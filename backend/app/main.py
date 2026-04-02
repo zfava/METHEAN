@@ -13,6 +13,7 @@ from app.core.database import engine
 from app.core.logging import setup_logging
 from app.api.auth import router as auth_router
 from app.api.curriculum import router as curriculum_router
+from app.api.state import router as state_router
 
 logger = structlog.get_logger()
 
@@ -54,6 +55,7 @@ app.add_middleware(
 # Routers
 app.include_router(auth_router, prefix="/api/v1")
 app.include_router(curriculum_router, prefix="/api/v1")
+app.include_router(state_router, prefix="/api/v1")
 
 
 @app.get("/health")

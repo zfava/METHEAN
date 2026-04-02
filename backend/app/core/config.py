@@ -40,6 +40,16 @@ class Settings(BaseSettings):
     CELERY_BROKER_URL: str = "redis://redis:6379/1"
     CELERY_RESULT_BACKEND: str = "redis://redis:6379/2"
 
+    # FSRS / Retention
+    FSRS_WEIGHTS: list[float] = []  # Empty = use py-fsrs defaults
+    MASTERY_THRESHOLD: float = 0.8  # Confidence threshold to reach mastered
+    DECAY_RETRIEVABILITY_THRESHOLD: float = 0.5  # Below this, mastered decays
+
+    # Decay job
+    DECAY_CRON_HOUR: int = 2  # 2:00 AM
+    DECAY_CRON_MINUTE: int = 0
+    DECAY_BATCH_SIZE: int = 500
+
     @field_validator("JWT_SECRET")
     @classmethod
     def jwt_secret_must_not_be_default_in_prod(cls, v: str, info) -> str:
