@@ -156,3 +156,50 @@ async def test_register_short_password(client: AsyncClient):
         },
     )
     assert response.status_code == 422  # Validation error
+
+
+@pytest.mark.asyncio
+async def test_refresh_token_reuse_revokes_all_tokens(client: AsyncClient):
+    """When a refresh token is replayed after rotation, ALL of the user's
+    refresh tokens must be revoked — including the legitimately issued new one.
+
+    Flow:
+    1. Register -> get refresh_token_A
+    2. Call /refresh with token_A -> get refresh_token_B (token_A rotated out)
+    3. Replay token_A (the OLD one) -> 401 "Token reuse detected"
+    4. Try token_B (the NEW one) -> also 401, proving all tokens were killed
+    """
+    # 1. Register
+    reg = await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "reuse@test.com",
+            "password": "securepass123",
+            "display_name": "Reuse Tester",
+            "household_name": "Reuse Family",
+        },
+    )
+    assert reg.status_code == 201
+    token_a = reg.cookies.get("refresh_token")
+    assert token_a is not None, "Registration must set refresh_token cookie"
+
+    # 2. Normal refresh: rotate token_A -> token_B
+    client.cookies.set("refresh_token", token_a)
+    refresh1 = await client.post("/api/v1/auth/refresh")
+    assert refresh1.status_code == 200, f"First refresh should succeed: {refresh1.text}"
+    token_b = refresh1.cookies.get("refresh_token")
+    assert token_b is not None, "Refresh must set a new refresh_token cookie"
+    assert token_b != token_a, "Rotated token must differ from original"
+
+    # 3. Replay old token_A — this is the reuse attack
+    client.cookies.set("refresh_token", token_a)
+    reuse_resp = await client.post("/api/v1/auth/refresh")
+    assert reuse_resp.status_code == 401, "Replayed old token must be rejected"
+    assert "reuse" in reuse_resp.json()["detail"].lower()
+
+    # 4. Try the legitimate token_B — it should ALSO be revoked now
+    client.cookies.set("refresh_token", token_b)
+    after_reuse = await client.post("/api/v1/auth/refresh")
+    assert after_reuse.status_code == 401, (
+        "After reuse detection, even the newest token must be revoked"
+    )

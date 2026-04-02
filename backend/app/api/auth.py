@@ -5,7 +5,7 @@ import uuid
 from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Response, status, Cookie
-from sqlalchemy import select
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user, get_db
@@ -193,25 +193,39 @@ async def refresh(
             detail="Invalid refresh token",
         )
 
-    # Verify token exists and is not revoked
+    # Look up the token record (regardless of revocation status).
     result = await db.execute(
-        select(RefreshToken).where(
-            RefreshToken.id == token_id,
-            RefreshToken.is_revoked == False,  # noqa: E712
-        )
+        select(RefreshToken).where(RefreshToken.id == token_id)
     )
     stored_token = result.scalar_one_or_none()
 
     if not stored_token:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Refresh token revoked or not found",
+            detail="Refresh token not found",
         )
 
-    # Verify hash matches
+    # If the token record is already revoked, this is a replay of a
+    # previously rotated token — i.e. token reuse.  Revoke ALL tokens
+    # for the user because the old token may have been stolen.
+    if stored_token.is_revoked:
+        await db.execute(
+            update(RefreshToken)
+            .where(RefreshToken.user_id == stored_token.user_id)
+            .values(is_revoked=True)
+        )
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token reuse detected",
+        )
+
+    # Verify hash matches (guards against forged token IDs)
     if stored_token.token_hash != _hash_token(refresh_token):
-        # Token reuse detected — revoke all tokens for user
-        stored_token.is_revoked = True
+        await db.execute(
+            update(RefreshToken)
+            .where(RefreshToken.user_id == stored_token.user_id)
+            .values(is_revoked=True)
+        )
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token reuse detected",
