@@ -23,9 +23,14 @@ from app.models.state import ChildNodeState, FSRSCard, ReviewLog, StateEvent
 
 
 def _get_scheduler(weights: list[float] | None = None) -> Scheduler:
-    """Get FSRS Scheduler instance, optionally with personalized weights."""
-    if weights:
-        return Scheduler(w=weights)
+    """Get FSRS Scheduler instance, optionally with personalized weights.
+
+    The Scheduler constructor accepts `parameters` as a Sequence[float]
+    (the 21 FSRS weights). When personalized weights are available from
+    the child's optimization history, they are used instead of defaults.
+    """
+    if weights and len(weights) == 21:
+        return Scheduler(parameters=weights)
     return Scheduler()
 
 
