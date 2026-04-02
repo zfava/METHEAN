@@ -1,16 +1,16 @@
 """Notification Rules Engine (Section 9).
 
 Event-driven notifications with dedup windows and quiet hours.
+Quiet hours are evaluated in the household's local timezone.
 """
 
 import uuid
 from datetime import UTC, datetime, timedelta
+from zoneinfo import ZoneInfo
 
-from sqlalchemy import and_, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.evidence import Alert
-from app.models.enums import AlertSeverity, AlertStatus
 from app.models.operational import NotificationLog
 
 # Dedup windows per event type (in seconds)
@@ -48,8 +48,13 @@ async def should_send(
     user_id: uuid.UUID,
     event_type: str,
     dedup_key: str | None = None,
+    timezone: str = "UTC",
 ) -> bool:
-    """Check dedup window and quiet hours before sending."""
+    """Check dedup window and quiet hours before sending.
+
+    Quiet hours are evaluated in the household's local timezone,
+    not UTC.
+    """
     window = DEDUP_WINDOWS.get(event_type, 0)
 
     if window > 0 and dedup_key:
@@ -65,10 +70,14 @@ async def should_send(
         if result.scalar_one_or_none():
             return False
 
-    # Check quiet hours (skip for critical alerts)
+    # Check quiet hours in household timezone (skip for critical alerts)
     if event_type != "alert_triggered":
-        now = datetime.now(UTC)
-        if _is_quiet_hours(now.hour):
+        try:
+            tz = ZoneInfo(timezone)
+        except (KeyError, ValueError):
+            tz = ZoneInfo("UTC")
+        local_now = datetime.now(UTC).astimezone(tz)
+        if _is_quiet_hours(local_now.hour):
             return False
 
     return True
@@ -82,9 +91,18 @@ async def send_notification(
     title: str,
     body: str,
     channel: str = "in_app",
+    timezone: str = "UTC",
 ) -> NotificationLog | None:
-    """Send a notification if dedup and quiet hours allow."""
-    if not await should_send(db, household_id, user_id, event_type, dedup_key=title):
+    """Send a notification if dedup and quiet hours allow.
+
+    Args:
+        timezone: The household's IANA timezone string (e.g. "America/Denver").
+            Quiet hours are checked in this timezone.
+    """
+    if not await should_send(
+        db, household_id, user_id, event_type,
+        dedup_key=title, timezone=timezone,
+    ):
         return None
 
     log = NotificationLog(

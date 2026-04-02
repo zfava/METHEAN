@@ -56,25 +56,70 @@ class TestNotifications:
         assert _is_quiet_hours(20) is False
 
     @pytest.mark.asyncio
-    async def test_send_notification(self, db_session, household, user):
+    async def test_quiet_hours_respects_household_timezone(self, db_session, household, user):
+        """Verify quiet hours are checked in the household's timezone, not UTC.
+
+        America/Denver is UTC-7 in winter (MST) and UTC-6 in summer (MDT).
+
+        22:00 UTC in winter = 15:00 Mountain -> NOT quiet hours -> should send
+        04:00 UTC in winter = 21:00 Mountain -> IS quiet hours   -> should NOT send
+
+        We test via should_send with a timezone argument. The _is_quiet_hours
+        function itself is timezone-agnostic (operates on a plain hour int);
+        the timezone conversion happens in should_send.
+        """
+        from unittest.mock import patch
+        from zoneinfo import ZoneInfo
+
+        tz_str = "America/Denver"
+
+        # 22:00 UTC on Jan 15 (winter) = 15:00 MST -> daytime -> should send
+        fake_utc_daytime = datetime(2026, 1, 15, 22, 0, 0, tzinfo=UTC)
+        with patch("app.services.notifications.datetime") as mock_dt:
+            mock_dt.now.return_value = fake_utc_daytime
+            mock_dt.side_effect = lambda *a, **kw: datetime(*a, **kw)
+            result = await should_send(
+                db_session, household.id, user.id,
+                "test", timezone=tz_str,
+            )
+        assert result is True, "15:00 Mountain should not be quiet hours"
+
+        # 04:00 UTC on Jan 15 (winter) = 21:00 MST -> quiet hours -> should NOT send
+        fake_utc_nighttime = datetime(2026, 1, 15, 4, 0, 0, tzinfo=UTC)
+        with patch("app.services.notifications.datetime") as mock_dt:
+            mock_dt.now.return_value = fake_utc_nighttime
+            mock_dt.side_effect = lambda *a, **kw: datetime(*a, **kw)
+            result = await should_send(
+                db_session, household.id, user.id,
+                "test", timezone=tz_str,
+            )
+        assert result is False, "21:00 Mountain should be quiet hours"
+
+    @pytest.mark.asyncio
+    async def test_send_notification_with_timezone(self, db_session, household, user):
+        """send_notification forwards timezone to should_send."""
         notif = await send_notification(
             db_session, household.id, user.id,
             "test", "Test Title", "Test Body",
+            timezone=household.timezone or "UTC",
         )
-        # May or may not send depending on current hour (quiet hours)
+        # May or may not send depending on current local hour (quiet hours)
         # Just verify no errors
 
     @pytest.mark.asyncio
     async def test_dedup_prevents_duplicate(self, db_session, household, user):
+        tz = household.timezone or "UTC"
         # Send first
         n1 = await send_notification(
             db_session, household.id, user.id,
             "node_decayed", "Decay Alert", "Node decayed",
+            timezone=tz,
         )
         # Second within dedup window should be blocked
         n2 = await send_notification(
             db_session, household.id, user.id,
             "node_decayed", "Decay Alert", "Node decayed again",
+            timezone=tz,
         )
         # n2 should be None (deduped) if n1 was sent
         if n1 is not None:

@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import PaginationParams, get_current_user, get_db, require_role
 from app.models.enums import AlertSeverity, AlertStatus, MasteryLevel
 from app.models.evidence import Alert, WeeklySnapshot
-from app.models.identity import Child, User
+from app.models.identity import Child, Household, User
 from app.models.operational import NotificationLog
 from app.models.state import ChildNodeState
 from app.models.curriculum import ChildMapEnrollment, LearningNode
@@ -161,9 +161,15 @@ async def send_test_notification(
     user: User = Depends(get_current_user),
 ) -> dict:
     """Send a test notification to verify the system."""
+    # Look up household timezone for quiet hours check
+    h_result = await db.execute(
+        select(Household).where(Household.id == user.household_id)
+    )
+    household = h_result.scalar_one()
     notif = await send_notification(
         db, user.household_id, user.id,
         "test", "Test Notification", "This is a test notification from METHEAN.",
+        timezone=household.timezone or "UTC",
     )
     return {"sent": notif is not None}
 
