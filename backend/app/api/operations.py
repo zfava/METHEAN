@@ -3,18 +3,60 @@
 import uuid
 from datetime import UTC, date, datetime, timedelta
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File
+from fastapi.responses import RedirectResponse
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import PaginationParams, get_current_user, get_db, require_role
-from app.models.enums import AlertSeverity, AlertStatus, MasteryLevel
-from app.models.evidence import Alert, WeeklySnapshot
+from app.models.enums import AlertSeverity, AlertStatus, ArtifactType, MasteryLevel
+from app.models.evidence import Alert, Artifact, WeeklySnapshot
 from app.models.identity import Child, Household, User
 from app.models.operational import NotificationLog
 from app.models.state import ChildNodeState
 from app.models.curriculum import ChildMapEnrollment, LearningNode
 from app.services.notifications import get_unread_notifications, send_notification
+from app.services.storage import get_presigned_url, upload_artifact
+
+MAX_UPLOAD_BYTES = 50 * 1024 * 1024  # 50 MB
+
+# Map MIME prefixes/extensions to ArtifactType
+_MIME_TYPE_MAP: dict[str, ArtifactType] = {
+    "image/": ArtifactType.photo,
+    "video/": ArtifactType.video,
+    "audio/": ArtifactType.audio,
+    "application/pdf": ArtifactType.document,
+    "application/msword": ArtifactType.document,
+    "application/vnd.": ArtifactType.document,
+    "text/": ArtifactType.document,
+}
+
+
+def _detect_artifact_type(content_type: str | None, filename: str | None) -> ArtifactType:
+    """Infer ArtifactType from MIME type or filename extension."""
+    ct = (content_type or "").lower()
+    for prefix, atype in _MIME_TYPE_MAP.items():
+        if ct.startswith(prefix):
+            return atype
+
+    if filename:
+        ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+        ext_map = {
+            "jpg": ArtifactType.photo, "jpeg": ArtifactType.photo,
+            "png": ArtifactType.photo, "gif": ArtifactType.photo,
+            "webp": ArtifactType.photo, "svg": ArtifactType.photo,
+            "mp4": ArtifactType.video, "mov": ArtifactType.video,
+            "webm": ArtifactType.video, "avi": ArtifactType.video,
+            "mp3": ArtifactType.audio, "wav": ArtifactType.audio,
+            "ogg": ArtifactType.audio, "m4a": ArtifactType.audio,
+            "pdf": ArtifactType.document, "doc": ArtifactType.document,
+            "docx": ArtifactType.document, "txt": ArtifactType.document,
+            "md": ArtifactType.document, "csv": ArtifactType.document,
+        }
+        if ext in ext_map:
+            return ext_map[ext]
+
+    return ArtifactType.document  # safe default
 
 router = APIRouter(tags=["operations"])
 
@@ -308,3 +350,134 @@ async def compliance_report(
         ],
         "generated_at": datetime.now(UTC).isoformat(),
     }
+
+
+# ══════════════════════════════════════════════════
+# Artifacts
+# ══════════════════════════════════════════════════
+
+@router.post("/children/{child_id}/artifacts", status_code=201)
+async def upload_artifact_endpoint(
+    child_id: uuid.UUID,
+    file: UploadFile = File(...),
+    attempt_id: uuid.UUID | None = Query(default=None),
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Upload an artifact file for a child. Max 50 MB."""
+    child = await _get_child_or_404(db, child_id, user.household_id)
+
+    contents = await file.read()
+    if len(contents) > MAX_UPLOAD_BYTES:
+        raise HTTPException(
+            status_code=413,
+            detail=f"File too large. Maximum size is {MAX_UPLOAD_BYTES // (1024*1024)} MB.",
+        )
+
+    content_type = file.content_type or "application/octet-stream"
+    filename = file.filename or "upload"
+    artifact_type = _detect_artifact_type(content_type, filename)
+
+    # Upload to S3
+    s3_key = upload_artifact(
+        file_bytes=contents,
+        filename=filename,
+        content_type=content_type,
+        household_id=user.household_id,
+        child_id=child_id,
+    )
+
+    # Create DB record
+    artifact = Artifact(
+        household_id=user.household_id,
+        child_id=child_id,
+        attempt_id=attempt_id,
+        artifact_type=artifact_type,
+        title=filename,
+        s3_key=s3_key,
+        mime_type=content_type,
+        file_size_bytes=len(contents),
+    )
+    db.add(artifact)
+    await db.flush()
+
+    download_url = get_presigned_url(s3_key)
+
+    return {
+        "id": str(artifact.id),
+        "child_id": str(child_id),
+        "artifact_type": artifact_type.value,
+        "title": filename,
+        "mime_type": content_type,
+        "file_size_bytes": len(contents),
+        "s3_key": s3_key,
+        "download_url": download_url,
+        "created_at": artifact.created_at.isoformat() if artifact.created_at else None,
+    }
+
+
+@router.get("/children/{child_id}/artifacts")
+async def list_artifacts(
+    child_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+    pagination: PaginationParams = Depends(),
+) -> dict:
+    """List artifacts for a child with pagination."""
+    child = await _get_child_or_404(db, child_id, user.household_id)
+
+    base = select(Artifact).where(
+        Artifact.child_id == child_id,
+        Artifact.household_id == user.household_id,
+    )
+    total_result = await db.execute(select(func.count()).select_from(base.subquery()))
+    total = total_result.scalar() or 0
+
+    result = await db.execute(
+        base.order_by(Artifact.created_at.desc())
+        .offset(pagination.skip).limit(pagination.limit)
+    )
+    items = []
+    for a in result.scalars().all():
+        item = {
+            "id": str(a.id),
+            "artifact_type": a.artifact_type.value if hasattr(a.artifact_type, "value") else str(a.artifact_type),
+            "title": a.title,
+            "mime_type": a.mime_type,
+            "file_size_bytes": a.file_size_bytes,
+            "created_at": a.created_at.isoformat() if a.created_at else None,
+        }
+        if a.s3_key:
+            item["download_url"] = get_presigned_url(a.s3_key)
+        items.append(item)
+
+    return {
+        "items": items,
+        "total": total,
+        "skip": pagination.skip,
+        "limit": pagination.limit,
+    }
+
+
+@router.get("/artifacts/{artifact_id}/download")
+async def download_artifact(
+    artifact_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> RedirectResponse:
+    """Redirect to a presigned S3 download URL (15-min expiry)."""
+    result = await db.execute(
+        select(Artifact).where(
+            Artifact.id == artifact_id,
+            Artifact.household_id == user.household_id,
+        )
+    )
+    artifact = result.scalar_one_or_none()
+    if not artifact:
+        raise HTTPException(status_code=404, detail="Artifact not found")
+
+    if not artifact.s3_key:
+        raise HTTPException(status_code=404, detail="Artifact has no file stored")
+
+    url = get_presigned_url(artifact.s3_key, expires_in=900)
+    return RedirectResponse(url=url, status_code=302)
