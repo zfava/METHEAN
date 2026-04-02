@@ -349,7 +349,7 @@ class TestLearningMapAPI:
         # List
         resp2 = await auth_client.get("/api/v1/learning-maps")
         assert resp2.status_code == 200
-        maps = resp2.json()
+        maps = resp2.json()["items"]
         assert any(m["id"] == map_id for m in maps)
 
     @pytest.mark.asyncio
@@ -762,4 +762,4 @@ class TestSubjectAPI:
         resp2 = await auth_client.get("/api/v1/subjects")
         assert resp2.status_code == 200
         # At least the one we created (might have more from other fixtures)
-        assert any(s["name"] == "Science" for s in resp2.json())
+        assert any(s["name"] == "Science" for s in resp2.json()["items"])

@@ -590,8 +590,9 @@ class TestStateAPI:
             f"/api/v1/children/{child.id}/nodes/{node.id}/history"
         )
         assert resp.status_code == 200
-        events = resp.json()
+        events = resp.json()["items"]
         assert len(events) == 2
+        assert resp.json()["total"] == 2
         # Chronological order
         assert events[0]["to_state"] == "developing"
         assert events[1]["to_state"] == "mastered"

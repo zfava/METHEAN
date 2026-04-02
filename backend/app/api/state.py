@@ -8,6 +8,7 @@ from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import func, select
+from app.api.deps import PaginationParams
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user, get_db, require_role
@@ -171,26 +172,33 @@ async def get_child_state(
 
 @router.get(
     "/children/{child_id}/nodes/{node_id}/history",
-    response_model=list[StateEventResponse],
 )
 async def get_node_history(
     child_id: uuid.UUID,
     node_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
-) -> list[StateEventResponse]:
+    pagination: PaginationParams = Depends(),
+) -> dict:
     """StateEvent stream for one node, chronological."""
     child = await _get_child_or_404(db, child_id, user.household_id)
 
-    result = await db.execute(
-        select(StateEvent).where(
-            StateEvent.child_id == child_id,
-            StateEvent.node_id == node_id,
-            StateEvent.household_id == user.household_id,
-        ).order_by(StateEvent.created_at.asc())
+    base = select(StateEvent).where(
+        StateEvent.child_id == child_id,
+        StateEvent.node_id == node_id,
+        StateEvent.household_id == user.household_id,
     )
-    events = result.scalars().all()
-    return [StateEventResponse.model_validate(e) for e in events]
+    total_result = await db.execute(select(func.count()).select_from(base.subquery()))
+    total = total_result.scalar() or 0
+    result = await db.execute(
+        base.order_by(StateEvent.created_at.asc()).offset(pagination.skip).limit(pagination.limit)
+    )
+    return {
+        "items": [StateEventResponse.model_validate(e) for e in result.scalars().all()],
+        "total": total,
+        "skip": pagination.skip,
+        "limit": pagination.limit,
+    }
 
 
 @router.get(

@@ -4,10 +4,10 @@ import uuid
 from datetime import UTC, date, datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db, require_role
+from app.api.deps import PaginationParams, get_current_user, get_db, require_role
 from app.models.enums import AlertSeverity, AlertStatus, MasteryLevel
 from app.models.evidence import Alert, WeeklySnapshot
 from app.models.identity import Child, User
@@ -41,19 +41,23 @@ async def list_alerts(
     status: str | None = Query(default=None),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
-) -> list[dict]:
+    pagination: PaginationParams = Depends(),
+) -> dict:
     child = await _get_child_or_404(db, child_id, user.household_id)
-    query = select(Alert).where(
+    base = select(Alert).where(
         Alert.child_id == child_id,
         Alert.household_id == user.household_id,
     )
     if status:
-        query = query.where(Alert.status == status)
-    query = query.order_by(Alert.created_at.desc()).limit(50)
+        base = base.where(Alert.status == status)
+    total_result = await db.execute(select(func.count()).select_from(base.subquery()))
+    total = total_result.scalar() or 0
 
-    result = await db.execute(query)
+    result = await db.execute(
+        base.order_by(Alert.created_at.desc()).offset(pagination.skip).limit(pagination.limit)
+    )
     alerts = result.scalars().all()
-    return [
+    items = [
         {
             "id": str(a.id),
             "severity": a.severity.value if hasattr(a.severity, 'value') else str(a.severity),
@@ -66,6 +70,12 @@ async def list_alerts(
         }
         for a in alerts
     ]
+    return {
+        "items": items,
+        "total": total,
+        "skip": pagination.skip,
+        "limit": pagination.limit,
+    }
 
 
 @router.put("/alerts/{alert_id}/acknowledge")
@@ -113,24 +123,36 @@ async def dismiss_alert(
 
 @router.get("/notifications")
 async def list_notifications(
-    limit: int = Query(default=20, le=100),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
-) -> list[dict]:
-    notifications = await get_unread_notifications(
-        db, user.household_id, user.id, limit
+    pagination: PaginationParams = Depends(),
+) -> dict:
+    base = select(NotificationLog).where(
+        NotificationLog.household_id == user.household_id,
+        NotificationLog.user_id == user.id,
     )
-    return [
-        {
-            "id": str(n.id),
-            "channel": n.channel,
-            "title": n.title,
-            "body": n.body,
-            "sent_at": n.sent_at.isoformat() if n.sent_at else None,
-            "created_at": n.created_at.isoformat() if n.created_at else None,
-        }
-        for n in notifications
-    ]
+    total_result = await db.execute(select(func.count()).select_from(base.subquery()))
+    total = total_result.scalar() or 0
+    result = await db.execute(
+        base.order_by(NotificationLog.created_at.desc())
+        .offset(pagination.skip).limit(pagination.limit)
+    )
+    return {
+        "items": [
+            {
+                "id": str(n.id),
+                "channel": n.channel,
+                "title": n.title,
+                "body": n.body,
+                "sent_at": n.sent_at.isoformat() if n.sent_at else None,
+                "created_at": n.created_at.isoformat() if n.created_at else None,
+            }
+            for n in result.scalars().all()
+        ],
+        "total": total,
+        "skip": pagination.skip,
+        "limit": pagination.limit,
+    }
 
 
 @router.post("/notifications/test")
@@ -155,29 +177,38 @@ async def list_snapshots(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
-) -> list[dict]:
+    pagination: PaginationParams = Depends(),
+) -> dict:
     child = await _get_child_or_404(db, child_id, user.household_id)
-    result = await db.execute(
-        select(WeeklySnapshot).where(
-            WeeklySnapshot.child_id == child_id,
-            WeeklySnapshot.household_id == user.household_id,
-        ).order_by(WeeklySnapshot.week_start.desc()).limit(52)
+    base = select(WeeklySnapshot).where(
+        WeeklySnapshot.child_id == child_id,
+        WeeklySnapshot.household_id == user.household_id,
     )
-    snapshots = result.scalars().all()
-    return [
-        {
-            "id": str(s.id),
-            "week_start": s.week_start.isoformat(),
-            "week_end": s.week_end.isoformat(),
-            "total_minutes": s.total_minutes,
-            "activities_completed": s.activities_completed,
-            "nodes_mastered": s.nodes_mastered,
-            "nodes_progressed": s.nodes_progressed,
-            "reviews_completed": s.reviews_completed,
-            "summary": s.summary,
-        }
-        for s in snapshots
-    ]
+    total_result = await db.execute(select(func.count()).select_from(base.subquery()))
+    total = total_result.scalar() or 0
+    result = await db.execute(
+        base.order_by(WeeklySnapshot.week_start.desc())
+        .offset(pagination.skip).limit(pagination.limit)
+    )
+    return {
+        "items": [
+            {
+                "id": str(s.id),
+                "week_start": s.week_start.isoformat(),
+                "week_end": s.week_end.isoformat(),
+                "total_minutes": s.total_minutes,
+                "activities_completed": s.activities_completed,
+                "nodes_mastered": s.nodes_mastered,
+                "nodes_progressed": s.nodes_progressed,
+                "reviews_completed": s.reviews_completed,
+                "summary": s.summary,
+            }
+            for s in result.scalars().all()
+        ],
+        "total": total,
+        "skip": pagination.skip,
+        "limit": pagination.limit,
+    }
 
 
 @router.get("/children/{child_id}/snapshots/compare")

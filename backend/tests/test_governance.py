@@ -245,7 +245,7 @@ class TestPlanGeneration:
 
         resp = await auth_client.get(f"/api/v1/children/{child.id}/plans")
         assert resp.status_code == 200
-        assert len(resp.json()) >= 1
+        assert len(resp.json()["items"]) >= 1
 
 
 class TestPlanManagement:
@@ -415,7 +415,7 @@ class TestGovernanceRulesAPI:
 
         list_resp = await auth_client.get("/api/v1/governance-rules")
         assert list_resp.status_code == 200
-        assert any(r["name"] == "Test Rule" for r in list_resp.json())
+        assert any(r["name"] == "Test Rule" for r in list_resp.json()["items"])
 
     @pytest.mark.asyncio
     async def test_update_rule(self, auth_client, db_session, household, user):
@@ -459,7 +459,7 @@ class TestAIInspection:
 
         resp = await auth_client.get("/api/v1/ai-runs")
         assert resp.status_code == 200
-        runs = resp.json()
+        runs = resp.json()["items"]
         assert len(runs) >= 2
 
     @pytest.mark.asyncio
@@ -485,7 +485,7 @@ class TestAIInspection:
 
         resp = await auth_client.get("/api/v1/ai-runs?role=tutor")
         assert resp.status_code == 200
-        runs = resp.json()
+        runs = resp.json()["items"]
         assert all(r["run_type"] == "tutor" for r in runs)
 
     @pytest.mark.asyncio
@@ -498,7 +498,7 @@ class TestAIInspection:
 
         resp = await auth_client.get("/api/v1/governance-events")
         assert resp.status_code == 200
-        events = resp.json()
+        events = resp.json()["items"]
         assert len(events) >= 1
 
     @pytest.mark.asyncio
@@ -562,7 +562,7 @@ class TestAdvisorReports:
             f"/api/v1/children/{child.id}/advisor-reports"
         )
         assert list_resp.status_code == 200
-        assert len(list_resp.json()) >= 1
+        assert len(list_resp.json()["items"]) >= 1
 
         # Get detail
         detail_resp = await auth_client.get(f"/api/v1/advisor-reports/{report_id}")

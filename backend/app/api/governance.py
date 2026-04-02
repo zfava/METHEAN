@@ -11,7 +11,7 @@ from datetime import UTC, date, datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import StreamingResponse
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
@@ -21,7 +21,7 @@ from app.ai.prompts import (
     CARTOGRAPHER_SYSTEM,
     TUTOR_SYSTEM,
 )
-from app.api.deps import get_current_user, get_db, require_role
+from app.api.deps import PaginationParams, get_current_user, get_db, require_role
 from app.models.curriculum import ChildMapEnrollment, LearningMap, LearningNode
 from app.models.enums import (
     ActivityStatus,
@@ -90,17 +90,24 @@ async def _get_plan_or_404(
 # Governance Rules CRUD
 # ══════════════════════════════════════════════════
 
-@router.get("/governance-rules", response_model=list[GovernanceRuleResponse])
+@router.get("/governance-rules")
 async def list_governance_rules(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
-) -> list[GovernanceRuleResponse]:
+    pagination: PaginationParams = Depends(),
+) -> dict:
+    base = select(GovernanceRule).where(GovernanceRule.household_id == user.household_id)
+    total_result = await db.execute(select(func.count()).select_from(base.subquery()))
+    total = total_result.scalar() or 0
     result = await db.execute(
-        select(GovernanceRule)
-        .where(GovernanceRule.household_id == user.household_id)
-        .order_by(GovernanceRule.priority.asc())
+        base.order_by(GovernanceRule.priority.asc()).offset(pagination.skip).limit(pagination.limit)
     )
-    return [GovernanceRuleResponse.model_validate(r) for r in result.scalars().all()]
+    return {
+        "items": [GovernanceRuleResponse.model_validate(r) for r in result.scalars().all()],
+        "total": total,
+        "skip": pagination.skip,
+        "limit": pagination.limit,
+    }
 
 
 @router.post("/governance-rules", response_model=GovernanceRuleResponse, status_code=201)
@@ -205,19 +212,26 @@ async def generate_plan_endpoint(
     return PlanResponse.model_validate(plan)
 
 
-@router.get("/children/{child_id}/plans", response_model=list[PlanResponse])
+@router.get("/children/{child_id}/plans")
 async def list_plans(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
-) -> list[PlanResponse]:
+    pagination: PaginationParams = Depends(),
+) -> dict:
     child = await _get_child_or_404(db, child_id, user.household_id)
+    base = select(Plan).where(Plan.child_id == child_id, Plan.household_id == user.household_id)
+    total_result = await db.execute(select(func.count()).select_from(base.subquery()))
+    total = total_result.scalar() or 0
     result = await db.execute(
-        select(Plan)
-        .where(Plan.child_id == child_id, Plan.household_id == user.household_id)
-        .order_by(Plan.created_at.desc())
+        base.order_by(Plan.created_at.desc()).offset(pagination.skip).limit(pagination.limit)
     )
-    return [PlanResponse.model_validate(p) for p in result.scalars().all()]
+    return {
+        "items": [PlanResponse.model_validate(p) for p in result.scalars().all()],
+        "total": total,
+        "skip": pagination.skip,
+        "limit": pagination.limit,
+    }
 
 
 @router.get("/plans/{plan_id}", response_model=PlanDetailResponse)
@@ -552,19 +566,28 @@ Provide an encouraging, honest assessment."""
     return AdvisorReportResponse.model_validate(report)
 
 
-@router.get("/children/{child_id}/advisor-reports", response_model=list[AdvisorReportResponse])
+@router.get("/children/{child_id}/advisor-reports")
 async def list_advisor_reports(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
-) -> list[AdvisorReportResponse]:
+    pagination: PaginationParams = Depends(),
+) -> dict:
     child = await _get_child_or_404(db, child_id, user.household_id)
-    result = await db.execute(
-        select(AdvisorReport)
-        .where(AdvisorReport.child_id == child_id, AdvisorReport.household_id == user.household_id)
-        .order_by(AdvisorReport.created_at.desc())
+    base = select(AdvisorReport).where(
+        AdvisorReport.child_id == child_id, AdvisorReport.household_id == user.household_id,
     )
-    return [AdvisorReportResponse.model_validate(r) for r in result.scalars().all()]
+    total_result = await db.execute(select(func.count()).select_from(base.subquery()))
+    total = total_result.scalar() or 0
+    result = await db.execute(
+        base.order_by(AdvisorReport.created_at.desc()).offset(pagination.skip).limit(pagination.limit)
+    )
+    return {
+        "items": [AdvisorReportResponse.model_validate(r) for r in result.scalars().all()],
+        "total": total,
+        "skip": pagination.skip,
+        "limit": pagination.limit,
+    }
 
 
 @router.get("/advisor-reports/{report_id}", response_model=AdvisorReportResponse)
@@ -589,20 +612,28 @@ async def get_advisor_report(
 # AI Inspection Endpoints
 # ══════════════════════════════════════════════════
 
-@router.get("/ai-runs", response_model=list[AIRunResponse])
+@router.get("/ai-runs")
 async def list_ai_runs(
     child_id: uuid.UUID | None = Query(default=None),
     role: str | None = Query(default=None),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
-) -> list[AIRunResponse]:
-    query = select(AIRun).where(AIRun.household_id == user.household_id)
+    pagination: PaginationParams = Depends(),
+) -> dict:
+    base = select(AIRun).where(AIRun.household_id == user.household_id)
     if role:
-        query = query.where(AIRun.run_type == role)
-    query = query.order_by(AIRun.created_at.desc()).limit(50)
-
-    result = await db.execute(query)
-    return [AIRunResponse.model_validate(r) for r in result.scalars().all()]
+        base = base.where(AIRun.run_type == role)
+    total_result = await db.execute(select(func.count()).select_from(base.subquery()))
+    total = total_result.scalar() or 0
+    result = await db.execute(
+        base.order_by(AIRun.created_at.desc()).offset(pagination.skip).limit(pagination.limit)
+    )
+    return {
+        "items": [AIRunResponse.model_validate(r) for r in result.scalars().all()],
+        "total": total,
+        "skip": pagination.skip,
+        "limit": pagination.limit,
+    }
 
 
 @router.get("/ai-runs/{run_id}", response_model=AIRunResponse)
@@ -689,16 +720,21 @@ async def get_decision_trace(
     }
 
 
-@router.get("/governance-events", response_model=list[GovernanceEventResponse])
+@router.get("/governance-events")
 async def list_governance_events(
-    limit: int = Query(default=50, le=200),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
-) -> list[GovernanceEventResponse]:
+    pagination: PaginationParams = Depends(),
+) -> dict:
+    base = select(GovernanceEvent).where(GovernanceEvent.household_id == user.household_id)
+    total_result = await db.execute(select(func.count()).select_from(base.subquery()))
+    total = total_result.scalar() or 0
     result = await db.execute(
-        select(GovernanceEvent)
-        .where(GovernanceEvent.household_id == user.household_id)
-        .order_by(GovernanceEvent.created_at.desc())
-        .limit(limit)
+        base.order_by(GovernanceEvent.created_at.desc()).offset(pagination.skip).limit(pagination.limit)
     )
-    return [GovernanceEventResponse.model_validate(e) for e in result.scalars().all()]
+    return {
+        "items": [GovernanceEventResponse.model_validate(e) for e in result.scalars().all()],
+        "total": total,
+        "skip": pagination.skip,
+        "limit": pagination.limit,
+    }

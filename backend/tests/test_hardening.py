@@ -229,7 +229,7 @@ class TestAlertsAPI:
 
         resp = await auth_client.get(f"/api/v1/children/{child.id}/alerts")
         assert resp.status_code == 200
-        assert len(resp.json()) >= 1
+        assert len(resp.json()["items"]) >= 1
 
     @pytest.mark.asyncio
     async def test_acknowledge_alert(self, auth_client, db_session, household, child):
@@ -277,7 +277,7 @@ class TestSnapshots:
 
         resp = await auth_client.get(f"/api/v1/children/{child.id}/snapshots")
         assert resp.status_code == 200
-        assert len(resp.json()) >= 1
+        assert len(resp.json()["items"]) >= 1
 
 
 class TestCompliance:
@@ -326,7 +326,7 @@ class TestNotificationsAPI:
 
         resp = await auth_client.get("/api/v1/notifications")
         assert resp.status_code == 200
-        assert len(resp.json()) >= 1
+        assert len(resp.json()["items"]) >= 1
 
     @pytest.mark.asyncio
     async def test_send_test_notification(self, auth_client):

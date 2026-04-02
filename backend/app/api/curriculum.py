@@ -7,11 +7,11 @@ child map state, enrollment, parent overrides, and template copying.
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.api.deps import get_current_user, get_db, require_role
+from app.api.deps import PaginationParams, get_current_user, get_db, require_role
 from app.models.curriculum import (
     ChildMapEnrollment,
     LearningEdge,
@@ -127,17 +127,26 @@ async def create_subject(
     return SubjectResponse.model_validate(subject)
 
 
-@router.get("/subjects", response_model=list[SubjectResponse])
+@router.get("/subjects")
 async def list_subjects(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
-) -> list[SubjectResponse]:
-    result = await db.execute(
-        select(Subject)
-        .where(Subject.household_id == user.household_id, Subject.is_active == True)  # noqa: E712
-        .order_by(Subject.sort_order)
+    pagination: PaginationParams = Depends(),
+) -> dict:
+    base = select(Subject).where(
+        Subject.household_id == user.household_id, Subject.is_active == True  # noqa: E712
     )
-    return [SubjectResponse.model_validate(s) for s in result.scalars().all()]
+    total_result = await db.execute(select(func.count()).select_from(base.subquery()))
+    total = total_result.scalar() or 0
+    result = await db.execute(
+        base.order_by(Subject.sort_order).offset(pagination.skip).limit(pagination.limit)
+    )
+    return {
+        "items": [SubjectResponse.model_validate(s) for s in result.scalars().all()],
+        "total": total,
+        "skip": pagination.skip,
+        "limit": pagination.limit,
+    }
 
 
 # ── Templates (must be before {map_id} routes to avoid path conflicts) ──
@@ -266,17 +275,24 @@ async def create_learning_map(
     return LearningMapResponse.model_validate(lmap)
 
 
-@router.get("/learning-maps", response_model=list[LearningMapResponse])
+@router.get("/learning-maps")
 async def list_learning_maps(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
-) -> list[LearningMapResponse]:
+    pagination: PaginationParams = Depends(),
+) -> dict:
+    base = select(LearningMap).where(LearningMap.household_id == user.household_id)
+    total_result = await db.execute(select(func.count()).select_from(base.subquery()))
+    total = total_result.scalar() or 0
     result = await db.execute(
-        select(LearningMap)
-        .where(LearningMap.household_id == user.household_id)
-        .order_by(LearningMap.created_at.desc())
+        base.order_by(LearningMap.created_at.desc()).offset(pagination.skip).limit(pagination.limit)
     )
-    return [LearningMapResponse.model_validate(m) for m in result.scalars().all()]
+    return {
+        "items": [LearningMapResponse.model_validate(m) for m in result.scalars().all()],
+        "total": total,
+        "skip": pagination.skip,
+        "limit": pagination.limit,
+    }
 
 
 @router.get("/learning-maps/{map_id}", response_model=LearningMapDetailResponse)

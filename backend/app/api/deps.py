@@ -2,13 +2,25 @@
 
 import uuid
 
-from fastapi import Cookie, Depends, HTTPException, status
+from fastapi import Cookie, Depends, HTTPException, Query, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_session, set_tenant
 from app.core.security import decode_token
 from app.models.identity import User
+
+
+class PaginationParams:
+    """Shared pagination dependency for list endpoints."""
+
+    def __init__(
+        self,
+        skip: int = Query(0, ge=0, description="Number of records to skip"),
+        limit: int = Query(50, ge=1, le=200, description="Max records to return"),
+    ):
+        self.skip = skip
+        self.limit = limit
 
 
 async def get_db() -> AsyncSession:
