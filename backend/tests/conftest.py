@@ -12,17 +12,21 @@ from sqlalchemy.ext.asyncio import (
     async_sessionmaker,
     create_async_engine,
 )
+from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
-from app.core.database import Base, get_session
-from app.core.security import hash_password
+from app.core.database import Base
+from app.core.security import create_access_token, hash_password
+from app.api.deps import get_db
 from app.main import app
-from app.models.identity import Household, User
+from app.models.curriculum import LearningMap, Subject
+from app.models.identity import Child, Household, User
 
-# Use a test database URL
-TEST_DATABASE_URL = settings.DATABASE_URL.replace("/methean", "/methean_test")
+# Use a test database URL - replace only the database name at the end
+TEST_DATABASE_URL = settings.DATABASE_URL.rsplit("/", 1)[0] + "/methean_test"
 
-test_engine = create_async_engine(TEST_DATABASE_URL, echo=False)
+# NullPool is required for async test isolation with asyncpg
+test_engine = create_async_engine(TEST_DATABASE_URL, echo=False, poolclass=NullPool)
 test_session_factory = async_sessionmaker(
     test_engine, class_=AsyncSession, expire_on_commit=False
 )
@@ -49,10 +53,10 @@ async def db_session() -> AsyncGenerator[AsyncSession, None]:
 
 @pytest_asyncio.fixture
 async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
-    async def override_get_session():
+    async def override_get_db():
         yield db_session
 
-    app.dependency_overrides[get_session] = override_get_session
+    app.dependency_overrides[get_db] = override_get_db
     transport = ASGITransport(app=app)
     async with AsyncClient(transport=transport, base_url="http://test") as ac:
         yield ac
@@ -79,3 +83,47 @@ async def user(db_session: AsyncSession, household: Household) -> User:
     db_session.add(u)
     await db_session.flush()
     return u
+
+
+@pytest_asyncio.fixture
+async def auth_client(
+    client: AsyncClient, user: User, household: Household,
+) -> AsyncClient:
+    """Client with access_token cookie set."""
+    token = create_access_token(user.id, household.id, "owner")
+    client.cookies.set("access_token", token)
+    return client
+
+
+@pytest_asyncio.fixture
+async def child(db_session: AsyncSession, household: Household) -> Child:
+    c = Child(
+        household_id=household.id,
+        first_name="Test",
+        last_name="Child",
+    )
+    db_session.add(c)
+    await db_session.flush()
+    return c
+
+
+@pytest_asyncio.fixture
+async def subject(db_session: AsyncSession, household: Household) -> Subject:
+    s = Subject(household_id=household.id, name="Mathematics")
+    db_session.add(s)
+    await db_session.flush()
+    return s
+
+
+@pytest_asyncio.fixture
+async def learning_map(
+    db_session: AsyncSession, household: Household, subject: Subject,
+) -> LearningMap:
+    lm = LearningMap(
+        household_id=household.id,
+        subject_id=subject.id,
+        name="Elementary Math",
+    )
+    db_session.add(lm)
+    await db_session.flush()
+    return lm

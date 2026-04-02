@@ -51,7 +51,8 @@ async def get_current_user(
 
 def require_role(*roles: str):
     async def check_role(user: User = Depends(get_current_user)) -> User:
-        if user.role.value not in roles:
+        role_val = user.role.value if hasattr(user.role, "value") else user.role
+        if role_val not in roles:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Insufficient permissions",
