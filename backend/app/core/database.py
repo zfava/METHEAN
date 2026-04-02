@@ -1,7 +1,9 @@
 """Async database engine and session factory using asyncpg."""
 
+import uuid
 from collections.abc import AsyncGenerator
 
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_sessionmaker,
@@ -28,6 +30,20 @@ async_session_factory = async_sessionmaker(
 
 class Base(DeclarativeBase):
     pass
+
+
+async def set_tenant(session: AsyncSession, household_id: uuid.UUID) -> None:
+    """Set the RLS tenant context for the current transaction.
+
+    Executes SET LOCAL so the setting is scoped to the current transaction
+    and automatically reset on commit/rollback.
+
+    Uses string formatting (not bound params) because SET doesn't support
+    parameterized queries in PostgreSQL. The household_id is pre-validated
+    as a UUID so there's no injection risk.
+    """
+    hid = str(household_id)
+    await session.execute(text(f"SET LOCAL app.current_household_id = '{hid}'"))
 
 
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
