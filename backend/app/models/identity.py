@@ -75,6 +75,7 @@ class Child(Base):
     date_of_birth: Mapped[date | None] = mapped_column(Date)
     grade_level: Mapped[str | None] = mapped_column(String(20))
     avatar_url: Mapped[str | None] = mapped_column(Text)
+    fsrs_weights: Mapped[list | None] = mapped_column(JSONB)  # Personalized FSRS weights (21 params)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

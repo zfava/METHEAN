@@ -18,11 +18,14 @@ from app.models.enums import (
     MasteryLevel,
     StateEventType,
 )
+from app.models.identity import Child
 from app.models.state import ChildNodeState, FSRSCard, ReviewLog, StateEvent
 
 
-def _get_scheduler() -> Scheduler:
-    """Get FSRS Scheduler instance."""
+def _get_scheduler(weights: list[float] | None = None) -> Scheduler:
+    """Get FSRS Scheduler instance, optionally with personalized weights."""
+    if weights:
+        return Scheduler(w=weights)
     return Scheduler()
 
 
@@ -195,8 +198,11 @@ async def process_review(
     # 1. Get or create FSRS card
     db_card = await get_or_create_fsrs_card(db, child_id, household_id, node_id)
 
-    # 2. Run FSRS review
-    scheduler = _get_scheduler()
+    # 2. Run FSRS review (use personalized weights if available)
+    child_result = await db.execute(select(Child).where(Child.id == child_id))
+    child_obj = child_result.scalar_one_or_none()
+    weights = child_obj.fsrs_weights if child_obj else None
+    scheduler = _get_scheduler(weights)
     fsrs_card = _db_card_to_fsrs(db_card)
     updated_card, review_log_entry = scheduler.review_card(fsrs_card, rating, now)
 
