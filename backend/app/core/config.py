@@ -29,6 +29,11 @@ class Settings(BaseSettings):
     # AI
     AI_API_KEY: str = ""
     AI_FALLBACK_API_KEY: str = ""
+    AI_PRIMARY_MODEL: str = "claude-sonnet-4-20250514"
+    AI_FALLBACK_MODEL: str = "gpt-4o-mini"
+    AI_MOCK_ENABLED: bool = True  # Allow mock fallback when providers unavailable
+    AI_MAX_TOKENS: int = 4096
+    AI_TEMPERATURE: float = 0.7
 
     # S3
     S3_ENDPOINT_URL: str = "http://minio:9000"
