@@ -4,9 +4,10 @@ Runs weekly. For each child with >= 50 new reviews since last optimization,
 runs the py-fsrs Optimizer to compute personalized 21-parameter weights
 from the child's actual review history.
 
-Built against py-fsrs 6.3.0.  The Optimizer class lives in fsrs.optimizer
-and its API (constructor taking ReviewLog list, compute_optimal_parameters()
-returning list[float]) may change in future versions.  Import and attribute
+Built against fsrs 6.3.1 (PyPI package name: "fsrs", not "py-fsrs").
+The Optimizer class lives in fsrs.optimizer and its API (constructor
+taking ReviewLog list, compute_optimal_parameters() returning
+list[float]) may change in future versions.  Import and attribute
 errors are caught separately so a py-fsrs upgrade never crashes the Celery
 worker — the child is simply skipped and the issue is logged.
 """
