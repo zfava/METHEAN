@@ -30,6 +30,7 @@ opentelemetry-sdk==1.29.0
 opentelemetry-instrumentation-fastapi==0.50b0
 prometheus-client==0.21.1
 structlog==24.4.0
+pyyaml==6.0.2
 
 # Storage
 boto3==1.36.2
