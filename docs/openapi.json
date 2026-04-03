@@ -5059,7 +5059,7 @@
     "/health/ready": {
       "get": {
         "summary": "Health Ready",
-        "description": "Readiness probe \u2014 DB + Redis connected.",
+        "description": "Readiness probe \u2014 DB + Redis + Celery status.",
         "operationId": "health_ready_health_ready_get",
         "responses": {
           "200": {

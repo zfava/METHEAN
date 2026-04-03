@@ -76,7 +76,10 @@ async def health() -> dict:
 
 @app.get("/health/ready")
 async def health_ready() -> dict:
-    """Readiness probe — DB + Redis connected."""
+    """Readiness probe — DB + Redis + Celery status."""
+    import asyncio
+    from app.tasks.worker import celery_app
+
     checks = {"api": "ok"}
 
     # Check DB
@@ -97,5 +100,20 @@ async def health_ready() -> dict:
     except Exception as e:
         checks["redis"] = f"error: {str(e)}"
 
-    all_ok = all(v == "ok" for v in checks.values())
-    return {"status": "ok" if all_ok else "degraded", "checks": checks}
+    # Check Celery (non-blocking — Celery down = degraded, not unready)
+    try:
+        loop = asyncio.get_event_loop()
+        responses = await loop.run_in_executor(
+            None, lambda: celery_app.control.ping(timeout=2.0)
+        )
+        if responses:
+            checks["celery"] = "ok"
+        else:
+            checks["celery"] = "error: no workers"
+    except Exception:
+        checks["celery"] = "error: no workers"
+
+    # Only DB and Redis failures make the service degraded.
+    # Celery being down is informational — the API can still serve requests.
+    core_ok = checks["database"] == "ok" and checks["redis"] == "ok"
+    return {"status": "ok" if core_ok else "degraded", "checks": checks}
