@@ -419,7 +419,7 @@ async def seed():
             plan = Plan(
                 household_id=hid, child_id=child.id, created_by=pid,
                 name=f"{child_label} \u2014 Week of {WEEK_START.isoformat()}",
-                status=PlanStatus.active, start_date=WEEK_START,
+                status=PlanStatus.draft, start_date=WEEK_START,
                 end_date=WEEK_START + timedelta(days=4), ai_generated=True,
             )
             db.add(plan)
@@ -434,9 +434,12 @@ async def seed():
             await db.flush()
 
             # Pick 3-4 nodes per child for activities
+            # Mix of governance statuses: first 2 completed+approved, next 1 approved+scheduled,
+            # last 2 pending review (governance_approved=False) — this populates the approval queue
             node_titles = list(nodes.keys())[:5]
             for i, title in enumerate(node_titles):
                 completed = i < 2
+                approved = i < 3  # First 3 approved, last 2 pending review
                 a = Activity(
                     plan_week_id=week.id, household_id=hid,
                     node_id=nodes[title].id,
@@ -445,18 +448,33 @@ async def seed():
                     status=ActivityStatus.completed if completed else ActivityStatus.scheduled,
                     scheduled_date=WEEK_START + timedelta(days=i),
                     estimated_minutes=25, sort_order=i,
-                    instructions={"difficulty": 2 if i == 0 else 3},
+                    instructions={
+                        "difficulty": 2 if i < 2 else 3 + (i - 2),
+                        "ai_rationale": f"Recommended based on {child_label}'s current progress in {title}",
+                    },
+                    governance_approved=approved,
+                    governance_reviewed_by=pid if approved else None,
+                    governance_reviewed_at=NOW - timedelta(hours=12) if approved else None,
                 )
                 db.add(a)
                 await db.flush()
 
-                # Governance events
-                db.add(GovernanceEvent(
-                    household_id=hid, user_id=pid,
-                    action=GovernanceAction.approve,
-                    target_type="activity", target_id=a.id,
-                    reason="Auto-approved" if i == 0 else "Parent approved",
-                ))
+                # Governance events (only for approved activities)
+                if approved:
+                    db.add(GovernanceEvent(
+                        household_id=hid, user_id=pid,
+                        action=GovernanceAction.approve,
+                        target_type="activity", target_id=a.id,
+                        reason="Auto-approved: difficulty < 3" if i == 0 else "Parent approved",
+                    ))
+                else:
+                    db.add(GovernanceEvent(
+                        household_id=hid, user_id=pid,
+                        action=GovernanceAction.defer,
+                        target_type="activity", target_id=a.id,
+                        reason=f"Difficulty {3 + (i - 2)} requires parent review",
+                        metadata_={"rule_name": "Review difficult activities", "is_auto": True},
+                    ))
 
                 # Attempts for completed activities
                 if completed:
@@ -595,7 +613,9 @@ async def seed():
     print("    3 curriculum maps with prerequisite DAGs")
     print("    3 children with varied mastery progression")
     print(f"    {review_count}+ FSRS review logs (Liam)")
-    print("    3 weekly plans (1 per child)")
+    print("    3 weekly plans (draft, 5 activities each)")
+    print("    6 activities pending review (governance queue)")
+    print("    9 approved activities (governance trail)")
     print("    3 alerts (stall, regression, pattern failure)")
     print("    6 weekly snapshots (2 weeks x 3 children)")
     print("    3 advisor reports")
