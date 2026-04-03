@@ -22,12 +22,24 @@ function getCookie(name: string): string | undefined {
   return match ? decodeURIComponent(match[1]) : undefined;
 }
 
+const RETRYABLE_STATUSES = new Set([502, 503, 504]);
+const MAX_RETRIES = 3;
+const BACKOFF_MS = [1000, 2000, 4000];
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function request<T>(
   path: string,
-  options: RequestInit = {},
+  options: RequestInit & { retry?: boolean } = {},
 ): Promise<T> {
   const url = `${API_BASE}${path}`;
   const method = (options.method || "GET").toUpperCase();
+  const { retry: retryOpt, ...fetchOptions } = options;
+
+  // Retry GET requests by default. Non-GET only when caller opts in.
+  const shouldRetry = retryOpt ?? method === "GET";
 
   // Attach CSRF token header for state-changing requests
   const csrfHeaders: Record<string, string> = {};
@@ -38,23 +50,51 @@ async function request<T>(
     }
   }
 
-  const res = await fetch(url, {
+  const init: RequestInit = {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
       ...csrfHeaders,
-      ...options.headers,
+      ...fetchOptions.headers,
     },
-    ...options,
-  });
+    ...fetchOptions,
+  };
 
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({ detail: res.statusText }));
-    throw new ApiError(res.status, body.detail || res.statusText);
+  let lastError: unknown;
+  const attempts = shouldRetry ? MAX_RETRIES + 1 : 1;
+
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    try {
+      const res = await fetch(url, init);
+
+      if (res.ok) {
+        if (res.status === 204) return undefined as T;
+        return res.json();
+      }
+
+      // Don't retry client errors (4xx) — they are not transient
+      if (!RETRYABLE_STATUSES.has(res.status) || !shouldRetry || attempt === attempts - 1) {
+        const body = await res.json().catch(() => ({ detail: res.statusText }));
+        throw new ApiError(res.status, body.detail || res.statusText);
+      }
+
+      lastError = new ApiError(res.status, res.statusText);
+    } catch (err) {
+      // Retry on network errors (TypeError from fetch) if retrying is enabled
+      if (err instanceof TypeError && shouldRetry && attempt < attempts - 1) {
+        lastError = err;
+      } else {
+        throw err;
+      }
+    }
+
+    // Exponential backoff before next attempt
+    if (attempt < attempts - 1) {
+      await sleep(BACKOFF_MS[attempt] || BACKOFF_MS[BACKOFF_MS.length - 1]);
+    }
   }
 
-  if (res.status === 204) return undefined as T;
-  return res.json();
+  throw lastError;
 }
 
 // Auth
