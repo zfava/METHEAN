@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { plans, type Plan, type PlanDetail, type ActivityInPlan } from "@/lib/api";
 import StatusBadge from "@/components/StatusBadge";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 export default function PlansPage() {
   const [planList, setPlanList] = useState<Plan[]>([]);

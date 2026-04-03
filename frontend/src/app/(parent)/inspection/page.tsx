@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { ai, type AIRun } from "@/lib/api";
 import StatusBadge from "@/components/StatusBadge";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 export default function InspectionPage() {
   const [runs, setRuns] = useState<AIRun[]>([]);
@@ -59,7 +60,7 @@ export default function InspectionPage() {
         {/* Run list */}
         <div className="bg-white rounded-lg border border-(--color-border) max-h-[600px] overflow-y-auto">
           {loading ? (
-            <div className="p-4 text-sm text-(--color-text-secondary)">Loading...</div>
+            <div className="p-4"><LoadingSkeleton variant="list" count={5} /></div>
           ) : runs.length === 0 ? (
             <div className="p-8 text-center text-sm text-(--color-text-secondary)">No AI runs found.</div>
           ) : (

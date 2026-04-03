@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { curriculum, type LearningMap, type MapDetail } from "@/lib/api";
 import StatusBadge from "@/components/StatusBadge";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 export default function MapsPage() {
   const [maps, setMaps] = useState<LearningMap[]>([]);
@@ -19,7 +20,12 @@ export default function MapsPage() {
     setSelectedMap(detail);
   }
 
-  if (loading) return <div className="text-sm text-(--color-text-secondary)">Loading...</div>;
+  if (loading) return (
+    <div className="max-w-6xl space-y-4">
+      <LoadingSkeleton variant="text" count={1} />
+      <LoadingSkeleton variant="card" count={3} />
+    </div>
+  );
 
   return (
     <div className="max-w-6xl">

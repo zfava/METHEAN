@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { governance, type GovernanceEvent } from "@/lib/api";
 import StatusBadge from "@/components/StatusBadge";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 export default function GovernancePage() {
   const [events, setEvents] = useState<GovernanceEvent[]>([]);
@@ -35,7 +36,12 @@ export default function GovernancePage() {
     a.click();
   }
 
-  if (loading) return <div className="text-sm text-(--color-text-secondary)">Loading...</div>;
+  if (loading) return (
+    <div className="max-w-6xl space-y-4">
+      <LoadingSkeleton variant="text" count={1} />
+      <LoadingSkeleton variant="table" count={8} />
+    </div>
+  );
 
   return (
     <div className="max-w-6xl">

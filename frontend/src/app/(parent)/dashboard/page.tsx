@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { auth, children, governance, plans, type User, type RetentionSummary, type GovernanceEvent, type Plan } from "@/lib/api";
 import StatusBadge from "@/components/StatusBadge";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 interface ChildSummary {
   id: string;
@@ -35,7 +36,13 @@ export default function DashboardPage() {
     }
   }
 
-  if (loading) return <div className="text-sm text-(--color-text-secondary)">Loading...</div>;
+  if (loading) return (
+    <div className="max-w-6xl space-y-8">
+      <LoadingSkeleton variant="text" count={1} />
+      <LoadingSkeleton variant="card" count={3} />
+      <LoadingSkeleton variant="list" count={5} />
+    </div>
+  );
 
   return (
     <div className="max-w-6xl">
