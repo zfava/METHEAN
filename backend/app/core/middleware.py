@@ -9,6 +9,8 @@ from fastapi import FastAPI, Request, Response
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
+from app.core.config import settings
+
 logger = structlog.get_logger()
 
 
@@ -144,7 +146,7 @@ class CSRFMiddleware(BaseHTTPMiddleware):
             value=csrf_cookie,
             httponly=False,
             samesite="lax",
-            secure=False,  # Set True in production via config
+            secure=settings.is_production,
             path="/",
         )
 
