@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { auth, tutor, attempts, type User } from "@/lib/api";
-import StatusBadge from "@/components/StatusBadge";
+import { auth, attempts, type User } from "@/lib/api";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 interface TodayActivity {
   id: string;
@@ -15,42 +14,54 @@ interface TodayActivity {
   node_id: string | null;
 }
 
-interface ChatMessage {
-  role: "child" | "tutor";
-  content: string;
+interface ChildInfo {
+  id: string;
+  first_name: string;
+  grade_level: string | null;
 }
 
+function greeting(name: string): string {
+  const h = new Date().getHours();
+  if (h < 12) return `Good morning, ${name}!`;
+  if (h < 17) return `Good afternoon, ${name}!`;
+  return `Good evening, ${name}!`;
+}
+
+const typeLabels: Record<string, { label: string; color: string }> = {
+  lesson:     { label: "Lesson",     color: "bg-blue-100 text-blue-700" },
+  practice:   { label: "Practice",   color: "bg-green-100 text-green-700" },
+  review:     { label: "Review",     color: "bg-amber-100 text-amber-700" },
+  assessment: { label: "Assessment", color: "bg-purple-100 text-purple-700" },
+  project:    { label: "Project",    color: "bg-rose-100 text-rose-700" },
+  field_trip: { label: "Field Trip", color: "bg-teal-100 text-teal-700" },
+};
+
 export default function ChildPage() {
-  const [user, setUser] = useState<User | null>(null);
-  const [children, setChildren] = useState<{ id: string; first_name: string }[]>([]);
-  const [selectedChildId, setSelectedChildId] = useState("");
-  const [todayActivities, setTodayActivities] = useState<TodayActivity[]>([]);
-  const [activeActivity, setActiveActivity] = useState<TodayActivity | null>(null);
-  const [attemptId, setAttemptId] = useState("");
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [input, setInput] = useState("");
-  const [sending, setSending] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [feedback, setFeedback] = useState("");
+  const [children, setChildren] = useState<ChildInfo[]>([]);
+  const [selectedId, setSelectedId] = useState("");
+  const [activities, setActivities] = useState<TodayActivity[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    init();
-  }, []);
+  // Focused learning state
+  const [activeActivity, setActiveActivity] = useState<TodayActivity | null>(null);
+  const [attemptId, setAttemptId] = useState("");
+  const [response, setResponse] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [feedback, setFeedback] = useState("");
+  const [masteryNote, setMasteryNote] = useState("");
 
-  useEffect(() => {
-    if (selectedChildId) loadToday();
-  }, [selectedChildId]);
+  useEffect(() => { init(); }, []);
+  useEffect(() => { if (selectedId) loadToday(); }, [selectedId]);
 
   async function init() {
     try {
-      const me = await auth.me();
-      setUser(me);
-      const resp = await fetch(`${API_BASE}/children`, { credentials: "include" });
+      await auth.me();
+      const resp = await fetch(`${API}/children`, { credentials: "include" });
       if (resp.ok) {
-        const data = await resp.json();
+        const data: ChildInfo[] = await resp.json();
         setChildren(data);
-        if (data.length > 0) setSelectedChildId(data[0].id);
+        if (data.length > 0) setSelectedId(data[0].id);
       }
     } catch {
       window.location.href = "/auth";
@@ -61,165 +72,231 @@ export default function ChildPage() {
 
   async function loadToday() {
     try {
-      const resp = await fetch(`${API_BASE}/children/${selectedChildId}/today`, { credentials: "include" });
-      if (resp.ok) setTodayActivities(await resp.json());
+      const resp = await fetch(`${API}/children/${selectedId}/today`, { credentials: "include" });
+      if (resp.ok) setActivities(await resp.json());
     } catch {}
   }
 
-  async function startActivity(activity: TodayActivity) {
+  async function startActivity(act: TodayActivity) {
     try {
-      const attempt = await attempts.start(activity.id, selectedChildId);
+      const attempt = await attempts.start(act.id, selectedId);
       setAttemptId(attempt.id);
-      setActiveActivity(activity);
+      setActiveActivity(act);
       setSubmitted(false);
+      setResponse("");
       setFeedback("");
-      setMessages([
-        { role: "tutor", content: `Let's work on "${activity.title}". What do you know about this topic so far?` },
-      ]);
+      setMasteryNote("");
     } catch (err: any) {
-      alert(err.detail || "Could not start");
-    }
-  }
-
-  async function sendMessage() {
-    if (!input.trim() || sending || !activeActivity) return;
-    const msg = input.trim();
-    setInput("");
-    setMessages((prev) => [...prev, { role: "child", content: msg }]);
-    setSending(true);
-    try {
-      const resp = await tutor.message(activeActivity.id, selectedChildId, msg);
-      setMessages((prev) => [...prev, { role: "tutor", content: resp.message }]);
-    } catch {
-      setMessages((prev) => [...prev, { role: "tutor", content: "I had trouble with that. Could you try again?" }]);
-    } finally {
-      setSending(false);
+      alert(err.detail || "Could not start activity");
     }
   }
 
   async function submitWork() {
-    if (!attemptId) return;
+    if (!attemptId || submitting) return;
+    setSubmitting(true);
     try {
-      const result = await attempts.submit(attemptId, { confidence: 0.7, duration_minutes: 15 });
+      const result = await attempts.submit(attemptId, {
+        confidence: 0.7,
+        duration_minutes: 15,
+      });
       setSubmitted(true);
-      const mastery = result.mastery_level?.replace(/_/g, " ") || "recorded";
-      setFeedback(`Great work! You've reached "${mastery}" level.`);
-      setMessages((prev) => [...prev, { role: "tutor", content: `Session complete! ${mastery === "recorded" ? "Your work has been recorded." : `You've reached ${mastery} level. Keep going!`}` }]);
-    } catch (err: any) {
-      alert(err.detail || "Could not submit");
+      setFeedback("Great work! Your answer has been submitted.");
+      const level = result.mastery_level?.replace(/_/g, " ");
+      if (level && level !== "not started") {
+        setMasteryNote(`You're making progress \u2014 you're at "${level}" level!`);
+      }
+    } catch {
+      setFeedback("Something went wrong. Your work has been saved.");
+    } finally {
+      setSubmitting(false);
     }
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-sm text-(--color-text-secondary)">Loading...</div>;
+  function goNext() {
+    setActiveActivity(null);
+    setAttemptId("");
+    setResponse("");
+    setSubmitted(false);
+    loadToday();
+  }
 
-  const childName = children.find((c) => c.id === selectedChildId)?.first_name || "Student";
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-amber-50/30 flex items-center justify-center">
+        <div className="text-base text-slate-400">Loading...</div>
+      </div>
+    );
+  }
 
+  const child = children.find((c) => c.id === selectedId);
+  const childName = child?.first_name || "Student";
+  const remaining = activities.filter((a) => a.status !== "completed");
+
+  // ── FOCUSED LEARNING VIEW ──
+  if (activeActivity) {
+    return (
+      <div className="min-h-screen bg-amber-50/30">
+        <div className="max-w-xl mx-auto px-6 py-12">
+          {!submitted ? (
+            <>
+              {/* Activity header */}
+              <div className="mb-8">
+                <button onClick={goNext} className="text-sm text-slate-400 hover:text-slate-600 mb-4 block">
+                  &larr; Back to activities
+                </button>
+                <h1 className="text-2xl font-semibold text-slate-800 mb-2">
+                  {activeActivity.title}
+                </h1>
+                <div className="flex items-center gap-3">
+                  {(() => {
+                    const t = typeLabels[activeActivity.activity_type] || { label: activeActivity.activity_type, color: "bg-slate-100 text-slate-600" };
+                    return <span className={`text-xs font-medium px-2 py-1 rounded-full ${t.color}`}>{t.label}</span>;
+                  })()}
+                  {activeActivity.estimated_minutes && (
+                    <span className="text-sm text-slate-400">{activeActivity.estimated_minutes} minutes</span>
+                  )}
+                </div>
+              </div>
+
+              {/* Work area */}
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
+                <label className="block text-sm font-medium text-slate-600 mb-3">
+                  Your work
+                </label>
+                <textarea
+                  value={response}
+                  onChange={(e) => setResponse(e.target.value)}
+                  placeholder="Write your answer here..."
+                  className="w-full h-40 px-4 py-3 text-base text-slate-700 border border-slate-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 placeholder:text-slate-300"
+                />
+              </div>
+
+              <button
+                onClick={submitWork}
+                disabled={submitting}
+                className="w-full py-3.5 text-base font-semibold text-white bg-green-600 rounded-xl hover:bg-green-700 disabled:opacity-50 transition-colors shadow-sm"
+              >
+                {submitting ? "Submitting..." : "Submit My Work"}
+              </button>
+            </>
+          ) : (
+            /* ── FEEDBACK VIEW ── */
+            <div className="text-center py-8">
+              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-green-100 flex items-center justify-center">
+                <span className="text-green-600 text-2xl">&#10003;</span>
+              </div>
+              <h2 className="text-xl font-semibold text-slate-800 mb-2">{feedback}</h2>
+              {masteryNote && (
+                <p className="text-base text-blue-600 mb-6">{masteryNote}</p>
+              )}
+              <div className="mt-8">
+                {remaining.length > 1 ? (
+                  <button onClick={goNext}
+                    className="px-8 py-3 text-base font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors shadow-sm"
+                  >Next Activity</button>
+                ) : (
+                  <div>
+                    <p className="text-lg text-slate-600 mb-4">All done for today!</p>
+                    <button onClick={goNext}
+                      className="px-6 py-2.5 text-sm text-slate-500 border border-slate-300 rounded-xl hover:bg-slate-50"
+                    >Back to overview</button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  // ── DAILY OVERVIEW ──
   return (
-    <div className="min-h-screen bg-(--color-bg)">
-      <header className="bg-white border-b border-(--color-border) px-6 py-4">
+    <div className="min-h-screen bg-amber-50/30">
+      {/* Header */}
+      <header className="bg-white border-b border-slate-200 px-6 py-5">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div>
-            <h1 className="text-lg font-semibold">METHEAN</h1>
-            <p className="text-xs text-(--color-text-secondary)">{childName}&apos;s Learning</p>
+            <h1 className="text-xl font-semibold text-slate-800">METHEAN</h1>
           </div>
-          <div className="flex items-center gap-3">
-            {children.length > 1 && (
-              <select
-                value={selectedChildId}
-                onChange={(e) => { setSelectedChildId(e.target.value); setActiveActivity(null); }}
-                className="text-sm border border-(--color-border) rounded px-2 py-1"
-              >
-                {children.map((c) => <option key={c.id} value={c.id}>{c.first_name}</option>)}
-              </select>
-            )}
-            {activeActivity && !submitted && (
-              <button onClick={submitWork} className="px-4 py-2 text-sm font-medium bg-(--color-accent) text-white rounded-md hover:bg-(--color-accent-hover)">
-                Submit Work
-              </button>
-            )}
-          </div>
+          {children.length > 1 && (
+            <select
+              value={selectedId}
+              onChange={(e) => setSelectedId(e.target.value)}
+              className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-300"
+            >
+              {children.map((c) => (
+                <option key={c.id} value={c.id}>{c.first_name}</option>
+              ))}
+            </select>
+          )}
         </div>
       </header>
 
-      <div className="max-w-2xl mx-auto py-6 px-4">
-        {!activeActivity ? (
-          <div>
-            <h2 className="text-sm font-semibold mb-4">Today&apos;s Activities</h2>
-            {todayActivities.length === 0 ? (
-              <div className="bg-white rounded-lg border border-(--color-border) p-8 text-center text-sm text-(--color-text-secondary)">
-                No activities scheduled for today. Check back tomorrow!
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {todayActivities.map((a) => (
-                  <div key={a.id} className="bg-white rounded-lg border border-(--color-border) p-4 flex items-center justify-between">
-                    <div>
-                      <div className="text-sm font-medium">{a.title}</div>
-                      <div className="flex items-center gap-2 mt-1">
-                        <StatusBadge status={a.activity_type} />
-                        {a.estimated_minutes && <span className="text-xs text-(--color-text-secondary)">{a.estimated_minutes} min</span>}
-                      </div>
-                    </div>
-                    {a.status === "scheduled" && (
-                      <button onClick={() => startActivity(a)} className="px-4 py-2 text-sm font-medium bg-(--color-accent) text-white rounded-md hover:bg-(--color-accent-hover)">
-                        Start
-                      </button>
-                    )}
-                    {a.status === "completed" && <StatusBadge status="completed" />}
-                  </div>
-                ))}
-              </div>
-            )}
+      <div className="max-w-2xl mx-auto px-6 py-8">
+        {/* Greeting */}
+        <h2 className="text-2xl font-semibold text-slate-800 mb-1">
+          {greeting(childName)}
+        </h2>
+        <p className="text-base text-slate-500 mb-8">
+          {remaining.length > 0
+            ? `You have ${remaining.length} ${remaining.length === 1 ? "activity" : "activities"} today.`
+            : "Let\u2019s see what\u2019s on your schedule."}
+        </p>
+
+        {/* Activities */}
+        {activities.length === 0 ? (
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 py-16 text-center">
+            <div className="text-4xl mb-4">&#9728;&#65039;</div>
+            <h3 className="text-lg font-semibold text-slate-700 mb-2">
+              No learning scheduled for today!
+            </h3>
+            <p className="text-base text-slate-400">Enjoy your free time.</p>
           </div>
         ) : (
-          <div className="bg-white rounded-lg border border-(--color-border)">
-            <div className="px-4 py-3 border-b border-(--color-border)">
-              <div className="text-sm font-semibold">{activeActivity.title}</div>
-              <button onClick={() => setActiveActivity(null)} className="text-xs text-(--color-accent) hover:underline mt-0.5">Back to activities</button>
-            </div>
-            <div className="h-96 overflow-y-auto p-4 space-y-3">
-              {messages.map((msg, i) => (
-                <div key={i} className={`flex ${msg.role === "child" ? "justify-end" : "justify-start"}`}>
-                  <div className={`max-w-[80%] px-4 py-2.5 rounded-xl text-sm ${
-                    msg.role === "child"
-                      ? "bg-(--color-accent) text-white rounded-br-sm"
-                      : "bg-gray-100 text-(--color-text) rounded-bl-sm"
-                  }`}>
-                    {msg.content}
+          <div className="space-y-4">
+            {activities.map((act) => {
+              const done = act.status === "completed" || act.status === "in_progress";
+              const t = typeLabels[act.activity_type] || { label: act.activity_type, color: "bg-slate-100 text-slate-600" };
+
+              return (
+                <div key={act.id}
+                  className={`bg-white rounded-2xl shadow-sm border border-slate-200 p-5 transition-colors ${
+                    done ? "opacity-60" : ""
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex-1">
+                      <h3 className={`text-lg font-medium ${done ? "text-slate-400" : "text-slate-800"}`}>
+                        {act.title}
+                      </h3>
+                      <div className="flex items-center gap-3 mt-2">
+                        <span className={`text-xs font-medium px-2 py-1 rounded-full ${t.color}`}>
+                          {t.label}
+                        </span>
+                        {act.estimated_minutes && (
+                          <span className="text-sm text-slate-400 flex items-center gap-1">
+                            <span className="text-xs">&#9201;</span> {act.estimated_minutes} min
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    {!done ? (
+                      <button
+                        onClick={() => startActivity(act)}
+                        className="px-6 py-2.5 text-base font-semibold text-white bg-green-600 rounded-xl hover:bg-green-700 transition-colors shadow-sm"
+                      >
+                        Start
+                      </button>
+                    ) : (
+                      <span className="text-sm text-green-600 font-medium flex items-center gap-1">
+                        <span>&#10003;</span> Done
+                      </span>
+                    )}
                   </div>
                 </div>
-              ))}
-              {sending && (
-                <div className="flex justify-start">
-                  <div className="bg-gray-100 rounded-xl px-4 py-2.5 text-sm text-(--color-text-secondary)">Thinking...</div>
-                </div>
-              )}
-            </div>
-            {!submitted && (
-              <div className="border-t border-(--color-border) p-3 flex gap-2">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-                  placeholder="Type your answer..."
-                  className="flex-1 px-3 py-2 text-sm border border-(--color-border) rounded-md focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20"
-                />
-                <button
-                  onClick={sendMessage}
-                  disabled={sending || !input.trim()}
-                  className="px-4 py-2 text-sm font-medium bg-(--color-accent) text-white rounded-md hover:bg-(--color-accent-hover) disabled:opacity-50"
-                >
-                  Send
-                </button>
-              </div>
-            )}
-            {submitted && feedback && (
-              <div className="border-t border-(--color-border) p-4 text-center">
-                <div className="text-sm font-medium text-emerald-700">{feedback}</div>
-                <button onClick={() => { setActiveActivity(null); loadToday(); }} className="mt-2 text-xs text-(--color-accent) hover:underline">Back to activities</button>
-              </div>
-            )}
+              );
+            })}
           </div>
         )}
       </div>
