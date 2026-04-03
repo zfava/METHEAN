@@ -324,6 +324,13 @@ class TestPlanManagement:
         )
         plan_id = gen_resp.json()["id"]
 
+        # Approve all activities first (required before lock)
+        detail = await auth_client.get(f"/api/v1/plans/{plan_id}")
+        for act in detail.json()["activities"]:
+            await auth_client.put(
+                f"/api/v1/plans/{plan_id}/activities/{act['id']}/approve"
+            )
+
         # Lock
         lock_resp = await auth_client.put(f"/api/v1/plans/{plan_id}/lock")
         assert lock_resp.status_code == 200

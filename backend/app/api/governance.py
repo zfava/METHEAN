@@ -296,7 +296,11 @@ async def approve_activity(
     if not activity:
         raise HTTPException(status_code=404, detail="Activity not found")
 
+    now = datetime.now(UTC)
     activity.status = ActivityStatus.scheduled
+    activity.governance_approved = True
+    activity.governance_reviewed_by = user.id
+    activity.governance_reviewed_at = now
 
     await log_governance_event(
         db, user.household_id, user.id,
@@ -329,7 +333,10 @@ async def reject_activity(
     if not activity:
         raise HTTPException(status_code=404, detail="Activity not found")
 
+    now = datetime.now(UTC)
     activity.status = ActivityStatus.cancelled
+    activity.governance_reviewed_by = user.id
+    activity.governance_reviewed_at = now
 
     await log_governance_event(
         db, user.household_id, user.id,
@@ -347,6 +354,31 @@ async def lock_plan(
     user: User = Depends(require_role("owner", "co_parent")),
 ) -> dict:
     plan = await _get_plan_or_404(db, plan_id, user.household_id)
+
+    # Verify all non-cancelled activities are governance-approved
+    weeks_result = await db.execute(
+        select(PlanWeek).where(PlanWeek.plan_id == plan_id)
+    )
+    week_ids = [w.id for w in weeks_result.scalars().all()]
+
+    if week_ids:
+        unapproved_result = await db.execute(
+            select(Activity).where(
+                Activity.plan_week_id.in_(week_ids),
+                Activity.governance_approved == False,  # noqa: E712
+                Activity.status != ActivityStatus.cancelled,
+            )
+        )
+        unapproved = unapproved_result.scalars().all()
+        if unapproved:
+            raise HTTPException(
+                status_code=409,
+                detail={
+                    "message": "Cannot lock plan with unapproved activities",
+                    "unapproved_activity_ids": [str(a.id) for a in unapproved],
+                },
+            )
+
     plan.status = PlanStatus.active
     await db.flush()
 

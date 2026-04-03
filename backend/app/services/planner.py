@@ -115,6 +115,34 @@ Prioritize nodes that are due for review, then available nodes."""
             except (ValueError, AttributeError):
                 pass
 
+        # Evaluate through governance rules
+        decision = await evaluate_activity(
+            db, household_id, difficulty=difficulty, activity_type=act_type.value,
+            node_id=node_id,
+        )
+
+        # Blocked activities are not created at all
+        if decision.action == "block":
+            await log_governance_event(
+                db, household_id, user_id=user_id,
+                action=GovernanceAction.reject,
+                target_type="activity_proposal",
+                target_id=uuid.uuid4(),  # no activity created
+                reason=decision.reason,
+                metadata={
+                    "rule_id": str(decision.rule_id) if decision.rule_id else None,
+                    "title": act_data.get("title", f"Activity {i+1}"),
+                    "blocked": True,
+                },
+            )
+            governance_decisions.append({
+                "activity_id": None,
+                "title": act_data.get("title", f"Activity {i+1}"),
+                "action": "block",
+                "reason": decision.reason,
+            })
+            continue
+
         activity = Activity(
             plan_week_id=week.id,
             household_id=household_id,
@@ -127,20 +155,15 @@ Prioritize nodes that are due for review, then available nodes."""
             status=ActivityStatus.scheduled,
             scheduled_date=scheduled_date,
             sort_order=i,
+            governance_approved=decision.action == "auto_approve",
         )
         db.add(activity)
         await db.flush()
 
-        # Evaluate through governance rules
-        decision = await evaluate_activity(
-            db, household_id, difficulty=difficulty, activity_type=act_type.value,
-            node_id=node_id,
-        )
-
         gov_action = GovernanceAction.approve if decision.action == "auto_approve" else GovernanceAction.defer
 
         await log_governance_event(
-            db, household_id, user_id=user_id,  # logged under triggering user
+            db, household_id, user_id=user_id,
             action=gov_action,
             target_type="activity",
             target_id=activity.id,
@@ -152,11 +175,6 @@ Prioritize nodes that are due for review, then available nodes."""
                 "is_auto": True,
             },
         )
-
-        # Auto-approved activities get approved status
-        if decision.action == "auto_approve":
-            activity.status = ActivityStatus.scheduled  # Ready to go
-        # require_review stays as scheduled but will need parent approval
 
         governance_decisions.append({
             "activity_id": activity.id,
