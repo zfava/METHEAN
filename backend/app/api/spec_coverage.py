@@ -121,6 +121,42 @@ async def update_household_settings(
     return {"id": str(household.id), "name": household.name, "timezone": household.timezone}
 
 
+@router.get("/children")
+async def list_children(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> list[dict]:
+    """List all children in the authenticated user's household."""
+    result = await db.execute(
+        select(Child).where(
+            Child.household_id == user.household_id,
+            Child.is_active == True,  # noqa: E712
+        ).order_by(Child.first_name)
+    )
+    children = result.scalars().all()
+
+    items = []
+    for c in children:
+        # Get enrollment count
+        enroll_result = await db.execute(
+            select(func.count(ChildMapEnrollment.id)).where(
+                ChildMapEnrollment.child_id == c.id,
+                ChildMapEnrollment.is_active == True,  # noqa: E712
+            )
+        )
+        enrollment_count = enroll_result.scalar() or 0
+
+        items.append({
+            "id": str(c.id),
+            "first_name": c.first_name,
+            "last_name": c.last_name,
+            "date_of_birth": c.date_of_birth.isoformat() if c.date_of_birth else None,
+            "grade_level": c.grade_level,
+            "enrollment_count": enrollment_count,
+        })
+    return items
+
+
 @router.post("/children", status_code=201)
 async def create_child(
     body: ChildCreate,

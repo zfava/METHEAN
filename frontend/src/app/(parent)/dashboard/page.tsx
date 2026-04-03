@@ -2,33 +2,55 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { auth, children, governance, plans, type User, type RetentionSummary, type GovernanceEvent, type Plan } from "@/lib/api";
+import { auth, children as childrenApi, governance, plans, type User, type RetentionSummary, type GovernanceEvent, type Plan, type MapState } from "@/lib/api";
 import StatusBadge from "@/components/StatusBadge";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
-
-interface ChildSummary {
-  id: string;
-  name: string;
-  retention: RetentionSummary | null;
-  currentPlan: Plan | null;
-}
+import { useChild } from "@/lib/ChildContext";
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
-  const [childSummaries, setChildSummaries] = useState<ChildSummary[]>([]);
+  const [retention, setRetention] = useState<RetentionSummary | null>(null);
+  const [mapStates, setMapStates] = useState<MapState[]>([]);
   const [events, setEvents] = useState<GovernanceEvent[]>([]);
+  const [childPlans, setChildPlans] = useState<Plan[]>([]);
+  const [alerts, setAlerts] = useState<{ title: string; severity: string }[]>([]);
   const [loading, setLoading] = useState(true);
+  const { selectedChild } = useChild();
 
   useEffect(() => {
     loadDashboard();
-  }, []);
+  }, [selectedChild]);
 
   async function loadDashboard() {
+    setLoading(true);
     try {
       const me = await auth.me();
       setUser(me);
       const evts = await governance.events(10);
-      setEvents(evts);
+      setEvents(evts.items || evts);
+
+      if (selectedChild) {
+        const [ret, maps, pls] = await Promise.all([
+          childrenApi.retentionSummary(selectedChild.id).catch(() => null),
+          childrenApi.allMapState(selectedChild.id).catch(() => []),
+          plans.list(selectedChild.id).catch(() => ({ items: [] })),
+        ]);
+        setRetention(ret);
+        setMapStates(maps);
+        setChildPlans((pls as any).items || pls || []);
+
+        // Fetch alerts
+        try {
+          const resp = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1"}/children/${selectedChild.id}/alerts`,
+            { credentials: "include" }
+          );
+          if (resp.ok) {
+            const data = await resp.json();
+            setAlerts((data.items || data).slice(0, 5));
+          }
+        } catch {}
+      }
     } catch {
       window.location.href = "/auth";
     } finally {
@@ -51,6 +73,7 @@ export default function DashboardPage() {
           <h1 className="text-xl font-semibold">Dashboard</h1>
           <p className="text-sm text-(--color-text-secondary) mt-0.5">
             Welcome back, {user?.display_name}
+            {selectedChild && <> &mdash; viewing <strong>{selectedChild.first_name}</strong> ({selectedChild.grade_level || ""})</>}
           </p>
         </div>
         <button
@@ -61,30 +84,79 @@ export default function DashboardPage() {
         </button>
       </div>
 
-      {/* Quick Actions */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
-        <Link href="/maps" className="bg-white rounded-lg border border-(--color-border) p-5 hover:border-(--color-accent) transition-colors">
-          <div className="text-sm font-medium">Learning Maps</div>
-          <p className="text-xs text-(--color-text-secondary) mt-1">View and manage curriculum DAGs</p>
-        </Link>
-        <Link href="/plans" className="bg-white rounded-lg border border-(--color-border) p-5 hover:border-(--color-accent) transition-colors">
-          <div className="text-sm font-medium">Weekly Plans</div>
-          <p className="text-xs text-(--color-text-secondary) mt-1">Generate and approve learning plans</p>
-        </Link>
-        <Link href="/inspection" className="bg-white rounded-lg border border-(--color-border) p-5 hover:border-(--color-accent) transition-colors">
-          <div className="text-sm font-medium">AI Inspection</div>
-          <p className="text-xs text-(--color-text-secondary) mt-1">Review every AI decision</p>
-        </Link>
+      {/* Retention summary */}
+      {retention && (
+        <div className="grid grid-cols-5 gap-3 mb-6">
+          {[
+            { label: "Total Nodes", value: retention.total_nodes, color: "" },
+            { label: "Mastered", value: retention.mastered_count, color: "text-(--color-mastered)" },
+            { label: "In Progress", value: retention.in_progress_count, color: "text-(--color-progress)" },
+            { label: "Blocked", value: retention.blocked_count, color: "text-(--color-blocked)" },
+            { label: "Decaying", value: retention.decaying_count, color: "text-(--color-decaying)" },
+          ].map((s) => (
+            <div key={s.label} className="bg-white rounded-lg border border-(--color-border) p-4">
+              <div className={`text-2xl font-semibold ${s.color}`}>{s.value}</div>
+              <div className="text-xs text-(--color-text-secondary) mt-0.5">{s.label}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Enrolled maps */}
+      {mapStates.length > 0 && (
+        <div className="grid grid-cols-3 gap-4 mb-6">
+          {mapStates.map((ms) => (
+            <Link key={ms.learning_map_id} href="/maps" className="bg-white rounded-lg border border-(--color-border) p-4 hover:border-(--color-accent) transition-colors">
+              <div className="text-sm font-medium">{ms.map_name}</div>
+              <div className="flex items-center gap-2 mt-2">
+                <div className="flex-1 bg-gray-100 rounded-full h-1.5">
+                  <div className="bg-(--color-mastered) h-1.5 rounded-full" style={{ width: `${Math.round(ms.progress_pct * 100)}%` }} />
+                </div>
+                <span className="text-xs text-(--color-text-secondary)">{Math.round(ms.progress_pct * 100)}%</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+
+      <div className="grid grid-cols-2 gap-4 mb-6">
+        {/* Alerts */}
+        <div className="bg-white rounded-lg border border-(--color-border) p-5">
+          <h2 className="text-sm font-semibold mb-3">Alerts</h2>
+          {alerts.length === 0 ? (
+            <p className="text-xs text-(--color-text-secondary)">No alerts</p>
+          ) : (
+            <div className="space-y-2">
+              {alerts.map((a, i) => (
+                <div key={i} className="flex items-center gap-2 py-1">
+                  <StatusBadge status={a.severity} />
+                  <span className="text-xs">{a.title}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Quick actions */}
+        <div className="bg-white rounded-lg border border-(--color-border) p-5">
+          <h2 className="text-sm font-semibold mb-3">Quick Actions</h2>
+          <div className="space-y-2">
+            <Link href="/plans" className="block text-xs text-(--color-accent) hover:underline">Generate a weekly plan</Link>
+            <Link href="/maps" className="block text-xs text-(--color-accent) hover:underline">View learning maps</Link>
+            <Link href="/inspection" className="block text-xs text-(--color-accent) hover:underline">Inspect AI decisions</Link>
+            <Link href="/governance" className="block text-xs text-(--color-accent) hover:underline">Review governance log</Link>
+          </div>
+        </div>
       </div>
 
-      {/* Governance Activity */}
+      {/* Recent governance activity */}
       <div className="bg-white rounded-lg border border-(--color-border) p-5">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-sm font-semibold">Recent Governance Activity</h2>
           <Link href="/governance" className="text-xs text-(--color-accent) hover:underline">View all</Link>
         </div>
         {events.length === 0 ? (
-          <p className="text-sm text-(--color-text-secondary)">No governance events yet. Generate a plan to get started.</p>
+          <p className="text-sm text-(--color-text-secondary)">No governance events yet.</p>
         ) : (
           <div className="space-y-2">
             {events.slice(0, 8).map((evt) => (
@@ -92,13 +164,9 @@ export default function DashboardPage() {
                 <div className="flex items-center gap-3">
                   <StatusBadge status={evt.action} />
                   <span className="text-sm">{evt.target_type}</span>
-                  {evt.reason && (
-                    <span className="text-xs text-(--color-text-secondary) truncate max-w-xs">{evt.reason}</span>
-                  )}
+                  {evt.reason && <span className="text-xs text-(--color-text-secondary) truncate max-w-xs">{evt.reason}</span>}
                 </div>
-                <span className="text-xs text-(--color-text-secondary)">
-                  {new Date(evt.created_at).toLocaleString()}
-                </span>
+                <span className="text-xs text-(--color-text-secondary)">{new Date(evt.created_at).toLocaleString()}</span>
               </div>
             ))}
           </div>

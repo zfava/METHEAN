@@ -2537,6 +2537,38 @@ paths:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/children:
+    get:
+      tags:
+      - spec-coverage
+      summary: List Children
+      description: List all children in the authenticated user's household.
+      operationId: list_children_api_v1_children_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+                title: Response List Children Api V1 Children Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
     post:
       tags:
       - spec-coverage

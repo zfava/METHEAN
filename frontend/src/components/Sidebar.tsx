@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useChild } from "@/lib/ChildContext";
 
 const nav = [
   { href: "/dashboard", label: "Dashboard", icon: "◉" },
@@ -13,6 +14,7 @@ const nav = [
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const { children, selectedChild, setSelectedChild, loading } = useChild();
 
   return (
     <aside className="w-56 min-h-screen bg-white border-r border-(--color-border) flex flex-col">
@@ -22,6 +24,30 @@ export default function Sidebar() {
         </Link>
         <p className="text-xs text-(--color-text-secondary) mt-0.5">Learning OS</p>
       </div>
+
+      {/* Child selector */}
+      {!loading && children.length > 0 && (
+        <div className="px-4 py-3 border-b border-(--color-border)">
+          <div className="text-[10px] font-medium text-(--color-text-secondary) uppercase tracking-wider mb-1.5">
+            Active Child
+          </div>
+          <select
+            value={selectedChild?.id || ""}
+            onChange={(e) => {
+              const child = children.find((c) => c.id === e.target.value);
+              if (child) setSelectedChild(child);
+            }}
+            className="w-full px-2 py-1.5 text-sm border border-(--color-border) rounded-md bg-white focus:outline-none focus:ring-1 focus:ring-(--color-accent)/30"
+          >
+            {children.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.first_name} {c.last_name || ""} {c.grade_level ? `(${c.grade_level})` : ""}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
       <nav className="flex-1 py-3">
         {nav.map((item) => {
           const active = pathname.startsWith(item.href);

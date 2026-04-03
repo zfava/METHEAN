@@ -114,7 +114,9 @@ export const auth = {
 };
 
 // Children
+// Children
 export const children = {
+  list: () => request<ChildListItem[]>("/children"),
   state: (childId: string) => request<ChildState>(`/children/${childId}/state`),
   mapState: (childId: string, mapId: string) =>
     request<MapState>(`/children/${childId}/map-state/${mapId}`),
@@ -225,6 +227,15 @@ export const ai = {
 };
 
 // Types
+export interface ChildListItem {
+  id: string;
+  first_name: string;
+  last_name: string | null;
+  date_of_birth: string | null;
+  grade_level: string | null;
+  enrollment_count: number;
+}
+
 export interface User {
   id: string;
   household_id: string;
