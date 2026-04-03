@@ -192,12 +192,15 @@ async def test_refresh_token_reuse_revokes_all_tokens(client: AsyncClient):
     assert token_b != token_a, "Rotated token must differ from original"
 
     # 3. Replay old token_A — this is the reuse attack
+    #    Clear cookies first to avoid httpx merging old and new values
+    client.cookies.delete("refresh_token")
     client.cookies.set("refresh_token", token_a)
     reuse_resp = await client.post("/api/v1/auth/refresh")
     assert reuse_resp.status_code == 401, "Replayed old token must be rejected"
     assert "reuse" in reuse_resp.json()["detail"].lower()
 
     # 4. Try the legitimate token_B — it should ALSO be revoked now
+    client.cookies.delete("refresh_token")
     client.cookies.set("refresh_token", token_b)
     after_reuse = await client.post("/api/v1/auth/refresh")
     assert after_reuse.status_code == 401, (

@@ -56,6 +56,97 @@ def test_access_token_contains_expiry():
 
 
 # ══════════════════════════════════════════════════
+# CSRF Protection Tests
+# ══════════════════════════════════════════════════
+
+@pytest.mark.asyncio
+async def test_csrf_rejects_without_header(db_session):
+    """POST to a protected endpoint without X-CSRF-Token should return 403."""
+    from httpx import ASGITransport, AsyncClient
+    from app.api.deps import get_db
+    from app.main import app
+
+    async def override():
+        yield db_session
+
+    app.dependency_overrides[get_db] = override
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
+        # Set a csrf cookie but do NOT send the X-CSRF-Token header
+        ac.cookies.set("csrf_token", "some-token")
+        resp = await ac.post("/api/v1/auth/logout")
+        assert resp.status_code == 403
+        assert resp.json()["code"] == "csrf_failed"
+    app.dependency_overrides.clear()
+
+
+@pytest.mark.asyncio
+async def test_csrf_allows_with_valid_header(db_session):
+    """POST with matching csrf cookie and header should succeed (not 403)."""
+    from httpx import ASGITransport, AsyncClient
+    from app.api.deps import get_db
+    from app.main import app
+
+    async def override():
+        yield db_session
+
+    app.dependency_overrides[get_db] = override
+    transport = ASGITransport(app=app)
+    token = "valid-csrf-token"
+    async with AsyncClient(
+        transport=transport, base_url="http://test",
+        headers={"X-CSRF-Token": token},
+    ) as ac:
+        ac.cookies.set("csrf_token", token)
+        # logout returns 200 even without auth (best-effort revocation)
+        resp = await ac.post("/api/v1/auth/logout")
+        assert resp.status_code != 403
+    app.dependency_overrides.clear()
+
+
+@pytest.mark.asyncio
+async def test_csrf_skips_get_requests(db_session):
+    """GET requests should not require CSRF."""
+    from httpx import ASGITransport, AsyncClient
+    from app.api.deps import get_db
+    from app.main import app
+
+    async def override():
+        yield db_session
+
+    app.dependency_overrides[get_db] = override
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
+        # No csrf cookie or header at all
+        resp = await ac.get("/health")
+        assert resp.status_code == 200
+    app.dependency_overrides.clear()
+
+
+@pytest.mark.asyncio
+async def test_csrf_skips_auth_endpoints(db_session):
+    """POST to /auth/login should not require CSRF."""
+    from httpx import ASGITransport, AsyncClient
+    from app.api.deps import get_db
+    from app.main import app
+
+    async def override():
+        yield db_session
+
+    app.dependency_overrides[get_db] = override
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
+        # No CSRF cookie or header — login should not be blocked
+        resp = await ac.post(
+            "/api/v1/auth/login",
+            json={"email": "nobody@test.com", "password": "doesntmatter"},
+        )
+        # 401 (bad credentials), not 403 (CSRF)
+        assert resp.status_code == 401
+    app.dependency_overrides.clear()
+
+
+# ══════════════════════════════════════════════════
 # RLS Tenant Isolation Tests
 # ══════════════════════════════════════════════════
 

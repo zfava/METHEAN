@@ -1,5 +1,6 @@
-"""Error handling middleware and rate limiting (Section 11)."""
+"""Error handling middleware, rate limiting, and CSRF protection (Section 11)."""
 
+import secrets
 import time
 import uuid
 
@@ -95,3 +96,56 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             pass
 
         return await call_next(request)
+
+
+# Paths exempt from CSRF checks (unauthenticated or initial auth flow)
+_CSRF_EXEMPT_PATHS = {
+    "/health",
+    "/health/ready",
+    "/api/v1/auth/register",
+    "/api/v1/auth/login",
+}
+
+_STATE_CHANGING_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
+
+
+class CSRFMiddleware(BaseHTTPMiddleware):
+    """Double-submit cookie CSRF protection.
+
+    On every response, sets a non-httponly csrf_token cookie.
+    On state-changing requests, verifies X-CSRF-Token header matches
+    the cookie value.
+    """
+
+    async def dispatch(self, request: Request, call_next) -> Response:
+        csrf_cookie = request.cookies.get("csrf_token")
+
+        # Check CSRF on state-changing methods for non-exempt paths
+        if request.method in _STATE_CHANGING_METHODS:
+            if request.url.path not in _CSRF_EXEMPT_PATHS:
+                csrf_header = request.headers.get("x-csrf-token")
+                if not csrf_cookie or not csrf_header or csrf_cookie != csrf_header:
+                    return JSONResponse(
+                        status_code=403,
+                        content={
+                            "code": "csrf_failed",
+                            "message": "CSRF validation failed",
+                        },
+                    )
+
+        response = await call_next(request)
+
+        # Set or refresh the csrf_token cookie on every response.
+        # Not httponly so the frontend JS can read it.
+        if not csrf_cookie:
+            csrf_cookie = secrets.token_hex(32)
+        response.set_cookie(
+            key="csrf_token",
+            value=csrf_cookie,
+            httponly=False,
+            samesite="lax",
+            secure=False,  # Set True in production via config
+            path="/",
+        )
+
+        return response

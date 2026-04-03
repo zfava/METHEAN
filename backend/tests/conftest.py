@@ -31,6 +31,9 @@ test_session_factory = async_sessionmaker(
     test_engine, class_=AsyncSession, expire_on_commit=False
 )
 
+# Fixed CSRF token for all test clients
+TEST_CSRF_TOKEN = "test-csrf-token-for-tests"
+
 
 @pytest.fixture(scope="session")
 def event_loop():
@@ -58,7 +61,12 @@ async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
 
     app.dependency_overrides[get_db] = override_get_db
     transport = ASGITransport(app=app)
-    async with AsyncClient(transport=transport, base_url="http://test") as ac:
+    async with AsyncClient(
+        transport=transport,
+        base_url="http://test",
+        headers={"X-CSRF-Token": TEST_CSRF_TOKEN},
+    ) as ac:
+        ac.cookies.set("csrf_token", TEST_CSRF_TOKEN)
         yield ac
     app.dependency_overrides.clear()
 

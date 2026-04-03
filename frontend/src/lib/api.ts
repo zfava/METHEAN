@@ -16,15 +16,33 @@ export class ApiError extends Error {
   }
 }
 
+function getCookie(name: string): string | undefined {
+  if (typeof document === "undefined") return undefined;
+  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+  return match ? decodeURIComponent(match[1]) : undefined;
+}
+
 async function request<T>(
   path: string,
   options: RequestInit = {},
 ): Promise<T> {
   const url = `${API_BASE}${path}`;
+  const method = (options.method || "GET").toUpperCase();
+
+  // Attach CSRF token header for state-changing requests
+  const csrfHeaders: Record<string, string> = {};
+  if (["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
+    const csrfToken = getCookie("csrf_token");
+    if (csrfToken) {
+      csrfHeaders["X-CSRF-Token"] = csrfToken;
+    }
+  }
+
   const res = await fetch(url, {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
+      ...csrfHeaders,
       ...options.headers,
     },
     ...options,
