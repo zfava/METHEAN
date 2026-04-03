@@ -2536,6 +2536,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children:
+    post:
+      tags:
+      - spec-coverage
+      summary: Create Child
+      operationId: create_child_api_v1_children_post
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChildCreate'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Create Child Api V1 Children Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/children/{child_id}:
     patch:
       tags:
@@ -3531,6 +3567,33 @@ components:
       - estimated_weeks
       - rationale
       title: CartographerRecommendation
+    ChildCreate:
+      properties:
+        first_name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+        date_of_birth:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Date Of Birth
+        grade_level:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Grade Level
+      type: object
+      required:
+      - first_name
+      title: ChildCreate
     ChildMapStateResponse:
       properties:
         child_id:

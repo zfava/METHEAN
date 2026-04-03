@@ -53,6 +53,13 @@ class ChildUpdate(BaseModel):
     grade_level: str | None = None
 
 
+class ChildCreate(BaseModel):
+    first_name: str = Field(min_length=1, max_length=100)
+    last_name: str | None = None
+    date_of_birth: date | None = None
+    grade_level: str | None = None
+
+
 class ChildPreferencesUpdate(BaseModel):
     daily_duration_minutes: int | None = Field(default=None, ge=15, le=480)
     learning_style: dict | None = None
@@ -112,6 +119,30 @@ async def update_household_settings(
         household.timezone = body.timezone
     await db.flush()
     return {"id": str(household.id), "name": household.name, "timezone": household.timezone}
+
+
+@router.post("/children", status_code=201)
+async def create_child(
+    body: ChildCreate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "co_parent")),
+) -> dict:
+    child = Child(
+        household_id=user.household_id,
+        first_name=body.first_name,
+        last_name=body.last_name,
+        date_of_birth=body.date_of_birth,
+        grade_level=body.grade_level,
+    )
+    db.add(child)
+    await db.flush()
+    return {
+        "id": str(child.id),
+        "household_id": str(child.household_id),
+        "first_name": child.first_name,
+        "last_name": child.last_name,
+        "grade_level": child.grade_level,
+    }
 
 
 @router.patch("/children/{child_id}")
