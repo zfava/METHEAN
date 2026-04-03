@@ -14,6 +14,9 @@ export default function DashboardPage() {
   const [events, setEvents] = useState<GovernanceEvent[]>([]);
   const [childPlans, setChildPlans] = useState<Plan[]>([]);
   const [alerts, setAlerts] = useState<{ title: string; severity: string }[]>([]);
+  const [pendingReviews, setPendingReviews] = useState(0);
+  const [rulesCount, setRulesCount] = useState(0);
+  const [overridesCount, setOverridesCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const { selectedChild } = useChild();
 
@@ -28,6 +31,19 @@ export default function DashboardPage() {
       setUser(me);
       const evts = await governance.events(10);
       setEvents(evts.items || evts);
+
+      // Governance summary
+      try {
+        const [queueResp, rulesResp] = await Promise.all([
+          fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1"}/governance/queue?limit=1`, { credentials: "include" }),
+          governance.rules(),
+        ]);
+        if (queueResp.ok) setPendingReviews((await queueResp.json()).total || 0);
+        const allRules = (rulesResp as any).items || rulesResp;
+        setRulesCount(Array.isArray(allRules) ? allRules.length : 0);
+        const allEvents = (evts as any).items || evts;
+        setOverridesCount(allEvents.filter((e: any) => e.target_type === "child_node_state").length);
+      } catch {}
 
       if (selectedChild) {
         const [ret, maps, pls] = await Promise.all([
@@ -118,6 +134,31 @@ export default function DashboardPage() {
           ))}
         </div>
       )}
+
+      {/* Governance summary */}
+      <Link href="/governance/queue" className="block mb-6 bg-white rounded-lg border border-(--color-border) p-4 hover:border-(--color-accent) transition-colors">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="text-center">
+              <div className={`text-xl font-semibold ${pendingReviews > 0 ? "text-amber-600" : "text-(--color-mastered)"}`}>
+                {pendingReviews}
+              </div>
+              <div className="text-[10px] text-(--color-text-secondary)">Pending Review</div>
+            </div>
+            <div className="w-px h-8 bg-gray-200" />
+            <div className="text-center">
+              <div className="text-xl font-semibold">{rulesCount}</div>
+              <div className="text-[10px] text-(--color-text-secondary)">Active Rules</div>
+            </div>
+            <div className="w-px h-8 bg-gray-200" />
+            <div className="text-center">
+              <div className="text-xl font-semibold">{overridesCount}</div>
+              <div className="text-[10px] text-(--color-text-secondary)">Overrides</div>
+            </div>
+          </div>
+          <div className="text-xs text-(--color-accent)">Governance &rarr;</div>
+        </div>
+      </Link>
 
       <div className="grid grid-cols-2 gap-4 mb-6">
         {/* Alerts */}

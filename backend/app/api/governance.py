@@ -770,3 +770,91 @@ async def list_governance_events(
         "skip": pagination.skip,
         "limit": pagination.limit,
     }
+
+
+# ══════════════════════════════════════════════════
+# Approval Queue
+# ══════════════════════════════════════════════════
+
+@router.get("/governance/queue")
+async def governance_queue(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+    pagination: PaginationParams = Depends(),
+) -> dict:
+    """All activities pending governance approval across all children."""
+    from app.models.identity import Child
+
+    base = select(Activity).where(
+        Activity.household_id == user.household_id,
+        Activity.governance_approved == False,  # noqa: E712
+        Activity.status != ActivityStatus.cancelled,
+    )
+    total_result = await db.execute(select(func.count()).select_from(base.subquery()))
+    total = total_result.scalar() or 0
+
+    result = await db.execute(
+        base.order_by(Activity.created_at.desc())
+        .offset(pagination.skip).limit(pagination.limit)
+    )
+    activities = result.scalars().all()
+
+    # Resolve child names and plan names in batch
+    plan_week_ids = list({a.plan_week_id for a in activities})
+    child_ids: set[uuid.UUID] = set()
+    week_to_plan: dict[uuid.UUID, uuid.UUID] = {}
+
+    if plan_week_ids:
+        weeks_result = await db.execute(
+            select(PlanWeek).where(PlanWeek.id.in_(plan_week_ids))
+        )
+        for w in weeks_result.scalars().all():
+            week_to_plan[w.id] = w.plan_id
+
+    plan_ids = list(set(week_to_plan.values()))
+    plan_names: dict[uuid.UUID, tuple[str, uuid.UUID]] = {}
+    if plan_ids:
+        plans_result = await db.execute(
+            select(Plan).where(Plan.id.in_(plan_ids))
+        )
+        for p in plans_result.scalars().all():
+            plan_names[p.id] = (p.name, p.child_id)
+            child_ids.add(p.child_id)
+
+    child_names: dict[uuid.UUID, str] = {}
+    if child_ids:
+        children_result = await db.execute(
+            select(Child).where(Child.id.in_(list(child_ids)))
+        )
+        for c in children_result.scalars().all():
+            child_names[c.id] = f"{c.first_name} {c.last_name or ''}".strip()
+
+    items = []
+    for a in activities:
+        plan_id = week_to_plan.get(a.plan_week_id)
+        plan_info = plan_names.get(plan_id) if plan_id else None
+        plan_name = plan_info[0] if plan_info else "Unknown"
+        a_child_id = plan_info[1] if plan_info else None
+        child_name = child_names.get(a_child_id) if a_child_id else "Unknown"
+        instructions = a.instructions or {}
+
+        items.append({
+            "activity_id": str(a.id),
+            "title": a.title,
+            "activity_type": a.activity_type.value if hasattr(a.activity_type, "value") else str(a.activity_type),
+            "estimated_minutes": a.estimated_minutes,
+            "difficulty": instructions.get("difficulty"),
+            "ai_rationale": instructions.get("ai_rationale", ""),
+            "scheduled_date": a.scheduled_date.isoformat() if a.scheduled_date else None,
+            "child_name": child_name,
+            "child_id": str(a_child_id) if a_child_id else None,
+            "plan_name": plan_name,
+            "plan_id": str(plan_id) if plan_id else None,
+        })
+
+    return {
+        "items": items,
+        "total": total,
+        "skip": pagination.skip,
+        "limit": pagination.limit,
+    }
