@@ -1,11 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { plans } from "@/lib/api";
-import StatusBadge from "@/components/StatusBadge";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+
+function getCsrf(): string | undefined {
+  if (typeof document === "undefined") return undefined;
+  const m = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);
+  return m ? decodeURIComponent(m[1]) : undefined;
+}
 
 interface QueueItem {
   activity_id: string;
@@ -21,178 +25,146 @@ interface QueueItem {
   plan_id: string | null;
 }
 
-function getCookie(name: string): string | undefined {
-  if (typeof document === "undefined") return undefined;
-  const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
-  return match ? decodeURIComponent(match[1]) : undefined;
-}
-
 export default function QueuePage() {
   const [items, setItems] = useState<QueueItem[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [dismissing, setDismissing] = useState<Set<string>>(new Set());
 
   useEffect(() => { loadQueue(); }, []);
 
   async function loadQueue() {
     setLoading(true);
     try {
-      const csrf = getCookie("csrf_token");
-      const resp = await fetch(`${API_BASE}/governance/queue?limit=100`, {
-        credentials: "include",
-        headers: csrf ? { "X-CSRF-Token": csrf } : {},
-      });
-      if (resp.ok) {
-        const data = await resp.json();
-        setItems(data.items || []);
-        setTotal(data.total || 0);
-      }
+      const resp = await fetch(`${API}/governance/queue?limit=100`, { credentials: "include" });
+      if (resp.ok) { const d = await resp.json(); setItems(d.items || []); setTotal(d.total || 0); }
     } catch {} finally { setLoading(false); }
   }
 
-  async function approve(activityId: string, planId: string) {
-    const csrf = getCookie("csrf_token");
-    await fetch(`${API_BASE}/plans/${planId}/activities/${activityId}/approve`, {
-      method: "PUT",
-      credentials: "include",
+  async function doAction(activityId: string, planId: string, action: "approve" | "reject") {
+    setDismissing((prev) => new Set(prev).add(activityId));
+    const csrf = getCsrf();
+    const body = action === "reject" ? JSON.stringify({ reason: "Rejected by parent" }) : undefined;
+    await fetch(`${API}/plans/${planId}/activities/${activityId}/${action}`, {
+      method: "PUT", credentials: "include",
       headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
+      body,
     });
-    await loadQueue();
-  }
-
-  async function reject(activityId: string, planId: string) {
-    const reason = prompt("Reason for rejection:");
-    if (!reason) return;
-    const csrf = getCookie("csrf_token");
-    await fetch(`${API_BASE}/plans/${planId}/activities/${activityId}/reject`, {
-      method: "PUT",
-      credentials: "include",
-      headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
-      body: JSON.stringify({ reason }),
-    });
-    await loadQueue();
+    setTimeout(() => {
+      setItems((prev) => prev.filter((i) => i.activity_id !== activityId));
+      setDismissing((prev) => { const n = new Set(prev); n.delete(activityId); return n; });
+      setTotal((t) => Math.max(0, t - 1));
+      setSelected((prev) => { const n = new Set(prev); n.delete(activityId); return n; });
+    }, 300);
   }
 
   async function bulkApprove() {
     for (const item of items) {
       if (selected.has(item.activity_id) && item.plan_id) {
-        await approve(item.activity_id, item.plan_id);
+        await doAction(item.activity_id, item.plan_id, "approve");
       }
     }
-    setSelected(new Set());
   }
 
-  function toggleSelect(id: string) {
-    const next = new Set(selected);
-    next.has(id) ? next.delete(id) : next.add(id);
-    setSelected(next);
-  }
+  function toggleSelect(id: string) { setSelected((p) => { const n = new Set(p); n.has(id) ? n.delete(id) : n.add(id); return n; }); }
+  function toggleAll() { selected.size === items.length ? setSelected(new Set()) : setSelected(new Set(items.map((i) => i.activity_id))); }
 
-  function selectAll() {
-    if (selected.size === items.length) setSelected(new Set());
-    else setSelected(new Set(items.map((i) => i.activity_id)));
-  }
-
-  if (loading) return <div className="max-w-4xl"><LoadingSkeleton variant="list" count={5} /></div>;
+  if (loading) return <div className="max-w-4xl"><LoadingSkeleton variant="list" count={6} /></div>;
 
   // Group by child
   const byChild: Record<string, QueueItem[]> = {};
-  items.forEach((item) => {
-    const key = item.child_name || "Unknown";
-    if (!byChild[key]) byChild[key] = [];
-    byChild[key].push(item);
-  });
+  items.forEach((item) => { const k = item.child_name || "Unknown"; (byChild[k] ||= []).push(item); });
 
   return (
     <div className="max-w-4xl">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-semibold">Approval Queue</h1>
-          <p className="text-sm text-(--color-text-secondary)">
+          <h1 className="text-xl font-semibold text-slate-800">Approval Queue</h1>
+          <p className="text-sm text-slate-500">
             {total === 0 ? "All caught up!" : `${total} activities need your review`}
           </p>
         </div>
         {selected.size > 0 && (
-          <button onClick={bulkApprove} className="px-4 py-2 text-sm font-medium bg-emerald-600 text-white rounded-md hover:bg-emerald-700">
+          <button onClick={bulkApprove} className="px-4 py-2 text-sm font-medium bg-green-600 text-white rounded-md hover:bg-green-700">
             Approve Selected ({selected.size})
           </button>
         )}
       </div>
 
       {total === 0 ? (
-        <div className="bg-white rounded-lg border border-(--color-border) p-12 text-center">
-          <div className="text-3xl mb-3 text-(--color-text-secondary)">&#10003;</div>
-          <h2 className="text-sm font-semibold mb-1">All caught up!</h2>
-          <p className="text-xs text-(--color-text-secondary)">No activities need your review right now.</p>
+        <div className="bg-white rounded-lg border border-slate-200 py-16 text-center">
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
+            <span className="text-green-600 text-2xl">&#10003;</span>
+          </div>
+          <div className="text-base font-medium text-slate-700">All caught up!</div>
+          <div className="text-sm text-slate-400 mt-1">No activities need your review right now.</div>
         </div>
       ) : (
-        <div className="space-y-6">
+        <>
           {items.length > 1 && (
-            <div className="flex items-center gap-2">
-              <button onClick={selectAll} className="text-xs text-(--color-accent) hover:underline">
+            <div className="mb-3">
+              <button onClick={toggleAll} className="text-xs text-blue-600 hover:underline">
                 {selected.size === items.length ? "Deselect all" : "Select all"}
               </button>
             </div>
           )}
-
-          {Object.entries(byChild).map(([childName, childItems]) => (
-            <div key={childName}>
-              <h3 className="text-xs font-semibold text-(--color-text-secondary) uppercase tracking-wider mb-2">
-                {childName}
-              </h3>
-              <div className="space-y-2">
-                {childItems.map((item) => (
-                  <div key={item.activity_id} className="bg-white rounded-lg border border-(--color-border) p-4">
-                    <div className="flex items-start gap-3">
-                      <input
-                        type="checkbox"
-                        checked={selected.has(item.activity_id)}
-                        onChange={() => toggleSelect(item.activity_id)}
-                        className="mt-1 rounded"
-                      />
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-sm font-medium">{item.title}</span>
-                          <StatusBadge status={item.activity_type} />
-                          {item.difficulty && (
-                            <span className="text-xs text-(--color-text-secondary)">
-                              {"●".repeat(item.difficulty)}{"○".repeat(5 - item.difficulty)}
-                            </span>
+          <div className="space-y-8">
+            {Object.entries(byChild).map(([childName, childItems]) => (
+              <div key={childName}>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="w-7 h-7 rounded-full bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center">
+                    {childName.charAt(0)}
+                  </span>
+                  <h3 className="text-sm font-semibold text-slate-700">{childName}</h3>
+                  <span className="text-xs text-slate-400">({childItems.length})</span>
+                </div>
+                <div className="space-y-2 ml-9">
+                  {childItems.map((item) => (
+                    <div
+                      key={item.activity_id}
+                      className={`bg-white rounded-lg border border-slate-200 p-4 transition-all duration-300 ${
+                        dismissing.has(item.activity_id) ? "opacity-0 -translate-x-4" : "opacity-100"
+                      }`}
+                    >
+                      <div className="flex items-start gap-3">
+                        <input type="checkbox" checked={selected.has(item.activity_id)}
+                          onChange={() => toggleSelect(item.activity_id)} className="mt-1 rounded" />
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-sm font-medium text-slate-800">{item.title}</span>
+                            <span className="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded font-medium uppercase">{item.activity_type}</span>
+                            {item.difficulty && (
+                              <span className="text-xs">
+                                <span className="text-yellow-500">{"●".repeat(item.difficulty)}</span>
+                                <span className="text-slate-300">{"●".repeat(5 - item.difficulty)}</span>
+                              </span>
+                            )}
+                            {item.estimated_minutes && <span className="text-xs text-slate-400">{item.estimated_minutes}m</span>}
+                            {item.scheduled_date && <span className="text-xs text-slate-400">{item.scheduled_date}</span>}
+                          </div>
+                          <div className="text-[11px] text-slate-400 mt-0.5">{item.plan_name}</div>
+                          {item.ai_rationale && (
+                            <div className="text-xs bg-blue-50 border border-blue-100 rounded px-2.5 py-1.5 mt-2">
+                              <span className="font-medium text-blue-700">AI rationale: </span>
+                              <span className="text-blue-600 italic">{item.ai_rationale}</span>
+                            </div>
                           )}
                         </div>
-                        <div className="text-xs text-(--color-text-secondary) mb-2">
-                          {item.plan_name} &middot; {item.scheduled_date || "Unscheduled"}
-                          {item.estimated_minutes && ` \u00b7 ${item.estimated_minutes}m`}
+                        <div className="flex gap-2 shrink-0">
+                          <button onClick={() => item.plan_id && doAction(item.activity_id, item.plan_id, "approve")}
+                            className="px-3 py-1.5 text-xs font-medium bg-green-600 text-white rounded-md hover:bg-green-700">Approve</button>
+                          <button onClick={() => item.plan_id && doAction(item.activity_id, item.plan_id, "reject")}
+                            className="px-3 py-1.5 text-xs font-medium text-red-600 border border-red-300 rounded-md hover:bg-red-50">Reject</button>
                         </div>
-                        {item.ai_rationale && (
-                          <div className="text-xs bg-blue-50 border border-blue-100 rounded p-2 mb-2">
-                            <span className="font-medium text-blue-700">AI rationale:</span>{" "}
-                            <span className="text-blue-600">{item.ai_rationale}</span>
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex gap-2 shrink-0">
-                        <button
-                          onClick={() => item.plan_id && approve(item.activity_id, item.plan_id)}
-                          className="px-3 py-1.5 text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-md hover:bg-emerald-100"
-                        >
-                          Approve
-                        </button>
-                        <button
-                          onClick={() => item.plan_id && reject(item.activity_id, item.plan_id)}
-                          className="px-3 py-1.5 text-xs font-medium bg-red-50 text-red-700 border border-red-200 rounded-md hover:bg-red-100"
-                        >
-                          Reject
-                        </button>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
