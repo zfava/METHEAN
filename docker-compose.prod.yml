@@ -70,6 +70,10 @@ services:
       redis:
         condition: service_healthy
     command: celery -A app.tasks.worker worker --loglevel=info --concurrency=4
+    deploy:
+      resources:
+        limits:
+          memory: 1G
 
   celery-beat:
     build:
@@ -81,6 +85,10 @@ services:
       redis:
         condition: service_healthy
     command: celery -A app.tasks.worker beat --loglevel=info
+    deploy:
+      resources:
+        limits:
+          memory: 256M
 
   frontend:
     build:
