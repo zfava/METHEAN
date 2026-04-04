@@ -2588,6 +2588,72 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/household/philosophy:
+    put:
+      tags:
+      - spec-coverage
+      summary: Update Philosophy
+      description: Set the household's philosophical profile. Governs all AI behavior.
+      operationId: update_philosophy_api_v1_household_philosophy_put
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhilosophicalProfileUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Update Philosophy Api V1 Household Philosophy Put
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - spec-coverage
+      summary: Get Philosophy
+      operationId: get_philosophy_api_v1_household_philosophy_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Get Philosophy Api V1 Household Philosophy Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/children:
     get:
       tags:
@@ -4564,6 +4630,56 @@ components:
       - child_id
       - message
       title: OverrideResponse
+    PhilosophicalProfileUpdate:
+      properties:
+        educational_philosophy:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Educational Philosophy
+        philosophy_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Philosophy Description
+        religious_framework:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Religious Framework
+        religious_notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Religious Notes
+        content_boundaries:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Content Boundaries
+        ai_autonomy_level:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ai Autonomy Level
+        pedagogical_preferences:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Pedagogical Preferences
+        custom_constraints:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Custom Constraints
+      type: object
+      title: PhilosophicalProfileUpdate
     PlanDetailResponse:
       properties:
         id:

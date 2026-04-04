@@ -121,6 +121,78 @@ async def update_household_settings(
     return {"id": str(household.id), "name": household.name, "timezone": household.timezone}
 
 
+VALID_PHILOSOPHIES = {"classical", "charlotte_mason", "unschooling", "eclectic", "montessori", "traditional", "custom"}
+VALID_STANCES = {"exclude", "present_alternative", "parent_led_only", "allow"}
+VALID_AUTONOMY = {"preview_all", "approve_difficult", "trust_within_rules", "full_autonomy"}
+
+
+class PhilosophicalProfileUpdate(BaseModel):
+    educational_philosophy: str | None = None
+    philosophy_description: str | None = None
+    religious_framework: str | None = None
+    religious_notes: str | None = None
+    content_boundaries: list[dict] | None = None
+    ai_autonomy_level: str | None = None
+    pedagogical_preferences: dict | None = None
+    custom_constraints: list[str] | None = None
+
+
+@router.put("/household/philosophy")
+async def update_philosophy(
+    body: PhilosophicalProfileUpdate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner")),
+) -> dict:
+    """Set the household's philosophical profile. Governs all AI behavior."""
+    from app.models.enums import GovernanceAction
+    from app.models.governance import GovernanceEvent
+
+    profile = body.model_dump(exclude_none=True)
+
+    # Validate educational_philosophy
+    if "educational_philosophy" in profile and profile["educational_philosophy"] not in VALID_PHILOSOPHIES:
+        raise HTTPException(status_code=422, detail=f"educational_philosophy must be one of: {', '.join(sorted(VALID_PHILOSOPHIES))}")
+
+    # Validate content_boundaries
+    for b in profile.get("content_boundaries", []):
+        if not b.get("topic") or not b.get("stance"):
+            raise HTTPException(status_code=422, detail="Each content_boundary must have 'topic' and 'stance'")
+        if b["stance"] not in VALID_STANCES:
+            raise HTTPException(status_code=422, detail=f"stance must be one of: {', '.join(sorted(VALID_STANCES))}")
+
+    # Validate autonomy level
+    if "ai_autonomy_level" in profile and profile["ai_autonomy_level"] not in VALID_AUTONOMY:
+        raise HTTPException(status_code=422, detail=f"ai_autonomy_level must be one of: {', '.join(sorted(VALID_AUTONOMY))}")
+
+    result = await db.execute(select(Household).where(Household.id == user.household_id))
+    household = result.scalar_one()
+    household.philosophical_profile = profile
+    await db.flush()
+
+    # Log governance event
+    db.add(GovernanceEvent(
+        household_id=user.household_id,
+        user_id=user.id,
+        action=GovernanceAction.modify,
+        target_type="philosophical_profile",
+        target_id=user.household_id,
+        reason="Philosophical profile updated",
+    ))
+    await db.flush()
+
+    return profile
+
+
+@router.get("/household/philosophy")
+async def get_philosophy(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    result = await db.execute(select(Household).where(Household.id == user.household_id))
+    household = result.scalar_one()
+    return household.philosophical_profile or {}
+
+
 @router.get("/children")
 async def list_children(
     db: AsyncSession = Depends(get_db),

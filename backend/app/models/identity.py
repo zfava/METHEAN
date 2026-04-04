@@ -21,6 +21,7 @@ class Household(Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     timezone: Mapped[str] = mapped_column(String(50), default="America/New_York")
     settings: Mapped[dict | None] = mapped_column(JSONB, default=dict)
+    philosophical_profile: Mapped[dict | None] = mapped_column(JSONB, default=dict)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

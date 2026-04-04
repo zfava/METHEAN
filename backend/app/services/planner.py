@@ -55,6 +55,12 @@ Child's current state:
 Create activities spread across 5 days (Monday=1 through Friday=5).
 Prioritize nodes that are due for review, then available nodes."""
 
+    # Fetch household philosophical profile for AI constraints
+    from app.models.identity import Household
+    h_result = await db.execute(select(Household).where(Household.id == household_id))
+    household_obj = h_result.scalar_one_or_none()
+    phil_profile = household_obj.philosophical_profile if household_obj else None
+
     # Call AI through governance gateway
     ai_result = await call_ai(
         db,
@@ -63,6 +69,7 @@ Prioritize nodes that are due for review, then available nodes."""
         user_prompt=user_prompt,
         household_id=household_id,
         triggered_by=user_id,
+        philosophical_profile=phil_profile,
     )
 
     ai_output = ai_result["output"]

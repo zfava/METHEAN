@@ -59,6 +59,13 @@ Child's responses/work:
 
 Provide your assessment."""
 
+    # Fetch philosophical profile for AI constraints
+    from sqlalchemy import select as sa_select
+    from app.models.identity import Household
+    h_result = await db.execute(sa_select(Household).where(Household.id == household_id))
+    h = h_result.scalar_one_or_none()
+    phil = h.philosophical_profile if h else None
+
     result = await call_ai(
         db,
         role=AIRole.evaluator,
@@ -66,6 +73,7 @@ Provide your assessment."""
         user_prompt=user_prompt,
         household_id=household_id,
         triggered_by=user_id,
+        philosophical_profile=phil,
     )
 
     output = result["output"]

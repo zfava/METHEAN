@@ -86,6 +86,17 @@ async def _get_plan_or_404(
     return plan
 
 
+async def _get_philosophical_profile(
+    db: AsyncSession, household_id: uuid.UUID,
+) -> dict | None:
+    from app.models.identity import Household
+    result = await db.execute(
+        select(Household).where(Household.id == household_id)
+    )
+    h = result.scalar_one_or_none()
+    return h.philosophical_profile if h else None
+
+
 # ══════════════════════════════════════════════════
 # Governance Rules CRUD
 # ══════════════════════════════════════════════════
@@ -445,6 +456,7 @@ Child says: {body.message}
 
 Respond using the Socratic method. Guide the child toward understanding without giving the answer."""
 
+    phil = await _get_philosophical_profile(db, user.household_id)
     result = await call_ai(
         db,
         role=AIRole.tutor,
@@ -452,6 +464,7 @@ Respond using the Socratic method. Guide the child toward understanding without 
         user_prompt=user_prompt,
         household_id=user.household_id,
         triggered_by=user.id,
+        philosophical_profile=phil,
     )
 
     output = result["output"]
@@ -511,11 +524,13 @@ Current nodes:
 
 Provide calibration recommendations."""
 
+    phil = await _get_philosophical_profile(db, user.household_id)
     result = await call_ai(
         db,
         role=AIRole.cartographer,
         system_prompt=CARTOGRAPHER_SYSTEM,
         user_prompt=user_prompt,
+        philosophical_profile=phil,
         household_id=user.household_id,
         triggered_by=user.id,
     )
@@ -572,6 +587,7 @@ State Summary:
 
 Provide an encouraging, honest assessment."""
 
+    phil = await _get_philosophical_profile(db, user.household_id)
     result = await call_ai(
         db,
         role=AIRole.advisor,
@@ -579,6 +595,7 @@ Provide an encouraging, honest assessment."""
         user_prompt=user_prompt,
         household_id=user.household_id,
         triggered_by=user.id,
+        philosophical_profile=phil,
     )
 
     output = result["output"]
