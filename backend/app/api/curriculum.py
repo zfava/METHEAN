@@ -175,7 +175,7 @@ async def list_templates(
 async def copy_template(
     template_id: str,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("manage.children")),
 ) -> TemplateCopyResponse:
     template = TEMPLATES.get(template_id)
     if not template:
@@ -643,7 +643,7 @@ async def enroll_child(
     child_id: uuid.UUID,
     body: EnrollmentCreate,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("manage.children")),
 ) -> EnrollmentResponse:
     child = await _get_child_or_404(db, child_id, user.household_id)
     lmap = await _get_map_or_404(db, body.learning_map_id, user.household_id)

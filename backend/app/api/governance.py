@@ -175,7 +175,7 @@ async def update_governance_rule(
     rule_id: uuid.UUID,
     body: GovernanceRuleUpdate,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("rules.edit")),
 ) -> GovernanceRuleResponse:
     from app.models.enums import RuleTier
 
@@ -256,7 +256,7 @@ async def update_governance_rule(
 async def delete_governance_rule(
     rule_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("rules.edit")),
 ) -> dict:
     from app.models.enums import RuleTier
 
@@ -299,7 +299,7 @@ class AttestRequest(BaseModel):
 async def generate_report(
     body: ReportRequest,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("export.data")),
 ) -> dict:
     """Generate a comprehensive governance report for the period."""
     from app.services.governance_report import generate_governance_report
@@ -384,7 +384,7 @@ async def upcoming_triggers(
 @router.post("/governance-rules/defaults", response_model=list[GovernanceRuleResponse], status_code=201)
 async def initialize_default_rules(
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner")),
+    user: User = Depends(require_permission("manage.users")),
 ) -> list[GovernanceRuleResponse]:
     rules = await create_default_rules(db, user.household_id, user.id)
     return [GovernanceRuleResponse.model_validate(r) for r in rules]
@@ -519,7 +519,7 @@ async def reject_activity(
     activity_id: uuid.UUID,
     body: ActivityApproveReject,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("rules.edit")),
 ) -> dict:
     plan = await _get_plan_or_404(db, plan_id, user.household_id)
     if plan.status == PlanStatus.archived:
@@ -553,7 +553,7 @@ async def reject_activity(
 async def lock_plan(
     plan_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("rules.edit")),
 ) -> dict:
     plan = await _get_plan_or_404(db, plan_id, user.household_id)
 
@@ -597,7 +597,7 @@ async def lock_plan(
 async def unlock_plan(
     plan_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("export.data")),
 ) -> dict:
     plan = await _get_plan_or_404(db, plan_id, user.household_id)
     if plan.status == PlanStatus.archived:
@@ -679,7 +679,7 @@ async def cartographer_calibrate(
     child_id: uuid.UUID,
     body: CartographerCalibrateRequest,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("approve.activities")),
 ) -> CartographerRecommendation:
     child = await _get_child_or_404(db, child_id, user.household_id)
 
@@ -745,7 +745,7 @@ Provide calibration recommendations."""
 async def generate_advisor_report(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("approve.activities")),
 ) -> AdvisorReportResponse:
     child = await _get_child_or_404(db, child_id, user.household_id)
 

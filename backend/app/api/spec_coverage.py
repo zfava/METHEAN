@@ -17,7 +17,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.ai.gateway import AIRole, call_ai
 from app.ai.prompts import PLANNER_SYSTEM
-from app.api.deps import get_current_user, get_db, require_role
+from app.api.deps import get_current_user, get_db, require_permission, require_role
 from app.models.curriculum import (
     ChildMapEnrollment,
     LearningEdge,
@@ -107,7 +107,7 @@ async def _get_child_or_404(db: AsyncSession, child_id: uuid.UUID, household_id:
 async def update_household_settings(
     body: HouseholdSettingsUpdate,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner")),
+    user: User = Depends(require_permission("manage.users")),
 ) -> dict:
     result = await db.execute(
         select(Household).where(Household.id == user.household_id)
@@ -141,7 +141,7 @@ class PhilosophicalProfileUpdate(BaseModel):
 async def update_philosophy(
     body: PhilosophicalProfileUpdate,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner")),
+    user: User = Depends(require_permission("change.philosophy")),
 ) -> dict:
     """Set the household's philosophical profile. Governs all AI behavior."""
     from app.models.enums import GovernanceAction
@@ -233,7 +233,7 @@ async def list_children(
 async def create_child(
     body: ChildCreate,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("manage.children")),
 ) -> dict:
     child = Child(
         household_id=user.household_id,
@@ -258,7 +258,7 @@ async def update_child(
     child_id: uuid.UUID,
     body: ChildUpdate,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner")),
+    user: User = Depends(require_permission("manage.children")),
 ) -> dict:
     child = await _get_child_or_404(db, child_id, user.household_id)
     if body.first_name is not None:
@@ -281,7 +281,7 @@ async def update_child_preferences(
     child_id: uuid.UUID,
     body: ChildPreferencesUpdate,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner")),
+    user: User = Depends(require_permission("manage.children")),
 ) -> dict:
     child = await _get_child_or_404(db, child_id, user.household_id)
     result = await db.execute(
@@ -351,7 +351,7 @@ async def get_today(
 async def list_user_permissions(
     user_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner")),
+    user: User = Depends(require_permission("manage.users")),
 ) -> list[dict]:
     result = await db.execute(
         select(UserPermission).where(
@@ -382,7 +382,7 @@ async def grant_permission(
     user_id: uuid.UUID,
     body: PermissionGrant,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner")),
+    user: User = Depends(require_permission("manage.users")),
 ) -> dict:
     perm = UserPermission(
         user_id=user_id,
@@ -407,7 +407,7 @@ async def revoke_permission(
     user_id: uuid.UUID,
     permission_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner")),
+    user: User = Depends(require_permission("manage.users")),
 ) -> dict:
     result = await db.execute(
         select(UserPermission).where(
@@ -644,7 +644,7 @@ async def counterfactual(
     child_id: uuid.UUID,
     body: CounterfactualRequest,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("plans.generate")),
 ) -> dict:
     """What-if analysis without state changes."""
     child = await _get_child_or_404(db, child_id, user.household_id)

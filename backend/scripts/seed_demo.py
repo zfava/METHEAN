@@ -232,6 +232,31 @@ async def seed():
         await db.flush()
         hid = household.id
 
+        # Set philosophical profile
+        household.philosophical_profile = {
+            "educational_philosophy": "classical",
+            "philosophy_description": "We follow the classical trivium model adapted for a Christian worldview, emphasizing grammar, logic, and rhetoric stages.",
+            "religious_framework": "christian",
+            "religious_notes": "Protestant evangelical. Scripture is the foundation for all learning.",
+            "content_boundaries": [
+                {"topic": "evolution", "stance": "present_alternative", "notes": "Present both evolutionary theory and creation science perspectives"},
+                {"topic": "sexuality_education", "stance": "parent_led_only", "notes": ""},
+            ],
+            "ai_autonomy_level": "approve_difficult",
+            "pedagogical_preferences": {
+                "socratic_method": True,
+                "memorization_valued": True,
+                "standardized_testing": False,
+                "competitive_grading": False,
+                "collaborative_learning": True,
+            },
+            "custom_constraints": [
+                "All history content should include primary sources when possible",
+                "Latin roots should be incorporated into vocabulary study",
+            ],
+        }
+        await db.flush()
+
         parent = User(
             household_id=hid, email=DEMO_EMAIL,
             password_hash=hash_password(DEMO_PASSWORD),
@@ -416,37 +441,50 @@ async def seed():
             (liam, elem, "Liam"),
             (sophia, logic, "Sophia"),
         ]:
+            # Plan dates span today so /today always returns activities
+            plan_start = min(WEEK_START, TODAY - timedelta(days=1))
+            plan_end = max(WEEK_START + timedelta(days=6), TODAY + timedelta(days=3))
+
             plan = Plan(
                 household_id=hid, child_id=child.id, created_by=pid,
                 name=f"{child_label} \u2014 Week of {WEEK_START.isoformat()}",
-                status=PlanStatus.draft, start_date=WEEK_START,
-                end_date=WEEK_START + timedelta(days=4), ai_generated=True,
+                status=PlanStatus.draft, start_date=plan_start,
+                end_date=plan_end, ai_generated=True,
             )
             db.add(plan)
             await db.flush()
 
             week = PlanWeek(
                 plan_id=plan.id, household_id=hid,
-                week_number=1, start_date=WEEK_START,
-                end_date=WEEK_START + timedelta(days=4),
+                week_number=1, start_date=plan_start,
+                end_date=plan_end,
             )
             db.add(week)
             await db.flush()
 
-            # Pick 3-4 nodes per child for activities
-            # Mix of governance statuses: first 2 completed+approved, next 1 approved+scheduled,
-            # last 2 pending review (governance_approved=False) — this populates the approval queue
+            # Activities: first 3 scheduled for TODAY so the dashboard always has data.
+            # Activity 0: completed + approved (shows progress)
+            # Activity 1: scheduled + approved (ready to start in child view)
+            # Activity 2: scheduled + pending review (shows in governance queue)
+            # Activity 3-4: future dates
             node_titles = list(nodes.keys())[:5]
             for i, title in enumerate(node_titles):
-                completed = i < 2
-                approved = i < 3  # First 3 approved, last 2 pending review
+                if i < 3:
+                    sched_date = TODAY
+                    completed = (i == 0)
+                    approved = (i < 2)  # 0 and 1 approved, 2 pending
+                else:
+                    sched_date = WEEK_START + timedelta(days=i)
+                    completed = False
+                    approved = False  # 3 and 4 pending review
+
                 a = Activity(
                     plan_week_id=week.id, household_id=hid,
                     node_id=nodes[title].id,
                     activity_type=ActivityType.review if i == 0 else ActivityType.lesson,
                     title=f"{'Review' if i == 0 else 'Study'} {title}",
                     status=ActivityStatus.completed if completed else ActivityStatus.scheduled,
-                    scheduled_date=WEEK_START + timedelta(days=i),
+                    scheduled_date=sched_date,
                     estimated_minutes=25, sort_order=i,
                     instructions={
                         "difficulty": 2 if i < 2 else 3 + (i - 2),
