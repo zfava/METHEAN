@@ -630,8 +630,9 @@ async def tutor_message(
     if not activity:
         raise HTTPException(status_code=404, detail="Activity not found")
 
-    # Build context
+    # Build context with node content if available
     node_title = "General"
+    content_guidance = ""
     if activity.node_id:
         node_result = await db.execute(
             select(LearningNode).where(LearningNode.id == activity.node_id)
@@ -639,9 +640,21 @@ async def tutor_message(
         node = node_result.scalar_one_or_none()
         if node:
             node_title = node.title
+            if node.content and node.content.get("teaching_guidance"):
+                tg = node.content["teaching_guidance"]
+                parts = []
+                if tg.get("socratic_questions"):
+                    parts.append(f"Key questions to ask: {', '.join(tg['socratic_questions'][:3])}")
+                if tg.get("common_misconceptions"):
+                    parts.append(f"Watch for misconceptions: {', '.join(tg['common_misconceptions'][:2])}")
+                if tg.get("scaffolding_sequence"):
+                    parts.append(f"Scaffolding: {' -> '.join(tg['scaffolding_sequence'][:3])}")
+                if parts:
+                    content_guidance = "\n\nTEACHING GUIDANCE:\n" + "\n".join(f"- {p}" for p in parts)
 
     user_prompt = f"""Activity: {activity.title}
 Learning Topic: {node_title}
+{content_guidance}
 
 Child says: {body.message}
 

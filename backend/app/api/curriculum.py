@@ -672,6 +672,47 @@ async def enroll_child(
     return EnrollmentResponse.model_validate(enrollment)
 
 
+# ── Content Enrichment ──
+
+@router.post("/learning-maps/{map_id}/enrich")
+async def enrich_map_nodes(
+    map_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Trigger content enrichment for all unenriched nodes in the map."""
+    from app.services.content_engine import enrich_nodes
+    lmap = await _get_map_or_404(db, map_id, user.household_id)
+    result = await enrich_nodes(db, user.household_id, map_id, user_id=user.id)
+    return result
+
+
+@router.post("/learning-maps/{map_id}/nodes/{node_id}/enrich")
+async def enrich_single_node_endpoint(
+    map_id: uuid.UUID,
+    node_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Enrich a single node with teaching/assessment/resource guidance."""
+    from app.services.content_engine import enrich_single_node
+    node = await _get_node_or_404(db, map_id, node_id, user.household_id)
+    result = await enrich_single_node(db, node_id, user.household_id, user_id=user.id)
+    return result
+
+
+@router.get("/learning-maps/{map_id}/nodes/{node_id}/content")
+async def get_node_content(
+    map_id: uuid.UUID,
+    node_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Return the full content guidance for a node."""
+    node = await _get_node_or_404(db, map_id, node_id, user.household_id)
+    return node.content or {}
+
+
 # ── Parent Override ──
 
 @router.post(

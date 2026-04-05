@@ -31,6 +31,7 @@ class AIRole(str, Enum):
     advisor = "advisor"
     cartographer = "cartographer"
     education_architect = "education_architect"
+    content_architect = "content_architect"
 
 
 class AIProvider(str, Enum):
@@ -393,5 +394,52 @@ def _call_mock(role: AIRole, user_prompt: str) -> dict:
                 "rationale": "Designed for the Grammar Stage of the trivium, emphasizing memorization, narration, and foundational skills"
             })
         },
+    }
+    mock_responses[AIRole.content_architect] = {
+        "content": json.dumps({
+            "learning_objectives": [
+                "Identify and produce letter sounds for all 26 letters",
+                "Blend CVC words (consonant-vowel-consonant) independently",
+            ],
+            "teaching_guidance": {
+                "introduction": "Begin with familiar letter sounds the child already knows, then introduce new ones in groups of 3-4",
+                "practice_activities": ["Sound sorting games", "Blending chains", "Dictation exercises"],
+                "common_misconceptions": ["Confusing similar sounds (b/d, p/q)", "Skipping the blending step"],
+                "scaffolding_sequence": ["Single sounds", "Two-sound blends", "CVC words", "CCVC words"],
+                "socratic_questions": ["What sound does this letter make?", "Can you hear the difference between these two words?"],
+                "real_world_connections": ["Reading signs on walks", "Sounding out names of family members"],
+            },
+            "assessment_criteria": {
+                "mastery_indicators": ["Produces all 26 letter sounds without hesitation", "Blends 3-sound words independently"],
+                "proficiency_indicators": ["Most sounds correct with occasional self-correction"],
+                "developing_indicators": ["Produces sounds with verbal cues"],
+                "assessment_methods": ["oral response", "sound dictation", "reading decodable text"],
+                "sample_assessment_prompts": ["What sound does M make?", "Read these three words: cat, sit, run"],
+            },
+            "resource_guidance": {
+                "required": ["Letter tiles or cards", "Decodable readers (systematic phonics series)"],
+                "recommended": ["Whiteboard for writing practice", "Sand tray for letter formation"],
+                "philosophy_specific": {"classical": "Use copywork from quality literature alongside phonics"},
+            },
+            "connections": {
+                "prerequisite_skills_from_other_subjects": [],
+                "feeds_into": ["Sight Words (Reading)", "Spelling (Writing)"],
+                "parallel_topics": ["Handwriting (Letter Formation)"],
+            },
+            "accommodations": {
+                "dyslexia": "Use multisensory approach: see, say, trace, write. Extra time on blending.",
+                "adhd": "Keep sessions to 10-15 minutes. Use movement between sound groups.",
+                "gifted": "Accelerate to multisyllabic words. Introduce word origins.",
+                "visual_learner": "Color-code vowels and consonants differently.",
+                "kinesthetic_learner": "Form letters in sand, use body movements for sounds.",
+                "auditory_learner": "Emphasize rhyming and sound discrimination games.",
+            },
+            "time_estimates": {
+                "first_exposure": 20,
+                "practice_session": 15,
+                "review_session": 10,
+                "estimated_sessions_to_mastery": 8,
+            },
+        })
     }
     return mock_responses.get(role, {"content": json.dumps({"message": "Mock response"})})

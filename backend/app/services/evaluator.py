@@ -41,16 +41,30 @@ async def evaluate_attempt(
     node_title: str,
     child_responses: str,
     tutor_transcript: str | None = None,
+    assessment_criteria: dict | None = None,
 ) -> dict:
     """Call AI Evaluator through governance gateway.
 
     Returns dict with: quality_rating, confidence_score, strengths,
     areas_for_improvement, evidence_summary, ai_run_id.
     """
+    criteria_text = ""
+    if assessment_criteria:
+        parts = []
+        if assessment_criteria.get("mastery_indicators"):
+            parts.append(f"Mastery looks like: {', '.join(assessment_criteria['mastery_indicators'][:3])}")
+        if assessment_criteria.get("assessment_methods"):
+            parts.append(f"Assessment methods: {', '.join(assessment_criteria['assessment_methods'])}")
+        if assessment_criteria.get("sample_assessment_prompts"):
+            parts.append(f"Key prompts: {', '.join(assessment_criteria['sample_assessment_prompts'][:2])}")
+        if parts:
+            criteria_text = "\n\nASSESSMENT CRITERIA:\n" + "\n".join(f"- {p}" for p in parts)
+
     user_prompt = f"""Evaluate this child's attempt at an activity.
 
 Activity: {activity_title}
 Learning Node: {node_title}
+{criteria_text}
 
 Child's responses/work:
 {child_responses}
