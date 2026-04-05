@@ -94,6 +94,7 @@ export default function Sidebar() {
           </div>
           {navLink("/plans", "Plans", "\u25A4")}
           {navLink("/maps", "Maps", "\u25CE")}
+          {navLink("/curriculum/editor", "Map Editor", "\u2710")}
           {navLink("/inspection", "Progress", "\u2B21")}
         </div>
 

@@ -1282,6 +1282,78 @@
         }
       }
     },
+    "/api/v1/learning-maps/{map_id}/batch": {
+      "post": {
+        "tags": [
+          "curriculum"
+        ],
+        "summary": "Batch Update",
+        "description": "Process all map changes in a single transaction.",
+        "operationId": "batch_update_api_v1_learning_maps__map_id__batch_post",
+        "parameters": [
+          {
+            "name": "map_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Map Id"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Batch Update Api V1 Learning Maps  Map Id  Batch Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/children/{child_id}/curriculum/map-existing": {
       "post": {
         "tags": [
@@ -7051,6 +7123,183 @@
           "attestation_text"
         ],
         "title": "AttestRequest"
+      },
+      "BatchEdgeCreate": {
+        "properties": {
+          "from_node_id": {
+            "type": "string",
+            "title": "From Node Id"
+          },
+          "to_node_id": {
+            "type": "string",
+            "title": "To Node Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "from_node_id",
+          "to_node_id"
+        ],
+        "title": "BatchEdgeCreate"
+      },
+      "BatchNodeCreate": {
+        "properties": {
+          "node_type": {
+            "type": "string",
+            "title": "Node Type"
+          },
+          "title": {
+            "type": "string",
+            "title": "Title"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "estimated_minutes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Minutes"
+          },
+          "sort_order": {
+            "type": "integer",
+            "title": "Sort Order",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "required": [
+          "node_type",
+          "title"
+        ],
+        "title": "BatchNodeCreate"
+      },
+      "BatchNodeUpdate": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Title"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "node_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Node Type"
+          },
+          "estimated_minutes": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Minutes"
+          },
+          "sort_order": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sort Order"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "BatchNodeUpdate"
+      },
+      "BatchRequest": {
+        "properties": {
+          "nodes_create": {
+            "items": {
+              "$ref": "#/components/schemas/BatchNodeCreate"
+            },
+            "type": "array",
+            "title": "Nodes Create",
+            "default": []
+          },
+          "nodes_update": {
+            "items": {
+              "$ref": "#/components/schemas/BatchNodeUpdate"
+            },
+            "type": "array",
+            "title": "Nodes Update",
+            "default": []
+          },
+          "nodes_delete": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Nodes Delete",
+            "default": []
+          },
+          "edges_create": {
+            "items": {
+              "$ref": "#/components/schemas/BatchEdgeCreate"
+            },
+            "type": "array",
+            "title": "Edges Create",
+            "default": []
+          },
+          "edges_delete": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Edges Delete",
+            "default": []
+          }
+        },
+        "type": "object",
+        "title": "BatchRequest"
       },
       "Body_upload_artifact_endpoint_api_v1_children__child_id__artifacts_post": {
         "properties": {

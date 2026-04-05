@@ -21,7 +21,7 @@ from app.models.curriculum import (
     LearningNode,
     Subject,
 )
-from app.models.enums import GovernanceAction, MasteryLevel, StateEventType
+from app.models.enums import EdgeRelation, GovernanceAction, MasteryLevel, StateEventType
 from app.models.governance import GovernanceEvent
 from app.models.identity import Child, User
 from app.models.state import ChildNodeState, StateEvent
@@ -671,6 +671,187 @@ async def enroll_child(
     await db.flush()
 
     return EnrollmentResponse.model_validate(enrollment)
+
+
+# ── Batch Update ──
+
+class BatchNodeCreate(BaseModel):
+    node_type: str
+    title: str
+    description: str | None = None
+    estimated_minutes: int | None = None
+    sort_order: int = 0
+
+class BatchNodeUpdate(BaseModel):
+    id: str
+    title: str | None = None
+    description: str | None = None
+    node_type: str | None = None
+    estimated_minutes: int | None = None
+    sort_order: int | None = None
+
+class BatchEdgeCreate(BaseModel):
+    from_node_id: str
+    to_node_id: str
+
+class BatchRequest(BaseModel):
+    nodes_create: list[BatchNodeCreate] = []
+    nodes_update: list[BatchNodeUpdate] = []
+    nodes_delete: list[str] = []
+    edges_create: list[BatchEdgeCreate] = []
+    edges_delete: list[str] = []
+
+
+@router.post("/learning-maps/{map_id}/batch")
+async def batch_update(
+    map_id: uuid.UUID,
+    body: BatchRequest,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Process all map changes in a single transaction."""
+    lmap = await _get_map_or_404(db, map_id, user.household_id)
+
+    created_nodes: dict[str, uuid.UUID] = {}  # temp_id -> real_id
+    errors = []
+
+    # 1. Delete edges first (before nodes that reference them)
+    for edge_id_str in body.edges_delete:
+        try:
+            eid = uuid.UUID(edge_id_str)
+            result = await db.execute(
+                select(LearningEdge).where(
+                    LearningEdge.id == eid,
+                    LearningEdge.learning_map_id == map_id,
+                )
+            )
+            edge = result.scalar_one_or_none()
+            if edge:
+                await db.delete(edge)
+        except Exception as e:
+            errors.append(f"edge_delete {edge_id_str}: {e}")
+
+    # 2. Delete nodes
+    for node_id_str in body.nodes_delete:
+        try:
+            nid = uuid.UUID(node_id_str)
+            node = await _get_node_or_404(db, map_id, nid, user.household_id)
+            node.is_active = False
+            # Remove edges involving this node
+            from sqlalchemy import or_ as sa_or, delete as sa_delete
+            await db.execute(
+                sa_delete(LearningEdge).where(
+                    LearningEdge.learning_map_id == map_id,
+                    sa_or(
+                        LearningEdge.from_node_id == nid,
+                        LearningEdge.to_node_id == nid,
+                    ),
+                )
+            )
+        except Exception as e:
+            errors.append(f"node_delete {node_id_str}: {e}")
+
+    await db.flush()
+
+    # 3. Create nodes
+    for nc in body.nodes_create:
+        node = LearningNode(
+            learning_map_id=map_id,
+            household_id=user.household_id,
+            node_type=nc.node_type,
+            title=nc.title,
+            description=nc.description,
+            estimated_minutes=nc.estimated_minutes,
+            sort_order=nc.sort_order,
+        )
+        db.add(node)
+        await db.flush()
+        created_nodes[nc.title] = node.id  # Use title as temp key
+
+    # 4. Update nodes
+    for nu in body.nodes_update:
+        try:
+            nid = uuid.UUID(nu.id)
+            result = await db.execute(
+                select(LearningNode).where(
+                    LearningNode.id == nid,
+                    LearningNode.learning_map_id == map_id,
+                )
+            )
+            node = result.scalar_one_or_none()
+            if node:
+                if nu.title is not None:
+                    node.title = nu.title
+                if nu.description is not None:
+                    node.description = nu.description
+                if nu.node_type is not None:
+                    node.node_type = nu.node_type
+                if nu.estimated_minutes is not None:
+                    node.estimated_minutes = nu.estimated_minutes
+                if nu.sort_order is not None:
+                    node.sort_order = nu.sort_order
+        except Exception as e:
+            errors.append(f"node_update {nu.id}: {e}")
+
+    await db.flush()
+
+    # 5. Create edges (with cycle detection)
+    edges_created = 0
+    for ec in body.edges_create:
+        try:
+            from_id = uuid.UUID(ec.from_node_id)
+            to_id = uuid.UUID(ec.to_node_id)
+            if await would_create_cycle(db, map_id, from_id, to_id):
+                errors.append(f"edge {ec.from_node_id}->{ec.to_node_id}: would create cycle")
+                continue
+            edge = LearningEdge(
+                learning_map_id=map_id,
+                household_id=user.household_id,
+                from_node_id=from_id,
+                to_node_id=to_id,
+                relation=EdgeRelation.prerequisite,
+            )
+            db.add(edge)
+            await db.flush()
+            await add_closure_entries(db, map_id, from_id, to_id)
+            edges_created += 1
+        except Exception as e:
+            errors.append(f"edge_create: {e}")
+
+    # 6. Rebuild closure if edges were deleted
+    if body.edges_delete or body.nodes_delete:
+        await rebuild_closure_for_map(db, map_id)
+
+    # 7. Increment version
+    await increment_map_version(db, map_id)
+
+    # Return updated map
+    result = await db.execute(
+        select(LearningMap).where(LearningMap.id == map_id)
+        .options(selectinload(LearningMap.nodes), selectinload(LearningMap.edges))
+    )
+    updated_map = result.scalar_one()
+    active_nodes = [n for n in updated_map.nodes if n.is_active]
+
+    return {
+        "map_id": str(map_id),
+        "version": updated_map.version,
+        "nodes": [
+            {"id": str(n.id), "title": n.title, "node_type": n.node_type.value if hasattr(n.node_type, "value") else str(n.node_type),
+             "sort_order": n.sort_order, "estimated_minutes": n.estimated_minutes}
+            for n in sorted(active_nodes, key=lambda x: x.sort_order)
+        ],
+        "edges": [
+            {"id": str(e.id), "from_node_id": str(e.from_node_id), "to_node_id": str(e.to_node_id)}
+            for e in updated_map.edges
+        ],
+        "errors": errors,
+        "nodes_created": len(body.nodes_create),
+        "nodes_updated": len(body.nodes_update),
+        "nodes_deleted": len(body.nodes_delete),
+        "edges_created": edges_created,
+        "edges_deleted": len(body.edges_delete),
+    }
 
 
 # ── Curriculum Mapper ──

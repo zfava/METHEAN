@@ -150,8 +150,10 @@ export default function MapsPage() {
 
           {/* ── DAG visualization ── */}
           <div className="bg-white rounded-lg border border-slate-200 p-6">
-            <div className="mb-4">
+            <div className="mb-4 flex items-center justify-between">
               <h2 className="text-sm font-semibold text-slate-800">{selectedMap.map_name}</h2>
+              <a href={`/curriculum/editor?map_id=${selectedMap.learning_map_id}`}
+                className="text-xs text-blue-600 hover:underline">Edit Map</a>
             </div>
 
             <div className="space-y-1">
