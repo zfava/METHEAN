@@ -41,6 +41,7 @@ export default function GovernanceOverviewPage() {
   const [events, setEvents] = useState<GovernanceEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [dismissing, setDismissing] = useState<Set<string>>(new Set());
+  const [philSummary, setPhilSummary] = useState("");
 
   useEffect(() => { load(); }, []);
 
@@ -55,6 +56,19 @@ export default function GovernanceOverviewPage() {
       setQueueTotal(qResp.total || 0);
       setRules((rResp as any).items || rResp);
       setEvents(((eResp as any).items || eResp).slice(0, 5));
+
+      // Philosophy summary
+      try {
+        const philResp = await fetch(`${API}/household/philosophy`, { credentials: "include" });
+        if (philResp.ok) {
+          const phil = await philResp.json();
+          const parts = [];
+          if (phil.educational_philosophy) parts.push(phil.educational_philosophy.replace(/_/g, " "));
+          if (phil.religious_framework && phil.religious_framework !== "secular") parts.push(phil.religious_framework);
+          if (phil.ai_autonomy_level) parts.push(phil.ai_autonomy_level.replace(/_/g, " "));
+          setPhilSummary(parts.join(" \u00b7 ") || "Not configured");
+        }
+      } catch {}
     } catch {} finally { setLoading(false); }
   }
 
@@ -102,6 +116,21 @@ export default function GovernanceOverviewPage() {
         <h1 className="text-xl font-semibold text-slate-800">Governance</h1>
         <p className="text-sm text-slate-500">You control what the AI can and cannot do.</p>
       </div>
+
+      {/* ── PHILOSOPHY SUMMARY ── */}
+      {philSummary && (
+        <Link href="/governance/philosophy"
+          className="block mb-6 bg-white rounded-lg border border-slate-200 px-4 py-3 hover:border-blue-300 transition-colors"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-slate-400">Philosophy:</span>
+              <span className="text-sm font-medium text-slate-700 capitalize">{philSummary}</span>
+            </div>
+            <span className="text-xs text-blue-600">Edit &rarr;</span>
+          </div>
+        </Link>
+      )}
 
       {/* ── APPROVAL QUEUE PREVIEW ── */}
       <div className="mb-8">
