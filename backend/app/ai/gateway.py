@@ -30,6 +30,7 @@ class AIRole(str, Enum):
     evaluator = "evaluator"
     advisor = "advisor"
     cartographer = "cartographer"
+    education_architect = "education_architect"
 
 
 class AIProvider(str, Enum):
@@ -293,6 +294,103 @@ def _call_mock(role: AIRole, user_prompt: str) -> dict:
                 "suggested_removals": [],
                 "estimated_weeks": 12,
                 "rationale": "Current map structure is appropriate for the child's level",
+            })
+        },
+        AIRole.education_architect: {
+            "content": json.dumps({
+                "plan_name": "Classical Education Plan",
+                "philosophy_alignment": "This plan follows the classical trivium model",
+                "year_plans": {
+                    "2026-2027": {
+                        "grade": "1st",
+                        "developmental_stage": "Grammar Stage",
+                        "subjects": [
+                            {"subject": "Phonics & Reading", "priority": "core", "hours_per_week": 5,
+                             "description": "Systematic phonics through reading fluency",
+                             "approach": "Explicit phonics instruction with decodable texts"},
+                            {"subject": "Mathematics", "priority": "core", "hours_per_week": 4,
+                             "description": "Number sense through single-digit operations",
+                             "approach": "Concrete manipulatives progressing to abstract"},
+                            {"subject": "Handwriting & Copywork", "priority": "core", "hours_per_week": 2,
+                             "description": "Letter formation and penmanship",
+                             "approach": "Daily copywork from quality literature"},
+                            {"subject": "History & Bible", "priority": "core", "hours_per_week": 3,
+                             "description": "Ancient civilizations and Old Testament narratives",
+                             "approach": "Narration-based with timeline building"},
+                            {"subject": "Nature Study", "priority": "enrichment", "hours_per_week": 2,
+                             "description": "Seasonal nature observation and journaling",
+                             "approach": "Weekly nature walks with field guides"},
+                            {"subject": "Music & Art", "priority": "enrichment", "hours_per_week": 2,
+                             "description": "Hymn singing, folk songs, and drawing fundamentals",
+                             "approach": "Integration with history period studied"},
+                        ],
+                        "total_hours_per_week": 18,
+                        "milestones": ["Reading chapter books independently", "Addition/subtraction to 20"],
+                        "notes": "Focus on building strong reading foundation"
+                    },
+                    "2027-2028": {
+                        "grade": "2nd",
+                        "developmental_stage": "Grammar Stage",
+                        "subjects": [
+                            {"subject": "Reading & Literature", "priority": "core", "hours_per_week": 5,
+                             "description": "Transition from learning to read to reading to learn",
+                             "approach": "Living books with oral narration"},
+                            {"subject": "Mathematics", "priority": "core", "hours_per_week": 4,
+                             "description": "Place value, multi-digit addition/subtraction, intro multiplication",
+                             "approach": "Mastery-based with concrete to pictorial to abstract"},
+                            {"subject": "Writing & Grammar", "priority": "core", "hours_per_week": 3,
+                             "description": "Sentence construction and basic grammar",
+                             "approach": "Copywork progressing to dictation"},
+                            {"subject": "History", "priority": "core", "hours_per_week": 3,
+                             "description": "Ancient Greece and Rome",
+                             "approach": "Story-based with primary source excerpts"},
+                            {"subject": "Science", "priority": "core", "hours_per_week": 2,
+                             "description": "Life science: plants, animals, habitats",
+                             "approach": "Observation-based with nature journal"},
+                            {"subject": "Latin Roots", "priority": "enrichment", "hours_per_week": 1,
+                             "description": "Introduction to Latin vocabulary roots",
+                             "approach": "Vocabulary building through word origins"},
+                        ],
+                        "total_hours_per_week": 18,
+                        "milestones": ["Fluent oral narration", "Multiplication facts to 5"],
+                        "notes": "Continue building fluency while introducing more subjects"
+                    },
+                    "2028-2029": {
+                        "grade": "3rd",
+                        "developmental_stage": "Grammar Stage",
+                        "subjects": [
+                            {"subject": "Literature", "priority": "core", "hours_per_week": 4,
+                             "description": "Classic children's literature and mythology",
+                             "approach": "Independent reading with written narration"},
+                            {"subject": "Mathematics", "priority": "core", "hours_per_week": 5,
+                             "description": "Multiplication/division mastery, fractions introduction",
+                             "approach": "Mastery-based with word problem emphasis"},
+                            {"subject": "Writing", "priority": "core", "hours_per_week": 3,
+                             "description": "Paragraph construction and creative writing",
+                             "approach": "Dictation, short compositions, journal writing"},
+                            {"subject": "History", "priority": "core", "hours_per_week": 3,
+                             "description": "Middle Ages through Renaissance",
+                             "approach": "Living books, timeline, and map work"},
+                            {"subject": "Science", "priority": "core", "hours_per_week": 3,
+                             "description": "Earth science and astronomy",
+                             "approach": "Experiments and observation with science notebook"},
+                            {"subject": "Latin", "priority": "enrichment", "hours_per_week": 2,
+                             "description": "Formal Latin grammar introduction",
+                             "approach": "Systematic grammar with vocabulary building"},
+                        ],
+                        "total_hours_per_week": 20,
+                        "milestones": ["Written narration fluency", "All multiplication facts memorized"],
+                        "notes": "Transition year: increasing independence and written output"
+                    }
+                },
+                "transitions": [
+                    {"from_year": "2026-2027", "to_year": "2027-2028",
+                     "description": "Reading shifts from learning-to-read to reading-to-learn. Writing begins."},
+                    {"from_year": "2027-2028", "to_year": "2028-2029",
+                     "description": "Oral narration transitions to written. Latin formalized. More independent work."},
+                ],
+                "graduation_pathway": "This plan builds toward college-preparatory classical education with strong humanities foundation",
+                "rationale": "Designed for the Grammar Stage of the trivium, emphasizing memorization, narration, and foundational skills"
             })
         },
     }

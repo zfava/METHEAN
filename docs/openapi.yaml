@@ -3564,6 +3564,213 @@ paths:
               schema:
                 type: string
                 title: Response Prometheus Metrics Api V1 Metrics Get
+  /api/v1/children/{child_id}/education-plan/generate:
+    post:
+      tags:
+      - education-plan
+      summary: Generate Plan Endpoint
+      operationId: generate_plan_endpoint_api_v1_children__child_id__education_plan_generate_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeneratePlanRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Generate Plan Endpoint Api V1 Children  Child Id  Education
+                  Plan Generate Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/education-plan:
+    get:
+      tags:
+      - education-plan
+      summary: Get Plan
+      operationId: get_plan_api_v1_children__child_id__education_plan_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Get Plan Api V1 Children  Child Id  Education Plan
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - education-plan
+      summary: Update Plan
+      operationId: update_plan_api_v1_children__child_id__education_plan_put
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePlanRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Update Plan Api V1 Children  Child Id  Education Plan
+                  Put
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/education-plan/approve:
+    post:
+      tags:
+      - education-plan
+      summary: Approve Plan Endpoint
+      operationId: approve_plan_endpoint_api_v1_children__child_id__education_plan_approve_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Approve Plan Endpoint Api V1 Children  Child Id  Education
+                  Plan Approve Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/education-plan/years/{year_key}/generate-curricula:
+    post:
+      tags:
+      - education-plan
+      summary: Generate Curricula Endpoint
+      operationId: generate_curricula_endpoint_api_v1_children__child_id__education_plan_years__year_key__generate_curricula_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: year_key
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Year Key
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Generate Curricula Endpoint Api V1 Children  Child
+                  Id  Education Plan Years  Year Key  Generate Curricula Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /health:
     get:
       summary: Health
@@ -4305,6 +4512,24 @@ components:
       - is_active
       - progress_pct
       title: EnrollmentResponse
+    GeneratePlanRequest:
+      properties:
+        goals:
+          additionalProperties: true
+          type: object
+          title: Goals
+        baseline_assessment:
+          additionalProperties: true
+          type: object
+          title: Baseline Assessment
+        time_budget_hours_per_week:
+          type: integer
+          maximum: 60.0
+          minimum: 5.0
+          title: Time Budget Hours Per Week
+          default: 25
+      type: object
+      title: GeneratePlanRequest
     GovernanceRuleCreate:
       properties:
         rule_type:
@@ -5580,6 +5805,27 @@ components:
       - encouragement
       - ai_run_id
       title: TutorMessageResponse
+    UpdatePlanRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        year_plans:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Year Plans
+        goals:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Goals
+      type: object
+      title: UpdatePlanRequest
     UserResponse:
       properties:
         id:
