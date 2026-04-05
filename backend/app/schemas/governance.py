@@ -20,6 +20,9 @@ class GovernanceRuleCreate(BaseModel):
     parameters: dict = Field(default_factory=dict)
     priority: int = 0
     confirm_constitutional: bool = False
+    effective_from: date | None = None
+    effective_until: date | None = None
+    trigger_conditions: dict | None = None
 
 
 class GovernanceRuleUpdate(BaseModel):
@@ -46,6 +49,9 @@ class GovernanceRuleResponse(BaseModel):
     parameters: dict
     is_active: bool
     priority: int
+    effective_from: date | None
+    effective_until: date | None
+    trigger_conditions: dict | None
     created_at: datetime
 
 

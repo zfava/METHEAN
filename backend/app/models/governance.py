@@ -51,6 +51,9 @@ class GovernanceRule(Base):
     parameters: Mapped[dict] = mapped_column(JSONB, nullable=False, default=dict)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     priority: Mapped[int] = mapped_column(Integer, default=0)
+    effective_from: Mapped[date | None] = mapped_column(Date)
+    effective_until: Mapped[date | None] = mapped_column(Date)
+    trigger_conditions: Mapped[dict | None] = mapped_column(JSONB, default=dict)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

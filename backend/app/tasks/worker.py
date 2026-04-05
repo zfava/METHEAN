@@ -38,6 +38,10 @@ celery_app.conf.beat_schedule = {
         "task": "app.tasks.worker.fsrs_optimize_task",
         "schedule": crontab(day_of_week="sunday", hour=2, minute=0),
     },
+    "daily-temporal-triggers": {
+        "task": "app.tasks.worker.temporal_triggers_task",
+        "schedule": crontab(hour=3, minute=0),
+    },
 }
 
 
@@ -67,6 +71,16 @@ def fsrs_optimize_task(self) -> dict:
     try:
         from app.tasks.optimizer import run_optimizer_sync
         return run_optimizer_sync()
+    except Exception as exc:
+        self.retry(exc=exc, countdown=30 * (2 ** self.request.retries))
+
+
+@celery_app.task(name="app.tasks.worker.temporal_triggers_task", bind=True, max_retries=3)
+def temporal_triggers_task(self) -> dict:
+    """Evaluate temporal governance triggers daily."""
+    try:
+        from app.tasks.temporal_rules import run_temporal_sync
+        return run_temporal_sync()
     except Exception as exc:
         self.retry(exc=exc, countdown=30 * (2 ** self.request.retries))
 

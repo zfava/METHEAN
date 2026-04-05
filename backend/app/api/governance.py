@@ -152,6 +152,9 @@ async def create_governance_rule(
         description=body.description,
         parameters=body.parameters,
         priority=body.priority,
+        effective_from=body.effective_from,
+        effective_until=body.effective_until,
+        trigger_conditions=body.trigger_conditions or {},
     )
     db.add(rule)
     await db.flush()
@@ -276,6 +279,34 @@ async def delete_governance_rule(
     await db.delete(rule)
     await db.flush()
     return {"deleted": True}
+
+
+@router.get("/governance/rules/upcoming")
+async def upcoming_triggers(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> list[dict]:
+    """Rules with future trigger conditions that haven't fired yet."""
+    result = await db.execute(
+        select(GovernanceRule).where(
+            GovernanceRule.household_id == user.household_id,
+            GovernanceRule.trigger_conditions.isnot(None),
+        )
+    )
+    items = []
+    for r in result.scalars().all():
+        tc = r.trigger_conditions or {}
+        if not tc.get("type") or tc.get("triggered_at"):
+            continue
+        items.append({
+            "rule_id": str(r.id),
+            "rule_name": r.name,
+            "trigger_type": tc.get("type"),
+            "trigger_conditions": tc,
+            "effective_from": r.effective_from.isoformat() if r.effective_from else None,
+            "is_active": r.is_active,
+        })
+    return items
 
 
 @router.post("/governance-rules/defaults", response_model=list[GovernanceRuleResponse], status_code=201)

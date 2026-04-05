@@ -96,7 +96,11 @@ async def evaluate_activity(
 
     Returns the highest-priority matching decision.
     """
-    # Get all active rules for household, ordered by priority
+    # Get all active rules for household, ordered by priority.
+    # Respect effective date windows.
+    from datetime import date as date_type
+    today = date_type.today()
+
     result = await db.execute(
         select(GovernanceRule).where(
             GovernanceRule.household_id == household_id,
@@ -104,7 +108,16 @@ async def evaluate_activity(
             GovernanceRule.rule_type == RuleType.approval_required,
         ).order_by(GovernanceRule.priority.asc())
     )
-    rules = result.scalars().all()
+    all_rules = result.scalars().all()
+
+    # Filter by effective window
+    rules = []
+    for r in all_rules:
+        if r.effective_from and r.effective_from > today:
+            continue  # Not yet effective
+        if r.effective_until and r.effective_until < today:
+            continue  # Expired
+        rules.append(r)
 
     if not rules:
         # No rules = auto-approve

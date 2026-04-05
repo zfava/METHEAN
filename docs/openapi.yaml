@@ -1243,6 +1243,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/governance/rules/upcoming:
+    get:
+      tags:
+      - governance
+      summary: Upcoming Triggers
+      description: Rules with future trigger conditions that haven't fired yet.
+      operationId: upcoming_triggers_api_v1_governance_rules_upcoming_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+                title: Response Upcoming Triggers Api V1 Governance Rules Upcoming
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/governance-rules/defaults:
     post:
       tags:
@@ -4216,6 +4250,24 @@ components:
           type: boolean
           title: Confirm Constitutional
           default: false
+        effective_from:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Effective From
+        effective_until:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Effective Until
+        trigger_conditions:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Trigger Conditions
       type: object
       required:
       - rule_type
@@ -4261,6 +4313,24 @@ components:
         priority:
           type: integer
           title: Priority
+        effective_from:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Effective From
+        effective_until:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Effective Until
+        trigger_conditions:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Trigger Conditions
         created_at:
           type: string
           format: date-time
@@ -4278,6 +4348,9 @@ components:
       - parameters
       - is_active
       - priority
+      - effective_from
+      - effective_until
+      - trigger_conditions
       - created_at
       title: GovernanceRuleResponse
     GovernanceRuleUpdate:
