@@ -25,6 +25,7 @@ from app.models.enums import (
     GovernanceAction,
     PlanStatus,
     RuleScope,
+    RuleTier,
     RuleType,
 )
 
@@ -42,6 +43,7 @@ class GovernanceRule(Base):
         UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL")
     )
     rule_type: Mapped[RuleType] = mapped_column(nullable=False)
+    tier: Mapped[RuleTier] = mapped_column(nullable=False, default=RuleTier.policy)
     scope: Mapped[RuleScope] = mapped_column(nullable=False, default=RuleScope.household)
     scope_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True))
     name: Mapped[str] = mapped_column(String(255), nullable=False)
@@ -49,6 +51,9 @@ class GovernanceRule(Base):
     parameters: Mapped[dict] = mapped_column(JSONB, nullable=False, default=dict)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     priority: Mapped[int] = mapped_column(Integer, default=0)
+    effective_from: Mapped[date | None] = mapped_column(Date)
+    effective_until: Mapped[date | None] = mapped_column(Date)
+    trigger_conditions: Mapped[dict | None] = mapped_column(JSONB, default=dict)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

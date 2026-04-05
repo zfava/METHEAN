@@ -78,6 +78,10 @@ async def register(
     db.add(user)
     await db.flush()
 
+    # Auto-grant owner permissions
+    from app.core.permissions import grant_role_permissions
+    await grant_role_permissions(db, user.id, household.id, "owner", user.id)
+
     # Generate tokens
     access_token = create_access_token(user.id, household.id, "owner")
     refresh_token_str, token_id = create_refresh_token(user.id, household.id)

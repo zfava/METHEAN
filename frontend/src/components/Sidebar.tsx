@@ -11,7 +11,9 @@ const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 const govSub = [
   { href: "/governance/queue", label: "Approval Queue", badge: true },
   { href: "/governance/rules", label: "Rules" },
+  { href: "/governance/philosophy", label: "Philosophy" },
   { href: "/governance/trace", label: "Decision Trace" },
+  { href: "/governance/reports", label: "Reports" },
   { href: "/governance/overrides", label: "Overrides" },
 ];
 

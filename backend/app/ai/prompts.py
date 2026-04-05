@@ -108,3 +108,108 @@ OUTPUT FORMAT: Return valid JSON:
   "estimated_weeks": number,
   "rationale": "overall calibration reasoning"
 }"""
+
+
+# ══════════════════════════════════════════════════
+# Philosophical Profile → Prompt Constraints
+# ══════════════════════════════════════════════════
+
+_PHILOSOPHY_LABELS = {
+    "classical": "Classical education (trivium: grammar, logic, rhetoric)",
+    "charlotte_mason": "Charlotte Mason method (living books, nature study, narration)",
+    "unschooling": "Unschooling (child-led, interest-driven learning)",
+    "eclectic": "Eclectic approach (mixed methods based on what works)",
+    "montessori": "Montessori method (self-directed, hands-on, mixed-age)",
+    "traditional": "Traditional schooling approach (textbook, structured lessons)",
+}
+
+_AUTONOMY_INSTRUCTIONS = {
+    "preview_all": "FLAG EVERY activity and recommendation for parent review, regardless of difficulty or content.",
+    "approve_difficult": "Flag activities at difficulty 3+ for parent review. Auto-approve easy activities.",
+    "trust_within_rules": "Operate within the defined rules. Only flag items that violate a specific rule.",
+    "full_autonomy": "Operate freely within the defined curriculum. Only flag safety concerns.",
+}
+
+
+def build_philosophical_constraints(profile: dict | None) -> str:
+    """Generate AI constraint text from a household's philosophical profile.
+
+    Returns an empty string if no profile is set, so callers can safely
+    append without conditional checks.
+    """
+    if not profile:
+        return ""
+
+    parts: list[str] = ["", "PHILOSOPHICAL CONSTRAINTS (set by parent — these override all defaults):"]
+
+    # Educational philosophy
+    philosophy = profile.get("educational_philosophy", "")
+    if philosophy:
+        label = _PHILOSOPHY_LABELS.get(philosophy, philosophy)
+        parts.append(f"- Educational approach: {label}")
+        desc = profile.get("philosophy_description", "")
+        if desc:
+            parts.append(f"  Parent's description: \"{desc}\"")
+
+    # Religious framework
+    religion = profile.get("religious_framework", "")
+    if religion and religion != "secular":
+        parts.append(f"- Religious framework: {religion}")
+        notes = profile.get("religious_notes", "")
+        if notes:
+            parts.append(f"  Details: \"{notes}\"")
+
+    # Content boundaries
+    boundaries = profile.get("content_boundaries", [])
+    for b in boundaries:
+        topic = b.get("topic", "")
+        stance = b.get("stance", "")
+        notes = b.get("notes", "")
+        if topic and stance:
+            if stance == "exclude":
+                parts.append(f"- CONTENT EXCLUSION: Do NOT include content about '{topic}'. {notes}")
+            elif stance == "present_alternative":
+                parts.append(
+                    f"- ALTERNATIVE PERSPECTIVES: When discussing '{topic}', present multiple "
+                    f"perspectives fairly. Frame as 'some believe X, others believe Y'. {notes}"
+                )
+            elif stance == "parent_led_only":
+                parts.append(
+                    f"- PARENT-LED TOPIC: Do NOT teach '{topic}' directly. Only reference it "
+                    f"if the parent has explicitly assigned it. {notes}"
+                )
+
+    # AI autonomy level
+    autonomy = profile.get("ai_autonomy_level", "")
+    if autonomy and autonomy in _AUTONOMY_INSTRUCTIONS:
+        parts.append(f"- AI AUTONOMY: {_AUTONOMY_INSTRUCTIONS[autonomy]}")
+
+    # Pedagogical preferences
+    prefs = profile.get("pedagogical_preferences", {})
+    if prefs:
+        pref_lines = []
+        if prefs.get("socratic_method"):
+            pref_lines.append("Use Socratic questioning extensively. Ask, don't tell.")
+        if prefs.get("memorization_valued"):
+            pref_lines.append("Include memorization exercises and recitation where appropriate.")
+        if not prefs.get("standardized_testing", True):
+            pref_lines.append("Avoid standardized test formats. Use narrative assessment instead.")
+        if not prefs.get("competitive_grading", True):
+            pref_lines.append("Do NOT use competitive grading or ranking. Focus on mastery, not comparison.")
+        if prefs.get("collaborative_learning"):
+            pref_lines.append("Design activities that encourage collaborative learning when possible.")
+        if pref_lines:
+            parts.append("- PEDAGOGICAL PREFERENCES:")
+            for line in pref_lines:
+                parts.append(f"  - {line}")
+
+    # Custom constraints
+    customs = profile.get("custom_constraints", [])
+    for c in customs:
+        if c.strip():
+            parts.append(f"- CUSTOM: {c.strip()}")
+
+    if len(parts) <= 1:
+        return ""
+
+    return "\n".join(parts)

@@ -10,6 +10,7 @@ import uuid
 from datetime import UTC, date, datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from pydantic import BaseModel, Field
 from fastapi.responses import StreamingResponse
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -21,7 +22,7 @@ from app.ai.prompts import (
     CARTOGRAPHER_SYSTEM,
     TUTOR_SYSTEM,
 )
-from app.api.deps import PaginationParams, get_current_user, get_db, require_role
+from app.api.deps import PaginationParams, get_current_user, get_db, require_permission, require_role
 from app.models.curriculum import ChildMapEnrollment, LearningMap, LearningNode
 from app.models.enums import (
     ActivityStatus,
@@ -86,6 +87,17 @@ async def _get_plan_or_404(
     return plan
 
 
+async def _get_philosophical_profile(
+    db: AsyncSession, household_id: uuid.UUID,
+) -> dict | None:
+    from app.models.identity import Household
+    result = await db.execute(
+        select(Household).where(Household.id == household_id)
+    )
+    h = result.scalar_one_or_none()
+    return h.philosophical_profile if h else None
+
+
 # ══════════════════════════════════════════════════
 # Governance Rules CRUD
 # ══════════════════════════════════════════════════
@@ -114,26 +126,45 @@ async def list_governance_rules(
 async def create_governance_rule(
     body: GovernanceRuleCreate,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("rules.create")),
 ) -> GovernanceRuleResponse:
+    from app.models.enums import RuleTier
+    from app.core.permissions import check_permission, PERM_RULES_CONSTITUTIONAL
+
+    # Constitutional rules require explicit confirmation AND the constitutional permission
+    if body.tier == RuleTier.constitutional:
+        if not await check_permission(db, user, PERM_RULES_CONSTITUTIONAL):
+            raise HTTPException(status_code=403, detail="Missing permission: rules.constitutional")
+        if not body.confirm_constitutional:
+            raise HTTPException(
+                status_code=400,
+                detail="Constitutional rules are hard to change once created. "
+                       "Set confirm_constitutional=true to confirm.",
+            )
+
     rule = GovernanceRule(
         household_id=user.household_id,
         created_by=user.id,
         rule_type=body.rule_type,
+        tier=body.tier,
         scope=body.scope,
         scope_id=body.scope_id,
         name=body.name,
         description=body.description,
         parameters=body.parameters,
         priority=body.priority,
+        effective_from=body.effective_from,
+        effective_until=body.effective_until,
+        trigger_conditions=body.trigger_conditions or {},
     )
     db.add(rule)
     await db.flush()
 
+    target_type = "constitutional_rule_change" if body.tier == RuleTier.constitutional else "governance_rule"
     await log_governance_event(
         db, user.household_id, user.id,
-        GovernanceAction.modify, "governance_rule", rule.id,
-        reason="Rule created",
+        GovernanceAction.modify, target_type, rule.id,
+        reason="Constitutional rule created" if body.tier == RuleTier.constitutional else "Rule created",
     )
 
     return GovernanceRuleResponse.model_validate(rule)
@@ -146,6 +177,8 @@ async def update_governance_rule(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_role("owner", "co_parent")),
 ) -> GovernanceRuleResponse:
+    from app.models.enums import RuleTier
+
     result = await db.execute(
         select(GovernanceRule).where(
             GovernanceRule.id == rule_id,
@@ -156,6 +189,31 @@ async def update_governance_rule(
     if not rule:
         raise HTTPException(status_code=404, detail="Rule not found")
 
+    is_constitutional = (
+        (rule.tier == RuleTier.constitutional)
+        if hasattr(rule.tier, "value") is False
+        else (rule.tier.value == "constitutional" if hasattr(rule.tier, "value") else str(rule.tier) == "constitutional")
+    ) or (rule.tier == "constitutional") or (rule.tier == RuleTier.constitutional)
+
+    if is_constitutional:
+        if not body.confirm_constitutional:
+            raise HTTPException(
+                status_code=400,
+                detail="This is a constitutional rule. Set confirm_constitutional=true to modify.",
+            )
+        if not body.reason or len(body.reason.strip()) < 20:
+            raise HTTPException(
+                status_code=400,
+                detail="Constitutional rule changes require a reason of at least 20 characters.",
+            )
+
+    # Capture before state for diff
+    before = {
+        "name": rule.name, "description": rule.description,
+        "parameters": rule.parameters, "priority": rule.priority,
+        "is_active": rule.is_active,
+    }
+
     if body.name is not None:
         rule.name = body.name
     if body.description is not None:
@@ -165,18 +223,162 @@ async def update_governance_rule(
     if body.priority is not None:
         rule.priority = body.priority
     if body.is_active is not None:
+        # Constitutional rules cannot be deleted, only deactivated — and that requires ceremony
+        if is_constitutional and body.is_active is False:
+            if not body.reason or len(body.reason.strip()) < 20:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Deactivating a constitutional rule requires a reason of at least 20 characters.",
+                )
         rule.is_active = body.is_active
+
+    after = {
+        "name": rule.name, "description": rule.description,
+        "parameters": rule.parameters, "priority": rule.priority,
+        "is_active": rule.is_active,
+    }
 
     await db.flush()
     await db.refresh(rule)
 
+    target_type = "constitutional_rule_change" if is_constitutional else "governance_rule"
     await log_governance_event(
         db, user.household_id, user.id,
-        GovernanceAction.modify, "governance_rule", rule.id,
-        reason="Rule updated",
+        GovernanceAction.modify, target_type, rule.id,
+        reason=body.reason or "Rule updated",
+        metadata={"before": before, "after": after} if is_constitutional else None,
     )
 
     return GovernanceRuleResponse.model_validate(rule)
+
+
+@router.delete("/governance-rules/{rule_id}")
+async def delete_governance_rule(
+    rule_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "co_parent")),
+) -> dict:
+    from app.models.enums import RuleTier
+
+    result = await db.execute(
+        select(GovernanceRule).where(
+            GovernanceRule.id == rule_id,
+            GovernanceRule.household_id == user.household_id,
+        )
+    )
+    rule = result.scalar_one_or_none()
+    if not rule:
+        raise HTTPException(status_code=404, detail="Rule not found")
+
+    is_constitutional = rule.tier == RuleTier.constitutional or rule.tier == "constitutional"
+    if is_constitutional:
+        raise HTTPException(
+            status_code=400,
+            detail="Constitutional rules cannot be deleted. Use PUT to deactivate with a reason.",
+        )
+
+    await db.delete(rule)
+    await db.flush()
+    return {"deleted": True}
+
+
+# ══════════════════════════════════════════════════
+# Governance Reports
+# ══════════════════════════════════════════════════
+
+class ReportRequest(BaseModel):
+    period_start: date
+    period_end: date
+
+class AttestRequest(BaseModel):
+    report_id: str
+    attestation_text: str = Field(min_length=10)
+
+
+@router.post("/governance/report")
+async def generate_report(
+    body: ReportRequest,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "co_parent")),
+) -> dict:
+    """Generate a comprehensive governance report for the period."""
+    from app.services.governance_report import generate_governance_report
+
+    report = await generate_governance_report(
+        db, user.household_id, body.period_start, body.period_end, user.id,
+    )
+
+    # Log the export
+    await log_governance_event(
+        db, user.household_id, user.id,
+        GovernanceAction.approve, "governance_report", user.household_id,
+        reason=f"Governance report generated for {body.period_start} to {body.period_end}",
+    )
+
+    return report
+
+
+@router.post("/governance/report/attest")
+async def attest_report(
+    body: AttestRequest,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner")),
+) -> dict:
+    """Parent's digital signature on a governance report.
+
+    Creates an immutable governance event as attestation. This is the
+    authoritative document — not any AI summary.
+    """
+    event = GovernanceEvent(
+        household_id=user.household_id,
+        user_id=user.id,
+        action=GovernanceAction.approve,
+        target_type="governance_report_attestation",
+        target_id=user.household_id,
+        reason=body.attestation_text,
+        metadata_={
+            "report_id": body.report_id,
+            "attested_by": user.display_name,
+            "attested_at": datetime.now(UTC).isoformat(),
+        },
+    )
+    db.add(event)
+    await db.flush()
+
+    return {
+        "attestation_id": str(event.id),
+        "report_id": body.report_id,
+        "attested_by": user.display_name,
+        "attested_at": event.created_at.isoformat() if event.created_at else None,
+    }
+
+
+@router.get("/governance/rules/upcoming")
+async def upcoming_triggers(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> list[dict]:
+    """Rules with future trigger conditions that haven't fired yet."""
+    result = await db.execute(
+        select(GovernanceRule).where(
+            GovernanceRule.household_id == user.household_id,
+            GovernanceRule.trigger_conditions.isnot(None),
+        )
+    )
+    items = []
+    for r in result.scalars().all():
+        tc = r.trigger_conditions or {}
+        if not tc.get("type") or tc.get("triggered_at"):
+            continue
+        items.append({
+            "rule_id": str(r.id),
+            "rule_name": r.name,
+            "trigger_type": tc.get("type"),
+            "trigger_conditions": tc,
+            "effective_from": r.effective_from.isoformat() if r.effective_from else None,
+            "is_active": r.is_active,
+        })
+    return items
 
 
 @router.post("/governance-rules/defaults", response_model=list[GovernanceRuleResponse], status_code=201)
@@ -197,7 +399,7 @@ async def generate_plan_endpoint(
     child_id: uuid.UUID,
     body: PlanGenerateRequest,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("plans.generate")),
 ) -> PlanResponse:
     child = await _get_child_or_404(db, child_id, user.household_id)
 
@@ -280,7 +482,7 @@ async def approve_activity(
     activity_id: uuid.UUID,
     body: ActivityApproveReject | None = None,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("approve.activities")),
 ) -> dict:
     plan = await _get_plan_or_404(db, plan_id, user.household_id)
     if plan.status == PlanStatus.archived:
@@ -445,6 +647,7 @@ Child says: {body.message}
 
 Respond using the Socratic method. Guide the child toward understanding without giving the answer."""
 
+    phil = await _get_philosophical_profile(db, user.household_id)
     result = await call_ai(
         db,
         role=AIRole.tutor,
@@ -452,6 +655,7 @@ Respond using the Socratic method. Guide the child toward understanding without 
         user_prompt=user_prompt,
         household_id=user.household_id,
         triggered_by=user.id,
+        philosophical_profile=phil,
     )
 
     output = result["output"]
@@ -511,11 +715,13 @@ Current nodes:
 
 Provide calibration recommendations."""
 
+    phil = await _get_philosophical_profile(db, user.household_id)
     result = await call_ai(
         db,
         role=AIRole.cartographer,
         system_prompt=CARTOGRAPHER_SYSTEM,
         user_prompt=user_prompt,
+        philosophical_profile=phil,
         household_id=user.household_id,
         triggered_by=user.id,
     )
@@ -572,6 +778,7 @@ State Summary:
 
 Provide an encouraging, honest assessment."""
 
+    phil = await _get_philosophical_profile(db, user.household_id)
     result = await call_ai(
         db,
         role=AIRole.advisor,
@@ -579,6 +786,7 @@ Provide an encouraging, honest assessment."""
         user_prompt=user_prompt,
         household_id=user.household_id,
         triggered_by=user.id,
+        philosophical_profile=phil,
     )
 
     output = result["output"]

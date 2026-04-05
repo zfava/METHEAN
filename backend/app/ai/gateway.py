@@ -47,6 +47,7 @@ async def call_ai(
     triggered_by: uuid.UUID | None = None,
     expected_json: bool = True,
     max_tokens: int | None = None,
+    philosophical_profile: dict | None = None,
 ) -> dict:
     """Call AI through the governance gateway.
 
@@ -59,6 +60,12 @@ async def call_ai(
     """
     max_tokens = max_tokens or settings.AI_MAX_TOKENS
     start = time.monotonic()
+
+    # Inject philosophical constraints into the system prompt
+    from app.ai.prompts import build_philosophical_constraints
+    constraints = build_philosophical_constraints(philosophical_profile)
+    if constraints:
+        system_prompt = system_prompt + "\n" + constraints
 
     # Create AIRun record
     ai_run = AIRun(

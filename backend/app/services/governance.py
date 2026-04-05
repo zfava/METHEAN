@@ -9,7 +9,7 @@ import uuid
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.enums import GovernanceAction, RuleScope, RuleType
+from app.models.enums import GovernanceAction, RuleScope, RuleTier, RuleType
 from app.models.governance import GovernanceEvent, GovernanceRule
 
 
@@ -66,6 +66,17 @@ async def create_default_rules(
             parameters={"max_daily_minutes": 240},
             priority=5,
         ),
+        GovernanceRule(
+            household_id=household_id,
+            created_by=created_by,
+            rule_type=RuleType.ai_boundary,
+            tier=RuleTier.constitutional,
+            scope=RuleScope.household,
+            name="AI oversight guarantee",
+            description="All AI-generated content and recommendations are logged with full input/output for parent inspection. AI cannot modify child state without governance approval.",
+            parameters={"ai_transparency": "full", "ai_direct_action": False},
+            priority=1,
+        ),
     ]
     for rule in defaults:
         db.add(rule)
@@ -85,7 +96,11 @@ async def evaluate_activity(
 
     Returns the highest-priority matching decision.
     """
-    # Get all active rules for household, ordered by priority
+    # Get all active rules for household, ordered by priority.
+    # Respect effective date windows.
+    from datetime import date as date_type
+    today = date_type.today()
+
     result = await db.execute(
         select(GovernanceRule).where(
             GovernanceRule.household_id == household_id,
@@ -93,7 +108,16 @@ async def evaluate_activity(
             GovernanceRule.rule_type == RuleType.approval_required,
         ).order_by(GovernanceRule.priority.asc())
     )
-    rules = result.scalars().all()
+    all_rules = result.scalars().all()
+
+    # Filter by effective window
+    rules = []
+    for r in all_rules:
+        if r.effective_from and r.effective_from > today:
+            continue  # Not yet effective
+        if r.effective_until and r.effective_until < today:
+            continue  # Expired
+        rules.append(r)
 
     if not rules:
         # No rules = auto-approve

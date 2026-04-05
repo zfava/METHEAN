@@ -53,6 +53,11 @@ class RuleType(str, enum.Enum):
     approval_required = "approval_required"
 
 
+class RuleTier(str, enum.Enum):
+    constitutional = "constitutional"  # Requires ceremony to change
+    policy = "policy"                  # Normal CRUD
+
+
 class RuleScope(str, enum.Enum):
     household = "household"
     child = "child"

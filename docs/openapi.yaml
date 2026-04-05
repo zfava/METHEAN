@@ -1206,6 +1206,156 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - governance
+      summary: Delete Governance Rule
+      operationId: delete_governance_rule_api_v1_governance_rules__rule_id__delete
+      parameters:
+      - name: rule_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Rule Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Delete Governance Rule Api V1 Governance Rules  Rule
+                  Id  Delete
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/governance/report:
+    post:
+      tags:
+      - governance
+      summary: Generate Report
+      description: Generate a comprehensive governance report for the period.
+      operationId: generate_report_api_v1_governance_report_post
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Generate Report Api V1 Governance Report Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/governance/report/attest:
+    post:
+      tags:
+      - governance
+      summary: Attest Report
+      description: 'Parent''s digital signature on a governance report.
+
+
+        Creates an immutable governance event as attestation. This is the
+
+        authoritative document — not any AI summary.'
+      operationId: attest_report_api_v1_governance_report_attest_post
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttestRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Attest Report Api V1 Governance Report Attest Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/governance/rules/upcoming:
+    get:
+      tags:
+      - governance
+      summary: Upcoming Triggers
+      description: Rules with future trigger conditions that haven't fired yet.
+      operationId: upcoming_triggers_api_v1_governance_rules_upcoming_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+                title: Response Upcoming Triggers Api V1 Governance Rules Upcoming
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/governance-rules/defaults:
     post:
       tags:
@@ -2588,6 +2738,72 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/household/philosophy:
+    put:
+      tags:
+      - spec-coverage
+      summary: Update Philosophy
+      description: Set the household's philosophical profile. Governs all AI behavior.
+      operationId: update_philosophy_api_v1_household_philosophy_put
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhilosophicalProfileUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Update Philosophy Api V1 Household Philosophy Put
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - spec-coverage
+      summary: Get Philosophy
+      operationId: get_philosophy_api_v1_household_philosophy_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Get Philosophy Api V1 Household Philosophy Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/children:
     get:
       tags:
@@ -2786,6 +3002,134 @@ paths:
                   type: object
                   additionalProperties: true
                 title: Response Get Today Api V1 Children  Child Id  Today Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/users/{user_id}/permissions:
+    get:
+      tags:
+      - spec-coverage
+      summary: List User Permissions
+      operationId: list_user_permissions_api_v1_users__user_id__permissions_get
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: User Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+                title: Response List User Permissions Api V1 Users  User Id  Permissions
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - spec-coverage
+      summary: Grant Permission
+      operationId: grant_permission_api_v1_users__user_id__permissions_post
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: User Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PermissionGrant'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Grant Permission Api V1 Users  User Id  Permissions
+                  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/users/{user_id}/permissions/{permission_id}:
+    delete:
+      tags:
+      - spec-coverage
+      summary: Revoke Permission
+      operationId: revoke_permission_api_v1_users__user_id__permissions__permission_id__delete
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: User Id
+      - name: permission_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Permission Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Revoke Permission Api V1 Users  User Id  Permissions  Permission
+                  Id  Delete
         '422':
           description: Validation Error
           content:
@@ -3584,6 +3928,20 @@ components:
       - state_event_id
       - nodes_unblocked
       title: AttemptSubmitResponse
+    AttestRequest:
+      properties:
+        report_id:
+          type: string
+          title: Report Id
+        attestation_text:
+          type: string
+          minLength: 10
+          title: Attestation Text
+      type: object
+      required:
+      - report_id
+      - attestation_text
+      title: AttestRequest
     Body_upload_artifact_endpoint_api_v1_children__child_id__artifacts_post:
       properties:
         file:
@@ -3951,6 +4309,9 @@ components:
       properties:
         rule_type:
           $ref: '#/components/schemas/RuleType'
+        tier:
+          $ref: '#/components/schemas/RuleTier'
+          default: policy
         scope:
           $ref: '#/components/schemas/RuleScope'
           default: household
@@ -3978,6 +4339,28 @@ components:
           type: integer
           title: Priority
           default: 0
+        confirm_constitutional:
+          type: boolean
+          title: Confirm Constitutional
+          default: false
+        effective_from:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Effective From
+        effective_until:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Effective Until
+        trigger_conditions:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Trigger Conditions
       type: object
       required:
       - rule_type
@@ -3995,6 +4378,8 @@ components:
           title: Household Id
         rule_type:
           $ref: '#/components/schemas/RuleType'
+        tier:
+          $ref: '#/components/schemas/RuleTier'
         scope:
           $ref: '#/components/schemas/RuleScope'
         scope_id:
@@ -4021,6 +4406,24 @@ components:
         priority:
           type: integer
           title: Priority
+        effective_from:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Effective From
+        effective_until:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Effective Until
+        trigger_conditions:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Trigger Conditions
         created_at:
           type: string
           format: date-time
@@ -4030,6 +4433,7 @@ components:
       - id
       - household_id
       - rule_type
+      - tier
       - scope
       - scope_id
       - name
@@ -4037,6 +4441,9 @@ components:
       - parameters
       - is_active
       - priority
+      - effective_from
+      - effective_until
+      - trigger_conditions
       - created_at
       title: GovernanceRuleResponse
     GovernanceRuleUpdate:
@@ -4069,6 +4476,15 @@ components:
           - type: boolean
           - type: 'null'
           title: Is Active
+        confirm_constitutional:
+          type: boolean
+          title: Confirm Constitutional
+          default: false
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
       type: object
       title: GovernanceRuleUpdate
     HTTPValidationError:
@@ -4564,6 +4980,78 @@ components:
       - child_id
       - message
       title: OverrideResponse
+    PermissionGrant:
+      properties:
+        permission:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Permission
+        scope_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scope Type
+        scope_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Scope Id
+      type: object
+      required:
+      - permission
+      title: PermissionGrant
+    PhilosophicalProfileUpdate:
+      properties:
+        educational_philosophy:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Educational Philosophy
+        philosophy_description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Philosophy Description
+        religious_framework:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Religious Framework
+        religious_notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Religious Notes
+        content_boundaries:
+          anyOf:
+          - items:
+              additionalProperties: true
+              type: object
+            type: array
+          - type: 'null'
+          title: Content Boundaries
+        ai_autonomy_level:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ai Autonomy Level
+        pedagogical_preferences:
+          anyOf:
+          - additionalProperties: true
+            type: object
+          - type: 'null'
+          title: Pedagogical Preferences
+        custom_constraints:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Custom Constraints
+      type: object
+      title: PhilosophicalProfileUpdate
     PlanDetailResponse:
       properties:
         id:
@@ -4792,6 +5280,21 @@ components:
       - access_token
       - expires_in
       title: RegisterResponse
+    ReportRequest:
+      properties:
+        period_start:
+          type: string
+          format: date
+          title: Period Start
+        period_end:
+          type: string
+          format: date
+          title: Period End
+      type: object
+      required:
+      - period_start
+      - period_end
+      title: ReportRequest
     RetentionSummaryResponse:
       properties:
         child_id:
@@ -4840,6 +5343,12 @@ components:
       - subject
       - map
       title: RuleScope
+    RuleTier:
+      type: string
+      enum:
+      - constitutional
+      - policy
+      title: RuleTier
     RuleType:
       type: string
       enum:

@@ -21,6 +21,7 @@ class Household(Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     timezone: Mapped[str] = mapped_column(String(50), default="America/New_York")
     settings: Mapped[dict | None] = mapped_column(JSONB, default=dict)
+    philosophical_profile: Mapped[dict | None] = mapped_column(JSONB, default=dict)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -117,3 +118,28 @@ class ChildPreferences(Base):
 
     # Relationships
     child: Mapped["Child"] = relationship(back_populates="preferences")
+
+
+class UserPermission(Base):
+    """Granular permission grants for users within a household."""
+
+    __tablename__ = "user_permissions"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    household_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("households.id", ondelete="CASCADE"), nullable=False
+    )
+    permission: Mapped[str] = mapped_column(String(100), nullable=False)
+    scope_type: Mapped[str | None] = mapped_column(String(50))  # "child", "subject", "all"
+    scope_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True))
+    granted_by: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL")
+    )
+    granted_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )

@@ -32,7 +32,7 @@ from app.models.enums import (
     NodeType,
 )
 from app.models.governance import Activity, Attempt, Plan, PlanWeek
-from app.models.identity import Child, ChildPreferences, Household, User
+from app.models.identity import Child, ChildPreferences, Household, User, UserPermission
 from app.models.operational import DeviceToken, NotificationLog
 from app.models.state import ChildNodeState, FSRSCard
 
@@ -119,6 +119,78 @@ async def update_household_settings(
         household.timezone = body.timezone
     await db.flush()
     return {"id": str(household.id), "name": household.name, "timezone": household.timezone}
+
+
+VALID_PHILOSOPHIES = {"classical", "charlotte_mason", "unschooling", "eclectic", "montessori", "traditional", "custom"}
+VALID_STANCES = {"exclude", "present_alternative", "parent_led_only", "allow"}
+VALID_AUTONOMY = {"preview_all", "approve_difficult", "trust_within_rules", "full_autonomy"}
+
+
+class PhilosophicalProfileUpdate(BaseModel):
+    educational_philosophy: str | None = None
+    philosophy_description: str | None = None
+    religious_framework: str | None = None
+    religious_notes: str | None = None
+    content_boundaries: list[dict] | None = None
+    ai_autonomy_level: str | None = None
+    pedagogical_preferences: dict | None = None
+    custom_constraints: list[str] | None = None
+
+
+@router.put("/household/philosophy")
+async def update_philosophy(
+    body: PhilosophicalProfileUpdate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner")),
+) -> dict:
+    """Set the household's philosophical profile. Governs all AI behavior."""
+    from app.models.enums import GovernanceAction
+    from app.models.governance import GovernanceEvent
+
+    profile = body.model_dump(exclude_none=True)
+
+    # Validate educational_philosophy
+    if "educational_philosophy" in profile and profile["educational_philosophy"] not in VALID_PHILOSOPHIES:
+        raise HTTPException(status_code=422, detail=f"educational_philosophy must be one of: {', '.join(sorted(VALID_PHILOSOPHIES))}")
+
+    # Validate content_boundaries
+    for b in profile.get("content_boundaries", []):
+        if not b.get("topic") or not b.get("stance"):
+            raise HTTPException(status_code=422, detail="Each content_boundary must have 'topic' and 'stance'")
+        if b["stance"] not in VALID_STANCES:
+            raise HTTPException(status_code=422, detail=f"stance must be one of: {', '.join(sorted(VALID_STANCES))}")
+
+    # Validate autonomy level
+    if "ai_autonomy_level" in profile and profile["ai_autonomy_level"] not in VALID_AUTONOMY:
+        raise HTTPException(status_code=422, detail=f"ai_autonomy_level must be one of: {', '.join(sorted(VALID_AUTONOMY))}")
+
+    result = await db.execute(select(Household).where(Household.id == user.household_id))
+    household = result.scalar_one()
+    household.philosophical_profile = profile
+    await db.flush()
+
+    # Log governance event
+    db.add(GovernanceEvent(
+        household_id=user.household_id,
+        user_id=user.id,
+        action=GovernanceAction.modify,
+        target_type="philosophical_profile",
+        target_id=user.household_id,
+        reason="Philosophical profile updated",
+    ))
+    await db.flush()
+
+    return profile
+
+
+@router.get("/household/philosophy")
+async def get_philosophy(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    result = await db.execute(select(Household).where(Household.id == user.household_id))
+    household = result.scalar_one()
+    return household.philosophical_profile or {}
 
 
 @router.get("/children")
@@ -269,6 +341,87 @@ async def get_today(
         }
         for a in activities
     ]
+
+
+# ══════════════════════════════════════════════════
+# User Permissions
+# ══════════════════════════════════════════════════
+
+@router.get("/users/{user_id}/permissions")
+async def list_user_permissions(
+    user_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner")),
+) -> list[dict]:
+    result = await db.execute(
+        select(UserPermission).where(
+            UserPermission.user_id == user_id,
+            UserPermission.household_id == user.household_id,
+        )
+    )
+    return [
+        {
+            "id": str(p.id),
+            "permission": p.permission,
+            "scope_type": p.scope_type,
+            "scope_id": str(p.scope_id) if p.scope_id else None,
+            "granted_at": p.granted_at.isoformat() if p.granted_at else None,
+        }
+        for p in result.scalars().all()
+    ]
+
+
+class PermissionGrant(BaseModel):
+    permission: str = Field(min_length=1, max_length=100)
+    scope_type: str | None = None
+    scope_id: uuid.UUID | None = None
+
+
+@router.post("/users/{user_id}/permissions", status_code=201)
+async def grant_permission(
+    user_id: uuid.UUID,
+    body: PermissionGrant,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner")),
+) -> dict:
+    perm = UserPermission(
+        user_id=user_id,
+        household_id=user.household_id,
+        permission=body.permission,
+        scope_type=body.scope_type or "all",
+        scope_id=body.scope_id,
+        granted_by=user.id,
+    )
+    db.add(perm)
+    await db.flush()
+    return {
+        "id": str(perm.id),
+        "permission": perm.permission,
+        "scope_type": perm.scope_type,
+        "granted": True,
+    }
+
+
+@router.delete("/users/{user_id}/permissions/{permission_id}")
+async def revoke_permission(
+    user_id: uuid.UUID,
+    permission_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner")),
+) -> dict:
+    result = await db.execute(
+        select(UserPermission).where(
+            UserPermission.id == permission_id,
+            UserPermission.user_id == user_id,
+            UserPermission.household_id == user.household_id,
+        )
+    )
+    perm = result.scalar_one_or_none()
+    if not perm:
+        raise HTTPException(status_code=404, detail="Permission not found")
+    await db.delete(perm)
+    await db.flush()
+    return {"revoked": True}
 
 
 # ══════════════════════════════════════════════════

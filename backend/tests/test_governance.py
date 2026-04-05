@@ -125,7 +125,7 @@ class TestGovernanceRules:
     @pytest.mark.asyncio
     async def test_create_default_rules(self, db_session, household, user):
         rules = await create_default_rules(db_session, household.id, user.id)
-        assert len(rules) == 3
+        assert len(rules) == 4  # 3 policy + 1 constitutional
 
         names = {r.name for r in rules}
         assert "Auto-approve easy activities" in names
@@ -445,7 +445,7 @@ class TestGovernanceRulesAPI:
     async def test_init_default_rules(self, auth_client, db_session, household, user):
         resp = await auth_client.post("/api/v1/governance-rules/defaults")
         assert resp.status_code == 201
-        assert len(resp.json()) == 3
+        assert len(resp.json()) == 4  # 3 policy + 1 constitutional
 
 
 # ══════════════════════════════════════════════════
