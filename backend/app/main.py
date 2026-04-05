@@ -20,6 +20,7 @@ from app.api.operations import router as operations_router
 from app.api.spec_coverage import router as spec_router
 from app.api.education_plan import router as education_plan_router
 from app.api.assessment import router as assessment_router
+from app.api.compliance import router as compliance_router
 
 logger = structlog.get_logger()
 
@@ -70,6 +71,7 @@ app.include_router(operations_router, prefix="/api/v1")
 app.include_router(spec_router, prefix="/api/v1")
 app.include_router(education_plan_router, prefix="/api/v1")
 app.include_router(assessment_router, prefix="/api/v1")
+app.include_router(compliance_router, prefix="/api/v1")
 
 
 @app.get("/health")
