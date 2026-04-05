@@ -127,10 +127,21 @@ async def create_governance_rule(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_role("owner", "co_parent")),
 ) -> GovernanceRuleResponse:
+    from app.models.enums import RuleTier
+
+    # Constitutional rules require explicit confirmation
+    if body.tier == RuleTier.constitutional and not body.confirm_constitutional:
+        raise HTTPException(
+            status_code=400,
+            detail="Constitutional rules are hard to change once created. "
+                   "Set confirm_constitutional=true to confirm.",
+        )
+
     rule = GovernanceRule(
         household_id=user.household_id,
         created_by=user.id,
         rule_type=body.rule_type,
+        tier=body.tier,
         scope=body.scope,
         scope_id=body.scope_id,
         name=body.name,
@@ -141,10 +152,11 @@ async def create_governance_rule(
     db.add(rule)
     await db.flush()
 
+    target_type = "constitutional_rule_change" if body.tier == RuleTier.constitutional else "governance_rule"
     await log_governance_event(
         db, user.household_id, user.id,
-        GovernanceAction.modify, "governance_rule", rule.id,
-        reason="Rule created",
+        GovernanceAction.modify, target_type, rule.id,
+        reason="Constitutional rule created" if body.tier == RuleTier.constitutional else "Rule created",
     )
 
     return GovernanceRuleResponse.model_validate(rule)
@@ -157,6 +169,8 @@ async def update_governance_rule(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_role("owner", "co_parent")),
 ) -> GovernanceRuleResponse:
+    from app.models.enums import RuleTier
+
     result = await db.execute(
         select(GovernanceRule).where(
             GovernanceRule.id == rule_id,
@@ -167,6 +181,31 @@ async def update_governance_rule(
     if not rule:
         raise HTTPException(status_code=404, detail="Rule not found")
 
+    is_constitutional = (
+        (rule.tier == RuleTier.constitutional)
+        if hasattr(rule.tier, "value") is False
+        else (rule.tier.value == "constitutional" if hasattr(rule.tier, "value") else str(rule.tier) == "constitutional")
+    ) or (rule.tier == "constitutional") or (rule.tier == RuleTier.constitutional)
+
+    if is_constitutional:
+        if not body.confirm_constitutional:
+            raise HTTPException(
+                status_code=400,
+                detail="This is a constitutional rule. Set confirm_constitutional=true to modify.",
+            )
+        if not body.reason or len(body.reason.strip()) < 20:
+            raise HTTPException(
+                status_code=400,
+                detail="Constitutional rule changes require a reason of at least 20 characters.",
+            )
+
+    # Capture before state for diff
+    before = {
+        "name": rule.name, "description": rule.description,
+        "parameters": rule.parameters, "priority": rule.priority,
+        "is_active": rule.is_active,
+    }
+
     if body.name is not None:
         rule.name = body.name
     if body.description is not None:
@@ -176,18 +215,63 @@ async def update_governance_rule(
     if body.priority is not None:
         rule.priority = body.priority
     if body.is_active is not None:
+        # Constitutional rules cannot be deleted, only deactivated — and that requires ceremony
+        if is_constitutional and body.is_active is False:
+            if not body.reason or len(body.reason.strip()) < 20:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Deactivating a constitutional rule requires a reason of at least 20 characters.",
+                )
         rule.is_active = body.is_active
+
+    after = {
+        "name": rule.name, "description": rule.description,
+        "parameters": rule.parameters, "priority": rule.priority,
+        "is_active": rule.is_active,
+    }
 
     await db.flush()
     await db.refresh(rule)
 
+    target_type = "constitutional_rule_change" if is_constitutional else "governance_rule"
     await log_governance_event(
         db, user.household_id, user.id,
-        GovernanceAction.modify, "governance_rule", rule.id,
-        reason="Rule updated",
+        GovernanceAction.modify, target_type, rule.id,
+        reason=body.reason or "Rule updated",
+        metadata={"before": before, "after": after} if is_constitutional else None,
     )
 
     return GovernanceRuleResponse.model_validate(rule)
+
+
+@router.delete("/governance-rules/{rule_id}")
+async def delete_governance_rule(
+    rule_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "co_parent")),
+) -> dict:
+    from app.models.enums import RuleTier
+
+    result = await db.execute(
+        select(GovernanceRule).where(
+            GovernanceRule.id == rule_id,
+            GovernanceRule.household_id == user.household_id,
+        )
+    )
+    rule = result.scalar_one_or_none()
+    if not rule:
+        raise HTTPException(status_code=404, detail="Rule not found")
+
+    is_constitutional = rule.tier == RuleTier.constitutional or rule.tier == "constitutional"
+    if is_constitutional:
+        raise HTTPException(
+            status_code=400,
+            detail="Constitutional rules cannot be deleted. Use PUT to deactivate with a reason.",
+        )
+
+    await db.delete(rule)
+    await db.flush()
+    return {"deleted": True}
 
 
 @router.post("/governance-rules/defaults", response_model=list[GovernanceRuleResponse], status_code=201)

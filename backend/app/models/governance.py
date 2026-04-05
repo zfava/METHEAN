@@ -25,6 +25,7 @@ from app.models.enums import (
     GovernanceAction,
     PlanStatus,
     RuleScope,
+    RuleTier,
     RuleType,
 )
 
@@ -42,6 +43,7 @@ class GovernanceRule(Base):
         UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL")
     )
     rule_type: Mapped[RuleType] = mapped_column(nullable=False)
+    tier: Mapped[RuleTier] = mapped_column(nullable=False, default=RuleTier.policy)
     scope: Mapped[RuleScope] = mapped_column(nullable=False, default=RuleScope.household)
     scope_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True))
     name: Mapped[str] = mapped_column(String(255), nullable=False)

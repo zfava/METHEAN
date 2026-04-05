@@ -9,7 +9,7 @@ import uuid
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.enums import GovernanceAction, RuleScope, RuleType
+from app.models.enums import GovernanceAction, RuleScope, RuleTier, RuleType
 from app.models.governance import GovernanceEvent, GovernanceRule
 
 
@@ -65,6 +65,17 @@ async def create_default_rules(
             description="Maximum daily learning time",
             parameters={"max_daily_minutes": 240},
             priority=5,
+        ),
+        GovernanceRule(
+            household_id=household_id,
+            created_by=created_by,
+            rule_type=RuleType.ai_boundary,
+            tier=RuleTier.constitutional,
+            scope=RuleScope.household,
+            name="AI oversight guarantee",
+            description="All AI-generated content and recommendations are logged with full input/output for parent inspection. AI cannot modify child state without governance approval.",
+            parameters={"ai_transparency": "full", "ai_direct_action": False},
+            priority=1,
         ),
     ]
     for rule in defaults:

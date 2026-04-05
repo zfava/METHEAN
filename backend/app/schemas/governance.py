@@ -5,19 +5,21 @@ from datetime import date, datetime
 
 from pydantic import BaseModel, Field
 
-from app.models.enums import GovernanceAction, PlanStatus, RuleScope, RuleType
+from app.models.enums import GovernanceAction, PlanStatus, RuleScope, RuleTier, RuleType
 
 
 # ── Governance Rules ──
 
 class GovernanceRuleCreate(BaseModel):
     rule_type: RuleType
+    tier: RuleTier = RuleTier.policy
     scope: RuleScope = RuleScope.household
     scope_id: uuid.UUID | None = None
     name: str = Field(min_length=1, max_length=255)
     description: str | None = None
     parameters: dict = Field(default_factory=dict)
     priority: int = 0
+    confirm_constitutional: bool = False
 
 
 class GovernanceRuleUpdate(BaseModel):
@@ -26,6 +28,8 @@ class GovernanceRuleUpdate(BaseModel):
     parameters: dict | None = None
     priority: int | None = None
     is_active: bool | None = None
+    confirm_constitutional: bool = False
+    reason: str | None = None
 
 
 class GovernanceRuleResponse(BaseModel):
@@ -34,6 +38,7 @@ class GovernanceRuleResponse(BaseModel):
     id: uuid.UUID
     household_id: uuid.UUID
     rule_type: RuleType
+    tier: RuleTier
     scope: RuleScope
     scope_id: uuid.UUID | None
     name: str

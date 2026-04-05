@@ -188,7 +188,7 @@ async def test_golden_workflow(client: AsyncClient):
     # ── 8. INITIALIZE GOVERNANCE RULES ───────────────────────────────
     rules = await client.post("/api/v1/governance-rules/defaults")
     assert rules.status_code == 201, f"Step 8 GOVERNANCE RULES failed: {rules.text}"
-    assert len(rules.json()) == 3
+    assert len(rules.json()) == 4  # 3 policy + 1 constitutional
 
     # ── 9. GENERATE PLAN ─────────────────────────────────────────────
     plan = await client.post(f"/api/v1/children/{child_id}/plans/generate", json={

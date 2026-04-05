@@ -1982,6 +1982,65 @@
             }
           }
         }
+      },
+      "delete": {
+        "tags": [
+          "governance"
+        ],
+        "summary": "Delete Governance Rule",
+        "operationId": "delete_governance_rule_api_v1_governance_rules__rule_id__delete",
+        "parameters": [
+          {
+            "name": "rule_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Rule Id"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Delete Governance Rule Api V1 Governance Rules  Rule Id  Delete"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/api/v1/governance-rules/defaults": {
@@ -6440,6 +6499,10 @@
           "rule_type": {
             "$ref": "#/components/schemas/RuleType"
           },
+          "tier": {
+            "$ref": "#/components/schemas/RuleTier",
+            "default": "policy"
+          },
           "scope": {
             "$ref": "#/components/schemas/RuleScope",
             "default": "household"
@@ -6482,6 +6545,11 @@
             "type": "integer",
             "title": "Priority",
             "default": 0
+          },
+          "confirm_constitutional": {
+            "type": "boolean",
+            "title": "Confirm Constitutional",
+            "default": false
           }
         },
         "type": "object",
@@ -6505,6 +6573,9 @@
           },
           "rule_type": {
             "$ref": "#/components/schemas/RuleType"
+          },
+          "tier": {
+            "$ref": "#/components/schemas/RuleTier"
           },
           "scope": {
             "$ref": "#/components/schemas/RuleScope"
@@ -6560,6 +6631,7 @@
           "id",
           "household_id",
           "rule_type",
+          "tier",
           "scope",
           "scope_id",
           "name",
@@ -6630,6 +6702,22 @@
               }
             ],
             "title": "Is Active"
+          },
+          "confirm_constitutional": {
+            "type": "boolean",
+            "title": "Confirm Constitutional",
+            "default": false
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
           }
         },
         "type": "object",
@@ -7882,6 +7970,14 @@
           "map"
         ],
         "title": "RuleScope"
+      },
+      "RuleTier": {
+        "type": "string",
+        "enum": [
+          "constitutional",
+          "policy"
+        ],
+        "title": "RuleTier"
       },
       "RuleType": {
         "type": "string",
