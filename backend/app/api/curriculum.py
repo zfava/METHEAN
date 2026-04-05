@@ -11,7 +11,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.api.deps import PaginationParams, get_current_user, get_db, require_role
+from app.api.deps import PaginationParams, get_current_user, get_db, require_permission, require_role
 from app.models.curriculum import (
     ChildMapEnrollment,
     LearningEdge,
@@ -683,7 +683,7 @@ async def override_blocked_node(
     node_id: uuid.UUID,
     body: OverrideRequest,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("override.prerequisites")),
 ) -> OverrideResponse:
     child = await _get_child_or_404(db, child_id, user.household_id)
 

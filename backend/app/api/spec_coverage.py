@@ -32,7 +32,7 @@ from app.models.enums import (
     NodeType,
 )
 from app.models.governance import Activity, Attempt, Plan, PlanWeek
-from app.models.identity import Child, ChildPreferences, Household, User
+from app.models.identity import Child, ChildPreferences, Household, User, UserPermission
 from app.models.operational import DeviceToken, NotificationLog
 from app.models.state import ChildNodeState, FSRSCard
 
@@ -341,6 +341,87 @@ async def get_today(
         }
         for a in activities
     ]
+
+
+# ══════════════════════════════════════════════════
+# User Permissions
+# ══════════════════════════════════════════════════
+
+@router.get("/users/{user_id}/permissions")
+async def list_user_permissions(
+    user_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner")),
+) -> list[dict]:
+    result = await db.execute(
+        select(UserPermission).where(
+            UserPermission.user_id == user_id,
+            UserPermission.household_id == user.household_id,
+        )
+    )
+    return [
+        {
+            "id": str(p.id),
+            "permission": p.permission,
+            "scope_type": p.scope_type,
+            "scope_id": str(p.scope_id) if p.scope_id else None,
+            "granted_at": p.granted_at.isoformat() if p.granted_at else None,
+        }
+        for p in result.scalars().all()
+    ]
+
+
+class PermissionGrant(BaseModel):
+    permission: str = Field(min_length=1, max_length=100)
+    scope_type: str | None = None
+    scope_id: uuid.UUID | None = None
+
+
+@router.post("/users/{user_id}/permissions", status_code=201)
+async def grant_permission(
+    user_id: uuid.UUID,
+    body: PermissionGrant,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner")),
+) -> dict:
+    perm = UserPermission(
+        user_id=user_id,
+        household_id=user.household_id,
+        permission=body.permission,
+        scope_type=body.scope_type or "all",
+        scope_id=body.scope_id,
+        granted_by=user.id,
+    )
+    db.add(perm)
+    await db.flush()
+    return {
+        "id": str(perm.id),
+        "permission": perm.permission,
+        "scope_type": perm.scope_type,
+        "granted": True,
+    }
+
+
+@router.delete("/users/{user_id}/permissions/{permission_id}")
+async def revoke_permission(
+    user_id: uuid.UUID,
+    permission_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner")),
+) -> dict:
+    result = await db.execute(
+        select(UserPermission).where(
+            UserPermission.id == permission_id,
+            UserPermission.user_id == user_id,
+            UserPermission.household_id == user.household_id,
+        )
+    )
+    perm = result.scalar_one_or_none()
+    if not perm:
+        raise HTTPException(status_code=404, detail="Permission not found")
+    await db.delete(perm)
+    await db.flush()
+    return {"revoked": True}
 
 
 # ══════════════════════════════════════════════════

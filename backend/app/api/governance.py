@@ -21,7 +21,7 @@ from app.ai.prompts import (
     CARTOGRAPHER_SYSTEM,
     TUTOR_SYSTEM,
 )
-from app.api.deps import PaginationParams, get_current_user, get_db, require_role
+from app.api.deps import PaginationParams, get_current_user, get_db, require_permission, require_role
 from app.models.curriculum import ChildMapEnrollment, LearningMap, LearningNode
 from app.models.enums import (
     ActivityStatus,
@@ -125,17 +125,21 @@ async def list_governance_rules(
 async def create_governance_rule(
     body: GovernanceRuleCreate,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("rules.create")),
 ) -> GovernanceRuleResponse:
     from app.models.enums import RuleTier
+    from app.core.permissions import check_permission, PERM_RULES_CONSTITUTIONAL
 
-    # Constitutional rules require explicit confirmation
-    if body.tier == RuleTier.constitutional and not body.confirm_constitutional:
-        raise HTTPException(
-            status_code=400,
-            detail="Constitutional rules are hard to change once created. "
-                   "Set confirm_constitutional=true to confirm.",
-        )
+    # Constitutional rules require explicit confirmation AND the constitutional permission
+    if body.tier == RuleTier.constitutional:
+        if not await check_permission(db, user, PERM_RULES_CONSTITUTIONAL):
+            raise HTTPException(status_code=403, detail="Missing permission: rules.constitutional")
+        if not body.confirm_constitutional:
+            raise HTTPException(
+                status_code=400,
+                detail="Constitutional rules are hard to change once created. "
+                       "Set confirm_constitutional=true to confirm.",
+            )
 
     rule = GovernanceRule(
         household_id=user.household_id,
@@ -292,7 +296,7 @@ async def generate_plan_endpoint(
     child_id: uuid.UUID,
     body: PlanGenerateRequest,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("plans.generate")),
 ) -> PlanResponse:
     child = await _get_child_or_404(db, child_id, user.household_id)
 
@@ -375,7 +379,7 @@ async def approve_activity(
     activity_id: uuid.UUID,
     body: ActivityApproveReject | None = None,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner", "co_parent")),
+    user: User = Depends(require_permission("approve.activities")),
 ) -> dict:
     plan = await _get_plan_or_404(db, plan_id, user.household_id)
     if plan.status == PlanStatus.archived:

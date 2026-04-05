@@ -2895,6 +2895,134 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/users/{user_id}/permissions:
+    get:
+      tags:
+      - spec-coverage
+      summary: List User Permissions
+      operationId: list_user_permissions_api_v1_users__user_id__permissions_get
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: User Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+                title: Response List User Permissions Api V1 Users  User Id  Permissions
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    post:
+      tags:
+      - spec-coverage
+      summary: Grant Permission
+      operationId: grant_permission_api_v1_users__user_id__permissions_post
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: User Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PermissionGrant'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Grant Permission Api V1 Users  User Id  Permissions
+                  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/users/{user_id}/permissions/{permission_id}:
+    delete:
+      tags:
+      - spec-coverage
+      summary: Revoke Permission
+      operationId: revoke_permission_api_v1_users__user_id__permissions__permission_id__delete
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: User Id
+      - name: permission_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Permission Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Revoke Permission Api V1 Users  User Id  Permissions  Permission
+                  Id  Delete
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/learning-maps/{map_id}/validate:
     post:
       tags:
@@ -4686,6 +4814,28 @@ components:
       - child_id
       - message
       title: OverrideResponse
+    PermissionGrant:
+      properties:
+        permission:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Permission
+        scope_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scope Type
+        scope_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Scope Id
+      type: object
+      required:
+      - permission
+      title: PermissionGrant
     PhilosophicalProfileUpdate:
       properties:
         educational_philosophy:
