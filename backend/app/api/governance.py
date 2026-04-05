@@ -10,6 +10,7 @@ import uuid
 from datetime import UTC, date, datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
+from pydantic import BaseModel, Field
 from fastapi.responses import StreamingResponse
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -279,6 +280,77 @@ async def delete_governance_rule(
     await db.delete(rule)
     await db.flush()
     return {"deleted": True}
+
+
+# ══════════════════════════════════════════════════
+# Governance Reports
+# ══════════════════════════════════════════════════
+
+class ReportRequest(BaseModel):
+    period_start: date
+    period_end: date
+
+class AttestRequest(BaseModel):
+    report_id: str
+    attestation_text: str = Field(min_length=10)
+
+
+@router.post("/governance/report")
+async def generate_report(
+    body: ReportRequest,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "co_parent")),
+) -> dict:
+    """Generate a comprehensive governance report for the period."""
+    from app.services.governance_report import generate_governance_report
+
+    report = await generate_governance_report(
+        db, user.household_id, body.period_start, body.period_end, user.id,
+    )
+
+    # Log the export
+    await log_governance_event(
+        db, user.household_id, user.id,
+        GovernanceAction.approve, "governance_report", user.household_id,
+        reason=f"Governance report generated for {body.period_start} to {body.period_end}",
+    )
+
+    return report
+
+
+@router.post("/governance/report/attest")
+async def attest_report(
+    body: AttestRequest,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner")),
+) -> dict:
+    """Parent's digital signature on a governance report.
+
+    Creates an immutable governance event as attestation. This is the
+    authoritative document — not any AI summary.
+    """
+    event = GovernanceEvent(
+        household_id=user.household_id,
+        user_id=user.id,
+        action=GovernanceAction.approve,
+        target_type="governance_report_attestation",
+        target_id=user.household_id,
+        reason=body.attestation_text,
+        metadata_={
+            "report_id": body.report_id,
+            "attested_by": user.display_name,
+            "attested_at": datetime.now(UTC).isoformat(),
+        },
+    )
+    db.add(event)
+    await db.flush()
+
+    return {
+        "attestation_id": str(event.id),
+        "report_id": body.report_id,
+        "attested_by": user.display_name,
+        "attested_at": event.created_at.isoformat() if event.created_at else None,
+    }
 
 
 @router.get("/governance/rules/upcoming")

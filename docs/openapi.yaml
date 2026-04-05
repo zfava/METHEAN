@@ -1243,6 +1243,85 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/governance/report:
+    post:
+      tags:
+      - governance
+      summary: Generate Report
+      description: Generate a comprehensive governance report for the period.
+      operationId: generate_report_api_v1_governance_report_post
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Generate Report Api V1 Governance Report Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/governance/report/attest:
+    post:
+      tags:
+      - governance
+      summary: Attest Report
+      description: 'Parent''s digital signature on a governance report.
+
+
+        Creates an immutable governance event as attestation. This is the
+
+        authoritative document — not any AI summary.'
+      operationId: attest_report_api_v1_governance_report_attest_post
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttestRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Attest Report Api V1 Governance Report Attest Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/governance/rules/upcoming:
     get:
       tags:
@@ -3849,6 +3928,20 @@ components:
       - state_event_id
       - nodes_unblocked
       title: AttemptSubmitResponse
+    AttestRequest:
+      properties:
+        report_id:
+          type: string
+          title: Report Id
+        attestation_text:
+          type: string
+          minLength: 10
+          title: Attestation Text
+      type: object
+      required:
+      - report_id
+      - attestation_text
+      title: AttestRequest
     Body_upload_artifact_endpoint_api_v1_children__child_id__artifacts_post:
       properties:
         file:
@@ -5187,6 +5280,21 @@ components:
       - access_token
       - expires_in
       title: RegisterResponse
+    ReportRequest:
+      properties:
+        period_start:
+          type: string
+          format: date
+          title: Period Start
+        period_end:
+          type: string
+          format: date
+          title: Period End
+      type: object
+      required:
+      - period_start
+      - period_end
+      title: ReportRequest
     RetentionSummaryResponse:
       properties:
         child_id:
