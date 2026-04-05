@@ -32,6 +32,7 @@ class AIRole(str, Enum):
     cartographer = "cartographer"
     education_architect = "education_architect"
     content_architect = "content_architect"
+    curriculum_mapper = "curriculum_mapper"
 
 
 class AIProvider(str, Enum):
@@ -440,6 +441,30 @@ def _call_mock(role: AIRole, user_prompt: str) -> dict:
                 "review_session": 10,
                 "estimated_sessions_to_mastery": 8,
             },
+        })
+    }
+    mock_responses[AIRole.curriculum_mapper] = {
+        "content": json.dumps({
+            "source_material": "Example Curriculum",
+            "current_position": {"ref": "unit-3", "status": "in_progress"},
+            "nodes_already_mastered": ["root", "unit-1", "unit-2"],
+            "nodes": [
+                {"ref": "root", "node_type": "root", "title": "Curriculum Root", "sort_order": 0},
+                {"ref": "unit-1", "node_type": "milestone", "title": "Unit 1: Foundations", "sort_order": 1,
+                 "description": "Chapters 1-4", "estimated_minutes": 30},
+                {"ref": "unit-2", "node_type": "milestone", "title": "Unit 2: Building Blocks", "sort_order": 2,
+                 "description": "Chapters 5-8", "estimated_minutes": 30},
+                {"ref": "unit-3", "node_type": "milestone", "title": "Unit 3: Application", "sort_order": 3,
+                 "description": "Chapters 9-12", "estimated_minutes": 35},
+                {"ref": "unit-4", "node_type": "milestone", "title": "Unit 4: Mastery", "sort_order": 4,
+                 "description": "Chapters 13-16", "estimated_minutes": 35},
+            ],
+            "edges": [
+                {"from_ref": "root", "to_ref": "unit-1"},
+                {"from_ref": "unit-1", "to_ref": "unit-2"},
+                {"from_ref": "unit-2", "to_ref": "unit-3"},
+                {"from_ref": "unit-3", "to_ref": "unit-4"},
+            ],
         })
     }
     return mock_responses.get(role, {"content": json.dumps({"message": "Mock response"})})

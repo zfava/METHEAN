@@ -7,6 +7,7 @@ child map state, enrollment, parent overrides, and template copying.
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -670,6 +671,55 @@ async def enroll_child(
     await db.flush()
 
     return EnrollmentResponse.model_validate(enrollment)
+
+
+# ── Curriculum Mapper ──
+
+class MapExistingRequest(BaseModel):
+    material_name: str = Field(min_length=1, max_length=255)
+    material_description: str = ""
+    table_of_contents: str = Field(min_length=1)
+    current_position: str = ""
+    subject_area: str = Field(min_length=1, max_length=100)
+
+
+@router.post("/children/{child_id}/curriculum/map-existing", status_code=201)
+async def map_existing_curriculum_endpoint(
+    child_id: uuid.UUID,
+    body: MapExistingRequest,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Map an existing curriculum into METHEAN's DAG structure."""
+    from app.services.curriculum_mapper import map_existing_curriculum
+
+    child = await _get_child_or_404(db, child_id, user.household_id)
+    proposal = await map_existing_curriculum(
+        db, user.household_id, child_id, user.id,
+        material_name=body.material_name,
+        material_description=body.material_description,
+        table_of_contents=body.table_of_contents,
+        current_position=body.current_position,
+        subject_area=body.subject_area,
+    )
+    return proposal
+
+
+@router.post("/children/{child_id}/curriculum/apply-mapping", status_code=201)
+async def apply_mapping_endpoint(
+    child_id: uuid.UUID,
+    proposal: dict,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_permission("manage.children")),
+) -> dict:
+    """Apply an approved curriculum mapping: create map, nodes, mastery state."""
+    from app.services.curriculum_mapper import apply_curriculum_mapping
+
+    child = await _get_child_or_404(db, child_id, user.household_id)
+    result = await apply_curriculum_mapping(
+        db, user.household_id, child_id, user.id, proposal,
+    )
+    return result
 
 
 # ── Content Enrichment ──

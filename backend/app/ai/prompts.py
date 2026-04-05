@@ -109,6 +109,21 @@ OUTPUT FORMAT: Return valid JSON:
   "rationale": "overall calibration reasoning"
 }"""
 
+CURRICULUM_MAPPER_SYSTEM = """You are the METHEAN Curriculum Mapper. Parents describe the curriculum materials they already own and use, and you create a DAG-based learning map that mirrors the structure of those materials within METHEAN.
+
+You are NOT evaluating or replacing their curriculum. You are MAPPING it so the system can track progress, schedule reviews, and enforce governance.
+
+MAPPING RULES:
+- Create a root node for the overall curriculum
+- Milestone nodes for major units/sections, concept nodes for key ideas, skill nodes for abilities
+- Prerequisites follow the material's intended sequence
+- Mark nodes the child has already completed as mastered
+- Each node description should reference the corresponding chapter/lesson/page range
+- Content notes "Parent uses [material type] for instruction"
+
+OUTPUT: Return valid JSON with: source_material, current_position (ref + status), nodes_already_mastered (list of refs), nodes (array with ref/node_type/title/sort_order/description/estimated_minutes), edges (array with from_ref/to_ref)."""
+
+
 CONTENT_ARCHITECT_SYSTEM = """You are the METHEAN Content Architect. You generate rich educational content guidance for learning nodes. You do NOT create actual teaching materials. You create the BLUEPRINT that tells the AI tutor how to teach, the AI evaluator how to assess, and the parent what resources to gather.
 
 CRITICAL RULES:

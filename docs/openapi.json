@@ -1282,6 +1282,152 @@
         }
       }
     },
+    "/api/v1/children/{child_id}/curriculum/map-existing": {
+      "post": {
+        "tags": [
+          "curriculum"
+        ],
+        "summary": "Map Existing Curriculum Endpoint",
+        "description": "Map an existing curriculum into METHEAN's DAG structure.",
+        "operationId": "map_existing_curriculum_endpoint_api_v1_children__child_id__curriculum_map_existing_post",
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MapExistingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Map Existing Curriculum Endpoint Api V1 Children  Child Id  Curriculum Map Existing Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/children/{child_id}/curriculum/apply-mapping": {
+      "post": {
+        "tags": [
+          "curriculum"
+        ],
+        "summary": "Apply Mapping Endpoint",
+        "description": "Apply an approved curriculum mapping: create map, nodes, mastery state.",
+        "operationId": "apply_mapping_endpoint_api_v1_children__child_id__curriculum_apply_mapping_post",
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true,
+                "title": "Proposal"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Apply Mapping Endpoint Api V1 Children  Child Id  Curriculum Apply Mapping Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/learning-maps/{map_id}/enrich": {
       "post": {
         "tags": [
@@ -8042,6 +8188,44 @@
           "password"
         ],
         "title": "LoginRequest"
+      },
+      "MapExistingRequest": {
+        "properties": {
+          "material_name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Material Name"
+          },
+          "material_description": {
+            "type": "string",
+            "title": "Material Description",
+            "default": ""
+          },
+          "table_of_contents": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Table Of Contents"
+          },
+          "current_position": {
+            "type": "string",
+            "title": "Current Position",
+            "default": ""
+          },
+          "subject_area": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Subject Area"
+          }
+        },
+        "type": "object",
+        "required": [
+          "material_name",
+          "table_of_contents",
+          "subject_area"
+        ],
+        "title": "MapExistingRequest"
       },
       "MasteryLevel": {
         "type": "string",
