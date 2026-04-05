@@ -227,6 +227,43 @@ export const ai = {
 };
 
 // Types
+// ── Compliance ──
+export const compliance = {
+  states: () => request<{ code: string; name: string; strictness: string }[]>("/compliance/states"),
+  stateDetail: (code: string) => request<object>(`/compliance/states/${code}`),
+  check: (childId: string, state: string) =>
+    request<object>(`/children/${childId}/compliance/check?state=${state}`),
+  attendance: (childId: string, start: string, end: string) =>
+    request<object>(`/children/${childId}/attendance?start=${start}&end=${end}`),
+  hours: (childId: string) => request<object>(`/children/${childId}/hours`),
+};
+
+// ── Assessment ──
+export const assessment = {
+  create: (childId: string, data: object) =>
+    request<object>(`/children/${childId}/assessments`, { method: "POST", body: JSON.stringify(data) }),
+  list: (childId: string) => request<{ items: object[]; total: number }>(`/children/${childId}/assessments`),
+  createPortfolio: (childId: string, data: object) =>
+    request<object>(`/children/${childId}/portfolio`, { method: "POST", body: JSON.stringify(data) }),
+  listPortfolio: (childId: string) => request<{ items: object[]; total: number }>(`/children/${childId}/portfolio`),
+  transcript: (childId: string, year?: number) =>
+    request<object>(`/children/${childId}/transcript${year ? `?year=${year}` : ""}`),
+  exportPortfolio: (childId: string, start: string, end: string) =>
+    request<object>(`/children/${childId}/portfolio/export?from=${start}&to=${end}`),
+};
+
+// ── Education Plan ──
+export const educationPlan = {
+  generate: (childId: string, data: object) =>
+    request<object>(`/children/${childId}/education-plan/generate`, { method: "POST", body: JSON.stringify(data) }),
+  get: (childId: string) => request<object>(`/children/${childId}/education-plan`),
+  approve: (childId: string) =>
+    request<object>(`/children/${childId}/education-plan/approve`, { method: "POST" }),
+  update: (childId: string, data: object) =>
+    request<object>(`/children/${childId}/education-plan`, { method: "PUT", body: JSON.stringify(data) }),
+};
+
+// Types
 export interface ChildListItem {
   id: string;
   first_name: string;

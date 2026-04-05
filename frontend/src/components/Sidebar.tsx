@@ -85,6 +85,7 @@ export default function Sidebar() {
             Overview
           </div>
           {navLink("/dashboard", "Dashboard", "\u25C9", true)}
+          {navLink("/compliance", "Compliance", "\u2611")}
         </div>
 
         {/* Learning */}
@@ -92,9 +93,11 @@ export default function Sidebar() {
           <div className="px-3 mb-1 text-[10px] font-semibold text-slate-500 uppercase tracking-widest">
             Learning
           </div>
+          {navLink("/curriculum", "Curriculum", "\u2630")}
           {navLink("/plans", "Plans", "\u25A4")}
           {navLink("/maps", "Maps", "\u25CE")}
           {navLink("/curriculum/editor", "Map Editor", "\u2710")}
+          {navLink("/assessment", "Assessment", "\u270D")}
           {navLink("/inspection", "Progress", "\u2B21")}
         </div>
 
