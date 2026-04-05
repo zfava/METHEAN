@@ -1,34 +1,45 @@
 "use client";
 
-const colors: Record<string, string> = {
-  mastered: "bg-emerald-100 text-emerald-800",
-  proficient: "bg-emerald-50 text-emerald-700",
-  developing: "bg-amber-100 text-amber-800",
-  emerging: "bg-amber-50 text-amber-700",
-  not_started: "bg-gray-100 text-gray-600",
-  available: "bg-blue-50 text-blue-700",
-  blocked: "bg-gray-100 text-gray-500",
-  in_progress: "bg-amber-100 text-amber-800",
-  decaying: "bg-red-100 text-red-700",
-  scheduled: "bg-blue-50 text-blue-700",
-  completed: "bg-emerald-100 text-emerald-800",
-  cancelled: "bg-gray-100 text-gray-500",
-  approved: "bg-emerald-100 text-emerald-800",
-  rejected: "bg-red-50 text-red-700",
-  draft: "bg-gray-100 text-gray-600",
-  active: "bg-blue-100 text-blue-800",
-  pending: "bg-amber-100 text-amber-700",
-  approve: "bg-emerald-100 text-emerald-800",
-  reject: "bg-red-100 text-red-700",
-  modify: "bg-amber-100 text-amber-800",
-  defer: "bg-gray-100 text-gray-600",
+import { cn } from "@/lib/cn";
+
+const styles: Record<string, string> = {
+  mastered: "bg-(--color-success-light) text-(--color-success)",
+  proficient: "bg-(--color-accent-light) text-(--color-accent)",
+  developing: "bg-(--color-warning-light) text-(--color-warning)",
+  emerging: "bg-orange-50 text-orange-700",
+  not_started: "bg-(--color-page) text-(--color-text-tertiary)",
+  available: "bg-(--color-accent-light) text-(--color-accent)",
+  blocked: "bg-(--color-page) text-(--color-text-tertiary)",
+  in_progress: "bg-(--color-warning-light) text-(--color-warning)",
+  scheduled: "bg-(--color-accent-light) text-(--color-accent)",
+  completed: "bg-(--color-success-light) text-(--color-success)",
+  cancelled: "bg-(--color-page) text-(--color-text-tertiary)",
+  approve: "bg-(--color-success-light) text-(--color-success)",
+  reject: "bg-(--color-danger-light) text-(--color-danger)",
+  modify: "bg-(--color-warning-light) text-(--color-warning)",
+  defer: "bg-(--color-page) text-(--color-text-secondary)",
+  draft: "bg-(--color-page) text-(--color-text-secondary)",
+  active: "bg-(--color-accent-light) text-(--color-accent)",
+  proposed: "bg-(--color-warning-light) text-(--color-warning)",
+  approved: "bg-(--color-success-light) text-(--color-success)",
+  rejected: "bg-(--color-danger-light) text-(--color-danger)",
+  pending: "bg-(--color-warning-light) text-(--color-warning)",
+  constitutional: "bg-(--color-constitutional-light) text-(--color-constitutional)",
+  policy: "bg-(--color-page) text-(--color-text-secondary)",
+  warning: "bg-(--color-warning-light) text-(--color-warning)",
+  action_required: "bg-(--color-danger-light) text-(--color-danger)",
+  info: "bg-(--color-accent-light) text-(--color-accent)",
 };
 
 export default function StatusBadge({ status, className = "" }: { status: string; className?: string }) {
-  const style = colors[status] || "bg-gray-100 text-gray-600";
+  const style = styles[status] || "bg-(--color-page) text-(--color-text-secondary)";
   const label = status.replace(/_/g, " ");
   return (
-    <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium capitalize ${style} ${className}`}>
+    <span className={cn(
+      "inline-block px-2 py-0.5 rounded-[4px] text-[11px] font-medium capitalize",
+      style,
+      className,
+    )}>
       {label}
     </span>
   );

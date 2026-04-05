@@ -1,25 +1,79 @@
 @import "tailwindcss";
 
-@theme {
-  --color-bg: #f8f9fa;
-  --color-surface: #ffffff;
-  --color-border: #e2e5e9;
-  --color-text: #1a1d21;
-  --color-text-secondary: #6b7280;
-  --color-accent: #2563eb;
-  --color-accent-hover: #1d4ed8;
-  --color-mastered: #059669;
-  --color-progress: #d97706;
-  --color-blocked: #9ca3af;
-  --color-decaying: #dc2626;
-  --color-danger: #dc2626;
+/* ══════════════════════════════════════════════════
+   METHEAN Design System
+   Sovereign. Calm. Precise. High-trust.
+   ══════════════════════════════════════════════════ */
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+@theme {
+  /* ── Background tiers ── */
+  --color-page: #FAFAF8;
+  --color-surface: #FFFFFF;
+  --color-sidebar: #1C1C1E;
+  --color-sidebar-hover: #2C2C2E;
+  --color-sidebar-active: #333336;
+
+  /* ── Text hierarchy ── */
+  --color-text: #1A1A1A;
+  --color-text-secondary: #6B6B6B;
+  --color-text-tertiary: #9A9A9A;
+  --color-text-inverse: #FFFFFF;
+  --color-text-sidebar: #B0B0B0;
+
+  /* ── Accent (muted steel blue — sparingly) ── */
+  --color-accent: #4A6FA5;
+  --color-accent-hover: #3D5F8F;
+  --color-accent-light: #EDF1F7;
+
+  /* ── Status / Semantic ── */
+  --color-mastered: #2D6A4F;
+  --color-success: #2D6A4F;
+  --color-success-light: #EAF4ED;
+  --color-progress: #B8860B;
+  --color-warning: #B8860B;
+  --color-warning-light: #FDF6E3;
+  --color-blocked: #9A9A9A;
+  --color-danger: #A63D40;
+  --color-danger-light: #FBF0F0;
+  --color-decaying: #A63D40;
+  --color-info: #4A6FA5;
+
+  /* ── Constitutional (bronze/gold) ── */
+  --color-constitutional: #8B7355;
+  --color-constitutional-light: #F5F0E8;
+
+  /* ── Borders ── */
+  --color-border: #E8E6E1;
+  --color-border-strong: #D4D1CC;
+
+  /* ── Radius scale ── */
+  --radius-card: 10px;
+  --radius-button: 6px;
+  --radius-badge: 4px;
+  --radius-input: 6px;
+
+  /* ── Typography ── */
+  --font-sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--color-bg);
+  font-size: 14px;
+  line-height: 1.5;
   color: var(--color-text);
+  background-color: var(--color-page);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { font-family: var(--font-sans); }
+
+*:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; }
 }

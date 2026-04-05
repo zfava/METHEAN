@@ -34,79 +34,42 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-(--color-bg)">
-      <div className="w-full max-w-sm">
+    <div className="min-h-screen flex items-center justify-center bg-(--color-page)">
+      <div className="w-full max-w-[380px]">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-semibold tracking-tight">METHEAN</h1>
-          <p className="text-sm text-(--color-text-secondary) mt-1">
-            A learning operating system for families.
-          </p>
+          <h1 className="text-3xl font-semibold tracking-[-0.04em] text-(--color-text)">METHEAN</h1>
+          <p className="text-sm text-(--color-text-secondary) mt-2">A learning operating system for families</p>
         </div>
 
-        <div className="bg-white rounded-lg border border-(--color-border) p-6">
-          <div className="flex mb-6 border-b border-(--color-border)">
-            <button
-              onClick={() => setMode("login")}
-              className={`flex-1 pb-3 text-sm font-medium border-b-2 transition-colors ${
-                mode === "login" ? "border-(--color-accent) text-(--color-accent)" : "border-transparent text-(--color-text-secondary)"
-              }`}
-            >
-              Sign In
-            </button>
-            <button
-              onClick={() => setMode("register")}
-              className={`flex-1 pb-3 text-sm font-medium border-b-2 transition-colors ${
-                mode === "register" ? "border-(--color-accent) text-(--color-accent)" : "border-transparent text-(--color-text-secondary)"
-              }`}
-            >
-              Register
-            </button>
+        <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-6">
+          {/* Tab switcher */}
+          <div className="flex mb-6 p-1 bg-(--color-page) rounded-lg border border-(--color-border)">
+            <button onClick={() => setMode("login")}
+              className={`flex-1 py-1.5 text-sm rounded-md transition-colors duration-150 ${
+                mode === "login" ? "bg-(--color-surface) text-(--color-text) font-medium shadow-sm" : "text-(--color-text-secondary)"
+              }`}>Sign In</button>
+            <button onClick={() => setMode("register")}
+              className={`flex-1 py-1.5 text-sm rounded-md transition-colors duration-150 ${
+                mode === "register" ? "bg-(--color-surface) text-(--color-text) font-medium shadow-sm" : "text-(--color-text-secondary)"
+              }`}>Register</button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3">
             {mode === "register" && (
               <>
-                <input
-                  type="text"
-                  placeholder="Your name"
-                  value={displayName}
-                  onChange={(e) => setDisplayName(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-md focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 focus:border-(--color-accent)"
-                  required
-                />
-                <input
-                  type="text"
-                  placeholder="Household name"
-                  value={householdName}
-                  onChange={(e) => setHouseholdName(e.target.value)}
-                  className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-md focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 focus:border-(--color-accent)"
-                  required
-                />
+                <input type="text" placeholder="Your name" value={displayName} onChange={(e) => setDisplayName(e.target.value)}
+                  className="w-full px-3 py-2.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 focus:border-(--color-accent) placeholder:text-(--color-text-tertiary)" required />
+                <input type="text" placeholder="Household name" value={householdName} onChange={(e) => setHouseholdName(e.target.value)}
+                  className="w-full px-3 py-2.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 focus:border-(--color-accent) placeholder:text-(--color-text-tertiary)" required />
               </>
             )}
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-md focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 focus:border-(--color-accent)"
-              required
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-md focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 focus:border-(--color-accent)"
-              required
-              minLength={8}
-            />
+            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-3 py-2.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 focus:border-(--color-accent) placeholder:text-(--color-text-tertiary)" required />
+            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-3 py-2.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 focus:border-(--color-accent) placeholder:text-(--color-text-tertiary)" required minLength={8} />
             {error && <p className="text-xs text-(--color-danger)">{error}</p>}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-2 text-sm font-medium text-white bg-(--color-accent) rounded-md hover:bg-(--color-accent-hover) disabled:opacity-50 transition-colors"
-            >
+            <button type="submit" disabled={loading}
+              className="w-full py-2.5 text-sm font-medium text-white bg-(--color-accent) rounded-[6px] hover:bg-(--color-accent-hover) disabled:opacity-50 transition-colors duration-150">
               {loading ? "..." : mode === "login" ? "Sign In" : "Create Account"}
             </button>
           </form>
