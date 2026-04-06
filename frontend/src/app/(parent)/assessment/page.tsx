@@ -4,6 +4,12 @@ import { useEffect, useState } from "react";
 import { assessment } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
 import StatusBadge from "@/components/StatusBadge";
+import PageHeader from "@/components/ui/PageHeader";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
+import Tabs from "@/components/ui/Tabs";
+import EmptyState from "@/components/ui/EmptyState";
+import { cn } from "@/lib/cn";
 
 const TYPES = ["parent_observation", "oral_narration", "written_work", "demonstration", "project", "discussion", "quiz"];
 const JUDGMENTS = ["mastered", "proficient", "developing", "emerging", "needs_review"];
@@ -80,62 +86,70 @@ export default function AssessmentPage() {
 
   return (
     <div className="max-w-4xl">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-semibold text-(--color-text)">Assessment &amp; Portfolio</h1>
-        <div className="flex gap-2">
-          <button onClick={() => setTab("assess")}
-            className={`px-4 py-1.5 text-sm rounded-[10px] ${tab === "assess" ? "bg-(--color-text) text-white" : "bg-(--color-page)"}`}>Assessments</button>
-          <button onClick={() => setTab("portfolio")}
-            className={`px-4 py-1.5 text-sm rounded-[10px] ${tab === "portfolio" ? "bg-(--color-text) text-white" : "bg-(--color-page)"}`}>Portfolio</button>
-        </div>
-      </div>
+      <PageHeader
+        title="Assessment & Portfolio"
+        actions={
+          <Tabs
+            tabs={[
+              { key: "assess" as const, label: "Assessments" },
+              { key: "portfolio" as const, label: "Portfolio" },
+            ]}
+            active={tab}
+            onChange={setTab}
+          />
+        }
+      />
 
       {tab === "assess" && (
         <>
           <div className="flex gap-2 mb-4">
-            <button onClick={() => setShowForm(!showForm)}
-              className="px-4 py-2 text-sm font-medium bg-(--color-accent) text-white rounded-[10px] hover:bg-(--color-accent-hover)">
+            <Button onClick={() => setShowForm(!showForm)}>
               {showForm ? "Cancel" : "Record Assessment"}
-            </button>
+            </Button>
           </div>
 
           {showForm && (
-            <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-5 mb-6">
+            <Card padding="p-5" className="mb-6">
               <div className="space-y-3">
                 <div className="flex flex-wrap gap-2">
                   {TYPES.map((t) => (
                     <button key={t} onClick={() => setAType(t)}
-                      className={`px-3 py-1.5 text-xs rounded-[10px] border capitalize ${aType === t ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)"}`}>
+                      className={cn(
+                        "px-3 py-1.5 text-xs rounded-[6px] border capitalize",
+                        aType === t ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)"
+                      )}>
                       {t.replace(/_/g, " ")}
                     </button>
                   ))}
                 </div>
                 <input value={aTitle} onChange={(e) => setATitle(e.target.value)}
-                  placeholder="Assessment title" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px]" />
+                  placeholder="Assessment title" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px]" />
                 <input value={aSubject} onChange={(e) => setASubject(e.target.value)}
-                  placeholder="Subject (optional)" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px]" />
+                  placeholder="Subject (optional)" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px]" />
                 <textarea value={aNotes} onChange={(e) => setANotes(e.target.value)}
-                  placeholder="What did you observe?" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] h-24 resize-none" />
+                  placeholder="What did you observe?" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] h-24 resize-none" />
                 <div>
                   <label className="block text-xs text-(--color-text-secondary) mb-1">Your mastery judgment (overrides AI)</label>
                   <div className="flex gap-2">
                     {JUDGMENTS.map((j) => (
                       <button key={j} onClick={() => setAJudgment(j === aJudgment ? "" : j)}
-                        className={`px-3 py-1 text-xs rounded-[10px] border capitalize ${aJudgment === j ? "border-(--color-accent) bg-(--color-accent-light) font-medium" : "border-(--color-border)"}`}>
+                        className={cn(
+                          "px-3 py-1 text-xs rounded-[6px] border capitalize",
+                          aJudgment === j ? "border-(--color-accent) bg-(--color-accent-light) font-medium" : "border-(--color-border)"
+                        )}>
                         {j.replace(/_/g, " ")}
                       </button>
                     ))}
                   </div>
                 </div>
-                <button onClick={submitAssessment} disabled={!aTitle}
-                  className="px-6 py-2 text-sm font-medium bg-(--color-text) text-white rounded-[10px] disabled:opacity-50">Submit</button>
+                <Button onClick={submitAssessment} disabled={!aTitle} size="lg">Submit</Button>
               </div>
-            </div>
+            </Card>
           )}
 
           <div className="space-y-2">
             {assessments.map((a: any) => (
-              <div key={a.id} className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-4 flex items-center justify-between">
+              <Card key={a.id} padding="p-4" className="flex items-center justify-between">
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-medium text-(--color-text)">{a.title}</span>
@@ -144,10 +158,10 @@ export default function AssessmentPage() {
                   </div>
                   {a.qualitative_notes && <p className="text-xs text-(--color-text-secondary) mt-1 line-clamp-1">{a.qualitative_notes}</p>}
                 </div>
-                <span className="text-xs text-(--color-text-tertiary)">{a.assessed_at?.split("T")[0]}</span>
-              </div>
+                <span className="text-xs text-(--color-text-secondary)">{a.assessed_at?.split("T")[0]}</span>
+              </Card>
             ))}
-            {!loading && assessments.length === 0 && <p className="text-sm text-(--color-text-tertiary)">No assessments recorded yet.</p>}
+            {!loading && assessments.length === 0 && <p className="text-sm text-(--color-text-secondary)">No assessments recorded yet.</p>}
           </div>
         </>
       )}
@@ -155,58 +169,61 @@ export default function AssessmentPage() {
       {tab === "portfolio" && (
         <>
           <div className="flex gap-2 mb-4">
-            <button onClick={() => setShowPortfolioForm(!showPortfolioForm)}
-              className="px-4 py-2 text-sm font-medium bg-(--color-accent) text-white rounded-[10px] hover:bg-(--color-accent-hover)">
+            <Button onClick={() => setShowPortfolioForm(!showPortfolioForm)}>
               {showPortfolioForm ? "Cancel" : "Add Entry"}
-            </button>
-            <button onClick={showTranscript} className="px-4 py-2 text-sm border border-(--color-border-strong) rounded-[10px] hover:bg-(--color-page)">
+            </Button>
+            <Button onClick={showTranscript} variant="secondary">
               Generate Transcript
-            </button>
+            </Button>
           </div>
 
           {showPortfolioForm && (
-            <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-5 mb-6 space-y-3">
-              <div className="flex gap-2">
-                {["work_sample", "narrative", "photo", "certificate", "reading_log", "field_trip"].map((t) => (
-                  <button key={t} onClick={() => setPType(t)}
-                    className={`px-3 py-1.5 text-xs rounded-[10px] border capitalize ${pType === t ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)"}`}>
-                    {t.replace(/_/g, " ")}
-                  </button>
-                ))}
+            <Card padding="p-5" className="mb-6">
+              <div className="space-y-3">
+                <div className="flex gap-2">
+                  {["work_sample", "narrative", "photo", "certificate", "reading_log", "field_trip"].map((t) => (
+                    <button key={t} onClick={() => setPType(t)}
+                      className={cn(
+                        "px-3 py-1.5 text-xs rounded-[6px] border capitalize",
+                        pType === t ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)"
+                      )}>
+                      {t.replace(/_/g, " ")}
+                    </button>
+                  ))}
+                </div>
+                <input value={pTitle} onChange={(e) => setPTitle(e.target.value)} placeholder="Title" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px]" />
+                <textarea value={pDesc} onChange={(e) => setPDesc(e.target.value)} placeholder="Description" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] h-16 resize-none" />
+                <div className="flex gap-3">
+                  <input value={pSubject} onChange={(e) => setPSubject(e.target.value)} placeholder="Subject" className="flex-1 px-3 py-2 text-sm border border-(--color-border) rounded-[6px]" />
+                  <input type="date" value={pDate} onChange={(e) => setPDate(e.target.value)} className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px]" />
+                </div>
+                <Button onClick={submitPortfolio} disabled={!pTitle} size="lg">Add Entry</Button>
               </div>
-              <input value={pTitle} onChange={(e) => setPTitle(e.target.value)} placeholder="Title" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px]" />
-              <textarea value={pDesc} onChange={(e) => setPDesc(e.target.value)} placeholder="Description" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] h-16 resize-none" />
-              <div className="flex gap-3">
-                <input value={pSubject} onChange={(e) => setPSubject(e.target.value)} placeholder="Subject" className="flex-1 px-3 py-2 text-sm border border-(--color-border) rounded-[10px]" />
-                <input type="date" value={pDate} onChange={(e) => setPDate(e.target.value)} className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px]" />
-              </div>
-              <button onClick={submitPortfolio} disabled={!pTitle}
-                className="px-6 py-2 text-sm font-medium bg-(--color-text) text-white rounded-[10px] disabled:opacity-50">Add Entry</button>
-            </div>
+            </Card>
           )}
 
           <div className="grid grid-cols-2 gap-3">
             {portfolio.map((e: any) => (
-              <div key={e.id} className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-4">
+              <Card key={e.id} padding="p-4">
                 <div className="flex items-center gap-2 mb-1">
                   <StatusBadge status={e.entry_type} />
                   <span className="text-sm font-medium text-(--color-text)">{e.title}</span>
                 </div>
-                <div className="text-xs text-(--color-text-tertiary)">
+                <div className="text-xs text-(--color-text-secondary)">
                   {e.subject && <span>{e.subject} &middot; </span>}
                   {e.date_completed || "No date"}
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
-          {!loading && portfolio.length === 0 && <p className="text-sm text-(--color-text-tertiary)">No portfolio entries yet.</p>}
+          {!loading && portfolio.length === 0 && <p className="text-sm text-(--color-text-secondary)">No portfolio entries yet.</p>}
 
           {transcript && (
             <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-              <div className="bg-(--color-surface) rounded-[10px] w-[600px] max-h-[80vh] overflow-y-auto p-6 shadow-lg">
+              <Card padding="p-6" className="w-[600px] max-h-[80vh] overflow-y-auto shadow-lg">
                 <div className="flex justify-between mb-4">
                   <h2 className="text-sm font-bold text-(--color-text) uppercase">Unofficial Transcript</h2>
-                  <button onClick={() => setTranscript(null)} className="text-xs text-(--color-text-tertiary)">Close</button>
+                  <button onClick={() => setTranscript(null)} className="text-xs text-(--color-text-secondary)">Close</button>
                 </div>
                 <table className="w-full text-sm mb-4">
                   <thead><tr className="border-b text-xs text-(--color-text-secondary)">
@@ -214,7 +231,7 @@ export default function AssessmentPage() {
                   </tr></thead>
                   <tbody>
                     {((transcript as any).subjects || []).map((s: any, i: number) => (
-                      <tr key={i} className="border-b border-(--color-border)/30">
+                      <tr key={i} className="border-b border-(--color-page)">
                         <td className="py-2">{s.subject}</td>
                         <td className="text-center font-semibold">{s.grade}</td>
                         <td className="text-center text-xs">{s.nodes_mastered}/{s.nodes_total}</td>
@@ -225,7 +242,7 @@ export default function AssessmentPage() {
                 </table>
                 <div className="text-xs text-(--color-text-secondary)">GPA: {(transcript as any).gpa}</div>
                 <button onClick={() => window.print()} className="mt-3 text-xs text-(--color-accent)">Print</button>
-              </div>
+              </Card>
             </div>
           )}
         </>
