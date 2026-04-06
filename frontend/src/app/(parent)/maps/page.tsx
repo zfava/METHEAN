@@ -4,6 +4,11 @@ import { useEffect, useState } from "react";
 import { children as childrenApi, curriculum, type MapState, type MapNodeState } from "@/lib/api";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { useChild } from "@/lib/ChildContext";
+import PageHeader from "@/components/ui/PageHeader";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
+import EmptyState from "@/components/ui/EmptyState";
+import { cn } from "@/lib/cn";
 
 // ── Node card styling by mastery + status ──
 function nodeStyle(node: MapNodeState): { bg: string; border: string; text: string } {
@@ -11,10 +16,10 @@ function nodeStyle(node: MapNodeState): { bg: string; border: string; text: stri
   const s = node.status;
   if (m === "mastered")   return { bg: "bg-(--color-success-light)",  border: "border-(--color-success)",  text: "text-(--color-success)" };
   if (m === "proficient") return { bg: "bg-(--color-accent-light)",   border: "border-(--color-accent)",   text: "text-(--color-accent)" };
-  if (m === "developing") return { bg: "bg-(--color-warning-light)", border: "border-(--color-warning)", text: "text-(--color-warning)" };
-  if (m === "emerging")   return { bg: "bg-(--color-danger-light)", border: "border-(--color-danger)", text: "text-(--color-danger)" };
-  if (s === "available")  return { bg: "bg-(--color-surface)",     border: "border-(--color-success)/50 border-dashed", text: "text-(--color-text)" };
-  return                         { bg: "bg-(--color-page)",  border: "border-(--color-border-strong)",  text: "text-(--color-text-tertiary)" };
+  if (m === "developing") return { bg: "bg-(--color-warning-light)",  border: "border-(--color-warning)",  text: "text-(--color-warning)" };
+  if (m === "emerging")   return { bg: "bg-(--color-danger-light)",    border: "border-(--color-danger)",    text: "text-(--color-danger)" };
+  if (s === "available")  return { bg: "bg-(--color-surface)",        border: "border-(--color-success)/50 border-dashed", text: "text-(--color-text)" };
+  return                         { bg: "bg-(--color-page)",           border: "border-(--color-border-strong)",  text: "text-(--color-text-tertiary)" };
 }
 
 const typeLabel: Record<string, string> = {
@@ -110,30 +115,33 @@ export default function MapsPage() {
 
   return (
     <div className="max-w-5xl">
-      <div className="mb-6">
-        <h1 className="text-xl font-semibold text-(--color-text)">Learning Maps</h1>
-        <p className="text-sm text-(--color-text-secondary)">{selectedChild.first_name}&apos;s curriculum &mdash; the full journey ahead</p>
-      </div>
+      <PageHeader
+        title="Learning Maps"
+        subtitle={`${selectedChild.first_name}'s curriculum \u2014 the full journey ahead`}
+      />
 
       {/* ── Map selector ── */}
       {mapStates.length > 1 && (
         <div className="flex gap-3 mb-6">
           {mapStates.map((ms) => (
             <button key={ms.learning_map_id} onClick={() => setSelectedMap(ms)}
-              className={`px-4 py-2 text-sm rounded-[10px] border transition-colors ${
+              className={cn(
+                "px-4 py-2 text-sm rounded-[6px] border transition-colors",
                 selectedMap?.learning_map_id === ms.learning_map_id
                   ? "border-(--color-accent) bg-(--color-accent-light) text-(--color-accent) font-medium"
                   : "border-(--color-border) text-(--color-text-secondary) hover:border-(--color-border-strong)"
-              }`}
+              )}
             >{ms.map_name}</button>
           ))}
         </div>
       )}
 
       {mapStates.length === 0 && (
-        <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-12 text-center text-sm text-(--color-text-tertiary)">
-          No maps enrolled. Complete onboarding to get started.
-        </div>
+        <EmptyState
+          icon="empty"
+          title="No maps enrolled"
+          description="Complete onboarding to get started."
+        />
       )}
 
       {selectedMap && (
@@ -149,7 +157,7 @@ export default function MapsPage() {
           </div>
 
           {/* ── DAG visualization ── */}
-          <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-6">
+          <Card padding="p-6">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-sm font-semibold text-(--color-text)">{selectedMap.map_name}</h2>
               <a href={`/curriculum/editor?map_id=${selectedMap.learning_map_id}`}
@@ -218,12 +226,12 @@ export default function MapsPage() {
                 </div>
               ))}
             </div>
-          </div>
+          </Card>
 
           {/* ── Override modal ── */}
           {overrideNodeId && (
             <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-              <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-6 w-96 shadow-lg">
+              <Card padding="p-6" className="w-96 shadow-lg">
                 <h3 className="text-sm font-semibold text-(--color-text) mb-1">Unlock Blocked Node</h3>
                 <p className="text-xs text-(--color-text-secondary) mb-4">
                   This bypasses the prerequisite requirement. Your reason will be recorded in the governance log.
@@ -232,20 +240,21 @@ export default function MapsPage() {
                   value={overrideReason}
                   onChange={(e) => setOverrideReason(e.target.value)}
                   placeholder="Why are you unlocking this node?"
-                  className="w-full px-3 py-2 text-sm border border-(--color-border-strong) rounded-md mb-3 h-20 resize-none focus:outline-none focus:ring-1 focus:ring-(--color-accent)/30"
+                  className="w-full px-3 py-2 text-sm border border-(--color-border-strong) rounded-[6px] mb-3 h-20 resize-none focus:outline-none focus:ring-1 focus:ring-(--color-accent)"
                 />
                 <div className="flex gap-2 justify-end">
-                  <button
+                  <Button
                     onClick={() => { setOverrideNodeId(null); setOverrideReason(""); }}
-                    className="px-3 py-1.5 text-xs text-(--color-text-secondary) border border-(--color-border-strong) rounded-md hover:bg-(--color-page)"
-                  >Cancel</button>
-                  <button
+                    variant="secondary" size="sm"
+                  >Cancel</Button>
+                  <Button
                     onClick={handleOverride}
                     disabled={!overrideReason.trim() || overriding}
-                    className="px-3 py-1.5 text-xs font-medium bg-(--color-warning) text-white rounded-md hover:opacity-90 disabled:opacity-50"
-                  >{overriding ? "Unlocking..." : "Unlock Node"}</button>
+                    size="sm"
+                    className="bg-(--color-warning) hover:opacity-90"
+                  >{overriding ? "Unlocking..." : "Unlock Node"}</Button>
                 </div>
-              </div>
+              </Card>
             </div>
           )}
 
@@ -256,7 +265,7 @@ export default function MapsPage() {
           </div>
 
           {/* ── Map metadata ── */}
-          <div className="mt-4 flex items-center gap-6 text-xs text-(--color-text-tertiary)">
+          <div className="mt-4 flex items-center gap-6 text-xs text-(--color-text-secondary)">
             <span>{total} nodes</span>
             <span>{mastered} mastered</span>
             <span>{Math.round((selectedMap.progress_pct || 0) * 100)}% complete</span>
