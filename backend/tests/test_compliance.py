@@ -48,15 +48,38 @@ class TestStateDatabase:
             assert data["strictness"] in valid, f"{code} has invalid strictness: {data['strictness']}"
 
     def test_high_regulation_states(self):
-        """Verify NY, PA, MA are all 'high'."""
-        for code in ["NY", "PA", "MA"]:
+        """Verify NY, PA, MA, RI, VT are all 'high'."""
+        for code in ["NY", "PA", "MA", "RI", "VT"]:
             assert STATE_REQUIREMENTS[code]["strictness"] == "high", f"{code} should be high"
 
     def test_no_notice_states(self):
         """Verify states classified as 'none' (no notice required per HSLDA)."""
-        no_notice_states = ["TX", "AK", "CT", "ID", "IL", "IN", "NJ", "MI", "MO", "WY"]
+        no_notice_states = ["AK", "CT", "IA", "ID", "IL", "MI", "MO", "NJ", "OK", "TX"]
         for code in no_notice_states:
             assert STATE_REQUIREMENTS[code]["strictness"] == "none", f"{code} should be none"
+            assert STATE_REQUIREMENTS[code]["notification"]["required"] is False, f"{code} should not require notification"
+
+    def test_moderate_regulation_states(self):
+        """Verify moderate regulation states."""
+        moderate_states = ["CO", "DC", "HI", "ME", "MD", "MN", "NH", "ND", "OH", "OR", "SC", "TN", "VA", "WA", "WV"]
+        for code in moderate_states:
+            assert STATE_REQUIREMENTS[code]["strictness"] == "moderate", f"{code} should be moderate"
+
+    def test_low_regulation_states(self):
+        """Verify low regulation states."""
+        low_states = ["AL", "AR", "AZ", "CA", "DE", "FL", "GA", "IN", "KS", "KY", "LA", "MS", "MT", "NC", "NE", "NM", "NV", "SD", "UT", "WI", "WY"]
+        for code in low_states:
+            assert STATE_REQUIREMENTS[code]["strictness"] == "low", f"{code} should be low"
+
+    def test_classification_counts(self):
+        """Verify exact counts per tier."""
+        from collections import Counter
+        c = Counter(s["strictness"] for s in STATE_REQUIREMENTS.values())
+        assert c["none"] == 10, f"Expected 10 no-notice states, got {c['none']}"
+        assert c["low"] == 21, f"Expected 21 low states, got {c['low']}"
+        assert c["moderate"] == 15, f"Expected 15 moderate states, got {c['moderate']}"
+        assert c["high"] == 5, f"Expected 5 high states, got {c['high']}"
+        assert sum(c.values()) == 51
 
     def test_utah_low_with_notification(self):
         """UT should be strictness 'low' with notification required but no testing."""
@@ -85,11 +108,11 @@ class TestStateDatabase:
             assert "last_verified" in data, f"{code} missing last_verified"
             assert "source" in data, f"{code} missing source"
 
-    def test_ohio_updated_to_low(self):
-        """Ohio's new law reduced regulation — should be 'low' now."""
+    def test_ohio_moderate_with_assessment(self):
+        """Ohio requires notification + assessment — moderate regulation."""
         oh = STATE_REQUIREMENTS["OH"]
-        assert oh["strictness"] == "low"
-        assert oh["annual_assessment"]["required"] is False
+        assert oh["strictness"] == "moderate"
+        assert oh["annual_assessment"]["required"] is True
 
     def test_california_psa_corrected(self):
         """CA PSA option should not have daily hour requirement."""
@@ -98,16 +121,16 @@ class TestStateDatabase:
         assert ca["instruction_hours"] == {}
         assert "Oct 1-15" in ca["special_notes"] or "October 1" in ca["notification"]["when"]
 
-    def test_indiana_no_notice(self):
-        """IN should be 'none' strictness with notification not required."""
+    def test_indiana_low_with_notification(self):
+        """IN should be 'low' strictness with enrollment report required."""
         ind = STATE_REQUIREMENTS["IN"]
-        assert ind["strictness"] == "none"
-        assert ind["notification"]["required"] is False
+        assert ind["strictness"] == "low"
+        assert ind["notification"]["required"] is True
 
-    def test_south_carolina_low(self):
-        """SC should be 'low' per HSLDA, not 'moderate'."""
+    def test_south_carolina_moderate(self):
+        """SC should be 'moderate' per HSLDA (notification + structured program)."""
         sc = STATE_REQUIREMENTS["SC"]
-        assert sc["strictness"] == "low"
+        assert sc["strictness"] == "moderate"
 
     def test_georgia_notification_to_doe(self):
         """GA notification should go to GA DOE (changed in 2013)."""

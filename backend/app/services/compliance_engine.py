@@ -37,9 +37,9 @@ STATE_REQUIREMENTS: dict[str, dict] = {
         "instruction_days": None,
         "attendance_tracking": True,
         "quarterly_reports": False,
-        "annual_assessment": {"required": False},
+        "annual_assessment": {"required": True, "options": ["standardized test", "evaluation by certified teacher"]},
         "record_retention_years": None,
-        "special_notes": "Three options: church/umbrella school (most popular, minimal requirements), private school, or private tutor (requires AL certified teacher). Church schools operate as ministry of a church — no mandated subjects or hours. CHOOSE Act ESA available ($2,000/student starting 2025-2026). Must keep attendance records.",
+        "special_notes": "Three options: church/umbrella school (most popular, minimal requirements), private school, or private tutor (requires AL certified teacher). Church schools operate as ministry of a church — no mandated subjects or hours. CHOOSE Act ESA available ($2,000/student starting 2025-2026). Must keep attendance records. Assessment required annually under all options.",
         "last_verified": "2026-04-06", "source": "HSLDA + state DOE",
     },
     # ── Alaska ────────────────────────────────────────
@@ -58,7 +58,7 @@ STATE_REQUIREMENTS: dict[str, dict] = {
     },
     # ── Arizona ───────────────────────────────────────
     "AZ": {
-        "code": "AZ", "name": "Arizona", "strictness": "none",
+        "code": "AZ", "name": "Arizona", "strictness": "low",
         "notification": {"required": True, "to_whom": "County school superintendent", "when": "Within 30 days of starting (one-time affidavit)"},
         "required_subjects": {"all": ["reading", "grammar", "mathematics", "social studies", "science"]},
         "instruction_hours": {},
@@ -106,7 +106,7 @@ STATE_REQUIREMENTS: dict[str, dict] = {
         "code": "CO", "name": "Colorado", "strictness": "moderate",
         "notification": {"required": True, "to_whom": "School district", "when": "14 days before starting, via certified mail"},
         "required_subjects": {"all": ["reading", "writing", "speaking", "mathematics", "history", "civics", "US Constitution", "literature", "science"]},
-        "instruction_hours": {"all": {"annual": None, "daily_min": 4}},
+        "instruction_hours": {"1-5": {"annual": 968}, "6-12": {"annual": 1056}},
         "instruction_days": 172,
         "attendance_tracking": True,
         "quarterly_reports": False,
@@ -131,7 +131,7 @@ STATE_REQUIREMENTS: dict[str, dict] = {
     },
     # ── Delaware ──────────────────────────────────────
     "DE": {
-        "code": "DE", "name": "Delaware", "strictness": "none",
+        "code": "DE", "name": "Delaware", "strictness": "low",
         "notification": {"required": True, "to_whom": "Delaware Department of Education", "when": "One-time upon initially opening homeschool"},
         "required_subjects": {},
         "instruction_hours": {},
@@ -182,7 +182,7 @@ STATE_REQUIREMENTS: dict[str, dict] = {
     },
     # ── Georgia ───────────────────────────────────────
     "GA": {
-        "code": "GA", "name": "Georgia", "strictness": "moderate",
+        "code": "GA", "name": "Georgia", "strictness": "low",
         "notification": {"required": True, "to_whom": "Georgia Department of Education", "when": "By September 1 or within 30 days of starting"},
         "required_subjects": {"all": ["reading", "language arts", "mathematics", "social studies", "science"]},
         "instruction_hours": {"all": {"annual": None, "daily_min": 4.5}},
@@ -191,7 +191,7 @@ STATE_REQUIREMENTS: dict[str, dict] = {
         "quarterly_reports": False,
         "annual_assessment": {"required": True, "options": ["standardized test every 3 years (beginning at end of 3rd grade)"]},
         "record_retention_years": 3,
-        "special_notes": "Declaration of intent filed with GA DOE (changed from local superintendent in 2013). 4.5-hour minimum school day. Annual written progress report kept for 3 years. Standardized testing every 3 years starting at end of grade 3. Monthly attendance reports to superintendent NO LONGER required (eliminated 2013).",
+        "special_notes": "Declaration of intent filed with GA DOE (changed from local superintendent in 2013). 4.5-hour minimum school day. Annual written progress report kept for 3 years. Standardized testing every 3 years starting at end of grade 3. Monthly attendance reports to superintendent NO LONGER required (eliminated 2013). Note: HSLDA classifies Georgia as low regulation. METHEAN rates it moderate due to monthly attendance reporting and triennial testing.",
         "last_verified": "2026-04-06", "source": "HSLDA + state DOE",
     },
     # ── Hawaii ────────────────────────────────────────
@@ -245,8 +245,8 @@ STATE_REQUIREMENTS: dict[str, dict] = {
     },
     # ── Indiana ───────────────────────────────────────
     "IN": {
-        "code": "IN", "name": "Indiana", "strictness": "none",
-        "notification": {"required": False},
+        "code": "IN", "name": "Indiana", "strictness": "low",
+        "notification": {"required": True, "to_whom": "Indiana Department of Education", "when": "Enrollment report by first day of school year"},
         "required_subjects": {},
         "instruction_hours": {},
         "instruction_days": 180,
@@ -273,7 +273,7 @@ STATE_REQUIREMENTS: dict[str, dict] = {
     },
     # ── Kansas ────────────────────────────────────────
     "KS": {
-        "code": "KS", "name": "Kansas", "strictness": "none",
+        "code": "KS", "name": "Kansas", "strictness": "low",
         "notification": {"required": True, "to_whom": "State Board of Education", "when": "One-time registration when starting"},
         "required_subjects": {},
         "instruction_hours": {},
@@ -362,7 +362,7 @@ STATE_REQUIREMENTS: dict[str, dict] = {
         "code": "MA", "name": "Massachusetts", "strictness": "high",
         "notification": {"required": True, "to_whom": "Local school committee or superintendent", "when": "Annually; prior approval required before starting"},
         "required_subjects": {"all": ["reading", "writing", "English grammar", "geography", "arithmetic", "drawing", "music", "US history and Constitution", "citizenship", "health", "PE"]},
-        "instruction_hours": {},
+        "instruction_hours": {"K-6": {"annual": 900}, "7-12": {"annual": 990}},
         "instruction_days": None,
         "attendance_tracking": False,
         "quarterly_reports": False,
@@ -411,7 +411,7 @@ STATE_REQUIREMENTS: dict[str, dict] = {
     },
     # -- Mississippi ---------------------------------------------
     "MS": {
-        "code": "MS", "name": "Mississippi", "strictness": "none",
+        "code": "MS", "name": "Mississippi", "strictness": "low",
         "notification": {"required": True, "to_whom": "Local school attendance officer", "when": "By September 15 annually (Certificate of Enrollment)"},
         "required_subjects": {},
         "instruction_hours": {},
@@ -512,7 +512,7 @@ STATE_REQUIREMENTS: dict[str, dict] = {
     },
     # -- New Hampshire ------------------------------------------
     "NH": {
-        "code": "NH", "name": "New Hampshire", "strictness": "low",
+        "code": "NH", "name": "New Hampshire", "strictness": "moderate",
         "notification": {"required": True, "to_whom": "Participating agency (Commissioner of Ed, superintendent, or nonpublic school principal)", "when": "Within 5 days of commencing"},
         "required_subjects": {"all": ["science", "mathematics", "language", "government", "history", "health", "reading", "writing", "spelling", "NH and US constitutions", "art", "music"]},
         "instruction_hours": {},
@@ -584,14 +584,14 @@ STATE_REQUIREMENTS: dict[str, dict] = {
     },
     # -- Ohio ---------------------------------------------------
     "OH": {
-        "code": "OH", "name": "Ohio", "strictness": "low",
+        "code": "OH", "name": "Ohio", "strictness": "moderate",
         "notification": {"required": True, "to_whom": "School district superintendent", "when": "By August 30 or within 5 days of starting"},
         "required_subjects": {"all": ["English language arts", "mathematics", "science", "history", "government", "social studies"]},
         "instruction_hours": {},
         "instruction_days": None,
         "attendance_tracking": False,
         "quarterly_reports": False,
-        "annual_assessment": {"required": False},
+        "annual_assessment": {"required": True, "options": ["standardized test", "written narrative", "portfolio review by certified teacher"]},
         "record_retention_years": None,
         "special_notes": "New Ohio law significantly streamlined requirements. No hours, no assessment required. Notification must include outline of curriculum. Previous 900-hour and testing requirements have been eliminated.",
         "last_verified": "2026-04-06", "source": "HSLDA + state DOE",
@@ -649,7 +649,7 @@ STATE_REQUIREMENTS: dict[str, dict] = {
     },
     # -- Rhode Island -------------------------------------------
     "RI": {
-        "code": "RI", "name": "Rhode Island", "strictness": "moderate",
+        "code": "RI", "name": "Rhode Island", "strictness": "high",
         "notification": {"required": True, "to_whom": "Local school committee", "when": "Before beginning homeschool"},
         "required_subjects": {"all": ["reading", "writing", "geography", "arithmetic", "health and PE", "US history", "Rhode Island history", "civics"]},
         "instruction_hours": {},
@@ -663,7 +663,7 @@ STATE_REQUIREMENTS: dict[str, dict] = {
     },
     # -- South Carolina -----------------------------------------
     "SC": {
-        "code": "SC", "name": "South Carolina", "strictness": "low",
+        "code": "SC", "name": "South Carolina", "strictness": "moderate",
         "notification": {"required": True, "to_whom": "School district", "when": "Annually"},
         "required_subjects": {
             "all": ["reading", "writing", "mathematics", "social studies", "science"],
@@ -724,7 +724,7 @@ STATE_REQUIREMENTS: dict[str, dict] = {
     "UT": {
         "code": "UT", "name": "Utah", "strictness": "low",
         "notification": {"required": True, "to_whom": "School district", "when": "At least 30 days before starting (one-time affidavit)"},
-        "required_subjects": {},
+        "required_subjects": {"all": ["language arts", "mathematics", "science", "social studies", "arts", "health", "computing"]},
         "instruction_hours": {},
         "instruction_days": None,
         "attendance_tracking": False,
@@ -753,7 +753,7 @@ STATE_REQUIREMENTS: dict[str, dict] = {
     },
     # -- Vermont ------------------------------------------------
     "VT": {
-        "code": "VT", "name": "Vermont", "strictness": "moderate",
+        "code": "VT", "name": "Vermont", "strictness": "high",
         "notification": {"required": True, "to_whom": "Vermont Secretary of Education / Agency of Education", "when": "At least 10 business days before starting; annually"},
         "required_subjects": {
             "K-6": ["reading", "writing", "mathematics", "citizenship and history", "fine arts", "PE", "health"],
@@ -829,8 +829,8 @@ STATE_REQUIREMENTS: dict[str, dict] = {
     },
     # -- Wyoming ------------------------------------------------
     "WY": {
-        "code": "WY", "name": "Wyoming", "strictness": "none",
-        "notification": {"required": False},
+        "code": "WY", "name": "Wyoming", "strictness": "low",
+        "notification": {"required": True, "to_whom": "Local school board", "when": "Annually with curriculum description"},
         "required_subjects": {"all": ["reading", "writing", "mathematics", "civics", "history", "literature", "science"]},
         "instruction_hours": {},
         "instruction_days": None,
