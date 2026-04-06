@@ -263,6 +263,36 @@ export const educationPlan = {
     request<object>(`/children/${childId}/education-plan`, { method: "PUT", body: JSON.stringify(data) }),
 };
 
+// ── Annual Curriculum ──
+export const annualCurriculum = {
+  generate: (childId: string, data: object) =>
+    request<object>(`/children/${childId}/curricula/generate`, { method: "POST", body: JSON.stringify(data) }),
+  list: (childId: string) =>
+    request<any[]>(`/children/${childId}/curricula`),
+  detail: (curriculumId: string) =>
+    request<any>(`/curricula/${curriculumId}`),
+  weekDetail: (curriculumId: string, weekNumber: number) =>
+    request<any>(`/curricula/${curriculumId}/weeks/${weekNumber}`),
+  approve: (curriculumId: string) =>
+    request<object>(`/curricula/${curriculumId}/approve`, { method: "POST" }),
+  updateWeekNotes: (curriculumId: string, weekNumber: number, notes: string) =>
+    request<object>(`/curricula/${curriculumId}/weeks/${weekNumber}/notes`, { method: "PUT", body: JSON.stringify({ notes }) }),
+  addActivity: (curriculumId: string, weekNumber: number, data: object) =>
+    request<object>(`/curricula/${curriculumId}/weeks/${weekNumber}/activities`, { method: "POST", body: JSON.stringify(data) }),
+  removeActivity: (curriculumId: string, weekNumber: number, activityId: string) =>
+    request<object>(`/curricula/${curriculumId}/weeks/${weekNumber}/activities/${activityId}`, { method: "DELETE" }),
+  editActivity: (curriculumId: string, weekNumber: number, activityId: string, data: object) =>
+    request<object>(`/curricula/${curriculumId}/weeks/${weekNumber}/activities/${activityId}`, { method: "PUT", body: JSON.stringify(data) }),
+  moveActivity: (curriculumId: string, weekNumber: number, activityId: string, targetWeek: number) =>
+    request<object>(`/curricula/${curriculumId}/weeks/${weekNumber}/activities/${activityId}/move`, { method: "POST", body: JSON.stringify({ target_week_number: targetWeek }) }),
+  completeWeek: (curriculumId: string, weekNumber: number, notes?: string) =>
+    request<object>(`/curricula/${curriculumId}/weeks/${weekNumber}/complete${notes ? `?notes=${encodeURIComponent(notes)}` : ""}`, { method: "POST" }),
+  history: (childId: string) =>
+    request<any>(`/children/${childId}/curricula/history`),
+  historyYear: (childId: string, year: string) =>
+    request<any[]>(`/children/${childId}/curricula/history/${year}`),
+};
+
 // Types
 export interface ChildListItem {
   id: string;

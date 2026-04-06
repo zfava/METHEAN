@@ -108,6 +108,10 @@ class Plan(Base):
     end_date: Mapped[date | None] = mapped_column(Date)
     ai_generated: Mapped[bool] = mapped_column(Boolean, default=False)
     ai_run_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True))
+    annual_curriculum_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("annual_curricula.id", ondelete="SET NULL")
+    )
+    curriculum_week_number: Mapped[int | None] = mapped_column(Integer)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

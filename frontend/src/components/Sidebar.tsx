@@ -75,6 +75,8 @@ export default function Sidebar() {
         <div>
           <div className="px-5 mb-1.5 text-[11px] font-medium text-white/30 tracking-wider">Learning</div>
           {navItem("/curriculum", "Curriculum")}
+          {navItem("/curriculum/year", "Year Plan")}
+          {navItem("/curriculum/history", "History")}
           {navItem("/plans", "Plans")}
           {navItem("/maps", "Maps")}
           {navItem("/curriculum/editor", "Map Editor")}
