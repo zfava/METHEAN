@@ -38,6 +38,7 @@ from app.schemas.state import (
     StateEventResponse,
 )
 from app.services.attempt_workflow import start_attempt, submit_attempt
+from app.services.learning_context import get_activity_learning_context
 from app.services.state_engine import compute_retrievability
 
 router = APIRouter(tags=["state"])
@@ -425,3 +426,23 @@ async def get_attempt(
         raise HTTPException(status_code=404, detail="Attempt not found")
 
     return AttemptResponse.model_validate(attempt)
+
+
+@router.get("/activities/{activity_id}/learn")
+async def get_learning_context(
+    activity_id: uuid.UUID,
+    child_id: uuid.UUID | None = None,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Get the full learning context for a child's activity.
+
+    Returns teaching content, lesson steps, practice prompts,
+    assessment criteria, and previous attempt history.
+    """
+    try:
+        return await get_activity_learning_context(
+            db, activity_id, user.household_id, child_id
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))

@@ -193,13 +193,45 @@ export const attempts = {
       method: "POST",
       body: JSON.stringify({ child_id: childId }),
     }),
-  submit: (attemptId: string, data: { confidence: number; duration_minutes?: number; score?: number }) =>
+  submit: (attemptId: string, data: {
+    confidence: number;
+    duration_minutes?: number;
+    score?: number;
+    feedback?: {
+      responses?: Array<{ prompt: string; response: string }>;
+      self_reflection?: string;
+    };
+  }) =>
     request<AttemptSubmitResult>(`/attempts/${attemptId}/submit`, {
       method: "PUT",
       body: JSON.stringify(data),
     }),
   get: (attemptId: string) => request<Attempt>(`/attempts/${attemptId}`),
 };
+
+// ── Learning Context ──
+export const learn = {
+  context: (activityId: string, childId?: string) =>
+    request<LearningContext>(`/activities/${activityId}/learn${childId ? `?child_id=${childId}` : ""}`),
+};
+
+export interface LearningContext {
+  activity: {
+    id: string; title: string; description: string;
+    activity_type: string; estimated_minutes: number; instructions: object;
+  };
+  lesson: {
+    introduction: string; objectives: string[];
+    steps: Array<{ title: string; content: string; type: string }>;
+    key_questions: string[]; practice_prompts: string[];
+    resources_needed: string[]; real_world_connection: string;
+    estimated_time: { introduction: number; guided_work: number; independent_practice: number };
+  };
+  assessment: { prompts: string[]; mastery_criteria: string; methods: string[] };
+  tutor_available: boolean;
+  previous_attempts: Array<{ date: string; status: string; duration_minutes: number; score: number | null }>;
+  grade_level: string | null;
+}
 
 // Governance
 export const governance = {
