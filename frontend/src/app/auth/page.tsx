@@ -36,9 +36,10 @@ export default function AuthPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-(--color-page)">
       <div className="w-full max-w-[380px]">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-semibold tracking-[-0.04em] text-(--color-text)">METHEAN</h1>
-          <p className="text-sm text-(--color-text-secondary) mt-2">A learning operating system for families</p>
+        <div className="text-center mb-10">
+          <img src="/brand/mark-gold.svg" alt="" className="h-12 w-auto mx-auto mb-3" />
+          <img src="/brand/wordmark-navy-cream.svg" alt="METHEAN" className="h-5 w-auto mx-auto" />
+          <p className="text-sm text-(--color-text-secondary) mt-3">A learning operating system for families</p>
         </div>
 
         <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-6">

@@ -92,6 +92,7 @@ export default function OnboardingPage() {
     <div className="min-h-screen flex items-center justify-center bg-(--color-page)">
       <div className="w-full max-w-lg">
         <div className="text-center mb-8">
+          <img src="/brand/mark-gold.svg" alt="" className="h-10 w-auto mx-auto mb-3" />
           <h1 className="text-2xl font-semibold tracking-tight text-(--color-text)">Welcome to METHEAN</h1>
           <p className="text-sm text-(--color-text-secondary) mt-1">Let&apos;s set up your learning environment.</p>
         </div>

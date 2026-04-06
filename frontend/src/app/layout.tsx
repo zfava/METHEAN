@@ -5,6 +5,9 @@ import ClientProviders from "@/components/ClientProviders";
 export const metadata: Metadata = {
   title: "METHEAN",
   description: "Learning governance operating system for homeschool families",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

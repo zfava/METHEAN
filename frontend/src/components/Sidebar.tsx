@@ -50,8 +50,11 @@ export default function Sidebar() {
 
   return (
     <aside className="w-[240px] min-h-screen bg-(--color-sidebar) flex flex-col shrink-0">
-      <div className="px-5 pt-6 pb-5">
-        <Link href="/dashboard" className="text-lg font-semibold tracking-[-0.03em] text-white">METHEAN</Link>
+      <div className="px-5 pt-5 pb-4">
+        <Link href="/dashboard" className="flex items-center gap-3">
+          <img src="/brand/mark-gold.svg" alt="" className="h-7 w-auto" />
+          <img src="/brand/wordmark-gold.svg" alt="METHEAN" className="h-4 w-auto" />
+        </Link>
       </div>
 
       {!loading && children.length > 0 && (
@@ -87,7 +90,7 @@ export default function Sidebar() {
           <div className="flex items-center justify-between px-5 mb-1.5">
             <span className="text-[11px] font-medium text-white/30 tracking-wider">Governance</span>
             {pendingCount > 0 && (
-              <span className="bg-(--color-warning) text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">{pendingCount}</span>
+              <span className="bg-(--color-brand-gold) text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">{pendingCount}</span>
             )}
           </div>
           <Link href="/governance"
@@ -107,7 +110,7 @@ export default function Sidebar() {
                 )}>
                 {item.label}
                 {item.badge && pendingCount > 0 && (
-                  <span className="bg-(--color-warning) text-white text-[9px] font-bold px-1 py-0.5 rounded-full">{pendingCount}</span>
+                  <span className="bg-(--color-brand-gold) text-white text-[9px] font-bold px-1 py-0.5 rounded-full">{pendingCount}</span>
                 )}
               </Link>
             );

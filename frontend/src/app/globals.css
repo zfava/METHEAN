@@ -9,9 +9,14 @@
   /* ── Background tiers ── */
   --color-page: #FAFAF8;
   --color-surface: #FFFFFF;
-  --color-sidebar: #1C1C1E;
-  --color-sidebar-hover: #2C2C2E;
-  --color-sidebar-active: #333336;
+  --color-sidebar: #0F1B2D;
+  --color-sidebar-hover: #1A2740;
+  --color-sidebar-active: #223350;
+
+  /* ── Brand ── */
+  --color-brand-gold: #C6A24E;
+  --color-brand-navy: #0F1B2D;
+  --color-brand-cream: #F5F1E8;
 
   /* ── Text hierarchy ── */
   --color-text: #1A1A1A;

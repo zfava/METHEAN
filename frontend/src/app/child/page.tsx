@@ -216,7 +216,10 @@ export default function ChildPage() {
       {/* Header */}
       <header className="bg-(--color-surface) border-b border-(--color-border) px-6 py-5">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-(--color-text)">METHEAN</h1>
+          <div className="flex items-center gap-2.5">
+            <img src="/brand/mark-gold.svg" alt="" className="h-6 w-auto" />
+            <img src="/brand/wordmark-navy-cream.svg" alt="METHEAN" className="h-3.5 w-auto" />
+          </div>
           {children.length > 1 && (
             <select
               value={selectedId}
