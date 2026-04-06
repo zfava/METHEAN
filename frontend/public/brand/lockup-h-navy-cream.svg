@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 80" fill="none">
-  <rect width="400" height="80" rx="6" fill="#F5F1E8"/>
-  <path d="M40 8L20 16v16c0 12.4 8 20.5 20 25.3 12-4.8 20-12.9 20-25.3V16L40 8z" fill="#C6A24E"/>
-  <path d="M40 16l-12 6v10c0 8.1 5.1 13.5 12 16.5 6.9-3 12-8.4 12-16.5V22l-12-6z" fill="#0F1B2D"/>
-  <path d="M40 26l4.5 3v6L40 38l-4.5-3v-6L40 26z" fill="#C6A24E"/>
-  <text x="80" y="50" font-family="'DM Sans', sans-serif" font-weight="600" font-size="28" letter-spacing="0.12em" fill="#0F1B2D">METHEAN</text>
-</svg>

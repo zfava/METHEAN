@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { auth, type User } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
 import { cn } from "@/lib/cn";
+import { MetheanLogo } from "@/components/Brand";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
@@ -51,9 +52,8 @@ export default function Sidebar() {
   return (
     <aside className="w-[240px] min-h-screen bg-(--color-sidebar) flex flex-col shrink-0">
       <div className="px-5 pt-5 pb-4">
-        <Link href="/dashboard" className="flex items-center gap-3">
-          <img src="/brand/mark-gold.svg" alt="" className="h-7 w-auto" />
-          <img src="/brand/wordmark-gold.svg" alt="METHEAN" className="h-4 w-auto" />
+        <Link href="/dashboard" className="block">
+          <MetheanLogo markSize={28} wordmarkHeight={14} color="#C6A24E" gap={10} />
         </Link>
       </div>
 

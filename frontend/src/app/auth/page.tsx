@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { auth } from "@/lib/api";
+import { MetheanLogoVertical } from "@/components/Brand";
 
 export default function AuthPage() {
   const router = useRouter();
@@ -37,8 +38,9 @@ export default function AuthPage() {
     <div className="min-h-screen flex items-center justify-center bg-(--color-page)">
       <div className="w-full max-w-[380px]">
         <div className="text-center mb-10">
-          <img src="/brand/mark-gold.svg" alt="" className="h-12 w-auto mx-auto mb-3" />
-          <img src="/brand/wordmark-navy-cream.svg" alt="METHEAN" className="h-5 w-auto mx-auto" />
+          <div className="flex justify-center mb-3">
+            <MetheanLogoVertical markSize={52} wordmarkHeight={18} color="#0F1B2D" gap={10} />
+          </div>
           <p className="text-sm text-(--color-text-secondary) mt-3">A learning operating system for families</p>
         </div>
 

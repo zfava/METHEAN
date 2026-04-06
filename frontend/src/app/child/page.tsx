@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { auth, attempts, learn, type LearningContext } from "@/lib/api";
+import { MetheanLogo } from "@/components/Brand";
 import LessonView from "@/components/child/LessonView";
 import PracticeView from "@/components/child/PracticeView";
 import ReviewView from "@/components/child/ReviewView";
@@ -216,10 +217,7 @@ export default function ChildPage() {
       {/* Header */}
       <header className="bg-(--color-surface) border-b border-(--color-border) px-6 py-5">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <img src="/brand/mark-gold.svg" alt="" className="h-6 w-auto" />
-            <img src="/brand/wordmark-navy-cream.svg" alt="METHEAN" className="h-3.5 w-auto" />
-          </div>
+          <MetheanLogo markSize={24} wordmarkHeight={12} color="#0F1B2D" gap={8} />
           {children.length > 1 && (
             <select
               value={selectedId}
