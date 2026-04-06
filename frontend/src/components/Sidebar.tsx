@@ -86,6 +86,7 @@ export default function Sidebar() {
           {navItem("/maps", "Maps")}
           {navItem("/curriculum/editor", "Map Editor")}
           {navItem("/assessment", "Assessment")}
+          {navItem("/reading", "Reading Log")}
           {navItem("/inspection", "Progress")}
         </div>
         <div>

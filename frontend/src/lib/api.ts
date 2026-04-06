@@ -270,6 +270,31 @@ export const compliance = {
   hours: (childId: string) => request<object>(`/children/${childId}/hours`),
 };
 
+// ── Activity Feedback ──
+export const feedback = {
+  create: (activityId: string, childId: string, message: string, feedbackType = "comment") =>
+    request<object>(`/activities/${activityId}/feedback`, { method: "POST", body: JSON.stringify({ message, feedback_type: feedbackType, child_id: childId }) }),
+  list: (activityId: string) => request<any[]>(`/activities/${activityId}/feedback`),
+  recent: (childId: string, limit = 10) => request<any[]>(`/children/${childId}/feedback/recent?limit=${limit}`),
+};
+
+// ── Reading Log ──
+export const readingLog = {
+  create: (childId: string, data: object) =>
+    request<object>(`/children/${childId}/reading-log`, { method: "POST", body: JSON.stringify(data) }),
+  list: (childId: string, params?: { status?: string; subject_area?: string }) => {
+    const qs = new URLSearchParams();
+    if (params?.status) qs.set("status", params.status);
+    if (params?.subject_area) qs.set("subject_area", params.subject_area);
+    const q = qs.toString();
+    return request<any[]>(`/children/${childId}/reading-log${q ? `?${q}` : ""}`);
+  },
+  update: (entryId: string, data: object) =>
+    request<object>(`/reading-log/${entryId}`, { method: "PUT", body: JSON.stringify(data) }),
+  stats: (childId: string) => request<any>(`/children/${childId}/reading-log/stats`),
+  current: (childId: string) => request<any[]>(`/children/${childId}/reading-log/current`),
+};
+
 // ── Assessment ──
 export const assessment = {
   create: (childId: string, data: object) =>
