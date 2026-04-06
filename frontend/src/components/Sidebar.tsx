@@ -73,6 +73,7 @@ export default function Sidebar() {
         <div>
           <div className="px-5 mb-1.5 text-[11px] font-medium text-white/30 tracking-wider">Overview</div>
           {navItem("/dashboard", "Dashboard", true)}
+          {navItem("/family", "Family")}
           {navItem("/compliance", "Compliance")}
         </div>
         <div>
@@ -80,6 +81,7 @@ export default function Sidebar() {
           {navItem("/curriculum", "Curriculum")}
           {navItem("/curriculum/year", "Year Plan")}
           {navItem("/curriculum/history", "History")}
+          {navItem("/calendar", "Calendar")}
           {navItem("/plans", "Plans")}
           {navItem("/maps", "Maps")}
           {navItem("/curriculum/editor", "Map Editor")}
