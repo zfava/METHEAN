@@ -44,10 +44,13 @@ export default function CompliancePage() {
         <select value={selectedState} onChange={(e) => setSelectedState(e.target.value)}
           className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)">
           <option value="">Select your state...</option>
-          {states.map((s) => (
-            <option key={s.code} value={s.code}>{s.name} ({s.strictness})</option>
-          ))}
+          {states
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((s) => (
+              <option key={s.code} value={s.code}>{s.name} ({s.strictness})</option>
+            ))}
         </select>
+        <span className="text-xs text-(--color-text-tertiary)">{states.length} states + DC supported</span>
       </div>
 
       {loading && <LoadingSkeleton variant="list" count={5} />}
