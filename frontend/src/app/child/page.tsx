@@ -28,12 +28,12 @@ function greeting(name: string): string {
 }
 
 const typeLabels: Record<string, { label: string; color: string }> = {
-  lesson:     { label: "Lesson",     color: "bg-blue-100 text-blue-700" },
-  practice:   { label: "Practice",   color: "bg-green-100 text-green-700" },
-  review:     { label: "Review",     color: "bg-amber-100 text-amber-700" },
-  assessment: { label: "Assessment", color: "bg-purple-100 text-purple-700" },
-  project:    { label: "Project",    color: "bg-rose-100 text-rose-700" },
-  field_trip: { label: "Field Trip", color: "bg-teal-100 text-teal-700" },
+  lesson:     { label: "Lesson",     color: "bg-(--color-accent-light) text-(--color-accent)" },
+  practice:   { label: "Practice",   color: "bg-(--color-success-light) text-(--color-success)" },
+  review:     { label: "Review",     color: "bg-(--color-warning-light) text-(--color-warning)" },
+  assessment: { label: "Assessment", color: "bg-(--color-constitutional-light) text-(--color-constitutional)" },
+  project:    { label: "Project",    color: "bg-(--color-danger-light) text-(--color-danger)" },
+  field_trip: { label: "Field Trip", color: "bg-(--color-accent-light) text-(--color-accent)" },
 };
 
 export default function ChildPage() {
@@ -122,8 +122,8 @@ export default function ChildPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-amber-50/30 flex items-center justify-center">
-        <div className="text-base text-slate-400">Loading...</div>
+      <div className="min-h-screen bg-(--color-warning-light)/30 flex items-center justify-center">
+        <div className="text-base text-(--color-text-tertiary)">Loading...</div>
       </div>
     );
   }
@@ -135,46 +135,46 @@ export default function ChildPage() {
   // ── FOCUSED LEARNING VIEW ──
   if (activeActivity) {
     return (
-      <div className="min-h-screen bg-amber-50/30">
+      <div className="min-h-screen bg-(--color-warning-light)/30">
         <div className="max-w-xl mx-auto px-6 py-12">
           {!submitted ? (
             <>
               {/* Activity header */}
               <div className="mb-8">
-                <button onClick={goNext} className="text-sm text-slate-400 hover:text-slate-600 mb-4 block">
+                <button onClick={goNext} className="text-sm text-(--color-text-tertiary) hover:text-(--color-text-secondary) mb-4 block">
                   &larr; Back to activities
                 </button>
-                <h1 className="text-2xl font-semibold text-slate-800 mb-2">
+                <h1 className="text-2xl font-semibold text-(--color-text) mb-2">
                   {activeActivity.title}
                 </h1>
                 <div className="flex items-center gap-3">
                   {(() => {
-                    const t = typeLabels[activeActivity.activity_type] || { label: activeActivity.activity_type, color: "bg-slate-100 text-slate-600" };
+                    const t = typeLabels[activeActivity.activity_type] || { label: activeActivity.activity_type, color: "bg-(--color-page) text-(--color-text-secondary)" };
                     return <span className={`text-xs font-medium px-2 py-1 rounded-full ${t.color}`}>{t.label}</span>;
                   })()}
                   {activeActivity.estimated_minutes && (
-                    <span className="text-sm text-slate-400">{activeActivity.estimated_minutes} minutes</span>
+                    <span className="text-sm text-(--color-text-tertiary)">{activeActivity.estimated_minutes} minutes</span>
                   )}
                 </div>
               </div>
 
               {/* Work area */}
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
-                <label className="block text-sm font-medium text-slate-600 mb-3">
+              <div className="bg-(--color-surface) rounded-2xl shadow-sm border border-(--color-border) p-6 mb-6">
+                <label className="block text-sm font-medium text-(--color-text-secondary) mb-3">
                   Your work
                 </label>
                 <textarea
                   value={response}
                   onChange={(e) => setResponse(e.target.value)}
                   placeholder="Write your answer here..."
-                  className="w-full h-40 px-4 py-3 text-base text-slate-700 border border-slate-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 placeholder:text-slate-300"
+                  className="w-full h-40 px-4 py-3 text-base text-(--color-text) border border-(--color-border) rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 focus:border-(--color-accent) placeholder:text-(--color-text-tertiary)"
                 />
               </div>
 
               <button
                 onClick={submitWork}
                 disabled={submitting}
-                className="w-full py-3.5 text-base font-semibold text-white bg-green-600 rounded-xl hover:bg-green-700 disabled:opacity-50 transition-colors shadow-sm"
+                className="w-full py-3.5 text-base font-semibold text-white bg-(--color-success) rounded-xl hover:opacity-90 disabled:opacity-50 transition-colors shadow-sm"
               >
                 {submitting ? "Submitting..." : "Submit My Work"}
               </button>
@@ -182,23 +182,23 @@ export default function ChildPage() {
           ) : (
             /* ── FEEDBACK VIEW ── */
             <div className="text-center py-8">
-              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-green-100 flex items-center justify-center">
-                <span className="text-green-600 text-2xl">&#10003;</span>
+              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-(--color-success-light) flex items-center justify-center">
+                <span className="text-(--color-success) text-2xl">&#10003;</span>
               </div>
-              <h2 className="text-xl font-semibold text-slate-800 mb-2">{feedback}</h2>
+              <h2 className="text-xl font-semibold text-(--color-text) mb-2">{feedback}</h2>
               {masteryNote && (
-                <p className="text-base text-blue-600 mb-6">{masteryNote}</p>
+                <p className="text-base text-(--color-accent) mb-6">{masteryNote}</p>
               )}
               <div className="mt-8">
                 {remaining.length > 1 ? (
                   <button onClick={goNext}
-                    className="px-8 py-3 text-base font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors shadow-sm"
+                    className="px-8 py-3 text-base font-semibold text-white bg-(--color-accent) rounded-xl hover:bg-(--color-accent-hover) transition-colors shadow-sm"
                   >Next Activity</button>
                 ) : (
                   <div>
-                    <p className="text-lg text-slate-600 mb-4">All done for today!</p>
+                    <p className="text-lg text-(--color-text-secondary) mb-4">All done for today!</p>
                     <button onClick={goNext}
-                      className="px-6 py-2.5 text-sm text-slate-500 border border-slate-300 rounded-xl hover:bg-slate-50"
+                      className="px-6 py-2.5 text-sm text-(--color-text-secondary) border border-(--color-border-strong) rounded-xl hover:bg-(--color-page)"
                     >Back to overview</button>
                   </div>
                 )}
@@ -212,18 +212,18 @@ export default function ChildPage() {
 
   // ── DAILY OVERVIEW ──
   return (
-    <div className="min-h-screen bg-amber-50/30">
+    <div className="min-h-screen bg-(--color-warning-light)/30">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 px-6 py-5">
+      <header className="bg-(--color-surface) border-b border-(--color-border) px-6 py-5">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-semibold text-slate-800">METHEAN</h1>
+            <h1 className="text-xl font-semibold text-(--color-text)">METHEAN</h1>
           </div>
           {children.length > 1 && (
             <select
               value={selectedId}
               onChange={(e) => setSelectedId(e.target.value)}
-              className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-300"
+              className="text-sm border border-(--color-border) rounded-[10px] px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-(--color-accent)/30"
             >
               {children.map((c) => (
                 <option key={c.id} value={c.id}>{c.first_name}</option>
@@ -235,10 +235,10 @@ export default function ChildPage() {
 
       <div className="max-w-2xl mx-auto px-6 py-8">
         {/* Greeting */}
-        <h2 className="text-2xl font-semibold text-slate-800 mb-1">
+        <h2 className="text-2xl font-semibold text-(--color-text) mb-1">
           {greeting(childName)}
         </h2>
-        <p className="text-base text-slate-500 mb-8">
+        <p className="text-base text-(--color-text-secondary) mb-8">
           {remaining.length > 0
             ? `You have ${remaining.length} ${remaining.length === 1 ? "activity" : "activities"} today.`
             : "Let\u2019s see what\u2019s on your schedule."}
@@ -246,28 +246,28 @@ export default function ChildPage() {
 
         {/* Activities */}
         {activities.length === 0 ? (
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 py-16 text-center">
+          <div className="bg-(--color-surface) rounded-2xl shadow-sm border border-(--color-border) py-16 text-center">
             <div className="text-4xl mb-4">&#9728;&#65039;</div>
-            <h3 className="text-lg font-semibold text-slate-700 mb-2">
+            <h3 className="text-lg font-semibold text-(--color-text) mb-2">
               No learning scheduled for today!
             </h3>
-            <p className="text-base text-slate-400">Enjoy your free time.</p>
+            <p className="text-base text-(--color-text-tertiary)">Enjoy your free time.</p>
           </div>
         ) : (
           <div className="space-y-4">
             {activities.map((act) => {
               const done = act.status === "completed" || act.status === "in_progress";
-              const t = typeLabels[act.activity_type] || { label: act.activity_type, color: "bg-slate-100 text-slate-600" };
+              const t = typeLabels[act.activity_type] || { label: act.activity_type, color: "bg-(--color-page) text-(--color-text-secondary)" };
 
               return (
                 <div key={act.id}
-                  className={`bg-white rounded-2xl shadow-sm border border-slate-200 p-5 transition-colors ${
+                  className={`bg-(--color-surface) rounded-2xl shadow-sm border border-(--color-border) p-5 transition-colors ${
                     done ? "opacity-60" : ""
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex-1">
-                      <h3 className={`text-lg font-medium ${done ? "text-slate-400" : "text-slate-800"}`}>
+                      <h3 className={`text-lg font-medium ${done ? "text-(--color-text-tertiary)" : "text-(--color-text)"}`}>
                         {act.title}
                       </h3>
                       <div className="flex items-center gap-3 mt-2">
@@ -275,7 +275,7 @@ export default function ChildPage() {
                           {t.label}
                         </span>
                         {act.estimated_minutes && (
-                          <span className="text-sm text-slate-400 flex items-center gap-1">
+                          <span className="text-sm text-(--color-text-tertiary) flex items-center gap-1">
                             <span className="text-xs">&#9201;</span> {act.estimated_minutes} min
                           </span>
                         )}
@@ -284,12 +284,12 @@ export default function ChildPage() {
                     {!done ? (
                       <button
                         onClick={() => startActivity(act)}
-                        className="px-6 py-2.5 text-base font-semibold text-white bg-green-600 rounded-xl hover:bg-green-700 transition-colors shadow-sm"
+                        className="px-6 py-2.5 text-base font-semibold text-white bg-(--color-success) rounded-xl hover:opacity-90 transition-colors shadow-sm"
                       >
                         Start
                       </button>
                     ) : (
-                      <span className="text-sm text-green-600 font-medium flex items-center gap-1">
+                      <span className="text-sm text-(--color-success) font-medium flex items-center gap-1">
                         <span>&#10003;</span> Done
                       </span>
                     )}

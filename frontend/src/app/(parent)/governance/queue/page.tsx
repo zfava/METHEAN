@@ -2,6 +2,10 @@
 
 import { useEffect, useState } from "react";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
+import PageHeader from "@/components/ui/PageHeader";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
+import EmptyState from "@/components/ui/EmptyState";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
@@ -78,33 +82,23 @@ export default function QueuePage() {
 
   return (
     <div className="max-w-4xl">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-xl font-semibold text-slate-800">Approval Queue</h1>
-          <p className="text-sm text-slate-500">
-            {total === 0 ? "All caught up!" : `${total} activities need your review`}
-          </p>
-        </div>
-        {selected.size > 0 && (
-          <button onClick={bulkApprove} className="px-4 py-2 text-sm font-medium bg-green-600 text-white rounded-md hover:bg-green-700">
+      <PageHeader
+        title="Approval Queue"
+        subtitle={total === 0 ? "All caught up!" : `${total} activities need your review`}
+        actions={selected.size > 0 ? (
+          <Button variant="success" size="md" onClick={bulkApprove}>
             Approve Selected ({selected.size})
-          </button>
-        )}
-      </div>
+          </Button>
+        ) : undefined}
+      />
 
       {total === 0 ? (
-        <div className="bg-white rounded-lg border border-slate-200 py-16 text-center">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
-            <span className="text-green-600 text-2xl">&#10003;</span>
-          </div>
-          <div className="text-base font-medium text-slate-700">All caught up!</div>
-          <div className="text-sm text-slate-400 mt-1">No activities need your review right now.</div>
-        </div>
+        <EmptyState icon="check" title="All caught up!" description="No activities need your review right now." />
       ) : (
         <>
           {items.length > 1 && (
             <div className="mb-3">
-              <button onClick={toggleAll} className="text-xs text-blue-600 hover:underline">
+              <button onClick={toggleAll} className="text-xs text-(--color-accent) hover:underline">
                 {selected.size === items.length ? "Deselect all" : "Select all"}
               </button>
             </div>
@@ -113,17 +107,18 @@ export default function QueuePage() {
             {Object.entries(byChild).map(([childName, childItems]) => (
               <div key={childName}>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="w-7 h-7 rounded-full bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center">
+                  <span className="w-7 h-7 rounded-full bg-(--color-accent-light) text-(--color-accent) text-xs font-bold flex items-center justify-center">
                     {childName.charAt(0)}
                   </span>
-                  <h3 className="text-sm font-semibold text-slate-700">{childName}</h3>
-                  <span className="text-xs text-slate-400">({childItems.length})</span>
+                  <h3 className="text-sm font-semibold text-(--color-text)">{childName}</h3>
+                  <span className="text-xs text-(--color-text-tertiary)">({childItems.length})</span>
                 </div>
                 <div className="space-y-2 ml-9">
                   {childItems.map((item) => (
-                    <div
+                    <Card
                       key={item.activity_id}
-                      className={`bg-white rounded-lg border border-slate-200 p-4 transition-all duration-300 ${
+                      padding="p-4"
+                      className={`transition-all duration-300 ${
                         dismissing.has(item.activity_id) ? "opacity-0 -translate-x-4" : "opacity-100"
                       }`}
                     >
@@ -132,33 +127,31 @@ export default function QueuePage() {
                           onChange={() => toggleSelect(item.activity_id)} className="mt-1 rounded" />
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-sm font-medium text-slate-800">{item.title}</span>
-                            <span className="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded font-medium uppercase">{item.activity_type}</span>
+                            <span className="text-sm font-medium text-(--color-text)">{item.title}</span>
+                            <span className="text-[10px] px-1.5 py-0.5 bg-(--color-page) text-(--color-text-secondary) rounded font-medium uppercase">{item.activity_type}</span>
                             {item.difficulty && (
                               <span className="text-xs">
-                                <span className="text-yellow-500">{"●".repeat(item.difficulty)}</span>
-                                <span className="text-slate-300">{"●".repeat(5 - item.difficulty)}</span>
+                                <span className="text-(--color-warning)">{"●".repeat(item.difficulty)}</span>
+                                <span className="text-(--color-text-tertiary)">{"●".repeat(5 - item.difficulty)}</span>
                               </span>
                             )}
-                            {item.estimated_minutes && <span className="text-xs text-slate-400">{item.estimated_minutes}m</span>}
-                            {item.scheduled_date && <span className="text-xs text-slate-400">{item.scheduled_date}</span>}
+                            {item.estimated_minutes && <span className="text-xs text-(--color-text-tertiary)">{item.estimated_minutes}m</span>}
+                            {item.scheduled_date && <span className="text-xs text-(--color-text-tertiary)">{item.scheduled_date}</span>}
                           </div>
-                          <div className="text-[11px] text-slate-400 mt-0.5">{item.plan_name}</div>
+                          <div className="text-[11px] text-(--color-text-tertiary) mt-0.5">{item.plan_name}</div>
                           {item.ai_rationale && (
-                            <div className="text-xs bg-blue-50 border border-blue-100 rounded px-2.5 py-1.5 mt-2">
-                              <span className="font-medium text-blue-700">AI rationale: </span>
-                              <span className="text-blue-600 italic">{item.ai_rationale}</span>
+                            <div className="text-xs bg-(--color-accent-light) border border-(--color-accent)/20 rounded px-2.5 py-1.5 mt-2">
+                              <span className="font-medium text-(--color-accent)">AI rationale: </span>
+                              <span className="text-(--color-accent) italic">{item.ai_rationale}</span>
                             </div>
                           )}
                         </div>
                         <div className="flex gap-2 shrink-0">
-                          <button onClick={() => item.plan_id && doAction(item.activity_id, item.plan_id, "approve")}
-                            className="px-3 py-1.5 text-xs font-medium bg-green-600 text-white rounded-md hover:bg-green-700">Approve</button>
-                          <button onClick={() => item.plan_id && doAction(item.activity_id, item.plan_id, "reject")}
-                            className="px-3 py-1.5 text-xs font-medium text-red-600 border border-red-300 rounded-md hover:bg-red-50">Reject</button>
+                          <Button variant="success" size="sm" onClick={() => item.plan_id && doAction(item.activity_id, item.plan_id, "approve")}>Approve</Button>
+                          <Button variant="secondary" size="sm" className="text-(--color-danger) border-color:var(--color-danger)/30 hover:bg-(--color-danger-light)" onClick={() => item.plan_id && doAction(item.activity_id, item.plan_id, "reject")}>Reject</Button>
                         </div>
                       </div>
-                    </div>
+                    </Card>
                   ))}
                 </div>
               </div>

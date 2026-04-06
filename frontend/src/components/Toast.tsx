@@ -38,9 +38,9 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const typeStyles = {
-    error: "bg-red-50 border-red-200 text-red-800",
-    success: "bg-emerald-50 border-emerald-200 text-emerald-800",
-    info: "bg-blue-50 border-blue-200 text-blue-800",
+    error: "bg-(--color-danger-light) border-(--color-danger)/20 text-(--color-danger)",
+    success: "bg-(--color-success-light) border-(--color-success)/20 text-(--color-success)",
+    info: "bg-(--color-accent-light) border-(--color-accent)/20 text-(--color-accent)",
   };
 
   return (

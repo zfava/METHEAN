@@ -5,6 +5,12 @@ import { children as childrenApi, curriculum, type MapState } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import StatusBadge from "@/components/StatusBadge";
+import PageHeader from "@/components/ui/PageHeader";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
+import Tabs from "@/components/ui/Tabs";
+import EmptyState from "@/components/ui/EmptyState";
+import { cn } from "@/lib/cn";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 function getCsrf(): string | undefined {
@@ -185,49 +191,57 @@ export default function CurriculumPage() {
     } catch {} finally { setGenerating(false); }
   }
 
-  if (!selectedChild) return <div className="text-sm text-slate-500">Select a child from the sidebar.</div>;
+  if (!selectedChild) return <div className="text-sm text-(--color-text-secondary)">Select a child from the sidebar.</div>;
 
   return (
     <div className="max-w-5xl">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          {buildPath && (
-            <button onClick={resetBuild} className="text-slate-400 hover:text-slate-600">&larr;</button>
-          )}
-          <h1 className="text-xl font-semibold text-slate-800">Curriculum</h1>
+      <PageHeader
+        title="Curriculum"
+        actions={
+          <Tabs
+            tabs={[
+              { key: "my" as const, label: "My Curriculum" },
+              { key: "build" as const, label: "Build New" },
+            ]}
+            active={tab}
+            onChange={(key) => { if (key === "my") { setTab("my"); resetBuild(); } else { setTab("build"); } }}
+          />
+        }
+        className={buildPath ? undefined : "mb-6"}
+      />
+
+      {buildPath && (
+        <div className="mb-4">
+          <button onClick={resetBuild} className="text-(--color-text-secondary) hover:text-(--color-text) text-sm">&larr; Back</button>
         </div>
-        <div className="flex gap-2">
-          <button onClick={() => { setTab("my"); resetBuild(); }}
-            className={`px-4 py-1.5 text-sm rounded-lg ${tab === "my" ? "bg-slate-800 text-white" : "bg-slate-100 text-slate-600"}`}>My Curriculum</button>
-          <button onClick={() => setTab("build")}
-            className={`px-4 py-1.5 text-sm rounded-lg ${tab === "build" ? "bg-slate-800 text-white" : "bg-slate-100 text-slate-600"}`}>Build New</button>
-        </div>
-      </div>
+      )}
 
       {/* ── MY CURRICULUM ── */}
       {tab === "my" && (
         loading ? <LoadingSkeleton variant="card" count={3} /> : (
           maps.length === 0 ? (
-            <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
-              <p className="text-sm text-slate-500">No curriculum yet. Switch to &quot;Build New&quot; to get started.</p>
-            </div>
+            <EmptyState
+              icon="empty"
+              title="No curriculum yet"
+              description='Switch to "Build New" to get started.'
+            />
           ) : (
             <div className="grid grid-cols-2 gap-4">
               {maps.map((ms) => (
-                <div key={ms.learning_map_id} className="bg-white rounded-lg border border-slate-200 p-4">
+                <Card key={ms.learning_map_id} padding="p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-slate-800">{ms.map_name}</span>
+                    <span className="text-sm font-medium text-(--color-text)">{ms.map_name}</span>
                     <a href={`/curriculum/editor?map_id=${ms.learning_map_id}`}
-                      className="text-xs text-blue-600 hover:underline">Edit</a>
+                      className="text-xs text-(--color-accent) hover:underline">Edit</a>
                   </div>
                   <div className="flex items-center gap-2 mb-1">
-                    <div className="flex-1 bg-slate-100 rounded-full h-1.5">
-                      <div className="bg-green-500 h-1.5 rounded-full" style={{ width: `${Math.round(ms.progress_pct * 100)}%` }} />
+                    <div className="flex-1 bg-(--color-page) rounded-full h-1.5">
+                      <div className="bg-(--color-success) h-1.5 rounded-full" style={{ width: `${Math.round(ms.progress_pct * 100)}%` }} />
                     </div>
-                    <span className="text-xs text-slate-500">{Math.round(ms.progress_pct * 100)}%</span>
+                    <span className="text-xs text-(--color-text-secondary)">{Math.round(ms.progress_pct * 100)}%</span>
                   </div>
-                  <span className="text-xs text-slate-400">{ms.nodes.length} nodes</span>
-                </div>
+                  <span className="text-xs text-(--color-text-secondary)">{ms.nodes.length} nodes</span>
+                </Card>
               ))}
             </div>
           )
@@ -237,38 +251,34 @@ export default function CurriculumPage() {
       {/* ── BUILD: PATH SELECTOR ── */}
       {tab === "build" && !buildPath && (
         <div className="grid grid-cols-3 gap-4">
-          <button onClick={() => setBuildPath("philosophy")}
-            className="text-left bg-white rounded-lg border border-slate-200 p-5 hover:border-blue-400 transition-colors">
-            <div className="text-sm font-semibold text-slate-800 mb-1">Build from Philosophy</div>
-            <p className="text-xs text-slate-500">AI generates curriculum based on your educational profile</p>
-          </button>
-          <button onClick={() => setBuildPath("existing")}
-            className="text-left bg-white rounded-lg border border-slate-200 p-5 hover:border-blue-400 transition-colors">
-            <div className="text-sm font-semibold text-slate-800 mb-1">Map Existing Materials</div>
-            <p className="text-xs text-slate-500">Import Saxon Math, Story of the World, etc.</p>
-          </button>
-          <button onClick={loadTemplates}
-            className="text-left bg-white rounded-lg border border-slate-200 p-5 hover:border-blue-400 transition-colors">
-            <div className="text-sm font-semibold text-slate-800 mb-1">Start from Template</div>
-            <p className="text-xs text-slate-500">Use a pre-built starter curriculum</p>
-          </button>
+          <Card onClick={() => setBuildPath("philosophy")} padding="p-5" className="text-left hover:border-(--color-accent) transition-colors">
+            <div className="text-sm font-semibold text-(--color-text) mb-1">Build from Philosophy</div>
+            <p className="text-xs text-(--color-text-secondary)">AI generates curriculum based on your educational profile</p>
+          </Card>
+          <Card onClick={() => setBuildPath("existing")} padding="p-5" className="text-left hover:border-(--color-accent) transition-colors">
+            <div className="text-sm font-semibold text-(--color-text) mb-1">Map Existing Materials</div>
+            <p className="text-xs text-(--color-text-secondary)">Import Saxon Math, Story of the World, etc.</p>
+          </Card>
+          <Card onClick={loadTemplates} padding="p-5" className="text-left hover:border-(--color-accent) transition-colors">
+            <div className="text-sm font-semibold text-(--color-text) mb-1">Start from Template</div>
+            <p className="text-xs text-(--color-text-secondary)">Use a pre-built starter curriculum</p>
+          </Card>
         </div>
       )}
 
       {/* ── BUILD: PHILOSOPHY — Step 1: Subject Selection ── */}
       {tab === "build" && buildPath === "philosophy" && !selectedSubject && !proposal && !approved && (
         <div>
-          <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 mb-6 text-sm text-blue-800">
+          <div className="bg-(--color-accent-light) border border-(--color-accent)/30 rounded-[10px] px-4 py-3 mb-6 text-sm text-(--color-accent)">
             Generating for: <strong className="capitalize">{philosophyLabel}</strong> approach, <strong>{selectedChild.first_name}</strong> ({selectedChild.grade_level || "K"})
           </div>
-          <h2 className="text-sm font-semibold text-slate-800 mb-3">Choose a subject to build</h2>
+          <h2 className="text-sm font-semibold text-(--color-text) mb-3">Choose a subject to build</h2>
           <div className="grid grid-cols-2 gap-3">
             {subjects.map((subj) => (
-              <button key={subj.s} onClick={() => setSelectedSubject(subj)}
-                className="text-left bg-white rounded-lg border border-slate-200 p-4 hover:border-blue-400 transition-colors">
-                <div className="text-sm font-medium text-slate-800">{subj.s}</div>
-                <p className="text-xs text-slate-500 mt-1">{subj.d}</p>
-              </button>
+              <Card key={subj.s} onClick={() => setSelectedSubject(subj)} padding="p-4" className="text-left hover:border-(--color-accent) transition-colors">
+                <div className="text-sm font-medium text-(--color-text)">{subj.s}</div>
+                <p className="text-xs text-(--color-text-secondary) mt-1">{subj.d}</p>
+              </Card>
             ))}
           </div>
         </div>
@@ -276,123 +286,119 @@ export default function CurriculumPage() {
 
       {/* ── BUILD: PHILOSOPHY — Step 2: Scope Customization ── */}
       {tab === "build" && buildPath === "philosophy" && selectedSubject && !generating && !proposal && !approved && (
-        <div className="bg-white rounded-lg border border-slate-200 p-6 max-w-2xl">
-          <h2 className="text-sm font-semibold text-slate-800 mb-1">{selectedSubject.s}</h2>
-          <p className="text-xs text-slate-500 mb-4">{selectedSubject.d}</p>
+        <Card padding="p-6" className="max-w-2xl">
+          <h2 className="text-sm font-semibold text-(--color-text) mb-1">{selectedSubject.s}</h2>
+          <p className="text-xs text-(--color-text-secondary) mb-4">{selectedSubject.d}</p>
           <textarea value={scopeNotes} onChange={(e) => setScopeNotes(e.target.value)}
             placeholder="Optional: customize the scope (e.g., 'Focus on fractions this semester', 'Include Latin roots')"
-            className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg h-24 resize-none mb-4" />
+            className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] h-24 resize-none mb-4" />
           <div className="flex gap-2">
-            <button onClick={generateFromPhilosophy}
-              className="px-6 py-2 text-sm font-medium bg-slate-800 text-white rounded-lg hover:bg-slate-900">
+            <Button onClick={generateFromPhilosophy} size="lg">
               Generate Curriculum
-            </button>
-            <button onClick={() => setSelectedSubject(null)}
-              className="px-4 py-2 text-xs text-slate-500 hover:text-slate-700">Back</button>
+            </Button>
+            <Button onClick={() => setSelectedSubject(null)} variant="ghost" size="sm">Back</Button>
           </div>
-        </div>
+        </Card>
       )}
 
       {/* ── BUILD: PHILOSOPHY — Generating indicator ── */}
       {tab === "build" && buildPath === "philosophy" && generating && !proposal && (
-        <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
-          <div className="text-lg mb-2 text-slate-300 animate-pulse">&#9881;</div>
-          <p className="text-sm text-slate-600">Building your {selectedSubject?.s} curriculum based on your {philosophyLabel} approach...</p>
-        </div>
+        <Card padding="p-12" className="text-center">
+          <div className="text-lg mb-2 text-(--color-text-tertiary) animate-pulse">&#9881;</div>
+          <p className="text-sm text-(--color-text-secondary)">Building your {selectedSubject?.s} curriculum based on your {philosophyLabel} approach...</p>
+        </Card>
       )}
 
       {/* ── BUILD: EXISTING MATERIALS ── */}
       {tab === "build" && buildPath === "existing" && !proposal && (
-        <div className="bg-white rounded-lg border border-slate-200 p-6 max-w-2xl">
-          <h2 className="text-sm font-semibold text-slate-800 mb-4">Map Your Existing Curriculum</h2>
+        <Card padding="p-6" className="max-w-2xl">
+          <h2 className="text-sm font-semibold text-(--color-text) mb-4">Map Your Existing Curriculum</h2>
           <div className="space-y-3">
             <input value={materialName} onChange={(e) => setMaterialName(e.target.value)}
-              placeholder="Material name (e.g., Saxon Math 5/4)" className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg" />
+              placeholder="Material name (e.g., Saxon Math 5/4)" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px]" />
             <textarea value={materialDesc} onChange={(e) => setMaterialDesc(e.target.value)}
-              placeholder="Brief description" className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg h-16 resize-none" />
+              placeholder="Brief description" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] h-16 resize-none" />
             <textarea value={toc} onChange={(e) => setToc(e.target.value)}
-              placeholder="Paste your table of contents, chapter list, or unit list..." className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg h-32 resize-none" />
+              placeholder="Paste your table of contents, chapter list, or unit list..." className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] h-32 resize-none" />
             <input value={position} onChange={(e) => setPosition(e.target.value)}
-              placeholder="Current position (e.g., Chapter 14, Lesson 47)" className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg" />
+              placeholder="Current position (e.g., Chapter 14, Lesson 47)" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px]" />
             <input value={subjectArea} onChange={(e) => setSubjectArea(e.target.value)}
-              placeholder="Subject area (e.g., Mathematics)" className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg" />
-            <button onClick={mapExisting} disabled={generating || !materialName || !toc || !subjectArea}
-              className="px-6 py-2 text-sm font-medium bg-slate-800 text-white rounded-lg hover:bg-slate-900 disabled:opacity-50">
+              placeholder="Subject area (e.g., Mathematics)" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px]" />
+            <Button onClick={mapExisting} disabled={generating || !materialName || !toc || !subjectArea} size="lg">
               {generating ? "Mapping..." : "Map My Curriculum"}
-            </button>
+            </Button>
           </div>
-        </div>
+        </Card>
       )}
 
       {/* ── BUILD: TEMPLATE ── */}
       {tab === "build" && buildPath === "template" && (
         <div className="space-y-3">
           {templates.map((t) => (
-            <div key={t.template_id} className="bg-white rounded-lg border border-slate-200 p-4 flex items-center justify-between">
+            <Card key={t.template_id} padding="p-4" className="flex items-center justify-between">
               <div>
-                <div className="text-sm font-medium text-slate-800">{t.name}</div>
-                <p className="text-xs text-slate-500">{t.description} &middot; {t.node_count} nodes</p>
+                <div className="text-sm font-medium text-(--color-text)">{t.name}</div>
+                <p className="text-xs text-(--color-text-secondary)">{t.description} &middot; {t.node_count} nodes</p>
               </div>
-              <button onClick={() => copyTemplate(t.template_id)} disabled={generating}
-                className="px-4 py-1.5 text-xs font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50">
+              <Button onClick={() => copyTemplate(t.template_id)} disabled={generating} size="sm">
                 {generating ? "..." : "Use Template"}
-              </button>
-            </div>
+              </Button>
+            </Card>
           ))}
         </div>
       )}
 
       {/* ── PROPOSAL REVIEW (shared by philosophy and existing paths) ── */}
       {proposal && !approved && (
-        <div className="bg-white rounded-lg border border-slate-200 p-6 mt-4">
-          <div className="bg-green-50 border border-green-200 rounded-lg px-4 py-2 mb-4 text-sm text-green-800">
+        <Card padding="p-6" className="mt-4">
+          <div className="bg-(--color-success-light) border border-(--color-success)/30 rounded-[6px] px-4 py-2 mb-4 text-sm text-(--color-success)">
             Curriculum generated! Review the proposal below.
           </div>
-          <h2 className="text-sm font-semibold text-slate-800 mb-2">
+          <h2 className="text-sm font-semibold text-(--color-text) mb-2">
             {proposal.source_material || proposal.material_name}
           </h2>
-          <p className="text-xs text-slate-500 mb-4">{proposal.nodes?.length || 0} nodes &middot; {proposal.edges?.length || 0} edges</p>
+          <p className="text-xs text-(--color-text-secondary) mb-4">{proposal.nodes?.length || 0} nodes &middot; {proposal.edges?.length || 0} edges</p>
 
           {/* Node preview */}
           <div className="space-y-1 mb-4 max-h-64 overflow-y-auto">
             {(proposal.nodes || []).map((n: any, i: number) => (
-              <div key={i} className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded">
-                <span className="text-[9px] font-bold uppercase text-slate-500 w-16">{n.node_type}</span>
-                <span className="text-xs text-slate-700">{n.title}</span>
-                {n.description && <span className="text-[10px] text-slate-400 truncate">{n.description}</span>}
+              <div key={i} className="flex items-center gap-2 px-3 py-1.5 bg-(--color-page) rounded-[6px]">
+                <span className="text-[9px] font-bold uppercase text-(--color-text-secondary) w-16">{n.node_type}</span>
+                <span className="text-xs text-(--color-text)">{n.title}</span>
+                {n.description && <span className="text-[10px] text-(--color-text-secondary) truncate">{n.description}</span>}
               </div>
             ))}
           </div>
 
           <div className="flex gap-2">
-            <button onClick={approveProposal} disabled={generating}
-              className="px-5 py-2 text-sm font-medium bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50">
+            <Button onClick={approveProposal} disabled={generating} variant="success" size="lg">
               {generating ? "Creating..." : "Approve & Create Map"}
-            </button>
-            <button onClick={() => { setProposal(null); setSelectedSubject(null); }}
-              className="px-4 py-2 text-xs text-slate-500 border border-slate-300 rounded-lg hover:bg-slate-50">Regenerate</button>
-            <button onClick={resetBuild}
-              className="px-4 py-2 text-xs text-slate-400 hover:text-slate-600">Cancel</button>
+            </Button>
+            <Button onClick={() => { setProposal(null); setSelectedSubject(null); }} variant="secondary" size="sm">
+              Regenerate
+            </Button>
+            <Button onClick={resetBuild} variant="ghost" size="sm">Cancel</Button>
           </div>
-        </div>
+        </Card>
       )}
 
       {/* ── CONFIRMATION ── */}
       {approved && (
-        <div className="bg-white rounded-lg border border-slate-200 p-8 text-center mt-4">
-          <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
-            <span className="text-green-600 text-xl">&#10003;</span>
+        <Card padding="p-8" className="text-center mt-4">
+          <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-(--color-success-light) flex items-center justify-center">
+            <span className="text-(--color-success) text-xl">&#10003;</span>
           </div>
-          <h2 className="text-sm font-semibold text-slate-800 mb-1">Curriculum Created!</h2>
-          <p className="text-xs text-slate-500 mb-4">
+          <h2 className="text-sm font-semibold text-(--color-text) mb-1">Curriculum Created!</h2>
+          <p className="text-xs text-(--color-text-secondary) mb-4">
             {proposal?.material_name || selectedSubject?.s || "Your curriculum"} with {proposal?.nodes?.length || 0} nodes is now active for {selectedChild.first_name}.
           </p>
           <div className="flex gap-2 justify-center">
-            <a href="/maps" className="px-5 py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700">View Map</a>
-            <button onClick={() => { resetBuild(); setApproved(false); }}
-              className="px-4 py-2 text-xs text-slate-500 border border-slate-300 rounded-lg hover:bg-slate-50">Build Another</button>
+            <a href="/maps" className="px-5 py-2 text-sm font-medium bg-(--color-accent) text-white rounded-[6px] hover:bg-(--color-accent-hover)">View Map</a>
+            <Button onClick={() => { resetBuild(); setApproved(false); }} variant="secondary" size="sm">
+              Build Another
+            </Button>
           </div>
-        </div>
+        </Card>
       )}
     </div>
   );

@@ -2,6 +2,11 @@
 
 import { useState } from "react";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
+import PageHeader from "@/components/ui/PageHeader";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
+import StatusBadge from "@/components/StatusBadge";
+import MetricCard from "@/components/ui/MetricCard";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
@@ -52,32 +57,32 @@ export default function ReportsPage() {
 
   return (
     <div className="max-w-4xl">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-xl font-semibold text-slate-800">Governance Report</h1>
-          <p className="text-sm text-slate-500">Board meeting minutes for your homeschool.</p>
-        </div>
-        <button onClick={() => window.print()} className="text-xs text-slate-400 hover:text-slate-600 print:hidden">
-          Print
-        </button>
-      </div>
+      <PageHeader
+        title="Governance Report"
+        subtitle="Board meeting minutes for your homeschool."
+        actions={
+          <button onClick={() => window.print()} className="text-xs text-(--color-text-tertiary) hover:text-(--color-text-secondary) print:hidden">
+            Print
+          </button>
+        }
+      />
 
       {/* Date range */}
       <div className="flex items-end gap-3 mb-6 print:hidden">
         <div>
-          <label className="block text-xs text-slate-500 mb-1">From</label>
+          <label className="block text-xs text-(--color-text-secondary) mb-1">From</label>
           <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)}
-            className="px-3 py-1.5 text-sm border border-slate-300 rounded-md" />
+            className="px-3 py-1.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
         </div>
         <div>
-          <label className="block text-xs text-slate-500 mb-1">To</label>
+          <label className="block text-xs text-(--color-text-secondary) mb-1">To</label>
           <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)}
-            className="px-3 py-1.5 text-sm border border-slate-300 rounded-md" />
+            className="px-3 py-1.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
         </div>
-        <button onClick={generate} disabled={loading}
-          className="px-4 py-1.5 text-sm font-medium bg-slate-800 text-white rounded-md hover:bg-slate-900 disabled:opacity-50">
+        <Button variant="primary" size="md" onClick={generate} disabled={loading}
+          className="bg-(--color-text) hover:opacity-90">
           {loading ? "Generating..." : "Generate Report"}
-        </button>
+        </Button>
       </div>
 
       {loading && <LoadingSkeleton variant="text" count={5} />}
@@ -85,20 +90,20 @@ export default function ReportsPage() {
       {report && (
         <div className="space-y-6 print:space-y-4">
           {/* Header */}
-          <div className="border-b-2 border-slate-800 pb-4">
-            <h2 className="text-lg font-bold text-slate-800 uppercase tracking-wide">
+          <div className="border-b-2 border-(--color-text) pb-4">
+            <h2 className="text-lg font-bold text-(--color-text) uppercase tracking-wide">
               Governance Report
             </h2>
-            <p className="text-sm text-slate-600">{report.household?.name}</p>
-            <p className="text-xs text-slate-500">
+            <p className="text-sm text-(--color-text-secondary)">{report.household?.name}</p>
+            <p className="text-xs text-(--color-text-secondary)">
               Period: {report.period?.start} to {report.period?.end} ({report.period?.days} days)
             </p>
-            <p className="text-xs text-slate-400">Generated: {new Date(report.generated_at).toLocaleString()}</p>
+            <p className="text-xs text-(--color-text-tertiary)">Generated: {new Date(report.generated_at).toLocaleString()}</p>
           </div>
 
           {/* Executive Summary */}
           <section>
-            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-2 border-b border-slate-200 pb-1">
+            <h3 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-2 border-b border-(--color-border) pb-1">
               1. Executive Summary
             </h3>
             <div className="grid grid-cols-4 gap-3">
@@ -108,24 +113,21 @@ export default function ReportsPage() {
                 { label: "Parent Overrides", value: s?.overrides_count },
                 { label: "AI Acceptance Rate", value: s?.ai_acceptance_rate_pct != null ? `${s.ai_acceptance_rate_pct}%` : "N/A" },
               ].map((m) => (
-                <div key={m.label} className="bg-slate-50 rounded p-3">
-                  <div className="text-lg font-semibold text-slate-800">{m.value ?? 0}</div>
-                  <div className="text-[10px] text-slate-500">{m.label}</div>
-                </div>
+                <MetricCard key={m.label} label={m.label} value={m.value ?? 0} />
               ))}
             </div>
           </section>
 
           {/* AI Oversight */}
           <section>
-            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-2 border-b border-slate-200 pb-1">
+            <h3 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-2 border-b border-(--color-border) pb-1">
               2. AI Oversight
             </h3>
-            <p className="text-xs text-slate-600 mb-2">
+            <p className="text-xs text-(--color-text-secondary) mb-2">
               {report.ai_oversight?.total_ai_runs || 0} AI calls made. Acceptance rate: {report.ai_oversight?.acceptance_rate_pct ?? "N/A"}%.
             </p>
             {report.ai_oversight?.runs_by_role && (
-              <div className="flex gap-3 text-xs text-slate-500">
+              <div className="flex gap-3 text-xs text-(--color-text-secondary)">
                 {Object.entries(report.ai_oversight.runs_by_role).map(([role, count]) => (
                   <span key={role} className="capitalize">{role}: {count as number}</span>
                 ))}
@@ -135,21 +137,18 @@ export default function ReportsPage() {
 
           {/* Governance Decisions */}
           <section>
-            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-2 border-b border-slate-200 pb-1">
+            <h3 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-2 border-b border-(--color-border) pb-1">
               3. Governance Decisions ({report.governance_decisions?.length || 0})
             </h3>
             <div className="text-xs space-y-1 max-h-60 overflow-y-auto print:max-h-none">
               {(report.governance_decisions || []).slice(0, 20).map((d: any, i: number) => (
-                <div key={i} className="flex justify-between py-1 border-b border-slate-50">
+                <div key={i} className="flex justify-between py-1 border-b border-(--color-border)/30">
                   <div className="flex items-center gap-2">
-                    <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${
-                      d.action === "approve" ? "bg-green-100 text-green-800" :
-                      d.action === "reject" ? "bg-red-100 text-red-800" : "bg-slate-100 text-slate-600"
-                    }`}>{d.action}</span>
-                    <span className="text-slate-600">{d.target_type}</span>
-                    {d.reason && <span className="text-slate-400 truncate max-w-xs">{d.reason}</span>}
+                    <StatusBadge status={d.action} />
+                    <span className="text-(--color-text-secondary)">{d.target_type}</span>
+                    {d.reason && <span className="text-(--color-text-tertiary) truncate max-w-xs">{d.reason}</span>}
                   </div>
-                  <span className="text-slate-400 shrink-0">{d.timestamp?.split("T")[0]}</span>
+                  <span className="text-(--color-text-tertiary) shrink-0">{d.timestamp?.split("T")[0]}</span>
                 </div>
               ))}
             </div>
@@ -157,22 +156,22 @@ export default function ReportsPage() {
 
           {/* Learning Progress */}
           <section>
-            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-2 border-b border-slate-200 pb-1">
+            <h3 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-2 border-b border-(--color-border) pb-1">
               4. Learning Progress
             </h3>
             <div className="space-y-2">
               {(report.learning_progress || []).map((cp: any) => (
-                <div key={cp.child_id} className="bg-slate-50 rounded p-3 flex items-center justify-between">
+                <Card key={cp.child_id} padding="p-3" className="flex items-center justify-between">
                   <div>
-                    <span className="text-sm font-medium text-slate-800">{cp.child_name}</span>
-                    <span className="text-xs text-slate-500 ml-2">{cp.grade_level || ""}</span>
+                    <span className="text-sm font-medium text-(--color-text)">{cp.child_name}</span>
+                    <span className="text-xs text-(--color-text-secondary) ml-2">{cp.grade_level || ""}</span>
                   </div>
-                  <div className="flex gap-4 text-xs text-slate-600">
+                  <div className="flex gap-4 text-xs text-(--color-text-secondary)">
                     <span>{cp.nodes_mastered}/{cp.nodes_total} mastered</span>
                     <span>{cp.total_hours}h logged</span>
                     <span>{cp.total_attempts} attempts</span>
                   </div>
-                </div>
+                </Card>
               ))}
             </div>
           </section>
@@ -180,26 +179,26 @@ export default function ReportsPage() {
           {/* Overrides */}
           {(report.overrides?.length || 0) > 0 && (
             <section>
-              <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-2 border-b border-slate-200 pb-1">
+              <h3 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-2 border-b border-(--color-border) pb-1">
                 5. Parent Overrides
               </h3>
               {report.overrides.map((o: any, i: number) => (
-                <div key={i} className="text-xs border-l-2 border-amber-400 pl-3 py-1 mb-1">
-                  <span className="text-slate-400">{o.timestamp?.split("T")[0]}</span>
-                  {o.reason && <span className="text-slate-600 ml-2">&ldquo;{o.reason}&rdquo;</span>}
+                <div key={i} className="text-xs border-l-2 border-(--color-warning) pl-3 py-1 mb-1">
+                  <span className="text-(--color-text-tertiary)">{o.timestamp?.split("T")[0]}</span>
+                  {o.reason && <span className="text-(--color-text-secondary) ml-2">&ldquo;{o.reason}&rdquo;</span>}
                 </div>
               ))}
             </section>
           )}
 
           {/* Attestation */}
-          <section className="border-t-2 border-slate-800 pt-4 print:break-before-page">
-            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-2">
+          <section className="border-t-2 border-(--color-text) pt-4 print:break-before-page">
+            <h3 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-2">
               Parent Attestation
             </h3>
             {!attested ? (
               <div className="print:hidden">
-                <p className="text-xs text-slate-500 mb-3">
+                <p className="text-xs text-(--color-text-secondary) mb-3">
                   By signing below, I attest that this report accurately reflects the governance
                   decisions made during this period, and that I was in control of my children&apos;s
                   educational program at all times.
@@ -208,19 +207,19 @@ export default function ReportsPage() {
                   value={attestText}
                   onChange={(e) => setAttestText(e.target.value)}
                   placeholder="I, [your name], confirm that this report is accurate and complete..."
-                  className="w-full h-24 px-3 py-2 text-sm border border-slate-300 rounded-md resize-none mb-3"
+                  className="w-full h-24 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] resize-none mb-3 bg-(--color-surface) text-(--color-text)"
                 />
-                <button onClick={attest} disabled={attestText.length < 10}
-                  className="px-6 py-2 text-sm font-medium bg-slate-800 text-white rounded-md hover:bg-slate-900 disabled:opacity-50">
+                <Button variant="primary" size="md" onClick={attest} disabled={attestText.length < 10}
+                  className="bg-(--color-text) hover:opacity-90">
                   Attest &amp; Sign
-                </button>
+                </Button>
               </div>
             ) : (
-              <div className="bg-green-50 border border-green-200 rounded p-4">
-                <p className="text-sm text-green-800 font-medium mb-1">Report attested.</p>
-                <p className="text-xs text-green-700">&ldquo;{attestText}&rdquo;</p>
-                <p className="text-xs text-green-600 mt-2">This attestation has been permanently recorded in the governance trail.</p>
-              </div>
+              <Card className="bg-(--color-success-light) border-(--color-success)/30">
+                <p className="text-sm text-(--color-success) font-medium mb-1">Report attested.</p>
+                <p className="text-xs text-(--color-success)">&ldquo;{attestText}&rdquo;</p>
+                <p className="text-xs text-(--color-success) mt-2">This attestation has been permanently recorded in the governance trail.</p>
+              </Card>
             )}
           </section>
         </div>

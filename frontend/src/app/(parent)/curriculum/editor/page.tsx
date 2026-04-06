@@ -3,6 +3,10 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { curriculum, type MapDetail, type MapNode, type MapEdge } from "@/lib/api";
+import PageHeader from "@/components/ui/PageHeader";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
+import { cn } from "@/lib/cn";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
@@ -13,10 +17,10 @@ function getCsrf(): string | undefined {
 }
 
 const typeColors: Record<string, string> = {
-  root: "bg-slate-700 text-white",
-  milestone: "bg-blue-100 text-blue-800",
-  concept: "bg-amber-100 text-amber-800",
-  skill: "bg-green-100 text-green-800",
+  root: "bg-(--color-text) text-white",
+  milestone: "bg-(--color-accent-light) text-(--color-accent)",
+  concept: "bg-(--color-warning-light) text-(--color-warning)",
+  skill: "bg-(--color-success-light) text-(--color-success)",
 };
 
 interface EditorNode {
@@ -207,8 +211,8 @@ export default function EditorPage() {
     });
   }
 
-  if (!mapId) return <div className="p-8 text-sm text-slate-500">No map selected. Go to Maps and click Edit.</div>;
-  if (loading) return <div className="p-8 text-sm text-slate-400">Loading editor...</div>;
+  if (!mapId) return <div className="p-8 text-sm text-(--color-text-secondary)">No map selected. Go to Maps and click Edit.</div>;
+  if (loading) return <div className="p-8 text-sm text-(--color-text-secondary)">Loading editor...</div>;
 
   const activeNodes = nodes.filter((n) => !n.is_deleted);
   const activeEdges = edges.filter((e) => !e.is_deleted);
@@ -220,41 +224,39 @@ export default function EditorPage() {
   return (
     <div className="flex h-[calc(100vh-4rem)] -m-8">
       {/* LEFT PANEL */}
-      <div className="w-52 bg-white border-r border-slate-200 p-4 flex flex-col shrink-0">
+      <div className="w-52 bg-(--color-surface) border-r border-(--color-border) p-4 flex flex-col shrink-0">
         <input value={mapName} onChange={(e) => setMapName(e.target.value)}
-          className="text-sm font-semibold text-slate-800 mb-3 px-2 py-1 border border-transparent hover:border-slate-200 rounded" />
+          className="text-sm font-semibold text-(--color-text) mb-3 px-2 py-1 border border-transparent hover:border-(--color-border) rounded-[6px]" />
 
-        <div className="text-xs text-slate-400 mb-3">
+        <div className="text-xs text-(--color-text-secondary) mb-3">
           {activeNodes.length} nodes &middot; {activeEdges.length} edges
         </div>
 
         <div className="space-y-1 mb-4">
           {["root", "milestone", "concept", "skill"].map((t) => (
             <button key={t} onClick={() => addNode(t)}
-              className="w-full text-left px-2.5 py-1.5 text-xs rounded-md border border-slate-200 hover:bg-slate-50 capitalize">
+              className="w-full text-left px-2.5 py-1.5 text-xs rounded-[6px] border border-(--color-border) hover:bg-(--color-page) capitalize">
               + {t}
             </button>
           ))}
         </div>
 
         <div className="mt-auto space-y-2">
-          <button onClick={enrichAll}
-            className="w-full py-1.5 text-xs text-blue-600 border border-blue-300 rounded-md hover:bg-blue-50">
+          <Button onClick={enrichAll} variant="secondary" size="sm" className="w-full text-(--color-accent)">
             Enrich All
-          </button>
-          <button onClick={saveAll} disabled={saving || !hasChanges}
-            className="w-full py-2 text-xs font-semibold bg-slate-800 text-white rounded-md hover:bg-slate-900 disabled:opacity-40">
+          </Button>
+          <Button onClick={saveAll} disabled={saving || !hasChanges} size="sm" className="w-full">
             {saving ? "Saving..." : hasChanges ? "Save Changes" : "No Changes"}
-          </button>
-          {saved && <p className="text-[10px] text-green-600">Saved!</p>}
-          {error && <p className="text-[10px] text-red-600">{error}</p>}
+          </Button>
+          {saved && <p className="text-[10px] text-(--color-success)">Saved!</p>}
+          {error && <p className="text-[10px] text-(--color-danger)">{error}</p>}
         </div>
       </div>
 
       {/* MAIN CANVAS */}
-      <div className="flex-1 overflow-auto bg-slate-50 p-6">
+      <div className="flex-1 overflow-auto bg-(--color-page) p-6">
         {connecting && (
-          <div className="fixed top-16 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-xs px-3 py-1.5 rounded-full z-10 shadow">
+          <div className="fixed top-16 left-1/2 -translate-x-1/2 bg-(--color-accent) text-white text-xs px-3 py-1.5 rounded-full z-10 shadow">
             Click a target node to connect &middot; <button onClick={() => setConnecting(null)} className="underline">Cancel</button>
           </div>
         )}
@@ -262,35 +264,36 @@ export default function EditorPage() {
         <div className="space-y-2">
           {tiers.map((tier, tierIdx) => (
             <div key={tierIdx}>
-              {tierIdx > 0 && <div className="flex justify-center py-1"><div className="w-px h-4 bg-slate-300" /></div>}
+              {tierIdx > 0 && <div className="flex justify-center py-1"><div className="w-px h-4 bg-(--color-border-strong)" /></div>}
               <div className="flex flex-wrap justify-center gap-3">
                 {tier.map((node) => {
                   const isSelected = selected === node.id;
                   const isConnectTarget = connecting && connecting !== node.id;
-                  const tc = typeColors[node.node_type] || "bg-slate-100 text-slate-600";
+                  const tc = typeColors[node.node_type] || "bg-(--color-page) text-(--color-text-secondary)";
                   return (
                     <div key={node.id}
                       onClick={() => isConnectTarget ? finishConnect(node.id) : setSelected(node.id)}
-                      className={`relative w-44 p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                        isSelected ? "border-blue-500 ring-2 ring-blue-200" :
-                        isConnectTarget ? "border-green-400 ring-1 ring-green-200" :
-                        node.is_new ? "border-dashed border-blue-300" :
-                        node.is_modified ? "border-amber-300" : "border-slate-200"
-                      } bg-white hover:shadow-sm`}
+                      className={cn(
+                        "relative w-44 p-3 rounded-[10px] border-2 cursor-pointer transition-all bg-(--color-surface) hover:shadow-sm",
+                        isSelected ? "border-(--color-accent) ring-2 ring-(--color-accent)/20" :
+                        isConnectTarget ? "border-(--color-success) ring-1 ring-(--color-success)/20" :
+                        node.is_new ? "border-dashed border-(--color-accent)/50" :
+                        node.is_modified ? "border-(--color-warning)" : "border-(--color-border)"
+                      )}
                     >
                       <div className="flex items-center gap-1.5 mb-1">
-                        <span className={`text-[9px] font-bold uppercase px-1 py-0.5 rounded ${tc}`}>
+                        <span className={`text-[9px] font-bold uppercase px-1 py-0.5 rounded-[4px] ${tc}`}>
                           {node.node_type}
                         </span>
-                        {node.is_new && <span className="text-[9px] text-blue-500">NEW</span>}
+                        {node.is_new && <span className="text-[9px] text-(--color-accent)">NEW</span>}
                       </div>
-                      <div className="text-xs font-medium text-slate-800 truncate">{node.title}</div>
+                      <div className="text-xs font-medium text-(--color-text) truncate">{node.title}</div>
                       {node.estimated_minutes && (
-                        <div className="text-[10px] text-slate-400 mt-0.5">{node.estimated_minutes}m</div>
+                        <div className="text-[10px] text-(--color-text-secondary) mt-0.5">{node.estimated_minutes}m</div>
                       )}
                       {!connecting && (
                         <button onClick={(e) => { e.stopPropagation(); startConnect(node.id); }}
-                          className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-blue-500 border-2 border-white hover:bg-blue-600" title="Connect" />
+                          className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-(--color-accent) border-2 border-white hover:bg-(--color-accent-hover)" title="Connect" />
                       )}
                     </div>
                   );
@@ -301,30 +304,30 @@ export default function EditorPage() {
         </div>
 
         {activeNodes.length === 0 && (
-          <div className="text-center py-16 text-sm text-slate-400">
+          <div className="text-center py-16 text-sm text-(--color-text-secondary)">
             Add nodes from the left panel to start building.
           </div>
         )}
       </div>
 
       {/* RIGHT PANEL */}
-      <div className="w-72 bg-white border-l border-slate-200 p-4 shrink-0 overflow-y-auto">
+      <div className="w-72 bg-(--color-surface) border-l border-(--color-border) p-4 shrink-0 overflow-y-auto">
         {selectedNode ? (
           <div className="space-y-3">
-            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Node Details</h3>
+            <h3 className="text-xs font-bold text-(--color-text-secondary) uppercase tracking-wider">Node Details</h3>
 
             <div>
-              <label className="block text-[10px] text-slate-400 mb-0.5">Title</label>
+              <label className="block text-[10px] text-(--color-text-secondary) mb-0.5">Title</label>
               <input value={selectedNode.title}
                 onChange={(e) => updateNode(selectedNode.id, "title", e.target.value)}
-                className="w-full px-2 py-1.5 text-sm border border-slate-200 rounded" />
+                className="w-full px-2 py-1.5 text-sm border border-(--color-border) rounded-[6px]" />
             </div>
 
             <div>
-              <label className="block text-[10px] text-slate-400 mb-0.5">Type</label>
+              <label className="block text-[10px] text-(--color-text-secondary) mb-0.5">Type</label>
               <select value={selectedNode.node_type}
                 onChange={(e) => updateNode(selectedNode.id, "node_type", e.target.value)}
-                className="w-full px-2 py-1.5 text-sm border border-slate-200 rounded">
+                className="w-full px-2 py-1.5 text-sm border border-(--color-border) rounded-[6px]">
                 {["root", "milestone", "concept", "skill"].map((t) => (
                   <option key={t} value={t} className="capitalize">{t}</option>
                 ))}
@@ -332,54 +335,54 @@ export default function EditorPage() {
             </div>
 
             <div>
-              <label className="block text-[10px] text-slate-400 mb-0.5">Description</label>
+              <label className="block text-[10px] text-(--color-text-secondary) mb-0.5">Description</label>
               <textarea value={selectedNode.description}
                 onChange={(e) => updateNode(selectedNode.id, "description", e.target.value)}
-                className="w-full px-2 py-1.5 text-xs border border-slate-200 rounded h-16 resize-none" />
+                className="w-full px-2 py-1.5 text-xs border border-(--color-border) rounded-[6px] h-16 resize-none" />
             </div>
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="block text-[10px] text-slate-400 mb-0.5">Minutes</label>
+                <label className="block text-[10px] text-(--color-text-secondary) mb-0.5">Minutes</label>
                 <input type="number" value={selectedNode.estimated_minutes || ""}
                   onChange={(e) => updateNode(selectedNode.id, "estimated_minutes", parseInt(e.target.value) || null)}
-                  className="w-full px-2 py-1.5 text-sm border border-slate-200 rounded" />
+                  className="w-full px-2 py-1.5 text-sm border border-(--color-border) rounded-[6px]" />
               </div>
               <div>
-                <label className="block text-[10px] text-slate-400 mb-0.5">Order</label>
+                <label className="block text-[10px] text-(--color-text-secondary) mb-0.5">Order</label>
                 <input type="number" value={selectedNode.sort_order}
                   onChange={(e) => updateNode(selectedNode.id, "sort_order", parseInt(e.target.value) || 0)}
-                  className="w-full px-2 py-1.5 text-sm border border-slate-200 rounded" />
+                  className="w-full px-2 py-1.5 text-sm border border-(--color-border) rounded-[6px]" />
               </div>
             </div>
 
             {/* Prerequisites */}
             <div>
-              <label className="block text-[10px] text-slate-400 mb-0.5">Prerequisites</label>
+              <label className="block text-[10px] text-(--color-text-secondary) mb-0.5">Prerequisites</label>
               <div className="space-y-1">
                 {activeEdges.filter((e) => e.to_node_id === selectedNode.id).map((e) => {
                   const from = nodes.find((n) => n.id === e.from_node_id);
                   return (
-                    <div key={e.id} className="flex items-center justify-between text-xs bg-slate-50 rounded px-2 py-1">
-                      <span className="text-slate-600">{from?.title || "?"}</span>
-                      <button onClick={() => deleteEdge(e.id)} className="text-red-400 hover:text-red-600 text-[10px]">remove</button>
+                    <div key={e.id} className="flex items-center justify-between text-xs bg-(--color-page) rounded-[6px] px-2 py-1">
+                      <span className="text-(--color-text-secondary)">{from?.title || "?"}</span>
+                      <button onClick={() => deleteEdge(e.id)} className="text-(--color-danger) hover:opacity-80 text-[10px]">remove</button>
                     </div>
                   );
                 })}
                 {activeEdges.filter((e) => e.to_node_id === selectedNode.id).length === 0 && (
-                  <span className="text-[10px] text-slate-400">None (root-level node)</span>
+                  <span className="text-[10px] text-(--color-text-secondary)">None (root-level node)</span>
                 )}
               </div>
             </div>
 
             {/* Dependents */}
             <div>
-              <label className="block text-[10px] text-slate-400 mb-0.5">Unlocks</label>
+              <label className="block text-[10px] text-(--color-text-secondary) mb-0.5">Unlocks</label>
               <div className="space-y-1">
                 {activeEdges.filter((e) => e.from_node_id === selectedNode.id).map((e) => {
                   const to = nodes.find((n) => n.id === e.to_node_id);
                   return (
-                    <div key={e.id} className="text-xs text-slate-600 bg-slate-50 rounded px-2 py-1">
+                    <div key={e.id} className="text-xs text-(--color-text-secondary) bg-(--color-page) rounded-[6px] px-2 py-1">
                       {to?.title || "?"}
                     </div>
                   );
@@ -387,13 +390,13 @@ export default function EditorPage() {
               </div>
             </div>
 
-            <button onClick={() => { if (confirm("Delete this node?")) deleteNode(selectedNode.id); }}
-              className="w-full mt-4 py-1.5 text-xs font-medium text-red-600 border border-red-300 rounded-md hover:bg-red-50">
+            <Button onClick={() => { if (confirm("Delete this node?")) deleteNode(selectedNode.id); }}
+              variant="danger" size="sm" className="w-full mt-4">
               Delete Node
-            </button>
+            </Button>
           </div>
         ) : (
-          <div className="text-center py-8 text-xs text-slate-400">
+          <div className="text-center py-8 text-xs text-(--color-text-secondary)">
             Select a node to edit its details.
           </div>
         )}

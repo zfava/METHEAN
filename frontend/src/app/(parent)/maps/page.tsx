@@ -9,12 +9,12 @@ import { useChild } from "@/lib/ChildContext";
 function nodeStyle(node: MapNodeState): { bg: string; border: string; text: string } {
   const m = node.mastery_level;
   const s = node.status;
-  if (m === "mastered")   return { bg: "bg-green-50",  border: "border-green-400",  text: "text-green-900" };
-  if (m === "proficient") return { bg: "bg-blue-50",   border: "border-blue-400",   text: "text-blue-900" };
-  if (m === "developing") return { bg: "bg-yellow-50", border: "border-yellow-400", text: "text-yellow-900" };
-  if (m === "emerging")   return { bg: "bg-orange-50", border: "border-orange-400", text: "text-orange-900" };
-  if (s === "available")  return { bg: "bg-white",     border: "border-green-300 border-dashed", text: "text-slate-700" };
-  return                         { bg: "bg-slate-50",  border: "border-slate-300",  text: "text-slate-400" };
+  if (m === "mastered")   return { bg: "bg-(--color-success-light)",  border: "border-(--color-success)",  text: "text-(--color-success)" };
+  if (m === "proficient") return { bg: "bg-(--color-accent-light)",   border: "border-(--color-accent)",   text: "text-(--color-accent)" };
+  if (m === "developing") return { bg: "bg-(--color-warning-light)", border: "border-(--color-warning)", text: "text-(--color-warning)" };
+  if (m === "emerging")   return { bg: "bg-(--color-danger-light)", border: "border-(--color-danger)", text: "text-(--color-danger)" };
+  if (s === "available")  return { bg: "bg-(--color-surface)",     border: "border-(--color-success)/50 border-dashed", text: "text-(--color-text)" };
+  return                         { bg: "bg-(--color-page)",  border: "border-(--color-border-strong)",  text: "text-(--color-text-tertiary)" };
 }
 
 const typeLabel: Record<string, string> = {
@@ -93,7 +93,7 @@ export default function MapsPage() {
     } catch {} finally { setOverriding(false); }
   }
 
-  if (!selectedChild) return <div className="text-sm text-slate-500">Select a child from the sidebar.</div>;
+  if (!selectedChild) return <div className="text-sm text-(--color-text-secondary)">Select a child from the sidebar.</div>;
   if (loading) return <div className="max-w-5xl space-y-4"><LoadingSkeleton variant="text" count={1} /><LoadingSkeleton variant="card" count={3} /></div>;
 
   const mastered = selectedMap?.nodes.filter((n) => n.mastery_level === "mastered").length || 0;
@@ -111,8 +111,8 @@ export default function MapsPage() {
   return (
     <div className="max-w-5xl">
       <div className="mb-6">
-        <h1 className="text-xl font-semibold text-slate-800">Learning Maps</h1>
-        <p className="text-sm text-slate-500">{selectedChild.first_name}&apos;s curriculum &mdash; the full journey ahead</p>
+        <h1 className="text-xl font-semibold text-(--color-text)">Learning Maps</h1>
+        <p className="text-sm text-(--color-text-secondary)">{selectedChild.first_name}&apos;s curriculum &mdash; the full journey ahead</p>
       </div>
 
       {/* ── Map selector ── */}
@@ -120,10 +120,10 @@ export default function MapsPage() {
         <div className="flex gap-3 mb-6">
           {mapStates.map((ms) => (
             <button key={ms.learning_map_id} onClick={() => setSelectedMap(ms)}
-              className={`px-4 py-2 text-sm rounded-lg border transition-colors ${
+              className={`px-4 py-2 text-sm rounded-[10px] border transition-colors ${
                 selectedMap?.learning_map_id === ms.learning_map_id
-                  ? "border-blue-500 bg-blue-50 text-blue-700 font-medium"
-                  : "border-slate-200 text-slate-600 hover:border-slate-300"
+                  ? "border-(--color-accent) bg-(--color-accent-light) text-(--color-accent) font-medium"
+                  : "border-(--color-border) text-(--color-text-secondary) hover:border-(--color-border-strong)"
               }`}
             >{ms.map_name}</button>
           ))}
@@ -131,7 +131,7 @@ export default function MapsPage() {
       )}
 
       {mapStates.length === 0 && (
-        <div className="bg-white rounded-lg border border-slate-200 p-12 text-center text-sm text-slate-400">
+        <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-12 text-center text-sm text-(--color-text-tertiary)">
           No maps enrolled. Complete onboarding to get started.
         </div>
       )}
@@ -139,21 +139,21 @@ export default function MapsPage() {
       {selectedMap && (
         <>
           {/* ── Legend ── */}
-          <div className="flex items-center gap-4 mb-4 text-xs text-slate-500">
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-green-100 border border-green-400" /> Mastered</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-blue-100 border border-blue-400" /> Proficient</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-yellow-100 border border-yellow-400" /> Developing</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-orange-100 border border-orange-400" /> Emerging</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-white border border-dashed border-green-300" /> Available</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-slate-100 border border-slate-300" /> Blocked</span>
+          <div className="flex items-center gap-4 mb-4 text-xs text-(--color-text-secondary)">
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-(--color-success-light) border border-(--color-success)" /> Mastered</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-(--color-accent-light) border border-(--color-accent)" /> Proficient</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-(--color-warning-light) border border-(--color-warning)" /> Developing</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-(--color-danger-light) border border-(--color-danger)" /> Emerging</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-(--color-surface) border border-dashed border-(--color-success)/50" /> Available</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-(--color-page) border border-(--color-border-strong)" /> Blocked</span>
           </div>
 
           {/* ── DAG visualization ── */}
-          <div className="bg-white rounded-lg border border-slate-200 p-6">
+          <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-6">
             <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-slate-800">{selectedMap.map_name}</h2>
+              <h2 className="text-sm font-semibold text-(--color-text)">{selectedMap.map_name}</h2>
               <a href={`/curriculum/editor?map_id=${selectedMap.learning_map_id}`}
-                className="text-xs text-blue-600 hover:underline">Edit Map</a>
+                className="text-xs text-(--color-accent) hover:underline">Edit Map</a>
             </div>
 
             <div className="space-y-1">
@@ -162,7 +162,7 @@ export default function MapsPage() {
                   {/* Connector lines from previous tier */}
                   {tierIdx > 0 && (
                     <div className="flex justify-center py-1">
-                      <div className="w-px h-4 bg-slate-300" />
+                      <div className="w-px h-4 bg-(--color-border-strong)" />
                     </div>
                   )}
 
@@ -175,11 +175,11 @@ export default function MapsPage() {
 
                       return (
                         <div key={node.node_id}
-                          className={`relative w-52 rounded-lg border-2 p-3 ${style.bg} ${style.border} ${style.text}`}
+                          className={`relative w-52 rounded-[10px] border-2 p-3 ${style.bg} ${style.border} ${style.text}`}
                         >
                           {/* Checkmark for mastered */}
                           {isMastered && (
-                            <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-green-500 text-white text-[10px] flex items-center justify-center font-bold">
+                            <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-(--color-success) text-white text-[10px] flex items-center justify-center font-bold">
                               &#10003;
                             </span>
                           )}
@@ -206,7 +206,7 @@ export default function MapsPage() {
                           {isBlocked && !node.is_unlocked && (
                             <button
                               onClick={() => setOverrideNodeId(node.node_id)}
-                              className="mt-2 text-[10px] text-blue-600 hover:underline"
+                              className="mt-2 text-[10px] text-(--color-accent) hover:underline"
                             >
                               Unlock
                             </button>
@@ -223,26 +223,26 @@ export default function MapsPage() {
           {/* ── Override modal ── */}
           {overrideNodeId && (
             <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-              <div className="bg-white rounded-lg border border-slate-200 p-6 w-96 shadow-lg">
-                <h3 className="text-sm font-semibold text-slate-800 mb-1">Unlock Blocked Node</h3>
-                <p className="text-xs text-slate-500 mb-4">
+              <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-6 w-96 shadow-lg">
+                <h3 className="text-sm font-semibold text-(--color-text) mb-1">Unlock Blocked Node</h3>
+                <p className="text-xs text-(--color-text-secondary) mb-4">
                   This bypasses the prerequisite requirement. Your reason will be recorded in the governance log.
                 </p>
                 <textarea
                   value={overrideReason}
                   onChange={(e) => setOverrideReason(e.target.value)}
                   placeholder="Why are you unlocking this node?"
-                  className="w-full px-3 py-2 text-sm border border-slate-300 rounded-md mb-3 h-20 resize-none focus:outline-none focus:ring-1 focus:ring-blue-400"
+                  className="w-full px-3 py-2 text-sm border border-(--color-border-strong) rounded-md mb-3 h-20 resize-none focus:outline-none focus:ring-1 focus:ring-(--color-accent)/30"
                 />
                 <div className="flex gap-2 justify-end">
                   <button
                     onClick={() => { setOverrideNodeId(null); setOverrideReason(""); }}
-                    className="px-3 py-1.5 text-xs text-slate-600 border border-slate-300 rounded-md hover:bg-slate-50"
+                    className="px-3 py-1.5 text-xs text-(--color-text-secondary) border border-(--color-border-strong) rounded-md hover:bg-(--color-page)"
                   >Cancel</button>
                   <button
                     onClick={handleOverride}
                     disabled={!overrideReason.trim() || overriding}
-                    className="px-3 py-1.5 text-xs font-medium bg-amber-500 text-white rounded-md hover:bg-amber-600 disabled:opacity-50"
+                    className="px-3 py-1.5 text-xs font-medium bg-(--color-warning) text-white rounded-md hover:opacity-90 disabled:opacity-50"
                   >{overriding ? "Unlocking..." : "Unlock Node"}</button>
                 </div>
               </div>
@@ -250,13 +250,13 @@ export default function MapsPage() {
           )}
 
           {/* ── Override notice ── */}
-          <div className="mt-4 px-4 py-3 bg-slate-50 rounded-lg border border-slate-200 text-xs text-slate-500">
+          <div className="mt-4 px-4 py-3 bg-(--color-page) rounded-[10px] border border-(--color-border) text-xs text-(--color-text-secondary)">
             If you disagree with a prerequisite, you can unlock any blocked node.
-            Every override is logged in your <a href="/governance/overrides" className="text-blue-600 hover:underline">governance trail</a>.
+            Every override is logged in your <a href="/governance/overrides" className="text-(--color-accent) hover:underline">governance trail</a>.
           </div>
 
           {/* ── Map metadata ── */}
-          <div className="mt-4 flex items-center gap-6 text-xs text-slate-400">
+          <div className="mt-4 flex items-center gap-6 text-xs text-(--color-text-tertiary)">
             <span>{total} nodes</span>
             <span>{mastered} mastered</span>
             <span>{Math.round((selectedMap.progress_pct || 0) * 100)}% complete</span>

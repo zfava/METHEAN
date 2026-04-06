@@ -6,7 +6,7 @@ const styles: Record<string, string> = {
   mastered: "bg-(--color-success-light) text-(--color-success)",
   proficient: "bg-(--color-accent-light) text-(--color-accent)",
   developing: "bg-(--color-warning-light) text-(--color-warning)",
-  emerging: "bg-orange-50 text-orange-700",
+  emerging: "bg-(--color-danger-light) text-(--color-danger)",
   not_started: "bg-(--color-page) text-(--color-text-tertiary)",
   available: "bg-(--color-accent-light) text-(--color-accent)",
   blocked: "bg-(--color-page) text-(--color-text-tertiary)",

@@ -32,7 +32,7 @@ export default class ErrorBoundary extends React.Component<Props, State> {
               Your data is safe. This error has been logged.
             </p>
             {this.state.error && (
-              <pre className="text-[11px] font-mono bg-gray-50 rounded p-3 mb-4 text-left overflow-auto max-h-24 text-(--color-text-secondary)">
+              <pre className="text-[11px] font-mono bg-(--color-page) rounded p-3 mb-4 text-left overflow-auto max-h-24 text-(--color-text-secondary)">
                 {this.state.error.message}
               </pre>
             )}

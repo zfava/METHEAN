@@ -3,6 +3,10 @@
 import { useEffect, useState } from "react";
 import { governance, type GovernanceRule } from "@/lib/api";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
+import PageHeader from "@/components/ui/PageHeader";
+import Card from "@/components/ui/Card";
+import EmptyState from "@/components/ui/EmptyState";
+import StatusBadge from "@/components/StatusBadge";
 
 function humanize(rule: GovernanceRule): string {
   const p = rule.parameters as Record<string, unknown>;
@@ -58,18 +62,10 @@ export default function RulesPage() {
 
   return (
     <div className="max-w-4xl">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-xl font-semibold text-slate-800">Governance Rules</h1>
-          <p className="text-sm text-slate-500">You set these. You can change them anytime.</p>
-        </div>
-      </div>
+      <PageHeader title="Governance Rules" subtitle="You set these. You can change them anytime." />
 
       {rules.length === 0 ? (
-        <div className="bg-white rounded-lg border border-slate-200 p-12 text-center">
-          <p className="text-sm text-slate-500">No rules configured.</p>
-          <p className="text-xs text-slate-400 mt-1">Initialize defaults from the governance overview or create a new rule.</p>
-        </div>
+        <EmptyState icon="empty" title="No rules configured" description="Initialize defaults from the governance overview or create a new rule." />
       ) : (
         <div className="space-y-8">
           {/* Constitutional rules first */}
@@ -87,30 +83,30 @@ export default function RulesPage() {
                   <div>
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-lg">&#x1F6E1;</span>
-                      <h3 className="text-sm font-semibold text-amber-800">Constitutional Rules</h3>
-                      <span className="text-[10px] px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded font-semibold">PROTECTED</span>
+                      <h3 className="text-sm font-semibold text-(--color-constitutional)">Constitutional Rules</h3>
+                      <StatusBadge status="constitutional" className="text-[10px] font-semibold" />
                     </div>
                     <div className="space-y-2">
                       {constitutional.map((r) => (
-                        <div key={r.id} className={`bg-white rounded-lg border-2 border-l-4 border-l-amber-500 p-4 ${r.is_active ? "border-amber-200" : "border-slate-100 opacity-50"}`}>
+                        <Card key={r.id} padding="p-4" borderLeft="border-l-(--color-warning)" className={`border-l-4 ${r.is_active ? "border-(--color-warning)/40" : "border-(--color-border) opacity-50"}`}>
                           <div className="flex items-center justify-between mb-1">
                             <div className="flex items-center gap-2">
-                              <span className="text-sm font-semibold text-slate-800">{r.name}</span>
-                              <span className="text-[9px] px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded-full font-bold">CONSTITUTIONAL</span>
+                              <span className="text-sm font-semibold text-(--color-text)">{r.name}</span>
+                              <StatusBadge status="constitutional" />
                             </div>
-                            <span className={`text-xs font-medium ${r.is_active ? "text-green-600" : "text-slate-400"}`}>
+                            <span className={`text-xs font-medium ${r.is_active ? "text-(--color-success)" : "text-(--color-text-tertiary)"}`}>
                               {r.is_active ? "Active" : "Deactivated"}
                             </span>
                           </div>
-                          {r.description && <p className="text-xs text-slate-600 mb-2">{r.description}</p>}
-                          <div className="text-xs bg-amber-50 border border-amber-100 text-amber-800 rounded px-3 py-2">
+                          {r.description && <p className="text-xs text-(--color-text-secondary) mb-2">{r.description}</p>}
+                          <div className="text-xs bg-(--color-constitutional-light) border border-(--color-constitutional)/20 text-(--color-constitutional) rounded px-3 py-2">
                             <span className="font-medium">What this means:</span> {humanize(r)}
                           </div>
-                          <p className="text-[10px] text-slate-400 mt-2 italic">Changes require written confirmation and are permanently logged.</p>
-                        </div>
+                          <p className="text-[10px] text-(--color-text-tertiary) mt-2 italic">Changes require written confirmation and are permanently logged.</p>
+                        </Card>
                       ))}
                     </div>
-                    {policy.length > 0 && <div className="border-t border-slate-200 mt-6 pt-2" />}
+                    {policy.length > 0 && <div className="border-t border-(--color-border) mt-6 pt-2" />}
                   </div>
                 )}
 
@@ -120,27 +116,27 @@ export default function RulesPage() {
                     <div key={type}>
                       <div className="flex items-center gap-2 mb-3">
                         <span className="text-lg">{info.icon}</span>
-                        <h3 className="text-sm font-semibold text-slate-700">{info.label}</h3>
-                        <span className="text-xs text-slate-400">({typeRules.length})</span>
+                        <h3 className="text-sm font-semibold text-(--color-text)">{info.label}</h3>
+                        <span className="text-xs text-(--color-text-tertiary)">({typeRules.length})</span>
                       </div>
                       <div className="space-y-2">
                         {typeRules.map((r) => (
-                          <div key={r.id} className={`bg-white rounded-lg border p-4 ${r.is_active ? "border-slate-200" : "border-slate-100 opacity-50"}`}>
+                          <Card key={r.id} padding="p-4" className={!r.is_active ? "opacity-50" : ""}>
                             <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-2">
-                                <span className="text-sm font-semibold text-slate-800">{r.name}</span>
-                                <span className="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-500 rounded font-medium">{r.scope}</span>
-                                <span className="text-[10px] font-mono text-slate-400">P{r.priority}</span>
+                                <span className="text-sm font-semibold text-(--color-text)">{r.name}</span>
+                                <span className="text-[10px] px-1.5 py-0.5 bg-(--color-page) text-(--color-text-secondary) rounded font-medium">{r.scope}</span>
+                                <span className="text-[10px] font-mono text-(--color-text-tertiary)">P{r.priority}</span>
                               </div>
-                              <span className={`text-xs font-medium ${r.is_active ? "text-green-600" : "text-slate-400"}`}>
+                              <span className={`text-xs font-medium ${r.is_active ? "text-(--color-success)" : "text-(--color-text-tertiary)"}`}>
                                 {r.is_active ? "Active" : "Disabled"}
                               </span>
                             </div>
-                            {r.description && <p className="text-xs text-slate-500 mb-2">{r.description}</p>}
-                            <div className="text-xs bg-amber-50 border border-amber-100 text-amber-800 rounded px-3 py-2">
+                            {r.description && <p className="text-xs text-(--color-text-secondary) mb-2">{r.description}</p>}
+                            <div className="text-xs bg-(--color-constitutional-light) border border-(--color-constitutional)/20 text-(--color-constitutional) rounded px-3 py-2">
                               <span className="font-medium">What this means:</span> {humanize(r)}
                             </div>
-                          </div>
+                          </Card>
                         ))}
                       </div>
                     </div>
