@@ -270,6 +270,33 @@ export const compliance = {
   hours: (childId: string) => request<object>(`/children/${childId}/hours`),
 };
 
+// ── Notifications ──
+export const notifications = {
+  list: (unread = false, limit = 20) =>
+    request<any[]>(`/notifications?unread=${unread}&limit=${limit}`),
+  markRead: (id: string) =>
+    request(`/notifications/${id}/read`, { method: "PUT" }),
+  markAllRead: () =>
+    request(`/notifications/read-all`, { method: "PUT" }),
+};
+
+// ── Documents ──
+export const documents = {
+  ihip: (childId: string, academicYear: string, state = "NY") =>
+    `/api/v1/children/${childId}/documents/ihip?academic_year=${academicYear}&state=${state}`,
+  quarterlyReport: (childId: string, quarter: number, academicYear: string) =>
+    `/api/v1/children/${childId}/documents/quarterly-report?quarter=${quarter}&academic_year=${academicYear}`,
+  attendance: (childId: string, start: string, end: string) =>
+    `/api/v1/children/${childId}/documents/attendance?start=${start}&end=${end}`,
+  transcript: (childId: string) =>
+    `/api/v1/children/${childId}/documents/transcript`,
+};
+
+// ── Data Export ──
+export const dataExport = {
+  download: () => `/api/v1/household/export`,
+};
+
 // ── Activity Feedback ──
 export const feedback = {
   create: (activityId: string, childId: string, message: string, feedbackType = "comment") =>

@@ -5,12 +5,15 @@ Quiet hours are evaluated in the household's local timezone.
 """
 
 import uuid
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 from zoneinfo import ZoneInfo
 
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.models.enums import ActivityStatus
+from app.models.governance import Activity
+from app.models.identity import User
 from app.models.operational import NotificationLog
 
 # Dedup windows per event type (in seconds)
@@ -133,3 +136,99 @@ async def get_unread_notifications(
         ).order_by(NotificationLog.created_at.desc()).limit(limit)
     )
     return list(result.scalars().all())
+
+
+async def get_notifications(
+    db: AsyncSession,
+    user_id: uuid.UUID,
+    household_id: uuid.UUID,
+    unread_only: bool = False,
+    limit: int = 20,
+) -> list[dict]:
+    """Get notifications formatted for the API."""
+    query = select(NotificationLog).where(
+        NotificationLog.user_id == user_id,
+        NotificationLog.household_id == household_id,
+    )
+    if unread_only:
+        query = query.where(NotificationLog.error.is_(None))
+    query = query.order_by(NotificationLog.created_at.desc()).limit(limit)
+    result = await db.execute(query)
+    return [
+        {
+            "id": str(n.id),
+            "title": n.title,
+            "message": n.body,
+            "channel": n.channel,
+            "is_read": n.error == "read",
+            "created_at": str(n.created_at),
+        }
+        for n in result.scalars().all()
+    ]
+
+
+async def mark_read(db: AsyncSession, notification_id: uuid.UUID, household_id: uuid.UUID) -> bool:
+    """Mark a single notification as read."""
+    result = await db.execute(
+        select(NotificationLog).where(
+            NotificationLog.id == notification_id,
+            NotificationLog.household_id == household_id,
+        )
+    )
+    notif = result.scalar_one_or_none()
+    if notif:
+        notif.error = "read"
+        await db.flush()
+        return True
+    return False
+
+
+async def mark_all_read(db: AsyncSession, user_id: uuid.UUID, household_id: uuid.UUID) -> int:
+    """Mark all unread notifications as read."""
+    result = await db.execute(
+        select(NotificationLog).where(
+            NotificationLog.user_id == user_id,
+            NotificationLog.household_id == household_id,
+            NotificationLog.error.is_(None),
+        )
+    )
+    count = 0
+    for notif in result.scalars().all():
+        notif.error = "read"
+        count += 1
+    await db.flush()
+    return count
+
+
+async def check_and_send_alerts(db: AsyncSession, household_id: uuid.UUID) -> list[dict]:
+    """Check conditions that should trigger notifications."""
+    alerts = []
+    user_result = await db.execute(
+        select(User).where(User.household_id == household_id).limit(1)
+    )
+    user = user_result.scalar_one_or_none()
+    if not user:
+        return alerts
+
+    # Pending approval > 24 hours
+    stale_cutoff = datetime.now(UTC) - timedelta(hours=24)
+    pending_result = await db.execute(
+        select(func.count()).select_from(Activity).where(
+            Activity.household_id == household_id,
+            Activity.governance_approved.is_(False),
+            Activity.status == ActivityStatus.scheduled,
+            Activity.created_at < stale_cutoff,
+        )
+    )
+    pending = pending_result.scalar() or 0
+    if pending > 0:
+        await send_notification(
+            db, household_id, user.id,
+            event_type="alert_triggered",
+            title=f"{pending} activities awaiting approval",
+            body=f"You have {pending} activities waiting for approval for more than 24 hours.",
+        )
+        alerts.append({"type": "pending_approval", "count": pending})
+
+    await db.flush()
+    return alerts

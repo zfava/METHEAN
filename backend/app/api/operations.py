@@ -16,6 +16,7 @@ from app.models.operational import NotificationLog
 from app.models.state import ChildNodeState
 from app.models.curriculum import ChildMapEnrollment, LearningNode
 from app.services.notifications import get_unread_notifications, send_notification
+from app.services.data_export import export_family_data
 from app.services.storage import get_presigned_url, upload_artifact
 
 MAX_UPLOAD_BYTES = 50 * 1024 * 1024  # 50 MB
@@ -481,3 +482,18 @@ async def download_artifact(
 
     url = get_presigned_url(artifact.s3_key, expires_in=900)
     return RedirectResponse(url=url, status_code=302)
+
+
+@router.post("/household/export")
+async def export_household_data(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    """Export complete family educational record as ZIP."""
+    from fastapi.responses import Response
+    data = await export_family_data(db, user.household_id)
+    return Response(
+        content=data,
+        media_type="application/zip",
+        headers={"Content-Disposition": 'attachment; filename="methean_export.zip"'},
+    )

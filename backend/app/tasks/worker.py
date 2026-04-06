@@ -46,6 +46,10 @@ celery_app.conf.beat_schedule = {
         "task": "app.tasks.worker.curriculum_eval_task",
         "schedule": crontab(day_of_week="monday", hour=5, minute=0),
     },
+    "daily-check-alerts": {
+        "task": "app.tasks.worker.check_alerts_task",
+        "schedule": crontab(hour=7, minute=0),
+    },
 }
 
 
@@ -85,6 +89,16 @@ def temporal_triggers_task(self) -> dict:
     try:
         from app.tasks.temporal_rules import run_temporal_sync
         return run_temporal_sync()
+    except Exception as exc:
+        self.retry(exc=exc, countdown=30 * (2 ** self.request.retries))
+
+
+@celery_app.task(name="app.tasks.worker.check_alerts_task", bind=True, max_retries=3)
+def check_alerts_task(self) -> dict:
+    """Daily: check alert conditions for all households."""
+    try:
+        from app.tasks.check_alerts import run_check_alerts_sync
+        return run_check_alerts_sync()
     except Exception as exc:
         self.retry(exc=exc, countdown=30 * (2 ** self.request.retries))
 

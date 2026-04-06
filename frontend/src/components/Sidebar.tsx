@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { auth, type User } from "@/lib/api";
+import { auth, notifications as notificationsApi, type User } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
 import { cn } from "@/lib/cn";
 import { MetheanLogo } from "@/components/Brand";
@@ -24,6 +24,9 @@ export default function Sidebar() {
   const { children, selectedChild, setSelectedChild, loading } = useChild();
   const [pendingCount, setPendingCount] = useState(0);
   const [user, setUser] = useState<User | null>(null);
+  const [unreadNotifs, setUnreadNotifs] = useState(0);
+  const [showNotifs, setShowNotifs] = useState(false);
+  const [notifList, setNotifList] = useState<any[]>([]);
 
   useEffect(() => {
     fetch(`${API}/governance/queue?limit=1`, { credentials: "include" })
@@ -31,6 +34,9 @@ export default function Sidebar() {
       .then((d) => setPendingCount(d.total || 0))
       .catch(() => {});
     auth.me().then(setUser).catch(() => {});
+    notificationsApi.list(false, 10)
+      .then((n) => { setNotifList(n); setUnreadNotifs(n.filter((x: any) => !x.is_read).length); })
+      .catch(() => {});
   }, []);
 
   const govActive = pathname.startsWith("/governance");
@@ -51,11 +57,42 @@ export default function Sidebar() {
 
   return (
     <aside className="w-[240px] min-h-screen bg-(--color-sidebar) flex flex-col shrink-0">
-      <div className="px-5 pt-5 pb-4">
+      <div className="px-5 pt-5 pb-4 flex items-center justify-between">
         <Link href="/dashboard" className="block">
           <MetheanLogo markSize={28} wordmarkHeight={14} color="#C6A24E" gap={10} />
         </Link>
+        <button onClick={() => setShowNotifs(!showNotifs)} className="relative p-1.5 text-white/40 hover:text-white/70 transition-colors">
+          <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+          </svg>
+          {unreadNotifs > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-(--color-brand-gold) text-white text-[8px] font-bold rounded-full flex items-center justify-center">{unreadNotifs}</span>
+          )}
+        </button>
       </div>
+      {showNotifs && (
+        <div className="mx-3 mb-3 p-3 rounded-[8px] bg-(--color-sidebar-hover) border border-white/5 max-h-60 overflow-y-auto">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[10px] font-medium text-white/50">Notifications</span>
+            {unreadNotifs > 0 && (
+              <button onClick={() => { notificationsApi.markAllRead(); setUnreadNotifs(0); setNotifList(notifList.map(n => ({...n, is_read: true}))); }}
+                className="text-[9px] text-(--color-brand-gold) hover:underline">Mark all read</button>
+            )}
+          </div>
+          {notifList.length === 0 ? (
+            <p className="text-[10px] text-white/30 text-center py-3">No notifications</p>
+          ) : (
+            <div className="space-y-1.5">
+              {notifList.map((n: any) => (
+                <div key={n.id} className={cn("px-2 py-1.5 rounded-[6px] text-[10px]", n.is_read ? "text-white/30" : "text-white/70 bg-white/5")}>
+                  <div className="font-medium">{n.title}</div>
+                  <div className="text-white/30 mt-0.5">{n.message?.slice(0, 60)}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {!loading && children.length > 0 && (
         <div className="px-4 pb-4">

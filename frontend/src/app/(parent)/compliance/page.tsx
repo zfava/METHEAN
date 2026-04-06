@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { compliance } from "@/lib/api";
+import { compliance, documents } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
@@ -113,6 +113,39 @@ export default function CompliancePage() {
               <span className="font-medium">Note:</span> {result.special_notes}
             </div>
           )}
+
+          {/* Document generation */}
+          <Card>
+            <SectionHeader title="Generate Documents" />
+            <div className="flex flex-wrap gap-2 mt-2">
+              {(result.strictness === "high") && (
+                <>
+                  <a href={documents.ihip(selectedChild.id, "2026-2027", selectedState)}
+                    className="px-3 py-1.5 text-xs font-medium border border-(--color-border) rounded-[6px] text-(--color-text-secondary) hover:bg-(--color-page) transition-colors"
+                    target="_blank" rel="noopener">
+                    Generate IHIP
+                  </a>
+                  {[1,2,3,4].map(q => (
+                    <a key={q} href={documents.quarterlyReport(selectedChild.id, q, "2026-2027")}
+                      className="px-3 py-1.5 text-xs font-medium border border-(--color-border) rounded-[6px] text-(--color-text-secondary) hover:bg-(--color-page) transition-colors"
+                      target="_blank" rel="noopener">
+                      Q{q} Report
+                    </a>
+                  ))}
+                </>
+              )}
+              <a href={documents.attendance(selectedChild.id, "2026-09-01", "2027-06-30")}
+                className="px-3 py-1.5 text-xs font-medium border border-(--color-border) rounded-[6px] text-(--color-text-secondary) hover:bg-(--color-page) transition-colors"
+                target="_blank" rel="noopener">
+                Attendance Record
+              </a>
+              <a href={documents.transcript(selectedChild.id)}
+                className="px-3 py-1.5 text-xs font-medium border border-(--color-border) rounded-[6px] text-(--color-text-secondary) hover:bg-(--color-page) transition-colors"
+                target="_blank" rel="noopener">
+                Transcript
+              </a>
+            </div>
+          </Card>
         </div>
       )}
     </div>
