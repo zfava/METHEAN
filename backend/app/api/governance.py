@@ -122,6 +122,33 @@ async def list_governance_rules(
     }
 
 
+def _validate_rule_params(rule_type: str, params: dict) -> str | None:
+    """Return error message if params are invalid for the rule type."""
+    if rule_type == "pace_limit":
+        v = params.get("max_daily_minutes")
+        if v is not None and (not isinstance(v, (int, float)) or v < 0 or v > 1440):
+            return "max_daily_minutes must be between 0 and 1440"
+        w = params.get("max_weekly_minutes")
+        if w is not None and (not isinstance(w, (int, float)) or w < 0 or w > 10080):
+            return "max_weekly_minutes must be between 0 and 10080"
+    elif rule_type == "schedule_constraint":
+        days = params.get("allowed_days", [])
+        valid_days = {"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"}
+        if days and any(d not in valid_days for d in days):
+            return f"allowed_days must be from: {', '.join(sorted(valid_days))}"
+    elif rule_type == "content_filter":
+        if not params.get("topic"):
+            return "content_filter rules require a 'topic' parameter"
+        valid_stances = {"exclude", "present_alternative", "parent_led_only", "age_appropriate"}
+        if params.get("stance") and params["stance"] not in valid_stances:
+            return f"stance must be one of: {', '.join(sorted(valid_stances))}"
+    elif rule_type == "ai_boundary":
+        valid_transparency = {"full", "summary", "minimal"}
+        if params.get("ai_transparency") and params["ai_transparency"] not in valid_transparency:
+            return f"ai_transparency must be one of: {', '.join(sorted(valid_transparency))}"
+    return None
+
+
 @router.post("/governance-rules", response_model=GovernanceRuleResponse, status_code=201)
 async def create_governance_rule(
     body: GovernanceRuleCreate,
@@ -130,6 +157,12 @@ async def create_governance_rule(
 ) -> GovernanceRuleResponse:
     from app.models.enums import RuleTier
     from app.core.permissions import check_permission, PERM_RULES_CONSTITUTIONAL
+
+    # Validate parameters
+    rule_type_str = body.rule_type.value if hasattr(body.rule_type, "value") else str(body.rule_type)
+    param_err = _validate_rule_params(rule_type_str, body.parameters or {})
+    if param_err:
+        raise HTTPException(status_code=400, detail=param_err)
 
     # Constitutional rules require explicit confirmation AND the constitutional permission
     if body.tier == RuleTier.constitutional:
@@ -188,6 +221,12 @@ async def update_governance_rule(
     rule = result.scalar_one_or_none()
     if not rule:
         raise HTTPException(status_code=404, detail="Rule not found")
+
+    if body.parameters is not None:
+        rt = rule.rule_type.value if hasattr(rule.rule_type, "value") else str(rule.rule_type)
+        param_err = _validate_rule_params(rt, body.parameters)
+        if param_err:
+            raise HTTPException(status_code=400, detail=param_err)
 
     is_constitutional = (
         (rule.tier == RuleTier.constitutional)

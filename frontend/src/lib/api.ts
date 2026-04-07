@@ -244,6 +244,10 @@ export const governance = {
   rules: () => request<GovernanceRule[]>("/governance-rules"),
   createRule: (data: object) =>
     request<GovernanceRule>("/governance-rules", { method: "POST", body: JSON.stringify(data) }),
+  updateRule: (id: string, data: object) =>
+    request<GovernanceRule>(`/governance-rules/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+  deleteRule: (id: string) =>
+    request<{ deleted: boolean }>(`/governance-rules/${id}`, { method: "DELETE" }),
   initDefaults: () => request<GovernanceRule[]>("/governance-rules/defaults", { method: "POST" }),
   events: (limit?: number) => request<GovernanceEvent[]>(`/governance-events?limit=${limit || 50}`),
 };
