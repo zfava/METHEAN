@@ -67,6 +67,8 @@ function buildTiers(nodes: MapNodeState[]): MapNodeState[][] {
 }
 
 export default function MapsPage() {
+  useEffect(() => { document.title = "Maps | METHEAN"; }, []);
+
   const { selectedChild } = useChild();
   const [mapStates, setMapStates] = useState<MapState[]>([]);
   const [selectedMap, setSelectedMap] = useState<MapState | null>(null);

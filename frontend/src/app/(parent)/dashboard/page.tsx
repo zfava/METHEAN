@@ -19,6 +19,8 @@ interface AlertItem { title: string; message: string; severity: string; }
 interface ChildSummary { id: string; mastered: number; total: number; todayCount: number; }
 
 export default function DashboardPage() {
+  useEffect(() => { document.title = "Dashboard | METHEAN"; }, []);
+
   const [user, setUser] = useState<User | null>(null);
   const { children, selectedChild, setSelectedChild, loading: childLoading } = useChild();
   const [summaries, setSummaries] = useState<Record<string, ChildSummary>>({});

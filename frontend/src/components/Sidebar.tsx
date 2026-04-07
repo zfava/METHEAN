@@ -42,7 +42,7 @@ export default function Sidebar() {
   const govActive = pathname.startsWith("/governance");
 
   function navItem(href: string, label: string, exact = false) {
-    const active = exact ? pathname === href : pathname.startsWith(href);
+    const active = exact ? pathname === href : (pathname === href || pathname.startsWith(href + "/"));
     return (
       <Link key={href} href={href}
         className={cn(
@@ -115,7 +115,7 @@ export default function Sidebar() {
         </div>
         <div>
           <div className="px-5 mb-1.5 text-[11px] font-medium text-white/30 tracking-wider">Learning</div>
-          {navItem("/curriculum", "Curriculum")}
+          {navItem("/curriculum", "Curriculum", true)}
           {navItem("/curriculum/year", "Year Plan")}
           {navItem("/curriculum/history", "History")}
           {navItem("/calendar", "Calendar")}

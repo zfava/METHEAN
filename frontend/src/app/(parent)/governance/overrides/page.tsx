@@ -9,6 +9,8 @@ import Card from "@/components/ui/Card";
 import EmptyState from "@/components/ui/EmptyState";
 
 export default function OverridesPage() {
+  useEffect(() => { document.title = "Overrides | METHEAN"; }, []);
+
   const [overrides, setOverrides] = useState<GovernanceEvent[]>([]);
   const [loading, setLoading] = useState(true);
 

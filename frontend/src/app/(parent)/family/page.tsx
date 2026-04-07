@@ -36,6 +36,8 @@ const typeLabels: Record<string, { label: string; color: string }> = {
 };
 
 export default function FamilyPage() {
+  useEffect(() => { document.title = "Family | METHEAN"; }, []);
+
   const { children, loading: childrenLoading } = useChild();
   const [childData, setChildData] = useState<Record<string, ChildDayData>>({});
   const [expanded, setExpanded] = useState<string | null>(null);

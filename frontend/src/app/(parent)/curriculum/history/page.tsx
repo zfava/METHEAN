@@ -11,6 +11,8 @@ import EmptyState from "@/components/ui/EmptyState";
 import { cn } from "@/lib/cn";
 
 export default function CurriculumHistoryPage() {
+  useEffect(() => { document.title = "History | METHEAN"; }, []);
+
   const { selectedChild } = useChild();
   const [history, setHistory] = useState<any>(null);
   const [loading, setLoading] = useState(true);

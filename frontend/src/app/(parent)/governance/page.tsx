@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { governance, type GovernanceEvent, type GovernanceRule } from "@/lib/api";
+import { relativeTime } from "@/lib/format";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
@@ -30,17 +31,10 @@ interface QueueItem {
   plan_id: string | null;
 }
 
-function relativeTime(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return "just now";
-  if (mins < 60) return `${mins}m ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  return `${Math.floor(hrs / 24)}d ago`;
-}
 
 export default function GovernanceOverviewPage() {
+  useEffect(() => { document.title = "Governance | METHEAN"; }, []);
+
   const [queue, setQueue] = useState<QueueItem[]>([]);
   const [queueTotal, setQueueTotal] = useState(0);
   const [rules, setRules] = useState<GovernanceRule[]>([]);

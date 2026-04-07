@@ -39,7 +39,7 @@ export default function Button({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "rounded-[6px] font-medium transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed",
+        "rounded-[6px] font-medium transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none",
         variants[variant],
         sizes[size],
         className,

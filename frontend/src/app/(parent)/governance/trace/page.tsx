@@ -7,6 +7,7 @@ import PageHeader from "@/components/ui/PageHeader";
 import EmptyState from "@/components/ui/EmptyState";
 import StatusBadge from "@/components/StatusBadge";
 import { cn } from "@/lib/cn";
+import { relativeTime } from "@/lib/format";
 
 const dotColor: Record<string, string> = {
   approve: "bg-(--color-success)",
@@ -15,17 +16,9 @@ const dotColor: Record<string, string> = {
   defer: "bg-(--color-text-tertiary)",
 };
 
-function relativeTime(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const mins = Math.floor(diff / 60000);
-  if (mins < 1) return "just now";
-  if (mins < 60) return `${mins}m ago`;
-  const hrs = Math.floor(mins / 60);
-  if (hrs < 24) return `${hrs}h ago`;
-  return `${Math.floor(hrs / 24)}d ago`;
-}
-
 export default function TracePage() {
+  useEffect(() => { document.title = "Decision Trace | METHEAN"; }, []);
+
   const [events, setEvents] = useState<GovernanceEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterAction, setFilterAction] = useState("");

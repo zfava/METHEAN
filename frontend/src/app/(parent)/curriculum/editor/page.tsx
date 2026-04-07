@@ -81,6 +81,8 @@ function buildTiers(nodes: EditorNode[], edges: EditorEdge[]): EditorNode[][] {
 }
 
 export default function EditorPage() {
+  useEffect(() => { document.title = "Map Editor | METHEAN"; }, []);
+
   const params = useSearchParams();
   const mapId = params.get("map_id") || "";
 

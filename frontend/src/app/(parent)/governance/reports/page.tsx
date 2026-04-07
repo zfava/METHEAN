@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
@@ -17,6 +17,7 @@ function getCsrf(): string | undefined {
 }
 
 export default function ReportsPage() {
+  useEffect(() => { document.title = "Reports | METHEAN"; }, []);
   const [startDate, setStartDate] = useState(() => {
     const d = new Date(); d.setDate(d.getDate() - 30);
     return d.toISOString().split("T")[0];

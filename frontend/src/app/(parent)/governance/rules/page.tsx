@@ -46,6 +46,8 @@ const typeLabels: Record<string, { label: string; icon: string }> = {
 };
 
 export default function RulesPage() {
+  useEffect(() => { document.title = "Rules | METHEAN"; }, []);
+
   const [rules, setRules] = useState<GovernanceRule[]>([]);
   const [loading, setLoading] = useState(true);
 

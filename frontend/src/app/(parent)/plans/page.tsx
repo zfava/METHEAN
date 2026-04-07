@@ -12,6 +12,8 @@ import EmptyState from "@/components/ui/EmptyState";
 import { cn } from "@/lib/cn";
 
 export default function PlansPage() {
+  useEffect(() => { document.title = "Plans | METHEAN"; }, []);
+
   const { selectedChild } = useChild();
   const [planList, setPlanList] = useState<Plan[]>([]);
   const [selected, setSelected] = useState<PlanDetail | null>(null);

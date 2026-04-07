@@ -10,6 +10,8 @@ import Button from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 
 export default function InspectionPage() {
+  useEffect(() => { document.title = "AI Inspection | METHEAN"; }, []);
+
   const [runs, setRuns] = useState<AIRun[]>([]);
   const [selected, setSelected] = useState<AIRun | null>(null);
   const [filterRole, setFilterRole] = useState("");

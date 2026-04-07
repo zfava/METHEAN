@@ -15,6 +15,8 @@ const TYPES = ["parent_observation", "oral_narration", "written_work", "demonstr
 const JUDGMENTS = ["mastered", "proficient", "developing", "emerging", "needs_review"];
 
 export default function AssessmentPage() {
+  useEffect(() => { document.title = "Assessment | METHEAN"; }, []);
+
   const { selectedChild } = useChild();
   const [tab, setTab] = useState<"assess" | "portfolio">("assess");
   const [assessments, setAssessments] = useState<any[]>([]);

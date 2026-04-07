@@ -9,6 +9,8 @@ import Card from "@/components/ui/Card";
 import SectionHeader from "@/components/ui/SectionHeader";
 
 export default function CompliancePage() {
+  useEffect(() => { document.title = "Compliance | METHEAN"; }, []);
+
   const { selectedChild } = useChild();
   const [states, setStates] = useState<{ code: string; name: string; strictness: string }[]>([]);
   const [selectedState, setSelectedState] = useState("");

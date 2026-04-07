@@ -30,6 +30,8 @@ interface QueueItem {
 }
 
 export default function QueuePage() {
+  useEffect(() => { document.title = "Approval Queue | METHEAN"; }, []);
+
   const [items, setItems] = useState<QueueItem[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);

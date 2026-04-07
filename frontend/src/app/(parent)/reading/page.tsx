@@ -22,6 +22,8 @@ const genreColors: Record<string, string> = {
 };
 
 export default function ReadingPage() {
+  useEffect(() => { document.title = "Reading Log | METHEAN"; }, []);
+
   const { selectedChild } = useChild();
   const [tab, setTab] = useState<Tab>("reading");
   const [entries, setEntries] = useState<any[]>([]);

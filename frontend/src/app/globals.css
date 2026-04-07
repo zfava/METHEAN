@@ -84,5 +84,8 @@ table { display: block; overflow-x: auto; max-width: 100%; }
 
 @media print {
   .no-print { display: none !important; }
-  body { background: white; }
+  aside { display: none !important; }
+  main { margin-left: 0 !important; padding: 20px !important; }
+  body { background: white !important; }
+  * { break-inside: avoid; }
 }

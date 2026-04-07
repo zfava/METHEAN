@@ -61,6 +61,8 @@ interface Boundary {
 }
 
 export default function PhilosophyPage() {
+  useEffect(() => { document.title = "Philosophy | METHEAN"; }, []);
+
   const [philosophy, setPhilosophy] = useState("eclectic");
   const [philosophyDesc, setPhilosophyDesc] = useState("");
   const [religion, setReligion] = useState("secular");

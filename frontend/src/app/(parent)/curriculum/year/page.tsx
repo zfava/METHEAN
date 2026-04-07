@@ -24,6 +24,8 @@ const typeLabel: Record<string, string> = {
 };
 
 export default function YearViewPage() {
+  useEffect(() => { document.title = "Year Plan | METHEAN"; }, []);
+
   const params = useSearchParams();
   const curriculumId = params.get("id") || "";
   const { selectedChild } = useChild();

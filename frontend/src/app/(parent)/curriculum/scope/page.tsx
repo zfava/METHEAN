@@ -15,6 +15,8 @@ const statusColors: Record<string, string> = {
 };
 
 export default function ScopePage() {
+  useEffect(() => { document.title = "Scope & Sequence | METHEAN"; }, []);
+
   const { selectedChild } = useChild();
   const [maps, setMaps] = useState<MapState[]>([]);
   const [loading, setLoading] = useState(true);

@@ -65,6 +65,8 @@ function gradeToRange(grade: string | null): string {
 }
 
 export default function CurriculumPage() {
+  useEffect(() => { document.title = "Curriculum | METHEAN"; }, []);
+
   const { selectedChild } = useChild();
   const [tab, setTab] = useState<"my" | "build">("my");
   const [maps, setMaps] = useState<MapState[]>([]);
