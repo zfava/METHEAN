@@ -101,6 +101,41 @@ pytest tests/ -v
 # - OpenAPI spec contract test
 ```
 
+## Deployment
+
+### Docker Compose (Recommended for Development)
+
+```bash
+cp .env.example .env
+# Edit .env with your values
+docker compose up --build
+docker compose exec backend alembic upgrade head
+```
+
+### Without Docker (Local Development)
+
+```bash
+# Requires: Python 3.12+, Node 20+, PostgreSQL 16, Redis
+cp .env.example .env
+# Edit .env: change postgres/redis hosts to localhost
+./scripts/dev-local.sh
+```
+
+### Railway (Cloud)
+
+1. Fork this repository
+2. Connect Railway to your GitHub
+3. Create a new project from the repo
+4. Add services: PostgreSQL, Redis
+5. Set environment variables from `.env.example`
+6. Deploy — migrations run automatically on startup
+
+### Production (Docker Compose)
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
+
 ## License
 
 Proprietary. All rights reserved.
