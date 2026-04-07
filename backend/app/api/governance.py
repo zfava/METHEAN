@@ -547,6 +547,7 @@ async def approve_activity(
         db, user.household_id, user.id,
         GovernanceAction.approve, "activity", activity_id,
         reason=body.reason if body else "Parent approved",
+        metadata={"source": "manual"},
     )
 
     return {"activity_id": str(activity_id), "status": "approved"}
@@ -583,6 +584,7 @@ async def reject_activity(
         db, user.household_id, user.id,
         GovernanceAction.reject, "activity", activity_id,
         reason=body.reason or "Parent rejected",
+        metadata={"source": "manual"},
     )
 
     return {"activity_id": str(activity_id), "status": "rejected"}

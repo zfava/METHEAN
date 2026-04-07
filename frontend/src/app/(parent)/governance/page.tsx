@@ -5,228 +5,313 @@ import Link from "next/link";
 import { governance, type GovernanceEvent, type GovernanceRule } from "@/lib/api";
 import { relativeTime } from "@/lib/format";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
+import StatusBadge from "@/components/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import SectionHeader from "@/components/ui/SectionHeader";
 import EmptyState from "@/components/ui/EmptyState";
-import StatusBadge from "@/components/StatusBadge";
+import { cn } from "@/lib/cn";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
-function getCsrf(): string | undefined {
-  if (typeof document === "undefined") return undefined;
-  const m = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);
-  return m ? decodeURIComponent(m[1]) : undefined;
-}
-
-interface QueueItem {
-  activity_id: string;
-  title: string;
-  activity_type: string;
-  estimated_minutes: number | null;
-  difficulty: number | null;
-  ai_rationale: string;
-  child_name: string;
-  plan_id: string | null;
-}
-
+const RULE_TYPE_LABELS: Record<string, { label: string; icon: string }> = {
+  approval_required: { label: "Approval", icon: "🛡️" },
+  pace_limit: { label: "Pace Limits", icon: "⏱️" },
+  content_filter: { label: "Content Filters", icon: "📋" },
+  schedule_constraint: { label: "Schedule", icon: "📅" },
+  ai_boundary: { label: "AI Boundaries", icon: "🤖" },
+};
 
 export default function GovernanceOverviewPage() {
   useEffect(() => { document.title = "Governance | METHEAN"; }, []);
 
-  const [queue, setQueue] = useState<QueueItem[]>([]);
-  const [queueTotal, setQueueTotal] = useState(0);
-  const [rules, setRules] = useState<GovernanceRule[]>([]);
   const [events, setEvents] = useState<GovernanceEvent[]>([]);
+  const [rules, setRules] = useState<GovernanceRule[]>([]);
+  const [pendingCount, setPendingCount] = useState(0);
+  const [philSummary, setPhilSummary] = useState<{ philosophy: string; autonomy: string; boundaries: number }>({ philosophy: "", autonomy: "", boundaries: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [dismissing, setDismissing] = useState<Set<string>>(new Set());
-  const [philSummary, setPhilSummary] = useState("");
 
   useEffect(() => { load(); }, []);
 
   async function load() {
+    setLoading(true);
     setError("");
     try {
-      const [qResp, rResp, eResp] = await Promise.all([
-        fetch(`${API}/governance/queue?limit=3`, { credentials: "include" }).then((r) => r.ok ? r.json() : { items: [], total: 0 }),
+      const [evtsRaw, rulesRaw, qResp, philResp] = await Promise.all([
+        governance.events(200),
         governance.rules(),
-        governance.events(5),
+        fetch(`${API}/governance/queue?limit=1`, { credentials: "include" }).then((r) => r.ok ? r.json() : { total: 0 }),
+        fetch(`${API}/household/philosophy`, { credentials: "include" }).then((r) => r.ok ? r.json() : {}),
       ]);
-      setQueue(qResp.items || []);
-      setQueueTotal(qResp.total || 0);
-      setRules((rResp as any).items || rResp);
-      setEvents(((eResp as any).items || eResp).slice(0, 5));
 
-      // Philosophy summary
-      try {
-        const philResp = await fetch(`${API}/household/philosophy`, { credentials: "include" });
-        if (philResp.ok) {
-          const phil = await philResp.json();
-          const parts = [];
-          if (phil.educational_philosophy) parts.push(phil.educational_philosophy.replace(/_/g, " "));
-          if (phil.religious_framework && phil.religious_framework !== "secular") parts.push(phil.religious_framework);
-          if (phil.ai_autonomy_level) parts.push(phil.ai_autonomy_level.replace(/_/g, " "));
-          setPhilSummary(parts.join(" \u00b7 ") || "Not configured");
-        }
-      } catch {}
+      const evtsList: GovernanceEvent[] = (evtsRaw as any).items || evtsRaw;
+      setEvents(Array.isArray(evtsList) ? evtsList : []);
+      const rulesList = (rulesRaw as any).items || rulesRaw;
+      setRules(Array.isArray(rulesList) ? rulesList : []);
+      setPendingCount(qResp.total || 0);
+      setPhilSummary({
+        philosophy: (philResp.educational_philosophy || "").replace(/_/g, " "),
+        autonomy: (philResp.ai_autonomy_level || "").replace(/_/g, " "),
+        boundaries: (philResp.content_boundaries || []).length,
+      });
     } catch (err: any) {
-      setError(err.detail || err.message || "Failed to load governance data.");
-    } finally { setLoading(false); }
+      setError(err?.detail || err?.message || "Couldn't load governance data.");
+    } finally {
+      setLoading(false);
+    }
   }
 
-  async function handleAction(item: QueueItem, action: "approve" | "reject") {
-    if (!item.plan_id) return;
-    setDismissing((prev) => new Set(prev).add(item.activity_id));
+  if (loading) return <div className="max-w-5xl"><PageHeader title="Governance" /><LoadingSkeleton variant="card" count={4} /></div>;
 
-    const csrf = getCsrf();
-    const url = `${API}/plans/${item.plan_id}/activities/${item.activity_id}/${action}`;
-    const body = action === "reject" ? JSON.stringify({ reason: "Rejected from governance overview" }) : undefined;
-    await fetch(url, {
-      method: "PUT", credentials: "include",
-      headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
-      body,
-    });
+  // ── Compute metrics ──
+  const autoApproved = events.filter((e) => {
+    const meta = (e as any).metadata_ || (e as any).metadata || {};
+    return e.action === "approve" && (meta.source === "auto" || (e.reason || "").toLowerCase().includes("auto"));
+  });
+  const manualDecisions = events.filter((e) => {
+    const meta = (e as any).metadata_ || (e as any).metadata || {};
+    return meta.source === "manual" || (!meta.source && ["approve", "reject", "modify"].includes(e.action) && !(e.reason || "").toLowerCase().includes("auto"));
+  });
+  const parentControlPct = events.length > 0 ? Math.round((manualDecisions.length / events.length) * 100) : 100;
+  const totalApproved = events.filter((e) => e.action === "approve").length;
+  const totalRejected = events.filter((e) => e.action === "reject").length;
+  const totalModified = events.filter((e) => e.action === "modify").length;
+  const totalQueued = pendingCount;
 
-    // Animate out then reload
-    setTimeout(() => load(), 300);
-  }
+  const constitutionalCount = rules.filter((r) => (r as any).tier === "constitutional" && r.is_active).length;
 
-  // Rule type counts
-  const ruleCounts: Record<string, number> = {};
-  rules.forEach((r) => { ruleCounts[r.rule_type] = (ruleCounts[r.rule_type] || 0) + 1; });
+  // AI autonomy display
+  const aiRule = rules.find((r) => r.rule_type === "ai_boundary" && r.is_active);
+  const aiTransparency = aiRule ? ((aiRule.parameters as any).ai_transparency || "full") : "not set";
+  const aiCanAct = aiRule ? (aiRule.parameters as any).ai_direct_action : false;
 
-  const ruleIcons: Record<string, { icon: string; label: string }> = {
-    approval_required: { icon: "\u26E8", label: "approval rules" },
-    pace_limit: { icon: "\u23F1", label: "pace limits" },
-    schedule_constraint: { icon: "\u2637", label: "schedule constraints" },
-    content_filter: { icon: "\u2616", label: "content filters" },
-    ai_boundary: { icon: "\u2B21", label: "AI boundaries" },
-  };
+  // Rule coverage
+  const ruleTypes = ["approval_required", "pace_limit", "content_filter", "schedule_constraint", "ai_boundary"];
+  const coverage = ruleTypes.map((type) => {
+    const typeRules = rules.filter((r) => r.rule_type === type && r.is_active);
+    const hasConstitutional = typeRules.some((r) => (r as any).tier === "constitutional");
+    return {
+      type,
+      ...RULE_TYPE_LABELS[type],
+      count: typeRules.length,
+      status: hasConstitutional ? "protected" : typeRules.length > 0 ? "covered" : "not_set",
+    };
+  });
 
-  if (loading) return <div className="max-w-4xl space-y-6"><LoadingSkeleton variant="card" count={3} /><LoadingSkeleton variant="list" count={4} /></div>;
+  const recentEvents = events.slice(0, 10);
+  const circ = 2 * Math.PI * 20;
 
   return (
-    <div className="max-w-4xl">
+    <div className="max-w-5xl">
       <PageHeader title="Governance" subtitle="You control what the AI can and cannot do." />
 
       {error && (
         <Card className="mb-4" borderLeft="border-l-(--color-danger)">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
             <p className="text-sm text-(--color-danger)">{error}</p>
             <Button variant="ghost" size="sm" onClick={() => { setError(""); load(); }}>Retry</Button>
           </div>
         </Card>
       )}
 
-      {/* ── PHILOSOPHY SUMMARY ── */}
-      {philSummary && (
-        <Card href="/governance/philosophy" className="mb-6" padding="px-4 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-(--color-text-tertiary)">Philosophy:</span>
-              <span className="text-sm font-medium text-(--color-text) capitalize">{philSummary}</span>
+      {/* ── Section 1: Health Bar ── */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+        {/* Parent Control Score */}
+        <Card padding="p-4">
+          <div className="flex items-center gap-3">
+            <div className="relative w-12 h-12 shrink-0">
+              <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
+                <circle cx="24" cy="24" r="20" fill="none" stroke="var(--color-border)" strokeWidth="3" />
+                <circle cx="24" cy="24" r="20" fill="none"
+                  stroke={parentControlPct > 50 ? "var(--color-success)" : parentControlPct > 20 ? "var(--color-warning)" : "var(--color-danger)"}
+                  strokeWidth="3" strokeDasharray={`${(parentControlPct / 100) * circ} ${circ}`} strokeLinecap="round" />
+              </svg>
+              <span className="absolute inset-0 flex items-center justify-center text-xs font-bold text-(--color-text)">{parentControlPct}%</span>
             </div>
-            <span className="text-xs text-(--color-accent)">Edit &rarr;</span>
+            <div>
+              <div className="text-xs font-medium text-(--color-text)">Parent Control</div>
+              <div className="text-[10px] text-(--color-text-tertiary)">{manualDecisions.length} of {events.length} decisions</div>
+            </div>
           </div>
         </Card>
-      )}
 
-      {/* ── APPROVAL QUEUE PREVIEW ── */}
-      <div className="mb-8">
-        <SectionHeader
-          title="Pending Your Review"
-          action={queueTotal > 0 ? `View full queue (${queueTotal}) →` : undefined}
-          actionHref={queueTotal > 0 ? "/governance/queue" : undefined}
-        />
-
-        {queue.length === 0 ? (
-          <EmptyState icon="check" title="All Clear" description="No activities need your review." />
-        ) : (
-          <div className="space-y-2">
-            {queue.map((item) => (
-              <Card
-                key={item.activity_id}
-                padding="p-4"
-                className={`transition-all duration-300 ${
-                  dismissing.has(item.activity_id) ? "opacity-0 scale-95" : "opacity-100"
-                }`}
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="w-6 h-6 rounded-full bg-(--color-accent-light) text-(--color-accent) text-[10px] font-bold flex items-center justify-center shrink-0">
-                        {item.child_name.charAt(0)}
-                      </span>
-                      <span className="text-xs text-(--color-text-secondary)">{item.child_name}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-(--color-text)">{item.title}</span>
-                      <span className="text-[10px] px-1.5 py-0.5 bg-(--color-page) text-(--color-text-secondary) rounded font-medium uppercase">{item.activity_type}</span>
-                      {item.difficulty && (
-                        <span className="text-xs text-(--color-warning)">
-                          {"●".repeat(item.difficulty)}
-                          <span className="text-(--color-text-tertiary)">{"●".repeat(5 - item.difficulty)}</span>
-                        </span>
-                      )}
-                      {item.estimated_minutes && <span className="text-xs text-(--color-text-tertiary)">{item.estimated_minutes}m</span>}
-                    </div>
-                    {item.ai_rationale && (
-                      <p className="text-xs text-(--color-text-secondary) italic mt-1.5">&ldquo;{item.ai_rationale}&rdquo;</p>
-                    )}
-                  </div>
-                  <div className="flex gap-2 shrink-0 pt-1">
-                    <Button variant="success" size="sm" onClick={() => handleAction(item, "approve")}>Approve</Button>
-                    <Button variant="danger" size="sm" className="bg-transparent text-(--color-danger) border border-(--color-danger)/30 hover:bg-(--color-danger-light) hover:opacity-100" onClick={() => handleAction(item, "reject")}>Reject</Button>
-                  </div>
-                </div>
-              </Card>
-            ))}
+        {/* AI Autonomy Level */}
+        <Card padding="p-4">
+          <div className="flex items-center gap-3">
+            <div className={cn("w-12 h-12 rounded-full flex items-center justify-center text-lg shrink-0",
+              aiTransparency === "full" ? "bg-(--color-success-light) text-(--color-success)" :
+              aiTransparency === "summary" ? "bg-(--color-warning-light) text-(--color-warning)" :
+              "bg-(--color-danger-light) text-(--color-danger)")}>
+              {aiTransparency === "full" ? "🛡️" : aiTransparency === "summary" ? "👁️" : "⚠️"}
+            </div>
+            <div>
+              <div className="text-xs font-medium text-(--color-text)">AI Oversight</div>
+              <div className="text-[10px] text-(--color-text-tertiary) capitalize">{aiTransparency}</div>
+              <div className="text-[10px] text-(--color-text-tertiary)">{aiCanAct ? "Can act alone" : "Review required"}</div>
+            </div>
           </div>
-        )}
-      </div>
+        </Card>
 
-      {/* ── ACTIVE RULES SUMMARY ── */}
-      <div className="mb-8">
-        <SectionHeader title="Active Rules" />
-        <Card href="/governance/rules" padding="p-4">
-          <div className="flex items-center gap-4">
-            {Object.entries(ruleIcons).map(([type, { icon, label }]) => {
-              const count = ruleCounts[type] || 0;
-              if (count === 0) return null;
-              return (
-                <div key={type} className="flex items-center gap-1.5">
-                  <span className="text-base">{icon}</span>
-                  <span className="text-sm text-(--color-text)"><strong>{count}</strong> {label}</span>
-                </div>
-              );
-            })}
-            {rules.length === 0 && <span className="text-sm text-(--color-text-tertiary)">No rules configured</span>}
+        {/* Pending Review */}
+        <Card padding="p-4" href={pendingCount > 0 ? "/governance/queue" : undefined}>
+          <div className="flex items-center gap-3">
+            <div className={cn("w-12 h-12 rounded-full flex items-center justify-center text-lg font-bold shrink-0",
+              pendingCount > 0 ? "bg-(--color-warning-light) text-(--color-warning)" : "bg-(--color-success-light) text-(--color-success)")}>
+              {pendingCount}
+            </div>
+            <div>
+              <div className="text-xs font-medium text-(--color-text)">Pending Review</div>
+              <div className="text-[10px] text-(--color-text-tertiary)">{pendingCount > 0 ? "Needs attention" : "All clear"}</div>
+            </div>
           </div>
-          <p className="text-xs text-(--color-text-tertiary) mt-2">You set these. You can change them anytime. &rarr;</p>
+        </Card>
+
+        {/* Constitutional Rules */}
+        <Card padding="p-4">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-(--color-constitutional-light) text-(--color-constitutional) flex items-center justify-center text-lg font-bold shrink-0">
+              {constitutionalCount}
+            </div>
+            <div>
+              <div className="text-xs font-medium text-(--color-text)">Constitutional</div>
+              <div className="text-[10px] text-(--color-text-tertiary)">{constitutionalCount} foundational rule{constitutionalCount !== 1 ? "s" : ""}</div>
+            </div>
+          </div>
         </Card>
       </div>
 
-      {/* ── RECENT DECISIONS ── */}
-      <div>
-        <SectionHeader title="Recent Decisions" action="View full trace →" actionHref="/governance/trace" />
-        {events.length === 0 ? (
-          <EmptyState icon="empty" title="No decisions yet" />
-        ) : (
-          <Card padding="p-0" className="divide-y divide-(--color-border)/30">
-            {events.map((evt) => (
-              <div key={evt.id} className="flex items-center justify-between px-4 py-3">
-                <div className="flex items-center gap-3">
-                  <StatusBadge status={evt.action} />
-                  <span className="text-sm text-(--color-text)">{evt.target_type.replace(/_/g, " ")}</span>
-                  {evt.reason && <span className="text-xs text-(--color-text-tertiary) truncate max-w-[200px]">{evt.reason}</span>}
-                </div>
-                <span className="text-xs text-(--color-text-tertiary) shrink-0">{relativeTime(evt.created_at)}</span>
+      {/* ── Section 2: Decision Flow ── */}
+      <Card className="mb-8" padding="p-5">
+        <SectionHeader title="Decision Flow" />
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-0 mt-3">
+          {/* AI Recommends */}
+          <div className="flex-1 text-center py-3 px-2 rounded-lg bg-(--color-accent-light) border border-(--color-accent)/20">
+            <div className="text-lg font-bold text-(--color-accent)">{events.length}</div>
+            <div className="text-[10px] text-(--color-accent)">AI Recommendations</div>
+          </div>
+          <div className="hidden sm:block w-6 text-center text-(--color-border-strong)">→</div>
+          <div className="sm:hidden text-center text-(--color-border-strong)">↓</div>
+          {/* Rules Evaluate */}
+          <div className="flex-1 text-center py-3 px-2 rounded-lg bg-(--color-constitutional-light) border border-(--color-constitutional)/20">
+            <div className="text-lg font-bold text-(--color-constitutional)">{rules.filter((r) => r.is_active).length}</div>
+            <div className="text-[10px] text-(--color-constitutional)">Active Rules</div>
+          </div>
+          <div className="hidden sm:block w-6 text-center text-(--color-border-strong)">→</div>
+          <div className="sm:hidden text-center text-(--color-border-strong)">↓</div>
+          {/* Outcomes */}
+          <div className="flex-1 grid grid-cols-2 gap-2">
+            <div className="text-center py-2 px-1 rounded-lg bg-(--color-success-light)">
+              <div className="text-sm font-bold text-(--color-success)">{autoApproved.length}</div>
+              <div className="text-[9px] text-(--color-success)">Auto-approved</div>
+            </div>
+            <div className="text-center py-2 px-1 rounded-lg bg-(--color-warning-light)">
+              <div className="text-sm font-bold text-(--color-warning)">{totalQueued}</div>
+              <div className="text-[9px] text-(--color-warning)">Queued</div>
+            </div>
+            <div className="text-center py-2 px-1 rounded-lg bg-(--color-success-light)">
+              <div className="text-sm font-bold text-(--color-success)">{totalApproved - autoApproved.length}</div>
+              <div className="text-[9px] text-(--color-success)">Parent OK</div>
+            </div>
+            <div className="text-center py-2 px-1 rounded-lg bg-(--color-danger-light)">
+              <div className="text-sm font-bold text-(--color-danger)">{totalRejected}</div>
+              <div className="text-[9px] text-(--color-danger)">Rejected</div>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      {/* ── Section 3: Rule Coverage Matrix ── */}
+      <Card className="mb-8" padding="p-5">
+        <SectionHeader title="Rule Coverage" link={{ href: "/governance/rules", label: "Manage rules" }} />
+        <div className="mt-3 space-y-2">
+          {coverage.map((c) => (
+            <div key={c.type} className="flex items-center justify-between py-2 px-3 rounded-[6px] bg-(--color-page)">
+              <div className="flex items-center gap-2">
+                <span>{c.icon}</span>
+                <span className="text-xs font-medium text-(--color-text)">{c.label}</span>
               </div>
-            ))}
-          </Card>
-        )}
+              <div className="flex items-center gap-2">
+                {c.status === "protected" && (
+                  <span className="text-[10px] font-medium text-(--color-constitutional) flex items-center gap-1">🛡️ Protected</span>
+                )}
+                {c.status === "covered" && (
+                  <span className="text-[10px] font-medium text-(--color-success) flex items-center gap-1">
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+                    {c.count} rule{c.count !== 1 ? "s" : ""}
+                  </span>
+                )}
+                {c.status === "not_set" && (
+                  <Link href="/governance/rules" className="text-[10px] font-medium text-(--color-warning) hover:underline">
+                    — Not set · Add
+                  </Link>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8">
+        {/* ── Section 4: Recent Timeline ── */}
+        <Card padding="p-0">
+          <div className="px-5 py-3 border-b border-(--color-border)">
+            <SectionHeader title="Recent Decisions" link={{ href: "/governance/trace", label: "Full trace" }} />
+          </div>
+          {recentEvents.length === 0 ? (
+            <div className="p-5">
+              <EmptyState icon="empty" title="No decisions yet" description="As activities are approved and rules applied, every decision appears here." />
+            </div>
+          ) : (
+            <div className="divide-y divide-(--color-border)/30 max-h-80 overflow-y-auto">
+              {recentEvents.map((evt) => (
+                <div key={evt.id} className="flex items-center justify-between px-5 py-2.5">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <StatusBadge status={evt.action} />
+                    <span className="text-xs text-(--color-text) truncate">{evt.target_type.replace(/_/g, " ")}</span>
+                  </div>
+                  <span className="text-[10px] text-(--color-text-tertiary) shrink-0 ml-2">{relativeTime(evt.created_at)}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </Card>
+
+        {/* ── Section 5: Philosophy Summary ── */}
+        <Card href="/governance/philosophy" padding="p-5">
+          <SectionHeader title="Philosophy" link={{ href: "/governance/philosophy", label: "Edit" }} />
+          <div className="mt-3 space-y-2">
+            {philSummary.philosophy ? (
+              <>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-(--color-text-secondary)">Approach</span>
+                  <span className="text-xs font-medium text-(--color-text) capitalize">{philSummary.philosophy}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-(--color-text-secondary)">AI Autonomy</span>
+                  <span className="text-xs font-medium text-(--color-text) capitalize">{philSummary.autonomy || "Not set"}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-(--color-text-secondary)">Content Boundaries</span>
+                  <span className="text-xs font-medium text-(--color-text)">{philSummary.boundaries} defined</span>
+                </div>
+              </>
+            ) : (
+              <p className="text-xs text-(--color-text-secondary)">No philosophy configured yet. Set your family's foundational principles.</p>
+            )}
+          </div>
+        </Card>
+      </div>
+
+      {/* ── Section 6: Quick Actions ── */}
+      <div className="flex flex-wrap gap-3">
+        <Button variant="primary" size="md" onClick={() => window.location.href = "/governance/rules"}>Add Rule</Button>
+        <Button variant="secondary" size="md" onClick={() => window.location.href = "/governance/reports"}>Generate Report</Button>
+        <Button variant="secondary" size="md" onClick={() => window.location.href = "/governance/queue"}>
+          Review Queue {pendingCount > 0 && <span className="ml-1 px-1.5 py-0.5 text-[9px] bg-(--color-warning) text-white rounded-full">{pendingCount}</span>}
+        </Button>
+        <Button variant="ghost" size="md" onClick={() => window.location.href = "/governance/trace"}>Full Trace</Button>
       </div>
     </div>
   );
