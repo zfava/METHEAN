@@ -117,6 +117,8 @@ export const auth = {
 // Children
 export const children = {
   list: () => request<ChildListItem[]>("/children"),
+  create: (data: { first_name: string; last_name?: string; grade_level?: string; date_of_birth?: string }) =>
+    request<{ id: string; first_name: string }>("/children", { method: "POST", body: JSON.stringify(data) }),
   state: (childId: string) => request<ChildState>(`/children/${childId}/state`),
   mapState: (childId: string, mapId: string) =>
     request<MapState>(`/children/${childId}/map-state/${mapId}`),

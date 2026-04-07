@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { children as childrenApi } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/StatusBadge";
 import { cn } from "@/lib/cn";
 
@@ -37,6 +39,16 @@ export default function FamilyPage() {
   const { children, loading: childrenLoading } = useChild();
   const [childData, setChildData] = useState<Record<string, ChildDayData>>({});
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [showAddChild, setShowAddChild] = useState(false);
+  const [newName, setNewName] = useState("");
+  const [newGrade, setNewGrade] = useState("");
+
+  async function addChild() {
+    if (!newName.trim()) return;
+    await childrenApi.create({ first_name: newName, grade_level: newGrade || undefined });
+    setNewName(""); setNewGrade(""); setShowAddChild(false);
+    window.location.reload();
+  }
 
   useEffect(() => {
     if (children.length > 0) loadAllChildren();
@@ -234,10 +246,29 @@ export default function FamilyPage() {
         })}
       </div>
 
-      {children.length === 0 && (
-        <Card className="text-center py-12">
+      {/* Add child */}
+      {showAddChild ? (
+        <Card className="mt-3">
+          <div className="flex items-center gap-3">
+            <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Child's first name"
+              className="flex-1 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+            <input value={newGrade} onChange={(e) => setNewGrade(e.target.value)} placeholder="Grade (K, 1st, etc.)"
+              className="w-32 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+            <Button variant="primary" size="sm" onClick={addChild} disabled={!newName.trim()}>Add</Button>
+            <Button variant="ghost" size="sm" onClick={() => setShowAddChild(false)}>Cancel</Button>
+          </div>
+        </Card>
+      ) : (
+        <button onClick={() => setShowAddChild(true)}
+          className="mt-3 w-full py-3 border-2 border-dashed border-(--color-border) rounded-[10px] text-sm text-(--color-text-tertiary) hover:text-(--color-text-secondary) hover:border-(--color-border-strong) transition-colors">
+          + Add Child
+        </button>
+      )}
+
+      {children.length === 0 && !showAddChild && (
+        <Card className="text-center py-12 mt-3">
           <p className="text-sm text-(--color-text-secondary)">No children in your household yet.</p>
-          <p className="text-xs text-(--color-text-tertiary) mt-1">Add children through the onboarding process.</p>
+          <p className="text-xs text-(--color-text-tertiary) mt-1">Click "Add Child" above to get started.</p>
         </Card>
       )}
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { children as childrenApi, curriculum, type MapState } from "@/lib/api";
+import { children as childrenApi, curriculum, annualCurriculum, type MapState } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import StatusBadge from "@/components/StatusBadge";
@@ -68,6 +68,7 @@ export default function CurriculumPage() {
   const { selectedChild } = useChild();
   const [tab, setTab] = useState<"my" | "build">("my");
   const [maps, setMaps] = useState<MapState[]>([]);
+  const [curricula, setCurricula] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Build state (shared)
@@ -112,8 +113,14 @@ export default function CurriculumPage() {
   async function loadMaps() {
     if (!selectedChild) return;
     setLoading(true);
-    try { setMaps(await childrenApi.allMapState(selectedChild.id)); }
-    catch {} finally { setLoading(false); }
+    try {
+      const [mapData, curricData] = await Promise.all([
+        childrenApi.allMapState(selectedChild.id),
+        annualCurriculum.list(selectedChild.id),
+      ]);
+      setMaps(mapData);
+      setCurricula(curricData);
+    } catch {} finally { setLoading(false); }
   }
 
   async function loadTemplates() {
@@ -134,21 +141,18 @@ export default function CurriculumPage() {
     if (!selectedChild || !selectedSubject) return;
     setGenerating(true);
     try {
-      const csrf = getCsrf();
-      // Use map-existing as the backend endpoint, with subject as material
-      const resp = await fetch(`${API}/children/${selectedChild.id}/curriculum/map-existing`, {
-        method: "POST", credentials: "include",
-        headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
-        body: JSON.stringify({
-          material_name: selectedSubject.s,
-          material_description: selectedSubject.d + (scopeNotes ? `\n\nParent notes: ${scopeNotes}` : ""),
-          table_of_contents: `Subject: ${selectedSubject.s}\nGrade: ${selectedChild.grade_level || "K"}\nApproach: ${philosophyLabel}\nScope: ${selectedSubject.d}`,
-          current_position: "Beginning of course",
-          subject_area: selectedSubject.s,
-        }),
+      const year = new Date().getFullYear();
+      const result = await annualCurriculum.generate(selectedChild.id, {
+        subject_name: selectedSubject.s,
+        academic_year: `${year}-${year + 1}`,
+        hours_per_week: 4,
+        total_weeks: 36,
+        scope_notes: scopeNotes || undefined,
       });
-      if (resp.ok) setProposal(await resp.json());
-    } catch {} finally { setGenerating(false); }
+      setProposal(result);
+    } catch (err: any) {
+      alert(err.detail || "Failed to generate curriculum");
+    } finally { setGenerating(false); }
   }
 
   async function mapExisting() {
@@ -167,15 +171,10 @@ export default function CurriculumPage() {
   }
 
   async function approveProposal() {
-    if (!selectedChild || !proposal) return;
+    if (!proposal?.id) return;
     setGenerating(true);
     try {
-      const csrf = getCsrf();
-      await fetch(`${API}/children/${selectedChild.id}/curriculum/apply-mapping`, {
-        method: "POST", credentials: "include",
-        headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
-        body: JSON.stringify(proposal),
-      });
+      await annualCurriculum.approve(proposal.id);
       setApproved(true);
       await loadMaps();
     } catch {} finally { setGenerating(false); }
@@ -219,30 +218,57 @@ export default function CurriculumPage() {
       {/* ── MY CURRICULUM ── */}
       {tab === "my" && (
         loading ? <LoadingSkeleton variant="card" count={3} /> : (
-          maps.length === 0 ? (
+          curricula.length === 0 && maps.length === 0 ? (
             <EmptyState
               icon="empty"
               title="No curriculum yet"
               description='Switch to "Build New" to get started.'
             />
           ) : (
-            <div className="grid grid-cols-2 gap-4">
-              {maps.map((ms) => (
-                <Card key={ms.learning_map_id} padding="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-(--color-text)">{ms.map_name}</span>
-                    <a href={`/curriculum/editor?map_id=${ms.learning_map_id}`}
-                      className="text-xs text-(--color-accent) hover:underline">Edit</a>
+            <div className="space-y-6">
+              {/* Annual Curricula (primary) */}
+              {curricula.length > 0 && (
+                <div>
+                  <h3 className="text-xs font-bold text-(--color-text-secondary) uppercase tracking-wider mb-3">Annual Curricula</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    {curricula.map((c: any) => (
+                      <Card key={c.id} href={`/curriculum/year?id=${c.id}`} padding="p-4">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-sm font-medium text-(--color-text)">{c.subject_name}</span>
+                          <StatusBadge status={c.status} />
+                        </div>
+                        <div className="text-xs text-(--color-text-secondary) mb-2">{c.academic_year} · {c.grade_level || ""}</div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-(--color-text-tertiary)">{c.total_weeks} weeks · {c.hours_per_week}h/week</span>
+                        </div>
+                      </Card>
+                    ))}
                   </div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="flex-1 bg-(--color-page) rounded-full h-1.5">
-                      <div className="bg-(--color-success) h-1.5 rounded-full" style={{ width: `${Math.round(ms.progress_pct * 100)}%` }} />
-                    </div>
-                    <span className="text-xs text-(--color-text-secondary)">{Math.round(ms.progress_pct * 100)}%</span>
+                </div>
+              )}
+
+              {/* Learning Maps (secondary) */}
+              {maps.length > 0 && (
+                <div>
+                  <h3 className="text-xs font-bold text-(--color-text-secondary) uppercase tracking-wider mb-3">Learning Maps</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    {maps.map((ms) => (
+                      <Card key={ms.learning_map_id} href={`/curriculum/editor?map_id=${ms.learning_map_id}`} padding="p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm font-medium text-(--color-text)">{ms.map_name}</span>
+                        </div>
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className="flex-1 bg-(--color-page) rounded-full h-1.5">
+                            <div className="bg-(--color-success) h-1.5 rounded-full" style={{ width: `${Math.round(ms.progress_pct * 100)}%` }} />
+                          </div>
+                          <span className="text-xs text-(--color-text-secondary)">{Math.round(ms.progress_pct * 100)}%</span>
+                        </div>
+                        <span className="text-xs text-(--color-text-secondary)">{ms.nodes.length} nodes</span>
+                      </Card>
+                    ))}
                   </div>
-                  <span className="text-xs text-(--color-text-secondary)">{ms.nodes.length} nodes</span>
-                </Card>
-              ))}
+                </div>
+              )}
             </div>
           )
         )
@@ -352,27 +378,32 @@ export default function CurriculumPage() {
       {proposal && !approved && (
         <Card padding="p-6" className="mt-4">
           <div className="bg-(--color-success-light) border border-(--color-success)/30 rounded-[6px] px-4 py-2 mb-4 text-sm text-(--color-success)">
-            Curriculum generated! Review the proposal below.
+            {proposal.id ? "Annual curriculum generated! Review and approve to create all 36 weeks." : "Curriculum generated! Review the proposal below."}
           </div>
           <h2 className="text-sm font-semibold text-(--color-text) mb-2">
-            {proposal.source_material || proposal.material_name}
+            {proposal.subject || proposal.source_material || proposal.material_name || selectedSubject?.s}
           </h2>
-          <p className="text-xs text-(--color-text-secondary) mb-4">{proposal.nodes?.length || 0} nodes &middot; {proposal.edges?.length || 0} edges</p>
+          <p className="text-xs text-(--color-text-secondary) mb-4">
+            {proposal.id
+              ? `Status: ${proposal.status} · Approving will create a full year of activities.`
+              : `${proposal.nodes?.length || 0} nodes · ${proposal.edges?.length || 0} edges`}
+          </p>
 
-          {/* Node preview */}
-          <div className="space-y-1 mb-4 max-h-64 overflow-y-auto">
-            {(proposal.nodes || []).map((n: any, i: number) => (
-              <div key={i} className="flex items-center gap-2 px-3 py-1.5 bg-(--color-page) rounded-[6px]">
-                <span className="text-[9px] font-bold uppercase text-(--color-text-secondary) w-16">{n.node_type}</span>
-                <span className="text-xs text-(--color-text)">{n.title}</span>
-                {n.description && <span className="text-[10px] text-(--color-text-secondary) truncate">{n.description}</span>}
-              </div>
-            ))}
-          </div>
+          {/* Node preview for map proposals */}
+          {proposal.nodes && (
+            <div className="space-y-1 mb-4 max-h-64 overflow-y-auto">
+              {(proposal.nodes || []).map((n: any, i: number) => (
+                <div key={i} className="flex items-center gap-2 px-3 py-1.5 bg-(--color-page) rounded-[6px]">
+                  <span className="text-[9px] font-bold uppercase text-(--color-text-secondary) w-16">{n.node_type}</span>
+                  <span className="text-xs text-(--color-text)">{n.title}</span>
+                </div>
+              ))}
+            </div>
+          )}
 
           <div className="flex gap-2">
             <Button onClick={approveProposal} disabled={generating} variant="success" size="lg">
-              {generating ? "Creating..." : "Approve & Create Map"}
+              {generating ? "Creating..." : proposal.id ? "Approve & Create Year Plan" : "Approve & Create Map"}
             </Button>
             <Button onClick={() => { setProposal(null); setSelectedSubject(null); }} variant="secondary" size="sm">
               Regenerate
@@ -393,7 +424,11 @@ export default function CurriculumPage() {
             {proposal?.material_name || selectedSubject?.s || "Your curriculum"} with {proposal?.nodes?.length || 0} nodes is now active for {selectedChild.first_name}.
           </p>
           <div className="flex gap-2 justify-center">
-            <a href="/maps" className="px-5 py-2 text-sm font-medium bg-(--color-accent) text-white rounded-[6px] hover:bg-(--color-accent-hover)">View Map</a>
+            {proposal?.id ? (
+              <a href={`/curriculum/year?id=${proposal.id}`} className="px-5 py-2 text-sm font-medium bg-(--color-accent) text-white rounded-[6px] hover:bg-(--color-accent-hover)">View Year Plan</a>
+            ) : (
+              <a href="/maps" className="px-5 py-2 text-sm font-medium bg-(--color-accent) text-white rounded-[6px] hover:bg-(--color-accent-hover)">View Map</a>
+            )}
             <Button onClick={() => { resetBuild(); setApproved(false); }} variant="secondary" size="sm">
               Build Another
             </Button>

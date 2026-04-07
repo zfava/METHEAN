@@ -892,6 +892,22 @@ async def get_hours_breakdown(
                 subj_name = "General"
             by_subject[subj_name] = by_subject.get(subj_name, 0) + state.time_spent_minutes / 60
 
+    # Add reading log hours
+    try:
+        from app.models.evidence import ReadingLogEntry
+        reading_result = await db.execute(
+            select(func.coalesce(func.sum(ReadingLogEntry.minutes_spent), 0)).where(
+                ReadingLogEntry.household_id == household_id,
+                ReadingLogEntry.child_id == child_id,
+            )
+        )
+        reading_minutes = reading_result.scalar() or 0
+        total_minutes += reading_minutes
+        if reading_minutes > 0:
+            by_subject["Reading (books)"] = round(reading_minutes / 60, 1)
+    except Exception:
+        pass  # ReadingLogEntry table may not exist yet
+
     return {
         "total_hours": round(total_minutes / 60, 1),
         "by_subject": {k: round(v, 1) for k, v in sorted(by_subject.items())},

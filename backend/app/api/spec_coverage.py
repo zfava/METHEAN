@@ -306,6 +306,57 @@ async def update_child_preferences(
     return {"child_id": str(child_id), "daily_duration_minutes": prefs.daily_duration_minutes}
 
 
+@router.get("/children/{child_id}/theme")
+async def get_child_theme(
+    child_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Get child's personalization theme."""
+    child = await _get_child_or_404(db, child_id, user.household_id)
+    result = await db.execute(
+        select(ChildPreferences).where(ChildPreferences.child_id == child_id)
+    )
+    prefs = result.scalar_one_or_none()
+    theme = (prefs.preferred_schedule or {}).get("theme", {}) if prefs else {}
+    return {
+        "background": theme.get("background", "plain"),
+        "color_accent": theme.get("color_accent", "blue"),
+        "font_size": theme.get("font_size", "normal"),
+        "avatar": theme.get("avatar", "owl"),
+    }
+
+
+@router.put("/children/{child_id}/theme")
+async def update_child_theme(
+    child_id: uuid.UUID,
+    body: dict,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Update child's personalization theme."""
+    child = await _get_child_or_404(db, child_id, user.household_id)
+    result = await db.execute(
+        select(ChildPreferences).where(ChildPreferences.child_id == child_id)
+    )
+    prefs = result.scalar_one_or_none()
+    if not prefs:
+        prefs = ChildPreferences(child_id=child_id, household_id=user.household_id)
+        db.add(prefs)
+    schedule = dict(prefs.preferred_schedule or {})
+    schedule["theme"] = {
+        "background": body.get("background", "plain"),
+        "color_accent": body.get("color_accent", "blue"),
+        "font_size": body.get("font_size", "normal"),
+        "avatar": body.get("avatar", "owl"),
+    }
+    prefs.preferred_schedule = schedule
+    from sqlalchemy.orm.attributes import flag_modified
+    flag_modified(prefs, "preferred_schedule")
+    await db.flush()
+    return schedule["theme"]
+
+
 # ══════════════════════════════════════════════════
 # Today's Activities
 # ══════════════════════════════════════════════════

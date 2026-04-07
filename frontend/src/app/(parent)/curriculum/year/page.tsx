@@ -29,6 +29,7 @@ export default function YearViewPage() {
   const { selectedChild } = useChild();
 
   const [curriculum, setCurriculum] = useState<any>(null);
+  const [allCurricula, setAllCurricula] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [expandedWeek, setExpandedWeek] = useState<number | null>(null);
   const [weekDetail, setWeekDetail] = useState<any>(null);
@@ -40,8 +41,12 @@ export default function YearViewPage() {
       annualCurriculum.detail(curriculumId)
         .then(setCurriculum)
         .finally(() => setLoading(false));
+    } else if (selectedChild) {
+      annualCurriculum.list(selectedChild.id)
+        .then(setAllCurricula)
+        .finally(() => setLoading(false));
     }
-  }, [curriculumId]);
+  }, [curriculumId, selectedChild]);
 
   async function toggleWeek(weekNumber: number) {
     if (expandedWeek === weekNumber) {
@@ -78,6 +83,39 @@ export default function YearViewPage() {
   }
 
   if (loading) return <div className="max-w-4xl"><LoadingSkeleton variant="list" count={8} /></div>;
+
+  // No ID: show curriculum picker
+  if (!curriculumId) {
+    return (
+      <div className="max-w-4xl">
+        <PageHeader title="Year Plan" subtitle="Select a curriculum to view." />
+        {allCurricula.length === 0 ? (
+          <Card className="text-center py-12">
+            <p className="text-sm text-(--color-text-secondary)">No annual curricula yet.</p>
+            <p className="text-xs text-(--color-text-tertiary) mt-1">Build one from the Curriculum page.</p>
+          </Card>
+        ) : (
+          <div className="space-y-3">
+            {allCurricula.map((c: any) => (
+              <Card key={c.id} href={`/curriculum/year?id=${c.id}`}>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <span className="text-sm font-medium text-(--color-text)">{c.subject_name}</span>
+                    <span className="text-xs text-(--color-text-tertiary) ml-2">{c.academic_year}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <StatusBadge status={c.status} />
+                    <span className="text-xs text-(--color-text-tertiary)">{c.total_weeks} weeks</span>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
   if (!curriculum) return <div className="text-sm text-(--color-text-secondary)">Curriculum not found.</div>;
 
   const weeks = curriculum.scope_sequence?.weeks || [];

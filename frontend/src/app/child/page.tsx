@@ -58,8 +58,20 @@ export default function ChildPage() {
   const [completionData, setCompletionData] = useState<{ mastery?: string; prevMastery?: string }>({});
   const startTimeRef = useRef<number>(0);
 
+  // Theme
+  const [theme, setTheme] = useState({ background: "plain", color_accent: "blue", font_size: "normal", avatar: "owl" });
+  const [showSettings, setShowSettings] = useState(false);
+
   useEffect(() => { init(); }, []);
-  useEffect(() => { if (selectedId) loadToday(); }, [selectedId]);
+  useEffect(() => {
+    if (selectedId) {
+      loadToday();
+      fetch(`${API}/children/${selectedId}/theme`, { credentials: "include" })
+        .then((r) => r.ok ? r.json() : {})
+        .then((t) => setTheme({ background: t.background || "plain", color_accent: t.color_accent || "blue", font_size: t.font_size || "normal", avatar: t.avatar || "owl" }))
+        .catch(() => {});
+    }
+  }, [selectedId]);
 
   async function init() {
     try {
@@ -133,6 +145,33 @@ export default function ChildPage() {
     }
   }
 
+  async function saveTheme(updates: Partial<typeof theme>) {
+    const newTheme = { ...theme, ...updates };
+    setTheme(newTheme);
+    const csrf = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/)?.[1];
+    fetch(`${API}/children/${selectedId}/theme`, {
+      method: "PUT", credentials: "include",
+      headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": decodeURIComponent(csrf) } : {}) },
+      body: JSON.stringify(newTheme),
+    }).catch(() => {});
+  }
+
+  const bgStyles: Record<string, React.CSSProperties> = {
+    plain: { background: "#FDF6E3" },
+    meadow: { background: "linear-gradient(180deg, #E8F5E9 0%, #C8E6C9 100%)" },
+    ocean: { background: "linear-gradient(180deg, #E3F2FD 0%, #BBDEFB 100%)" },
+    forest: { background: "linear-gradient(180deg, #E8F0E4 0%, #C5D9BA 100%)" },
+    space: { background: "linear-gradient(180deg, #1A1A2E 0%, #16213E 100%)", color: "#E0E0E0" },
+    desert: { background: "linear-gradient(180deg, #FFF3E0 0%, #FFE0B2 100%)" },
+    mountains: { background: "linear-gradient(180deg, #ECEFF1 0%, #CFD8DC 100%)" },
+  };
+
+  const avatarEmoji: Record<string, string> = {
+    bear: "🐻", owl: "🦉", fox: "🦊", rabbit: "🐰", deer: "🦌", eagle: "🦅", wolf: "🐺",
+  };
+
+  const fontSizeClass = theme.font_size === "large" ? "text-lg" : theme.font_size === "extra-large" ? "text-xl" : "";
+
   function goNext() {
     setActiveActivity(null);
     setAttemptId("");
@@ -143,7 +182,7 @@ export default function ChildPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-(--color-warning-light)/30 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center" style={{ background: "#FDF6E3" }}>
         <div className="text-base text-(--color-text-tertiary)">Loading...</div>
       </div>
     );
@@ -157,7 +196,7 @@ export default function ChildPage() {
   // ── COMPLETION STATE ──
   if (activeActivity && completed) {
     return (
-      <div className="min-h-screen bg-(--color-warning-light)/30">
+      <div className={`min-h-screen ${fontSizeClass}`} style={bgStyles[theme.background] || bgStyles.plain}>
         <div className="max-w-xl mx-auto px-6 py-12">
           <CompletionState
             activityTitle={activeActivity.title}
@@ -176,7 +215,7 @@ export default function ChildPage() {
     const actType = activeActivity.activity_type;
 
     return (
-      <div className="min-h-screen bg-(--color-warning-light)/30">
+      <div className={`min-h-screen ${fontSizeClass}`} style={bgStyles[theme.background] || bgStyles.plain}>
         {/* Top bar */}
         <header className="bg-(--color-surface)/80 backdrop-blur border-b border-(--color-border)/50 px-6 py-3">
           <div className="max-w-2xl mx-auto flex items-center justify-between">
@@ -213,29 +252,76 @@ export default function ChildPage() {
 
   // ── DAILY OVERVIEW ──
   return (
-    <div className="min-h-screen bg-(--color-warning-light)/30">
+    <div className={`min-h-screen ${fontSizeClass}`} style={bgStyles[theme.background] || bgStyles.plain}>
       {/* Header */}
       <header className="bg-(--color-surface) border-b border-(--color-border) px-6 py-5">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <MetheanLogo markSize={24} wordmarkHeight={12} color="#0F1B2D" gap={8} />
-          {children.length > 1 && (
-            <select
-              value={selectedId}
-              onChange={(e) => setSelectedId(e.target.value)}
-              className="text-sm border border-(--color-border) rounded-[10px] px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-(--color-accent)/30"
-            >
-              {children.map((c) => (
-                <option key={c.id} value={c.id}>{c.first_name}</option>
-              ))}
-            </select>
-          )}
+          <div className="flex items-center gap-3">
+            {children.length > 1 && (
+              <select
+                value={selectedId}
+                onChange={(e) => setSelectedId(e.target.value)}
+                className="text-sm border border-(--color-border) rounded-[10px] px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-(--color-accent)/30"
+              >
+                {children.map((c) => (
+                  <option key={c.id} value={c.id}>{c.first_name}</option>
+                ))}
+              </select>
+            )}
+            <button onClick={() => setShowSettings(!showSettings)} className="p-1.5 text-(--color-text-tertiary) hover:text-(--color-text) transition-colors">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </button>
+          </div>
         </div>
       </header>
+
+      {/* Settings panel */}
+      {showSettings && (
+        <div className="max-w-2xl mx-auto px-6 pt-4">
+          <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-5 mb-4">
+            <h3 className="text-sm font-semibold text-(--color-text) mb-4">My Settings</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs text-(--color-text-secondary) mb-2 block">Background</label>
+                <div className="flex gap-2 flex-wrap">
+                  {(["plain", "meadow", "ocean", "forest", "space", "desert", "mountains"] as const).map((bg) => (
+                    <button key={bg} onClick={() => saveTheme({ background: bg })}
+                      className={`w-14 h-10 rounded-xl border-2 text-[9px] font-medium capitalize transition-all ${theme.background === bg ? "border-(--color-accent) ring-1 ring-(--color-accent)/20" : "border-(--color-border)"}`}
+                      style={bgStyles[bg]}>{bg}</button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="text-xs text-(--color-text-secondary) mb-2 block">Avatar</label>
+                <div className="flex gap-2">
+                  {(["bear", "owl", "fox", "rabbit", "deer", "eagle", "wolf"] as const).map((a) => (
+                    <button key={a} onClick={() => saveTheme({ avatar: a })}
+                      className={`w-10 h-10 rounded-full text-xl border-2 transition-all ${theme.avatar === a ? "border-(--color-accent) ring-1 ring-(--color-accent)/20" : "border-(--color-border)"}`}>{avatarEmoji[a]}</button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="text-xs text-(--color-text-secondary) mb-2 block">Text Size</label>
+                <div className="flex gap-2">
+                  {([["normal", "Normal"], ["large", "Large"], ["extra-large", "Extra Large"]] as const).map(([val, label]) => (
+                    <button key={val} onClick={() => saveTheme({ font_size: val })}
+                      className={`px-3 py-1.5 text-xs rounded-lg border-2 transition-all ${theme.font_size === val ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)"}`}>{label}</button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="max-w-2xl mx-auto px-6 py-8">
         {/* Greeting */}
         <h2 className="text-2xl font-semibold text-(--color-text) mb-1">
-          {greeting(childName)}
+          {avatarEmoji[theme.avatar] || "🦉"} {greeting(childName)}
         </h2>
         <p className="text-base text-(--color-text-secondary) mb-2">
           {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
