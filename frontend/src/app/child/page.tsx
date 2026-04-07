@@ -20,6 +20,7 @@ interface TodayActivity {
   status: string;
   estimated_minutes: number | null;
   node_id: string | null;
+  error?: string;
 }
 
 interface ChildInfo {
@@ -49,6 +50,7 @@ export default function ChildPage() {
   const [selectedId, setSelectedId] = useState("");
   const [activities, setActivities] = useState<TodayActivity[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   // Learning state
   const [activeActivity, setActiveActivity] = useState<TodayActivity | null>(null);
@@ -64,6 +66,10 @@ export default function ChildPage() {
 
   useEffect(() => { init(); }, []);
   useEffect(() => {
+    const c = children.find((ch) => ch.id === selectedId);
+    document.title = c ? `${c.first_name}'s Learning | METHEAN` : "Learning | METHEAN";
+  }, [selectedId, children]);
+  useEffect(() => {
     if (selectedId) {
       loadToday();
       fetch(`${API}/children/${selectedId}/theme`, { credentials: "include" })
@@ -74,26 +80,34 @@ export default function ChildPage() {
   }, [selectedId]);
 
   async function init() {
+    setLoading(true);
+    setError("");
     try {
       await auth.me();
       const resp = await fetch(`${API}/children`, { credentials: "include" });
-      if (resp.ok) {
-        const data: ChildInfo[] = await resp.json();
-        setChildren(data);
-        if (data.length > 0) setSelectedId(data[0].id);
+      if (!resp.ok) throw new Error("Couldn't load your learning page.");
+      const data: ChildInfo[] = await resp.json();
+      setChildren(Array.isArray(data) ? data : []);
+      if (data.length > 0) setSelectedId(data[0].id);
+    } catch (err: any) {
+      if (err?.message?.includes("auth") || err?.status === 401) {
+        window.location.href = "/auth";
+        return;
       }
-    } catch {
-      window.location.href = "/auth";
+      setError(err?.message || "Something went wrong loading your learning page.");
     } finally {
       setLoading(false);
     }
   }
 
   async function loadToday() {
+    setError("");
     try {
       const resp = await fetch(`${API}/children/${selectedId}/today`, { credentials: "include" });
       if (resp.ok) setActivities(await resp.json());
-    } catch {}
+    } catch (err: any) {
+      setError(err?.message || "Couldn't load today's activities. Try again in a moment.");
+    }
   }
 
   async function startActivity(act: TodayActivity) {
@@ -110,7 +124,9 @@ export default function ChildPage() {
       setCompleted(false);
       setCompletionData({});
     } catch (err: any) {
-      alert(err.detail || "Could not start activity");
+      setActivities((prev) =>
+        prev.map((a) => a.id === act.id ? { ...a, error: "Couldn't start this activity. Try again." } : a)
+      );
     }
   }
 
@@ -139,9 +155,8 @@ export default function ChildPage() {
         prevMastery: result.previous_mastery?.replace(/_/g, " "),
       });
       setCompleted(true);
-    } catch {
-      setCompleted(true);
-      setCompletionData({});
+    } catch (err: any) {
+      setError(err?.message || "Couldn't save your work. Don't worry, try submitting again.");
     }
   }
 
@@ -181,9 +196,46 @@ export default function ChildPage() {
   }
 
   if (loading) {
+    const bgStyle = bgStyles[theme.background] || bgStyles.plain;
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: "#FDF6E3" }}>
-        <div className="text-base text-(--color-text-tertiary)">Loading...</div>
+      <div className="min-h-screen" style={bgStyle}>
+        <header className="bg-(--color-surface) border-b border-(--color-border) px-6 py-4">
+          <div className="max-w-2xl mx-auto flex justify-between items-center">
+            <MetheanLogo markSize={24} wordmarkHeight={12} color="#0F1B2D" gap={8} />
+            <div className="w-24 h-8 rounded-lg bg-(--color-border) animate-pulse" />
+          </div>
+        </header>
+        <div className="max-w-2xl mx-auto px-6 py-8">
+          <div className="h-8 w-48 rounded bg-(--color-border) animate-pulse mb-2" />
+          <div className="h-5 w-64 rounded bg-(--color-border) animate-pulse mb-6" />
+          <div className="h-2 rounded-full bg-(--color-border) animate-pulse mb-8" />
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-(--color-surface) border border-(--color-border) rounded-2xl p-5 mb-3">
+              <div className="h-5 w-40 rounded bg-(--color-border) animate-pulse mb-3" />
+              <div className="flex gap-2">
+                <div className="h-4 w-16 rounded bg-(--color-border) animate-pulse" />
+                <div className="h-4 w-12 rounded bg-(--color-border) animate-pulse" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    const bgStyle = bgStyles[theme.background] || bgStyles.plain;
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={bgStyle}>
+        <div className="text-center px-6 max-w-sm">
+          <div className="text-5xl mb-4">🌧️</div>
+          <h2 className="text-xl font-semibold text-(--color-text) mb-2">Oops! Something went wrong</h2>
+          <p className="text-sm text-(--color-text-secondary) mb-6">{error}</p>
+          <button
+            onClick={() => { setError(""); init(); }}
+            className="px-6 py-3 text-sm font-semibold text-white bg-(--color-accent) rounded-2xl hover:opacity-90 transition-opacity"
+          >Try Again</button>
+        </div>
       </div>
     );
   }
@@ -349,11 +401,14 @@ export default function ChildPage() {
 
         {/* Activities */}
         {activities.length === 0 ? (
-          <div className="bg-(--color-surface) rounded-2xl shadow-sm border border-(--color-border) py-16 text-center">
+          <div className="text-center py-16">
+            <div className="text-5xl mb-4">{avatarEmoji[theme.avatar] || "🦉"}</div>
             <h3 className="text-lg font-semibold text-(--color-text) mb-2">
               No learning scheduled for today!
             </h3>
-            <p className="text-base text-(--color-text-tertiary)">Enjoy your free time.</p>
+            <p className="text-sm text-(--color-text-secondary)">
+              Enjoy your free time, {childName}. Your next activities will show up here when they're ready.
+            </p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -380,6 +435,9 @@ export default function ChildPage() {
                       {act.status === "in_progress" ? "Continue" : "Start"}
                     </button>
                   </div>
+                  {act.error && (
+                    <p className="text-xs text-(--color-danger) mt-2">{act.error}</p>
+                  )}
                 </div>
               );
             })}
