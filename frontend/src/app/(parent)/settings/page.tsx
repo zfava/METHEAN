@@ -1,0 +1,161 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { auth, account, dataExport, type User } from "@/lib/api";
+import PageHeader from "@/components/ui/PageHeader";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
+import SectionHeader from "@/components/ui/SectionHeader";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
+
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+
+function getCsrf(): string | undefined {
+  if (typeof document === "undefined") return undefined;
+  const m = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);
+  return m ? decodeURIComponent(m[1]) : undefined;
+}
+
+export default function SettingsPage() {
+  useEffect(() => { document.title = "Settings | METHEAN"; }, []);
+
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // Household
+  const [hhName, setHhName] = useState("");
+  const [hhTimezone, setHhTimezone] = useState("America/New_York");
+  const [hhSaved, setHhSaved] = useState(false);
+
+  // Password
+  const [currentPw, setCurrentPw] = useState("");
+  const [newPw, setNewPw] = useState("");
+  const [confirmPw, setConfirmPw] = useState("");
+  const [pwError, setPwError] = useState("");
+  const [pwSuccess, setPwSuccess] = useState(false);
+
+  useEffect(() => {
+    Promise.all([
+      auth.me().then(setUser),
+      fetch(`${API}/household/settings`, { credentials: "include" })
+        .then((r) => r.ok ? r.json() : {})
+        .then((d) => { if (d.name) setHhName(d.name); if (d.timezone) setHhTimezone(d.timezone); }),
+    ]).catch(() => {}).finally(() => setLoading(false));
+  }, []);
+
+  async function saveHousehold() {
+    const csrf = getCsrf();
+    await fetch(`${API}/household/settings`, {
+      method: "PUT", credentials: "include",
+      headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
+      body: JSON.stringify({ name: hhName, timezone: hhTimezone }),
+    });
+    setHhSaved(true);
+    setTimeout(() => setHhSaved(false), 2000);
+  }
+
+  async function changePassword() {
+    setPwError(""); setPwSuccess(false);
+    if (newPw !== confirmPw) { setPwError("Passwords don't match."); return; }
+    if (newPw.length < 8) { setPwError("Password must be at least 8 characters."); return; }
+    try {
+      await account.changePassword(currentPw, newPw);
+      setPwSuccess(true);
+      setCurrentPw(""); setNewPw(""); setConfirmPw("");
+    } catch (err: any) {
+      setPwError(err?.detail || err?.message || "Couldn't change password.");
+    }
+  }
+
+  if (loading) return <div className="max-w-3xl"><PageHeader title="Settings" /><LoadingSkeleton variant="card" count={3} /></div>;
+
+  return (
+    <div className="max-w-3xl">
+      <PageHeader title="Settings" subtitle="Manage your household and account." />
+
+      {/* Household */}
+      <Card className="mb-6">
+        <SectionHeader title="Household" />
+        <div className="mt-3 space-y-3">
+          <div>
+            <label className="block text-xs text-(--color-text-secondary) mb-1">Household name</label>
+            <input value={hhName} onChange={(e) => setHhName(e.target.value)}
+              className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+          </div>
+          <div>
+            <label className="block text-xs text-(--color-text-secondary) mb-1">Timezone</label>
+            <select value={hhTimezone} onChange={(e) => setHhTimezone(e.target.value)}
+              className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)">
+              {["America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles", "America/Anchorage", "Pacific/Honolulu", "UTC"].map((tz) => (
+                <option key={tz} value={tz}>{tz}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="primary" size="sm" onClick={saveHousehold}>Save</Button>
+            {hhSaved && <span className="text-xs text-(--color-success)">Saved</span>}
+          </div>
+        </div>
+      </Card>
+
+      {/* Account */}
+      <Card className="mb-6">
+        <SectionHeader title="Account" />
+        <div className="mt-3 space-y-3">
+          <div>
+            <label className="block text-xs text-(--color-text-secondary) mb-1">Email</label>
+            <input value={user?.email || ""} disabled
+              className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-page) text-(--color-text-tertiary)" />
+            <p className="text-[10px] text-(--color-text-tertiary) mt-0.5">Contact support to change your email.</p>
+          </div>
+          <div>
+            <label className="block text-xs text-(--color-text-secondary) mb-1">Display name</label>
+            <input value={user?.display_name || ""} disabled
+              className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-page) text-(--color-text-tertiary)" />
+          </div>
+        </div>
+      </Card>
+
+      {/* Password */}
+      <Card className="mb-6">
+        <SectionHeader title="Change Password" />
+        <div className="mt-3 space-y-3">
+          <input type="password" value={currentPw} onChange={(e) => setCurrentPw(e.target.value)} placeholder="Current password"
+            className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+          <input type="password" value={newPw} onChange={(e) => setNewPw(e.target.value)} placeholder="New password (min 8 characters)"
+            className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+          <input type="password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)} placeholder="Confirm new password"
+            className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+          {pwError && <p className="text-xs text-(--color-danger)">{pwError}</p>}
+          {pwSuccess && <p className="text-xs text-(--color-success)">Password changed successfully.</p>}
+          <Button variant="primary" size="sm" onClick={changePassword} disabled={!currentPw || !newPw || !confirmPw}>
+            Change Password
+          </Button>
+        </div>
+      </Card>
+
+      {/* Data */}
+      <Card className="mb-6">
+        <SectionHeader title="Your Data" />
+        <p className="text-xs text-(--color-text-secondary) mt-2 mb-3">Your data belongs to you. Export it anytime.</p>
+        <div className="flex flex-wrap gap-2">
+          <a href={dataExport.download()} target="_blank" rel="noopener"
+            className="px-3 py-1.5 text-xs font-medium border border-(--color-border) rounded-[6px] text-(--color-text-secondary) hover:bg-(--color-page) transition-colors">
+            Export All Data (ZIP)
+          </a>
+        </div>
+      </Card>
+
+      {/* About */}
+      <Card>
+        <SectionHeader title="About" />
+        <div className="mt-2 text-xs text-(--color-text-tertiary) space-y-1">
+          <p>METHEAN v0.1.0</p>
+          <p>Built by Spartan Solutions</p>
+          <a href="/" className="text-(--color-accent) hover:underline">Visit landing page</a>
+        </div>
+      </Card>
+    </div>
+  );
+}

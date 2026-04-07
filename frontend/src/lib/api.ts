@@ -307,6 +307,22 @@ export const dataExport = {
   download: () => `/api/v1/household/export`,
 };
 
+// ── Manual Activities + Time Log ──
+export const activities = {
+  create: (data: { child_id: string; title: string; activity_type?: string; scheduled_date: string; estimated_minutes?: number; description?: string; subject_area?: string }) =>
+    request<any>("/activities", { method: "POST", body: JSON.stringify(data) }),
+};
+
+export const timeLog = {
+  create: (childId: string, data: { date: string; minutes: number; subject_area: string; description?: string }) =>
+    request<any>(`/children/${childId}/time-log`, { method: "POST", body: JSON.stringify(data) }),
+};
+
+export const account = {
+  changePassword: (currentPassword: string, newPassword: string) =>
+    request<{ success: boolean }>("/auth/password", { method: "PUT", body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }) }),
+};
+
 // ── Resources ──
 export const resources = {
   list: (params?: { resource_type?: string; subject_area?: string; status?: string }) => {

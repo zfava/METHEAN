@@ -625,6 +625,132 @@ async def reschedule_activity(
     return {"activity_id": str(activity_id), "scheduled_date": str(new_date)}
 
 
+class ManualActivityCreate(BaseModel):
+    child_id: uuid.UUID
+    title: str
+    activity_type: str = "lesson"
+    scheduled_date: date
+    estimated_minutes: int = 30
+    description: str | None = None
+    subject_area: str | None = None
+    node_id: uuid.UUID | None = None
+
+
+@router.post("/activities", status_code=201)
+async def create_manual_activity(
+    body: ManualActivityCreate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Create a manually scheduled activity (not AI-generated)."""
+    from app.models.identity import Child
+    child_r = await db.execute(select(Child).where(Child.id == body.child_id, Child.household_id == user.household_id))
+    child = child_r.scalar_one_or_none()
+    if not child:
+        raise HTTPException(status_code=404, detail="Child not found")
+
+    # Find or create plan for this week
+    week_start = body.scheduled_date - timedelta(days=body.scheduled_date.weekday())
+    week_end = week_start + timedelta(days=4)
+
+    plan_r = await db.execute(
+        select(Plan).where(
+            Plan.child_id == body.child_id,
+            Plan.household_id == user.household_id,
+            Plan.start_date <= body.scheduled_date,
+            Plan.end_date >= body.scheduled_date,
+        ).limit(1)
+    )
+    plan = plan_r.scalar_one_or_none()
+    if not plan:
+        plan = Plan(
+            household_id=user.household_id, child_id=body.child_id,
+            created_by=user.id, name=f"Week of {week_start}",
+            status=PlanStatus.active, start_date=week_start, end_date=week_end,
+        )
+        db.add(plan)
+        await db.flush()
+
+    # Find or create plan_week
+    pw_r = await db.execute(
+        select(PlanWeek).where(PlanWeek.plan_id == plan.id, PlanWeek.start_date <= body.scheduled_date, PlanWeek.end_date >= body.scheduled_date).limit(1)
+    )
+    pw = pw_r.scalar_one_or_none()
+    if not pw:
+        pw = PlanWeek(plan_id=plan.id, household_id=user.household_id, week_number=1, start_date=week_start, end_date=week_end)
+        db.add(pw)
+        await db.flush()
+
+    activity = Activity(
+        plan_week_id=pw.id,
+        household_id=user.household_id,
+        node_id=body.node_id,
+        activity_type=ActivityType(body.activity_type),
+        title=body.title,
+        description=body.description,
+        instructions={"subject_area": body.subject_area} if body.subject_area else {},
+        estimated_minutes=body.estimated_minutes,
+        status=ActivityStatus.scheduled,
+        scheduled_date=body.scheduled_date,
+        governance_approved=True,
+        governance_reviewed_by=user.id,
+        governance_reviewed_at=datetime.now(UTC),
+    )
+    db.add(activity)
+    await db.flush()
+
+    await log_governance_event(
+        db, user.household_id, user.id,
+        GovernanceAction.approve, "activity", activity.id,
+        reason="Manually created by parent",
+        metadata={"source": "manual"},
+    )
+    await db.commit()
+    return {"id": str(activity.id), "title": activity.title, "scheduled_date": str(body.scheduled_date)}
+
+
+class TimeLogCreate(BaseModel):
+    date_val: date = Field(alias="date")
+    minutes: int = Field(ge=1, le=1440)
+    subject_area: str
+    description: str | None = None
+
+    model_config = {"populate_by_name": True}
+
+
+@router.post("/children/{child_id}/time-log", status_code=201)
+async def log_manual_time(
+    child_id: uuid.UUID,
+    body: TimeLogCreate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Log manual learning time for compliance tracking."""
+    from app.models.identity import Child
+    from app.models.evidence import ReadingLogEntry
+    child_r = await db.execute(select(Child).where(Child.id == child_id, Child.household_id == user.household_id))
+    child = child_r.scalar_one_or_none()
+    if not child:
+        raise HTTPException(status_code=404, detail="Child not found")
+
+    entry = ReadingLogEntry(
+        household_id=user.household_id,
+        child_id=child_id,
+        created_by=user.id,
+        book_title=body.subject_area,
+        book_author=body.description or "",
+        genre="manual_time",
+        subject_area=body.subject_area,
+        status="completed",
+        minutes_spent=body.minutes,
+        started_date=body.date_val,
+        completed_date=body.date_val,
+    )
+    db.add(entry)
+    await db.commit()
+    return {"id": str(entry.id), "minutes": body.minutes, "subject": body.subject_area}
+
+
 @router.put("/plans/{plan_id}/lock")
 async def lock_plan(
     plan_id: uuid.UUID,

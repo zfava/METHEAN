@@ -19,6 +19,7 @@ from app.core.security import (
 )
 from app.models.identity import Household, User
 from app.models.operational import RefreshToken
+from pydantic import BaseModel, Field
 from app.schemas.auth import (
     LoginRequest,
     MessageResponse,
@@ -303,3 +304,22 @@ async def logout(
 @router.get("/me", response_model=UserResponse)
 async def get_me(user: User = Depends(get_current_user)) -> UserResponse:
     return UserResponse.model_validate(user)
+
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str = Field(min_length=8)
+
+
+@router.put("/auth/password")
+async def change_password(
+    body: ChangePasswordRequest,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Change the current user's password."""
+    if not verify_password(body.current_password, user.password_hash):
+        raise HTTPException(status_code=400, detail="Current password is incorrect")
+    user.password_hash = hash_password(body.new_password)
+    await db.commit()
+    return {"success": True}

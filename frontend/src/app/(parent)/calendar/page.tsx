@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { plans, type PlanDetail, type ActivityInPlan } from "@/lib/api";
+import { plans, activities as activitiesApi, type PlanDetail, type ActivityInPlan } from "@/lib/api";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 import { useChild } from "@/lib/ChildContext";
@@ -71,33 +71,40 @@ export default function CalendarPage() {
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [familyView, setFamilyView] = useState(false);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [addTitle, setAddTitle] = useState("");
+  const [addType, setAddType] = useState("lesson");
+  const [addDate, setAddDate] = useState("");
+  const [addMinutes, setAddMinutes] = useState(30);
+  const [addSubject, setAddSubject] = useState("");
+
+  const childColors = ["#4A6FA5", "#2D6A4F", "#6B4C9A", "#C97B2A", "#B5547A", "#3B8C8C"];
 
   useEffect(() => {
-    if (selectedChild) loadWeek();
-  }, [selectedChild, weekStart]);
+    if (selectedChild || familyView) loadWeek();
+  }, [selectedChild, weekStart, familyView]);
 
   async function loadWeek() {
     setLoading(true);
     setError("");
     try {
-      const allPlans = await plans.list(selectedChild!.id);
-      setPlanList(allPlans);
-
-      // Find plan covering this week
       const ws = formatDate(weekStart);
       const we = formatDate(addDays(weekStart, 4));
-      let weekActivities: ActivityInPlan[] = [];
+      let weekActivities: (ActivityInPlan & { childName?: string; childColor?: string })[] = [];
 
-      for (const p of allPlans) {
-        if (p.start_date && p.end_date && p.start_date <= we && p.end_date >= ws) {
-          const detail = await plans.detail(p.id);
-          weekActivities = [
-            ...weekActivities,
-            ...(detail.activities || []).filter((a) => {
-              if (!a.scheduled_date) return false;
-              return a.scheduled_date >= ws && a.scheduled_date <= we;
-            }),
-          ];
+      const targets = familyView ? children : (selectedChild ? [selectedChild] : []);
+      for (let ci = 0; ci < targets.length; ci++) {
+        const c = targets[ci];
+        const childPlans = await plans.list(c.id);
+        for (const p of childPlans) {
+          if (p.start_date && p.end_date && p.start_date <= we && p.end_date >= ws) {
+            const detail = await plans.detail(p.id);
+            const tagged = (detail.activities || [])
+              .filter((a) => a.scheduled_date && a.scheduled_date >= ws && a.scheduled_date <= we)
+              .map((a) => ({ ...a, childName: familyView ? c.first_name : undefined, childColor: familyView ? childColors[ci % childColors.length] : undefined }));
+            weekActivities = [...weekActivities, ...tagged];
+          }
         }
       }
 
@@ -129,7 +136,7 @@ export default function CalendarPage() {
     <div className="max-w-6xl">
       <PageHeader
         title="Weekly Calendar"
-        subtitle={selectedChild.first_name + "'s schedule"}
+        subtitle={familyView ? "Family schedule" : selectedChild.first_name + "'s schedule"}
         actions={
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" onClick={prevWeek}>&larr;</Button>
@@ -139,7 +146,55 @@ export default function CalendarPage() {
         }
       />
 
-      <div className="text-sm font-medium text-(--color-text) mb-4">{weekLabel}</div>
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-sm font-medium text-(--color-text)">{weekLabel}</span>
+        <div className="flex items-center gap-2">
+          {children.length > 1 && (
+            <button onClick={() => setFamilyView(!familyView)}
+              className={cn("px-3 py-1.5 text-xs rounded-[6px] border transition-colors",
+                familyView ? "border-(--color-accent) bg-(--color-accent-light) text-(--color-accent)" : "border-(--color-border) text-(--color-text-secondary)")}>
+              {familyView ? "👨‍👩‍👧‍👦 Family" : "Single Child"}
+            </button>
+          )}
+          <Button variant="secondary" size="sm" onClick={() => { setShowAddForm(!showAddForm); setAddDate(formatDate(weekStart)); }}>
+            {showAddForm ? "Cancel" : "+ Activity"}
+          </Button>
+        </div>
+      </div>
+
+      {/* Add Activity Form */}
+      {showAddForm && (
+        <Card className="mb-4" padding="p-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
+            <input value={addTitle} onChange={(e) => setAddTitle(e.target.value)} placeholder="Activity title *"
+              className="sm:col-span-2 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+            <select value={addType} onChange={(e) => setAddType(e.target.value)}
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)">
+              <option value="lesson">Lesson</option><option value="practice">Practice</option>
+              <option value="project">Project</option><option value="field_trip">Field Trip</option>
+              <option value="review">Review</option><option value="assessment">Assessment</option>
+            </select>
+            <input type="date" value={addDate} onChange={(e) => setAddDate(e.target.value)}
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+            <input type="number" value={addMinutes} onChange={(e) => setAddMinutes(Number(e.target.value))} placeholder="Minutes" min={1}
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+            <input value={addSubject} onChange={(e) => setAddSubject(e.target.value)} placeholder="Subject (optional)"
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+          </div>
+          <Button variant="primary" size="sm" disabled={!addTitle.trim() || !addDate} onClick={async () => {
+            try {
+              await activitiesApi.create({
+                child_id: selectedChild!.id,
+                title: addTitle, activity_type: addType,
+                scheduled_date: addDate, estimated_minutes: addMinutes,
+                subject_area: addSubject || undefined,
+              });
+              setShowAddForm(false); setAddTitle(""); setAddSubject("");
+              loadWeek();
+            } catch (err: any) { setError(err?.detail || "Couldn't create activity."); }
+          }}>Save Activity</Button>
+        </Card>
+      )}
 
       {error && (
         <Card className="border-l-4 border-(--color-danger) mb-4">
@@ -189,6 +244,12 @@ export default function CalendarPage() {
                             )}
                           >
                             <div className="flex items-start justify-between gap-1">
+                              {(act as any).childName && (
+                                <div className="flex items-center gap-1 mb-0.5">
+                                  <span className="w-2 h-2 rounded-full shrink-0" style={{ background: (act as any).childColor }} />
+                                  <span className="text-[9px] text-(--color-text-tertiary)">{(act as any).childName}</span>
+                                </div>
+                              )}
                               <span className={cn("text-xs font-medium leading-tight", done ? "text-(--color-text-tertiary) line-through" : "text-(--color-text)")}>
                                 {act.title}
                               </span>

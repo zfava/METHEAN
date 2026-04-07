@@ -179,6 +179,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="px-4 py-4 border-t border-white/5 space-y-2">
+        {navItem("/settings", "Settings", true)}
         <Link href="/child" className="block px-1 py-1 text-xs text-white/25 hover:text-white/50 transition-colors duration-150">Child View</Link>
         {user && (
           <div className="flex items-center justify-between px-1">
