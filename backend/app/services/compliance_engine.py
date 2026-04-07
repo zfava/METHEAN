@@ -892,15 +892,18 @@ async def get_hours_breakdown(
                 subj_name = "General"
             by_subject[subj_name] = by_subject.get(subj_name, 0) + state.time_spent_minutes / 60
 
-    # Add reading log hours
+    # Also include reading log time
     try:
         from app.models.evidence import ReadingLogEntry
-        reading_result = await db.execute(
-            select(func.coalesce(func.sum(ReadingLogEntry.minutes_spent), 0)).where(
-                ReadingLogEntry.household_id == household_id,
-                ReadingLogEntry.child_id == child_id,
-            )
+        reading_query = select(func.coalesce(func.sum(ReadingLogEntry.minutes_spent), 0)).where(
+            ReadingLogEntry.household_id == household_id,
+            ReadingLogEntry.child_id == child_id,
         )
+        if start_date:
+            reading_query = reading_query.where(ReadingLogEntry.created_at >= start_date)
+        if end_date:
+            reading_query = reading_query.where(ReadingLogEntry.created_at <= end_date)
+        reading_result = await db.execute(reading_query)
         reading_minutes = reading_result.scalar() or 0
         total_minutes += reading_minutes
         if reading_minutes > 0:

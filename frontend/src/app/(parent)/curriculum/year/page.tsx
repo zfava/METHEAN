@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { annualCurriculum } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
@@ -35,6 +35,20 @@ export default function YearViewPage() {
   const [weekDetail, setWeekDetail] = useState<any>(null);
   const [weekNotes, setWeekNotes] = useState("");
   const [savingNotes, setSavingNotes] = useState(false);
+  const [notesSaved, setNotesSaved] = useState(false);
+  const notesTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const debouncedSaveNotes = useCallback((notes: string, weekNum: number) => {
+    if (notesTimerRef.current) clearTimeout(notesTimerRef.current);
+    setNotesSaved(false);
+    notesTimerRef.current = setTimeout(async () => {
+      setSavingNotes(true);
+      await annualCurriculum.updateWeekNotes(curriculumId, weekNum, notes);
+      setSavingNotes(false);
+      setNotesSaved(true);
+      setTimeout(() => setNotesSaved(false), 2000);
+    }, 2000);
+  }, [curriculumId]);
 
   useEffect(() => {
     if (curriculumId) {
@@ -263,11 +277,14 @@ export default function YearViewPage() {
                     <h4 className="text-xs font-bold text-(--color-text-secondary) uppercase tracking-wider mb-1">Parent Notes</h4>
                     <textarea
                       value={weekNotes}
-                      onChange={(e) => setWeekNotes(e.target.value)}
+                      onChange={(e) => { setWeekNotes(e.target.value); debouncedSaveNotes(e.target.value, wn); }}
+                      onBlur={() => { if (weekNotes && expandedWeek) saveNotes(); }}
                       placeholder={status === "completed" ? "What happened this week? Any observations?" : "Any special plans or adjustments?"}
                       className="w-full h-20 px-3 py-2 text-xs border border-(--color-border) rounded-[6px] resize-none bg-(--color-surface) text-(--color-text)"
                     />
-                    <div className="flex gap-2 mt-1.5">
+                    <div className="flex items-center gap-2 mt-1.5">
+                      {notesSaved && <span className="text-[10px] text-(--color-success)">Saved</span>}
+                      {savingNotes && <span className="text-[10px] text-(--color-text-tertiary)">Saving...</span>}
                       <Button size="sm" variant="secondary" onClick={saveNotes} disabled={savingNotes}>
                         {savingNotes ? "Saving..." : "Save Notes"}
                       </Button>

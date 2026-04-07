@@ -149,6 +149,10 @@ export const plans = {
   lock: (planId: string) => request(`/plans/${planId}/lock`, { method: "PUT" }),
   unlock: (planId: string) => request(`/plans/${planId}/unlock`, { method: "PUT" }),
   decisionTrace: (planId: string) => request<DecisionTrace>(`/plans/${planId}/decision-trace`),
+  rescheduleActivity: (activityId: string, newDate: string) =>
+    request<{ activity_id: string; scheduled_date: string }>(`/activities/${activityId}/reschedule`, {
+      method: "PUT", body: JSON.stringify({ new_date: newDate }),
+    }),
 };
 
 // Curriculum

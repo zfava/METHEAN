@@ -549,6 +549,41 @@ async def reject_activity(
     return {"activity_id": str(activity_id), "status": "rejected"}
 
 
+@router.put("/activities/{activity_id}/reschedule")
+async def reschedule_activity(
+    activity_id: uuid.UUID,
+    body: dict,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Move an activity to a different day."""
+    result = await db.execute(
+        select(Activity).where(
+            Activity.id == activity_id,
+            Activity.household_id == user.household_id,
+        )
+    )
+    activity = result.scalar_one_or_none()
+    if not activity:
+        raise HTTPException(status_code=404, detail="Activity not found")
+
+    from datetime import date as date_type
+    old_date = activity.scheduled_date
+    new_date_str = body.get("new_date")
+    if not new_date_str:
+        raise HTTPException(status_code=400, detail="new_date required")
+    new_date = date_type.fromisoformat(new_date_str)
+    activity.scheduled_date = new_date
+
+    await log_governance_event(
+        db, user.household_id, user.id,
+        GovernanceAction.modify, "activity", activity_id,
+        reason=f"Rescheduled from {old_date} to {new_date}",
+    )
+
+    return {"activity_id": str(activity_id), "scheduled_date": str(new_date)}
+
+
 @router.put("/plans/{plan_id}/lock")
 async def lock_plan(
     plan_id: uuid.UUID,

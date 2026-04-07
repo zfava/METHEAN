@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { plans, type PlanDetail, type ActivityInPlan } from "@/lib/api";
+
+const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 import { useChild } from "@/lib/ChildContext";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
@@ -193,14 +195,44 @@ export default function CalendarPage() {
                           {isExpanded && (
                             <div className="mt-1 p-2.5 rounded-[6px] bg-(--color-page) text-[10px] text-(--color-text-secondary)">
                               {act.description && <p className="mb-1">{act.description}</p>}
-                              <div className="flex items-center gap-2">
+                              <div className="flex items-center justify-between">
                                 <StatusBadge status={act.status} />
+                                {!done && (
+                                  <select
+                                    defaultValue=""
+                                    onChange={async (e) => {
+                                      if (!e.target.value) return;
+                                      const targetIdx = parseInt(e.target.value);
+                                      const targetDate = formatDate(addDays(weekStart, targetIdx));
+                                      await plans.rescheduleActivity(act.id, targetDate);
+                                      loadWeek();
+                                    }}
+                                    className="text-[9px] px-1.5 py-0.5 border border-(--color-border) rounded bg-(--color-surface)"
+                                  >
+                                    <option value="">Move to...</option>
+                                    {DAYS.map((d, di) => di !== dayIdx && (
+                                      <option key={d} value={di}>{d}</option>
+                                    ))}
+                                  </select>
+                                )}
                               </div>
                             </div>
                           )}
                         </div>
                       );
                     })}
+
+                    {/* Day total */}
+                    {dayActivities.length > 0 && (
+                      <div className="text-center text-[9px] text-(--color-text-tertiary) pt-2 border-t border-(--color-border)/30 mt-2">
+                        {(() => {
+                          const totalMin = dayActivities.reduce((s, a) => s + (a.estimated_minutes || 0), 0);
+                          const h = Math.floor(totalMin / 60);
+                          const m = totalMin % 60;
+                          return h > 0 ? `${h}h ${m}m` : `${m}m`;
+                        })()}
+                      </div>
+                    )}
 
                     {dayActivities.length === 0 && (
                       <div className="text-[10px] text-(--color-text-tertiary) text-center py-6">
