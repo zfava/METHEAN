@@ -72,6 +72,7 @@ export default function CurriculumPage() {
   const [maps, setMaps] = useState<MapState[]>([]);
   const [curricula, setCurricula] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   // Build state (shared)
   const [buildPath, setBuildPath] = useState<"philosophy" | "existing" | "template" | null>(null);
@@ -122,7 +123,9 @@ export default function CurriculumPage() {
       ]);
       setMaps(mapData);
       setCurricula(curricData);
-    } catch {} finally { setLoading(false); }
+    } catch (err: any) {
+      setError(err?.detail || err?.message || "Couldn't load curriculum data.");
+    } finally { setLoading(false); }
   }
 
   async function loadTemplates() {
@@ -169,7 +172,7 @@ export default function CurriculumPage() {
           table_of_contents: toc, current_position: position, subject_area: subjectArea }),
       });
       if (resp.ok) setProposal(await resp.json());
-    } catch {} finally { setGenerating(false); }
+    } catch (err: any) { setError(err?.detail || err?.message || "Something went wrong."); } finally { setGenerating(false); }
   }
 
   async function approveProposal() {
@@ -179,7 +182,7 @@ export default function CurriculumPage() {
       await annualCurriculum.approve(proposal.id);
       setApproved(true);
       await loadMaps();
-    } catch {} finally { setGenerating(false); }
+    } catch (err: any) { setError(err?.detail || err?.message || "Something went wrong."); } finally { setGenerating(false); }
   }
 
   async function copyTemplate(tid: string) {
@@ -189,7 +192,7 @@ export default function CurriculumPage() {
       resetBuild();
       setTab("my");
       await loadMaps();
-    } catch {} finally { setGenerating(false); }
+    } catch (err: any) { setError(err?.detail || err?.message || "Something went wrong."); } finally { setGenerating(false); }
   }
 
   if (!selectedChild) return <div className="text-sm text-(--color-text-secondary)">Select a child from the sidebar.</div>;
@@ -215,6 +218,15 @@ export default function CurriculumPage() {
         <div className="mb-4">
           <button onClick={resetBuild} className="text-(--color-text-secondary) hover:text-(--color-text) text-sm">&larr; Back</button>
         </div>
+      )}
+
+      {error && (
+        <Card className="mb-4" borderLeft="border-l-(--color-danger)">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-(--color-danger)">{error}</p>
+            <Button variant="ghost" size="sm" onClick={() => { setError(""); loadMaps(); }}>Retry</Button>
+          </div>
+        </Card>
       )}
 
       {/* ── MY CURRICULUM ── */}

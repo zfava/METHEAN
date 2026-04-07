@@ -32,6 +32,7 @@ export default function DashboardPage() {
   const [rulesCount, setRulesCount] = useState(0);
   const [lastDecision, setLastDecision] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => { init(); }, []);
   useEffect(() => { if (selectedChild) loadChildDetail(); }, [selectedChild]);
@@ -48,7 +49,9 @@ export default function DashboardPage() {
       setRulesCount(Array.isArray(rules) ? rules.length : 0);
       const evts: GovernanceEvent[] = ((eResp as any).items || eResp);
       if (evts.length > 0) setLastDecision(new Date(evts[0].created_at).toLocaleString());
-    } catch {}
+    } catch (err: any) {
+      setError(err?.detail || err?.message || "Couldn't load dashboard data. Check your connection.");
+    }
     setLoading(false);
   }
 
@@ -61,7 +64,9 @@ export default function DashboardPage() {
           fetch(`${API}/children/${c.id}/today`, { credentials: "include" }).then((r) => r.ok ? r.json() : []).catch(() => []),
         ]);
         setSummaries((prev) => ({ ...prev, [c.id]: { id: c.id, mastered: state?.mastered_count || 0, total: state?.total_nodes || 0, todayCount: Array.isArray(todayResp) ? todayResp.length : 0 } }));
-      } catch {}
+      } catch (err: any) {
+        setError(err?.detail || err?.message || "Couldn't load child summary.");
+      }
     });
   }, [children]);
 
@@ -77,7 +82,9 @@ export default function DashboardPage() {
       setTodayActivities(Array.isArray(todayResp) ? todayResp : []);
       const alertItems = (alertsResp as any).items || alertsResp;
       setAlerts(Array.isArray(alertItems) ? alertItems.slice(0, 5) : []);
-    } catch {}
+    } catch (err: any) {
+      setError(err?.detail || err?.message || "Couldn't load activity details.");
+    }
   }
 
   if (loading || childLoading) return (
@@ -110,6 +117,15 @@ export default function DashboardPage() {
           </Card>
         }
       />
+
+      {error && (
+        <Card className="mb-4" borderLeft="border-l-(--color-danger)">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-(--color-danger)">{error}</p>
+            <Button variant="ghost" size="sm" onClick={() => { setError(""); init(); }}>Retry</Button>
+          </div>
+        </Card>
+      )}
 
       {/* ── Child cards ── */}
       {children.length === 0 && !childLoading && (

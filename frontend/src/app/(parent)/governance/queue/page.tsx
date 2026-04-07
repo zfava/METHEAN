@@ -35,6 +35,7 @@ export default function QueuePage() {
   const [items, setItems] = useState<QueueItem[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [dismissing, setDismissing] = useState<Set<string>>(new Set());
 
@@ -42,10 +43,13 @@ export default function QueuePage() {
 
   async function loadQueue() {
     setLoading(true);
+    setError("");
     try {
       const resp = await fetch(`${API}/governance/queue?limit=100`, { credentials: "include" });
       if (resp.ok) { const d = await resp.json(); setItems(d.items || []); setTotal(d.total || 0); }
-    } catch {} finally { setLoading(false); }
+    } catch (err: any) {
+      setError(err?.detail || err?.message || "Couldn't load approval queue.");
+    } finally { setLoading(false); }
   }
 
   async function doAction(activityId: string, planId: string, action: "approve" | "reject") {
@@ -93,6 +97,15 @@ export default function QueuePage() {
           </Button>
         ) : undefined}
       />
+
+      {error && (
+        <Card className="mb-4" borderLeft="border-l-(--color-danger)">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-(--color-danger)">{error}</p>
+            <Button variant="ghost" size="sm" onClick={() => { setError(""); loadQueue(); }}>Retry</Button>
+          </div>
+        </Card>
+      )}
 
       {total === 0 ? (
         <EmptyState icon="check" title="All caught up!" description="No activities need your review right now." />

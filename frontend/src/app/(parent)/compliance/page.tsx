@@ -17,6 +17,7 @@ export default function CompliancePage() {
   const [selectedState, setSelectedState] = useState("");
   const [result, setResult] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     compliance.states().then(setStates).catch(() => {});
@@ -25,10 +26,13 @@ export default function CompliancePage() {
   async function runCheck() {
     if (!selectedChild || !selectedState) return;
     setLoading(true);
+    setError("");
     try {
       const r = await compliance.check(selectedChild.id, selectedState);
       setResult(r);
-    } catch {} finally { setLoading(false); }
+    } catch (err: any) {
+      setError(err?.detail || err?.message || "Couldn't check compliance status.");
+    } finally { setLoading(false); }
   }
 
   useEffect(() => { if (selectedState && selectedChild) runCheck(); }, [selectedState, selectedChild]);
@@ -55,6 +59,15 @@ export default function CompliancePage() {
         </select>
         <span className="text-xs text-(--color-text-tertiary)">{states.length} states + DC supported</span>
       </div>
+
+      {error && (
+        <Card className="mb-4" borderLeft="border-l-(--color-danger)">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-(--color-danger)">{error}</p>
+            <Button variant="ghost" size="sm" onClick={() => { setError(""); runCheck(); }}>Retry</Button>
+          </div>
+        </Card>
+      )}
 
       {loading && <LoadingSkeleton variant="list" count={5} />}
 

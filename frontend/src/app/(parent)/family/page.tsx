@@ -43,6 +43,7 @@ export default function FamilyPage() {
   const { children, loading: childrenLoading } = useChild();
   const [childData, setChildData] = useState<Record<string, ChildDayData>>({});
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [error, setError] = useState("");
   const [showAddChild, setShowAddChild] = useState(false);
   const [newName, setNewName] = useState("");
   const [newGrade, setNewGrade] = useState("");
@@ -79,7 +80,8 @@ export default function FamilyPage() {
           ...prev,
           [child.id]: { childId: child.id, activities, alerts, loading: false },
         }));
-      } catch {
+      } catch (err: any) {
+        setError(err?.detail || err?.message || "Couldn't load family data.");
         setChildData((prev) => ({
           ...prev,
           [child.id]: { childId: child.id, activities: [], alerts: [], loading: false },
@@ -101,6 +103,15 @@ export default function FamilyPage() {
   return (
     <div className="max-w-4xl">
       <PageHeader title="Family Overview" subtitle={today} />
+
+      {error && (
+        <Card className="mb-4" borderLeft="border-l-(--color-danger)">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-(--color-danger)">{error}</p>
+            <Button variant="ghost" size="sm" onClick={() => { setError(""); loadAllChildren(); }}>Retry</Button>
+          </div>
+        </Card>
+      )}
 
       {/* Family summary */}
       {totalActivities > 0 && (

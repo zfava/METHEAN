@@ -26,6 +26,7 @@ export default function ReportsPage() {
   const [endDate, setEndDate] = useState(() => new Date().toISOString().split("T")[0]);
   const [report, setReport] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [attestText, setAttestText] = useState("");
   const [attested, setAttested] = useState(false);
 
@@ -33,6 +34,7 @@ export default function ReportsPage() {
     setLoading(true);
     setReport(null);
     setAttested(false);
+    setError("");
     try {
       const csrf = getCsrf();
       const resp = await fetch(`${API}/governance/report`, {
@@ -41,7 +43,9 @@ export default function ReportsPage() {
         body: JSON.stringify({ period_start: startDate, period_end: endDate }),
       });
       if (resp.ok) setReport(await resp.json());
-    } catch {} finally { setLoading(false); }
+    } catch (err: any) {
+      setError(err?.detail || err?.message || "Couldn't generate report.");
+    } finally { setLoading(false); }
   }
 
   async function attest() {
@@ -86,6 +90,15 @@ export default function ReportsPage() {
           {loading ? "Generating..." : "Generate Report"}
         </Button>
       </div>
+
+      {error && (
+        <Card className="mb-4" borderLeft="border-l-(--color-danger)">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-(--color-danger)">{error}</p>
+            <Button variant="ghost" size="sm" onClick={() => { setError(""); generate(); }}>Retry</Button>
+          </div>
+        </Card>
+      )}
 
       {loading && <LoadingSkeleton variant="text" count={5} />}
 

@@ -80,6 +80,7 @@ export default function PhilosophyPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => { load(); }, []);
 
@@ -97,7 +98,9 @@ export default function PhilosophyPage() {
         if (data.pedagogical_preferences) setPrefs({ ...prefs, ...data.pedagogical_preferences });
         if (data.custom_constraints) setCustoms(data.custom_constraints);
       }
-    } catch {} finally { setLoading(false); }
+    } catch (err: any) {
+      setError(err?.detail || err?.message || "Couldn't load your philosophical profile.");
+    } finally { setLoading(false); }
   }
 
   async function save() {
@@ -137,6 +140,15 @@ export default function PhilosophyPage() {
         title="Educational Philosophy"
         subtitle="Your family's foundational principles. These guide every AI recommendation."
       />
+
+      {error && (
+        <Card className="mb-4" borderLeft="border-l-(--color-danger)">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-(--color-danger)">{error}</p>
+            <Button variant="ghost" size="sm" onClick={() => { setError(""); load(); }}>Retry</Button>
+          </div>
+        </Card>
+      )}
 
       {/* ── Section 1: Educational Approach ── */}
       <section className="mb-10">
