@@ -200,9 +200,29 @@ async def generate_governance_report(
             "children_with_mastery_gains": sum(1 for cp in child_progress if cp["nodes_mastered"] > 0),
         },
 
+        "rule_enforcement": _compute_rule_enforcement(events),
+
         "parent_attestation": {
             "status": "pending",
             "text": None,
             "attested_at": None,
         },
     }
+
+
+def _compute_rule_enforcement(events: list) -> dict:
+    """Compute per-rule evaluation and trigger counts from event metadata."""
+    stats: dict[str, dict] = {}
+    for event in events:
+        evals = (event.metadata_ or {}).get("evaluations", [])
+        for ev in evals:
+            name = ev.get("rule", "unknown")
+            if name not in stats:
+                stats[name] = {
+                    "evaluated": 0, "triggered": 0,
+                    "type": ev.get("type", ""), "tier": "",
+                }
+            stats[name]["evaluated"] += 1
+            if not ev.get("passed", True):
+                stats[name]["triggered"] += 1
+    return stats

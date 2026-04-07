@@ -7,7 +7,10 @@ import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/StatusBadge";
 import MetricCard from "@/components/ui/MetricCard";
+import SectionHeader from "@/components/ui/SectionHeader";
 import EmptyState from "@/components/ui/EmptyState";
+import { ShieldIcon } from "@/components/ConstitutionalCeremony";
+import { cn } from "@/lib/cn";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
@@ -17,8 +20,27 @@ function getCsrf(): string | undefined {
   return m ? decodeURIComponent(m[1]) : undefined;
 }
 
+// CSS bar chart component (no external deps)
+function BarChart({ data, maxValue }: { data: Array<{ label: string; value: number; color: string }>; maxValue?: number }) {
+  const max = maxValue || Math.max(...data.map((d) => d.value), 1);
+  return (
+    <div className="space-y-2">
+      {data.map((d) => (
+        <div key={d.label} className="flex items-center gap-3">
+          <span className="text-xs text-(--color-text-secondary) w-24 text-right truncate">{d.label}</span>
+          <div className="flex-1 h-5 bg-(--color-page) rounded-[4px] overflow-hidden">
+            <div className="h-full rounded-[4px] transition-all duration-500" style={{ width: `${(d.value / max) * 100}%`, background: d.color }} />
+          </div>
+          <span className="text-xs font-mono text-(--color-text) w-8 text-right">{d.value}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function ReportsPage() {
   useEffect(() => { document.title = "Reports | METHEAN"; }, []);
+
   const [startDate, setStartDate] = useState(() => {
     const d = new Date(); d.setDate(d.getDate() - 30);
     return d.toISOString().split("T")[0];
@@ -29,6 +51,14 @@ export default function ReportsPage() {
   const [error, setError] = useState("");
   const [attestText, setAttestText] = useState("");
   const [attested, setAttested] = useState(false);
+
+  function setPreset(days: number) {
+    const end = new Date();
+    const start = new Date();
+    start.setDate(start.getDate() - days);
+    setStartDate(start.toISOString().split("T")[0]);
+    setEndDate(end.toISOString().split("T")[0]);
+  }
 
   async function generate() {
     setLoading(true);
@@ -43,6 +73,7 @@ export default function ReportsPage() {
         body: JSON.stringify({ period_start: startDate, period_end: endDate }),
       });
       if (resp.ok) setReport(await resp.json());
+      else setError("Failed to generate report.");
     } catch (err: any) {
       setError(err?.detail || err?.message || "Couldn't generate report.");
     } finally { setLoading(false); }
@@ -60,35 +91,69 @@ export default function ReportsPage() {
   }
 
   const s = report?.executive_summary;
+  const decisions = report?.governance_decisions || [];
+  const aiRoles = Object.entries(report?.ai_oversight?.runs_by_role || {}) as Array<[string, number]>;
+  const ruleEnforcement = report?.rule_enforcement || {};
+  const constitutionalActions = report?.constitutional_actions || [];
+
+  // Compute decision breakdown for bar chart
+  const decisionCounts = {
+    approved: decisions.filter((d: any) => d.action === "approve").length,
+    rejected: decisions.filter((d: any) => d.action === "reject").length,
+    modified: decisions.filter((d: any) => d.action === "modify").length,
+    deferred: decisions.filter((d: any) => d.action === "defer").length,
+  };
+
+  // Compute auto vs manual for review rate
+  const autoApproved = decisions.filter((d: any) => d.action === "approve" && (d.reason || "").toLowerCase().includes("auto")).length;
+  const manualDecisions = decisions.length - autoApproved;
+  const reviewRate = decisions.length > 0 ? Math.round((manualDecisions / decisions.length) * 100) : 100;
 
   return (
-    <div className="max-w-4xl">
+    <div className="max-w-5xl">
       <PageHeader
-        title="Governance Report"
-        subtitle="Board meeting minutes for your homeschool."
+        title="Governance Analytics"
+        subtitle="Visualize your family's educational oversight."
         actions={
           <button onClick={() => window.print()} className="text-xs text-(--color-text-tertiary) hover:text-(--color-text-secondary) print:hidden">
-            Print
+            Print Report
           </button>
         }
       />
 
-      {/* Date range */}
-      <div className="flex items-end gap-3 mb-6 print:hidden">
-        <div>
-          <label className="block text-xs text-(--color-text-secondary) mb-1">From</label>
-          <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)}
-            className="px-3 py-1.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+      {/* Print header */}
+      <div className="governance-report-print-header hidden print:block mb-6">
+        <h1 className="text-lg font-bold">METHEAN Governance Report</h1>
+        <p className="text-sm text-(--color-text-secondary)">{report?.household?.name} · {startDate} to {endDate} · Generated {new Date().toLocaleDateString()}</p>
+      </div>
+
+      {/* ── Period Selector ── */}
+      <div className="print:hidden">
+        <div className="flex flex-col sm:flex-row items-start sm:items-end gap-3 mb-6">
+          <div className="flex gap-3">
+            <div>
+              <label className="block text-xs text-(--color-text-secondary) mb-1">From</label>
+              <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)}
+                className="px-3 py-1.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+            </div>
+            <div>
+              <label className="block text-xs text-(--color-text-secondary) mb-1">To</label>
+              <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)}
+                className="px-3 py-1.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+            </div>
+          </div>
+          <div className="flex gap-1.5 flex-wrap">
+            {[["7d", 7], ["30d", 30], ["90d", 90], ["1y", 365]] .map(([label, days]) => (
+              <button key={label as string} onClick={() => setPreset(days as number)}
+                className="px-2.5 py-1 text-[10px] font-medium rounded-[6px] border border-(--color-border) text-(--color-text-secondary) hover:bg-(--color-page)">
+                {label}
+              </button>
+            ))}
+          </div>
+          <Button variant="primary" size="md" onClick={generate} disabled={loading}>
+            {loading ? "Generating..." : "Generate Report"}
+          </Button>
         </div>
-        <div>
-          <label className="block text-xs text-(--color-text-secondary) mb-1">To</label>
-          <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)}
-            className="px-3 py-1.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
-        </div>
-        <Button variant="primary" size="md" onClick={generate} disabled={loading}
-          className="bg-(--color-text) hover:opacity-90">
-          {loading ? "Generating..." : "Generate Report"}
-        </Button>
       </div>
 
       {error && (
@@ -100,147 +165,167 @@ export default function ReportsPage() {
         </Card>
       )}
 
-      {loading && <LoadingSkeleton variant="text" count={5} />}
+      {loading && <LoadingSkeleton variant="card" count={4} />}
 
-      {!loading && !report && (
-        <EmptyState icon="empty" title="No reports generated yet" description="Select a date range above and click Generate Report to see a summary of AI oversight and family progress." />
+      {!loading && !report && !error && (
+        <EmptyState icon="empty" title="No report generated yet"
+          description="Select a date range and click Generate Report to see governance analytics." />
       )}
 
       {report && (
         <div className="space-y-6 print:space-y-4">
-          {/* Header */}
-          <div className="border-b-2 border-(--color-text) pb-4">
-            <h2 className="text-lg font-bold text-(--color-text) uppercase tracking-wide">
-              Governance Report
-            </h2>
-            <p className="text-sm text-(--color-text-secondary)">{report.household?.name}</p>
-            <p className="text-xs text-(--color-text-secondary)">
-              Period: {report.period?.start} to {report.period?.end} ({report.period?.days} days)
-            </p>
-            <p className="text-xs text-(--color-text-tertiary)">Generated: {new Date(report.generated_at).toLocaleString()}</p>
+          {/* ── Section 2: Executive Summary ── */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <MetricCard label="Total Decisions" value={s?.total_governance_events || 0} />
+            <MetricCard label="Parent Review Rate" value={`${reviewRate}%`} color={reviewRate > 50 ? "success" : reviewRate > 20 ? "warning" : "danger"} />
+            <MetricCard label="AI Calls" value={s?.ai_runs_count || 0} />
+            <MetricCard label="Constitutional Changes" value={s?.constitutional_changes_count || 0} />
           </div>
 
-          {/* Executive Summary */}
-          <section>
-            <h3 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-2 border-b border-(--color-border) pb-1">
-              1. Executive Summary
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {[
-                { label: "Activities Approved", value: s?.activities_approved },
-                { label: "Activities Rejected", value: s?.activities_rejected },
-                { label: "Parent Overrides", value: s?.overrides_count },
-                { label: "AI Acceptance Rate", value: s?.ai_acceptance_rate_pct != null ? `${s.ai_acceptance_rate_pct}%` : "N/A" },
-              ].map((m) => (
-                <MetricCard key={m.label} label={m.label} value={m.value ?? 0} />
-              ))}
+          {/* ── Section 3: Decision Breakdown ── */}
+          <Card>
+            <SectionHeader title="Decision Breakdown" />
+            <div className="mt-3">
+              <BarChart data={[
+                { label: "Approved", value: decisionCounts.approved, color: "#2D6A4F" },
+                { label: "Rejected", value: decisionCounts.rejected, color: "#A63D40" },
+                { label: "Modified", value: decisionCounts.modified, color: "#B8860B" },
+                { label: "Deferred", value: decisionCounts.deferred, color: "#4A6FA5" },
+              ]} />
             </div>
-          </section>
+          </Card>
 
-          {/* AI Oversight */}
-          <section>
-            <h3 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-2 border-b border-(--color-border) pb-1">
-              2. AI Oversight
-            </h3>
-            <p className="text-xs text-(--color-text-secondary) mb-2">
-              {report.ai_oversight?.total_ai_runs || 0} AI calls made. Acceptance rate: {report.ai_oversight?.acceptance_rate_pct ?? "N/A"}%.
-            </p>
-            {report.ai_oversight?.runs_by_role && (
-              <div className="flex gap-3 text-xs text-(--color-text-secondary)">
-                {Object.entries(report.ai_oversight.runs_by_role).map(([role, count]) => (
-                  <span key={role} className="capitalize">{role}: {count as number}</span>
+          {/* ── Section 4: AI Oversight ── */}
+          {aiRoles.length > 0 && (
+            <Card>
+              <SectionHeader title="AI Usage by Role" />
+              <div className="mt-3">
+                <BarChart data={aiRoles.map(([role, count]) => ({
+                  label: role.charAt(0).toUpperCase() + role.slice(1).replace(/_/g, " "),
+                  value: count,
+                  color: "#4A6FA5",
+                }))} />
+              </div>
+              <p className="text-[10px] text-(--color-text-tertiary) mt-2">
+                {s?.ai_runs_count || 0} total AI calls · Acceptance rate: {s?.ai_acceptance_rate_pct ?? "N/A"}%
+              </p>
+            </Card>
+          )}
+
+          {/* ── Section 5: Rule Enforcement ── */}
+          {Object.keys(ruleEnforcement).length > 0 && (
+            <Card padding="p-0">
+              <div className="px-5 py-3 border-b border-(--color-border)">
+                <SectionHeader title="Rule Enforcement Summary" />
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs">
+                  <thead>
+                    <tr className="border-b border-(--color-border)">
+                      <th className="text-left px-5 py-2 text-(--color-text-secondary) font-medium">Rule</th>
+                      <th className="text-left px-3 py-2 text-(--color-text-secondary) font-medium">Type</th>
+                      <th className="text-right px-3 py-2 text-(--color-text-secondary) font-medium">Evaluated</th>
+                      <th className="text-right px-3 py-2 text-(--color-text-secondary) font-medium">Triggered</th>
+                      <th className="text-right px-5 py-2 text-(--color-text-secondary) font-medium">Trigger Rate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(ruleEnforcement).map(([name, data]: [string, any]) => (
+                      <tr key={name} className="border-b border-(--color-border)/30">
+                        <td className="px-5 py-2 text-(--color-text) font-medium">{name}</td>
+                        <td className="px-3 py-2 text-(--color-text-secondary) capitalize">{data.type?.replace(/_/g, " ")}</td>
+                        <td className="px-3 py-2 text-right text-(--color-text)">{data.evaluated}</td>
+                        <td className="px-3 py-2 text-right">
+                          <span className={data.triggered > 0 ? "text-(--color-warning) font-medium" : "text-(--color-text-tertiary)"}>{data.triggered}</span>
+                        </td>
+                        <td className="px-5 py-2 text-right text-(--color-text-secondary)">
+                          {data.evaluated > 0 ? `${Math.round((data.triggered / data.evaluated) * 100)}%` : "—"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </Card>
+          )}
+
+          {/* ── Section 6: Per-Child Governance ── */}
+          {(report.learning_progress || []).length > 0 && (
+            <Card>
+              <SectionHeader title="Per-Child Governance Profile" />
+              <div className="mt-3 space-y-3">
+                {(report.learning_progress || []).map((cp: any) => (
+                  <div key={cp.child_id} className="flex items-center justify-between py-2 px-3 rounded-[6px] bg-(--color-page)">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-(--color-accent) text-white flex items-center justify-center text-xs font-bold">
+                        {cp.child_name?.charAt(0)}
+                      </div>
+                      <div>
+                        <span className="text-xs font-medium text-(--color-text)">{cp.child_name}</span>
+                        {cp.grade_level && <span className="text-[10px] text-(--color-text-tertiary) ml-1">{cp.grade_level}</span>}
+                      </div>
+                    </div>
+                    <div className="flex gap-4 text-xs text-(--color-text-secondary)">
+                      <span>{cp.nodes_mastered}/{cp.nodes_total} mastered</span>
+                      <span>{cp.total_hours}h logged</span>
+                      <span>{cp.total_attempts} attempts</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          )}
+
+          {/* ── Section 7: Constitutional History ── */}
+          <Card>
+            <SectionHeader title="Constitutional Rule History" />
+            {constitutionalActions.length === 0 ? (
+              <p className="text-xs text-(--color-text-secondary) mt-2 italic">
+                No constitutional changes during this period. Your foundational principles remained stable.
+              </p>
+            ) : (
+              <div className="mt-3 space-y-2">
+                {constitutionalActions.map((ca: any, i: number) => (
+                  <div key={i} className="flex items-start gap-2 px-3 py-2 rounded-[6px] bg-(--color-constitutional-light) border-l-2 border-(--color-constitutional)">
+                    <ShieldIcon size={14} className="text-(--color-constitutional) shrink-0 mt-0.5" />
+                    <div>
+                      <span className="text-xs text-(--color-text-secondary)">{ca.timestamp?.split("T")[0]}</span>
+                      {ca.reason && <p className="text-xs text-(--color-constitutional) italic mt-0.5">"{ca.reason}"</p>}
+                    </div>
+                  </div>
                 ))}
               </div>
             )}
-          </section>
+          </Card>
 
-          {/* Governance Decisions */}
-          <section>
-            <h3 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-2 border-b border-(--color-border) pb-1">
-              3. Governance Decisions ({report.governance_decisions?.length || 0})
-            </h3>
-            <div className="text-xs space-y-1 max-h-60 overflow-y-auto print:max-h-none">
-              {(report.governance_decisions || []).slice(0, 20).map((d: any, i: number) => (
-                <div key={i} className="flex justify-between py-1 border-b border-(--color-border)/30">
-                  <div className="flex items-center gap-2">
-                    <StatusBadge status={d.action} />
-                    <span className="text-(--color-text-secondary)">{d.target_type}</span>
-                    {d.reason && <span className="text-(--color-text-tertiary) truncate max-w-xs">{d.reason}</span>}
-                  </div>
-                  <span className="text-(--color-text-tertiary) shrink-0">{d.timestamp?.split("T")[0]}</span>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* Learning Progress */}
-          <section>
-            <h3 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-2 border-b border-(--color-border) pb-1">
-              4. Learning Progress
-            </h3>
-            <div className="space-y-2">
-              {(report.learning_progress || []).map((cp: any) => (
-                <Card key={cp.child_id} padding="p-3" className="flex items-center justify-between">
-                  <div>
-                    <span className="text-sm font-medium text-(--color-text)">{cp.child_name}</span>
-                    <span className="text-xs text-(--color-text-secondary) ml-2">{cp.grade_level || ""}</span>
-                  </div>
-                  <div className="flex gap-4 text-xs text-(--color-text-secondary)">
-                    <span>{cp.nodes_mastered}/{cp.nodes_total} mastered</span>
-                    <span>{cp.total_hours}h logged</span>
-                    <span>{cp.total_attempts} attempts</span>
-                  </div>
-                </Card>
-              ))}
-            </div>
-          </section>
-
-          {/* Overrides */}
-          {(report.overrides?.length || 0) > 0 && (
-            <section>
-              <h3 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-2 border-b border-(--color-border) pb-1">
-                5. Parent Overrides
-              </h3>
-              {report.overrides.map((o: any, i: number) => (
-                <div key={i} className="text-xs border-l-2 border-(--color-warning) pl-3 py-1 mb-1">
-                  <span className="text-(--color-text-tertiary)">{o.timestamp?.split("T")[0]}</span>
-                  {o.reason && <span className="text-(--color-text-secondary) ml-2">&ldquo;{o.reason}&rdquo;</span>}
-                </div>
-              ))}
-            </section>
-          )}
-
-          {/* Attestation */}
-          <section className="border-t-2 border-(--color-text) pt-4 print:break-before-page">
-            <h3 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-2">
-              Parent Attestation
-            </h3>
+          {/* ── Section 8: Attestation ── */}
+          <Card className="print:break-before-page">
+            <SectionHeader title="Parent Attestation" />
             {!attested ? (
-              <div className="print:hidden">
+              <div className="mt-3 print:hidden">
                 <p className="text-xs text-(--color-text-secondary) mb-3">
                   By signing below, I attest that this report accurately reflects the governance
-                  decisions made during this period, and that I was in control of my children&apos;s
+                  decisions made during this period, and that I was in control of my children's
                   educational program at all times.
                 </p>
                 <textarea
                   value={attestText}
                   onChange={(e) => setAttestText(e.target.value)}
-                  placeholder="I, [your name], confirm that this report is accurate and complete..."
+                  placeholder="I confirm that this report is accurate and complete..."
                   className="w-full h-24 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] resize-none mb-3 bg-(--color-surface) text-(--color-text)"
                 />
-                <Button variant="primary" size="md" onClick={attest} disabled={attestText.length < 10}
-                  className="bg-(--color-text) hover:opacity-90">
-                  Attest &amp; Sign
+                <Button variant="primary" size="md" onClick={attest} disabled={attestText.length < 10}>
+                  Attest &amp; Sign Report
                 </Button>
               </div>
             ) : (
-              <Card className="bg-(--color-success-light) border-(--color-success)/30">
+              <div className="mt-3 bg-(--color-success-light) border border-(--color-success)/30 rounded-[6px] p-4">
                 <p className="text-sm text-(--color-success) font-medium mb-1">Report attested.</p>
-                <p className="text-xs text-(--color-success)">&ldquo;{attestText}&rdquo;</p>
-                <p className="text-xs text-(--color-success) mt-2">This attestation has been permanently recorded in the governance trail.</p>
-              </Card>
+                <p className="text-xs text-(--color-success)">"{attestText}"</p>
+                <p className="text-xs text-(--color-success) mt-2">Attested on {new Date().toLocaleDateString()}. Permanently recorded.</p>
+              </div>
             )}
-          </section>
+          </Card>
         </div>
       )}
     </div>
