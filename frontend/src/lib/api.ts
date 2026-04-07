@@ -179,10 +179,10 @@ export const curriculum = {
 
 // Tutor
 export const tutor = {
-  message: (activityId: string, childId: string, message: string) =>
+  message: (activityId: string, childId: string, message: string, conversationHistory?: Array<{ role: string; text: string }>) =>
     request<TutorResponse>(`/tutor/${activityId}/message`, {
       method: "POST",
-      body: JSON.stringify({ child_id: childId, message }),
+      body: JSON.stringify({ message, conversation_history: conversationHistory }),
     }),
 };
 

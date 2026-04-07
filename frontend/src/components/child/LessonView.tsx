@@ -97,7 +97,19 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
       )}
 
       {/* Phase: Guided Learning */}
-      {phase === "guided" && (
+      {phase === "guided" && steps.length === 0 && (
+        <div className="py-6 text-center">
+          <h2 className="text-lg font-semibold text-(--color-text) mb-4">Guided Learning</h2>
+          <p className="text-base text-(--color-text-secondary) mb-6">
+            Work through this activity at your own pace. When you're ready, move on to practice.
+          </p>
+          <button onClick={() => setPhase(prompts.length > 0 ? "practice" : "reflect")}
+            className="py-3 px-8 text-base font-semibold text-white bg-(--color-accent) rounded-2xl hover:opacity-90 transition-opacity">
+            Continue to {prompts.length > 0 ? "Practice" : "Reflection"}
+          </button>
+        </div>
+      )}
+      {phase === "guided" && steps.length > 0 && (
         <div className="py-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-(--color-text)">Guided Learning</h2>
@@ -168,7 +180,9 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
       {phase === "practice" && (
         <div className="py-6">
           <h2 className="text-2xl font-semibold text-(--color-text) mb-2">Practice</h2>
-          <p className="text-sm text-(--color-text-secondary) mb-6">Work through these to build your skills.</p>
+          <p className="text-sm text-(--color-text-secondary) mb-6">
+            {prompts.length > 0 ? "Work through these to build your skills." : "Write about what you learned, or describe your work in your own words."}
+          </p>
 
           <div className="space-y-4 mb-6">
             {prompts.map((prompt, i) => (

@@ -652,13 +652,24 @@ async def tutor_message(
                 if parts:
                     content_guidance = "\n\nTEACHING GUIDANCE:\n" + "\n".join(f"- {p}" for p in parts)
 
+    # Build conversation context from history
+    conversation_context = ""
+    if body.conversation_history:
+        recent = body.conversation_history[-10:]  # Last 10 messages max
+        lines = []
+        for msg in recent:
+            role_label = "Child" if msg.get("role") == "child" else "Tutor"
+            lines.append(f"{role_label}: {msg.get('text', '')}")
+        conversation_context = "\n\nCONVERSATION SO FAR:\n" + "\n".join(lines)
+
     user_prompt = f"""Activity: {activity.title}
 Learning Topic: {node_title}
 {content_guidance}
+{conversation_context}
 
-Child says: {body.message}
+Child's latest message: {body.message}
 
-Respond using the Socratic method. Guide the child toward understanding without giving the answer."""
+Continue the Socratic dialogue. Reference what was discussed earlier if relevant. Guide toward understanding without giving answers."""
 
     phil = await _get_philosophical_profile(db, user.household_id)
     result = await call_ai(

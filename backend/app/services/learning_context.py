@@ -102,6 +102,42 @@ async def get_activity_learning_context(
             te = content.get("time_estimates", {})
             objectives = content.get("learning_objectives", [])
 
+            # Fallback: if content is still empty after enrichment, build from node title
+            if not tg and not objectives:
+                tg = {
+                    "introduction": f"Today we're working on {node.title}. Take your time and do your best work.",
+                    "scaffolding_sequence": [
+                        f"Read about {node.title} carefully",
+                        "Think about what you already know about this topic",
+                        "Work through the activity step by step",
+                        "Check your work before moving on",
+                    ],
+                    "socratic_questions": [
+                        f"What do you already know about {node.title}?",
+                        "Can you explain this in your own words?",
+                        "How does this connect to something you learned before?",
+                    ],
+                    "practice_activities": [
+                        f"Practice what you learned about {node.title}",
+                    ],
+                    "real_world_connections": [],
+                    "common_misconceptions": [],
+                }
+                objectives = [
+                    f"Understand the key ideas in {node.title}",
+                    "Practice applying what you learn",
+                ]
+                ac = {
+                    "sample_assessment_prompts": [
+                        f"Explain what you learned about {node.title} in your own words.",
+                    ],
+                    "mastery_indicators": [f"Can explain {node.title} concepts clearly"],
+                    "assessment_methods": ["oral narration", "written work"],
+                }
+                content["teaching_guidance"] = tg
+                content["learning_objectives"] = objectives
+                content["assessment_criteria"] = ac
+
             # Build lesson structure
             steps = []
             # Introduction as a "read" step

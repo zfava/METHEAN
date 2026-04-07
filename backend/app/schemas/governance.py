@@ -136,8 +136,9 @@ class AIRunResponse(BaseModel):
 # ── Tutor ──
 
 class TutorMessageRequest(BaseModel):
-    child_id: uuid.UUID
+    child_id: uuid.UUID | None = None
     message: str = Field(min_length=1, max_length=2000)
+    conversation_history: list[dict] | None = None
 
 
 class TutorMessageResponse(BaseModel):

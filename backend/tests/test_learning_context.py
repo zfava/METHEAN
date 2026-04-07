@@ -141,11 +141,14 @@ class TestLearningContext:
             db_session, activity.id, household.id, child.id,
         )
 
-        # Should still return valid structure even without enriched content
+        # Fallback content should be generated from node title
         assert ctx["activity"]["title"] == "Fractions Practice"
         assert ctx["activity"]["activity_type"] == "practice"
-        assert isinstance(ctx["lesson"], dict)
-        assert isinstance(ctx["assessment"], dict)
+        assert "Fractions" in ctx["lesson"]["introduction"]
+        assert len(ctx["lesson"]["objectives"]) >= 2
+        assert len(ctx["lesson"]["steps"]) > 0
+        assert len(ctx["assessment"]["prompts"]) > 0
+        assert "Fractions" in ctx["assessment"]["prompts"][0]
 
     @pytest.mark.asyncio
     async def test_learn_no_tutor_for_assessment(
@@ -303,3 +306,76 @@ class TestLearningContextAPI:
         assert "lesson" in data
         assert "assessment" in data
         assert data["tutor_available"] is True
+
+
+class TestTutorConversationHistory:
+
+    @pytest.mark.asyncio
+    async def test_tutor_with_history(self, auth_client, db_session, household, child, user, subject, learning_map):
+        """Send a tutor message with conversation history, verify it's accepted."""
+        plan = Plan(
+            household_id=household.id, child_id=child.id,
+            created_by=user.id, name="Math", status=PlanStatus.active,
+        )
+        db_session.add(plan)
+        await db_session.flush()
+        week = PlanWeek(
+            plan_id=plan.id, household_id=household.id,
+            week_number=1, start_date=date(2026, 9, 1), end_date=date(2026, 9, 5),
+        )
+        db_session.add(week)
+        await db_session.flush()
+        activity = Activity(
+            plan_week_id=week.id, household_id=household.id,
+            activity_type=ActivityType.lesson, title="Addition",
+            status=ActivityStatus.scheduled, governance_approved=True,
+        )
+        db_session.add(activity)
+        await db_session.flush()
+
+        # Send with conversation history
+        resp = await auth_client.post(
+            f"/api/v1/tutor/{activity.id}/message",
+            json={
+                "message": "Why?",
+                "conversation_history": [
+                    {"role": "child", "text": "What is 3 + 4?"},
+                    {"role": "tutor", "text": "What do you think happens when you add 3 and 4?"},
+                ],
+            },
+        )
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "message" in data
+
+    @pytest.mark.asyncio
+    async def test_tutor_without_history(self, auth_client, db_session, household, child, user, subject, learning_map):
+        """Send a tutor message without history (backward compatible)."""
+        plan = Plan(
+            household_id=household.id, child_id=child.id,
+            created_by=user.id, name="Math", status=PlanStatus.active,
+        )
+        db_session.add(plan)
+        await db_session.flush()
+        week = PlanWeek(
+            plan_id=plan.id, household_id=household.id,
+            week_number=1, start_date=date(2026, 9, 1), end_date=date(2026, 9, 5),
+        )
+        db_session.add(week)
+        await db_session.flush()
+        activity = Activity(
+            plan_week_id=week.id, household_id=household.id,
+            activity_type=ActivityType.lesson, title="Addition",
+            status=ActivityStatus.scheduled, governance_approved=True,
+        )
+        db_session.add(activity)
+        await db_session.flush()
+
+        # Send without history (no conversation_history field)
+        resp = await auth_client.post(
+            f"/api/v1/tutor/{activity.id}/message",
+            json={"message": "What is 3 + 4?"},
+        )
+        assert resp.status_code == 200
+        data = resp.json()
+        assert "message" in data

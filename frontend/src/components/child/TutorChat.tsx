@@ -28,11 +28,13 @@ export default function TutorChat({ activityId, childId, onClose }: TutorChatPro
     if (!input.trim() || loading) return;
     const msg = input.trim();
     setInput("");
-    setMessages((prev) => [...prev, { role: "child", text: msg }]);
+    const updatedMessages: Message[] = [...messages, { role: "child", text: msg }];
+    setMessages(updatedMessages);
     setLoading(true);
 
     try {
-      const resp = await tutor.message(activityId, childId, msg);
+      const history = updatedMessages.map((m) => ({ role: m.role, text: m.text }));
+      const resp = await tutor.message(activityId, childId, msg, history);
       setMessages((prev) => [...prev, {
         role: "tutor",
         text: resp.message,
