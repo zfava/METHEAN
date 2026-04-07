@@ -25,6 +25,7 @@ from app.api.annual_curriculum import router as annual_curriculum_router
 from app.api.feedback import router as feedback_router
 from app.api.notifications import router as notifications_router
 from app.api.documents import router as documents_router
+from app.api.resources import router as resources_router
 
 logger = structlog.get_logger()
 
@@ -80,6 +81,7 @@ app.include_router(annual_curriculum_router, prefix="/api/v1")
 app.include_router(feedback_router, prefix="/api/v1")
 app.include_router(notifications_router, prefix="/api/v1")
 app.include_router(documents_router, prefix="/api/v1")
+app.include_router(resources_router, prefix="/api/v1")
 
 
 @app.get("/health")

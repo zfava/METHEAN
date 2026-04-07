@@ -19,7 +19,7 @@ from app.models.governance import (
     PlanWeek,
 )
 from app.models.annual_curriculum import AnnualCurriculum
-from app.models.evidence import ActivityFeedback, AdvisorReport, Alert, Artifact, ReadingLogEntry, WeeklySnapshot
+from app.models.evidence import ActivityFeedback, AdvisorReport, Alert, Artifact, FamilyResource, ReadingLogEntry, WeeklySnapshot
 from app.models.operational import (
     AIRun,
     AuditLog,
@@ -52,6 +52,7 @@ __all__ = [
     "AnnualCurriculum",
     "ActivityFeedback",
     "Artifact",
+    "FamilyResource",
     "Alert",
     "ReadingLogEntry",
     "WeeklySnapshot",

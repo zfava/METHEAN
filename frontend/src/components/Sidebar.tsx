@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { auth, notifications as notificationsApi, type User } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
 import { cn } from "@/lib/cn";
@@ -27,6 +27,25 @@ export default function Sidebar() {
   const [unreadNotifs, setUnreadNotifs] = useState(0);
   const [showNotifs, setShowNotifs] = useState(false);
   const [notifList, setNotifList] = useState<any[]>([]);
+  const [bellPulse, setBellPulse] = useState(false);
+  const prevUnread = useRef(0);
+
+  const loadNotifications = useCallback(async () => {
+    try {
+      const data = await notificationsApi.list(false, 10);
+      const items = Array.isArray(data) ? data : (data as any).items || [];
+      setNotifList(items);
+      setUnreadNotifs(items.filter((n: any) => !n.is_read).length);
+    } catch {}
+  }, []);
+
+  useEffect(() => {
+    if (unreadNotifs > prevUnread.current) {
+      setBellPulse(true);
+      setTimeout(() => setBellPulse(false), 1200);
+    }
+    prevUnread.current = unreadNotifs;
+  }, [unreadNotifs]);
 
   useEffect(() => {
     fetch(`${API}/governance/queue?limit=1`, { credentials: "include" })
@@ -34,10 +53,10 @@ export default function Sidebar() {
       .then((d) => setPendingCount(d.total || 0))
       .catch(() => {});
     auth.me().then(setUser).catch(() => {});
-    notificationsApi.list(false, 10)
-      .then((n) => { setNotifList(n); setUnreadNotifs(n.filter((x: any) => !x.is_read).length); })
-      .catch(() => {});
-  }, []);
+    loadNotifications();
+    const interval = setInterval(loadNotifications, 60000);
+    return () => clearInterval(interval);
+  }, [loadNotifications]);
 
   const govActive = pathname.startsWith("/governance");
 
@@ -66,7 +85,7 @@ export default function Sidebar() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
           </svg>
           {unreadNotifs > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-(--color-brand-gold) text-white text-[8px] font-bold rounded-full flex items-center justify-center">{unreadNotifs}</span>
+            <span className={cn("absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-(--color-brand-gold) text-white text-[8px] font-bold rounded-full flex items-center justify-center", bellPulse && "notif-new")}>{unreadNotifs}</span>
           )}
         </button>
       </div>
@@ -124,6 +143,7 @@ export default function Sidebar() {
           {navItem("/curriculum/editor", "Map Editor")}
           {navItem("/assessment", "Assessment")}
           {navItem("/reading", "Reading Log")}
+          {navItem("/resources", "Resources")}
           {navItem("/inspection", "Progress")}
         </div>
         <div>

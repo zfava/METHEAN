@@ -303,6 +303,19 @@ export const dataExport = {
   download: () => `/api/v1/household/export`,
 };
 
+// ── Resources ──
+export const resources = {
+  list: (params?: { resource_type?: string; subject_area?: string; status?: string }) => {
+    const qs = params ? new URLSearchParams(Object.entries(params).filter(([, v]) => v) as string[][]).toString() : "";
+    return request<any[]>(`/resources${qs ? `?${qs}` : ""}`);
+  },
+  create: (data: object) => request<any>("/resources", { method: "POST", body: JSON.stringify(data) }),
+  update: (id: string, data: object) => request<any>(`/resources/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+  remove: (id: string) => request<any>(`/resources/${id}`, { method: "DELETE" }),
+  link: (id: string, nodeId: string) => request<any>(`/resources/${id}/link/${nodeId}`, { method: "POST" }),
+  unlink: (id: string, nodeId: string) => request<any>(`/resources/${id}/link/${nodeId}`, { method: "DELETE" }),
+};
+
 // ── Activity Feedback ──
 export const feedback = {
   create: (activityId: string, childId: string, message: string, feedbackType = "comment") =>

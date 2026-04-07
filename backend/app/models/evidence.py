@@ -199,3 +199,33 @@ class ReadingLogEntry(Base):
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
+
+
+class FamilyResource(Base):
+    """Track family educational materials (textbooks, workbooks, digital, etc.)."""
+
+    __tablename__ = "family_resources"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    household_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("households.id", ondelete="CASCADE"), nullable=False
+    )
+    created_by: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL")
+    )
+    name: Mapped[str] = mapped_column(String(500), nullable=False)
+    resource_type: Mapped[str] = mapped_column(String(100), default="textbook")
+    subject_area: Mapped[str | None] = mapped_column(String(100))
+    publisher: Mapped[str | None] = mapped_column(String(500))
+    grade_range: Mapped[str | None] = mapped_column(String(50))
+    notes: Mapped[str | None] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(String(50), default="owned")
+    linked_node_ids: Mapped[list] = mapped_column(JSONB, default=list)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
