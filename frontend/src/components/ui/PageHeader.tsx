@@ -16,7 +16,7 @@ export default function PageHeader({
   className?: string;
 }) {
   return (
-    <div className={cn("flex items-start justify-between mb-6", className)}>
+    <div className={cn("flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6", className)}>
       <div className="flex items-center gap-3">
         {backHref && (
           <a href={backHref} className="text-(--color-text-tertiary) hover:text-(--color-text-secondary) transition-colors duration-150">

@@ -230,7 +230,7 @@ export default function CurriculumPage() {
               {curricula.length > 0 && (
                 <div>
                   <h3 className="text-xs font-bold text-(--color-text-secondary) uppercase tracking-wider mb-3">Annual Curricula</h3>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {curricula.map((c: any) => (
                       <Card key={c.id} href={`/curriculum/year?id=${c.id}`} padding="p-4">
                         <div className="flex items-center justify-between mb-1">
@@ -251,7 +251,7 @@ export default function CurriculumPage() {
               {maps.length > 0 && (
                 <div>
                   <h3 className="text-xs font-bold text-(--color-text-secondary) uppercase tracking-wider mb-3">Learning Maps</h3>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {maps.map((ms) => (
                       <Card key={ms.learning_map_id} href={`/curriculum/editor?map_id=${ms.learning_map_id}`} padding="p-4">
                         <div className="flex items-center justify-between mb-2">
@@ -276,7 +276,7 @@ export default function CurriculumPage() {
 
       {/* ── BUILD: PATH SELECTOR ── */}
       {tab === "build" && !buildPath && (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <Card onClick={() => setBuildPath("philosophy")} padding="p-5" className="text-left hover:border-(--color-accent) transition-colors">
             <div className="text-sm font-semibold text-(--color-text) mb-1">Build from Philosophy</div>
             <p className="text-xs text-(--color-text-secondary)">AI generates curriculum based on your educational profile</p>
@@ -299,7 +299,7 @@ export default function CurriculumPage() {
             Generating for: <strong className="capitalize">{philosophyLabel}</strong> approach, <strong>{selectedChild.first_name}</strong> ({selectedChild.grade_level || "K"})
           </div>
           <h2 className="text-sm font-semibold text-(--color-text) mb-3">Choose a subject to build</h2>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {subjects.map((subj) => (
               <Card key={subj.s} onClick={() => setSelectedSubject(subj)} padding="p-4" className="text-left hover:border-(--color-accent) transition-colors">
                 <div className="text-sm font-medium text-(--color-text)">{subj.s}</div>

@@ -104,7 +104,7 @@ export default function ReadingPage() {
       {/* Add book form */}
       {showAddForm && (
         <Card className="mb-6">
-          <div className="grid grid-cols-2 gap-3 mb-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
             <input value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="Book title *"
               className="col-span-2 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
             <input value={newAuthor} onChange={(e) => setNewAuthor(e.target.value)} placeholder="Author"

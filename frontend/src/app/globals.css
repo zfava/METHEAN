@@ -78,6 +78,10 @@ h1, h2, h3, h4 { font-family: var(--font-sans); }
   outline-offset: 2px;
 }
 
+/* ── Overflow prevention ── */
+pre, code { overflow-x: auto; max-width: 100%; }
+table { display: block; overflow-x: auto; max-width: 100%; }
+
 @media print {
   .no-print { display: none !important; }
   body { background: white; }

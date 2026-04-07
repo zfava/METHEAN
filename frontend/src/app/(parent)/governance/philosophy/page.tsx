@@ -141,7 +141,7 @@ export default function PhilosophyPage() {
         <h2 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-4">
           1. Educational Approach
         </h2>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {PHILOSOPHIES.map((p) => (
             <Card key={p.value} onClick={() => setPhilosophy(p.value)} padding="p-3.5"
               selected={philosophy === p.value}

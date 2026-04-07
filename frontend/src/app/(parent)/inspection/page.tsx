@@ -43,7 +43,7 @@ export default function InspectionPage() {
         ))}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card padding="p-0" className="max-h-[600px] overflow-y-auto">
           {loading ? (
             <div className="p-4"><LoadingSkeleton variant="list" count={5} /></div>

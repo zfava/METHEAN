@@ -46,7 +46,7 @@ export default function Sidebar() {
     return (
       <Link key={href} href={href}
         className={cn(
-          "flex items-center px-4 py-[7px] text-[13px] rounded-r-lg ml-1 transition-colors duration-150",
+          "flex items-center px-4 py-2 text-[13px] rounded-r-lg ml-1 transition-colors duration-150",
           active
             ? "bg-(--color-sidebar-active) text-white font-medium border-l-2 border-(--color-accent)"
             : "text-(--color-text-sidebar) hover:text-white hover:bg-(--color-sidebar-hover) border-l-2 border-transparent",
@@ -135,7 +135,7 @@ export default function Sidebar() {
           </div>
           <Link href="/governance"
             className={cn(
-              "flex items-center px-4 py-[7px] text-[13px] rounded-r-lg ml-1 transition-colors duration-150",
+              "flex items-center px-4 py-2 text-[13px] rounded-r-lg ml-1 transition-colors duration-150",
               pathname === "/governance"
                 ? "bg-(--color-sidebar-active) text-white font-medium border-l-2 border-(--color-accent)"
                 : "text-(--color-text-sidebar) hover:text-white hover:bg-(--color-sidebar-hover) border-l-2 border-transparent",

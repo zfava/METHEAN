@@ -57,7 +57,7 @@ export default function CompliancePage() {
 
       {result && !loading && (
         <div className="space-y-6">
-          <Card className="flex items-center gap-6">
+          <Card className="flex flex-col sm:flex-row items-center gap-6">
             <div className="relative w-20 h-20 shrink-0">
               <svg className="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
                 <circle cx="40" cy="40" r="34" fill="none" stroke="var(--color-border)" strokeWidth="6" />

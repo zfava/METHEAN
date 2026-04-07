@@ -115,7 +115,7 @@ export default function DashboardPage() {
           <p className="text-xs text-(--color-text-tertiary) mt-1">Go to the <a href="/family" className="text-(--color-accent) hover:underline">Family page</a> to add children to your household.</p>
         </Card>
       )}
-      <div className="grid grid-cols-3 gap-3 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
         {children.map((c) => {
           const s = summaries[c.id];
           const pct = s && s.total > 0 ? Math.round((s.mastered / s.total) * 100) : 0;
@@ -148,7 +148,7 @@ export default function DashboardPage() {
       {selectedChild && (
         <>
           {/* ── Activities + Alerts ── */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div className="col-span-2">
               <Card padding="p-0">
                 <div className="px-5 py-3 border-b border-(--color-border)">
