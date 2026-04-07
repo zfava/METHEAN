@@ -12,6 +12,7 @@ import Button from "@/components/ui/Button";
 import SectionHeader from "@/components/ui/SectionHeader";
 import EmptyState from "@/components/ui/EmptyState";
 import { cn } from "@/lib/cn";
+import EvaluationChain from "@/components/EvaluationChain";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
@@ -32,6 +33,7 @@ export default function GovernanceOverviewPage() {
   const [philSummary, setPhilSummary] = useState<{ philosophy: string; autonomy: string; boundaries: number }>({ philosophy: "", autonomy: "", boundaries: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [expandedEvent, setExpandedEvent] = useState<string | null>(null);
 
   useEffect(() => { load(); }, []);
 
@@ -266,12 +268,20 @@ export default function GovernanceOverviewPage() {
           ) : (
             <div className="divide-y divide-(--color-border)/30 max-h-80 overflow-y-auto">
               {recentEvents.map((evt) => (
-                <div key={evt.id} className="flex items-center justify-between px-5 py-2.5">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <StatusBadge status={evt.action} />
-                    <span className="text-xs text-(--color-text) truncate">{evt.target_type.replace(/_/g, " ")}</span>
-                  </div>
-                  <span className="text-[10px] text-(--color-text-tertiary) shrink-0 ml-2">{relativeTime(evt.created_at)}</span>
+                <div key={evt.id}>
+                  <button onClick={() => setExpandedEvent(expandedEvent === evt.id ? null : evt.id)}
+                    className="w-full flex items-center justify-between px-5 py-2.5 text-left hover:bg-(--color-page) transition-colors">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <StatusBadge status={evt.action} />
+                      <span className="text-xs text-(--color-text) truncate">{evt.target_type.replace(/_/g, " ")}</span>
+                    </div>
+                    <span className="text-[10px] text-(--color-text-tertiary) shrink-0 ml-2">{relativeTime(evt.created_at)}</span>
+                  </button>
+                  {expandedEvent === evt.id && evt.metadata_?.evaluations && (
+                    <div className="px-5 pb-2.5">
+                      <EvaluationChain evaluations={evt.metadata_.evaluations} blockingRules={evt.metadata_.blocking_rules || []} />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

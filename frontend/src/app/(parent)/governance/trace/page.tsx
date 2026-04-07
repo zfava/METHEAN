@@ -8,6 +8,7 @@ import EmptyState from "@/components/ui/EmptyState";
 import StatusBadge from "@/components/StatusBadge";
 import { cn } from "@/lib/cn";
 import { relativeTime } from "@/lib/format";
+import EvaluationChain from "@/components/EvaluationChain";
 
 const dotColor: Record<string, string> = {
   approve: "bg-(--color-success)",
@@ -117,6 +118,15 @@ export default function TracePage() {
                       {evt.reason && (
                         <div className="mt-2 pt-2 border-t border-(--color-border)">
                           <span className="text-(--color-text-tertiary)">Reason:</span> {evt.reason}
+                        </div>
+                      )}
+                      {evt.metadata_?.evaluations && evt.metadata_.evaluations.length > 0 && (
+                        <div className="mt-2 pt-2 border-t border-(--color-border)">
+                          <div className="text-(--color-text-tertiary) mb-1.5">Rule evaluations:</div>
+                          <EvaluationChain
+                            evaluations={evt.metadata_.evaluations}
+                            blockingRules={evt.metadata_.blocking_rules || []}
+                          />
                         </div>
                       )}
                     </div>

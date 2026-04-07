@@ -65,6 +65,7 @@ class GovernanceEventResponse(BaseModel):
     target_type: str
     target_id: uuid.UUID
     reason: str | None
+    metadata_: dict | None = None
     created_at: datetime
 
 

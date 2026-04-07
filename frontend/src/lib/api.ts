@@ -610,6 +610,13 @@ export interface GovernanceRule {
   created_at: string;
 }
 
+export interface GovernanceEvaluation {
+  rule: string;
+  type: string;
+  passed: boolean;
+  reason: string;
+}
+
 export interface GovernanceEvent {
   id: string;
   household_id: string;
@@ -618,6 +625,7 @@ export interface GovernanceEvent {
   target_type: string;
   target_id: string;
   reason: string | null;
+  metadata_: { source?: string; evaluations?: GovernanceEvaluation[]; blocking_rules?: string[] } | null;
   created_at: string;
 }
 

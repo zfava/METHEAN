@@ -1137,6 +1137,21 @@ async def governance_queue(
         for c in children_result.scalars().all():
             child_names[c.id] = f"{c.first_name} {c.last_name or ''}".strip()
 
+    # Fetch governance evaluations for pending activities
+    activity_ids = [a.id for a in activities]
+    gov_evals: dict[uuid.UUID, dict] = {}
+    if activity_ids:
+        for aid in activity_ids:
+            ev_result = await db.execute(
+                select(GovernanceEvent).where(
+                    GovernanceEvent.target_id == aid,
+                    GovernanceEvent.household_id == user.household_id,
+                ).order_by(GovernanceEvent.created_at.desc()).limit(1)
+            )
+            ev = ev_result.scalar_one_or_none()
+            if ev and ev.metadata_:
+                gov_evals[aid] = ev.metadata_
+
     items = []
     for a in activities:
         plan_id = week_to_plan.get(a.plan_week_id)
@@ -1158,6 +1173,7 @@ async def governance_queue(
             "child_id": str(a_child_id) if a_child_id else None,
             "plan_name": plan_name,
             "plan_id": str(plan_id) if plan_id else None,
+            "governance_evaluation": gov_evals.get(a.id, {}),
         })
 
     return {
