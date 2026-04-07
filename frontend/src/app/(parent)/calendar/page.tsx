@@ -153,7 +153,7 @@ export default function CalendarPage() {
       ) : (
         <>
           {/* Desktop: 5-column grid */}
-          <div className="hidden md:grid grid-cols-5 gap-3">
+          <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-5 gap-3">
             {DAYS.map((day, dayIdx) => {
               const dayDate = addDays(weekStart, dayIdx);
               const isToday = formatDate(dayDate) === formatDate(new Date());
@@ -310,7 +310,7 @@ function MobileCalendar({ weekStart, activitiesForDay, expanded, setExpanded }: 
   const dayActivities = activitiesForDay(activeDay);
 
   return (
-    <div className="md:hidden">
+    <div className="sm:hidden">
       <div className="flex gap-1 mb-4">
         {DAYS.map((day, i) => (
           <button key={day} onClick={() => setActiveDay(i)}

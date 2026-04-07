@@ -82,7 +82,7 @@ export default function InspectionPage() {
                   )}
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-2 mb-4 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4 text-xs">
                 {[
                   { label: "Model", value: selected.model_used || "\u2014" },
                   { label: "Tokens", value: `${selected.input_tokens || 0} in / ${selected.output_tokens || 0} out` },

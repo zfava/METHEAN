@@ -251,7 +251,7 @@ export default function FamilyPage() {
       {/* Add child */}
       {showAddChild ? (
         <Card className="mt-3">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Child's first name"
               className="flex-1 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
             <input value={newGrade} onChange={(e) => setNewGrade(e.target.value)} placeholder="Grade (K, 1st, etc.)"

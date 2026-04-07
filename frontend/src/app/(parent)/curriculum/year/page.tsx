@@ -179,7 +179,7 @@ export default function YearViewPage() {
       {/* Overview Card */}
       <Card className="mb-6">
         <p className="text-xs text-(--color-text-secondary) mb-2">{curriculum.scope_sequence?.overview || ""}</p>
-        <div className="flex gap-6 text-xs text-(--color-text-tertiary)">
+        <div className="flex flex-wrap gap-3 sm:gap-6 text-xs text-(--color-text-tertiary)">
           <span>{curriculum.hours_per_week}h/week</span>
           <span>{curriculum.total_weeks} weeks</span>
           <span>{curriculum.start_date} → {curriculum.end_date}</span>

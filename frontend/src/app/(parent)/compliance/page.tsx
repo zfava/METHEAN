@@ -42,7 +42,7 @@ export default function CompliancePage() {
     <div className="max-w-4xl">
       <PageHeader title="State Compliance" subtitle="Track requirements automatically." />
 
-      <div className="flex items-center gap-3 mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
         <select value={selectedState} onChange={(e) => setSelectedState(e.target.value)}
           className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)">
           <option value="">Select your state...</option>

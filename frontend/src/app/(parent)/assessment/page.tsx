@@ -132,7 +132,7 @@ export default function AssessmentPage() {
                   placeholder="What did you observe?" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] h-24 resize-none" />
                 <div>
                   <label className="block text-xs text-(--color-text-secondary) mb-1">Your mastery judgment (overrides AI)</label>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     {JUDGMENTS.map((j) => (
                       <button key={j} onClick={() => setAJudgment(j === aJudgment ? "" : j)}
                         className={cn(

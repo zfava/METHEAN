@@ -113,7 +113,7 @@ export default function ReportsPage() {
             <h3 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-2 border-b border-(--color-border) pb-1">
               1. Executive Summary
             </h3>
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
                 { label: "Activities Approved", value: s?.activities_approved },
                 { label: "Activities Rejected", value: s?.activities_rejected },

@@ -150,8 +150,8 @@ export default function DashboardPage() {
       {selectedChild && (
         <>
           {/* ── Activities + Alerts ── */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="col-span-2">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+            <div className="lg:col-span-2">
               <Card padding="p-0">
                 <div className="px-5 py-3 border-b border-(--color-border)">
                   <SectionHeader title={`${selectedChild.first_name}'s Activities Today`} />

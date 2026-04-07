@@ -175,7 +175,7 @@ export default function PlansPage() {
                 </div>
               </Card>
 
-              <div className="grid grid-cols-5 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                 {days.map((day) => {
                   const dayActivities = activitiesByDay(selected.activities)[day] || [];
                   return (

@@ -224,9 +224,9 @@ export default function EditorPage() {
                      edges.some((e) => e.is_new || e.is_deleted);
 
   return (
-    <div className="flex flex-col md:flex-row h-auto md:h-[calc(100vh-4rem)] -m-4 md:-m-8">
+    <div className="flex flex-col lg:flex-row h-auto lg:h-[calc(100vh-4rem)] -m-4 lg:-m-8">
       {/* LEFT PANEL */}
-      <div className="w-full md:w-52 bg-(--color-surface) border-b md:border-b-0 md:border-r border-(--color-border) p-4 flex flex-col shrink-0">
+      <div className="w-full lg:w-52 bg-(--color-surface) border-b lg:border-b-0 lg:border-r border-(--color-border) p-4 flex flex-col shrink-0">
         <input value={mapName} onChange={(e) => setMapName(e.target.value)}
           className="text-sm font-semibold text-(--color-text) mb-3 px-2 py-1 border border-transparent hover:border-(--color-border) rounded-[6px]" />
 
@@ -313,7 +313,7 @@ export default function EditorPage() {
       </div>
 
       {/* RIGHT PANEL */}
-      <div className="w-full md:w-72 bg-(--color-surface) border-t md:border-t-0 md:border-l border-(--color-border) p-4 shrink-0 overflow-y-auto">
+      <div className="w-full lg:w-72 bg-(--color-surface) border-t lg:border-t-0 lg:border-l border-(--color-border) p-4 shrink-0 overflow-y-auto">
         {selectedNode ? (
           <div className="space-y-3">
             <h3 className="text-xs font-bold text-(--color-text-secondary) uppercase tracking-wider">Node Details</h3>

@@ -81,6 +81,7 @@ h1, h2, h3, h4 { font-family: var(--font-sans); }
 /* ── Overflow prevention ── */
 pre, code { overflow-x: auto; max-width: 100%; }
 table { display: block; overflow-x: auto; max-width: 100%; }
+img, svg { max-width: 100%; height: auto; }
 
 @media print {
   .no-print { display: none !important; }
