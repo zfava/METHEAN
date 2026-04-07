@@ -87,6 +87,12 @@ export default function ReportsPage() {
 
       {loading && <LoadingSkeleton variant="text" count={5} />}
 
+      {!loading && !report && (
+        <div className="text-center py-12 text-sm text-(--color-text-tertiary)">
+          No reports generated yet. Select a date range above and click Generate Report to see a summary of AI oversight and family progress.
+        </div>
+      )}
+
       {report && (
         <div className="space-y-6 print:space-y-4">
           {/* Header */}

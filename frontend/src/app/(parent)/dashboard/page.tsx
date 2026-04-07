@@ -109,6 +109,12 @@ export default function DashboardPage() {
       />
 
       {/* ── Child cards ── */}
+      {children.length === 0 && !childLoading && (
+        <Card className="text-center py-10 mb-6">
+          <p className="text-sm text-(--color-text-secondary)">Add your first child to get started.</p>
+          <p className="text-xs text-(--color-text-tertiary) mt-1">Go to the <a href="/family" className="text-(--color-accent) hover:underline">Family page</a> to add children to your household.</p>
+        </Card>
+      )}
       <div className="grid grid-cols-3 gap-3 mb-6">
         {children.map((c) => {
           const s = summaries[c.id];
@@ -149,7 +155,7 @@ export default function DashboardPage() {
                   <SectionHeader title={`${selectedChild.first_name}'s Activities Today`} />
                 </div>
                 {todayActivities.length === 0 ? (
-                  <div className="px-5 py-8 text-center text-sm text-(--color-text-tertiary)">No activities scheduled for today</div>
+                  <div className="px-5 py-8 text-center text-sm text-(--color-text-tertiary)">No activities scheduled for today. Generate a weekly plan or build a curriculum to get started.</div>
                 ) : todayActivities.map((a) => (
                   <div key={a.id} className="flex items-center justify-between px-5 py-3 border-b border-(--color-border)/50 last:border-0">
                     <div className="flex items-center gap-3">

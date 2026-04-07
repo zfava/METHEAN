@@ -38,7 +38,7 @@ export default function CurriculumHistoryPage() {
       />
 
       {sortedYears.length === 0 ? (
-        <EmptyState icon="empty" title="No curriculum history yet" description="Generate and approve annual curricula to build a permanent educational record." />
+        <EmptyState icon="empty" title="No curriculum history yet" description="As you complete academic years, your full educational record will build here. Start by creating a curriculum from the Curriculum page." />
       ) : (
         <div className="space-y-6">
           {sortedYears.map((year) => {

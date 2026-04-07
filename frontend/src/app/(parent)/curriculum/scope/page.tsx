@@ -71,7 +71,7 @@ export default function ScopePage() {
             </Card>
           );
         })}
-        {maps.length === 0 && <p className="text-sm text-(--color-text-secondary)">No enrolled maps.</p>}
+        {maps.length === 0 && <p className="text-sm text-(--color-text-secondary)">No enrolled maps yet. Create a curriculum to see your scope and sequence here.</p>}
       </div>
     </div>
   );

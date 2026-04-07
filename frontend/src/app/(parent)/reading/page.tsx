@@ -27,6 +27,7 @@ export default function ReadingPage() {
   const [entries, setEntries] = useState<any[]>([]);
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
 
@@ -57,7 +58,9 @@ export default function ReadingPage() {
       ]);
       setEntries(list);
       setStats(s);
-    } catch {} finally { setLoading(false); }
+    } catch (err: any) {
+      setError(err.detail || "Failed to load reading log");
+    } finally { setLoading(false); }
   }
 
   async function addBook() {
@@ -149,8 +152,9 @@ export default function ReadingPage() {
         {loading ? <LoadingSkeleton variant="list" count={4} /> : (
           <>
             {entries.length === 0 ? (
-              <EmptyState icon="empty" title={`No ${tab === "all" ? "" : tab.replace("_", " ")} books`}
-                description={tab === "reading" ? "Add a book to start tracking." : undefined} />
+              <EmptyState icon="empty"
+                title={tab === "reading" ? "Not currently reading any books" : tab === "completed" ? "No completed books yet" : tab === "to_read" ? "No books on the reading list" : "No books tracked yet"}
+                description={tab === "reading" ? "Add a book and set it to 'Currently Reading' to start tracking." : tab === "to_read" ? "Build a reading list for the year ahead." : `Add your first book to start building ${selectedChild?.first_name || "your child"}'s reading record.`} />
             ) : (
               <div className="space-y-3">
                 {entries.map((entry) => {

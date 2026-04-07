@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
@@ -126,7 +127,7 @@ export default function PhilosophyPage() {
   }
   function removeBoundary(i: number) { setBoundaries(boundaries.filter((_, j) => j !== i)); }
 
-  if (loading) return <div className="max-w-3xl text-sm text-(--color-text-tertiary)">Loading...</div>;
+  if (loading) return <div className="max-w-3xl"><PageHeader title="Educational Philosophy" /><LoadingSkeleton variant="card" count={3} /></div>;
 
   return (
     <div className="max-w-3xl">

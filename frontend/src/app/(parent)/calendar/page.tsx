@@ -10,6 +10,7 @@ import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/StatusBadge";
+import EmptyState from "@/components/ui/EmptyState";
 import { cn } from "@/lib/cn";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
@@ -67,6 +68,7 @@ export default function CalendarPage() {
   const [activities, setActivities] = useState<ActivityInPlan[]>([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<string | null>(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (selectedChild) loadWeek();
@@ -74,6 +76,7 @@ export default function CalendarPage() {
 
   async function loadWeek() {
     setLoading(true);
+    setError("");
     try {
       const allPlans = await plans.list(selectedChild!.id);
       setPlanList(allPlans);
@@ -97,7 +100,9 @@ export default function CalendarPage() {
       }
 
       setActivities(weekActivities);
-    } catch {} finally {
+    } catch (err: any) {
+      setError(err.detail || "Failed to load schedule");
+    } finally {
       setLoading(false);
     }
   }
@@ -133,6 +138,13 @@ export default function CalendarPage() {
       />
 
       <div className="text-sm font-medium text-(--color-text) mb-4">{weekLabel}</div>
+
+      {error && (
+        <Card className="border-l-4 border-(--color-danger) mb-4">
+          <p className="text-sm text-(--color-danger)">{error}</p>
+          <Button variant="ghost" size="sm" onClick={loadWeek} className="mt-2">Try again</Button>
+        </Card>
+      )}
 
       {loading ? (
         <LoadingSkeleton variant="list" count={5} />
@@ -254,12 +266,18 @@ export default function CalendarPage() {
           />
 
           {activities.length === 0 && (
-            <Card className="text-center py-12 mt-4">
-              <p className="text-sm text-(--color-text-secondary) mb-3">No plan for this week.</p>
-              <Button variant="primary" size="sm" onClick={() => {
-                plans.generate(selectedChild!.id, { week_start: formatDate(weekStart) }).then(loadWeek);
-              }}>Generate Plan</Button>
-            </Card>
+            <div className="mt-4">
+              <EmptyState
+                icon="empty"
+                title="No activities scheduled this week"
+                description="Generate a plan or add activities manually from the curriculum page."
+                action={
+                  <Button variant="primary" size="sm" onClick={() => {
+                    plans.generate(selectedChild!.id, { week_start: formatDate(weekStart) }).then(loadWeek);
+                  }}>Generate Plan</Button>
+                }
+              />
+            </div>
           )}
 
           {/* Week summary */}

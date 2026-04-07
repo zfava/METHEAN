@@ -161,7 +161,7 @@ export default function AssessmentPage() {
                 <span className="text-xs text-(--color-text-secondary)">{a.assessed_at?.split("T")[0]}</span>
               </Card>
             ))}
-            {!loading && assessments.length === 0 && <p className="text-sm text-(--color-text-secondary)">No assessments recorded yet.</p>}
+            {!loading && assessments.length === 0 && <EmptyState icon="empty" title="No assessments recorded yet" description={`Record your first observation to start building ${selectedChild?.first_name || "your child"}'s portfolio.`} />}
           </div>
         </>
       )}
@@ -216,7 +216,7 @@ export default function AssessmentPage() {
               </Card>
             ))}
           </div>
-          {!loading && portfolio.length === 0 && <p className="text-sm text-(--color-text-secondary)">No portfolio entries yet.</p>}
+          {!loading && portfolio.length === 0 && <EmptyState icon="empty" title="No portfolio entries yet" description="Add work samples, photos, or descriptions to build a portfolio." />}
 
           {transcript && (
             <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">

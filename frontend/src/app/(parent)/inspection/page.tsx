@@ -48,7 +48,7 @@ export default function InspectionPage() {
           {loading ? (
             <div className="p-4"><LoadingSkeleton variant="list" count={5} /></div>
           ) : runs.length === 0 ? (
-            <div className="p-8 text-center text-sm text-(--color-text-secondary)">No AI runs found.</div>
+            <div className="p-8 text-center text-sm text-(--color-text-secondary)">No AI activity yet. When the planner, tutor, or evaluator runs, every call appears here for inspection.</div>
           ) : runs.map((run) => (
             <button key={run.id} onClick={() => selectRun(run.id)}
               className={cn(

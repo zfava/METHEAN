@@ -31,6 +31,7 @@ export default function YearViewPage() {
   const [curriculum, setCurriculum] = useState<any>(null);
   const [allCurricula, setAllCurricula] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [expandedWeek, setExpandedWeek] = useState<number | null>(null);
   const [weekDetail, setWeekDetail] = useState<any>(null);
   const [weekNotes, setWeekNotes] = useState("");
@@ -54,10 +55,12 @@ export default function YearViewPage() {
     if (curriculumId) {
       annualCurriculum.detail(curriculumId)
         .then(setCurriculum)
+        .catch((err: any) => setError(err.detail || "Failed to load curriculum"))
         .finally(() => setLoading(false));
     } else if (selectedChild) {
       annualCurriculum.list(selectedChild.id)
         .then(setAllCurricula)
+        .catch((err: any) => setError(err.detail || "Failed to load curricula"))
         .finally(() => setLoading(false));
     }
   }, [curriculumId, selectedChild]);
@@ -103,10 +106,15 @@ export default function YearViewPage() {
     return (
       <div className="max-w-4xl">
         <PageHeader title="Year Plan" subtitle="Select a curriculum to view." />
-        {allCurricula.length === 0 ? (
+        {error && (
+          <Card className="border-l-4 border-(--color-danger) mb-4">
+            <p className="text-sm text-(--color-danger)">{error}</p>
+          </Card>
+        )}
+        {allCurricula.length === 0 && !error ? (
           <Card className="text-center py-12">
-            <p className="text-sm text-(--color-text-secondary)">No annual curricula yet.</p>
-            <p className="text-xs text-(--color-text-tertiary) mt-1">Build one from the Curriculum page.</p>
+            <p className="text-sm text-(--color-text-secondary)">No year plans for {selectedChild?.first_name || "this child"} yet.</p>
+            <p className="text-xs text-(--color-text-tertiary) mt-1">Build a curriculum first from the Curriculum page, then it will appear here as a year-long plan.</p>
           </Card>
         ) : (
           <div className="space-y-3">
