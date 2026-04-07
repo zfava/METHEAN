@@ -132,33 +132,46 @@ export default function CompliancePage() {
 
           {/* Document generation */}
           <Card>
-            <SectionHeader title="Generate Documents" />
-            <div className="flex flex-wrap gap-2 mt-2">
+            <SectionHeader title="Documents" />
+            <p className="text-xs text-(--color-text-secondary) mt-1 mb-3">Generate and download compliance documents for {selectedChild.first_name}.</p>
+            <div className="space-y-2">
               {(result.strictness === "high") && (
                 <>
-                  <a href={documents.ihip(selectedChild.id, "2026-2027", selectedState)}
-                    className="px-3 py-1.5 text-xs font-medium border border-(--color-border) rounded-[6px] text-(--color-text-secondary) hover:bg-(--color-page) transition-colors"
-                    target="_blank" rel="noopener">
-                    Generate IHIP
+                  <a href={documents.ihip(selectedChild.id, "2026-2027", selectedState)} target="_blank" rel="noopener"
+                    className="flex items-center justify-between px-3 py-2.5 rounded-[6px] border border-(--color-border) hover:bg-(--color-page) transition-colors">
+                    <div>
+                      <div className="text-xs font-medium text-(--color-text)">📄 IHIP (Individualized Home Instruction Plan)</div>
+                      <div className="text-[10px] text-(--color-text-tertiary)">Required for high-regulation states</div>
+                    </div>
+                    <span className="text-xs text-(--color-accent)">Download →</span>
                   </a>
                   {[1,2,3,4].map(q => (
-                    <a key={q} href={documents.quarterlyReport(selectedChild.id, q, "2026-2027")}
-                      className="px-3 py-1.5 text-xs font-medium border border-(--color-border) rounded-[6px] text-(--color-text-secondary) hover:bg-(--color-page) transition-colors"
-                      target="_blank" rel="noopener">
-                      Q{q} Report
+                    <a key={q} href={documents.quarterlyReport(selectedChild.id, q, "2026-2027")} target="_blank" rel="noopener"
+                      className="flex items-center justify-between px-3 py-2.5 rounded-[6px] border border-(--color-border) hover:bg-(--color-page) transition-colors">
+                      <div>
+                        <div className="text-xs font-medium text-(--color-text)">📄 Q{q} Progress Report</div>
+                        <div className="text-[10px] text-(--color-text-tertiary)">Mastery, hours, and activities for quarter {q}</div>
+                      </div>
+                      <span className="text-xs text-(--color-accent)">Download →</span>
                     </a>
                   ))}
                 </>
               )}
-              <a href={documents.attendance(selectedChild.id, "2026-09-01", "2027-06-30")}
-                className="px-3 py-1.5 text-xs font-medium border border-(--color-border) rounded-[6px] text-(--color-text-secondary) hover:bg-(--color-page) transition-colors"
-                target="_blank" rel="noopener">
-                Attendance Record
+              <a href={documents.attendance(selectedChild.id, "2026-09-01", "2027-06-30")} target="_blank" rel="noopener"
+                className="flex items-center justify-between px-3 py-2.5 rounded-[6px] border border-(--color-border) hover:bg-(--color-page) transition-colors">
+                <div>
+                  <div className="text-xs font-medium text-(--color-text)">📄 Attendance Record</div>
+                  <div className="text-[10px] text-(--color-text-tertiary)">School days and instruction hours</div>
+                </div>
+                <span className="text-xs text-(--color-accent)">Download →</span>
               </a>
-              <a href={documents.transcript(selectedChild.id)}
-                className="px-3 py-1.5 text-xs font-medium border border-(--color-border) rounded-[6px] text-(--color-text-secondary) hover:bg-(--color-page) transition-colors"
-                target="_blank" rel="noopener">
-                Transcript
+              <a href={documents.transcript(selectedChild.id)} target="_blank" rel="noopener"
+                className="flex items-center justify-between px-3 py-2.5 rounded-[6px] border border-(--color-border) hover:bg-(--color-page) transition-colors">
+                <div>
+                  <div className="text-xs font-medium text-(--color-text)">📄 Academic Transcript</div>
+                  <div className="text-[10px] text-(--color-text-tertiary)">Cumulative record across all subjects and years</div>
+                </div>
+                <span className="text-xs text-(--color-accent)">Download →</span>
               </a>
             </div>
           </Card>

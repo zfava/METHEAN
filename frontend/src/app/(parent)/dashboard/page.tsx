@@ -32,6 +32,9 @@ export default function DashboardPage() {
   const [rulesCount, setRulesCount] = useState(0);
   const [lastDecision, setLastDecision] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [subjectMastery, setSubjectMastery] = useState<Array<{ name: string; mastered: number; total: number; color: string }>>([]);
+  const [dueForReview, setDueForReview] = useState<Array<{ title: string; due: string }>>([]);
+  const [weeklyStats, setWeeklyStats] = useState({ completed: 0, minutes: 0, mastered: 0 });
   const [error, setError] = useState("");
 
   useEffect(() => { init(); }, []);
@@ -82,6 +85,36 @@ export default function DashboardPage() {
       setTodayActivities(Array.isArray(todayResp) ? todayResp : []);
       const alertItems = (alertsResp as any).items || alertsResp;
       setAlerts(Array.isArray(alertItems) ? alertItems.slice(0, 5) : []);
+
+      // Fetch per-subject mastery
+      const subjectColors = ["#4A6FA5", "#2D6A4F", "#B8860B", "#6B4C9A", "#C97B2A", "#B5547A"];
+      try {
+        const mapStates = await childrenApi.allMapState(selectedChild.id);
+        const subjects = mapStates.map((ms: any, i: number) => ({
+          name: ms.map_name || "Subject",
+          mastered: ms.nodes?.filter((n: any) => n.mastery === "mastered").length || 0,
+          total: ms.nodes?.length || 0,
+          color: subjectColors[i % subjectColors.length],
+        }));
+        setSubjectMastery(subjects);
+      } catch { setSubjectMastery([]); }
+
+      // Fetch due-for-review
+      try {
+        const retention = await childrenApi.retentionSummary(selectedChild.id);
+        const now = Date.now();
+        const sevenDays = 7 * 24 * 60 * 60 * 1000;
+        const due = ((retention as any).nodes || [])
+          .filter((n: any) => n.due_date && new Date(n.due_date).getTime() - now < sevenDays)
+          .slice(0, 5)
+          .map((n: any) => ({ title: n.title || n.node_id, due: n.due_date }));
+        setDueForReview(due);
+      } catch { setDueForReview([]); }
+
+      // Weekly stats from today's activities
+      const completedToday = Array.isArray(todayResp) ? todayResp.filter((a: any) => a.status === "completed").length : 0;
+      const minutesToday = Array.isArray(todayResp) ? todayResp.reduce((s: number, a: any) => s + (a.estimated_minutes || 0), 0) : 0;
+      setWeeklyStats({ completed: completedToday, minutes: minutesToday, mastered: state?.mastered_count || 0 });
     } catch (err: any) {
       setError(err?.detail || err?.message || "Couldn't load activity details.");
     }
@@ -211,25 +244,61 @@ export default function DashboardPage() {
             </Card>
           </div>
 
-          {/* ── Mastery progress ── */}
-          {childState && masteryTotal > 0 && (
+          {/* ── Subject Mastery Rings ── */}
+          {subjectMastery.length > 0 && (
             <Card className="mb-6">
-              <SectionHeader title="Mastery Progress" />
-              <div className="flex rounded-full overflow-hidden h-2.5 bg-(--color-page) mb-3">
-                {masterySegments.map((seg) => seg.count > 0 && (
-                  <div key={seg.label} className={seg.color} style={{ width: `${(seg.count / masteryTotal) * 100}%` }} />
-                ))}
-              </div>
-              <div className="flex gap-5">
-                {masterySegments.map((seg) => (
-                  <div key={seg.label} className="flex items-center gap-1.5">
-                    <span className={cn("w-2.5 h-2.5 rounded-sm", seg.color)} />
-                    <span className="text-xs text-(--color-text-secondary)">{seg.label} <span className="font-medium text-(--color-text)">{seg.count}</span></span>
-                  </div>
-                ))}
+              <SectionHeader title="Mastery by Subject" />
+              <div className="flex gap-5 overflow-x-auto pb-2 mt-3">
+                {subjectMastery.map((s) => {
+                  const pct = s.total > 0 ? Math.round((s.mastered / s.total) * 100) : 0;
+                  const c2 = 2 * Math.PI * 20;
+                  return (
+                    <div key={s.name} className="flex flex-col items-center gap-1.5 min-w-[80px] shrink-0">
+                      <div className="relative w-14 h-14">
+                        <svg className="w-14 h-14 -rotate-90" viewBox="0 0 48 48">
+                          <circle cx="24" cy="24" r="20" fill="none" stroke="var(--color-border)" strokeWidth="3" />
+                          <circle cx="24" cy="24" r="20" fill="none" stroke={s.color} strokeWidth="3"
+                            strokeDasharray={`${(pct / 100) * c2} ${c2}`} strokeLinecap="round" />
+                        </svg>
+                        <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-(--color-text)">{pct}%</span>
+                      </div>
+                      <span className="text-xs font-medium text-(--color-text) text-center leading-tight">{s.name}</span>
+                      <span className="text-[10px] text-(--color-text-tertiary)">{s.mastered}/{s.total}</span>
+                    </div>
+                  );
+                })}
               </div>
             </Card>
           )}
+
+          {/* ── Due for Review ── */}
+          {dueForReview.length > 0 && (
+            <Card className="mb-6" padding="p-4">
+              <SectionHeader title="Due for Review" />
+              <div className="mt-2 space-y-1.5">
+                {dueForReview.map((n, i) => {
+                  const dueDate = new Date(n.due);
+                  const today = new Date();
+                  const diffDays = Math.ceil((dueDate.getTime() - today.getTime()) / 86400000);
+                  const label = diffDays <= 0 ? "due today" : diffDays === 1 ? "due tomorrow" : `due in ${diffDays} days`;
+                  return (
+                    <div key={i} className="flex items-center gap-2 text-xs">
+                      <span className="text-(--color-accent)">📗</span>
+                      <span className="text-(--color-text)">{n.title}</span>
+                      <span className={cn("text-[10px]", diffDays <= 0 ? "text-(--color-warning) font-medium" : "text-(--color-text-tertiary)")}>— {label}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </Card>
+          )}
+
+          {/* ── Weekly Summary ── */}
+          <div className="flex items-center gap-4 text-xs text-(--color-text-tertiary) mb-6">
+            <span>Today: {weeklyStats.completed} completed</span>
+            <span>{weeklyStats.minutes}m planned</span>
+            <span>{weeklyStats.mastered} nodes mastered</span>
+          </div>
         </>
       )}
     </div>

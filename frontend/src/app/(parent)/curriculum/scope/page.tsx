@@ -1,81 +1,154 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { children as childrenApi, type MapState } from "@/lib/api";
+import { annualCurriculum } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
-import Button from "@/components/ui/Button";
-import { cn } from "@/lib/cn";
 import EmptyState from "@/components/ui/EmptyState";
-
-const statusColors: Record<string, string> = {
-  mastered: "bg-(--color-success)", in_progress: "bg-(--color-accent)",
-  available: "bg-(--color-warning)", blocked: "bg-(--color-border-strong)",
-};
+import { cn } from "@/lib/cn";
 
 export default function ScopePage() {
   useEffect(() => { document.title = "Scope & Sequence | METHEAN"; }, []);
 
   const { selectedChild } = useChild();
-  const [maps, setMaps] = useState<MapState[]>([]);
+  const [curricula, setCurricula] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    if (selectedChild) {
-      childrenApi.allMapState(selectedChild.id).then(setMaps).finally(() => setLoading(false));
-    }
+    if (selectedChild) loadData();
   }, [selectedChild]);
 
+  async function loadData() {
+    setLoading(true);
+    setError("");
+    try {
+      setCurricula(await annualCurriculum.list(selectedChild!.id));
+    } catch (err: any) {
+      setError(err?.detail || err?.message || "Couldn't load scope data.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   if (!selectedChild) return <div className="text-sm text-(--color-text-secondary)">Select a child.</div>;
-  if (loading) return <LoadingSkeleton variant="list" count={5} />;
+  if (loading) return <div className="max-w-6xl"><PageHeader title="Scope & Sequence" /><LoadingSkeleton variant="card" count={3} /></div>;
+
+  // Compute current week number
+  const now = new Date();
+
+  function getWeekStatus(c: any, weekNum: number): "completed" | "current" | "upcoming" | "skipped" {
+    const actual = c.actual_record?.weeks || {};
+    if (actual[String(weekNum)]) return "completed";
+    const weekStart = new Date(c.start_date);
+    weekStart.setDate(weekStart.getDate() + (weekNum - 1) * 7);
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekEnd.getDate() + 7);
+    if (now >= weekStart && now < weekEnd) return "current";
+    if (now > weekEnd) return "skipped";
+    return "upcoming";
+  }
+
+  const statusColors: Record<string, string> = {
+    completed: "bg-(--color-success)",
+    current: "bg-(--color-accent)",
+    upcoming: "bg-(--color-border)",
+    skipped: "bg-(--color-warning)",
+  };
 
   return (
-    <div className="max-w-3xl print:max-w-none">
-      <PageHeader
-        title="Scope & Sequence"
-        subtitle={`${selectedChild.first_name} \u00b7 ${selectedChild.grade_level || ""}`}
-        actions={
-          <Button onClick={() => window.print()} variant="ghost" size="sm" className="print:hidden">Print</Button>
-        }
-        className="print:mb-4"
-      />
+    <div className="max-w-6xl">
+      <PageHeader title="Scope & Sequence" subtitle={`${selectedChild.first_name}'s year-long roadmap`} />
 
-      <div className="space-y-8 print:space-y-4">
-        {maps.map((ms) => {
-          const mastered = ms.nodes.filter((n) => n.mastery_level === "mastered").length;
-          const totalMins = ms.nodes.reduce((s, n) => s + n.time_spent_minutes, 0);
-          return (
-            <Card key={ms.learning_map_id} padding="p-0" className="print:border-0 print:shadow-none">
-              <div className="px-5 py-4 border-b border-(--color-border)">
-                <h2 className="text-sm font-bold text-(--color-text)">{ms.map_name}</h2>
-                <div className="text-xs text-(--color-text-secondary) mt-1">
-                  {mastered}/{ms.nodes.length} mastered &middot; {Math.round(totalMins / 60)}h logged
-                </div>
-              </div>
-              <div className="divide-y divide-(--color-page)">
-                {ms.nodes.map((node, i) => (
-                  <div key={node.node_id} className="flex items-center gap-3 px-5 py-2.5">
-                    <span className={`w-2 h-2 rounded-full shrink-0 ${statusColors[node.status] || "bg-(--color-border-strong)"}`} />
-                    <div className="flex-1">
-                      <span className="text-sm text-(--color-text)">{node.title}</span>
-                      {node.node_type === "milestone" && (
-                        <span className="ml-2 text-[9px] font-bold text-(--color-accent) uppercase">Milestone</span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-3 text-xs text-(--color-text-secondary)">
-                      <span className="capitalize">{node.mastery_level.replace(/_/g, " ")}</span>
-                      {node.time_spent_minutes > 0 && <span>{node.time_spent_minutes}m</span>}
-                    </div>
-                  </div>
+      {error && (
+        <Card className="mb-4" borderLeft="border-l-(--color-danger)">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-(--color-danger)">{error}</p>
+            <button onClick={() => { setError(""); loadData(); }} className="text-xs text-(--color-accent) hover:underline">Retry</button>
+          </div>
+        </Card>
+      )}
+
+      {curricula.length === 0 ? (
+        <EmptyState icon="empty" title="No scope and sequence data" description="Build a curriculum first to see the year-long roadmap here." />
+      ) : (
+        <div className="space-y-4">
+          {/* Legend */}
+          <div className="flex items-center gap-4 text-[10px] text-(--color-text-tertiary)">
+            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-(--color-success)" /> Completed</span>
+            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-(--color-accent)" /> Current</span>
+            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-(--color-border)" /> Upcoming</span>
+            <span className="flex items-center gap-1"><span className="w-3 h-3 rounded-sm bg-(--color-warning)" /> Skipped</span>
+            <span className="flex items-center gap-1">◆ Assessment</span>
+          </div>
+
+          {/* Timeline grid */}
+          <Card padding="p-0" className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr>
+                  <th className="sticky left-0 bg-(--color-surface) z-10 px-3 py-2 text-left text-xs font-medium text-(--color-text-secondary) border-b border-(--color-border) min-w-[120px]">Subject</th>
+                  {Array.from({ length: 36 }, (_, i) => i + 1).map((w) => (
+                    <th key={w} className={cn("px-0.5 py-2 text-center text-[9px] border-b border-(--color-border) min-w-[24px]",
+                      w % 6 === 0 ? "text-(--color-constitutional) font-bold" : "text-(--color-text-tertiary) font-normal"
+                    )}>{w}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {curricula.map((c: any) => (
+                  <tr key={c.id} className="border-b border-(--color-border)/30">
+                    <td className="sticky left-0 bg-(--color-surface) z-10 px-3 py-2">
+                      <a href={`/curriculum/year?id=${c.id}`} className="text-xs font-medium text-(--color-text) hover:text-(--color-accent)">
+                        {c.subject_name}
+                      </a>
+                      <div className="text-[9px] text-(--color-text-tertiary)">{c.academic_year}</div>
+                    </td>
+                    {Array.from({ length: c.total_weeks || 36 }, (_, i) => i + 1).map((w) => {
+                      const status = getWeekStatus(c, w);
+                      const isAssessment = w % 6 === 0;
+                      return (
+                        <td key={w} className="px-0.5 py-2 text-center">
+                          <a href={`/curriculum/year?id=${c.id}`}
+                            className={cn("inline-block w-4 h-4 rounded-sm transition-colors",
+                              statusColors[status],
+                              status === "current" && "ring-1 ring-(--color-accent) ring-offset-1"
+                            )}
+                            title={`Week ${w}: ${status}`}>
+                            {isAssessment && <span className="text-[7px] text-white leading-none flex items-center justify-center h-full">◆</span>}
+                          </a>
+                        </td>
+                      );
+                    })}
+                  </tr>
                 ))}
-              </div>
-            </Card>
-          );
-        })}
-        {maps.length === 0 && <EmptyState icon="empty" title="No scope and sequence data" description="Build a curriculum first to see the year-long roadmap here." />}
-      </div>
+              </tbody>
+            </table>
+          </Card>
+
+          {/* Mobile: Subject cards with progress bars */}
+          <div className="lg:hidden space-y-3 mt-4">
+            {curricula.map((c: any) => {
+              const totalWeeks = c.total_weeks || 36;
+              const completedWeeks = Object.keys(c.actual_record?.weeks || {}).length;
+              const pct = Math.round((completedWeeks / totalWeeks) * 100);
+              return (
+                <Card key={c.id} href={`/curriculum/year?id=${c.id}`} padding="p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium text-(--color-text)">{c.subject_name}</span>
+                    <span className="text-xs text-(--color-text-tertiary)">{completedWeeks}/{totalWeeks} weeks</span>
+                  </div>
+                  <div className="w-full h-2 rounded-full bg-(--color-border) overflow-hidden">
+                    <div className="h-full rounded-full bg-(--color-success) transition-all" style={{ width: `${pct}%` }} />
+                  </div>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
