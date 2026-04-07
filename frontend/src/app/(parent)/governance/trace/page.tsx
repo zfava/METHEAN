@@ -9,6 +9,7 @@ import StatusBadge from "@/components/StatusBadge";
 import { cn } from "@/lib/cn";
 import { relativeTime } from "@/lib/format";
 import EvaluationChain from "@/components/EvaluationChain";
+import { ShieldIcon } from "@/components/ConstitutionalCeremony";
 
 const dotColor: Record<string, string> = {
   approve: "bg-(--color-success)",
@@ -89,7 +90,8 @@ export default function TracePage() {
 
           <div className="space-y-0">
             {filtered.map((evt) => {
-              const dot = dotColor[evt.action] || "bg-(--color-text-tertiary)";
+              const isConstitutional = evt.target_type.includes("constitutional");
+              const dot = isConstitutional ? "bg-(--color-constitutional)" : (dotColor[evt.action] || "bg-(--color-text-tertiary)");
               const isOpen = expanded.has(evt.id);
 
               return (
@@ -100,7 +102,9 @@ export default function TracePage() {
                   <button onClick={() => toggleExpand(evt.id)} className="w-full text-left">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
+                        {isConstitutional && <ShieldIcon size={12} className="text-(--color-constitutional)" />}
                         <StatusBadge status={evt.action} />
+                        {isConstitutional && <StatusBadge status="constitutional" />}
                         <span className="text-sm text-(--color-text) capitalize">{evt.target_type.replace(/_/g, " ")}</span>
                       </div>
                       <span className="text-xs text-(--color-text-tertiary)">{relativeTime(evt.created_at)}</span>
@@ -116,8 +120,9 @@ export default function TracePage() {
                         {evt.user_id && <div><span className="text-(--color-text-tertiary)">Actor:</span> <span className="font-mono">{evt.user_id.slice(0, 8)}...</span></div>}
                       </div>
                       {evt.reason && (
-                        <div className="mt-2 pt-2 border-t border-(--color-border)">
-                          <span className="text-(--color-text-tertiary)">Reason:</span> {evt.reason}
+                        <div className={cn("mt-2 pt-2 border-t border-(--color-border)", isConstitutional && "bg-(--color-constitutional-light) -mx-3 px-3 py-2 rounded-[6px] border-t-0 mt-3")}>
+                          <span className="text-(--color-text-tertiary)">{isConstitutional ? "Stated reason:" : "Reason:"}</span>
+                          {isConstitutional ? <p className="italic text-(--color-constitutional) mt-0.5">"{evt.reason}"</p> : <span> {evt.reason}</span>}
                         </div>
                       )}
                       {evt.metadata_?.evaluations && evt.metadata_.evaluations.length > 0 && (

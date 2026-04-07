@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { governance, type GovernanceRule } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
+import ConstitutionalCeremony, { ShieldIcon } from "@/components/ConstitutionalCeremony";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
@@ -74,6 +75,8 @@ export default function RulesPage() {
   const [effectiveUntil, setEffectiveUntil] = useState("");
   const [confirmConstitutional, setConfirmConstitutional] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [ceremonyMode, setCeremonyMode] = useState<"create" | "amend" | "suspend" | null>(null);
+  const [ceremonyRuleId, setCeremonyRuleId] = useState<string | null>(null);
 
   // Type-specific params
   const [pMaxDaily, setPMaxDaily] = useState(240);
@@ -515,27 +518,70 @@ export default function RulesPage() {
                 </div>
               </div>
 
-              {/* Constitutional warning */}
-              {ruleTier === "constitutional" && (
-                <div className="bg-(--color-warning-light) border border-(--color-warning)/30 rounded-[10px] p-4">
-                  <p className="text-xs text-(--color-warning) font-medium mb-2">
-                    Constitutional rules are foundational principles that require ceremony to change. Are you sure?
-                  </p>
-                  <label className="flex items-center gap-2 text-xs text-(--color-text)">
-                    <input type="checkbox" checked={confirmConstitutional} onChange={(e) => setConfirmConstitutional(e.target.checked)}
-                      className="rounded border-(--color-border)" />
-                    I understand this is a constitutional rule and confirm its creation.
-                  </label>
+              {/* Constitutional: launch ceremony instead of direct create */}
+              {ruleTier === "constitutional" && !ceremonyMode && (
+                <div className="flex gap-2 pt-2">
+                  <Button size="sm" onClick={() => setCeremonyMode(editingId ? "amend" : "create")}
+                    className="bg-(--color-constitutional) text-white hover:opacity-90"
+                    disabled={ruleType === "content_filter" && !pTopic}>
+                    {editingId ? "Begin Amendment" : "Begin Constitutional Ceremony"}
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => setStep("params")}>&larr; Back</Button>
                 </div>
               )}
 
-              <div className="flex gap-2 pt-2">
-                <Button variant="primary" size="sm" onClick={saveRule} disabled={saving || (ruleTier === "constitutional" && !confirmConstitutional) || (ruleType === "content_filter" && !pTopic)}>
-                  {saving ? "Saving..." : editingId ? "Save Changes" : "Create Rule"}
-                </Button>
-                <Button variant="ghost" size="sm" onClick={() => setStep("params")}>&larr; Back</Button>
-              </div>
+              {/* Policy: direct save */}
+              {ruleTier !== "constitutional" && (
+                <div className="flex gap-2 pt-2">
+                  <Button variant="primary" size="sm" onClick={saveRule}
+                    disabled={saving || (ruleType === "content_filter" && !pTopic)}>
+                    {saving ? "Saving..." : editingId ? "Save Changes" : "Create Rule"}
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={() => setStep("params")}>&larr; Back</Button>
+                </div>
+              )}
             </div>
+          )}
+
+          {/* Constitutional ceremony */}
+          {ceremonyMode && (
+            <ConstitutionalCeremony
+              mode={ceremonyMode}
+              ruleName={ruleName || autoName()}
+              ruleType={ruleType}
+              ruleParams={buildParams() as Record<string, unknown>}
+              proposedChanges={editingId ? buildParams() as Record<string, unknown> : undefined}
+              onConfirm={async (reason) => {
+                setSaving(true);
+                setError("");
+                try {
+                  const payload: any = {
+                    rule_type: ruleType, tier: "constitutional",
+                    scope: ruleScope, scope_id: ruleScope === "child" && ruleScopeId ? ruleScopeId : undefined,
+                    name: ruleName || autoName(), description: ruleDesc || reason,
+                    parameters: buildParams(),
+                    effective_from: effectiveFrom || undefined,
+                    effective_until: effectiveUntil || undefined,
+                    confirm_constitutional: true,
+                    reason,
+                  };
+                  if (editingId) {
+                    await governance.updateRule(editingId, { ...payload, reason });
+                  } else {
+                    await governance.createRule(payload);
+                  }
+                  resetBuilder();
+                  setCeremonyMode(null);
+                  await loadRules();
+                } catch (err: any) {
+                  setError(err?.detail || err?.message || "Couldn't save constitutional rule.");
+                } finally {
+                  setSaving(false);
+                }
+              }}
+              onCancel={() => setCeremonyMode(null)}
+              loading={saving}
+            />
           )}
         </Card>
       )}
@@ -556,24 +602,61 @@ export default function RulesPage() {
               </div>
               <div className="space-y-2">
                 {constitutional.map((r) => (
-                  <Card key={r.id} padding="p-4" borderLeft="border-l-(--color-constitutional)" className={!r.is_active ? "opacity-50" : ""}>
-                    <div className="flex items-center justify-between mb-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-(--color-text)">{r.name}</span>
-                        <StatusBadge status="constitutional" />
+                  <div key={r.id}>
+                    <Card padding="p-4" borderLeft="border-l-(--color-constitutional)" className={cn("border-l-4", !r.is_active && "opacity-60")}>
+                      <div className="flex items-center justify-between mb-1">
+                        <div className="flex items-center gap-2">
+                          <ShieldIcon size={14} className="text-(--color-constitutional)" />
+                          <span className="text-sm font-semibold text-(--color-text)">{r.name}</span>
+                          <StatusBadge status="constitutional" />
+                          {!r.is_active && <span className="text-[10px] font-bold text-(--color-warning) bg-(--color-warning-light) px-1.5 py-0.5 rounded">SUSPENDED</span>}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Button variant="ghost" size="sm" onClick={() => startEdit(r)}>Amend</Button>
+                          {r.is_active ? (
+                            <Button variant="ghost" size="sm" className="text-(--color-warning)"
+                              onClick={() => { setCeremonyRuleId(r.id); setCeremonyMode("suspend"); }}>Suspend</Button>
+                          ) : (
+                            <Button variant="ghost" size="sm" className="text-(--color-success)"
+                              onClick={async () => { await governance.updateRule(r.id, { is_active: true }); loadRules(); }}>Reactivate</Button>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <span className={cn("text-xs font-medium", r.is_active ? "text-(--color-success)" : "text-(--color-text-tertiary)")}>
-                          {r.is_active ? "Active" : "Deactivated"}
-                        </span>
-                        <Button variant="ghost" size="sm" onClick={() => startEdit(r)}>Edit</Button>
+                      {r.description && <p className="text-xs text-(--color-text-secondary) mb-2">{r.description}</p>}
+                      <div className="text-xs bg-(--color-constitutional-light) text-(--color-constitutional) rounded px-3 py-2">
+                        {humanize(r)}
                       </div>
-                    </div>
-                    {r.description && <p className="text-xs text-(--color-text-secondary) mb-2">{r.description}</p>}
-                    <div className="text-xs bg-(--color-constitutional-light) text-(--color-constitutional) rounded px-3 py-2">
-                      {humanize(r)}
-                    </div>
-                  </Card>
+                      <p className="text-[10px] text-(--color-text-tertiary) mt-2 italic">
+                        Cannot be deleted. Changes require formal amendment.
+                      </p>
+                    </Card>
+                    {/* Suspend ceremony for this rule */}
+                    {ceremonyMode === "suspend" && ceremonyRuleId === r.id && (
+                      <div className="mt-2">
+                        <ConstitutionalCeremony
+                          mode="suspend"
+                          ruleName={r.name}
+                          originalReason={r.description || undefined}
+                          createdAt={(r as any).created_at}
+                          onConfirm={async (reason) => {
+                            setSaving(true);
+                            try {
+                              await governance.updateRule(r.id, { is_active: false, reason });
+                              setCeremonyMode(null);
+                              setCeremonyRuleId(null);
+                              await loadRules();
+                            } catch (err: any) {
+                              setError(err?.detail || err?.message || "Couldn't suspend rule.");
+                            } finally {
+                              setSaving(false);
+                            }
+                          }}
+                          onCancel={() => { setCeremonyMode(null); setCeremonyRuleId(null); }}
+                          loading={saving}
+                        />
+                      </div>
+                    )}
+                  </div>
                 ))}
               </div>
             </div>
