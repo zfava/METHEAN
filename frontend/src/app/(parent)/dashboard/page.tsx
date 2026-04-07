@@ -11,6 +11,7 @@ import MetricCard from "@/components/ui/MetricCard";
 import SectionHeader from "@/components/ui/SectionHeader";
 import { useChild } from "@/lib/ChildContext";
 import { cn } from "@/lib/cn";
+import EmptyState from "@/components/ui/EmptyState";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
@@ -112,10 +113,7 @@ export default function DashboardPage() {
 
       {/* ── Child cards ── */}
       {children.length === 0 && !childLoading && (
-        <Card className="text-center py-10 mb-6">
-          <p className="text-sm text-(--color-text-secondary)">Add your first child to get started.</p>
-          <p className="text-xs text-(--color-text-tertiary) mt-1">Go to the <a href="/family" className="text-(--color-accent) hover:underline">Family page</a> to add children to your household.</p>
-        </Card>
+        <EmptyState icon="empty" title="Welcome to METHEAN" description="Add your first child from the Family page to get started." action={<a href="/family" className="text-sm text-(--color-accent) hover:underline">Go to Family</a>} />
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
         {children.map((c) => {

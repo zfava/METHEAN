@@ -16,6 +16,7 @@ export default function CurriculumHistoryPage() {
   const { selectedChild } = useChild();
   const [history, setHistory] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [expandedYear, setExpandedYear] = useState<string | null>(null);
 
   useEffect(() => {

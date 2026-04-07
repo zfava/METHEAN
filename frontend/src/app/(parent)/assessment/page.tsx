@@ -9,6 +9,7 @@ import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import Tabs from "@/components/ui/Tabs";
 import EmptyState from "@/components/ui/EmptyState";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { cn } from "@/lib/cn";
 
 const TYPES = ["parent_observation", "oral_narration", "written_work", "demonstration", "project", "discussion", "quiz"];
@@ -22,6 +23,7 @@ export default function AssessmentPage() {
   const [assessments, setAssessments] = useState<any[]>([]);
   const [portfolio, setPortfolio] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [showPortfolioForm, setShowPortfolioForm] = useState(false);
   const [transcript, setTranscript] = useState<any>(null);
@@ -53,7 +55,7 @@ export default function AssessmentPage() {
         const d = await assessment.listPortfolio(selectedChild.id);
         setPortfolio(d.items || []);
       }
-    } catch {} finally { setLoading(false); }
+    } catch (err: any) { setError(err.detail || err.message || "Failed to load assessments."); } finally { setLoading(false); }
   }
 
   async function submitAssessment() {
@@ -85,6 +87,7 @@ export default function AssessmentPage() {
   }
 
   if (!selectedChild) return <div className="text-sm text-(--color-text-secondary)">Select a child.</div>;
+  if (loading) return <div className="max-w-4xl"><PageHeader title="Assessment" /><LoadingSkeleton variant="card" count={3} /></div>;
 
   return (
     <div className="max-w-4xl">

@@ -13,6 +13,7 @@ export default function OverridesPage() {
 
   const [overrides, setOverrides] = useState<GovernanceEvent[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     governance.events(200)

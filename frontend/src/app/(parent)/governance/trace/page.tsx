@@ -21,6 +21,7 @@ export default function TracePage() {
 
   const [events, setEvents] = useState<GovernanceEvent[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [filterAction, setFilterAction] = useState("");
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
@@ -42,6 +43,14 @@ export default function TracePage() {
   return (
     <div className="max-w-4xl">
       <PageHeader title="Decision Trace" subtitle="Complete audit trail of every governance decision." />
+
+      {error && (
+        <Card className="mb-4" borderLeft="border-l-(--color-danger)">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-(--color-danger)">{error}</p>
+          </div>
+        </Card>
+      )}
 
       {/* Filter bar */}
       <div className="flex gap-2 mb-5">

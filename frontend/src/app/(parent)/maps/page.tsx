@@ -73,6 +73,7 @@ export default function MapsPage() {
   const [mapStates, setMapStates] = useState<MapState[]>([]);
   const [selectedMap, setSelectedMap] = useState<MapState | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [overrideNodeId, setOverrideNodeId] = useState<string | null>(null);
   const [overrideReason, setOverrideReason] = useState("");
   const [overriding, setOverriding] = useState(false);
@@ -86,7 +87,7 @@ export default function MapsPage() {
       const states = await childrenApi.allMapState(selectedChild.id);
       setMapStates(states);
       if (states.length > 0) setSelectedMap(states[0]);
-    } catch {} finally { setLoading(false); }
+    } catch (err: any) { setError(err.detail || err.message || "Failed to load maps."); } finally { setLoading(false); }
   }
 
   async function handleOverride() {
@@ -97,7 +98,7 @@ export default function MapsPage() {
       setOverrideNodeId(null);
       setOverrideReason("");
       await loadMaps();
-    } catch {} finally { setOverriding(false); }
+    } catch (err: any) { setError(err.detail || err.message || "Failed to load maps."); } finally { setOverriding(false); }
   }
 
   if (!selectedChild) return <div className="text-sm text-(--color-text-secondary)">Select a child from the sidebar.</div>;

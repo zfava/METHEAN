@@ -7,6 +7,8 @@ import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/StatusBadge";
+import EmptyState from "@/components/ui/EmptyState";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { cn } from "@/lib/cn";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
@@ -86,7 +88,7 @@ export default function FamilyPage() {
     }));
   }
 
-  if (childrenLoading) return <div className="max-w-4xl"><PageHeader title="Family Overview" subtitle="Loading..." /></div>;
+  if (childrenLoading) return <div className="max-w-4xl"><PageHeader title="Family Overview" /><LoadingSkeleton variant="card" count={3} /></div>;
 
   const today = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
 
@@ -268,10 +270,9 @@ export default function FamilyPage() {
       )}
 
       {children.length === 0 && !showAddChild && (
-        <Card className="text-center py-12 mt-3">
-          <p className="text-sm text-(--color-text-secondary)">No children in your household yet.</p>
-          <p className="text-xs text-(--color-text-tertiary) mt-1">Click "Add Child" above to get started.</p>
-        </Card>
+        <div className="mt-3">
+          <EmptyState icon="empty" title="Your family is ready" description="Add your first child above to begin building their educational journey." />
+        </div>
       )}
     </div>
   );

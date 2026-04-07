@@ -8,6 +8,7 @@ import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
+import EmptyState from "@/components/ui/EmptyState";
 
 const statusColors: Record<string, string> = {
   mastered: "bg-(--color-success)", in_progress: "bg-(--color-accent)",
@@ -73,7 +74,7 @@ export default function ScopePage() {
             </Card>
           );
         })}
-        {maps.length === 0 && <p className="text-sm text-(--color-text-secondary)">No enrolled maps yet. Create a curriculum to see your scope and sequence here.</p>}
+        {maps.length === 0 && <EmptyState icon="empty" title="No scope and sequence data" description="Build a curriculum first to see the year-long roadmap here." />}
       </div>
     </div>
   );

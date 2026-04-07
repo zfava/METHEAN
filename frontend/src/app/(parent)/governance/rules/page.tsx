@@ -50,6 +50,7 @@ export default function RulesPage() {
 
   const [rules, setRules] = useState<GovernanceRule[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     governance.rules()

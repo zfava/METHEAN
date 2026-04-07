@@ -8,6 +8,7 @@ import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
+import EmptyState from "@/components/ui/EmptyState";
 
 export default function InspectionPage() {
   useEffect(() => { document.title = "AI Inspection | METHEAN"; }, []);
@@ -16,6 +17,7 @@ export default function InspectionPage() {
   const [selected, setSelected] = useState<AIRun | null>(null);
   const [filterRole, setFilterRole] = useState("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => { loadRuns(); }, [filterRole]);
 
@@ -37,6 +39,14 @@ export default function InspectionPage() {
     <div className="max-w-6xl">
       <PageHeader title="AI Inspection" subtitle="Every AI decision is transparent. Inspect any call's full input and output." />
 
+      {error && (
+        <Card className="mb-4" borderLeft="border-l-(--color-danger)">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-(--color-danger)">{error}</p>
+          </div>
+        </Card>
+      )}
+
       <div className="flex gap-2 mb-4">
         <Button variant={!filterRole ? "primary" : "secondary"} size="sm" onClick={() => setFilterRole("")}>All</Button>
         {roles.map((r) => (
@@ -50,7 +60,7 @@ export default function InspectionPage() {
           {loading ? (
             <div className="p-4"><LoadingSkeleton variant="list" count={5} /></div>
           ) : runs.length === 0 ? (
-            <div className="p-8 text-center text-sm text-(--color-text-secondary)">No AI activity yet. When the planner, tutor, or evaluator runs, every call appears here for inspection.</div>
+            <div className="p-6"><EmptyState icon="empty" title="No AI activity recorded" description="When the planner, tutor, evaluator, or advisor runs, every call is logged here with full input and output for your inspection." /></div>
           ) : runs.map((run) => (
             <button key={run.id} onClick={() => selectRun(run.id)}
               className={cn(

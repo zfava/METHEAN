@@ -40,12 +40,14 @@ export default function GovernanceOverviewPage() {
   const [rules, setRules] = useState<GovernanceRule[]>([]);
   const [events, setEvents] = useState<GovernanceEvent[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const [dismissing, setDismissing] = useState<Set<string>>(new Set());
   const [philSummary, setPhilSummary] = useState("");
 
   useEffect(() => { load(); }, []);
 
   async function load() {
+    setError("");
     try {
       const [qResp, rResp, eResp] = await Promise.all([
         fetch(`${API}/governance/queue?limit=3`, { credentials: "include" }).then((r) => r.ok ? r.json() : { items: [], total: 0 }),
@@ -69,7 +71,9 @@ export default function GovernanceOverviewPage() {
           setPhilSummary(parts.join(" \u00b7 ") || "Not configured");
         }
       } catch {}
-    } catch {} finally { setLoading(false); }
+    } catch (err: any) {
+      setError(err.detail || err.message || "Failed to load governance data.");
+    } finally { setLoading(false); }
   }
 
   async function handleAction(item: QueueItem, action: "approve" | "reject") {
@@ -106,6 +110,15 @@ export default function GovernanceOverviewPage() {
   return (
     <div className="max-w-4xl">
       <PageHeader title="Governance" subtitle="You control what the AI can and cannot do." />
+
+      {error && (
+        <Card className="mb-4" borderLeft="border-l-(--color-danger)">
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-(--color-danger)">{error}</p>
+            <Button variant="ghost" size="sm" onClick={() => { setError(""); load(); }}>Retry</Button>
+          </div>
+        </Card>
+      )}
 
       {/* ── PHILOSOPHY SUMMARY ── */}
       {philSummary && (
