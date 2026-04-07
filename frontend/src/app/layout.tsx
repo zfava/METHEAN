@@ -3,8 +3,8 @@ import "./globals.css";
 import ClientProviders from "@/components/ClientProviders";
 
 export const metadata: Metadata = {
-  title: "METHEAN",
-  description: "Learning governance operating system for homeschool families",
+  title: "METHEAN — A Learning Operating System for Families",
+  description: "AI-powered homeschool platform with parent governance. You set the rules. AI follows them. 51-state compliance. Start free.",
   icons: {
     icon: "/favicon.svg",
   },
