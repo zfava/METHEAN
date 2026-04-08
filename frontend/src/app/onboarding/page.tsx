@@ -7,6 +7,7 @@ import { MetheanLogoVertical } from "@/components/Brand";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import { cn } from "@/lib/cn";
+import SubjectLevelPicker from "@/components/SubjectLevelPicker";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
@@ -31,29 +32,6 @@ const AUTONOMY = [
   { value: "trust_within_rules", label: "Trust Within Rules", desc: "AI follows your rules freely" },
 ];
 
-const GRADE_SUBJECTS: Record<string, string[]> = {
-  "K": ["Reading", "Mathematics", "Handwriting"],
-  "1st": ["Reading", "Mathematics", "Handwriting", "Science"],
-  "2nd": ["Reading", "Mathematics", "Writing", "Science"],
-  "3rd": ["Literature", "Mathematics", "Writing", "Science", "History"],
-  "4th": ["Literature", "Mathematics", "Writing", "Science", "History"],
-  "5th": ["Literature", "Mathematics", "Writing", "Science", "History"],
-  "6th": ["Literature", "Mathematics", "Writing", "Science", "History", "Latin"],
-  "7th": ["Literature", "Mathematics", "Logic", "Science", "History"],
-  "8th": ["Literature", "Mathematics", "Logic", "Science", "History"],
-  "9th": ["Literature", "Mathematics", "Rhetoric", "Science", "History"],
-  "10th": ["Literature", "Mathematics", "Rhetoric", "Science", "History"],
-  "11th": ["Literature", "Mathematics", "Science", "History", "Government"],
-  "12th": ["Literature", "Mathematics", "Science", "History", "Philosophy"],
-};
-
-const GRADE_MINUTES: Record<string, number> = {
-  "K": 90, "1st": 90, "2nd": 90,
-  "3rd": 120, "4th": 120, "5th": 120,
-  "6th": 150, "7th": 150, "8th": 150,
-  "9th": 180, "10th": 180, "11th": 180, "12th": 180,
-};
-
 const GRADES = ["K", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"];
 
 interface OnboardingChild { id: string; firstName: string; grade: string }
@@ -67,21 +45,26 @@ export default function OnboardingPage() {
   // Step 2: Children
   const [addedChildren, setAddedChildren] = useState<OnboardingChild[]>([]);
   const [newName, setNewName] = useState("");
-  const [newGrade, setNewGrade] = useState("K");
+  const [newGrade, setNewGrade] = useState("");
 
-  // Step 3: Philosophy
+  // Step 3: Learning Profile
+  const [childSubjectLevels, setChildSubjectLevels] = useState<Record<string, Record<string, string>>>({});
+  const [childMinutes, setChildMinutes] = useState<Record<string, number>>({});
+  const [profileChildIdx, setProfileChildIdx] = useState(0);
+
+  // Step 4: Philosophy
   const [philosophy, setPhilosophy] = useState("eclectic");
   const [autonomy, setAutonomy] = useState("approve_difficult");
 
-  // Step 4: Curriculum
+  // Step 5: Curriculum
   const [curriculumChoices, setCurriculumChoices] = useState<Record<string, "ai" | "template" | "skip">>({});
   const [currentChildIdx, setCurrentChildIdx] = useState(0);
   const [generatingFor, setGeneratingFor] = useState("");
 
-  // Step 5: Plans
+  // Step 6: Plans
   const [planProgress, setPlanProgress] = useState<string[]>([]);
 
-  // Step 6: Summary
+  // Step 7: Summary
   const [summary, setSummary] = useState<{ rules: number; activities: Record<string, number> }>({ rules: 0, activities: {} });
 
   useEffect(() => { document.title = "Welcome | METHEAN"; }, []);
@@ -91,7 +74,7 @@ export default function OnboardingPage() {
     if (!newName.trim()) return;
     setError("");
     try {
-      const result = await childrenApi.create({ first_name: newName, grade_level: newGrade });
+      const result = await childrenApi.create({ first_name: newName, grade_level: newGrade || undefined });
       setAddedChildren((prev) => [...prev, { id: result.id, firstName: newName, grade: newGrade }]);
       setNewName("");
     } catch (err: any) {
@@ -103,7 +86,7 @@ export default function OnboardingPage() {
     setAddedChildren((prev) => prev.filter((c) => c.id !== id));
   }
 
-  // ── Step 3: Save Philosophy + Init Rules ──
+  // ── Step 4: Save Philosophy + Init Rules ──
   async function savePhilosophy() {
     setLoading(true);
     setError("");
@@ -118,9 +101,8 @@ export default function OnboardingPage() {
           ai_autonomy_level: autonomy,
         }),
       });
-      // Initialize default governance rules
       await governance.initDefaults();
-      setStep(4);
+      setStep(5);
     } catch (err: any) {
       setError(err?.detail || err?.message || "Couldn't save settings.");
     } finally {
@@ -128,7 +110,7 @@ export default function OnboardingPage() {
     }
   }
 
-  // ── Step 4: Generate Curricula ──
+  // ── Step 5: Generate Curricula ──
   async function generateCurricula() {
     setLoading(true);
     setError("");
@@ -139,7 +121,10 @@ export default function OnboardingPage() {
       const choice = curriculumChoices[child.id] || "skip";
       if (choice === "skip") continue;
 
-      const subjects = GRADE_SUBJECTS[child.grade] || GRADE_SUBJECTS["K"];
+      const levels = childSubjectLevels[child.id] || {};
+      const subjects = Object.keys(levels).length > 0
+        ? Object.keys(levels).map(id => id.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase()))
+        : ["Reading", "Mathematics"];
       for (const subject of subjects) {
         setGeneratingFor(`${child.firstName}: ${subject}`);
         try {
@@ -149,21 +134,18 @@ export default function OnboardingPage() {
             hours_per_week: 4,
             total_weeks: 36,
           });
-          // Auto-approve
           if (result && (result as any).id) {
             try { await annualCurriculum.approve((result as any).id); } catch {}
           }
-        } catch {
-          // Continue with next subject — don't block onboarding
-        }
+        } catch {}
       }
     }
     setGeneratingFor("");
-    setStep(5);
+    setStep(6);
     setLoading(false);
   }
 
-  // ── Step 5: Generate Plans ──
+  // ── Step 6: Generate Plans ──
   async function generatePlans() {
     setLoading(true);
     setError("");
@@ -178,9 +160,8 @@ export default function OnboardingPage() {
       if (curriculumChoices[child.id] === "skip") continue;
       setPlanProgress((prev) => [...prev, child.firstName]);
       try {
-        const dailyMinutes = GRADE_MINUTES[child.grade] || 120;
+        const dailyMinutes = childMinutes[child.id] || 120;
         await plans.generate(child.id, { week_start: weekStart, daily_minutes: dailyMinutes });
-        // Count today's activities
         const resp = await fetch(`${API}/children/${child.id}/today`, { credentials: "include" });
         if (resp.ok) {
           const acts = await resp.json();
@@ -191,7 +172,6 @@ export default function OnboardingPage() {
       }
     }
 
-    // Count active rules
     try {
       const rulesData = await governance.rules();
       const rulesList = (rulesData as any).items || rulesData;
@@ -200,7 +180,7 @@ export default function OnboardingPage() {
       setSummary({ rules: 4, activities: activityCounts });
     }
 
-    setStep(6);
+    setStep(7);
     setLoading(false);
   }
 
@@ -220,7 +200,7 @@ export default function OnboardingPage() {
           )}
           {step > 1 && (
             <div className="flex items-center justify-center gap-2 mt-3">
-              {[2, 3, 4, 5, 6].map((s) => (
+              {[2, 3, 4, 5, 6, 7].map((s) => (
                 <div key={s} className={cn("w-8 h-1 rounded-full transition-colors", step >= s ? "bg-(--color-accent)" : "bg-(--color-border)")} />
               ))}
             </div>
@@ -264,6 +244,7 @@ export default function OnboardingPage() {
                 onKeyDown={(e) => e.key === "Enter" && addChild()} />
               <select value={newGrade} onChange={(e) => setNewGrade(e.target.value)}
                 className="w-full sm:w-28 px-3 py-2.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)">
+                <option value="">Optional</option>
                 {GRADES.map((g) => <option key={g} value={g}>{g}</option>)}
               </select>
               <Button variant="primary" size="md" onClick={addChild} disabled={!newName.trim()}>Add</Button>
@@ -273,7 +254,7 @@ export default function OnboardingPage() {
               <div className="space-y-2 mb-4">
                 {addedChildren.map((c) => (
                   <div key={c.id} className="flex items-center justify-between px-3 py-2 bg-(--color-page) rounded-[10px]">
-                    <span className="text-sm text-(--color-text)">{c.firstName} <span className="text-(--color-text-tertiary)">· {c.grade}</span></span>
+                    <span className="text-sm text-(--color-text)">{c.firstName}{c.grade && <span className="text-(--color-text-tertiary)"> · {c.grade}</span>}</span>
                     <button onClick={() => removeChild(c.id)} className="text-xs text-(--color-danger) hover:underline">Remove</button>
                   </div>
                 ))}
@@ -288,8 +269,77 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* ── Step 3: Philosophy ── */}
-        {step === 3 && (
+        {/* ── Step 3: Learning Profile ── */}
+        {step === 3 && addedChildren.length > 0 && (
+          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6">
+            <h3 className="text-sm font-semibold text-(--color-text) mb-1">
+              What is {addedChildren[profileChildIdx]?.firstName} studying?
+            </h3>
+            <p className="text-xs text-(--color-text-secondary) mb-4">
+              Select subjects and set learning levels. All subjects available regardless of age.
+            </p>
+            <SubjectLevelPicker
+              selected={childSubjectLevels[addedChildren[profileChildIdx]?.id] || {}}
+              onChange={(levels) => setChildSubjectLevels(prev => ({
+                ...prev,
+                [addedChildren[profileChildIdx].id]: levels,
+              }))}
+              showCustom={false}
+            />
+            <div className="mt-4">
+              <label className="text-xs text-(--color-text-secondary)">Daily learning target (minutes)</label>
+              <div className="flex items-center gap-2 mt-1">
+                <input
+                  type="number"
+                  value={childMinutes[addedChildren[profileChildIdx]?.id] || 120}
+                  onChange={(e) => setChildMinutes(prev => ({
+                    ...prev,
+                    [addedChildren[profileChildIdx].id]: Math.max(30, Math.min(480, +e.target.value)),
+                  }))}
+                  className="w-24 px-3 py-2 text-sm border border-(--color-border) rounded-[10px]"
+                />
+                <span className="text-xs text-(--color-text-tertiary)">You decide. Suggested: 90-240.</span>
+              </div>
+            </div>
+            <Button
+              variant="primary"
+              size="lg"
+              className="w-full mt-6"
+              onClick={async () => {
+                const childId = addedChildren[profileChildIdx].id;
+                const levels = childSubjectLevels[childId] || {};
+                const minutes = childMinutes[childId] || 120;
+                const csrf = getCsrf();
+                try {
+                  await fetch(`${API}/children/${childId}/preferences`, {
+                    method: "PUT",
+                    credentials: "include",
+                    headers: {
+                      "Content-Type": "application/json",
+                      ...(csrf ? { "X-CSRF-Token": csrf } : {}),
+                    },
+                    body: JSON.stringify({
+                      subject_levels: levels,
+                      daily_duration_minutes: minutes,
+                    }),
+                  });
+                } catch { /* preferences can be set later from family page */ }
+                if (profileChildIdx < addedChildren.length - 1) {
+                  setProfileChildIdx(profileChildIdx + 1);
+                } else {
+                  setStep(4);
+                }
+              }}
+            >
+              {profileChildIdx < addedChildren.length - 1
+                ? `Next: ${addedChildren[profileChildIdx + 1].firstName}`
+                : "Continue to Philosophy"}
+            </Button>
+          </div>
+        )}
+
+        {/* ── Step 4: Philosophy ── */}
+        {step === 4 && (
           <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6">
             <h3 className="text-sm font-semibold text-(--color-text) mb-1">Your educational approach</h3>
             <p className="text-xs text-(--color-text-secondary) mb-4">This guides how the AI generates curriculum and activities.</p>
@@ -323,8 +373,8 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* ── Step 4: Curriculum Path ── */}
-        {step === 4 && !loading && (
+        {/* ── Step 5: Curriculum Path ── */}
+        {step === 5 && !loading && (
           <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6">
             {currentChildIdx < addedChildren.length ? (
               <>
@@ -332,7 +382,7 @@ export default function OnboardingPage() {
                   Build {addedChildren[currentChildIdx].firstName}'s curriculum
                 </h3>
                 <p className="text-xs text-(--color-text-secondary) mb-4">
-                  {addedChildren[currentChildIdx].grade} · {GRADE_SUBJECTS[addedChildren[currentChildIdx].grade]?.length || 3} core subjects
+                  {Object.keys(childSubjectLevels[addedChildren[currentChildIdx]?.id] || {}).length || 0} subjects selected
                 </p>
 
                 <div className="space-y-2 mb-6">
@@ -370,21 +420,21 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* ── Step 4/5: Loading ── */}
-        {loading && (step === 4 || step === 5) && (
+        {/* ── Step 5/6: Loading ── */}
+        {loading && (step === 5 || step === 6) && (
           <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-8 text-center">
             <div className="w-10 h-10 mx-auto mb-4 rounded-full border-2 border-(--color-accent) border-t-transparent animate-spin" />
             <p className="text-sm text-(--color-text) mb-1">
-              {step === 4 && generatingFor && `Generating ${generatingFor}...`}
-              {step === 5 && planProgress.length > 0 && `Creating ${planProgress[planProgress.length - 1]}'s plan...`}
-              {!generatingFor && step === 4 && "Setting up curricula..."}
+              {step === 5 && generatingFor && `Generating ${generatingFor}...`}
+              {step === 6 && planProgress.length > 0 && `Creating ${planProgress[planProgress.length - 1]}'s plan...`}
+              {!generatingFor && step === 5 && "Setting up curricula..."}
             </p>
             <p className="text-xs text-(--color-text-tertiary)">This may take a moment.</p>
           </div>
         )}
 
-        {/* ── Step 5: Generate Plans ── */}
-        {step === 5 && !loading && (
+        {/* ── Step 6: Generate Plans ── */}
+        {step === 6 && !loading && (
           <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6 text-center">
             <h3 className="text-sm font-semibold text-(--color-text) mb-2">Curricula ready!</h3>
             <p className="text-xs text-(--color-text-secondary) mb-6">
@@ -393,15 +443,15 @@ export default function OnboardingPage() {
             <Button variant="primary" size="lg" onClick={generatePlans} className="w-full">
               Generate First Week's Plan
             </Button>
-            <button onClick={() => { setStep(6); setSummary({ rules: 4, activities: {} }); }}
+            <button onClick={() => { setStep(7); setSummary({ rules: 4, activities: {} }); }}
               className="block mx-auto mt-3 text-xs text-(--color-text-tertiary) hover:underline">
               Skip — I'll generate plans later
             </button>
           </div>
         )}
 
-        {/* ── Step 6: All Set ── */}
-        {step === 6 && (
+        {/* ── Step 7: All Set ── */}
+        {step === 7 && (
           <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-8">
             <div className="text-center mb-6">
               <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-(--color-success-light) flex items-center justify-center">
