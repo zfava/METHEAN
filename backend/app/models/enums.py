@@ -10,10 +10,17 @@ class UserRole(str, enum.Enum):
 
 
 class NodeType(str, enum.Enum):
+    # Academic
     root = "root"
     milestone = "milestone"
     concept = "concept"
     skill = "skill"
+    # Vocational
+    safety = "safety"
+    knowledge = "knowledge"
+    technique = "technique"
+    project = "project"
+    certification_prep = "certification_prep"
 
 
 class EdgeRelation(str, enum.Enum):

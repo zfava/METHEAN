@@ -235,7 +235,7 @@ export default function EditorPage() {
         </div>
 
         <div className="space-y-1 mb-4">
-          {["root", "milestone", "concept", "skill"].map((t) => (
+          {["root", "milestone", "concept", "skill", "safety", "knowledge", "technique", "project", "certification_prep"].map((t) => (
             <button key={t} onClick={() => addNode(t)}
               className="w-full text-left px-2.5 py-1.5 text-xs rounded-[6px] border border-(--color-border) hover:bg-(--color-page) capitalize">
               + {t}
@@ -330,7 +330,7 @@ export default function EditorPage() {
               <select value={selectedNode.node_type}
                 onChange={(e) => updateNode(selectedNode.id, "node_type", e.target.value)}
                 className="w-full px-2 py-1.5 text-sm border border-(--color-border) rounded-[6px]">
-                {["root", "milestone", "concept", "skill"].map((t) => (
+                {["root", "milestone", "concept", "skill", "safety", "knowledge", "technique", "project", "certification_prep"].map((t) => (
                   <option key={t} value={t} className="capitalize">{t}</option>
                 ))}
               </select>

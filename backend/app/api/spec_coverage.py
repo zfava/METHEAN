@@ -444,6 +444,166 @@ async def add_custom_subject(
     return new_subj
 
 
+# ══════════════════════════════════════════════════
+# Assessment Types
+# ══════════════════════════════════════════════════
+
+ASSESSMENT_TYPES_ACADEMIC = ["parent_observation", "oral_narration", "written_work", "demonstration", "project", "discussion", "quiz"]
+ASSESSMENT_TYPES_VOCATIONAL = ["safety_checklist", "practical_demo", "project_evaluation", "weld_inspection", "circuit_test", "diagnostic_challenge", "tool_proficiency", "mentor_evaluation"]
+
+
+@router.get("/assessment-types")
+async def list_assessment_types(user: User = Depends(get_current_user)) -> dict:
+    """Return all available assessment types."""
+    return {"academic": ASSESSMENT_TYPES_ACADEMIC, "vocational": ASSESSMENT_TYPES_VOCATIONAL}
+
+
+# ══════════════════════════════════════════════════
+# Certification Tracking
+# ══════════════════════════════════════════════════
+
+
+class CertificationCreate(BaseModel):
+    name: str
+    subject: str
+    target_date: str | None = None
+    requirements: list[dict] | None = None
+    notes: str | None = None
+
+
+class CertificationUpdate(BaseModel):
+    status: str | None = None
+    target_date: str | None = None
+    requirements: list[dict] | None = None
+    notes: str | None = None
+
+
+async def _get_or_create_prefs(db: AsyncSession, child_id, household_id):
+    result = await db.execute(select(ChildPreferences).where(ChildPreferences.child_id == child_id))
+    prefs = result.scalar_one_or_none()
+    if not prefs:
+        prefs = ChildPreferences(child_id=child_id, household_id=household_id)
+        db.add(prefs)
+        await db.flush()
+    return prefs
+
+
+@router.get("/children/{child_id}/certifications")
+async def list_certifications(
+    child_id: uuid.UUID, db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user),
+) -> list:
+    await _get_child_or_404(db, child_id, user.household_id)
+    prefs = await _get_or_create_prefs(db, child_id, user.household_id)
+    return prefs.certification_progress or []
+
+
+@router.post("/children/{child_id}/certifications", status_code=201)
+async def add_certification(
+    child_id: uuid.UUID, body: CertificationCreate,
+    db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user),
+) -> dict:
+    await _get_child_or_404(db, child_id, user.household_id)
+    prefs = await _get_or_create_prefs(db, child_id, user.household_id)
+    certs = list(prefs.certification_progress or [])
+    cert_id = body.name.lower().replace(" ", "-").replace("(", "").replace(")", "")
+    if any(c["id"] == cert_id for c in certs):
+        raise HTTPException(409, "Certification already exists for this child")
+    from datetime import date as d
+    new_cert = {
+        "id": cert_id, "name": body.name, "subject": body.subject,
+        "status": "not_started", "target_date": body.target_date,
+        "requirements": body.requirements or [], "notes": body.notes or "",
+        "created_at": d.today().isoformat(),
+    }
+    certs.append(new_cert)
+    prefs.certification_progress = certs
+    from sqlalchemy.orm.attributes import flag_modified
+    flag_modified(prefs, "certification_progress")
+    await db.flush()
+    return new_cert
+
+
+@router.put("/children/{child_id}/certifications/{cert_id}")
+async def update_certification(
+    child_id: uuid.UUID, cert_id: str, body: CertificationUpdate,
+    db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user),
+) -> dict:
+    await _get_child_or_404(db, child_id, user.household_id)
+    prefs = await _get_or_create_prefs(db, child_id, user.household_id)
+    certs = list(prefs.certification_progress or [])
+    cert = next((c for c in certs if c["id"] == cert_id), None)
+    if not cert:
+        raise HTTPException(404, "Certification not found")
+    if body.status:
+        valid = {"not_started", "in_progress", "ready_for_exam", "certified"}
+        if body.status not in valid:
+            raise HTTPException(400, f"status must be: {', '.join(sorted(valid))}")
+        cert["status"] = body.status
+    if body.target_date:
+        cert["target_date"] = body.target_date
+    if body.requirements is not None:
+        cert["requirements"] = body.requirements
+    if body.notes is not None:
+        cert["notes"] = body.notes
+    prefs.certification_progress = certs
+    from sqlalchemy.orm.attributes import flag_modified
+    flag_modified(prefs, "certification_progress")
+    await db.flush()
+    return cert
+
+
+# ══════════════════════════════════════════════════
+# Mentors
+# ══════════════════════════════════════════════════
+
+
+class MentorCreate(BaseModel):
+    name: str
+    trade: str
+    relationship: str | None = None
+    availability: str | None = None
+    children: list[str] | None = None
+    notes: str | None = None
+
+
+@router.get("/household/mentors")
+async def list_mentors(db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user)) -> list:
+    household = (await db.execute(select(Household).where(Household.id == user.household_id))).scalar_one()
+    return (household.settings or {}).get("mentors", [])
+
+
+@router.post("/household/mentors", status_code=201)
+async def add_mentor(body: MentorCreate, db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user)) -> dict:
+    household = (await db.execute(select(Household).where(Household.id == user.household_id))).scalar_one()
+    settings = dict(household.settings or {})
+    mentors = list(settings.get("mentors", []))
+    mentor = {
+        "id": f"mentor-{len(mentors) + 1}", "name": body.name, "trade": body.trade,
+        "relationship": body.relationship or "", "availability": body.availability or "",
+        "children": body.children or [], "notes": body.notes or "",
+    }
+    mentors.append(mentor)
+    settings["mentors"] = mentors
+    household.settings = settings
+    from sqlalchemy.orm.attributes import flag_modified
+    flag_modified(household, "settings")
+    await db.flush()
+    return mentor
+
+
+@router.delete("/household/mentors/{mentor_id}")
+async def remove_mentor(mentor_id: str, db: AsyncSession = Depends(get_db), user: User = Depends(get_current_user)) -> dict:
+    household = (await db.execute(select(Household).where(Household.id == user.household_id))).scalar_one()
+    settings = dict(household.settings or {})
+    mentors = list(settings.get("mentors", []))
+    settings["mentors"] = [m for m in mentors if m["id"] != mentor_id]
+    household.settings = settings
+    from sqlalchemy.orm.attributes import flag_modified
+    flag_modified(household, "settings")
+    await db.flush()
+    return {"deleted": True}
+
+
 @router.get("/children/{child_id}/theme")
 async def get_child_theme(
     child_id: uuid.UUID,

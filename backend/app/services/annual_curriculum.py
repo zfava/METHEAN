@@ -153,10 +153,20 @@ Use these node IDs in the focus_nodes field for each week."""
     # Build philosophical constraints
     phil_constraints = build_philosophical_constraints(phil)
 
-    system_prompt = ANNUAL_CURRICULUM_SYSTEM.format(
-        total_weeks=total_weeks,
-        philosophical_constraints=phil_constraints,
-    )
+    # Detect vocational subject and use appropriate prompt
+    from app.core.learning_levels import SUBJECT_CATALOG
+    vocational_names = {s["name"].lower() for s in SUBJECT_CATALOG.get("vocational", [])}
+    vocational_ids = {s["id"] for s in SUBJECT_CATALOG.get("vocational", [])}
+    is_vocational = subject_name.lower() in vocational_names or subject_name.lower().replace(" ", "_") in vocational_ids
+
+    if is_vocational:
+        from app.ai.prompts import VOCATIONAL_CURRICULUM_SYSTEM
+        system_prompt = VOCATIONAL_CURRICULUM_SYSTEM
+    else:
+        system_prompt = ANNUAL_CURRICULUM_SYSTEM.format(
+            total_weeks=total_weeks,
+            philosophical_constraints=phil_constraints,
+        )
 
     user_prompt = f"""Design a complete {total_weeks}-week curriculum for:
 

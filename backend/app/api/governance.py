@@ -634,6 +634,10 @@ class ManualActivityCreate(BaseModel):
     description: str | None = None
     subject_area: str | None = None
     node_id: uuid.UUID | None = None
+    tools_required: list[str] | None = None
+    materials: list[dict] | None = None
+    safety_notes: str | None = None
+    workspace: str | None = None
 
 
 @router.post("/activities", status_code=201)
@@ -688,7 +692,13 @@ async def create_manual_activity(
         activity_type=ActivityType(body.activity_type),
         title=body.title,
         description=body.description,
-        instructions={"subject_area": body.subject_area} if body.subject_area else {},
+        instructions={
+            **({"subject_area": body.subject_area} if body.subject_area else {}),
+            **({"tools_required": body.tools_required} if body.tools_required else {}),
+            **({"materials": body.materials} if body.materials else {}),
+            **({"safety_notes": body.safety_notes} if body.safety_notes else {}),
+            **({"workspace": body.workspace} if body.workspace else {}),
+        },
         estimated_minutes=body.estimated_minutes,
         status=ActivityStatus.scheduled,
         scheduled_date=body.scheduled_date,

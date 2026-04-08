@@ -132,6 +132,7 @@ export default function LandingPage() {
               { icon: "👨‍👩‍👧‍👦", title: "Multi-Child Family", desc: "See everyone's schedule on one screen. Manage 1 child or 10." },
               { icon: "🧒", title: "Child Learning Space", desc: "Personalized themes, Socratic AI tutor, 6 activity views." },
               { icon: "📊", title: "Mastery Tracking", desc: "FSRS v6 spaced repetition with DAG-based curriculum maps." },
+              { icon: "🔧", title: "Vocational & Trades", desc: "Welding, electrical, automotive, woodworking. Certification tracking. Same governance." },
             ].map((f) => (
               <div key={f.title} className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-5">
                 <div className="text-2xl mb-2">{f.icon}</div>

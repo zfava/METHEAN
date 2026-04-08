@@ -114,6 +114,7 @@ class ChildPreferences(Base):
     areas_for_growth: Mapped[list | None] = mapped_column(JSONB, default=list)
     custom_subjects: Mapped[list | None] = mapped_column(JSONB, default=list)
     parent_notes: Mapped[str | None] = mapped_column(Text)
+    certification_progress: Mapped[list | None] = mapped_column(JSONB, default=list)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
