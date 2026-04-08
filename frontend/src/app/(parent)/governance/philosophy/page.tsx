@@ -169,7 +169,7 @@ export default function PhilosophyPage() {
         <textarea
           value={philosophyDesc} onChange={(e) => setPhilosophyDesc(e.target.value)}
           placeholder="Describe your approach in your own words (optional)"
-          className="w-full mt-3 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] resize-none h-20 focus:outline-none focus:ring-1 focus:ring-(--color-accent) bg-(--color-surface) text-(--color-text)"
+          className="w-full mt-3 px-3 py-2 text-sm border border-(--color-border) rounded-[14px] resize-none h-20 focus:outline-none focus:ring-1 focus:ring-(--color-accent) bg-(--color-surface) text-(--color-text)"
         />
       </section>
 
@@ -191,7 +191,7 @@ export default function PhilosophyPage() {
         <textarea
           value={religionNotes} onChange={(e) => setReligionNotes(e.target.value)}
           placeholder="Any specifics (denomination, traditions, etc.)"
-          className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] resize-none h-16 focus:outline-none focus:ring-1 focus:ring-(--color-accent) bg-(--color-surface) text-(--color-text)"
+          className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[14px] resize-none h-16 focus:outline-none focus:ring-1 focus:ring-(--color-accent) bg-(--color-surface) text-(--color-text)"
         />
         <p className="text-xs text-(--color-text-tertiary) mt-1">This informs how the AI presents topics with worldview implications.</p>
       </section>
@@ -209,15 +209,15 @@ export default function PhilosophyPage() {
             <Card key={i} padding="p-3">
               <div className="flex gap-2 mb-2">
                 <input type="text" value={b.topic} onChange={(e) => updateBoundary(i, "topic", e.target.value)}
-                  placeholder="Topic (e.g. evolution)" className="flex-1 px-2 py-1.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+                  placeholder="Topic (e.g. evolution)" className="flex-1 px-2 py-1.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
                 <select value={b.stance} onChange={(e) => updateBoundary(i, "stance", e.target.value)}
-                  className="px-2 py-1.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)">
+                  className="px-2 py-1.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)">
                   {STANCES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
                 </select>
                 <button onClick={() => removeBoundary(i)} className="text-xs text-(--color-danger) hover:opacity-80 px-2">Remove</button>
               </div>
               <input type="text" value={b.notes} onChange={(e) => updateBoundary(i, "notes", e.target.value)}
-                placeholder="Notes (optional)" className="w-full px-2 py-1 text-xs border border-(--color-border)/50 rounded-[6px] mb-1 bg-(--color-surface) text-(--color-text)" />
+                placeholder="Notes (optional)" className="w-full px-2 py-1 text-xs border border-(--color-border)/50 rounded-[10px] mb-1 bg-(--color-surface) text-(--color-text)" />
               {b.topic && b.stance && (
                 <p className="text-[11px] text-(--color-accent) italic">
                   {stancePreview[b.stance]?.(b.topic) || ""}
@@ -286,7 +286,7 @@ export default function PhilosophyPage() {
               <input type="text" value={c}
                 onChange={(e) => { const next = [...customs]; next[i] = e.target.value; setCustoms(next); }}
                 placeholder="e.g. All history content should include primary sources"
-                className="flex-1 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
+                className="flex-1 px-3 py-2 text-sm border border-(--color-border) rounded-[14px] bg-(--color-surface) text-(--color-text)" />
               <button onClick={() => setCustoms(customs.filter((_, j) => j !== i))}
                 className="text-xs text-(--color-danger) hover:opacity-80 px-2">Remove</button>
             </div>

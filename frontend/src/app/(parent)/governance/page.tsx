@@ -229,7 +229,7 @@ export default function GovernanceOverviewPage() {
         <SectionHeader title="Rule Coverage" link={{ href: "/governance/rules", label: "Manage rules" }} />
         <div className="mt-3 space-y-2">
           {coverage.map((c) => (
-            <div key={c.type} className="flex items-center justify-between py-2 px-3 rounded-[6px] bg-(--color-page)">
+            <div key={c.type} className="flex items-center justify-between py-2 px-3 rounded-[10px] bg-(--color-page)">
               <div className="flex items-center gap-2">
                 <span>{c.icon}</span>
                 <span className="text-xs font-medium text-(--color-text)">{c.label}</span>

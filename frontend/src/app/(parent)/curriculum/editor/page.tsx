@@ -228,7 +228,7 @@ export default function EditorPage() {
       {/* LEFT PANEL */}
       <div className="w-full lg:w-52 bg-(--color-surface) border-b lg:border-b-0 lg:border-r border-(--color-border) p-4 flex flex-col shrink-0">
         <input value={mapName} onChange={(e) => setMapName(e.target.value)}
-          className="text-sm font-semibold text-(--color-text) mb-3 px-2 py-1 border border-transparent hover:border-(--color-border) rounded-[6px]" />
+          className="text-sm font-semibold text-(--color-text) mb-3 px-2 py-1 border border-transparent hover:border-(--color-border) rounded-[10px]" />
 
         <div className="text-xs text-(--color-text-secondary) mb-3">
           {activeNodes.length} nodes &middot; {activeEdges.length} edges
@@ -237,7 +237,7 @@ export default function EditorPage() {
         <div className="space-y-1 mb-4">
           {["root", "milestone", "concept", "skill", "safety", "knowledge", "technique", "project", "certification_prep"].map((t) => (
             <button key={t} onClick={() => addNode(t)}
-              className="w-full text-left px-2.5 py-1.5 text-xs rounded-[6px] border border-(--color-border) hover:bg-(--color-page) capitalize">
+              className="w-full text-left px-2.5 py-1.5 text-xs rounded-[10px] border border-(--color-border) hover:bg-(--color-page) capitalize">
               + {t}
             </button>
           ))}
@@ -276,7 +276,7 @@ export default function EditorPage() {
                     <div key={node.id}
                       onClick={() => isConnectTarget ? finishConnect(node.id) : setSelected(node.id)}
                       className={cn(
-                        "relative w-44 p-3 rounded-[10px] border-2 cursor-pointer transition-all bg-(--color-surface) hover:shadow-sm",
+                        "relative w-44 p-3 rounded-[14px] border-2 cursor-pointer transition-all bg-(--color-surface) hover:shadow-sm",
                         isSelected ? "border-(--color-accent) ring-2 ring-(--color-accent)/20" :
                         isConnectTarget ? "border-(--color-success) ring-1 ring-(--color-success)/20" :
                         node.is_new ? "border-dashed border-(--color-accent)/50" :
@@ -284,7 +284,7 @@ export default function EditorPage() {
                       )}
                     >
                       <div className="flex items-center gap-1.5 mb-1">
-                        <span className={`text-[9px] font-bold uppercase px-1 py-0.5 rounded-[4px] ${tc}`}>
+                        <span className={`text-[9px] font-bold uppercase px-1 py-0.5 rounded-[6px] ${tc}`}>
                           {node.node_type}
                         </span>
                         {node.is_new && <span className="text-[9px] text-(--color-accent)">NEW</span>}
@@ -322,14 +322,14 @@ export default function EditorPage() {
               <label className="block text-[10px] text-(--color-text-secondary) mb-0.5">Title</label>
               <input value={selectedNode.title}
                 onChange={(e) => updateNode(selectedNode.id, "title", e.target.value)}
-                className="w-full px-2 py-1.5 text-sm border border-(--color-border) rounded-[6px]" />
+                className="w-full px-2 py-1.5 text-sm border border-(--color-border) rounded-[10px]" />
             </div>
 
             <div>
               <label className="block text-[10px] text-(--color-text-secondary) mb-0.5">Type</label>
               <select value={selectedNode.node_type}
                 onChange={(e) => updateNode(selectedNode.id, "node_type", e.target.value)}
-                className="w-full px-2 py-1.5 text-sm border border-(--color-border) rounded-[6px]">
+                className="w-full px-2 py-1.5 text-sm border border-(--color-border) rounded-[10px]">
                 {["root", "milestone", "concept", "skill", "safety", "knowledge", "technique", "project", "certification_prep"].map((t) => (
                   <option key={t} value={t} className="capitalize">{t}</option>
                 ))}
@@ -340,7 +340,7 @@ export default function EditorPage() {
               <label className="block text-[10px] text-(--color-text-secondary) mb-0.5">Description</label>
               <textarea value={selectedNode.description}
                 onChange={(e) => updateNode(selectedNode.id, "description", e.target.value)}
-                className="w-full px-2 py-1.5 text-xs border border-(--color-border) rounded-[6px] h-16 resize-none" />
+                className="w-full px-2 py-1.5 text-xs border border-(--color-border) rounded-[10px] h-16 resize-none" />
             </div>
 
             <div className="grid grid-cols-2 gap-2">
@@ -348,13 +348,13 @@ export default function EditorPage() {
                 <label className="block text-[10px] text-(--color-text-secondary) mb-0.5">Minutes</label>
                 <input type="number" value={selectedNode.estimated_minutes || ""}
                   onChange={(e) => updateNode(selectedNode.id, "estimated_minutes", parseInt(e.target.value) || null)}
-                  className="w-full px-2 py-1.5 text-sm border border-(--color-border) rounded-[6px]" />
+                  className="w-full px-2 py-1.5 text-sm border border-(--color-border) rounded-[10px]" />
               </div>
               <div>
                 <label className="block text-[10px] text-(--color-text-secondary) mb-0.5">Order</label>
                 <input type="number" value={selectedNode.sort_order}
                   onChange={(e) => updateNode(selectedNode.id, "sort_order", parseInt(e.target.value) || 0)}
-                  className="w-full px-2 py-1.5 text-sm border border-(--color-border) rounded-[6px]" />
+                  className="w-full px-2 py-1.5 text-sm border border-(--color-border) rounded-[10px]" />
               </div>
             </div>
 
@@ -365,7 +365,7 @@ export default function EditorPage() {
                 {activeEdges.filter((e) => e.to_node_id === selectedNode.id).map((e) => {
                   const from = nodes.find((n) => n.id === e.from_node_id);
                   return (
-                    <div key={e.id} className="flex items-center justify-between text-xs bg-(--color-page) rounded-[6px] px-2 py-1">
+                    <div key={e.id} className="flex items-center justify-between text-xs bg-(--color-page) rounded-[10px] px-2 py-1">
                       <span className="text-(--color-text-secondary)">{from?.title || "?"}</span>
                       <button onClick={() => deleteEdge(e.id)} className="text-(--color-danger) hover:opacity-80 text-[10px]">remove</button>
                     </div>
@@ -384,7 +384,7 @@ export default function EditorPage() {
                 {activeEdges.filter((e) => e.from_node_id === selectedNode.id).map((e) => {
                   const to = nodes.find((n) => n.id === e.to_node_id);
                   return (
-                    <div key={e.id} className="text-xs text-(--color-text-secondary) bg-(--color-page) rounded-[6px] px-2 py-1">
+                    <div key={e.id} className="text-xs text-(--color-text-secondary) bg-(--color-page) rounded-[10px] px-2 py-1">
                       {to?.title || "?"}
                     </div>
                   );

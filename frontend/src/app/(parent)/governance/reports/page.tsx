@@ -28,8 +28,8 @@ function BarChart({ data, maxValue }: { data: Array<{ label: string; value: numb
       {data.map((d) => (
         <div key={d.label} className="flex items-center gap-3">
           <span className="text-xs text-(--color-text-secondary) w-24 text-right truncate">{d.label}</span>
-          <div className="flex-1 h-5 bg-(--color-page) rounded-[4px] overflow-hidden">
-            <div className="h-full rounded-[4px] transition-all duration-500" style={{ width: `${(d.value / max) * 100}%`, background: d.color }} />
+          <div className="flex-1 h-5 bg-(--color-page) rounded-[6px] overflow-hidden">
+            <div className="h-full rounded-[6px] transition-all duration-500" style={{ width: `${(d.value / max) * 100}%`, background: d.color }} />
           </div>
           <span className="text-xs font-mono text-(--color-text) w-8 text-right">{d.value}</span>
         </div>
@@ -134,18 +134,18 @@ export default function ReportsPage() {
             <div>
               <label className="block text-xs text-(--color-text-secondary) mb-1">From</label>
               <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)}
-                className="px-3 py-1.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+                className="px-3 py-1.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
             </div>
             <div>
               <label className="block text-xs text-(--color-text-secondary) mb-1">To</label>
               <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)}
-                className="px-3 py-1.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+                className="px-3 py-1.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
             </div>
           </div>
           <div className="flex gap-1.5 flex-wrap">
             {[["7d", 7], ["30d", 30], ["90d", 90], ["1y", 365]] .map(([label, days]) => (
               <button key={label as string} onClick={() => setPreset(days as number)}
-                className="px-2.5 py-1 text-[10px] font-medium rounded-[6px] border border-(--color-border) text-(--color-text-secondary) hover:bg-(--color-page)">
+                className="px-2.5 py-1 text-[10px] font-medium rounded-[10px] border border-(--color-border) text-(--color-text-secondary) hover:bg-(--color-page)">
                 {label}
               </button>
             ))}
@@ -255,7 +255,7 @@ export default function ReportsPage() {
               <SectionHeader title="Per-Child Governance Profile" />
               <div className="mt-3 space-y-3">
                 {(report.learning_progress || []).map((cp: any) => (
-                  <div key={cp.child_id} className="flex items-center justify-between py-2 px-3 rounded-[6px] bg-(--color-page)">
+                  <div key={cp.child_id} className="flex items-center justify-between py-2 px-3 rounded-[10px] bg-(--color-page)">
                     <div className="flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-(--color-accent) text-white flex items-center justify-center text-xs font-bold">
                         {cp.child_name?.charAt(0)}
@@ -286,7 +286,7 @@ export default function ReportsPage() {
             ) : (
               <div className="mt-3 space-y-2">
                 {constitutionalActions.map((ca: any, i: number) => (
-                  <div key={i} className="flex items-start gap-2 px-3 py-2 rounded-[6px] bg-(--color-constitutional-light) border-l-2 border-(--color-constitutional)">
+                  <div key={i} className="flex items-start gap-2 px-3 py-2 rounded-[10px] bg-(--color-constitutional-light) border-l-2 border-(--color-constitutional)">
                     <ShieldIcon size={14} className="text-(--color-constitutional) shrink-0 mt-0.5" />
                     <div>
                       <span className="text-xs text-(--color-text-secondary)">{ca.timestamp?.split("T")[0]}</span>
@@ -312,14 +312,14 @@ export default function ReportsPage() {
                   value={attestText}
                   onChange={(e) => setAttestText(e.target.value)}
                   placeholder="I confirm that this report is accurate and complete..."
-                  className="w-full h-24 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] resize-none mb-3 bg-(--color-surface) text-(--color-text)"
+                  className="w-full h-24 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] resize-none mb-3 bg-(--color-surface) text-(--color-text)"
                 />
                 <Button variant="primary" size="md" onClick={attest} disabled={attestText.length < 10}>
                   Attest &amp; Sign Report
                 </Button>
               </div>
             ) : (
-              <div className="mt-3 bg-(--color-success-light) border border-(--color-success)/30 rounded-[6px] p-4">
+              <div className="mt-3 bg-(--color-success-light) border border-(--color-success)/30 rounded-[10px] p-4">
                 <p className="text-sm text-(--color-success) font-medium mb-1">Report attested.</p>
                 <p className="text-xs text-(--color-success)">"{attestText}"</p>
                 <p className="text-xs text-(--color-success) mt-2">Attested on {new Date().toLocaleDateString()}. Permanently recorded.</p>

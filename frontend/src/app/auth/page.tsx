@@ -44,7 +44,7 @@ export default function AuthPage() {
           <p className="text-sm text-(--color-text-secondary) mt-3">A learning operating system for families</p>
         </div>
 
-        <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-6">
+        <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6">
           {/* Tab switcher */}
           <div className="flex mb-6 p-1 bg-(--color-page) rounded-lg border border-(--color-border)">
             <button onClick={() => setMode("login")}
@@ -61,18 +61,18 @@ export default function AuthPage() {
             {mode === "register" && (
               <>
                 <input type="text" placeholder="Your name" value={displayName} onChange={(e) => setDisplayName(e.target.value)}
-                  className="w-full px-3 py-2.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 focus:border-(--color-accent) placeholder:text-(--color-text-tertiary)" required />
+                  className="w-full px-3 py-2.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 focus:border-(--color-accent) placeholder:text-(--color-text-tertiary)" required />
                 <input type="text" placeholder="Household name" value={householdName} onChange={(e) => setHouseholdName(e.target.value)}
-                  className="w-full px-3 py-2.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 focus:border-(--color-accent) placeholder:text-(--color-text-tertiary)" required />
+                  className="w-full px-3 py-2.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 focus:border-(--color-accent) placeholder:text-(--color-text-tertiary)" required />
               </>
             )}
             <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 focus:border-(--color-accent) placeholder:text-(--color-text-tertiary)" required />
+              className="w-full px-3 py-2.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 focus:border-(--color-accent) placeholder:text-(--color-text-tertiary)" required />
             <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-3 py-2.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 focus:border-(--color-accent) placeholder:text-(--color-text-tertiary)" required minLength={8} />
+              className="w-full px-3 py-2.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 focus:border-(--color-accent) placeholder:text-(--color-text-tertiary)" required minLength={8} />
             {error && <p className="text-xs text-(--color-danger)">{error}</p>}
             <button type="submit" disabled={loading}
-              className="w-full py-2.5 text-sm font-medium text-white bg-(--color-accent) rounded-[6px] hover:bg-(--color-accent-hover) disabled:opacity-50 transition-colors duration-150">
+              className="w-full py-2.5 text-sm font-medium text-white bg-(--color-accent) rounded-[10px] hover:bg-(--color-accent-hover) disabled:opacity-50 transition-colors duration-150">
               {loading ? "..." : mode === "login" ? "Sign In" : "Create Account"}
             </button>
           </form>

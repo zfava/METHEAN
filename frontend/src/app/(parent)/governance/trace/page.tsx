@@ -113,14 +113,14 @@ export default function TracePage() {
 
                   {/* Expanded detail */}
                   {isOpen && (
-                    <div className="mt-2 p-3 bg-(--color-page) rounded-[6px] text-xs text-(--color-text-secondary)">
+                    <div className="mt-2 p-3 bg-(--color-page) rounded-[10px] text-xs text-(--color-text-secondary)">
                       <div className="grid grid-cols-2 gap-2">
                         <div><span className="text-(--color-text-tertiary)">Time:</span> {new Date(evt.created_at).toLocaleString()}</div>
                         <div><span className="text-(--color-text-tertiary)">Target ID:</span> <span className="font-mono">{evt.target_id.slice(0, 12)}...</span></div>
                         {evt.user_id && <div><span className="text-(--color-text-tertiary)">Actor:</span> <span className="font-mono">{evt.user_id.slice(0, 8)}...</span></div>}
                       </div>
                       {evt.reason && (
-                        <div className={cn("mt-2 pt-2 border-t border-(--color-border)", isConstitutional && "bg-(--color-constitutional-light) -mx-3 px-3 py-2 rounded-[6px] border-t-0 mt-3")}>
+                        <div className={cn("mt-2 pt-2 border-t border-(--color-border)", isConstitutional && "bg-(--color-constitutional-light) -mx-3 px-3 py-2 rounded-[10px] border-t-0 mt-3")}>
                           <span className="text-(--color-text-tertiary)">{isConstitutional ? "Stated reason:" : "Reason:"}</span>
                           {isConstitutional ? <p className="italic text-(--color-constitutional) mt-0.5">"{evt.reason}"</p> : <span> {evt.reason}</span>}
                         </div>

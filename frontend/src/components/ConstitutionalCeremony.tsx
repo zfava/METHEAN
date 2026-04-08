@@ -149,7 +149,7 @@ export default function ConstitutionalCeremony({
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 placeholder="Explain why this is foundational to your family's education. (minimum 20 characters)"
-                className="w-full h-20 px-3 py-2 text-xs border border-(--color-border) rounded-[6px] resize-none bg-(--color-surface) text-(--color-text)"
+                className="w-full h-20 px-3 py-2 text-xs border border-(--color-border) rounded-[10px] resize-none bg-(--color-surface) text-(--color-text)"
               />
               {reason.length > 0 && reason.length < 20 && (
                 <p className="text-[10px] text-(--color-danger) mt-1">{20 - reason.length} more characters needed</p>
@@ -228,7 +228,7 @@ export default function ConstitutionalCeremony({
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
                 placeholder="Explain why this change is necessary. (minimum 20 characters)"
-                className="w-full h-20 px-3 py-2 text-xs border border-(--color-border) rounded-[6px] resize-none bg-(--color-surface) text-(--color-text)"
+                className="w-full h-20 px-3 py-2 text-xs border border-(--color-border) rounded-[10px] resize-none bg-(--color-surface) text-(--color-text)"
               />
               {reason.length > 0 && reason.length < 20 && (
                 <p className="text-[10px] text-(--color-danger) mt-1">{20 - reason.length} more characters needed</p>
@@ -259,7 +259,7 @@ export default function ConstitutionalCeremony({
         {originalReason ? " with the following justification:" : "."}
       </p>
       {originalReason && (
-        <div className="bg-(--color-page) rounded-[6px] px-3 py-2 mb-3 text-xs text-(--color-text) italic">
+        <div className="bg-(--color-page) rounded-[10px] px-3 py-2 mb-3 text-xs text-(--color-text) italic">
           "{originalReason}"
         </div>
       )}
@@ -272,7 +272,7 @@ export default function ConstitutionalCeremony({
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           placeholder="Explain your reason. (minimum 20 characters)"
-          className="w-full h-20 px-3 py-2 text-xs border border-(--color-border) rounded-[6px] resize-none bg-(--color-surface) text-(--color-text)"
+          className="w-full h-20 px-3 py-2 text-xs border border-(--color-border) rounded-[10px] resize-none bg-(--color-surface) text-(--color-text)"
         />
         {reason.length > 0 && reason.length < 20 && (
           <p className="text-[10px] text-(--color-danger) mt-1">{20 - reason.length} more characters needed</p>

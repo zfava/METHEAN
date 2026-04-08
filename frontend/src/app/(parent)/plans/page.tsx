@@ -127,7 +127,7 @@ export default function PlansPage() {
         }
       />
 
-      {error && <div className="mb-4 p-3 text-sm bg-(--color-danger-light) text-(--color-danger) rounded-[6px] border border-(--color-danger)/30">{error}</div>}
+      {error && <div className="mb-4 p-3 text-sm bg-(--color-danger-light) text-(--color-danger) rounded-[10px] border border-(--color-danger)/30">{error}</div>}
 
       {loading ? <LoadingSkeleton variant="card" count={3} /> : (
         <>
@@ -139,7 +139,7 @@ export default function PlansPage() {
                   key={p.id}
                   onClick={() => loadPlanDetail(p.id)}
                   className={cn(
-                    "shrink-0 px-3 py-1.5 text-xs rounded-[6px] border transition-colors",
+                    "shrink-0 px-3 py-1.5 text-xs rounded-[10px] border transition-colors",
                     selected?.id === p.id
                       ? "border-(--color-accent) bg-(--color-accent-light) text-(--color-accent)"
                       : "border-(--color-border) hover:bg-(--color-page)"
@@ -183,7 +183,7 @@ export default function PlansPage() {
                       <div className="px-3 py-2 border-b border-(--color-border) text-xs font-semibold text-(--color-text-secondary)">{day}</div>
                       <div className="p-2 space-y-2 min-h-32">
                         {dayActivities.map((a) => (
-                          <div key={a.id} className="p-2.5 rounded-[6px] border border-(--color-border) bg-(--color-page)">
+                          <div key={a.id} className="p-2.5 rounded-[10px] border border-(--color-border) bg-(--color-page)">
                             <div className="text-xs font-medium text-(--color-text)">{a.title}</div>
                             <div className="flex items-center gap-2 mt-1">
                               <StatusBadge status={a.status} />
@@ -191,8 +191,8 @@ export default function PlansPage() {
                             </div>
                             {a.status === "scheduled" && (
                               <div className="flex gap-1 mt-2">
-                                <button onClick={() => handleApprove(a.id)} className="px-2 py-0.5 text-[10px] font-medium bg-(--color-success-light) text-(--color-success) rounded-[4px] hover:opacity-80">Approve</button>
-                                <button onClick={() => handleReject(a.id)} className="px-2 py-0.5 text-[10px] font-medium bg-(--color-danger-light) text-(--color-danger) rounded-[4px] hover:opacity-80">Reject</button>
+                                <button onClick={() => handleApprove(a.id)} className="px-2 py-0.5 text-[10px] font-medium bg-(--color-success-light) text-(--color-success) rounded-[6px] hover:opacity-80">Approve</button>
+                                <button onClick={() => handleReject(a.id)} className="px-2 py-0.5 text-[10px] font-medium bg-(--color-danger-light) text-(--color-danger) rounded-[6px] hover:opacity-80">Reject</button>
                               </div>
                             )}
                           </div>

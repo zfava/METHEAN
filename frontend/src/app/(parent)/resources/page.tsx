@@ -122,9 +122,9 @@ export default function ResourcesPage() {
           <h3 className="text-sm font-semibold text-(--color-text) mb-3">{editingId ? "Edit Resource" : "Add Resource"}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
             <input value={fName} onChange={(e) => setFName(e.target.value)} placeholder="Resource name *"
-              className="col-span-1 md:col-span-2 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+              className="col-span-1 md:col-span-2 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
             <select value={fType} onChange={(e) => setFType(e.target.value)}
-              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)">
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)">
               <option value="textbook">Textbook</option>
               <option value="workbook">Workbook</option>
               <option value="digital">Digital</option>
@@ -132,7 +132,7 @@ export default function ResourcesPage() {
               <option value="other">Other</option>
             </select>
             <select value={fSubject} onChange={(e) => setFSubject(e.target.value)}
-              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)">
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)">
               <option value="">Subject area</option>
               <option value="mathematics">Mathematics</option>
               <option value="language_arts">Language Arts</option>
@@ -143,18 +143,18 @@ export default function ResourcesPage() {
               <option value="other">Other</option>
             </select>
             <input value={fPublisher} onChange={(e) => setFPublisher(e.target.value)} placeholder="Publisher"
-              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
             <input value={fGrade} onChange={(e) => setFGrade(e.target.value)} placeholder="Grade range (e.g. K-3, 6-8)"
-              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
             <select value={fStatus} onChange={(e) => setFStatus(e.target.value)}
-              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)">
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)">
               <option value="owned">Owned</option>
               <option value="borrowed">Borrowed</option>
               <option value="wishlist">Wishlist</option>
               <option value="digital_access">Digital Access</option>
             </select>
             <textarea value={fNotes} onChange={(e) => setFNotes(e.target.value)} placeholder="Notes"
-              className="col-span-1 md:col-span-2 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text) h-16 resize-none" />
+              className="col-span-1 md:col-span-2 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text) h-16 resize-none" />
           </div>
           <div className="flex gap-2">
             <Button variant="primary" size="sm" onClick={handleSubmit} disabled={!fName.trim()}>

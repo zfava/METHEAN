@@ -151,7 +151,7 @@ export default function CalendarPage() {
         <div className="flex items-center gap-2">
           {children.length > 1 && (
             <button onClick={() => setFamilyView(!familyView)}
-              className={cn("px-3 py-1.5 text-xs rounded-[6px] border transition-colors",
+              className={cn("px-3 py-1.5 text-xs rounded-[10px] border transition-colors",
                 familyView ? "border-(--color-accent) bg-(--color-accent-light) text-(--color-accent)" : "border-(--color-border) text-(--color-text-secondary)")}>
               {familyView ? "👨‍👩‍👧‍👦 Family" : "Single Child"}
             </button>
@@ -167,19 +167,19 @@ export default function CalendarPage() {
         <Card className="mb-4" padding="p-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-3">
             <input value={addTitle} onChange={(e) => setAddTitle(e.target.value)} placeholder="Activity title *"
-              className="sm:col-span-2 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+              className="sm:col-span-2 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
             <select value={addType} onChange={(e) => setAddType(e.target.value)}
-              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)">
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)">
               <option value="lesson">Lesson</option><option value="practice">Practice</option>
               <option value="project">Project</option><option value="field_trip">Field Trip</option>
               <option value="review">Review</option><option value="assessment">Assessment</option>
             </select>
             <input type="date" value={addDate} onChange={(e) => setAddDate(e.target.value)}
-              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
             <input type="number" value={addMinutes} onChange={(e) => setAddMinutes(Number(e.target.value))} placeholder="Minutes" min={1}
-              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
             <input value={addSubject} onChange={(e) => setAddSubject(e.target.value)} placeholder="Subject (optional)"
-              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
           </div>
           <Button variant="primary" size="sm" disabled={!addTitle.trim() || !addDate} onClick={async () => {
             try {
@@ -268,7 +268,7 @@ export default function CalendarPage() {
                           </button>
 
                           {isExpanded && (
-                            <div className="mt-1 p-2.5 rounded-[6px] bg-(--color-page) text-[10px] text-(--color-text-secondary)">
+                            <div className="mt-1 p-2.5 rounded-[10px] bg-(--color-page) text-[10px] text-(--color-text-secondary)">
                               {act.description && <p className="mb-1">{act.description}</p>}
                               <div className="flex items-center justify-between">
                                 <StatusBadge status={act.status} />
@@ -376,7 +376,7 @@ function MobileCalendar({ weekStart, activitiesForDay, expanded, setExpanded }: 
         {DAYS.map((day, i) => (
           <button key={day} onClick={() => setActiveDay(i)}
             className={cn(
-              "flex-1 py-2 text-xs font-medium rounded-[6px] transition-colors",
+              "flex-1 py-2 text-xs font-medium rounded-[10px] transition-colors",
               activeDay === i ? "bg-(--color-text) text-white" : "bg-(--color-page) text-(--color-text-secondary)"
             )}>
             {day.slice(0, 3)}

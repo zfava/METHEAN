@@ -108,20 +108,20 @@ export default function ReadingPage() {
         <Card className="mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
             <input value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="Book title *"
-              className="col-span-2 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+              className="col-span-2 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
             <input value={newAuthor} onChange={(e) => setNewAuthor(e.target.value)} placeholder="Author"
-              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
             <input value={newPages} onChange={(e) => setNewPages(e.target.value)} placeholder="Total pages" type="number"
-              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
             <select value={newGenre} onChange={(e) => setNewGenre(e.target.value)}
-              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)">
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)">
               <option value="">Genre</option>
               <option value="fiction">Fiction</option><option value="nonfiction">Nonfiction</option>
               <option value="poetry">Poetry</option><option value="biography">Biography</option>
               <option value="reference">Reference</option><option value="other">Other</option>
             </select>
             <select value={newSubject} onChange={(e) => setNewSubject(e.target.value)}
-              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)">
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)">
               <option value="">Subject area</option>
               <option value="history">History</option><option value="science">Science</option>
               <option value="literature">Literature</option><option value="math">Math</option>
@@ -130,7 +130,7 @@ export default function ReadingPage() {
           </div>
           <div className="flex items-center gap-3">
             <select value={newStatus} onChange={(e) => setNewStatus(e.target.value)}
-              className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)">
+              className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)">
               <option value="to_read">To Read</option><option value="reading">Currently Reading</option>
             </select>
             <Button variant="primary" size="sm" onClick={addBook} disabled={!newTitle.trim()}>Add</Button>
@@ -221,15 +221,15 @@ export default function ReadingPage() {
                         <div className="mt-3 pt-3 border-t border-(--color-border) space-y-2">
                           <div className="flex gap-2">
                             <input value={updatePages} onChange={(e) => setUpdatePages(e.target.value)} placeholder="Pages read" type="number"
-                              className="w-24 px-2 py-1.5 text-xs border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+                              className="w-24 px-2 py-1.5 text-xs border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
                             <span className="text-xs text-(--color-text-tertiary) self-center">of {entry.pages_total || "?"}</span>
                           </div>
                           <textarea value={updateNarration} onChange={(e) => setUpdateNarration(e.target.value)}
                             placeholder="Narration (what did they read about?)"
-                            className="w-full h-16 px-3 py-2 text-xs border border-(--color-border) rounded-[6px] resize-none bg-(--color-surface) text-(--color-text)" />
+                            className="w-full h-16 px-3 py-2 text-xs border border-(--color-border) rounded-[10px] resize-none bg-(--color-surface) text-(--color-text)" />
                           <textarea value={updateNotes} onChange={(e) => setUpdateNotes(e.target.value)}
                             placeholder="Your notes (optional)"
-                            className="w-full h-12 px-3 py-2 text-xs border border-(--color-border) rounded-[6px] resize-none bg-(--color-surface) text-(--color-text)" />
+                            className="w-full h-12 px-3 py-2 text-xs border border-(--color-border) rounded-[10px] resize-none bg-(--color-surface) text-(--color-text)" />
                           <Button variant="primary" size="sm" onClick={() => updateEntry(entry.id, {
                             pages_read: updatePages ? parseInt(updatePages) : undefined,
                             narration: updateNarration || undefined,

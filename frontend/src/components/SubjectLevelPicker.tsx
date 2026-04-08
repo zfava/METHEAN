@@ -101,7 +101,7 @@ export default function SubjectLevelPicker({ selected, onChange, showCustom = tr
                   {LEVEL_ORDER.map((level) => (
                     <button key={level} onClick={() => setLevel(subj.id, level)}
                       className={cn(
-                        "flex-1 py-1.5 text-[9px] font-medium rounded-[4px] transition-colors",
+                        "flex-1 py-1.5 text-[9px] font-medium rounded-[6px] transition-colors",
                         selected[subj.id] === level ? LEVEL_COLORS[level] : "bg-(--color-page) text-(--color-text-tertiary)"
                       )}>
                       {LEVEL_LABELS[level]}
@@ -121,7 +121,7 @@ export default function SubjectLevelPicker({ selected, onChange, showCustom = tr
           <div className="flex gap-2 mt-2">
             <input value={newSubjectName} onChange={(e) => setNewSubjectName(e.target.value)}
               placeholder="New subject name"
-              className="flex-1 px-3 py-2 text-xs border border-(--color-border) rounded-[6px] bg-(--color-surface)"
+              className="flex-1 px-3 py-2 text-xs border border-(--color-border) rounded-[10px] bg-(--color-surface)"
               onKeyDown={(e) => e.key === "Enter" && addCustomSubject()} />
             <Button variant="primary" size="sm" onClick={addCustomSubject} disabled={!newSubjectName.trim()}>Add</Button>
           </div>

@@ -185,7 +185,7 @@ export default function QueuePage() {
                               value={actionReason}
                               onChange={(e) => setActionReason(e.target.value)}
                               placeholder={actionForm.type === "reject" ? "Reason (required)" : "Note (optional)"}
-                              className="px-2 py-1.5 text-xs border border-(--color-border) rounded-[6px] bg-(--color-surface)"
+                              className="px-2 py-1.5 text-xs border border-(--color-border) rounded-[10px] bg-(--color-surface)"
                               autoFocus
                             />
                             <div className="flex gap-1.5">

@@ -263,7 +263,7 @@ export default function RulesPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {RULE_TYPES.map((rt) => (
                 <button key={rt.value} onClick={() => { setRuleType(rt.value); setStep("tier"); }}
-                  className="text-left p-4 rounded-[10px] border border-(--color-border) hover:border-(--color-accent) transition-colors">
+                  className="text-left p-4 rounded-[14px] border border-(--color-border) hover:border-(--color-accent) transition-colors">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-lg">{rt.icon}</span>
                     <span className="text-sm font-medium text-(--color-text)">{rt.label}</span>
@@ -278,12 +278,12 @@ export default function RulesPage() {
           {step === "tier" && (
             <div className="space-y-3">
               <button onClick={() => { setRuleTier("policy"); setStep("params"); }}
-                className="w-full text-left p-4 rounded-[10px] border border-(--color-border) hover:border-(--color-accent) transition-colors">
+                className="w-full text-left p-4 rounded-[14px] border border-(--color-border) hover:border-(--color-accent) transition-colors">
                 <span className="text-sm font-medium text-(--color-text)">Policy Rule</span>
                 <p className="text-xs text-(--color-text-secondary) mt-0.5">Normal rule. Can be changed anytime.</p>
               </button>
               <button onClick={() => { setRuleTier("constitutional"); setStep("params"); }}
-                className="w-full text-left p-4 rounded-[10px] border-2 border-(--color-constitutional)/30 hover:border-(--color-constitutional) transition-colors">
+                className="w-full text-left p-4 rounded-[14px] border-2 border-(--color-constitutional)/30 hover:border-(--color-constitutional) transition-colors">
                 <div className="flex items-center gap-2">
                   <span className="text-lg">🛡️</span>
                   <span className="text-sm font-medium text-(--color-constitutional)">Constitutional Rule</span>
@@ -307,24 +307,24 @@ export default function RulesPage() {
                   <div>
                     <label className="block text-xs text-(--color-text-secondary) mb-1">Maximum daily minutes</label>
                     <input type="number" value={pMaxDaily} onChange={(e) => setPMaxDaily(Number(e.target.value))} min={0} max={1440}
-                      className="w-32 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+                      className="w-32 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
                   </div>
                   <div>
                     <label className="block text-xs text-(--color-text-secondary) mb-1">Maximum weekly minutes</label>
                     <input type="number" value={pMaxWeekly} onChange={(e) => setPMaxWeekly(Number(e.target.value))} min={0}
-                      className="w-32 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+                      className="w-32 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
                   </div>
                   <div>
                     <label className="block text-xs text-(--color-text-secondary) mb-1">Suggest break after (minutes)</label>
                     <input type="number" value={pBreakAfter} onChange={(e) => setPBreakAfter(Number(e.target.value))} min={0}
-                      className="w-32 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+                      className="w-32 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
                   </div>
                   <div>
                     <label className="block text-xs text-(--color-text-secondary) mb-1">Enforcement</label>
                     <div className="flex gap-2">
                       {(["hard", "soft"] as const).map((v) => (
                         <button key={v} onClick={() => setPEnforce(v)}
-                          className={cn("px-4 py-2 text-xs rounded-[6px] border capitalize", pEnforce === v ? "border-(--color-accent) bg-(--color-accent-light) text-(--color-accent)" : "border-(--color-border)")}>
+                          className={cn("px-4 py-2 text-xs rounded-[10px] border capitalize", pEnforce === v ? "border-(--color-accent) bg-(--color-accent-light) text-(--color-accent)" : "border-(--color-border)")}>
                           {v} {v === "hard" ? "(block)" : "(warn)"}
                         </button>
                       ))}
@@ -352,7 +352,7 @@ export default function RulesPage() {
                     <div className="flex flex-wrap gap-2">
                       {ACTIVITY_TYPES.map((at) => (
                         <button key={at} onClick={() => toggleArrayItem(pActivityTypes, at, setPActivityTypes)}
-                          className={cn("px-3 py-1.5 text-xs rounded-[6px] border capitalize", pActivityTypes.includes(at) ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)")}>
+                          className={cn("px-3 py-1.5 text-xs rounded-[10px] border capitalize", pActivityTypes.includes(at) ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)")}>
                           {at.replace(/_/g, " ")}
                         </button>
                       ))}
@@ -366,12 +366,12 @@ export default function RulesPage() {
                   <div>
                     <label className="block text-xs text-(--color-text-secondary) mb-1">Topic *</label>
                     <input value={pTopic} onChange={(e) => setPTopic(e.target.value)} placeholder="e.g., evolution, violence"
-                      className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+                      className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
                   </div>
                   <div>
                     <label className="block text-xs text-(--color-text-secondary) mb-1">Stance</label>
                     <select value={pStance} onChange={(e) => setPStance(e.target.value)}
-                      className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)">
+                      className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)">
                       <option value="exclude">Exclude entirely</option>
                       <option value="present_alternative">Present alternatives</option>
                       <option value="parent_led_only">Parent-led discussion only</option>
@@ -382,7 +382,7 @@ export default function RulesPage() {
                     <label className="block text-xs text-(--color-text-secondary) mb-1">Notes for AI</label>
                     <textarea value={pContentNotes} onChange={(e) => setPContentNotes(e.target.value)}
                       placeholder="Additional guidance for the AI..."
-                      className="w-full h-16 px-3 py-2 text-xs border border-(--color-border) rounded-[6px] resize-none bg-(--color-surface)" />
+                      className="w-full h-16 px-3 py-2 text-xs border border-(--color-border) rounded-[10px] resize-none bg-(--color-surface)" />
                   </div>
                 </>
               )}
@@ -394,7 +394,7 @@ export default function RulesPage() {
                     <div className="flex flex-wrap gap-2">
                       {DAYS.map((d) => (
                         <button key={d} onClick={() => toggleArrayItem(pAllowedDays, d, setPAllowedDays)}
-                          className={cn("w-10 h-10 text-xs rounded-[6px] border capitalize", pAllowedDays.includes(d) ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)")}>
+                          className={cn("w-10 h-10 text-xs rounded-[10px] border capitalize", pAllowedDays.includes(d) ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)")}>
                           {d.slice(0, 2)}
                         </button>
                       ))}
@@ -404,12 +404,12 @@ export default function RulesPage() {
                     <div>
                       <label className="block text-xs text-(--color-text-secondary) mb-1">Start time</label>
                       <input type="time" value={pStartTime} onChange={(e) => setPStartTime(e.target.value)}
-                        className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+                        className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
                     </div>
                     <div>
                       <label className="block text-xs text-(--color-text-secondary) mb-1">End time</label>
                       <input type="time" value={pEndTime} onChange={(e) => setPEndTime(e.target.value)}
-                        className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+                        className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
                     </div>
                   </div>
                   <div>
@@ -417,7 +417,7 @@ export default function RulesPage() {
                     <div className="flex gap-2">
                       {(["hard", "soft"] as const).map((v) => (
                         <button key={v} onClick={() => setPEnforce(v)}
-                          className={cn("px-4 py-2 text-xs rounded-[6px] border capitalize", pEnforce === v ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)")}>
+                          className={cn("px-4 py-2 text-xs rounded-[10px] border capitalize", pEnforce === v ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)")}>
                           {v}
                         </button>
                       ))}
@@ -433,7 +433,7 @@ export default function RulesPage() {
                     <div className="flex gap-2">
                       {(["full", "summary", "minimal"] as const).map((v) => (
                         <button key={v} onClick={() => setPTransparency(v)}
-                          className={cn("px-4 py-2 text-xs rounded-[6px] border capitalize", pTransparency === v ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)")}>
+                          className={cn("px-4 py-2 text-xs rounded-[10px] border capitalize", pTransparency === v ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)")}>
                           {v}
                         </button>
                       ))}
@@ -449,14 +449,14 @@ export default function RulesPage() {
                   <div>
                     <label className="block text-xs text-(--color-text-secondary) mb-1">Max AI calls per day</label>
                     <input type="number" value={pMaxAiCalls} onChange={(e) => setPMaxAiCalls(Number(e.target.value))} min={1}
-                      className="w-32 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+                      className="w-32 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
                   </div>
                   <div>
                     <label className="block text-xs text-(--color-text-secondary) mb-1">Allowed AI roles</label>
                     <div className="flex flex-wrap gap-2">
                       {AI_ROLES.map((role) => (
                         <button key={role} onClick={() => toggleArrayItem(pAllowedRoles, role, setPAllowedRoles)}
-                          className={cn("px-3 py-1.5 text-xs rounded-[6px] border capitalize", pAllowedRoles.includes(role) ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)")}>
+                          className={cn("px-3 py-1.5 text-xs rounded-[10px] border capitalize", pAllowedRoles.includes(role) ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)")}>
                           {role.replace(/_/g, " ")}
                         </button>
                       ))}
@@ -478,28 +478,28 @@ export default function RulesPage() {
               <div>
                 <label className="block text-xs text-(--color-text-secondary) mb-1">Rule name</label>
                 <input value={ruleName} onChange={(e) => setRuleName(e.target.value)} placeholder={autoName()}
-                  className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+                  className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
               </div>
               <div>
                 <label className="block text-xs text-(--color-text-secondary) mb-1">Description (optional)</label>
                 <textarea value={ruleDesc} onChange={(e) => setRuleDesc(e.target.value)} placeholder="What does this rule do?"
-                  className="w-full h-16 px-3 py-2 text-xs border border-(--color-border) rounded-[6px] resize-none bg-(--color-surface)" />
+                  className="w-full h-16 px-3 py-2 text-xs border border-(--color-border) rounded-[10px] resize-none bg-(--color-surface)" />
               </div>
               <div>
                 <label className="block text-xs text-(--color-text-secondary) mb-1">Scope</label>
                 <div className="flex gap-2">
                   <button onClick={() => setRuleScope("household")}
-                    className={cn("px-4 py-2 text-xs rounded-[6px] border", ruleScope === "household" ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)")}>
+                    className={cn("px-4 py-2 text-xs rounded-[10px] border", ruleScope === "household" ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)")}>
                     Entire household
                   </button>
                   <button onClick={() => setRuleScope("child")}
-                    className={cn("px-4 py-2 text-xs rounded-[6px] border", ruleScope === "child" ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)")}>
+                    className={cn("px-4 py-2 text-xs rounded-[10px] border", ruleScope === "child" ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)")}>
                     Specific child
                   </button>
                 </div>
                 {ruleScope === "child" && allChildren.length > 0 && (
                   <select value={ruleScopeId} onChange={(e) => setRuleScopeId(e.target.value)}
-                    className="mt-2 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)">
+                    className="mt-2 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)">
                     <option value="">Select child...</option>
                     {allChildren.map((c) => <option key={c.id} value={c.id}>{c.first_name}</option>)}
                   </select>
@@ -509,12 +509,12 @@ export default function RulesPage() {
                 <div>
                   <label className="block text-xs text-(--color-text-secondary) mb-1">Effective from (optional)</label>
                   <input type="date" value={effectiveFrom} onChange={(e) => setEffectiveFrom(e.target.value)}
-                    className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+                    className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
                 </div>
                 <div>
                   <label className="block text-xs text-(--color-text-secondary) mb-1">Effective until (optional)</label>
                   <input type="date" value={effectiveUntil} onChange={(e) => setEffectiveUntil(e.target.value)}
-                    className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+                    className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
                 </div>
               </div>
 

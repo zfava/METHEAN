@@ -49,7 +49,7 @@ export default function CompliancePage() {
 
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
         <select value={selectedState} onChange={(e) => setSelectedState(e.target.value)}
-          className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)">
+          className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)">
           <option value="">Select your state...</option>
           {states
             .sort((a, b) => a.name.localeCompare(b.name))
@@ -125,7 +125,7 @@ export default function CompliancePage() {
           )}
 
           {result.special_notes && (
-            <div className="bg-(--color-warning-light) border border-(--color-warning)/20 rounded-[10px] p-4 text-xs text-(--color-warning)">
+            <div className="bg-(--color-warning-light) border border-(--color-warning)/20 rounded-[14px] p-4 text-xs text-(--color-warning)">
               <span className="font-medium">Note:</span> {result.special_notes}
             </div>
           )}
@@ -138,7 +138,7 @@ export default function CompliancePage() {
               {(result.strictness === "high") && (
                 <>
                   <a href={documents.ihip(selectedChild.id, "2026-2027", selectedState)} target="_blank" rel="noopener"
-                    className="flex items-center justify-between px-3 py-2.5 rounded-[6px] border border-(--color-border) hover:bg-(--color-page) transition-colors">
+                    className="flex items-center justify-between px-3 py-2.5 rounded-[10px] border border-(--color-border) hover:bg-(--color-page) transition-colors">
                     <div>
                       <div className="text-xs font-medium text-(--color-text)">📄 IHIP (Individualized Home Instruction Plan)</div>
                       <div className="text-[10px] text-(--color-text-tertiary)">Required for high-regulation states</div>
@@ -147,7 +147,7 @@ export default function CompliancePage() {
                   </a>
                   {[1,2,3,4].map(q => (
                     <a key={q} href={documents.quarterlyReport(selectedChild.id, q, "2026-2027")} target="_blank" rel="noopener"
-                      className="flex items-center justify-between px-3 py-2.5 rounded-[6px] border border-(--color-border) hover:bg-(--color-page) transition-colors">
+                      className="flex items-center justify-between px-3 py-2.5 rounded-[10px] border border-(--color-border) hover:bg-(--color-page) transition-colors">
                       <div>
                         <div className="text-xs font-medium text-(--color-text)">📄 Q{q} Progress Report</div>
                         <div className="text-[10px] text-(--color-text-tertiary)">Mastery, hours, and activities for quarter {q}</div>
@@ -158,7 +158,7 @@ export default function CompliancePage() {
                 </>
               )}
               <a href={documents.attendance(selectedChild.id, "2026-09-01", "2027-06-30")} target="_blank" rel="noopener"
-                className="flex items-center justify-between px-3 py-2.5 rounded-[6px] border border-(--color-border) hover:bg-(--color-page) transition-colors">
+                className="flex items-center justify-between px-3 py-2.5 rounded-[10px] border border-(--color-border) hover:bg-(--color-page) transition-colors">
                 <div>
                   <div className="text-xs font-medium text-(--color-text)">📄 Attendance Record</div>
                   <div className="text-[10px] text-(--color-text-tertiary)">School days and instruction hours</div>
@@ -166,7 +166,7 @@ export default function CompliancePage() {
                 <span className="text-xs text-(--color-accent)">Download →</span>
               </a>
               <a href={documents.transcript(selectedChild.id)} target="_blank" rel="noopener"
-                className="flex items-center justify-between px-3 py-2.5 rounded-[6px] border border-(--color-border) hover:bg-(--color-page) transition-colors">
+                className="flex items-center justify-between px-3 py-2.5 rounded-[10px] border border-(--color-border) hover:bg-(--color-page) transition-colors">
                 <div>
                   <div className="text-xs font-medium text-(--color-text)">📄 Academic Transcript</div>
                   <div className="text-[10px] text-(--color-text-tertiary)">Cumulative record across all subjects and years</div>

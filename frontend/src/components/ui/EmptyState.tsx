@@ -24,12 +24,12 @@ export default function EmptyState({
   };
 
   return (
-    <div className={cn("bg-(--color-surface) rounded-[10px] border border-(--color-border) py-12 px-6 text-center", className)}>
+    <div className={cn("bg-(--color-surface) rounded-[14px] border border-(--color-border) py-12 px-6 text-center", className)}>
       {icon && icons[icon]}
       <h3 className="text-sm font-medium text-(--color-text)">{title}</h3>
       {description && <p className="text-xs text-(--color-text-secondary) mt-1 max-w-sm mx-auto">{description}</p>}
       {action && onAction && (
-        <button onClick={onAction} className="mt-4 px-4 py-1.5 text-xs font-medium text-(--color-accent) border border-(--color-accent)/30 rounded-[6px] hover:bg-(--color-accent-light) transition-colors duration-150">
+        <button onClick={onAction} className="mt-4 px-4 py-1.5 text-xs font-medium text-(--color-accent) border border-(--color-accent)/30 rounded-[10px] hover:bg-(--color-accent-light) transition-colors duration-150">
           {action}
         </button>
       )}

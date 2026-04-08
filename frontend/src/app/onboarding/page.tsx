@@ -239,7 +239,7 @@ export default function OnboardingPage() {
 
         {/* ── Step 1: Welcome ── */}
         {step === 1 && (
-          <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-8 text-center">
+          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-8 text-center">
             <p className="text-sm text-(--color-text-secondary) mb-6">
               METHEAN is a learning operating system where AI advises, but you govern.
               In the next few steps, we'll add your children, set your educational philosophy,
@@ -253,17 +253,17 @@ export default function OnboardingPage() {
 
         {/* ── Step 2: Add Children ── */}
         {step === 2 && (
-          <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-6">
+          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6">
             <h3 className="text-sm font-semibold text-(--color-text) mb-1">Who's learning at home?</h3>
             <p className="text-xs text-(--color-text-secondary) mb-4">Add at least one child to continue.</p>
 
             <div className="flex flex-col sm:flex-row gap-2 mb-4">
               <input value={newName} onChange={(e) => setNewName(e.target.value)}
                 placeholder="First name"
-                className="flex-1 px-3 py-2.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)"
+                className="flex-1 px-3 py-2.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)"
                 onKeyDown={(e) => e.key === "Enter" && addChild()} />
               <select value={newGrade} onChange={(e) => setNewGrade(e.target.value)}
-                className="w-full sm:w-28 px-3 py-2.5 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)">
+                className="w-full sm:w-28 px-3 py-2.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)">
                 {GRADES.map((g) => <option key={g} value={g}>{g}</option>)}
               </select>
               <Button variant="primary" size="md" onClick={addChild} disabled={!newName.trim()}>Add</Button>
@@ -272,7 +272,7 @@ export default function OnboardingPage() {
             {addedChildren.length > 0 && (
               <div className="space-y-2 mb-4">
                 {addedChildren.map((c) => (
-                  <div key={c.id} className="flex items-center justify-between px-3 py-2 bg-(--color-page) rounded-[6px]">
+                  <div key={c.id} className="flex items-center justify-between px-3 py-2 bg-(--color-page) rounded-[10px]">
                     <span className="text-sm text-(--color-text)">{c.firstName} <span className="text-(--color-text-tertiary)">· {c.grade}</span></span>
                     <button onClick={() => removeChild(c.id)} className="text-xs text-(--color-danger) hover:underline">Remove</button>
                   </div>
@@ -290,14 +290,14 @@ export default function OnboardingPage() {
 
         {/* ── Step 3: Philosophy ── */}
         {step === 3 && (
-          <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-6">
+          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6">
             <h3 className="text-sm font-semibold text-(--color-text) mb-1">Your educational approach</h3>
             <p className="text-xs text-(--color-text-secondary) mb-4">This guides how the AI generates curriculum and activities.</p>
 
             <div className="grid grid-cols-2 gap-2 mb-6">
               {PHILOSOPHIES.map((p) => (
                 <button key={p.value} onClick={() => setPhilosophy(p.value)}
-                  className={cn("text-left p-3 rounded-[6px] border transition-colors",
+                  className={cn("text-left p-3 rounded-[10px] border transition-colors",
                     philosophy === p.value ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border) hover:border-(--color-border-strong)")}>
                   <div className="text-xs font-medium text-(--color-text)">{p.label}</div>
                   <div className="text-[10px] text-(--color-text-tertiary)">{p.desc}</div>
@@ -309,7 +309,7 @@ export default function OnboardingPage() {
             <div className="space-y-2 mb-6">
               {AUTONOMY.map((a) => (
                 <button key={a.value} onClick={() => setAutonomy(a.value)}
-                  className={cn("w-full text-left p-3 rounded-[6px] border transition-colors",
+                  className={cn("w-full text-left p-3 rounded-[10px] border transition-colors",
                     autonomy === a.value ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)")}>
                   <div className="text-xs font-medium text-(--color-text)">{a.label}</div>
                   <div className="text-[10px] text-(--color-text-tertiary)">{a.desc}</div>
@@ -325,7 +325,7 @@ export default function OnboardingPage() {
 
         {/* ── Step 4: Curriculum Path ── */}
         {step === 4 && !loading && (
-          <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-6">
+          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6">
             {currentChildIdx < addedChildren.length ? (
               <>
                 <h3 className="text-sm font-semibold text-(--color-text) mb-1">
@@ -345,7 +345,7 @@ export default function OnboardingPage() {
                     const childId = addedChildren[currentChildIdx].id;
                     return (
                       <button key={choice} onClick={() => setCurriculumChoices((prev) => ({ ...prev, [childId]: choice }))}
-                        className={cn("w-full text-left p-4 rounded-[6px] border transition-colors",
+                        className={cn("w-full text-left p-4 rounded-[10px] border transition-colors",
                           curriculumChoices[childId] === choice ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)")}>
                         <div className="text-xs font-medium text-(--color-text)">{labels[choice].title}</div>
                         <div className="text-[10px] text-(--color-text-tertiary)">{labels[choice].desc}</div>
@@ -372,7 +372,7 @@ export default function OnboardingPage() {
 
         {/* ── Step 4/5: Loading ── */}
         {loading && (step === 4 || step === 5) && (
-          <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-8 text-center">
+          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-8 text-center">
             <div className="w-10 h-10 mx-auto mb-4 rounded-full border-2 border-(--color-accent) border-t-transparent animate-spin" />
             <p className="text-sm text-(--color-text) mb-1">
               {step === 4 && generatingFor && `Generating ${generatingFor}...`}
@@ -385,7 +385,7 @@ export default function OnboardingPage() {
 
         {/* ── Step 5: Generate Plans ── */}
         {step === 5 && !loading && (
-          <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-6 text-center">
+          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6 text-center">
             <h3 className="text-sm font-semibold text-(--color-text) mb-2">Curricula ready!</h3>
             <p className="text-xs text-(--color-text-secondary) mb-6">
               Now let's create this week's activity schedule.
@@ -402,7 +402,7 @@ export default function OnboardingPage() {
 
         {/* ── Step 6: All Set ── */}
         {step === 6 && (
-          <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-8">
+          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-8">
             <div className="text-center mb-6">
               <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-(--color-success-light) flex items-center justify-center">
                 <svg className="w-7 h-7 text-(--color-success)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -416,7 +416,7 @@ export default function OnboardingPage() {
             {Object.keys(summary.activities).length > 0 && (
               <div className="space-y-2 mb-4">
                 {Object.entries(summary.activities).map(([name, count]) => (
-                  <div key={name} className="flex items-center justify-between px-3 py-2 bg-(--color-page) rounded-[6px]">
+                  <div key={name} className="flex items-center justify-between px-3 py-2 bg-(--color-page) rounded-[10px]">
                     <span className="text-sm text-(--color-text)">{name}</span>
                     <span className="text-xs text-(--color-text-secondary)">{count} activities today</span>
                   </div>
@@ -426,7 +426,7 @@ export default function OnboardingPage() {
 
             {/* Rules summary */}
             {summary.rules > 0 && (
-              <div className="mb-6 p-3 bg-(--color-constitutional-light) rounded-[6px]">
+              <div className="mb-6 p-3 bg-(--color-constitutional-light) rounded-[10px]">
                 <p className="text-xs text-(--color-constitutional) font-medium mb-1">Governance rules active</p>
                 <p className="text-[10px] text-(--color-text-secondary)">{summary.rules} rules protecting your family's education.</p>
               </div>

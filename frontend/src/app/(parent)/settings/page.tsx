@@ -118,7 +118,7 @@ export default function SettingsPage() {
           <div className="flex gap-2">
             {(["traditional", "year_round", "custom"] as const).map((t) => (
               <button key={t} onClick={() => { setCalType(t); if (t === "traditional") { setCalWeeks(36); setCalDaysPerWeek(5); setCalDays(["monday","tuesday","wednesday","thursday","friday"]); } }}
-                className={`px-3 py-1.5 text-xs rounded-[6px] border capitalize transition-colors ${calType === t ? "border-(--color-accent) bg-(--color-accent-light) text-(--color-accent)" : "border-(--color-border) text-(--color-text-secondary)"}`}>
+                className={`px-3 py-1.5 text-xs rounded-[10px] border capitalize transition-colors ${calType === t ? "border-(--color-accent) bg-(--color-accent-light) text-(--color-accent)" : "border-(--color-border) text-(--color-text-secondary)"}`}>
                 {t.replace("_", " ")}
               </button>
             ))}
@@ -128,19 +128,19 @@ export default function SettingsPage() {
               <div>
                 <label className="block text-xs text-(--color-text-secondary) mb-1">Start date</label>
                 <input type="date" value={calStart} onChange={(e) => setCalStart(e.target.value)}
-                  className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+                  className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
               </div>
               <div>
                 <label className="block text-xs text-(--color-text-secondary) mb-1">Instructional weeks</label>
                 <input type="number" value={calWeeks} onChange={(e) => setCalWeeks(Number(e.target.value))} min={1} max={52}
-                  className="w-24 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+                  className="w-24 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
               </div>
               <div>
                 <label className="block text-xs text-(--color-text-secondary) mb-1">Instruction days</label>
                 <div className="flex gap-1.5 flex-wrap">
                   {["monday","tuesday","wednesday","thursday","friday","saturday","sunday"].map((d) => (
                     <button key={d} onClick={() => toggleCalDay(d)}
-                      className={`w-9 h-9 text-[10px] rounded-[6px] border capitalize transition-colors ${calDays.includes(d) ? "border-(--color-accent) bg-(--color-accent-light) text-(--color-accent)" : "border-(--color-border) text-(--color-text-tertiary)"}`}>
+                      className={`w-9 h-9 text-[10px] rounded-[10px] border capitalize transition-colors ${calDays.includes(d) ? "border-(--color-accent) bg-(--color-accent-light) text-(--color-accent)" : "border-(--color-border) text-(--color-text-tertiary)"}`}>
                       {d.slice(0, 2)}
                     </button>
                   ))}
@@ -165,12 +165,12 @@ export default function SettingsPage() {
           <div>
             <label className="block text-xs text-(--color-text-secondary) mb-1">Household name</label>
             <input value={hhName} onChange={(e) => setHhName(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+              className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
           </div>
           <div>
             <label className="block text-xs text-(--color-text-secondary) mb-1">Timezone</label>
             <select value={hhTimezone} onChange={(e) => setHhTimezone(e.target.value)}
-              className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)">
+              className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)">
               {["America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles", "America/Anchorage", "Pacific/Honolulu", "UTC"].map((tz) => (
                 <option key={tz} value={tz}>{tz}</option>
               ))}
@@ -190,13 +190,13 @@ export default function SettingsPage() {
           <div>
             <label className="block text-xs text-(--color-text-secondary) mb-1">Email</label>
             <input value={user?.email || ""} disabled
-              className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-page) text-(--color-text-tertiary)" />
+              className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-page) text-(--color-text-tertiary)" />
             <p className="text-[10px] text-(--color-text-tertiary) mt-0.5">Contact support to change your email.</p>
           </div>
           <div>
             <label className="block text-xs text-(--color-text-secondary) mb-1">Display name</label>
             <input value={user?.display_name || ""} disabled
-              className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-page) text-(--color-text-tertiary)" />
+              className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-page) text-(--color-text-tertiary)" />
           </div>
         </div>
       </Card>
@@ -206,11 +206,11 @@ export default function SettingsPage() {
         <SectionHeader title="Change Password" />
         <div className="mt-3 space-y-3">
           <input type="password" value={currentPw} onChange={(e) => setCurrentPw(e.target.value)} placeholder="Current password"
-            className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+            className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
           <input type="password" value={newPw} onChange={(e) => setNewPw(e.target.value)} placeholder="New password (min 8 characters)"
-            className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+            className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
           <input type="password" value={confirmPw} onChange={(e) => setConfirmPw(e.target.value)} placeholder="Confirm new password"
-            className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+            className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
           {pwError && <p className="text-xs text-(--color-danger)">{pwError}</p>}
           {pwSuccess && <p className="text-xs text-(--color-success)">Password changed successfully.</p>}
           <Button variant="primary" size="sm" onClick={changePassword} disabled={!currentPw || !newPw || !confirmPw}>
@@ -225,7 +225,7 @@ export default function SettingsPage() {
         <p className="text-xs text-(--color-text-secondary) mt-2 mb-3">Your data belongs to you. Export it anytime.</p>
         <div className="flex flex-wrap gap-2">
           <a href={dataExport.download()} target="_blank" rel="noopener"
-            className="px-3 py-1.5 text-xs font-medium border border-(--color-border) rounded-[6px] text-(--color-text-secondary) hover:bg-(--color-page) transition-colors">
+            className="px-3 py-1.5 text-xs font-medium border border-(--color-border) rounded-[10px] text-(--color-text-secondary) hover:bg-(--color-page) transition-colors">
             Export All Data (ZIP)
           </a>
         </div>

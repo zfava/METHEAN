@@ -314,7 +314,7 @@ export default function ChildPage() {
               <select
                 value={selectedId}
                 onChange={(e) => setSelectedId(e.target.value)}
-                className="text-sm border border-(--color-border) rounded-[10px] px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-(--color-accent)/30"
+                className="text-sm border border-(--color-border) rounded-[14px] px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-(--color-accent)/30"
               >
                 {children.map((c) => (
                   <option key={c.id} value={c.id}>{c.first_name}</option>

@@ -120,7 +120,7 @@ export default function AssessmentPage() {
                   {TYPES.map((t) => (
                     <button key={t} onClick={() => setAType(t)}
                       className={cn(
-                        "px-3 py-1.5 text-xs rounded-[6px] border capitalize",
+                        "px-3 py-1.5 text-xs rounded-[10px] border capitalize",
                         aType === t ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)"
                       )}>
                       {t.replace(/_/g, " ")}
@@ -128,18 +128,18 @@ export default function AssessmentPage() {
                   ))}
                 </div>
                 <input value={aTitle} onChange={(e) => setATitle(e.target.value)}
-                  placeholder="Assessment title" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px]" />
+                  placeholder="Assessment title" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px]" />
                 <input value={aSubject} onChange={(e) => setASubject(e.target.value)}
-                  placeholder="Subject (optional)" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px]" />
+                  placeholder="Subject (optional)" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px]" />
                 <textarea value={aNotes} onChange={(e) => setANotes(e.target.value)}
-                  placeholder="What did you observe?" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] h-24 resize-none" />
+                  placeholder="What did you observe?" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] h-24 resize-none" />
                 <div>
                   <label className="block text-xs text-(--color-text-secondary) mb-1">Your mastery judgment (overrides AI)</label>
                   <div className="flex flex-col sm:flex-row gap-2">
                     {JUDGMENTS.map((j) => (
                       <button key={j} onClick={() => setAJudgment(j === aJudgment ? "" : j)}
                         className={cn(
-                          "px-3 py-1 text-xs rounded-[6px] border capitalize",
+                          "px-3 py-1 text-xs rounded-[10px] border capitalize",
                           aJudgment === j ? "border-(--color-accent) bg-(--color-accent-light) font-medium" : "border-(--color-border)"
                         )}>
                         {j.replace(/_/g, " ")}
@@ -189,18 +189,18 @@ export default function AssessmentPage() {
                   {["work_sample", "narrative", "photo", "certificate", "reading_log", "field_trip"].map((t) => (
                     <button key={t} onClick={() => setPType(t)}
                       className={cn(
-                        "px-3 py-1.5 text-xs rounded-[6px] border capitalize",
+                        "px-3 py-1.5 text-xs rounded-[10px] border capitalize",
                         pType === t ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)"
                       )}>
                       {t.replace(/_/g, " ")}
                     </button>
                   ))}
                 </div>
-                <input value={pTitle} onChange={(e) => setPTitle(e.target.value)} placeholder="Title" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px]" />
-                <textarea value={pDesc} onChange={(e) => setPDesc(e.target.value)} placeholder="Description" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] h-16 resize-none" />
+                <input value={pTitle} onChange={(e) => setPTitle(e.target.value)} placeholder="Title" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px]" />
+                <textarea value={pDesc} onChange={(e) => setPDesc(e.target.value)} placeholder="Description" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] h-16 resize-none" />
                 <div className="flex gap-3">
-                  <input value={pSubject} onChange={(e) => setPSubject(e.target.value)} placeholder="Subject" className="flex-1 px-3 py-2 text-sm border border-(--color-border) rounded-[6px]" />
-                  <input type="date" value={pDate} onChange={(e) => setPDate(e.target.value)} className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px]" />
+                  <input value={pSubject} onChange={(e) => setPSubject(e.target.value)} placeholder="Subject" className="flex-1 px-3 py-2 text-sm border border-(--color-border) rounded-[10px]" />
+                  <input type="date" value={pDate} onChange={(e) => setPDate(e.target.value)} className="px-3 py-2 text-sm border border-(--color-border) rounded-[10px]" />
                 </div>
                 <Button onClick={submitPortfolio} disabled={!pTitle} size="lg">Add Entry</Button>
               </div>

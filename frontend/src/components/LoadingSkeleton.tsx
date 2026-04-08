@@ -17,7 +17,7 @@ export default function LoadingSkeleton({
     return (
       <div className="grid grid-cols-3 gap-4">
         {items.map((_, i) => (
-          <div key={i} className="bg-(--color-surface) rounded-[10px] border border-(--color-border) p-5">
+          <div key={i} className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-5">
             <Pulse className="h-4 w-2/3 mb-3" />
             <Pulse className="h-3 w-full mb-2" />
             <Pulse className="h-3 w-1/2" />
@@ -29,7 +29,7 @@ export default function LoadingSkeleton({
 
   if (variant === "list") {
     return (
-      <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border) divide-y divide-(--color-border)/30">
+      <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) divide-y divide-(--color-border)/30">
         {items.map((_, i) => (
           <div key={i} className="flex items-center gap-3 px-4 py-3">
             <Pulse className="h-5 w-5 rounded-full shrink-0" />
@@ -46,7 +46,7 @@ export default function LoadingSkeleton({
 
   if (variant === "table") {
     return (
-      <div className="bg-(--color-surface) rounded-[10px] border border-(--color-border)">
+      <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border)">
         <div className="flex gap-4 px-4 py-3 border-b border-(--color-border)">
           <Pulse className="h-3 w-24" />
           <Pulse className="h-3 w-16" />

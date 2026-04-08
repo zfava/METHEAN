@@ -46,7 +46,7 @@ export default function VocationalActivityDetail({ instructions }: VocationalPro
         </div>
       )}
       {safety_notes && (
-        <div className="flex items-start gap-2 p-2 bg-(--color-danger-light) border border-(--color-danger)/20 rounded-[6px]">
+        <div className="flex items-start gap-2 p-2 bg-(--color-danger-light) border border-(--color-danger)/20 rounded-[10px]">
           <span className="text-sm shrink-0">⚠️</span>
           <div className="text-xs text-(--color-danger)">{safety_notes}</div>
         </div>

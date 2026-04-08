@@ -129,7 +129,7 @@ export default function MapsPage() {
           {mapStates.map((ms) => (
             <button key={ms.learning_map_id} onClick={() => setSelectedMap(ms)}
               className={cn(
-                "px-4 py-2 text-sm rounded-[6px] border transition-colors",
+                "px-4 py-2 text-sm rounded-[10px] border transition-colors",
                 selectedMap?.learning_map_id === ms.learning_map_id
                   ? "border-(--color-accent) bg-(--color-accent-light) text-(--color-accent) font-medium"
                   : "border-(--color-border) text-(--color-text-secondary) hover:border-(--color-border-strong)"
@@ -186,7 +186,7 @@ export default function MapsPage() {
 
                       return (
                         <div key={node.node_id}
-                          className={`relative w-52 rounded-[10px] border-2 p-3 ${style.bg} ${style.border} ${style.text}`}
+                          className={`relative w-52 rounded-[14px] border-2 p-3 ${style.bg} ${style.border} ${style.text}`}
                         >
                           {/* Checkmark for mastered */}
                           {isMastered && (
@@ -243,7 +243,7 @@ export default function MapsPage() {
                   value={overrideReason}
                   onChange={(e) => setOverrideReason(e.target.value)}
                   placeholder="Why are you unlocking this node?"
-                  className="w-full px-3 py-2 text-sm border border-(--color-border-strong) rounded-[6px] mb-3 h-20 resize-none focus:outline-none focus:ring-1 focus:ring-(--color-accent)"
+                  className="w-full px-3 py-2 text-sm border border-(--color-border-strong) rounded-[10px] mb-3 h-20 resize-none focus:outline-none focus:ring-1 focus:ring-(--color-accent)"
                 />
                 <div className="flex gap-2 justify-end">
                   <Button
@@ -262,7 +262,7 @@ export default function MapsPage() {
           )}
 
           {/* ── Override notice ── */}
-          <div className="mt-4 px-4 py-3 bg-(--color-page) rounded-[10px] border border-(--color-border) text-xs text-(--color-text-secondary)">
+          <div className="mt-4 px-4 py-3 bg-(--color-page) rounded-[14px] border border-(--color-border) text-xs text-(--color-text-secondary)">
             If you disagree with a prerequisite, you can unlock any blocked node.
             Every override is logged in your <a href="/governance/overrides" className="text-(--color-accent) hover:underline">governance trail</a>.
           </div>

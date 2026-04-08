@@ -103,7 +103,7 @@ export default function Sidebar() {
           ) : (
             <div className="space-y-1.5">
               {notifList.map((n: any) => (
-                <div key={n.id} className={cn("px-2 py-1.5 rounded-[6px] text-[10px]", n.is_read ? "text-white/30" : "text-white/70 bg-white/5")}>
+                <div key={n.id} className={cn("px-2 py-1.5 rounded-[10px] text-[10px]", n.is_read ? "text-white/30" : "text-white/70 bg-white/5")}>
                   <div className="font-medium">{n.title}</div>
                   <div className="text-white/30 mt-0.5">{n.message?.slice(0, 60)}</div>
                 </div>
@@ -117,7 +117,7 @@ export default function Sidebar() {
         <div className="px-4 pb-4">
           <select value={selectedChild?.id || ""}
             onChange={(e) => { const c = children.find((ch) => ch.id === e.target.value); if (c) setSelectedChild(c); }}
-            className="w-full px-3 py-2 text-sm bg-(--color-sidebar-hover) text-white border border-white/10 rounded-[6px] focus:outline-none focus:ring-1 focus:ring-(--color-accent)">
+            className="w-full px-3 py-2 text-sm bg-(--color-sidebar-hover) text-white border border-white/10 rounded-[10px] focus:outline-none focus:ring-1 focus:ring-(--color-accent)">
             {children.map((c) => (
               <option key={c.id} value={c.id}>{c.first_name} {c.last_name || ""}</option>
             ))}

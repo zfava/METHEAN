@@ -88,7 +88,7 @@ export default function InspectionPage() {
                 <div className="flex items-center gap-2">
                   <StatusBadge status={selected.status} />
                   {selected.model_used === "mock" && (
-                    <span className="text-[10px] px-1.5 py-0.5 bg-(--color-warning-light) text-(--color-warning) rounded-[4px] font-medium">MOCK</span>
+                    <span className="text-[10px] px-1.5 py-0.5 bg-(--color-warning-light) text-(--color-warning) rounded-[6px] font-medium">MOCK</span>
                   )}
                 </div>
               </div>
@@ -98,7 +98,7 @@ export default function InspectionPage() {
                   { label: "Tokens", value: `${selected.input_tokens || 0} in / ${selected.output_tokens || 0} out` },
                   { label: "Time", value: selected.started_at && selected.completed_at ? `${Math.round((new Date(selected.completed_at).getTime() - new Date(selected.started_at).getTime()))}ms` : "\u2014" },
                 ].map((m) => (
-                  <div key={m.label} className="bg-(--color-page) rounded-[6px] p-2">
+                  <div key={m.label} className="bg-(--color-page) rounded-[10px] p-2">
                     <div className="text-(--color-text-tertiary)">{m.label}</div>
                     <div className="font-mono mt-0.5 text-(--color-text)">{m.value}</div>
                   </div>
@@ -107,13 +107,13 @@ export default function InspectionPage() {
               <div className="space-y-3">
                 <div>
                   <div className="text-xs font-medium text-(--color-text-secondary) mb-1">INPUT</div>
-                  <pre className="text-[11px] font-mono bg-(--color-page) rounded-[6px] p-3 overflow-auto max-h-48 whitespace-pre-wrap break-words text-(--color-text-secondary)">
+                  <pre className="text-[11px] font-mono bg-(--color-page) rounded-[10px] p-3 overflow-auto max-h-48 whitespace-pre-wrap break-words text-(--color-text-secondary)">
                     {JSON.stringify(selected.input_data, null, 2)}
                   </pre>
                 </div>
                 <div>
                   <div className="text-xs font-medium text-(--color-text-secondary) mb-1">OUTPUT</div>
-                  <pre className="text-[11px] font-mono bg-(--color-page) rounded-[6px] p-3 overflow-auto max-h-48 whitespace-pre-wrap break-words text-(--color-text-secondary)">
+                  <pre className="text-[11px] font-mono bg-(--color-page) rounded-[10px] p-3 overflow-auto max-h-48 whitespace-pre-wrap break-words text-(--color-text-secondary)">
                     {JSON.stringify(selected.output_data, null, 2)}
                   </pre>
                 </div>

@@ -201,7 +201,7 @@ export default function YearViewPage() {
               <button
                 onClick={() => toggleWeek(wn)}
                 className={cn(
-                  "w-full text-left rounded-[10px] border p-4 transition-all",
+                  "w-full text-left rounded-[14px] border p-4 transition-all",
                   isExpanded ? "border-(--color-accent) ring-1 ring-(--color-accent)/20" : "border-(--color-border) hover:border-(--color-border-strong)",
                   "bg-(--color-surface)"
                 )}
@@ -248,7 +248,7 @@ export default function YearViewPage() {
                   <h4 className="text-xs font-bold text-(--color-text-secondary) uppercase tracking-wider mb-2">Activities</h4>
                   <div className="space-y-1.5 mb-4">
                     {(weekDetail.activities || []).map((act: any) => (
-                      <div key={act.id} className="flex items-center justify-between py-1.5 px-3 rounded-[6px] bg-(--color-page)">
+                      <div key={act.id} className="flex items-center justify-between py-1.5 px-3 rounded-[10px] bg-(--color-page)">
                         <div className="flex items-center gap-2">
                           <StatusBadge status={act.status} />
                           <span className="text-xs text-(--color-text)">{act.title}</span>
@@ -268,14 +268,14 @@ export default function YearViewPage() {
 
                   {/* Assessment Focus */}
                   {weekDetail.planned?.assessment_focus && (
-                    <div className="mb-4 p-2.5 rounded-[6px] bg-(--color-warning-light) text-xs text-(--color-warning)">
+                    <div className="mb-4 p-2.5 rounded-[10px] bg-(--color-warning-light) text-xs text-(--color-warning)">
                       <span className="font-medium">Assessment:</span> {weekDetail.planned.assessment_focus}
                     </div>
                   )}
 
                   {/* Actual Results */}
                   {weekDetail.actual && Object.keys(weekDetail.actual).length > 0 && (
-                    <div className="mb-4 p-2.5 rounded-[6px] bg-(--color-success-light) text-xs text-(--color-success)">
+                    <div className="mb-4 p-2.5 rounded-[10px] bg-(--color-success-light) text-xs text-(--color-success)">
                       <span className="font-medium">Completed:</span>{" "}
                       {weekDetail.actual.completed_activities}/{weekDetail.actual.planned_activities} activities ·{" "}
                       {weekDetail.actual.total_minutes}m total
@@ -290,7 +290,7 @@ export default function YearViewPage() {
                       onChange={(e) => { setWeekNotes(e.target.value); debouncedSaveNotes(e.target.value, wn); }}
                       onBlur={() => { if (weekNotes && expandedWeek) saveNotes(); }}
                       placeholder={status === "completed" ? "What happened this week? Any observations?" : "Any special plans or adjustments?"}
-                      className="w-full h-20 px-3 py-2 text-xs border border-(--color-border) rounded-[6px] resize-none bg-(--color-surface) text-(--color-text)"
+                      className="w-full h-20 px-3 py-2 text-xs border border-(--color-border) rounded-[10px] resize-none bg-(--color-surface) text-(--color-text)"
                     />
                     <div className="flex items-center gap-2 mt-1.5">
                       {notesSaved && <span className="text-[10px] text-(--color-success)">Saved</span>}

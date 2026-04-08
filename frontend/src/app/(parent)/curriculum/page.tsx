@@ -309,7 +309,7 @@ export default function CurriculumPage() {
       {/* ── BUILD: PHILOSOPHY — Step 1: Subject Selection ── */}
       {tab === "build" && buildPath === "philosophy" && !selectedSubject && !proposal && !approved && (
         <div>
-          <div className="bg-(--color-accent-light) border border-(--color-accent)/30 rounded-[10px] px-4 py-3 mb-6 text-sm text-(--color-accent)">
+          <div className="bg-(--color-accent-light) border border-(--color-accent)/30 rounded-[14px] px-4 py-3 mb-6 text-sm text-(--color-accent)">
             Generating for: <strong className="capitalize">{philosophyLabel}</strong> approach, <strong>{selectedChild.first_name}</strong> ({selectedChild.grade_level || "K"})
           </div>
           <h2 className="text-sm font-semibold text-(--color-text) mb-3">Choose a subject to build</h2>
@@ -331,7 +331,7 @@ export default function CurriculumPage() {
           <p className="text-xs text-(--color-text-secondary) mb-4">{selectedSubject.d}</p>
           <textarea value={scopeNotes} onChange={(e) => setScopeNotes(e.target.value)}
             placeholder="Optional: customize the scope (e.g., 'Focus on fractions this semester', 'Include Latin roots')"
-            className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] h-24 resize-none mb-4" />
+            className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] h-24 resize-none mb-4" />
           <div className="flex gap-2">
             <Button onClick={generateFromPhilosophy} size="lg">
               Generate Curriculum
@@ -355,15 +355,15 @@ export default function CurriculumPage() {
           <h2 className="text-sm font-semibold text-(--color-text) mb-4">Map Your Existing Curriculum</h2>
           <div className="space-y-3">
             <input value={materialName} onChange={(e) => setMaterialName(e.target.value)}
-              placeholder="Material name (e.g., Saxon Math 5/4)" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px]" />
+              placeholder="Material name (e.g., Saxon Math 5/4)" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px]" />
             <textarea value={materialDesc} onChange={(e) => setMaterialDesc(e.target.value)}
-              placeholder="Brief description" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] h-16 resize-none" />
+              placeholder="Brief description" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] h-16 resize-none" />
             <textarea value={toc} onChange={(e) => setToc(e.target.value)}
-              placeholder="Paste your table of contents, chapter list, or unit list..." className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px] h-32 resize-none" />
+              placeholder="Paste your table of contents, chapter list, or unit list..." className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] h-32 resize-none" />
             <input value={position} onChange={(e) => setPosition(e.target.value)}
-              placeholder="Current position (e.g., Chapter 14, Lesson 47)" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px]" />
+              placeholder="Current position (e.g., Chapter 14, Lesson 47)" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px]" />
             <input value={subjectArea} onChange={(e) => setSubjectArea(e.target.value)}
-              placeholder="Subject area (e.g., Mathematics)" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[6px]" />
+              placeholder="Subject area (e.g., Mathematics)" className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px]" />
             <Button onClick={mapExisting} disabled={generating || !materialName || !toc || !subjectArea} size="lg">
               {generating ? "Mapping..." : "Map My Curriculum"}
             </Button>
@@ -391,7 +391,7 @@ export default function CurriculumPage() {
       {/* ── PROPOSAL REVIEW (shared by philosophy and existing paths) ── */}
       {proposal && !approved && (
         <Card padding="p-6" className="mt-4">
-          <div className="bg-(--color-success-light) border border-(--color-success)/30 rounded-[6px] px-4 py-2 mb-4 text-sm text-(--color-success)">
+          <div className="bg-(--color-success-light) border border-(--color-success)/30 rounded-[10px] px-4 py-2 mb-4 text-sm text-(--color-success)">
             {proposal.id ? "Annual curriculum generated! Review and approve to create all 36 weeks." : "Curriculum generated! Review the proposal below."}
           </div>
           <h2 className="text-sm font-semibold text-(--color-text) mb-2">
@@ -407,7 +407,7 @@ export default function CurriculumPage() {
           {proposal.nodes && (
             <div className="space-y-1 mb-4 max-h-64 overflow-y-auto">
               {(proposal.nodes || []).map((n: any, i: number) => (
-                <div key={i} className="flex items-center gap-2 px-3 py-1.5 bg-(--color-page) rounded-[6px]">
+                <div key={i} className="flex items-center gap-2 px-3 py-1.5 bg-(--color-page) rounded-[10px]">
                   <span className="text-[9px] font-bold uppercase text-(--color-text-secondary) w-16">{n.node_type}</span>
                   <span className="text-xs text-(--color-text)">{n.title}</span>
                 </div>
@@ -439,9 +439,9 @@ export default function CurriculumPage() {
           </p>
           <div className="flex gap-2 justify-center">
             {proposal?.id ? (
-              <a href={`/curriculum/year?id=${proposal.id}`} className="px-5 py-2 text-sm font-medium bg-(--color-accent) text-white rounded-[6px] hover:bg-(--color-accent-hover)">View Year Plan</a>
+              <a href={`/curriculum/year?id=${proposal.id}`} className="px-5 py-2 text-sm font-medium bg-(--color-accent) text-white rounded-[10px] hover:bg-(--color-accent-hover)">View Year Plan</a>
             ) : (
-              <a href="/maps" className="px-5 py-2 text-sm font-medium bg-(--color-accent) text-white rounded-[6px] hover:bg-(--color-accent-hover)">View Map</a>
+              <a href="/maps" className="px-5 py-2 text-sm font-medium bg-(--color-accent) text-white rounded-[10px] hover:bg-(--color-accent-hover)">View Map</a>
             )}
             <Button onClick={() => { resetBuild(); setApproved(false); }} variant="secondary" size="sm">
               Build Another

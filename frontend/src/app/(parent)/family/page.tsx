@@ -266,16 +266,16 @@ export default function FamilyPage() {
         <Card className="mt-3">
           <div className="flex flex-col sm:flex-row gap-3">
             <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Child's first name"
-              className="flex-1 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+              className="flex-1 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
             <input value={newGrade} onChange={(e) => setNewGrade(e.target.value)} placeholder="Grade (K, 1st, etc.)"
-              className="w-32 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface) text-(--color-text)" />
+              className="w-32 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
             <Button variant="primary" size="sm" onClick={addChild} disabled={!newName.trim()}>Add</Button>
             <Button variant="ghost" size="sm" onClick={() => setShowAddChild(false)}>Cancel</Button>
           </div>
         </Card>
       ) : (
         <button onClick={() => setShowAddChild(true)}
-          className="mt-3 w-full py-3 border-2 border-dashed border-(--color-border) rounded-[10px] text-sm text-(--color-text-tertiary) hover:text-(--color-text-secondary) hover:border-(--color-border-strong) transition-colors">
+          className="mt-3 w-full py-3 border-2 border-dashed border-(--color-border) rounded-[14px] text-sm text-(--color-text-tertiary) hover:text-(--color-text-secondary) hover:border-(--color-border-strong) transition-colors">
           + Add Child
         </button>
       )}
