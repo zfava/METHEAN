@@ -109,6 +109,11 @@ class ChildPreferences(Base):
     accommodations: Mapped[dict | None] = mapped_column(JSONB, default=dict)
     daily_duration_minutes: Mapped[int | None] = mapped_column()
     preferred_schedule: Mapped[dict | None] = mapped_column(JSONB, default=dict)
+    subject_levels: Mapped[dict | None] = mapped_column(JSONB, default=dict)
+    strengths: Mapped[list | None] = mapped_column(JSONB, default=list)
+    areas_for_growth: Mapped[list | None] = mapped_column(JSONB, default=list)
+    custom_subjects: Mapped[list | None] = mapped_column(JSONB, default=list)
+    parent_notes: Mapped[str | None] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )

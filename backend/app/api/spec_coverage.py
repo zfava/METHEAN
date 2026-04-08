@@ -65,6 +65,10 @@ class ChildPreferencesUpdate(BaseModel):
     learning_style: dict | None = None
     interests: list | None = None
     preferred_schedule: dict | None = None
+    subject_levels: dict | None = None
+    strengths: list | None = None
+    areas_for_growth: list | None = None
+    parent_notes: str | None = None
 
 
 class SyncEvent(BaseModel):
@@ -368,8 +372,76 @@ async def update_child_preferences(
         prefs.interests = body.interests
     if body.preferred_schedule is not None:
         prefs.preferred_schedule = body.preferred_schedule
+    # Learning profile fields
+    if hasattr(body, "subject_levels") and body.subject_levels is not None:
+        from app.core.learning_levels import VALID_LEVELS
+        for subj, level in body.subject_levels.items():
+            if level not in VALID_LEVELS:
+                raise HTTPException(400, f"Invalid level '{level}' for '{subj}'. Must be one of: {', '.join(sorted(VALID_LEVELS))}")
+        prefs.subject_levels = body.subject_levels
+    if hasattr(body, "strengths") and body.strengths is not None:
+        prefs.strengths = body.strengths
+    if hasattr(body, "areas_for_growth") and body.areas_for_growth is not None:
+        prefs.areas_for_growth = body.areas_for_growth
+    if hasattr(body, "parent_notes") and body.parent_notes is not None:
+        prefs.parent_notes = body.parent_notes
     await db.flush()
     return {"child_id": str(child_id), "daily_duration_minutes": prefs.daily_duration_minutes}
+
+
+# ══════════════════════════════════════════════════
+# Subject Catalog & Learning Levels
+# ══════════════════════════════════════════════════
+
+
+@router.get("/subjects/catalog")
+async def get_subject_catalog(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Return the full subject catalog with learning levels."""
+    from app.core.learning_levels import SUBJECT_CATALOG, LEARNING_LEVELS
+    household = (await db.execute(select(Household).where(Household.id == user.household_id))).scalar_one()
+    custom = (household.settings or {}).get("custom_subjects", [])
+    return {
+        "academic": SUBJECT_CATALOG["academic"],
+        "vocational": SUBJECT_CATALOG["vocational"],
+        "custom": custom,
+        "levels": LEARNING_LEVELS,
+    }
+
+
+class CustomSubjectCreate(BaseModel):
+    name: str = Field(min_length=1, max_length=255)
+    category: str = "custom"
+    description: str | None = None
+
+
+@router.post("/subjects/custom", status_code=201)
+async def add_custom_subject(
+    body: CustomSubjectCreate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Add a custom subject to the household catalog."""
+    household = (await db.execute(select(Household).where(Household.id == user.household_id))).scalar_one()
+    settings = dict(household.settings or {})
+    custom = list(settings.get("custom_subjects", []))
+    if any(s["name"].lower() == body.name.lower() for s in custom):
+        raise HTTPException(409, f"Subject '{body.name}' already exists")
+    new_subj = {
+        "id": body.name.lower().replace(" ", "_"),
+        "name": body.name,
+        "category": body.category,
+        "description": body.description or "",
+    }
+    custom.append(new_subj)
+    settings["custom_subjects"] = custom
+    household.settings = settings
+    from sqlalchemy.orm.attributes import flag_modified
+    flag_modified(household, "settings")
+    await db.flush()
+    return new_subj
 
 
 @router.get("/children/{child_id}/theme")

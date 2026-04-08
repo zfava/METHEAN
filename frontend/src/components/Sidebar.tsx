@@ -119,7 +119,7 @@ export default function Sidebar() {
             onChange={(e) => { const c = children.find((ch) => ch.id === e.target.value); if (c) setSelectedChild(c); }}
             className="w-full px-3 py-2 text-sm bg-(--color-sidebar-hover) text-white border border-white/10 rounded-[6px] focus:outline-none focus:ring-1 focus:ring-(--color-accent)">
             {children.map((c) => (
-              <option key={c.id} value={c.id}>{c.first_name} {c.last_name || ""}{c.grade_level ? ` \u00b7 ${c.grade_level}` : ""}</option>
+              <option key={c.id} value={c.id}>{c.first_name} {c.last_name || ""}</option>
             ))}
           </select>
         </div>

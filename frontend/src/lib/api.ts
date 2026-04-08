@@ -307,6 +307,13 @@ export const dataExport = {
   download: () => `/api/v1/household/export`,
 };
 
+// ── Subjects & Levels ──
+export const subjects = {
+  catalog: () => request<any>("/subjects/catalog"),
+  addCustom: (data: { name: string; category?: string; description?: string }) =>
+    request<any>("/subjects/custom", { method: "POST", body: JSON.stringify(data) }),
+};
+
 // ── Academic Calendar ──
 export const academicCalendar = {
   get: () => request<any>("/household/academic-calendar"),
