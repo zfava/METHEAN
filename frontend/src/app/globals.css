@@ -6,86 +6,112 @@
    ══════════════════════════════════════════════════ */
 
 @theme {
-  /* ── Background tiers ── */
+  /* ── Brand ── */
+  --gold: #C6A24E;
+  --navy: #0F1B2D;
+  --cream: #F5F1E8;
+
+  /* ── Surfaces ── */
   --color-page: #FAFAF8;
   --color-surface: #FFFFFF;
   --color-sidebar: #0F1B2D;
   --color-sidebar-hover: #1A2740;
   --color-sidebar-active: #223350;
 
-  /* ── Brand ── */
   --color-brand-gold: #C6A24E;
   --color-brand-navy: #0F1B2D;
   --color-brand-cream: #F5F1E8;
 
-  /* ── Text hierarchy ── */
+  /* ── Text ── */
   --color-text: #1A1A1A;
   --color-text-secondary: #6B6B6B;
   --color-text-tertiary: #9A9A9A;
   --color-text-inverse: #FFFFFF;
   --color-text-sidebar: #B0B0B0;
 
-  /* ── Accent (muted steel blue — sparingly) ── */
+  /* ── Accent ── */
   --color-accent: #4A6FA5;
   --color-accent-hover: #3D5F8F;
-  --color-accent-light: #EDF1F7;
+  --color-accent-light: rgba(74, 111, 165, 0.08);
 
-  /* ── Status / Semantic ── */
+  /* ── Semantic ── */
   --color-mastered: #2D6A4F;
   --color-success: #2D6A4F;
-  --color-success-light: #EAF4ED;
+  --color-success-light: rgba(45, 106, 79, 0.08);
   --color-progress: #B8860B;
   --color-warning: #B8860B;
-  --color-warning-light: #FDF6E3;
+  --color-warning-light: rgba(184, 134, 11, 0.08);
   --color-blocked: #9A9A9A;
   --color-danger: #A63D40;
-  --color-danger-light: #FBF0F0;
+  --color-danger-light: rgba(166, 61, 64, 0.08);
   --color-decaying: #A63D40;
   --color-info: #4A6FA5;
 
-  /* ── Constitutional (bronze/gold) ── */
   --color-constitutional: #8B7355;
-  --color-constitutional-light: #F5F0E8;
+  --color-constitutional-light: rgba(139, 115, 85, 0.08);
 
   /* ── Borders ── */
-  --color-border: #E8E6E1;
-  --color-border-strong: #D4D1CC;
+  --color-border: rgba(0, 0, 0, 0.06);
+  --color-border-strong: rgba(0, 0, 0, 0.12);
 
-  /* ── Radius scale ── */
-  --radius-card: 10px;
-  --radius-button: 6px;
-  --radius-badge: 4px;
-  --radius-input: 6px;
+  /* ── Shadows ── */
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.02), 0 4px 12px rgba(0,0,0,0.04);
+  --shadow-card-hover: 0 4px 16px rgba(0,0,0,0.06), 0 12px 40px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04);
 
-  /* ── Typography ── */
+  /* ── Radii ── */
+  --radius-card: 14px;
+  --radius-button: 10px;
+  --radius-badge: 6px;
+  --radius-input: 10px;
+
+  /* ── Type ── */
   --font-sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --tracking-tight: -0.025em;
+  --tracking-tighter: -0.035em;
+
+  /* ── Motion ── */
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-fast: 0.15s var(--ease);
+  --transition-base: 0.2s var(--ease);
 }
+
+* { box-sizing: border-box; }
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
 body {
   font-family: var(--font-sans);
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.6;
   color: var(--color-text);
-  background-color: var(--color-page);
-  -webkit-font-smoothing: antialiased;
+  background: var(--color-page);
 }
 
-h1, h2, h3, h4 { font-family: var(--font-sans); }
+::selection { background: rgba(198, 162, 78, 0.15); color: var(--color-text); }
 
-*:focus-visible {
-  outline: 2px solid var(--color-accent);
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.1); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.18); }
+
+:focus-visible {
+  outline: 2px solid rgba(74, 111, 165, 0.4);
   outline-offset: 2px;
+  border-radius: 4px;
 }
 
-/* ── Notification pulse ── */
+@keyframes subtle-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
 @keyframes notif-pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.2); }
 }
 .notif-new { animation: notif-pulse 0.6s ease-in-out 2; }
 
-/* ── Overflow prevention ── */
 pre, code { overflow-x: auto; max-width: 100%; }
 table { display: block; overflow-x: auto; max-width: 100%; }
 img, svg { max-width: 100%; height: auto; }

@@ -16,7 +16,7 @@ export default function PageHeader({
   className?: string;
 }) {
   return (
-    <div className={cn("flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-6", className)}>
+    <div className={cn("flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-6", className)}>
       <div className="flex items-center gap-3">
         {backHref && (
           <a href={backHref} className="text-(--color-text-tertiary) hover:text-(--color-text-secondary) transition-colors duration-150">
@@ -24,8 +24,8 @@ export default function PageHeader({
           </a>
         )}
         <div>
-          <h1 className="text-2xl font-medium tracking-tight text-(--color-text)">{title}</h1>
-          {subtitle && <p className="text-sm text-(--color-text-secondary) mt-0.5">{subtitle}</p>}
+          <h1 className="text-[28px] font-semibold tracking-[-0.025em] text-(--color-text)">{title}</h1>
+          {subtitle && <p className="text-[15px] text-(--color-text-secondary) mt-1">{subtitle}</p>}
         </div>
       </div>
       {actions && <div className="flex items-center gap-2">{actions}</div>}

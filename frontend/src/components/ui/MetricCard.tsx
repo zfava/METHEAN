@@ -12,14 +12,18 @@ export default function MetricCard({
   label: string;
   value: string | number;
   subtitle?: string;
-  color?: string; // text color class
+  color?: string;
   className?: string;
 }) {
   return (
-    <div className={cn("bg-(--color-surface) rounded-[10px] border border-(--color-border) p-4", className)}>
-      <div className={cn("text-2xl font-medium tracking-tight", color || "text-(--color-text)")}>{value}</div>
-      <div className="text-xs text-(--color-text-secondary) mt-1">{label}</div>
-      {subtitle && <div className="text-[11px] text-(--color-text-tertiary) mt-0.5">{subtitle}</div>}
+    <div className={cn(
+      "bg-(--color-surface) rounded-[14px] border border-(--color-border) p-5",
+      "shadow-[var(--shadow-card)]",
+      className
+    )}>
+      <div className="text-xs text-(--color-text-tertiary) uppercase tracking-wide mb-2">{label}</div>
+      <div className={cn("text-[28px] font-semibold tracking-tight", color || "text-(--color-text)")}>{value}</div>
+      {subtitle && <div className="text-[13px] text-(--color-text-secondary) mt-1">{subtitle}</div>}
     </div>
   );
 }
