@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { children as childrenApi, curriculum, annualCurriculum, type MapState } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
+import SubjectLevelPicker from "@/components/SubjectLevelPicker";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import StatusBadge from "@/components/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
@@ -19,51 +20,6 @@ function getCsrf(): string | undefined {
   return m ? decodeURIComponent(m[1]) : undefined;
 }
 
-// Classical subjects by grade band (fallback if library endpoint unavailable)
-const CLASSICAL_SUBJECTS: Record<string, { s: string; d: string }[]> = {
-  "K-2": [
-    { s: "Phonics & Reading", d: "Systematic phonics through reading fluency" },
-    { s: "Mathematics", d: "Number sense through basic operations" },
-    { s: "Handwriting & Copywork", d: "Letter formation, penmanship, copywork from quality literature" },
-    { s: "History & Bible", d: "Ancient civilizations and Scripture narratives" },
-    { s: "Nature Study", d: "Seasonal observation, nature journaling" },
-    { s: "Music & Art", d: "Hymn singing, folk songs, drawing fundamentals" },
-  ],
-  "3-5": [
-    { s: "Literature", d: "Classic children's literature and mythology" },
-    { s: "Mathematics", d: "Multiplication through fractions" },
-    { s: "Writing & Grammar", d: "Paragraph construction, dictation, grammar" },
-    { s: "History", d: "Ancients through Renaissance with primary sources" },
-    { s: "Science", d: "Life, earth, and physical sciences with experiments" },
-    { s: "Latin", d: "Systematic grammar and vocabulary" },
-  ],
-  "6-8": [
-    { s: "Literature & Composition", d: "Great books, essay writing, rhetoric foundations" },
-    { s: "Mathematics", d: "Pre-algebra through algebra" },
-    { s: "Logic", d: "Formal logic, syllogisms, argument analysis" },
-    { s: "History", d: "World and American history with historiography" },
-    { s: "Science", d: "Biology, chemistry foundations, scientific method" },
-    { s: "Latin", d: "Reading and translation" },
-  ],
-  "9-12": [
-    { s: "Literature", d: "Great books seminar, literary analysis" },
-    { s: "Mathematics", d: "Algebra II, Geometry, Precalculus" },
-    { s: "Rhetoric & Composition", d: "Persuasive writing, public speaking" },
-    { s: "History & Government", d: "American government, economics, worldview studies" },
-    { s: "Science", d: "Biology, Chemistry, Physics" },
-    { s: "Theology & Philosophy", d: "Systematic theology, philosophical foundations" },
-  ],
-};
-
-function gradeToRange(grade: string | null): string {
-  if (!grade) return "K-2";
-  const g = grade.toLowerCase();
-  if (g.includes("k") || g.includes("1") || g.includes("2")) return "K-2";
-  if (g.includes("3") || g.includes("4") || g.includes("5")) return "3-5";
-  if (g.includes("6") || g.includes("7") || g.includes("8")) return "6-8";
-  return "9-12";
-}
-
 export default function CurriculumPage() {
   useEffect(() => { document.title = "Curriculum | METHEAN"; }, []);
 
@@ -73,6 +29,7 @@ export default function CurriculumPage() {
   const [curricula, setCurricula] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [subjectLevels, setSubjectLevels] = useState<Record<string, string>>({});
 
   // Build state (shared)
   const [buildPath, setBuildPath] = useState<"philosophy" | "existing" | "template" | null>(null);
@@ -108,8 +65,11 @@ export default function CurriculumPage() {
         .catch(() => {});
 
       // Set subjects based on grade
-      const range = gradeToRange(selectedChild.grade_level);
-      setSubjects(CLASSICAL_SUBJECTS[range] || CLASSICAL_SUBJECTS["K-2"]);
+      // Default subjects (user can change via SubjectLevelPicker)
+      setSubjects([
+        { s: "Phonics & Reading", d: "" }, { s: "Mathematics", d: "" },
+        { s: "Science", d: "" }, { s: "History", d: "" },
+      ]);
     }
   }, [buildPath, selectedChild]);
 
@@ -310,17 +270,32 @@ export default function CurriculumPage() {
       {tab === "build" && buildPath === "philosophy" && !selectedSubject && !proposal && !approved && (
         <div>
           <div className="bg-(--color-accent-light) border border-(--color-accent)/30 rounded-[14px] px-4 py-3 mb-6 text-sm text-(--color-accent)">
-            Generating for: <strong className="capitalize">{philosophyLabel}</strong> approach, <strong>{selectedChild.first_name}</strong> ({selectedChild.grade_level || "K"})
+            Generating for: <strong className="capitalize">{philosophyLabel}</strong> approach, <strong>{selectedChild.first_name}</strong>
           </div>
-          <h2 className="text-sm font-semibold text-(--color-text) mb-3">Choose a subject to build</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {subjects.map((subj) => (
-              <Card key={subj.s} onClick={() => setSelectedSubject(subj)} padding="p-4" className="text-left hover:border-(--color-accent) transition-colors">
-                <div className="text-sm font-medium text-(--color-text)">{subj.s}</div>
-                <p className="text-xs text-(--color-text-secondary) mt-1">{subj.d}</p>
-              </Card>
-            ))}
-          </div>
+          <h3 className="text-sm font-medium mb-2">Select subjects</h3>
+          <p className="text-xs text-(--color-text-secondary) mb-4">All subjects available regardless of age.</p>
+          <SubjectLevelPicker
+            selected={subjectLevels}
+            onChange={(levels) => {
+              setSubjectLevels(levels);
+              setSubjects(Object.keys(levels).map(id => ({
+                s: id.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase()), d: "",
+              })));
+            }}
+            showCustom={true}
+          />
+          {Object.keys(subjectLevels).length > 0 && (
+            <div className="mt-4">
+              <p className="text-xs text-(--color-text-secondary) mb-2">Now select which subject to build:</p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {subjects.map((subj) => (
+                  <Card key={subj.s} onClick={() => setSelectedSubject(subj)} padding="p-3" className="text-left">
+                    <div className="text-sm font-medium">{subj.s}</div>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 

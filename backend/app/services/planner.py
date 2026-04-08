@@ -41,8 +41,10 @@ async def generate_plan(
     # Read academic calendar
     from app.services.academic_calendar import (
         get_academic_calendar, get_instruction_days, is_break_date,
-        get_week_end_for_start, get_daily_minutes_for_grade,
+        get_week_end_for_start,
     )
+    from app.core.learning_levels import get_daily_minutes_for_child
+    from sqlalchemy.orm import selectinload
     calendar = await get_academic_calendar(db, household_id)
     instruction_days = get_instruction_days(calendar)
     num_days = len(instruction_days)
@@ -54,10 +56,12 @@ async def generate_plan(
 
     # Use calendar-aware daily minutes if default
     if daily_minutes == 120:
-        child_r = await db.execute(select(Child).where(Child.id == child_id))
+        child_r = await db.execute(
+            select(Child).options(selectinload(Child.preferences)).where(Child.id == child_id)
+        )
         child_obj = child_r.scalar_one_or_none()
         if child_obj:
-            daily_minutes = get_daily_minutes_for_grade(calendar, child_obj.grade_level or "")
+            daily_minutes = get_daily_minutes_for_child(child_obj, calendar)
 
     # Gather child context for AI
     context = await _build_planner_context(

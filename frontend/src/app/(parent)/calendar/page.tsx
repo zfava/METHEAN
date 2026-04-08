@@ -12,6 +12,7 @@ import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/StatusBadge";
 import EmptyState from "@/components/ui/EmptyState";
 import { cn } from "@/lib/cn";
+import VocationalActivityDetail from "@/components/VocationalActivityDetail";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 

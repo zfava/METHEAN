@@ -10,6 +10,7 @@ import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import EmptyState from "@/components/ui/EmptyState";
 import { cn } from "@/lib/cn";
+import VocationalActivityDetail from "@/components/VocationalActivityDetail";
 
 export default function PlansPage() {
   useEffect(() => { document.title = "Plans | METHEAN"; }, []);

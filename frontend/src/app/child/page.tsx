@@ -10,6 +10,7 @@ import AssessmentView from "@/components/child/AssessmentView";
 import ProjectView from "@/components/child/ProjectView";
 import FieldTripView from "@/components/child/FieldTripView";
 import CompletionState from "@/components/child/CompletionState";
+import VocationalActivityDetail from "@/components/VocationalActivityDetail";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 

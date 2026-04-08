@@ -892,6 +892,23 @@ async def get_hours_breakdown(
                 subj_name = "General"
             by_subject[subj_name] = by_subject.get(subj_name, 0) + state.time_spent_minutes / 60
 
+    # Cross-subject tags: vocational activities crediting academic subjects
+    try:
+        cross_result = await db.execute(
+            select(Activity).where(
+                Activity.household_id == household_id,
+                Activity.instructions.isnot(None),
+            )
+        )
+        for act in cross_result.scalars().all():
+            cross_tags = (act.instructions or {}).get("cross_subject_tags", [])
+            if cross_tags and act.estimated_minutes:
+                for tag in cross_tags:
+                    tag_subject = tag.replace("_", " ").title()
+                    by_subject[tag_subject] = by_subject.get(tag_subject, 0) + (act.estimated_minutes * 0.25) / 60
+    except Exception:
+        pass  # Cross-subject tags are additive; failure is non-fatal
+
     # Also include reading log time
     try:
         from app.models.evidence import ReadingLogEntry

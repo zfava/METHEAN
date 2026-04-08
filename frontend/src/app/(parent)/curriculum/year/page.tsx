@@ -10,6 +10,7 @@ import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import StatusBadge from "@/components/StatusBadge";
 import { cn } from "@/lib/cn";
+import VocationalActivityDetail from "@/components/VocationalActivityDetail";
 
 const statusColors: Record<string, string> = {
   completed: "bg-(--color-success) text-white",

@@ -687,6 +687,7 @@ async def get_today(
             "status": a.status.value if hasattr(a.status, 'value') else str(a.status),
             "estimated_minutes": a.estimated_minutes,
             "node_id": str(a.node_id) if a.node_id else None,
+            "instructions": a.instructions or {},
         }
         for a in activities
     ]
