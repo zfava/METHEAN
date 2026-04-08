@@ -13,6 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.ai.gateway import AIRole, call_ai
 from app.ai.prompts import PLANNER_SYSTEM
 from app.models.curriculum import ChildMapEnrollment, LearningNode
+from app.models.identity import Child
 from app.models.enums import (
     ActivityStatus,
     ActivityType,
@@ -37,22 +38,44 @@ async def generate_plan(
 
     Returns dict with plan_id, activities, governance_decisions.
     """
-    week_end = week_start + timedelta(days=4)  # Mon-Fri
+    # Read academic calendar
+    from app.services.academic_calendar import (
+        get_academic_calendar, get_instruction_days, is_break_date,
+        get_week_end_for_start, get_daily_minutes_for_grade,
+    )
+    calendar = await get_academic_calendar(db, household_id)
+    instruction_days = get_instruction_days(calendar)
+    num_days = len(instruction_days)
+    week_end = get_week_end_for_start(week_start, calendar)
+
+    # Check if this week is a break
+    if is_break_date(calendar, week_start):
+        return {"plan_id": None, "message": "This week is a scheduled break.", "activities": []}
+
+    # Use calendar-aware daily minutes if default
+    if daily_minutes == 120:
+        child_r = await db.execute(select(Child).where(Child.id == child_id))
+        child_obj = child_r.scalar_one_or_none()
+        if child_obj:
+            daily_minutes = get_daily_minutes_for_grade(calendar, child_obj.grade_level or "")
 
     # Gather child context for AI
     context = await _build_planner_context(
         db, child_id, household_id, daily_minutes,
     )
 
+    day_labels = ", ".join([d.capitalize() for d in instruction_days])
+
     user_prompt = f"""Generate a weekly learning plan for this child.
 
 Week: {week_start.isoformat()} to {week_end.isoformat()}
 Daily time budget: {daily_minutes} minutes
+Instruction days: {day_labels} ({num_days} days)
 
 Child's current state:
 {json.dumps(context, indent=2, default=str)}
 
-Create activities spread across 5 days (Monday=1 through Friday=5).
+Create activities spread across {num_days} days ({day_labels}).
 Prioritize nodes that are due for review, then available nodes."""
 
     # Fetch household philosophical profile for AI constraints

@@ -99,13 +99,24 @@ async def generate_annual_curriculum(
     household = h_result.scalar_one()
     phil = household.philosophical_profile or {}
 
+    # Read academic calendar
+    from app.services.academic_calendar import get_academic_calendar, get_instruction_days, calculate_end_date
+    calendar = await get_academic_calendar(db, household_id)
+    if total_weeks == 36:
+        total_weeks = calendar.get("total_instructional_weeks", 36)
+    instruction_days = get_instruction_days(calendar)
+    days_per_week = len(instruction_days)
+
     # Calculate dates
     if not start_date:
-        today = date.today()
-        # Default to next September 1
-        year = today.year if today.month < 7 else today.year + 1
-        start_date = date(year, 9, 1)
-    end_date = start_date + timedelta(weeks=total_weeks)
+        cal_start = calendar.get("start_date")
+        if cal_start:
+            start_date = date.fromisoformat(cal_start) if isinstance(cal_start, str) else cal_start
+        else:
+            today = date.today()
+            year = today.year if today.month < 7 else today.year + 1
+            start_date = date(year, 9, 1)
+    end_date = calculate_end_date(start_date, total_weeks, calendar)
 
     child_age = (date.today() - child.date_of_birth).days / 365.25 if child.date_of_birth else 6
 
@@ -162,6 +173,7 @@ CHILD PROFILE:
 
 TIME BUDGET: {hours_per_week} hours per week ({hours_per_week * 60:.0f} minutes)
 TOTAL WEEKS: {total_weeks}
+INSTRUCTION DAYS: {days_per_week} days per week ({', '.join(d.capitalize() for d in instruction_days)})
 START DATE: {start_date}
 {nodes_description}
 {f'ADDITIONAL GUIDANCE FROM PARENT: {scope_notes}' if scope_notes else ''}

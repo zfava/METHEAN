@@ -307,6 +307,12 @@ export const dataExport = {
   download: () => `/api/v1/household/export`,
 };
 
+// ── Academic Calendar ──
+export const academicCalendar = {
+  get: () => request<any>("/household/academic-calendar"),
+  update: (data: object) => request<any>("/household/academic-calendar", { method: "PUT", body: JSON.stringify(data) }),
+};
+
 // ── Manual Activities + Time Log ──
 export const activities = {
   create: (data: { child_id: string; title: string; activity_type?: string; scheduled_date: string; estimated_minutes?: number; description?: string; subject_area?: string }) =>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { auth, account, dataExport, type User } from "@/lib/api";
+import { auth, account, academicCalendar, dataExport, type User } from "@/lib/api";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
@@ -23,6 +23,14 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Academic Calendar
+  const [calType, setCalType] = useState("traditional");
+  const [calWeeks, setCalWeeks] = useState(36);
+  const [calDaysPerWeek, setCalDaysPerWeek] = useState(5);
+  const [calDays, setCalDays] = useState(["monday", "tuesday", "wednesday", "thursday", "friday"]);
+  const [calStart, setCalStart] = useState("");
+  const [calSaved, setCalSaved] = useState(false);
+
   // Household
   const [hhName, setHhName] = useState("");
   const [hhTimezone, setHhTimezone] = useState("America/New_York");
@@ -41,6 +49,13 @@ export default function SettingsPage() {
       fetch(`${API}/household/settings`, { credentials: "include" })
         .then((r) => r.ok ? r.json() : {})
         .then((d) => { if (d.name) setHhName(d.name); if (d.timezone) setHhTimezone(d.timezone); }),
+      academicCalendar.get().then((c) => {
+        if (c.schedule_type) setCalType(c.schedule_type);
+        if (c.total_instructional_weeks) setCalWeeks(c.total_instructional_weeks);
+        if (c.instruction_days_per_week) setCalDaysPerWeek(c.instruction_days_per_week);
+        if (c.instruction_days) setCalDays(c.instruction_days);
+        if (c.start_date) setCalStart(c.start_date);
+      }).catch(() => {}),
     ]).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
@@ -53,6 +68,27 @@ export default function SettingsPage() {
     });
     setHhSaved(true);
     setTimeout(() => setHhSaved(false), 2000);
+  }
+
+  async function saveCalendar() {
+    setCalSaved(false);
+    try {
+      await academicCalendar.update({
+        schedule_type: calType,
+        total_instructional_weeks: calWeeks,
+        instruction_days_per_week: calDaysPerWeek,
+        instruction_days: calDays,
+        start_date: calStart || undefined,
+      });
+      setCalSaved(true);
+      setTimeout(() => setCalSaved(false), 2000);
+    } catch (err: any) {
+      setError(err?.detail || "Couldn't save calendar.");
+    }
+  }
+
+  function toggleCalDay(day: string) {
+    setCalDays((prev) => prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day]);
   }
 
   async function changePassword() {
@@ -73,6 +109,54 @@ export default function SettingsPage() {
   return (
     <div className="max-w-3xl">
       <PageHeader title="Settings" subtitle="Manage your household and account." />
+
+      {/* Academic Calendar */}
+      <Card className="mb-6">
+        <SectionHeader title="Academic Calendar" />
+        <p className="text-xs text-(--color-text-secondary) mt-1 mb-3">How does your family schedule the school year?</p>
+        <div className="space-y-3">
+          <div className="flex gap-2">
+            {(["traditional", "year_round", "custom"] as const).map((t) => (
+              <button key={t} onClick={() => { setCalType(t); if (t === "traditional") { setCalWeeks(36); setCalDaysPerWeek(5); setCalDays(["monday","tuesday","wednesday","thursday","friday"]); } }}
+                className={`px-3 py-1.5 text-xs rounded-[6px] border capitalize transition-colors ${calType === t ? "border-(--color-accent) bg-(--color-accent-light) text-(--color-accent)" : "border-(--color-border) text-(--color-text-secondary)"}`}>
+                {t.replace("_", " ")}
+              </button>
+            ))}
+          </div>
+          {calType !== "traditional" && (
+            <>
+              <div>
+                <label className="block text-xs text-(--color-text-secondary) mb-1">Start date</label>
+                <input type="date" value={calStart} onChange={(e) => setCalStart(e.target.value)}
+                  className="px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+              </div>
+              <div>
+                <label className="block text-xs text-(--color-text-secondary) mb-1">Instructional weeks</label>
+                <input type="number" value={calWeeks} onChange={(e) => setCalWeeks(Number(e.target.value))} min={1} max={52}
+                  className="w-24 px-3 py-2 text-sm border border-(--color-border) rounded-[6px] bg-(--color-surface)" />
+              </div>
+              <div>
+                <label className="block text-xs text-(--color-text-secondary) mb-1">Instruction days</label>
+                <div className="flex gap-1.5 flex-wrap">
+                  {["monday","tuesday","wednesday","thursday","friday","saturday","sunday"].map((d) => (
+                    <button key={d} onClick={() => toggleCalDay(d)}
+                      className={`w-9 h-9 text-[10px] rounded-[6px] border capitalize transition-colors ${calDays.includes(d) ? "border-(--color-accent) bg-(--color-accent-light) text-(--color-accent)" : "border-(--color-border) text-(--color-text-tertiary)"}`}>
+                      {d.slice(0, 2)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+          <div className="flex items-center gap-2">
+            <Button variant="primary" size="sm" onClick={saveCalendar}>Save Calendar</Button>
+            {calSaved && <span className="text-xs text-(--color-success)">Saved</span>}
+          </div>
+          {calType === "traditional" && (
+            <p className="text-[10px] text-(--color-text-tertiary)">Traditional: September to May, 36 weeks, Monday through Friday.</p>
+          )}
+        </div>
+      </Card>
 
       {/* Household */}
       <Card className="mb-6">

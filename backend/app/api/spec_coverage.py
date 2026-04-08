@@ -183,6 +183,72 @@ async def update_philosophy(
     return profile
 
 
+# ══════════════════════════════════════════════════
+# Academic Calendar
+# ══════════════════════════════════════════════════
+
+
+class AcademicCalendarUpdate(BaseModel):
+    schedule_type: str | None = None
+    start_date: str | None = None
+    total_instructional_weeks: int | None = None
+    instruction_days_per_week: int | None = None
+    instruction_days: list[str] | None = None
+    breaks: list[dict] | None = None
+    daily_target_minutes: dict | None = None
+
+
+@router.get("/household/academic-calendar")
+async def get_academic_calendar_endpoint(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Return the household's academic calendar preferences."""
+    from app.services.academic_calendar import get_academic_calendar
+    return await get_academic_calendar(db, user.household_id)
+
+
+@router.put("/household/academic-calendar")
+async def update_academic_calendar(
+    body: AcademicCalendarUpdate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Update the household's academic calendar preferences."""
+    from app.services.academic_calendar import calculate_end_date
+
+    result = await db.execute(select(Household).where(Household.id == user.household_id))
+    household = result.scalar_one()
+
+    cal = body.model_dump(exclude_none=True)
+
+    # Validate
+    if "total_instructional_weeks" in cal:
+        if cal["total_instructional_weeks"] < 1 or cal["total_instructional_weeks"] > 52:
+            raise HTTPException(400, "total_instructional_weeks must be between 1 and 52")
+    if "instruction_days_per_week" in cal:
+        if cal["instruction_days_per_week"] < 1 or cal["instruction_days_per_week"] > 7:
+            raise HTTPException(400, "instruction_days_per_week must be between 1 and 7")
+    valid_days = {"monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"}
+    if "instruction_days" in cal:
+        if any(d not in valid_days for d in cal["instruction_days"]):
+            raise HTTPException(400, f"instruction_days must be from: {', '.join(sorted(valid_days))}")
+
+    # Calculate end_date if possible
+    if cal.get("start_date") and cal.get("total_instructional_weeks"):
+        from datetime import date as date_type
+        start = date_type.fromisoformat(cal["start_date"]) if isinstance(cal["start_date"], str) else cal["start_date"]
+        cal["end_date"] = calculate_end_date(start, cal["total_instructional_weeks"], cal).isoformat()
+
+    settings = dict(household.settings or {})
+    settings["academic_calendar"] = {**settings.get("academic_calendar", {}), **cal}
+    household.settings = settings
+    from sqlalchemy.orm.attributes import flag_modified
+    flag_modified(household, "settings")
+    await db.flush()
+    return settings["academic_calendar"]
+
+
 @router.get("/household/philosophy")
 async def get_philosophy(
     db: AsyncSession = Depends(get_db),
