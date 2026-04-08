@@ -120,6 +120,11 @@ async def generate_annual_curriculum(
 
     child_age = (date.today() - child.date_of_birth).days / 365.25 if child.date_of_birth else 6
 
+    # Learning level for AI prompt
+    from app.core.learning_levels import get_level_for_subject, LEARNING_LEVELS
+    level = get_level_for_subject(prefs, subject_name)
+    level_info = LEARNING_LEVELS.get(level, LEARNING_LEVELS["developing"])
+
     # Fetch learning map nodes in topological order if provided
     nodes_description = ""
     if learning_map_id:
@@ -176,7 +181,8 @@ ACADEMIC YEAR: {academic_year}
 CHILD PROFILE:
 - Name: {child.first_name}
 - Age: {child_age:.1f} years
-- Grade: {child.grade_level or 'K'}
+- Learning level for {subject_name}: {level_info['label']} — {level_info['ai_instruction']}
+- Age: {child_age:.0f} (developmental context only)
 - Learning style: {json.dumps(prefs.learning_style if prefs else {}, default=str)}
 - Interests: {json.dumps(prefs.interests if prefs else [], default=str)}
 - Accommodations: {json.dumps(prefs.accommodations if prefs else {}, default=str)}
