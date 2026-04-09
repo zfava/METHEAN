@@ -116,6 +116,14 @@ pre, code { overflow-x: auto; max-width: 100%; }
 table { display: block; overflow-x: auto; max-width: 100%; }
 img, svg { max-width: 100%; height: auto; }
 
+/* ── Mobile scroll fade for horizontal overflow containers ── */
+@media (max-width: 639px) {
+  .scroll-fade-right {
+    mask-image: linear-gradient(to right, black 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+  }
+}
+
 @media print {
   .no-print { display: none !important; }
   aside { display: none !important; }

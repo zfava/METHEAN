@@ -119,7 +119,7 @@ export default function GovernanceOverviewPage() {
       )}
 
       {/* ── Section 1: Health Bar ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
         {/* Parent Control Score */}
         <Card padding="p-4">
           <div className="flex items-center gap-3">

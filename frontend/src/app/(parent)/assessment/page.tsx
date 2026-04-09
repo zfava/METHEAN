@@ -225,7 +225,7 @@ export default function AssessmentPage() {
 
           {transcript && (
             <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-              <Card padding="p-6" className="w-[600px] max-h-[80vh] overflow-y-auto shadow-lg">
+              <Card padding="p-6" className="w-full max-w-[600px] mx-4 max-h-[80vh] overflow-y-auto shadow-lg">
                 <div className="flex justify-between mb-4">
                   <h2 className="text-sm font-bold text-(--color-text) uppercase">Unofficial Transcript</h2>
                   <button onClick={() => setTranscript(null)} className="text-xs text-(--color-text-secondary)">Close</button>

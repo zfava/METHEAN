@@ -253,19 +253,19 @@ export default function ReadingPage() {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div>
               <div className="text-2xl font-bold text-(--color-text)">{stats.total_books}</div>
-              <div className="text-[10px] text-(--color-text-tertiary)">Total books</div>
+              <div className="text-[10px] text-(--color-text-tertiary) truncate">Total books</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-(--color-success)">{stats.books_completed}</div>
-              <div className="text-[10px] text-(--color-text-tertiary)">Completed</div>
+              <div className="text-[10px] text-(--color-text-tertiary) truncate">Completed</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-(--color-accent)">{stats.pages_read_total.toLocaleString()}</div>
-              <div className="text-[10px] text-(--color-text-tertiary)">Pages read</div>
+              <div className="text-[10px] text-(--color-text-tertiary) truncate">Pages read</div>
             </div>
             <div>
               <div className="text-2xl font-bold text-(--color-warning)">{Math.round((stats.minutes_total || 0) / 60)}h</div>
-              <div className="text-[10px] text-(--color-text-tertiary)">Reading time</div>
+              <div className="text-[10px] text-(--color-text-tertiary) truncate">Reading time</div>
             </div>
           </div>
           {Object.keys(stats.by_genre || {}).length > 0 && (

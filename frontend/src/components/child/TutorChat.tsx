@@ -84,7 +84,7 @@ export default function TutorChat({ activityId, childId, onClose }: TutorChatPro
   }
 
   return (
-    <div className="fixed inset-y-0 right-0 w-full max-w-sm bg-(--color-surface) border-l border-(--color-border) shadow-lg z-50 flex flex-col">
+    <div className="fixed inset-0 sm:inset-y-0 sm:right-0 sm:left-auto sm:w-full sm:max-w-sm bg-(--color-surface) sm:border-l border-(--color-border) shadow-lg z-50 flex flex-col">
       {/* Header */}
       <div className="flex items-center justify-between px-5 py-3.5 border-b border-(--color-border)">
         <div>

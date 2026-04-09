@@ -370,7 +370,7 @@ export default function OnboardingPage() {
             <h3 className="text-sm font-semibold text-(--color-text) mb-1">Your educational approach</h3>
             <p className="text-xs text-(--color-text-secondary) mb-4">This guides how the AI generates curriculum and activities.</p>
 
-            <div className="grid grid-cols-2 gap-2 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
               {PHILOSOPHIES.map((p) => (
                 <button key={p.value} onClick={() => setPhilosophy(p.value)}
                   className={cn("text-left p-3 rounded-[10px] border transition-colors",

@@ -22,7 +22,7 @@ export default function MetricCard({
       className
     )}>
       <div className="text-xs text-(--color-text-tertiary) uppercase tracking-wide mb-2">{label}</div>
-      <div className={cn("text-[28px] font-semibold tracking-tight", color || "text-(--color-text)")}>{value}</div>
+      <div className={cn("text-[22px] sm:text-[28px] font-semibold tracking-tight", color || "text-(--color-text)")}>{value}</div>
       {subtitle && <div className="text-[13px] text-(--color-text-secondary) mt-1">{subtitle}</div>}
     </div>
   );

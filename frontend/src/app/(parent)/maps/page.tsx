@@ -179,7 +179,7 @@ export default function MapsPage() {
           {/* ── Override modal ── */}
           {overrideNodeId && (
             <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
-              <Card padding="p-6" className="w-96 shadow-lg">
+              <Card padding="p-6" className="w-full max-w-md mx-4 shadow-lg">
                 <h3 className="text-sm font-semibold text-(--color-text) mb-1">Unlock Blocked Node</h3>
                 <p className="text-xs text-(--color-text-secondary) mb-4">
                   This bypasses the prerequisite requirement. Your reason will be recorded in the governance log.

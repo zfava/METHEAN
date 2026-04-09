@@ -12,7 +12,7 @@ const variants = {
 };
 
 const sizes = {
-  sm: "px-3 py-1.5 text-[13px]",
+  sm: "px-3 py-1.5 text-[13px] min-h-[44px] sm:min-h-0",
   md: "px-5 py-2.5 text-[14px]",
   lg: "px-7 py-3 text-[15px]",
 };

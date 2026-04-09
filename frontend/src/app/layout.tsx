@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ClientProviders from "@/components/ClientProviders";
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "METHEAN — A Learning Operating System for Families",
   description: "AI-powered homeschool platform with parent governance. You set the rules. AI follows them. 51-state compliance. Start free.",

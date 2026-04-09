@@ -147,7 +147,7 @@ export default function CalendarPage() {
         }
       />
 
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4">
         <span className="text-sm font-medium text-(--color-text)">{weekLabel}</span>
         <div className="flex items-center gap-2">
           {children.length > 1 && (
@@ -374,15 +374,25 @@ function MobileCalendar({ weekStart, activitiesForDay, expanded, setExpanded }: 
   return (
     <div className="sm:hidden">
       <div className="flex gap-1 mb-4">
-        {DAYS.map((day, i) => (
-          <button key={day} onClick={() => setActiveDay(i)}
-            className={cn(
-              "flex-1 py-2 text-xs font-medium rounded-[10px] transition-colors",
-              activeDay === i ? "bg-(--color-text) text-white" : "bg-(--color-page) text-(--color-text-secondary)"
-            )}>
-            {day.slice(0, 3)}
-          </button>
-        ))}
+        {DAYS.map((day, i) => {
+          const dayDate = addDays(weekStart, i);
+          const isToday = formatDate(dayDate) === formatDate(new Date());
+          return (
+            <button key={day} onClick={() => setActiveDay(i)}
+              className={cn(
+                "flex-1 py-2 text-xs font-medium rounded-[10px] transition-colors relative",
+                activeDay === i ? "bg-(--color-text) text-white" : "bg-(--color-page) text-(--color-text-secondary)"
+              )}>
+              {day.slice(0, 3)}
+              {isToday && (
+                <span className={cn(
+                  "absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full",
+                  activeDay === i ? "bg-white" : "bg-(--color-accent)"
+                )} />
+              )}
+            </button>
+          );
+        })}
       </div>
 
       <div className="space-y-2">
