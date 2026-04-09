@@ -24,7 +24,7 @@ export default function PageHeader({
           </a>
         )}
         <div>
-          <h1 className="text-[28px] font-semibold tracking-[-0.025em] text-(--color-text)">{title}</h1>
+          <h1 className="text-[22px] sm:text-[28px] font-semibold tracking-[-0.025em] text-(--color-text)">{title}</h1>
           {subtitle && <p className="text-[15px] text-(--color-text-secondary) mt-1">{subtitle}</p>}
         </div>
       </div>

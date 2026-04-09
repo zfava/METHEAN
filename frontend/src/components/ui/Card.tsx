@@ -5,7 +5,7 @@ import { cn } from "@/lib/cn";
 export default function Card({
   children,
   className,
-  padding = "p-5",
+  padding = "p-4 sm:p-5",
   onClick,
   href,
   selected,
