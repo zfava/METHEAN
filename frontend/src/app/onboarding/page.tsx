@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { children as childrenApi, governance, annualCurriculum, plans, curriculum } from "@/lib/api";
 import { MetheanLogoVertical } from "@/components/Brand";
+import { ShieldIcon } from "@/components/ConstitutionalCeremony";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import { cn } from "@/lib/cn";
@@ -34,6 +35,12 @@ const AUTONOMY = [
 
 const GRADES = ["K", "1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th", "11th", "12th"];
 
+const CEREMONY_AFFIRMATIONS = [
+  "I understand that AI in METHEAN advises but never decides. Every recommendation flows through my governance rules.",
+  "I understand that I can inspect every AI interaction, including the full prompt and response, at any time.",
+  "I understand that constitutional rules require a formal amendment process to change, protecting my family's values from casual modification.",
+] as const;
+
 interface OnboardingChild { id: string; firstName: string; grade: string }
 
 export default function OnboardingPage() {
@@ -56,15 +63,21 @@ export default function OnboardingPage() {
   const [philosophy, setPhilosophy] = useState("eclectic");
   const [autonomy, setAutonomy] = useState("approve_difficult");
 
-  // Step 5: Curriculum
+  // Step 5: Constitutional Ceremony
+  const [ceremonyChecks, setCeremonyChecks] = useState([false, false, false]);
+  const [ceremonyReason, setCeremonyReason] = useState("");
+  const [ratified, setRatified] = useState(false);
+  const [constitutionalRules, setConstitutionalRules] = useState<string[]>([]);
+
+  // Step 6: Curriculum
   const [curriculumChoices, setCurriculumChoices] = useState<Record<string, "ai" | "template" | "skip">>({});
   const [currentChildIdx, setCurrentChildIdx] = useState(0);
   const [generatingFor, setGeneratingFor] = useState("");
 
-  // Step 6: Plans
+  // Step 7: Plans
   const [planProgress, setPlanProgress] = useState<string[]>([]);
 
-  // Step 7: Summary
+  // Step 8: Summary
   const [summary, setSummary] = useState<{ rules: number; activities: Record<string, number> }>({ rules: 0, activities: {} });
 
   useEffect(() => { document.title = "Welcome | METHEAN"; }, []);
@@ -101,7 +114,11 @@ export default function OnboardingPage() {
           ai_autonomy_level: autonomy,
         }),
       });
-      await governance.initDefaults();
+      const rulesResult = await governance.initDefaults();
+      const rulesList = (rulesResult as any).items || rulesResult;
+      if (Array.isArray(rulesList)) {
+        setConstitutionalRules(rulesList.filter((r: any) => r.tier === "constitutional" || r.rule_type === "ai_boundary").map((r: any) => r.name || r.rule_type));
+      }
       setStep(5);
     } catch (err: any) {
       setError(err?.detail || err?.message || "Couldn't save settings.");
@@ -110,7 +127,13 @@ export default function OnboardingPage() {
     }
   }
 
-  // ── Step 5: Generate Curricula ──
+  // ── Step 5: Ratify Constitution ──
+  function handleRatify() {
+    setRatified(true);
+    setTimeout(() => setStep(6), 2000);
+  }
+
+  // ── Step 6: Generate Curricula ──
   async function generateCurricula() {
     setLoading(true);
     setError("");
@@ -141,11 +164,11 @@ export default function OnboardingPage() {
       }
     }
     setGeneratingFor("");
-    setStep(6);
+    setStep(7);
     setLoading(false);
   }
 
-  // ── Step 6: Generate Plans ──
+  // ── Step 7: Generate Plans ──
   async function generatePlans() {
     setLoading(true);
     setError("");
@@ -180,9 +203,12 @@ export default function OnboardingPage() {
       setSummary({ rules: 4, activities: activityCounts });
     }
 
-    setStep(7);
+    setStep(8);
     setLoading(false);
   }
+
+  const allCeremonyChecked = ceremonyChecks.every(Boolean);
+  const ceremonyReasonValid = ceremonyReason.trim().length >= 20;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-(--color-page) px-4 py-8">
@@ -200,8 +226,8 @@ export default function OnboardingPage() {
           )}
           {step > 1 && (
             <div className="flex items-center justify-center gap-2 mt-3">
-              {[2, 3, 4, 5, 6, 7].map((s) => (
-                <div key={s} className={cn("w-8 h-1 rounded-full transition-colors", step >= s ? "bg-(--color-accent)" : "bg-(--color-border)")} />
+              {[2, 3, 4, 5, 6, 7, 8].map((s) => (
+                <div key={s} className={cn("w-7 h-1 rounded-full transition-colors", step >= s ? "bg-(--color-accent)" : "bg-(--color-border)")} />
               ))}
             </div>
           )}
@@ -373,8 +399,123 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* ── Step 5: Curriculum Path ── */}
-        {step === 5 && !loading && (
+        {/* ── Step 5: Constitutional Ceremony ── */}
+        {step === 5 && !ratified && (
+          <Card padding="p-0" borderLeft="border-l-(--color-constitutional)">
+            <div className="p-6">
+              {/* Header */}
+              <div className="flex items-start gap-3 mb-5">
+                <div className="w-10 h-10 rounded-[10px] bg-(--color-constitutional-light) flex items-center justify-center shrink-0">
+                  <ShieldIcon size={22} className="text-(--color-constitutional)" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-(--color-text)">
+                    Establishing Your Family's AI Constitution
+                  </h3>
+                  <p className="text-xs text-(--color-text-secondary) mt-1 leading-relaxed">
+                    These are the foundational rules that govern how AI interacts with your children.
+                    Constitutional rules cannot be changed casually; they require a formal amendment process.
+                  </p>
+                </div>
+              </div>
+
+              {/* Constitutional rule display */}
+              <div className="bg-(--color-constitutional-light) border border-(--color-constitutional)/15 rounded-[10px] p-4 mb-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <ShieldIcon size={14} className="text-(--color-constitutional)" />
+                  <span className="text-xs font-semibold text-(--color-constitutional) uppercase tracking-wide">AI Oversight Guarantee</span>
+                </div>
+                <p className="text-sm text-(--color-text) leading-relaxed">
+                  All AI-generated content and recommendations are logged with full input/output for parent inspection.
+                  AI cannot modify child state without governance approval.
+                </p>
+              </div>
+
+              {/* Affirmation checkboxes */}
+              <div className="space-y-3 mb-6">
+                {CEREMONY_AFFIRMATIONS.map((text, i) => (
+                  <label key={i} className="flex items-start gap-3 cursor-pointer group" onClick={() => {
+                    setCeremonyChecks((prev) => { const next = [...prev]; next[i] = !next[i]; return next; });
+                  }}>
+                    <span className={cn(
+                      "w-5 h-5 shrink-0 mt-0.5 rounded-[4px] border-2 flex items-center justify-center transition-all",
+                      ceremonyChecks[i]
+                        ? "bg-(--gold) border-(--gold)"
+                        : "border-(--color-border-strong) group-hover:border-(--color-text-tertiary)"
+                    )}>
+                      {ceremonyChecks[i] && (
+                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                      )}
+                    </span>
+                    <span className="text-xs text-(--color-text) leading-relaxed">{text}</span>
+                  </label>
+                ))}
+              </div>
+
+              {/* Reason field */}
+              <div className="mb-6">
+                <label className="text-xs font-medium text-(--color-text) block mb-1.5">
+                  In your own words, why are these protections important to your family?
+                </label>
+                <textarea
+                  value={ceremonyReason}
+                  onChange={(e) => setCeremonyReason(e.target.value)}
+                  placeholder="This is your founding statement — what matters to your family..."
+                  rows={3}
+                  className="w-full px-3 py-2.5 text-sm border border-(--color-border-strong) rounded-[10px] bg-(--color-surface) resize-none focus:outline-none focus:ring-1 focus:ring-(--color-constitutional) text-(--color-text)"
+                />
+                {ceremonyReason.length > 0 && ceremonyReason.trim().length < 20 && (
+                  <p className="text-[10px] text-(--color-text-tertiary) mt-1">
+                    {20 - ceremonyReason.trim().length} more characters needed
+                  </p>
+                )}
+              </div>
+
+              {/* Ratify button */}
+              <Button
+                variant="gold"
+                size="lg"
+                className="w-full"
+                disabled={!allCeremonyChecked || !ceremonyReasonValid}
+                onClick={handleRatify}
+              >
+                Ratify Constitution
+              </Button>
+            </div>
+          </Card>
+        )}
+
+        {/* ── Step 5: Ratification confirmation ── */}
+        {step === 5 && ratified && (
+          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-8 text-center">
+            <div className="flex justify-center mb-4">
+              <div
+                className="w-16 h-16 rounded-full bg-(--color-constitutional-light) flex items-center justify-center"
+                style={{ animation: "ratify-glow 500ms ease-out forwards" }}
+              >
+                <ShieldIcon size={32} className="text-(--color-constitutional)" />
+              </div>
+            </div>
+            <h2 className="text-lg font-semibold text-(--color-text) mb-1">
+              Your family's AI constitution is established.
+            </h2>
+            <p className="text-xs text-(--color-text-secondary)">
+              These protections are now active for every AI interaction.
+            </p>
+            <style>{`
+              @keyframes ratify-glow {
+                0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.3); }
+                50% { transform: scale(1.1); box-shadow: 0 0 24px 8px rgba(184, 134, 11, 0.2); }
+                100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(184, 134, 11, 0); }
+              }
+            `}</style>
+          </div>
+        )}
+
+        {/* ── Step 6: Curriculum Path ── */}
+        {step === 6 && !loading && (
           <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6">
             {currentChildIdx < addedChildren.length ? (
               <>
@@ -420,21 +561,21 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* ── Step 5/6: Loading ── */}
-        {loading && (step === 5 || step === 6) && (
+        {/* ── Step 6/7: Loading ── */}
+        {loading && (step === 6 || step === 7) && (
           <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-8 text-center">
             <div className="w-10 h-10 mx-auto mb-4 rounded-full border-2 border-(--color-accent) border-t-transparent animate-spin" />
             <p className="text-sm text-(--color-text) mb-1">
-              {step === 5 && generatingFor && `Generating ${generatingFor}...`}
-              {step === 6 && planProgress.length > 0 && `Creating ${planProgress[planProgress.length - 1]}'s plan...`}
-              {!generatingFor && step === 5 && "Setting up curricula..."}
+              {step === 6 && generatingFor && `Generating ${generatingFor}...`}
+              {step === 7 && planProgress.length > 0 && `Creating ${planProgress[planProgress.length - 1]}'s plan...`}
+              {!generatingFor && step === 6 && "Setting up curricula..."}
             </p>
             <p className="text-xs text-(--color-text-tertiary)">This may take a moment.</p>
           </div>
         )}
 
-        {/* ── Step 6: Generate Plans ── */}
-        {step === 6 && !loading && (
+        {/* ── Step 7: Generate Plans ── */}
+        {step === 7 && !loading && (
           <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6 text-center">
             <h3 className="text-sm font-semibold text-(--color-text) mb-2">Curricula ready!</h3>
             <p className="text-xs text-(--color-text-secondary) mb-6">
@@ -443,15 +584,15 @@ export default function OnboardingPage() {
             <Button variant="primary" size="lg" onClick={generatePlans} className="w-full">
               Generate First Week's Plan
             </Button>
-            <button onClick={() => { setStep(7); setSummary({ rules: 4, activities: {} }); }}
+            <button onClick={() => { setStep(8); setSummary({ rules: 4, activities: {} }); }}
               className="block mx-auto mt-3 text-xs text-(--color-text-tertiary) hover:underline">
               Skip — I'll generate plans later
             </button>
           </div>
         )}
 
-        {/* ── Step 7: All Set ── */}
-        {step === 7 && (
+        {/* ── Step 8: All Set ── */}
+        {step === 8 && (
           <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-8">
             <div className="text-center mb-6">
               <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-(--color-success-light) flex items-center justify-center">
@@ -460,6 +601,31 @@ export default function OnboardingPage() {
                 </svg>
               </div>
               <h2 className="text-lg font-semibold text-(--color-text)">Your family is ready!</h2>
+            </div>
+
+            {/* ── Your Constitution ── */}
+            <div className="mb-5 p-4 bg-(--color-constitutional-light) border border-(--color-constitutional)/15 rounded-[10px]">
+              <div className="flex items-center gap-2 mb-2">
+                <ShieldIcon size={16} className="text-(--color-constitutional)" />
+                <span className="text-xs font-semibold text-(--color-constitutional)">Constitutional Governance Established</span>
+              </div>
+              {constitutionalRules.length > 0 && (
+                <ul className="space-y-1 mb-2">
+                  {constitutionalRules.map((name, i) => (
+                    <li key={i} className="flex items-center gap-1.5 text-[11px] text-(--color-text-secondary)">
+                      <span className="w-1 h-1 rounded-full bg-(--color-constitutional) shrink-0" />
+                      {name}
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {ceremonyReason && (
+                <div className="border-t border-(--color-constitutional)/15 pt-2 mt-2">
+                  <p className="text-[11px] text-(--color-text-secondary) italic leading-relaxed">
+                    &ldquo;{ceremonyReason}&rdquo;
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Activity preview */}
@@ -476,9 +642,8 @@ export default function OnboardingPage() {
 
             {/* Rules summary */}
             {summary.rules > 0 && (
-              <div className="mb-6 p-3 bg-(--color-constitutional-light) rounded-[10px]">
-                <p className="text-xs text-(--color-constitutional) font-medium mb-1">Governance rules active</p>
-                <p className="text-[10px] text-(--color-text-secondary)">{summary.rules} rules protecting your family's education.</p>
+              <div className="mb-6 p-3 bg-(--color-page) rounded-[10px]">
+                <p className="text-xs text-(--color-text-secondary) font-medium">{summary.rules} governance rules protecting your family's education.</p>
               </div>
             )}
 
