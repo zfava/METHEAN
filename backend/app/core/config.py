@@ -45,6 +45,10 @@ class Settings(BaseSettings):
     CELERY_BROKER_URL: str = "redis://redis:6379/1"
     CELERY_RESULT_BACKEND: str = "redis://redis:6379/2"
 
+    # Email (Resend)
+    RESEND_API_KEY: str = ""
+    EMAIL_FROM: str = "METHEAN <notifications@methean.app>"
+
     # FSRS / Retention
     FSRS_WEIGHTS: list[float] = []  # Empty = use py-fsrs defaults
     MASTERY_THRESHOLD: float = 0.8  # Confidence threshold to reach mastered

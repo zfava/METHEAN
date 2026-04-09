@@ -26,6 +26,9 @@ export default function SettingsPage() {
   const [calStart, setCalStart] = useState("");
   const [calSaved, setCalSaved] = useState(false);
 
+  // Notification preferences
+  const [notifPrefs, setNotifPrefs] = useState<Record<string, boolean>>({});
+
   // Household
   const [hhName, setHhName] = useState("");
   const [hhTimezone, setHhTimezone] = useState("America/New_York");
@@ -51,6 +54,7 @@ export default function SettingsPage() {
         if (c.instruction_days) setCalDays(c.instruction_days);
         if (c.start_date) setCalStart(c.start_date);
       }).catch(() => {}),
+      account.getNotificationPreferences().then(setNotifPrefs).catch(() => {}),
     ]).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
@@ -242,6 +246,42 @@ export default function SettingsPage() {
           <p>METHEAN v0.1.0</p>
           <p>Built by Spartan Solutions</p>
           <a href="/" className="text-(--color-accent) hover:underline">Visit landing page</a>
+        </div>
+      </Card>
+
+      {/* Notification Preferences */}
+      <Card className="mb-6">
+        <SectionHeader title="Notification Preferences" />
+        <p className="text-xs text-(--color-text-secondary) mt-1 mb-4">Choose which emails METHEAN sends you.</p>
+        <div className="space-y-3">
+          {([
+            ["email_daily_summary", "Daily morning summary", "Today's plan per child + pending reviews"],
+            ["email_milestones", "Mastery milestones", "When your child masters a concept"],
+            ["email_governance_alerts", "Governance alerts", "When a rule blocks or flags an activity"],
+            ["email_weekly_digest", "Weekly digest", "End-of-week summary of learning progress"],
+            ["email_compliance_warnings", "Compliance warnings", "Hours shortfall or approaching deadlines"],
+          ] as const).map(([key, label, desc]) => (
+            <div key={key} className="flex items-center justify-between py-2">
+              <div>
+                <div className="text-sm text-(--color-text)">{label}</div>
+                <div className="text-[10px] text-(--color-text-tertiary)">{desc}</div>
+              </div>
+              <button
+                onClick={async () => {
+                  const newVal = !notifPrefs[key];
+                  const updated = { ...notifPrefs, [key]: newVal };
+                  setNotifPrefs(updated);
+                  try {
+                    await account.updateNotificationPreferences({ [key]: newVal });
+                    toast(newVal ? "Enabled" : "Disabled", "success");
+                  } catch { toast("Couldn't save preference", "error"); }
+                }}
+                className={`w-10 h-6 rounded-full transition-colors duration-200 relative ${notifPrefs[key] !== false ? "bg-(--color-success)" : "bg-(--color-border-strong)"}`}
+              >
+                <span className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200 ${notifPrefs[key] !== false ? "left-[18px]" : "left-0.5"}`} />
+              </button>
+            </div>
+          ))}
         </div>
       </Card>
     </div>

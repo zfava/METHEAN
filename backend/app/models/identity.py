@@ -50,6 +50,16 @@ class User(Base):
         nullable=False, default=UserRole.owner
     )
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    notification_preferences: Mapped[dict | None] = mapped_column(
+        JSONB,
+        default=lambda: {
+            "email_daily_summary": True,
+            "email_milestones": True,
+            "email_governance_alerts": True,
+            "email_weekly_digest": True,
+            "email_compliance_warnings": True,
+        },
+    )
     last_login_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()

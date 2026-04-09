@@ -399,6 +399,10 @@ export const intelligence = {
 export const account = {
   changePassword: (currentPassword: string, newPassword: string) =>
     request<{ success: boolean }>("/auth/password", { method: "PUT", body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }) }),
+  getNotificationPreferences: () =>
+    request<Record<string, boolean>>("/auth/me/notification-preferences"),
+  updateNotificationPreferences: (prefs: Record<string, boolean>) =>
+    request<Record<string, boolean>>("/auth/me/notification-preferences", { method: "PUT", body: JSON.stringify(prefs) }),
 };
 
 // ── Resources ──

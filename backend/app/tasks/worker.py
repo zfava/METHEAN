@@ -50,6 +50,14 @@ celery_app.conf.beat_schedule = {
         "task": "app.tasks.worker.check_alerts_task",
         "schedule": crontab(hour=7, minute=0),
     },
+    "daily-summary-email": {
+        "task": "app.tasks.worker.daily_summary_task",
+        "schedule": crontab(hour=7, minute=15),
+    },
+    "weekly-digest-email": {
+        "task": "app.tasks.worker.weekly_digest_task",
+        "schedule": crontab(day_of_week="sunday", hour=18, minute=0),
+    },
 }
 
 
@@ -109,6 +117,26 @@ def curriculum_eval_task(self) -> dict:
     try:
         from app.tasks.curriculum_eval import run_curriculum_eval_sync
         return run_curriculum_eval_sync()
+    except Exception as exc:
+        self.retry(exc=exc, countdown=30 * (2 ** self.request.retries))
+
+
+@celery_app.task(name="app.tasks.worker.daily_summary_task", bind=True, max_retries=3)
+def daily_summary_task(self) -> dict:
+    """Send daily morning summary emails."""
+    try:
+        from app.tasks.daily_summary import run_daily_summary_sync
+        return run_daily_summary_sync()
+    except Exception as exc:
+        self.retry(exc=exc, countdown=30 * (2 ** self.request.retries))
+
+
+@celery_app.task(name="app.tasks.worker.weekly_digest_task", bind=True, max_retries=3)
+def weekly_digest_task(self) -> dict:
+    """Send weekly digest emails."""
+    try:
+        from app.tasks.weekly_digest import run_weekly_digest_sync
+        return run_weekly_digest_sync()
     except Exception as exc:
         self.retry(exc=exc, countdown=30 * (2 ** self.request.retries))
 

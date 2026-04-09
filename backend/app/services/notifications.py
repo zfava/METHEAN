@@ -119,6 +119,29 @@ async def send_notification(
     )
     db.add(log)
     await db.flush()
+
+    # Send email for high-priority event types
+    EMAIL_EVENTS = {
+        "node_mastered": "email_milestones",
+        "review_needed": "email_governance_alerts",
+        "alert_triggered": "email_governance_alerts",
+        "compliance_warning": "email_compliance_warnings",
+    }
+    pref_key = EMAIL_EVENTS.get(event_type)
+    if pref_key:
+        try:
+            user_result = await db.execute(
+                select(User).where(User.id == user_id)
+            )
+            user_obj = user_result.scalar_one_or_none()
+            if user_obj:
+                prefs = user_obj.notification_preferences or {}
+                if prefs.get(pref_key, True):
+                    from app.services.email import send_email
+                    await send_email(user_obj.email, title, body)
+        except Exception:
+            pass  # Email delivery is non-blocking
+
     return log
 
 

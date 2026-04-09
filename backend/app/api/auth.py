@@ -323,3 +323,34 @@ async def change_password(
     user.password_hash = hash_password(body.new_password)
     await db.commit()
     return {"success": True}
+
+
+@router.get("/auth/me/notification-preferences")
+async def get_notification_preferences(
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Get current user's notification preferences."""
+    return user.notification_preferences or {
+        "email_daily_summary": True,
+        "email_milestones": True,
+        "email_governance_alerts": True,
+        "email_weekly_digest": True,
+        "email_compliance_warnings": True,
+    }
+
+
+@router.put("/auth/me/notification-preferences")
+async def update_notification_preferences(
+    body: dict,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Update notification preferences."""
+    allowed = {"email_daily_summary", "email_milestones", "email_governance_alerts", "email_weekly_digest", "email_compliance_warnings"}
+    current = dict(user.notification_preferences or {})
+    for key, val in body.items():
+        if key in allowed and isinstance(val, bool):
+            current[key] = val
+    user.notification_preferences = current
+    await db.commit()
+    return current
