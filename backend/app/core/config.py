@@ -49,6 +49,12 @@ class Settings(BaseSettings):
     RESEND_API_KEY: str = ""
     EMAIL_FROM: str = "METHEAN <notifications@methean.app>"
 
+    # Stripe
+    STRIPE_SECRET_KEY: str = ""
+    STRIPE_WEBHOOK_SECRET: str = ""
+    STRIPE_PRICE_ID: str = ""
+    APP_URL: str = "http://localhost:3000"
+
     # FSRS / Retention
     FSRS_WEIGHTS: list[float] = []  # Empty = use py-fsrs defaults
     MASTERY_THRESHOLD: float = 0.8  # Confidence threshold to reach mastered

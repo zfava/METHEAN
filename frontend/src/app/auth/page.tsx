@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { auth } from "@/lib/api";
+import { auth, account } from "@/lib/api";
 import { MetheanLogoVertical } from "@/components/Brand";
 
 export default function AuthPage() {
   const router = useRouter();
-  const [mode, setMode] = useState<"login" | "register">("login");
+  const [mode, setMode] = useState<"login" | "register" | "forgot">("login");
+  const [forgotSent, setForgotSent] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
@@ -75,7 +76,40 @@ export default function AuthPage() {
               className="w-full py-2.5 text-sm font-medium text-white bg-(--color-accent) rounded-[10px] hover:bg-(--color-accent-hover) disabled:opacity-50 transition-colors duration-150">
               {loading ? "..." : mode === "login" ? "Sign In" : "Create Account"}
             </button>
+            {mode === "login" && (
+              <button type="button" onClick={() => setMode("forgot")} className="w-full text-center text-xs text-(--color-text-tertiary) hover:text-(--color-accent) mt-2">
+                Forgot password?
+              </button>
+            )}
           </form>
+        )}
+        {mode === "forgot" && (
+          <div className="space-y-3">
+            {forgotSent ? (
+              <div className="text-center py-4">
+                <p className="text-sm text-(--color-success) font-medium mb-1">Check your email</p>
+                <p className="text-xs text-(--color-text-secondary)">If that email is registered, we sent a reset link.</p>
+                <button onClick={() => { setMode("login"); setForgotSent(false); }} className="text-xs text-(--color-accent) mt-3 hover:underline">Back to sign in</button>
+              </div>
+            ) : (
+              <>
+                <p className="text-xs text-(--color-text-secondary) mb-2">Enter your email and we'll send a reset link.</p>
+                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-3 py-2.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
+                {error && <p className="text-xs text-(--color-danger)">{error}</p>}
+                <button
+                  disabled={loading || !email}
+                  onClick={async () => { setLoading(true); try { await account.forgotPassword(email); setForgotSent(true); } catch { setError("Something went wrong"); } finally { setLoading(false); } }}
+                  className="w-full py-2.5 text-sm font-medium text-white bg-(--color-accent) rounded-[10px] hover:bg-(--color-accent-hover) disabled:opacity-50">
+                  {loading ? "..." : "Send Reset Link"}
+                </button>
+                <button onClick={() => setMode("login")} className="w-full text-center text-xs text-(--color-text-tertiary) hover:text-(--color-accent) mt-1">
+                  Back to sign in
+                </button>
+              </>
+            )}
+          </div>
+        )}
         </div>
       </div>
     </div>

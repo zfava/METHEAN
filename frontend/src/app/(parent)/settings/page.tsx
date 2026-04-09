@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { auth, account, academicCalendar, household, dataExport, type User } from "@/lib/api";
+import { auth, account, academicCalendar, household, familyInvites, dataExport, type User } from "@/lib/api";
 import { useToast } from "@/components/Toast";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
@@ -29,6 +29,12 @@ export default function SettingsPage() {
   // Notification preferences
   const [notifPrefs, setNotifPrefs] = useState<Record<string, boolean>>({});
 
+  // Family members
+  const [invites, setInvites] = useState<any[]>([]);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteRole, setInviteRole] = useState("parent");
+  const [inviting, setInviting] = useState(false);
+
   // Household
   const [hhName, setHhName] = useState("");
   const [hhTimezone, setHhTimezone] = useState("America/New_York");
@@ -55,6 +61,7 @@ export default function SettingsPage() {
         if (c.start_date) setCalStart(c.start_date);
       }).catch(() => {}),
       account.getNotificationPreferences().then(setNotifPrefs).catch(() => {}),
+      familyInvites.list().then(setInvites).catch(() => {}),
     ]).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
@@ -246,6 +253,51 @@ export default function SettingsPage() {
           <p>METHEAN v0.1.0</p>
           <p>Built by Spartan Solutions</p>
           <a href="/" className="text-(--color-accent) hover:underline">Visit landing page</a>
+        </div>
+      </Card>
+
+      {/* Family Members */}
+      <Card className="mb-6">
+        <SectionHeader title="Family Members" />
+        <p className="text-xs text-(--color-text-secondary) mt-1 mb-3">Invite a co-parent or observer to your household.</p>
+
+        {invites.length > 0 && (
+          <div className="space-y-2 mb-4">
+            {invites.map((inv: any) => (
+              <div key={inv.id} className="flex items-center justify-between px-3 py-2 bg-(--color-page) rounded-[10px]">
+                <div>
+                  <span className="text-sm text-(--color-text)">{inv.email}</span>
+                  <span className="text-[10px] text-(--color-text-tertiary) ml-2 capitalize">{inv.role} · Pending</span>
+                </div>
+                <button onClick={async () => {
+                  await familyInvites.revoke(inv.id);
+                  toast("Invite revoked", "info");
+                  setInvites(invites.filter((i: any) => i.id !== inv.id));
+                }} className="text-xs text-(--color-danger) hover:underline">Revoke</button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="flex gap-2">
+          <input value={inviteEmail} onChange={(e) => setInviteEmail(e.target.value)} placeholder="Email address"
+            className="flex-1 px-3 py-2 text-sm border border-(--color-border-strong) rounded-[10px]" />
+          <select value={inviteRole} onChange={(e) => setInviteRole(e.target.value)}
+            className="px-3 py-2 text-sm border border-(--color-border-strong) rounded-[10px]">
+            <option value="parent">Parent</option>
+            <option value="viewer">Observer</option>
+          </select>
+          <Button variant="primary" size="sm" disabled={!inviteEmail.trim() || inviting} onClick={async () => {
+            setInviting(true);
+            try {
+              await familyInvites.invite(inviteEmail, inviteRole);
+              toast("Invitation sent", "success");
+              setInviteEmail("");
+              const updated = await familyInvites.list();
+              setInvites(updated);
+            } catch (err: any) { toast(err?.detail || "Couldn't send invite", "error"); }
+            finally { setInviting(false); }
+          }}>Invite</Button>
         </div>
       </Card>
 

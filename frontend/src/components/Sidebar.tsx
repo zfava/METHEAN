@@ -206,6 +206,7 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
       </nav>
 
       <div className="px-4 py-4 border-t border-white/5 space-y-2">
+        {navItem("/billing", "Billing")}
         {navItem("/settings", "Settings", true)}
         <Link href="/child" onClick={handleNav} className="block px-1 py-1 text-xs text-white/25 hover:text-white/50 transition-colors duration-150">Child View</Link>
         {user && (

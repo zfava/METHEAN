@@ -1,6 +1,6 @@
 """SQLAlchemy models for METHEAN."""
 
-from app.models.identity import Child, ChildPreferences, Household, User
+from app.models.identity import Child, ChildPreferences, FamilyInvite, Household, User
 from app.models.curriculum import (
     ChildMapEnrollment,
     LearningEdge,
@@ -64,4 +64,5 @@ __all__ = [
     "DeviceToken",
     "NotificationLog",
     "LearnerIntelligence",
+    "FamilyInvite",
 ]

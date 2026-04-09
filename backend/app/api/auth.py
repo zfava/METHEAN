@@ -354,3 +354,209 @@ async def update_notification_preferences(
     user.notification_preferences = current
     await db.commit()
     return current
+
+
+# ── Password Reset ──
+
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str = Field(min_length=8)
+
+@router.post("/auth/forgot-password")
+async def forgot_password(
+    body: ForgotPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Send password reset email."""
+    from app.services.password_reset import generate_reset_token
+    await generate_reset_token(db, body.email)
+    return {"message": "If that email exists, a reset link has been sent."}
+
+
+@router.post("/auth/reset-password")
+async def reset_password_endpoint(
+    body: ResetPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Reset password with token."""
+    from app.services.password_reset import reset_password
+    success = await reset_password(db, body.token, body.new_password)
+    if not success:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset token")
+    await db.commit()
+    return {"success": True}
+
+
+# ── Email Verification ──
+
+@router.post("/auth/verify-email")
+async def verify_email(
+    body: dict,
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Verify email with token (simplified — token = user_id for now)."""
+    token = body.get("token")
+    if not token:
+        raise HTTPException(status_code=400, detail="Token required")
+    result = await db.execute(select(User).where(User.id == uuid.UUID(token)))
+    user = result.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=400, detail="Invalid token")
+    user.email_verified = True
+    await db.commit()
+    return {"verified": True}
+
+
+@router.post("/auth/resend-verification")
+async def resend_verification(
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Resend verification email."""
+    from app.services.email import send_email
+    from app.core.config import settings
+    verify_url = f"{settings.APP_URL}/auth/verify?token={user.id}"
+    html = f'<a href="{verify_url}" style="background:#4A6FA5;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;">Verify Email</a>'
+    await send_email(user.email, "Verify your METHEAN email", html)
+    return {"sent": True}
+
+
+# ── Family Invites ──
+
+class InviteRequest(BaseModel):
+    email: str
+    role: str = "parent"
+
+class AcceptInviteRequest(BaseModel):
+    token: str
+    password: str = Field(min_length=8)
+    display_name: str
+
+@router.post("/household/invite")
+async def invite_family_member(
+    body: InviteRequest,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Invite a co-parent or observer to the household."""
+    import secrets
+    from datetime import timedelta, timezone as tz
+    from app.models.identity import FamilyInvite
+    from app.services.email import send_email
+    from app.core.config import settings
+
+    token = secrets.token_urlsafe(32)
+    invite = FamilyInvite(
+        household_id=user.household_id,
+        email=body.email,
+        role=body.role,
+        invited_by=user.id,
+        token=token,
+        expires_at=datetime.now(tz.utc) + timedelta(days=7),
+    )
+    db.add(invite)
+    await db.flush()
+
+    invite_url = f"{settings.APP_URL}/auth?invite={token}"
+    html = f"""
+    <div style="font-family:-apple-system,sans-serif;max-width:480px;margin:0 auto;padding:20px;">
+        <h2 style="color:#0F1B2D;">You've been invited to METHEAN</h2>
+        <p style="color:#6B6B6B;">{user.display_name} has invited you to join their family's learning platform as a {body.role}.</p>
+        <a href="{invite_url}" style="display:inline-block;background:#C6A24E;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;">Accept Invitation</a>
+        <p style="color:#9A9A9A;font-size:12px;margin-top:16px;">This invitation expires in 7 days.</p>
+    </div>"""
+    await send_email(body.email, f"{user.display_name} invited you to METHEAN", html)
+    await db.commit()
+    return {"invited": True, "email": body.email}
+
+
+@router.get("/household/invites")
+async def list_invites(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> list:
+    """List pending invites for the household."""
+    from app.models.identity import FamilyInvite
+    result = await db.execute(
+        select(FamilyInvite).where(
+            FamilyInvite.household_id == user.household_id,
+            FamilyInvite.status == "pending",
+        )
+    )
+    return [
+        {"id": str(i.id), "email": i.email, "role": i.role, "created_at": str(i.created_at)}
+        for i in result.scalars().all()
+    ]
+
+
+@router.delete("/household/invites/{invite_id}")
+async def revoke_invite(
+    invite_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Revoke a pending invite."""
+    from app.models.identity import FamilyInvite
+    result = await db.execute(
+        select(FamilyInvite).where(
+            FamilyInvite.id == invite_id,
+            FamilyInvite.household_id == user.household_id,
+        )
+    )
+    invite = result.scalar_one_or_none()
+    if not invite:
+        raise HTTPException(status_code=404, detail="Invite not found")
+    invite.status = "revoked"
+    await db.commit()
+    return {"revoked": True}
+
+
+@router.post("/auth/accept-invite")
+async def accept_invite(
+    body: AcceptInviteRequest,
+    response: Response,
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Accept an invite, create account, and join household."""
+    from app.models.identity import FamilyInvite
+
+    result = await db.execute(
+        select(FamilyInvite).where(
+            FamilyInvite.token == body.token,
+            FamilyInvite.status == "pending",
+        )
+    )
+    invite = result.scalar_one_or_none()
+    if not invite:
+        raise HTTPException(status_code=400, detail="Invalid or expired invitation")
+
+    if invite.expires_at and invite.expires_at < datetime.now(UTC):
+        invite.status = "expired"
+        await db.commit()
+        raise HTTPException(status_code=400, detail="Invitation has expired")
+
+    # Check if user already exists
+    existing = await db.execute(select(User).where(User.email == invite.email))
+    if existing.scalar_one_or_none():
+        raise HTTPException(status_code=400, detail="An account with this email already exists. Log in and contact the household owner.")
+
+    role_enum = UserRole.owner if invite.role == "owner" else UserRole.parent if invite.role == "parent" else UserRole.viewer
+    new_user = User(
+        household_id=invite.household_id,
+        email=invite.email,
+        password_hash=hash_password(body.password),
+        display_name=body.display_name,
+        role=role_enum,
+        email_verified=True,
+    )
+    db.add(new_user)
+    invite.status = "accepted"
+    await db.flush()
+
+    token = create_access_token(new_user.id, invite.household_id, new_user.role.value)
+    _set_cookie(response, "access_token", token, settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60)
+    await db.commit()
+
+    return {"user_id": str(new_user.id), "household_id": str(invite.household_id)}

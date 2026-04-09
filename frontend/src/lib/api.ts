@@ -403,6 +403,28 @@ export const account = {
     request<Record<string, boolean>>("/auth/me/notification-preferences"),
   updateNotificationPreferences: (prefs: Record<string, boolean>) =>
     request<Record<string, boolean>>("/auth/me/notification-preferences", { method: "PUT", body: JSON.stringify(prefs) }),
+  forgotPassword: (email: string) =>
+    request<{ message: string }>("/auth/forgot-password", { method: "POST", body: JSON.stringify({ email }) }),
+  resetPassword: (token: string, newPassword: string) =>
+    request<{ success: boolean }>("/auth/reset-password", { method: "POST", body: JSON.stringify({ token, new_password: newPassword }) }),
+  resendVerification: () =>
+    request<{ sent: boolean }>("/auth/resend-verification", { method: "POST" }),
+};
+
+export const billing = {
+  subscribe: () => request<{ checkout_url: string }>("/billing/subscribe", { method: "POST" }),
+  status: () => request<any>("/billing/status"),
+  cancel: () => request<{ canceled: boolean }>("/billing/cancel", { method: "POST" }),
+  portal: () => request<{ portal_url: string }>("/billing/portal", { method: "POST" }),
+};
+
+export const familyInvites = {
+  invite: (email: string, role: string) =>
+    request<{ invited: boolean }>("/household/invite", { method: "POST", body: JSON.stringify({ email, role }) }),
+  list: () => request<any[]>("/household/invites"),
+  revoke: (inviteId: string) => request<{ revoked: boolean }>(`/household/invites/${inviteId}`, { method: "DELETE" }),
+  accept: (token: string, password: string, displayName: string) =>
+    request<any>("/auth/accept-invite", { method: "POST", body: JSON.stringify({ token, password, display_name: displayName }) }),
 };
 
 // ── Resources ──

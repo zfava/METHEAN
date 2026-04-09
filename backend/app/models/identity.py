@@ -22,6 +22,12 @@ class Household(Base):
     timezone: Mapped[str] = mapped_column(String(50), default="America/New_York")
     settings: Mapped[dict | None] = mapped_column(JSONB, default=dict)
     philosophical_profile: Mapped[dict | None] = mapped_column(JSONB, default=dict)
+    # Billing
+    stripe_customer_id: Mapped[str | None] = mapped_column(Text, nullable=True)
+    subscription_status: Mapped[str] = mapped_column(String(50), default="trial")
+    trial_ends_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    subscription_ends_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -50,6 +56,7 @@ class User(Base):
         nullable=False, default=UserRole.owner
     )
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    email_verified: Mapped[bool] = mapped_column(Boolean, default=False)
     notification_preferences: Mapped[dict | None] = mapped_column(
         JSONB,
         default=lambda: {
@@ -159,3 +166,21 @@ class UserPermission(Base):
     granted_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
+
+
+class FamilyInvite(Base):
+    __tablename__ = "family_invites"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    household_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("households.id", ondelete="CASCADE"), nullable=False
+    )
+    email: Mapped[str] = mapped_column(String(320), nullable=False)
+    role: Mapped[str] = mapped_column(String(50), default="parent")
+    invited_by: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL")
+    )
+    token: Mapped[str] = mapped_column(Text, nullable=False, unique=True)
+    status: Mapped[str] = mapped_column(String(20), default="pending")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
