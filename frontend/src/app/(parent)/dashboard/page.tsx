@@ -163,18 +163,18 @@ export default function DashboardPage() {
         actions={
           <Card href="/governance" padding="px-4 py-2.5" className="flex items-center gap-3">
             <ShieldIcon size={16} className="text-(--color-constitutional) shrink-0" />
-            <span className="text-xs font-medium text-(--color-text)">{govHealth.rules} rules</span>
-            <div className="w-px h-4 bg-(--color-border)" />
+            <span className="text-xs font-medium text-(--color-text)">{govHealth.rules} rules active</span>
+            <div className="w-px h-3 bg-(--color-border) hidden sm:block" />
             <span className={cn("text-xs hidden sm:inline", govHealth.transparency === "full" ? "text-(--color-success)" : "text-(--color-warning)")}>
               AI: {govHealth.transparency}
             </span>
-            <div className="w-px h-4 bg-(--color-border) hidden sm:block" />
-            <span className={cn("text-xs font-medium", govHealth.pending > 0 ? "text-(--color-warning)" : "text-(--color-success)")}>
+            <div className="w-px h-3 bg-(--color-border)" />
+            <span className={cn("text-xs font-medium flex items-center gap-1", govHealth.pending > 0 ? "text-(--color-warning)" : "text-(--color-success)")}>
+              {govHealth.pending > 0 && <span className="w-1.5 h-1.5 rounded-full bg-(--color-warning) animate-pulse shrink-0" />}
               {govHealth.pending > 0 ? `${govHealth.pending} pending` : "All clear"}
-              {govHealth.pending > 0 && <span className="inline-block w-1.5 h-1.5 rounded-full bg-(--color-warning) ml-1 animate-pulse" />}
             </span>
             {govHealth.constitutional > 0 && (
-              <span className="text-[10px] px-1.5 py-0.5 bg-(--color-constitutional-light) text-(--color-constitutional) rounded-[var(--radius-badge)] hidden sm:inline">{govHealth.constitutional} constitutional</span>
+              <span className="text-[10px] px-1.5 py-0.5 bg-(--color-constitutional-light) text-(--color-constitutional) rounded-full font-medium hidden sm:inline">{govHealth.constitutional} constitutional</span>
             )}
           </Card>
         }
