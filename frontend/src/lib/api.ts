@@ -295,6 +295,7 @@ export const governance = {
     request<any>("/governance/report", { method: "POST", body: JSON.stringify(data) }),
   attestReport: (reportId: string, text: string) =>
     request<any>(`/governance/report/attest`, { method: "POST", body: JSON.stringify({ report_id: reportId, attestation_text: text }) }),
+  governanceIntelligence: () => request<any>("/household/governance-intelligence"),
 };
 
 // Household

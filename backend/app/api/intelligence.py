@@ -185,3 +185,13 @@ async def override_intelligence(
     await db.commit()
 
     return {"status": "overridden", "field": body.field}
+
+
+@router.get("/household/governance-intelligence")
+async def get_governance_intelligence(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Returns governance pattern analysis for the current household."""
+    from app.services.governance_intelligence import analyze_governance_patterns
+    return await analyze_governance_patterns(db, user.household_id)

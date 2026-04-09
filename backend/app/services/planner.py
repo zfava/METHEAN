@@ -68,6 +68,15 @@ async def generate_plan(
         db, child_id, household_id, daily_minutes,
     )
 
+    # Inject governance intelligence
+    try:
+        from app.services.governance_intelligence import get_planning_adjustments
+        gov_adjustments = await get_planning_adjustments(db, household_id)
+        if gov_adjustments:
+            context["governance_intelligence"] = gov_adjustments
+    except Exception:
+        pass
+
     day_labels = ", ".join([d.capitalize() for d in instruction_days])
 
     user_prompt = f"""Generate a weekly learning plan for this child.

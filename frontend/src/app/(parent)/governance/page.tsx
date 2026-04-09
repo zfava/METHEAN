@@ -32,6 +32,7 @@ export default function GovernanceOverviewPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [expandedEvent, setExpandedEvent] = useState<string | null>(null);
+  const [govIntel, setGovIntel] = useState<any>(null);
 
   useEffect(() => { load(); }, []);
 
@@ -56,6 +57,8 @@ export default function GovernanceOverviewPage() {
         autonomy: (philResp.ai_autonomy_level || "").replace(/_/g, " "),
         boundaries: (philResp.content_boundaries || []).length,
       });
+      // Load governance intelligence
+      governance.governanceIntelligence().then(setGovIntel).catch(() => {});
     } catch (err: any) {
       setError(err?.detail || err?.message || "Couldn't load governance data.");
     } finally {
@@ -181,6 +184,78 @@ export default function GovernanceOverviewPage() {
           </div>
         </Card>
       </div>
+
+      {/* ── Section 1.5: Governance Intelligence ── */}
+      <Card className="mb-8" padding="p-4 sm:p-5">
+        <SectionHeader title="What METHEAN Has Learned From Your Reviews" />
+        {!govIntel || !govIntel.sufficient_data ? (
+          <p className="text-xs text-(--color-text-tertiary) mt-2">
+            {govIntel?.event_count > 0
+              ? `METHEAN has ${govIntel.event_count} governance events — it needs at least 10 to learn your patterns. Keep reviewing!`
+              : "METHEAN needs more review history to learn your patterns. Keep reviewing, and insights will appear here."}
+          </p>
+        ) : (
+          <div className="space-y-4 mt-3">
+            {/* Auto-approve zone */}
+            {govIntel.auto_approve_ceiling > 0 && (
+              <div>
+                <div className="text-xs font-medium text-(--color-text) mb-1.5">
+                  Auto-approve zone: Difficulty 1–{govIntel.auto_approve_ceiling}
+                </div>
+                <div className="flex items-center gap-0.5">
+                  {[1, 2, 3, 4, 5].map((d) => (
+                    <div key={d} className={cn(
+                      "flex-1 h-3 rounded-sm text-center",
+                      d <= govIntel.auto_approve_ceiling ? "bg-(--color-success)" : d === govIntel.auto_approve_ceiling + 1 ? "bg-(--color-warning)" : "bg-(--color-border)"
+                    )}>
+                      <span className="text-[8px] text-white font-bold leading-3">{d}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-[10px] text-(--color-text-tertiary) mt-1">
+                  Activities at difficulty 1–{govIntel.auto_approve_ceiling} are approved {Math.round((govIntel.approval_rate_by_difficulty[govIntel.auto_approve_ceiling] || 0) * 100)}% of the time.
+                </p>
+              </div>
+            )}
+
+            {/* Activity type preferences */}
+            {Object.keys(govIntel.approval_rate_by_type || {}).length > 0 && (
+              <div>
+                <div className="text-xs font-medium text-(--color-text) mb-1.5">Activity preferences</div>
+                <div className="space-y-1">
+                  {Object.entries(govIntel.approval_rate_by_type)
+                    .sort(([, a]: any, [, b]: any) => b - a)
+                    .map(([type, rate]: [string, any]) => (
+                      <div key={type} className="flex items-center gap-2">
+                        <span className="text-[11px] text-(--color-text-secondary) w-24 capitalize truncate">{type.replace(/_/g, " ")}</span>
+                        <div className="flex-1 h-2 rounded-full bg-(--color-border)">
+                          <div className={cn("h-full rounded-full", rate >= 0.8 ? "bg-(--color-success)" : rate >= 0.5 ? "bg-(--color-warning)" : "bg-(--color-danger)")}
+                            style={{ width: `${Math.round(rate * 100)}%` }} />
+                        </div>
+                        <span className="text-[10px] text-(--color-text-tertiary) w-8 text-right">{Math.round(rate * 100)}%</span>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
+
+            {/* Review time + event count */}
+            <div className="flex items-center gap-6 text-xs text-(--color-text-tertiary)">
+              {govIntel.avg_review_hours != null && (
+                <span>Avg review time: <strong className="text-(--color-text)">{govIntel.avg_review_hours}h</strong></span>
+              )}
+              {govIntel.peak_review_time && (
+                <span>Most active: <strong className="text-(--color-text) capitalize">{govIntel.peak_review_time}</strong></span>
+              )}
+              <span>{govIntel.event_count} decisions analyzed</span>
+            </div>
+
+            <p className="text-[10px] text-(--color-text-tertiary) italic border-t border-(--color-border) pt-2">
+              These patterns inform planning but never bypass your rules. You always have final say.
+            </p>
+          </div>
+        )}
+      </Card>
 
       {/* ── Section 2: Decision Flow ── */}
       <Card className="mb-8" padding="p-5">
