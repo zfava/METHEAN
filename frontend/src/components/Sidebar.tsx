@@ -5,18 +5,85 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { auth, governance, notifications as notificationsApi, type User } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
-import { useStagger } from "@/lib/useStagger";
 import { cn } from "@/lib/cn";
 import { MetheanLogo } from "@/components/Brand";
 
-const govSub = [
-  { href: "/governance/queue", label: "Approval Queue", badge: true },
-  { href: "/governance/rules", label: "Rules" },
-  { href: "/governance/philosophy", label: "Philosophy" },
-  { href: "/governance/trace", label: "Decision Trace" },
-  { href: "/governance/reports", label: "Reports" },
-  { href: "/governance/overrides", label: "Overrides" },
+// ── Nav group definitions ──
+const NAV_GROUPS = [
+  {
+    key: "overview",
+    label: "Overview",
+    collapsible: false,
+    items: [
+      { href: "/dashboard", label: "Dashboard", exact: true },
+      { href: "/family", label: "Family" },
+      { href: "/compliance", label: "Compliance" },
+    ],
+  },
+  {
+    key: "curriculum",
+    label: "Curriculum",
+    collapsible: true,
+    defaultExpanded: true,
+    items: [
+      { href: "/curriculum", label: "Curriculum", exact: true },
+      { href: "/curriculum/year", label: "Year Plan" },
+      { href: "/curriculum/scope", label: "Scope & Sequence" },
+      { href: "/curriculum/history", label: "History" },
+      { href: "/curriculum/editor", label: "Map Editor" },
+      { href: "/curriculum/mapper", label: "Map Curriculum" },
+    ],
+  },
+  {
+    key: "learning",
+    label: "Learning",
+    collapsible: true,
+    defaultExpanded: true,
+    items: [
+      { href: "/calendar", label: "Calendar" },
+      { href: "/plans", label: "Weekly Plans", exact: true },
+      { href: "/plans/vision", label: "Education Plan" },
+      { href: "/maps", label: "Maps" },
+      { href: "/assessment", label: "Assessment" },
+      { href: "/reading", label: "Reading Log" },
+      { href: "/resources", label: "Resources" },
+    ],
+  },
+  {
+    key: "intelligence",
+    label: "Intelligence",
+    collapsible: true,
+    defaultExpanded: false,
+    items: [
+      { href: "/inspection", label: "AI Inspection" },
+      { href: "/intelligence", label: "Learner Profile" },
+    ],
+  },
+  {
+    key: "governance",
+    label: "Governance",
+    collapsible: true,
+    defaultExpanded: false,
+    items: [
+      { href: "/governance", label: "Overview", exact: true },
+      { href: "/governance/queue", label: "Approval Queue", badge: true },
+      { href: "/governance/rules", label: "Rules" },
+      { href: "/governance/philosophy", label: "Philosophy" },
+      { href: "/governance/trace", label: "Decision Trace" },
+      { href: "/governance/reports", label: "Reports" },
+      { href: "/governance/overrides", label: "Overrides" },
+    ],
+  },
 ];
+
+function getActiveGroup(pathname: string): string | null {
+  for (const group of NAV_GROUPS) {
+    if (group.items.some((item) => item.exact ? pathname === item.href : pathname.startsWith(item.href))) {
+      return group.key;
+    }
+  }
+  return null;
+}
 
 export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean; onClose?: () => void }) {
   const pathname = usePathname();
@@ -35,7 +102,33 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
     if (mobile) requestAnimationFrame(() => requestAnimationFrame(() => setEntered(true)));
   }, [mobile]);
 
-  const sectionVisibility = useStagger(3, 80);
+  // Collapsible group state
+  const activeGroup = getActiveGroup(pathname);
+  const [expanded, setExpanded] = useState<Record<string, boolean>>(() => {
+    const initial: Record<string, boolean> = {};
+    for (const g of NAV_GROUPS) {
+      if (!g.collapsible) {
+        initial[g.key] = true;
+      } else if (mobile) {
+        // Mobile: only expand the active group
+        initial[g.key] = g.key === activeGroup;
+      } else {
+        initial[g.key] = g.defaultExpanded || g.key === activeGroup;
+      }
+    }
+    return initial;
+  });
+
+  // Auto-expand group when pathname changes to an item inside it
+  useEffect(() => {
+    if (activeGroup && !expanded[activeGroup]) {
+      setExpanded((prev) => ({ ...prev, [activeGroup]: true }));
+    }
+  }, [activeGroup]);
+
+  function toggleGroup(key: string) {
+    setExpanded((prev) => ({ ...prev, [key]: !prev[key] }));
+  }
 
   const loadNotifications = useCallback(async () => {
     try {
@@ -64,24 +157,27 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
     return () => clearInterval(interval);
   }, [loadNotifications]);
 
-  const govActive = pathname.startsWith("/governance");
-
   function handleNav() {
     if (mobile && onClose) onClose();
   }
 
-  function navItem(href: string, label: string, exact = false) {
+  function navItem(href: string, label: string, exact = false, badge = false) {
     const active = exact ? pathname === href : (pathname === href || pathname.startsWith(href + "/"));
     return (
       <Link key={href} href={href} onClick={handleNav}
         aria-current={active ? "page" : undefined}
         className={cn(
-          "flex items-center px-4 py-2 text-[13px] rounded-r-lg ml-1 transition-colors duration-150",
+          "flex items-center justify-between px-4 py-[7px] text-[13px] rounded-r-lg ml-1 transition-colors duration-150",
           active
             ? "bg-(--color-sidebar-active) text-white font-medium border-l-2 border-(--color-accent)"
             : "text-(--color-text-sidebar) hover:text-white hover:bg-(--color-sidebar-hover) border-l-2 border-transparent",
         )}
-      >{label}</Link>
+      >
+        {label}
+        {badge && pendingCount > 0 && (
+          <span className="bg-(--color-brand-gold) text-white text-[9px] font-bold px-1 py-0.5 rounded-full">{pendingCount}</span>
+        )}
+      </Link>
     );
   }
 
@@ -148,61 +244,56 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
         </div>
       )}
 
-      <nav aria-label="Main navigation" className="flex-1 space-y-5 pb-4 overflow-y-auto">
-        <div className={sectionVisibility[0] ? "animate-fade-up" : "opacity-0"}>
-          <div className="px-5 mb-1.5 text-[11px] font-medium text-white/30 tracking-wider">Overview</div>
-          {navItem("/dashboard", "Dashboard", true)}
-          {navItem("/family", "Family")}
-          {navItem("/compliance", "Compliance")}
-        </div>
-        <div className={sectionVisibility[1] ? "animate-fade-up" : "opacity-0"}>
-          <div className="px-5 mb-1.5 text-[11px] font-medium text-white/30 tracking-wider">Learning</div>
-          {navItem("/curriculum", "Curriculum", true)}
-          {navItem("/curriculum/year", "Year Plan")}
-          {navItem("/curriculum/scope", "Scope & Sequence")}
-          {navItem("/curriculum/history", "History")}
-          {navItem("/calendar", "Calendar")}
-          {navItem("/plans", "Weekly Plans")}
-          {navItem("/plans/vision", "Education Plan")}
-          {navItem("/maps", "Maps")}
-          {navItem("/curriculum/editor", "Map Editor")}
-          {navItem("/curriculum/mapper", "Map Curriculum")}
-          {navItem("/assessment", "Assessment")}
-          {navItem("/reading", "Reading Log")}
-          {navItem("/resources", "Resources")}
-          {navItem("/inspection", "AI Inspection")}
-          {navItem("/intelligence", "Learner Profile")}
-        </div>
-        <div className={sectionVisibility[2] ? "animate-fade-up" : "opacity-0"}>
-          <div className="flex items-center justify-between px-5 mb-1.5">
-            <span className="text-[11px] font-medium text-white/30 tracking-wider">Governance</span>
-            {pendingCount > 0 && (
-              <span className="bg-(--color-brand-gold) text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">{pendingCount}</span>
-            )}
-          </div>
-          <Link href="/governance" onClick={handleNav}
-            className={cn(
-              "flex items-center px-4 py-2 text-[13px] rounded-r-lg ml-1 transition-colors duration-150",
-              pathname === "/governance"
-                ? "bg-(--color-sidebar-active) text-white font-medium border-l-2 border-(--color-accent)"
-                : "text-(--color-text-sidebar) hover:text-white hover:bg-(--color-sidebar-hover) border-l-2 border-transparent",
-            )}>Overview</Link>
-          {govActive && govSub.map((item) => {
-            const active = pathname.startsWith(item.href);
-            return (
-              <Link key={item.href} href={item.href} onClick={handleNav}
-                className={cn(
-                  "flex items-center justify-between pl-9 pr-4 py-[5px] text-xs transition-colors duration-150",
-                  active ? "text-white font-medium" : "text-white/30 hover:text-white/60",
-                )}>
-                {item.label}
-                {item.badge && pendingCount > 0 && (
-                  <span className="bg-(--color-brand-gold) text-white text-[9px] font-bold px-1 py-0.5 rounded-full">{pendingCount}</span>
-                )}
-              </Link>
-            );
-          })}
-        </div>
+      <nav aria-label="Main navigation" className="flex-1 space-y-1 pb-4 overflow-y-auto">
+        {NAV_GROUPS.map((group) => {
+          const isExpanded = expanded[group.key] ?? true;
+          const isActive = group.key === activeGroup;
+          const showBadge = group.key === "governance" && pendingCount > 0;
+
+          return (
+            <div key={group.key}>
+              {group.collapsible ? (
+                <button
+                  onClick={() => toggleGroup(group.key)}
+                  className="w-full flex items-center justify-between px-5 py-1.5 group"
+                >
+                  <span className={cn(
+                    "text-[11px] font-medium tracking-wider uppercase",
+                    isActive ? "text-white/50" : "text-white/30"
+                  )}>
+                    {group.label}
+                  </span>
+                  <div className="flex items-center gap-1.5">
+                    {showBadge && (
+                      <span className="bg-(--color-brand-gold) text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">{pendingCount}</span>
+                    )}
+                    <svg
+                      className={cn(
+                        "w-3 h-3 text-white/20 transition-transform duration-150",
+                        isExpanded ? "rotate-90" : "rotate-0"
+                      )}
+                      fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </button>
+              ) : (
+                <div className="px-5 py-1.5">
+                  <span className="text-[11px] font-medium text-white/30 tracking-wider uppercase">{group.label}</span>
+                </div>
+              )}
+
+              {isExpanded && (
+                <div className="mt-0.5 mb-2">
+                  {group.items.map((item) =>
+                    navItem(item.href, item.label, item.exact, (item as any).badge)
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </nav>
 
       <div className="px-4 py-4 border-t border-white/5 space-y-2">
@@ -223,19 +314,15 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
     </aside>
   );
 
-  // ── Desktop: render inline ──
   if (!mobile) return sidebarContent;
 
-  // ── Mobile: render as slide-out drawer ──
   return (
     <div className="fixed inset-0 z-50">
-      {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/40 transition-opacity duration-250"
         style={{ opacity: entered ? 1 : 0 }}
         onClick={onClose}
       />
-      {/* Drawer */}
       <div
         className="absolute top-0 left-0 h-full transition-transform duration-250"
         style={{
