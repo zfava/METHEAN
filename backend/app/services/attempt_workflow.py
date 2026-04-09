@@ -15,6 +15,7 @@ from app.models.governance import Activity, Attempt
 from app.services.evaluator import mock_evaluator
 from app.services.state_engine import process_review
 from app.services import intelligence
+from app.services import achievements as achievements_svc
 
 
 async def start_attempt(
@@ -162,7 +163,26 @@ async def submit_attempt(
     except Exception:
         pass  # Intelligence recording is non-blocking
 
+    # Check achievements and update streak
+    new_achievements = []
+    try:
+        await achievements_svc.update_streak(db, attempt.child_id, household_id)
+        ctx = {
+            "subject": activity.subject_area or activity.title or "",
+            "new_level": review_result.get("mastery_level"),
+            "old_level": review_result.get("previous_mastery"),
+            "node_id": str(activity.node_id) if activity.node_id else None,
+        }
+        new_achievements = await achievements_svc.check_achievements(
+            db, attempt.child_id, household_id,
+            trigger_event="mastery_change" if ctx["new_level"] != ctx["old_level"] else "activity_complete",
+            context=ctx,
+        )
+    except Exception:
+        pass  # Achievement checking is non-blocking
+
     return {
         "attempt": attempt,
         **review_result,
+        "new_achievements": [{"title": a.title, "icon": a.icon} for a in new_achievements],
     }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { auth, attempts, learn, children as childrenApi, type LearningContext } from "@/lib/api";
+import { auth, attempts, learn, children as childrenApi, achievements as achievementsApi, type LearningContext } from "@/lib/api";
 import { useToast } from "@/components/Toast";
 import { MetheanLogo } from "@/components/Brand";
 import Card from "@/components/ui/Card";
@@ -73,6 +73,11 @@ export default function ChildPage() {
   const [theme, setTheme] = useState({ background: "plain", color_accent: "blue", font_size: "normal", avatar: "owl" });
   const [showSettings, setShowSettings] = useState(false);
 
+  // Achievements & streak
+  const [streak, setStreak] = useState<{ current_streak: number; longest_streak: number } | null>(null);
+  const [earnedAchievements, setEarnedAchievements] = useState<any[]>([]);
+  const [totalMastered, setTotalMastered] = useState(0);
+
   useEffect(() => { init(); }, []);
   useEffect(() => {
     const c = children.find((ch) => ch.id === selectedId);
@@ -84,6 +89,9 @@ export default function ChildPage() {
       childrenApi.theme(selectedId)
         .then((t) => setTheme({ background: t.background || "plain", color_accent: t.color_accent || "blue", font_size: t.font_size || "normal", avatar: t.avatar || "owl" }))
         .catch(() => {});
+      achievementsApi.streak(selectedId).then(setStreak).catch(() => {});
+      achievementsApi.list(selectedId).then((d) => setEarnedAchievements(d.earned || [])).catch(() => {});
+      childrenApi.state(selectedId).then((s) => setTotalMastered(s?.mastered_count || 0)).catch(() => {});
     }
   }, [selectedId]);
 
@@ -434,6 +442,51 @@ export default function ChildPage() {
                 className="h-full rounded-full bg-(--color-success) transition-all duration-500"
                 style={{ width: `${activities.length > 0 ? (completedCount / activities.length) * 100 : 0}%` }}
               />
+            </div>
+          </div>
+        )}
+
+        {/* Stats row */}
+        <div className="grid grid-cols-3 gap-2 mb-6">
+          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-3 text-center">
+            <div className="text-xl font-bold text-(--color-text)">
+              {streak && streak.current_streak > 0 ? (
+                <>{streak.current_streak >= 7 && <span className="animate-pulse">🔥</span>} {streak.current_streak}</>
+              ) : "0"}
+            </div>
+            <div className="text-[10px] text-(--color-text-tertiary)">day streak</div>
+          </div>
+          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-3 text-center">
+            <div className="text-xl font-bold text-(--color-success)">⭐ {totalMastered}</div>
+            <div className="text-[10px] text-(--color-text-tertiary)">mastered</div>
+          </div>
+          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-3 text-center">
+            <div className="text-xl font-bold text-(--color-accent)">📚 {completedCount}</div>
+            <div className="text-[10px] text-(--color-text-tertiary)">completed</div>
+          </div>
+        </div>
+
+        {/* Recent achievements */}
+        {earnedAchievements.length > 0 && (
+          <div className="mb-6">
+            <div className="flex items-center gap-1.5 mb-2">
+              <span className="text-xs font-medium text-(--color-text-secondary)">Recent achievements</span>
+            </div>
+            <div className="flex gap-2 overflow-x-auto pb-1">
+              {earnedAchievements.slice(0, 3).map((ach: any) => {
+                const isNew = ach.earned_at && (Date.now() - new Date(ach.earned_at).getTime()) < 86400000;
+                return (
+                  <div key={ach.id} className={`shrink-0 bg-(--color-surface) rounded-[12px] border px-3 py-2 flex items-center gap-2 ${isNew ? "border-(--gold) ring-1 ring-(--gold)/20" : "border-(--color-border)"}`}>
+                    <span className="text-lg">{ach.icon}</span>
+                    <div>
+                      <div className="text-xs font-medium text-(--color-text) flex items-center gap-1">
+                        {ach.title}
+                        {isNew && <span className="text-[8px] px-1 py-0.5 bg-(--gold) text-white rounded-full font-bold">NEW</span>}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}

@@ -385,6 +385,12 @@ export const timeLog = {
     request<any>(`/children/${childId}/time-log`, { method: "POST", body: JSON.stringify(data) }),
 };
 
+// ── Achievements ──
+export const achievements = {
+  list: (childId: string) => request<{ earned: any[]; definitions: any[] }>(`/children/${childId}/achievements`),
+  streak: (childId: string) => request<{ current_streak: number; longest_streak: number; last_activity_date: string | null }>(`/children/${childId}/streak`),
+};
+
 // ── Learner Intelligence ──
 export const intelligence = {
   get: (childId: string) => request<any>(`/children/${childId}/intelligence`),

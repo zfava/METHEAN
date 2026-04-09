@@ -195,3 +195,28 @@ async def get_governance_intelligence(
     """Returns governance pattern analysis for the current household."""
     from app.services.governance_intelligence import analyze_governance_patterns
     return await analyze_governance_patterns(db, user.household_id)
+
+
+@router.get("/children/{child_id}/achievements")
+async def list_achievements(
+    child_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """List earned achievements and all possible definitions."""
+    await _get_child_or_404(db, child_id, user.household_id)
+    from app.services.achievements import get_achievements, get_all_definitions
+    earned = await get_achievements(db, child_id)
+    return {"earned": earned, "definitions": get_all_definitions()}
+
+
+@router.get("/children/{child_id}/streak")
+async def get_child_streak(
+    child_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Get current streak info for a child."""
+    await _get_child_or_404(db, child_id, user.household_id)
+    from app.services.achievements import get_streak
+    return await get_streak(db, child_id, user.household_id)

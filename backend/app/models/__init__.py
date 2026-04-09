@@ -28,6 +28,7 @@ from app.models.operational import (
     RefreshToken,
 )
 from app.models.intelligence import LearnerIntelligence
+from app.models.achievements import Achievement, Streak
 
 __all__ = [
     "Household",
@@ -65,4 +66,6 @@ __all__ = [
     "NotificationLog",
     "LearnerIntelligence",
     "FamilyInvite",
+    "Achievement",
+    "Streak",
 ]
