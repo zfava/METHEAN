@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef } from "react";
 import { auth, attempts, learn, type LearningContext } from "@/lib/api";
 import { MetheanLogo } from "@/components/Brand";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
 import LessonView from "@/components/child/LessonView";
 import PracticeView from "@/components/child/PracticeView";
 import ReviewView from "@/components/child/ReviewView";
@@ -37,13 +39,13 @@ function greeting(name: string): string {
   return `Good evening, ${name}!`;
 }
 
-const typeLabels: Record<string, { label: string; color: string }> = {
-  lesson:     { label: "Lesson",     color: "bg-(--color-accent-light) text-(--color-accent)" },
-  practice:   { label: "Practice",   color: "bg-(--color-success-light) text-(--color-success)" },
-  review:     { label: "Review",     color: "bg-(--color-warning-light) text-(--color-warning)" },
-  assessment: { label: "Assessment", color: "bg-(--color-constitutional-light) text-(--color-constitutional)" },
-  project:    { label: "Project",    color: "bg-(--color-danger-light) text-(--color-danger)" },
-  field_trip: { label: "Field Trip", color: "bg-(--color-accent-light) text-(--color-accent)" },
+const typeConfig: Record<string, { label: string; bg: string; icon: string }> = {
+  lesson:     { label: "Lesson",     bg: "bg-(--color-accent-light)",         icon: "📖" },
+  practice:   { label: "Practice",   bg: "bg-(--color-success-light)",        icon: "✏️" },
+  review:     { label: "Review",     bg: "bg-(--color-warning-light)",        icon: "🔄" },
+  assessment: { label: "Assessment", bg: "bg-(--color-constitutional-light)", icon: "📋" },
+  project:    { label: "Project",    bg: "bg-(--color-danger-light)",         icon: "🔨" },
+  field_trip: { label: "Field Trip", bg: "bg-(--color-accent-light)",         icon: "🧭" },
 };
 
 export default function ChildPage() {
@@ -60,6 +62,11 @@ export default function ChildPage() {
   const [completed, setCompleted] = useState(false);
   const [completionData, setCompletionData] = useState<{ mastery?: string; prevMastery?: string }>({});
   const startTimeRef = useRef<number>(0);
+
+  // Transition overlay state
+  const [transitioning, setTransitioning] = useState(false);
+  const [transitionActivity, setTransitionActivity] = useState<TodayActivity | null>(null);
+  const [transitionVisible, setTransitionVisible] = useState(false);
 
   // Theme
   const [theme, setTheme] = useState({ background: "plain", color_accent: "blue", font_size: "normal", avatar: "owl" });
@@ -112,6 +119,12 @@ export default function ChildPage() {
   }
 
   async function startActivity(act: TodayActivity) {
+    // Show transition overlay
+    setTransitionActivity(act);
+    setTransitioning(true);
+    // Trigger fade-in on next frame
+    requestAnimationFrame(() => setTransitionVisible(true));
+
     try {
       // Start attempt and track time
       const attempt = await attempts.start(act.id, selectedId);
@@ -124,7 +137,14 @@ export default function ChildPage() {
       setActiveActivity(act);
       setCompleted(false);
       setCompletionData({});
+
+      // Fade out transition overlay
+      setTransitionVisible(false);
+      setTimeout(() => { setTransitioning(false); setTransitionActivity(null); }, 150);
     } catch (err: any) {
+      // Dismiss overlay on error
+      setTransitionVisible(false);
+      setTimeout(() => { setTransitioning(false); setTransitionActivity(null); }, 150);
       setActivities((prev) =>
         prev.map((a) => a.id === act.id ? { ...a, error: "Couldn't start this activity. Try again." } : a)
       );
@@ -303,6 +323,29 @@ export default function ChildPage() {
     );
   }
 
+  // ── TRANSITION OVERLAY ──
+  const transitionOverlay = transitioning && transitionActivity && (() => {
+    const tc = typeConfig[transitionActivity.activity_type] || { label: transitionActivity.activity_type, bg: "bg-(--color-page)", icon: "📄" };
+    return (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center"
+        style={{
+          background: "var(--color-page)",
+          opacity: transitionVisible ? 1 : 0,
+          transition: transitionVisible ? "opacity 200ms ease-out" : "opacity 150ms ease-in",
+        }}
+      >
+        <div className="text-center">
+          <div className="w-16 h-16 rounded-2xl bg-(--color-surface) border border-(--color-border) flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm">
+            {tc.icon}
+          </div>
+          <p className="text-sm font-medium text-(--color-text) mb-4">{transitionActivity.title}</p>
+          <div className="w-5 h-5 mx-auto border-2 border-(--color-accent) border-t-transparent rounded-full animate-spin" />
+        </div>
+      </div>
+    );
+  })();
+
   // ── DAILY OVERVIEW ──
   return (
     <div className={`min-h-screen ${fontSizeClass}`} style={bgStyles[theme.background] || bgStyles.plain}>
@@ -373,24 +416,23 @@ export default function ChildPage() {
 
       <div className="max-w-2xl mx-auto px-6 py-8">
         {/* Greeting */}
-        <h2 className="text-2xl font-semibold text-(--color-text) mb-1">
-          {avatarEmoji[theme.avatar] || "🦉"} {greeting(childName)}
-        </h2>
-        <p className="text-base text-(--color-text-secondary) mb-2">
-          {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
-        </p>
+        <div className="flex items-center gap-4 mb-2">
+          <div className="w-12 h-12 rounded-full bg-(--color-accent-light) flex items-center justify-center text-2xl shrink-0">
+            {avatarEmoji[theme.avatar] || "🦉"}
+          </div>
+          <div>
+            <h2 className="text-2xl font-semibold text-(--color-text)">{greeting(childName)}</h2>
+            <p className="text-sm text-(--color-text-secondary)">
+              {activities.length > 0
+                ? `You have ${activities.length} activities today. ${completedCount} completed.`
+                : new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+            </p>
+          </div>
+        </div>
 
         {/* Progress bar */}
         {activities.length > 0 && (
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm text-(--color-text-secondary)">
-                {completedCount} of {activities.length} activities completed
-              </span>
-              {completedCount === activities.length && activities.length > 0 && (
-                <span className="text-sm font-medium text-(--color-success)">All done!</span>
-              )}
-            </div>
+          <div className="mb-8 mt-4">
             <div className="w-full h-2 rounded-full bg-(--color-border)">
               <div
                 className="h-full rounded-full bg-(--color-success) transition-all duration-500"
@@ -412,63 +454,57 @@ export default function ChildPage() {
             </p>
           </div>
         ) : (
-          <div className="space-y-4">
-            {/* Active activities first */}
+          <div className="space-y-3">
+            {/* Active activities */}
             {activities.filter((a) => a.status !== "completed").map((act) => {
-              const t = typeLabels[act.activity_type] || { label: act.activity_type, color: "bg-(--color-page) text-(--color-text-secondary)" };
+              const tc = typeConfig[act.activity_type] || { label: act.activity_type, bg: "bg-(--color-page)", icon: "📄" };
               return (
-                <div key={act.id}
-                  className="bg-(--color-surface) rounded-2xl shadow-sm border border-(--color-border) p-5">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <h3 className="text-lg font-medium text-(--color-text)">{act.title}</h3>
-                      <div className="flex items-center gap-3 mt-2">
-                        <span className={`text-xs font-medium px-2 py-1 rounded-full ${t.color}`}>{t.label}</span>
-                        {act.estimated_minutes && (
-                          <span className="text-sm text-(--color-text-tertiary)">{act.estimated_minutes} min</span>
-                        )}
-                      </div>
+                <Card key={act.id} padding="p-4">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-[10px] ${tc.bg} flex items-center justify-center text-xl shrink-0`}>
+                      {tc.icon}
                     </div>
-                    <button
-                      onClick={() => startActivity(act)}
-                      className="px-6 py-2.5 text-base font-semibold text-white bg-(--color-success) rounded-xl hover:opacity-90 transition-opacity shadow-sm"
-                    >
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm font-medium text-(--color-text) truncate">{act.title}</h3>
+                      <p className="text-xs text-(--color-text-tertiary)">{tc.label}{act.estimated_minutes ? ` · ${act.estimated_minutes} min` : ""}</p>
+                    </div>
+                    <Button variant="primary" size="sm" onClick={() => startActivity(act)}>
                       {act.status === "in_progress" ? "Continue" : "Start"}
-                    </button>
+                    </Button>
                   </div>
-                  {act.error && (
-                    <p className="text-xs text-(--color-danger) mt-2">{act.error}</p>
-                  )}
-                </div>
+                  {act.error && <p className="text-xs text-(--color-danger) mt-2">{act.error}</p>}
+                </Card>
               );
             })}
 
             {/* Completed activities */}
             {activities.filter((a) => a.status === "completed").map((act) => {
-              const t = typeLabels[act.activity_type] || { label: act.activity_type, color: "bg-(--color-page) text-(--color-text-secondary)" };
+              const tc = typeConfig[act.activity_type] || { label: act.activity_type, bg: "bg-(--color-page)", icon: "📄" };
               return (
-                <div key={act.id}
-                  className="bg-(--color-surface) rounded-2xl shadow-sm border border-(--color-border) p-5 opacity-60">
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <h3 className="text-lg font-medium text-(--color-text-tertiary)">{act.title}</h3>
-                      <div className="flex items-center gap-3 mt-2">
-                        <span className={`text-xs font-medium px-2 py-1 rounded-full ${t.color}`}>{t.label}</span>
-                      </div>
+                <Card key={act.id} padding="p-4" className="opacity-60">
+                  <div className="flex items-center gap-3">
+                    <div className={`w-10 h-10 rounded-[10px] ${tc.bg} flex items-center justify-center text-xl shrink-0`}>
+                      {tc.icon}
                     </div>
-                    <span className="text-sm text-(--color-success) font-medium flex items-center gap-1">
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-sm font-medium text-(--color-text-tertiary) line-through truncate">{act.title}</h3>
+                      <p className="text-xs text-(--color-text-tertiary)">{tc.label}</p>
+                    </div>
+                    <span className="w-7 h-7 rounded-full bg-(--color-success-light) flex items-center justify-center shrink-0">
+                      <svg className="w-4 h-4 text-(--color-success)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
-                      Done
                     </span>
                   </div>
-                </div>
+                </Card>
               );
             })}
           </div>
         )}
       </div>
+
+      {/* Transition overlay */}
+      {transitionOverlay}
     </div>
   );
 }
