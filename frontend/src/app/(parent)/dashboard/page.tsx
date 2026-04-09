@@ -2,13 +2,15 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { auth, children as childrenApi, governance, type User, type ChildState, type GovernanceEvent } from "@/lib/api";
+import { auth, children as childrenApi, governance, snapshots, type User, type ChildState, type GovernanceEvent, type SnapshotItem } from "@/lib/api";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import StatusBadge from "@/components/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 import MetricCard from "@/components/ui/MetricCard";
 import SectionHeader from "@/components/ui/SectionHeader";
+import MasteryChart from "@/components/MasteryChart";
+import { ShieldIcon } from "@/components/ConstitutionalCeremony";
 import { useChild } from "@/lib/ChildContext";
 import { cn } from "@/lib/cn";
 import EmptyState from "@/components/ui/EmptyState";
@@ -35,6 +37,8 @@ export default function DashboardPage() {
   const [subjectMastery, setSubjectMastery] = useState<Array<{ name: string; mastered: number; total: number; color: string }>>([]);
   const [dueForReview, setDueForReview] = useState<Array<{ title: string; due: string }>>([]);
   const [weeklyStats, setWeeklyStats] = useState({ completed: 0, minutes: 0, mastered: 0 });
+  const [chartData, setChartData] = useState<Array<{ week: string; mastered: number; progressed: number; total_minutes: number }>>([]);
+  const [govHealth, setGovHealth] = useState<{ rules: number; constitutional: number; transparency: string; pending: number }>({ rules: 0, constitutional: 0, transparency: "full", pending: 0 });
   const [error, setError] = useState("");
 
   useEffect(() => { init(); }, []);
@@ -47,11 +51,18 @@ export default function DashboardPage() {
         fetch(`${API}/governance/queue?limit=1`, { credentials: "include" }),
         governance.rules(), governance.events(1),
       ]);
-      if (qResp.ok) setPendingReviews((await qResp.json()).total || 0);
+      const qData = qResp.ok ? await qResp.json() : { total: 0 };
+      setPendingReviews(qData.total || 0);
       const rules = (rResp as any).items || rResp;
-      setRulesCount(Array.isArray(rules) ? rules.length : 0);
+      const rulesList = Array.isArray(rules) ? rules : [];
+      setRulesCount(rulesList.length);
       const evts: GovernanceEvent[] = ((eResp as any).items || eResp);
       if (evts.length > 0) setLastDecision(new Date(evts[0].created_at).toLocaleString());
+      // Governance health
+      const constitutional = rulesList.filter((r: any) => r.tier === "constitutional" && r.is_active).length;
+      const aiRule = rulesList.find((r: any) => r.rule_type === "ai_boundary" && r.is_active);
+      const transparency = aiRule ? ((aiRule.parameters as any)?.ai_transparency || "full") : "full";
+      setGovHealth({ rules: rulesList.filter((r: any) => r.is_active).length, constitutional, transparency, pending: qData.total || 0 });
     } catch (err: any) {
       setError(err?.detail || err?.message || "Couldn't load dashboard data. Check your connection.");
     }
@@ -115,6 +126,20 @@ export default function DashboardPage() {
       const completedToday = Array.isArray(todayResp) ? todayResp.filter((a: any) => a.status === "completed").length : 0;
       const minutesToday = Array.isArray(todayResp) ? todayResp.reduce((s: number, a: any) => s + (a.estimated_minutes || 0), 0) : 0;
       setWeeklyStats({ completed: completedToday, minutes: minutesToday, mastered: state?.mastered_count || 0 });
+
+      // Fetch mastery snapshots for chart
+      try {
+        const snapshotData = await snapshots.list(selectedChild.id, 20);
+        const items = snapshotData?.items || snapshotData || [];
+        if (Array.isArray(items)) {
+          setChartData(items.map((s: SnapshotItem) => ({
+            week: s.week_start,
+            mastered: s.nodes_mastered,
+            progressed: s.nodes_progressed,
+            total_minutes: s.total_minutes,
+          })));
+        }
+      } catch { setChartData([]); }
     } catch (err: any) {
       setError(err?.detail || err?.message || "Couldn't load activity details.");
     }
@@ -136,17 +161,21 @@ export default function DashboardPage() {
     <div className="max-w-5xl">
       <PageHeader title="Dashboard" subtitle={today}
         actions={
-          <Card href="/governance/queue" padding="px-4 py-2.5" className="flex items-center gap-4">
-            <div className="text-center">
-              <div className={cn("text-lg font-medium leading-none", pendingReviews > 0 ? "text-(--color-warning)" : "text-(--color-success)")}>{pendingReviews}</div>
-              <div className="text-[10px] text-(--color-text-tertiary) mt-0.5">pending</div>
-            </div>
-            <div className="w-px h-6 bg-(--color-border)" />
-            <div className="text-center">
-              <div className="text-lg font-medium leading-none text-(--color-text)">{rulesCount}</div>
-              <div className="text-[10px] text-(--color-text-tertiary) mt-0.5">rules</div>
-            </div>
-            {lastDecision && <div className="text-[10px] text-(--color-text-tertiary)">Last: {lastDecision}</div>}
+          <Card href="/governance" padding="px-4 py-2.5" className="flex items-center gap-3">
+            <ShieldIcon size={16} className="text-(--color-constitutional) shrink-0" />
+            <span className="text-xs font-medium text-(--color-text)">{govHealth.rules} rules</span>
+            <div className="w-px h-4 bg-(--color-border)" />
+            <span className={cn("text-xs hidden sm:inline", govHealth.transparency === "full" ? "text-(--color-success)" : "text-(--color-warning)")}>
+              AI: {govHealth.transparency}
+            </span>
+            <div className="w-px h-4 bg-(--color-border) hidden sm:block" />
+            <span className={cn("text-xs font-medium", govHealth.pending > 0 ? "text-(--color-warning)" : "text-(--color-success)")}>
+              {govHealth.pending > 0 ? `${govHealth.pending} pending` : "All clear"}
+              {govHealth.pending > 0 && <span className="inline-block w-1.5 h-1.5 rounded-full bg-(--color-warning) ml-1 animate-pulse" />}
+            </span>
+            {govHealth.constitutional > 0 && (
+              <span className="text-[10px] px-1.5 py-0.5 bg-(--color-constitutional-light) text-(--color-constitutional) rounded-[var(--radius-badge)] hidden sm:inline">{govHealth.constitutional} constitutional</span>
+            )}
           </Card>
         }
       />
@@ -270,6 +299,18 @@ export default function DashboardPage() {
               </div>
             </Card>
           )}
+
+          {/* ── Mastery Over Time ── */}
+          <Card className="mb-6">
+            <SectionHeader title="Mastery Over Time" />
+            <div className="mt-3">
+              <MasteryChart data={chartData} height={200} />
+            </div>
+            <div className="flex items-center gap-5 mt-2 text-[11px] text-(--color-text-tertiary)">
+              <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-(--color-success) rounded" /> Mastered</span>
+              <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 bg-(--color-accent) rounded" style={{ backgroundImage: "repeating-linear-gradient(90deg, var(--color-accent) 0 4px, transparent 4px 7px)" }} /> Progressing</span>
+            </div>
+          </Card>
 
           {/* ── Due for Review ── */}
           {dueForReview.length > 0 && (

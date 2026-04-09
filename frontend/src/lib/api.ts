@@ -130,6 +130,18 @@ export const children = {
     request<StateEvent[]>(`/children/${childId}/nodes/${nodeId}/history`),
 };
 
+// Snapshots
+export interface SnapshotItem {
+  id: string; week_start: string; week_end: string;
+  total_minutes: number; activities_completed: number;
+  nodes_mastered: number; nodes_progressed: number;
+  reviews_completed: number; summary: object | null;
+}
+export const snapshots = {
+  list: (childId: string, limit = 20) =>
+    request<{ items: SnapshotItem[] }>(`/children/${childId}/snapshots?limit=${limit}`),
+};
+
 // Plans
 export const plans = {
   generate: (childId: string, data: { week_start: string; daily_minutes?: number }) =>
