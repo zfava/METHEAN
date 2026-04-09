@@ -262,6 +262,23 @@ export const governance = {
     request<{ deleted: boolean }>(`/governance-rules/${id}`, { method: "DELETE" }),
   initDefaults: () => request<GovernanceRule[]>("/governance-rules/defaults", { method: "POST" }),
   events: (limit?: number) => request<GovernanceEvent[]>(`/governance-events?limit=${limit || 50}`),
+  queue: (limit = 100) =>
+    request<{ items: any[]; total: number }>(`/governance/queue?limit=${limit}`),
+  approve: (planId: string, activityId: string, reason?: string) =>
+    request(`/plans/${planId}/activities/${activityId}/approve`, {
+      method: "PUT",
+      body: reason ? JSON.stringify({ reason }) : undefined,
+    }),
+  reject: (planId: string, activityId: string, reason: string) =>
+    request(`/plans/${planId}/activities/${activityId}/reject`, {
+      method: "PUT",
+      body: JSON.stringify({ reason }),
+    }),
+  modify: (planId: string, activityId: string, data: { reason: string; difficulty?: number; estimated_minutes?: number; notes?: string }) =>
+    request(`/plans/${planId}/activities/${activityId}/approve`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
 };
 
 // AI

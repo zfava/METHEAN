@@ -1,21 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { governance } from "@/lib/api";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
+import StatusBadge from "@/components/StatusBadge";
 import EmptyState from "@/components/ui/EmptyState";
+import SectionHeader from "@/components/ui/SectionHeader";
 import EvaluationChain from "@/components/EvaluationChain";
 import { cn } from "@/lib/cn";
-
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
-
-function getCsrf(): string | undefined {
-  if (typeof document === "undefined") return undefined;
-  const m = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);
-  return m ? decodeURIComponent(m[1]) : undefined;
-}
+import { shortDate } from "@/lib/format";
 
 interface QueueItem {
   activity_id: string;
@@ -36,6 +32,32 @@ interface QueueItem {
   };
 }
 
+type ActionType = "approve" | "reject" | "modify";
+
+// ── Difficulty dots ──
+function DifficultyDots({ level }: { level: number }) {
+  return (
+    <div className="flex items-center gap-0.5">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <span
+          key={i}
+          className={cn(
+            "w-2 h-2 rounded-full",
+            i <= level ? "bg-(--color-warning)" : "bg-(--color-border)"
+          )}
+        />
+      ))}
+    </div>
+  );
+}
+
+// ── Check for constitutional violations ──
+function hasConstitutionalViolation(item: QueueItem): boolean {
+  const evals = item.governance_evaluation?.evaluations;
+  if (!evals) return false;
+  return evals.some((ev) => !ev.passed && ev.type === "constitutional");
+}
+
 export default function QueuePage() {
   useEffect(() => { document.title = "Approval Queue | METHEAN"; }, []);
 
@@ -43,11 +65,13 @@ export default function QueuePage() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [dismissing, setDismissing] = useState<Set<string>>(new Set());
-  const [expandedDetail, setExpandedDetail] = useState<string | null>(null);
-  const [actionForm, setActionForm] = useState<{ id: string; type: "approve" | "reject" } | null>(null);
+
+  // Per-item action state
+  const [activeAction, setActiveAction] = useState<{ id: string; type: ActionType } | null>(null);
   const [actionReason, setActionReason] = useState("");
+  const [modifyFields, setModifyFields] = useState<{ difficulty?: number; duration?: number; notes?: string }>({});
+  const [submitting, setSubmitting] = useState(false);
+  const [dismissing, setDismissing] = useState<Set<string>>(new Set());
 
   useEffect(() => { loadQueue(); }, []);
 
@@ -55,59 +79,89 @@ export default function QueuePage() {
     setLoading(true);
     setError("");
     try {
-      const resp = await fetch(`${API}/governance/queue?limit=100`, { credentials: "include" });
-      if (resp.ok) { const d = await resp.json(); setItems(d.items || []); setTotal(d.total || 0); }
+      const d = await governance.queue();
+      setItems(d.items || []);
+      setTotal(d.total || 0);
     } catch (err: any) {
       setError(err?.detail || err?.message || "Couldn't load approval queue.");
-    } finally { setLoading(false); }
-  }
-
-  async function doAction(activityId: string, planId: string, action: "approve" | "reject", reason?: string) {
-    setDismissing((prev) => new Set(prev).add(activityId));
-    const csrf = getCsrf();
-    const body = reason ? JSON.stringify({ reason }) : (action === "reject" ? JSON.stringify({ reason: "Rejected by parent" }) : undefined);
-    await fetch(`${API}/plans/${planId}/activities/${activityId}/${action}`, {
-      method: "PUT", credentials: "include",
-      headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
-      body,
-    });
-    setActionForm(null);
-    setActionReason("");
-    setTimeout(() => {
-      setItems((prev) => prev.filter((i) => i.activity_id !== activityId));
-      setDismissing((prev) => { const n = new Set(prev); n.delete(activityId); return n; });
-      setTotal((t) => Math.max(0, t - 1));
-      setSelected((prev) => { const n = new Set(prev); n.delete(activityId); return n; });
-    }, 300);
-  }
-
-  async function bulkApprove() {
-    for (const item of items) {
-      if (selected.has(item.activity_id) && item.plan_id) {
-        await doAction(item.activity_id, item.plan_id, "approve");
-      }
+    } finally {
+      setLoading(false);
     }
   }
 
-  function toggleSelect(id: string) { setSelected((p) => { const n = new Set(p); n.has(id) ? n.delete(id) : n.add(id); return n; }); }
-  function toggleAll() { selected.size === items.length ? setSelected(new Set()) : setSelected(new Set(items.map((i) => i.activity_id))); }
+  async function handleAction(item: QueueItem) {
+    if (!activeAction || !item.plan_id) return;
+    const { type } = activeAction;
 
-  if (loading) return <div className="max-w-4xl"><LoadingSkeleton variant="list" count={6} /></div>;
+    // Validate
+    if (type === "reject" && actionReason.trim().length < 10) return;
 
-  // Group by child
-  const byChild: Record<string, QueueItem[]> = {};
-  items.forEach((item) => { const k = item.child_name || "Unknown"; (byChild[k] ||= []).push(item); });
+    setSubmitting(true);
+    try {
+      if (type === "approve") {
+        await governance.approve(item.plan_id, item.activity_id, actionReason || undefined);
+      } else if (type === "reject") {
+        await governance.reject(item.plan_id, item.activity_id, actionReason);
+      } else if (type === "modify") {
+        await governance.modify(item.plan_id, item.activity_id, {
+          reason: actionReason || "Modified and approved by parent",
+          difficulty: modifyFields.difficulty,
+          estimated_minutes: modifyFields.duration,
+          notes: modifyFields.notes,
+        });
+      }
+
+      // Animate out
+      setDismissing((prev) => new Set(prev).add(item.activity_id));
+      setActiveAction(null);
+      setActionReason("");
+      setModifyFields({});
+
+      setTimeout(() => {
+        setItems((prev) => prev.filter((i) => i.activity_id !== item.activity_id));
+        setDismissing((prev) => { const n = new Set(prev); n.delete(item.activity_id); return n; });
+        setTotal((t) => Math.max(0, t - 1));
+      }, 300);
+    } catch (err: any) {
+      setError(err?.detail || err?.message || "Action failed. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  function startAction(id: string, type: ActionType) {
+    setActiveAction({ id, type });
+    setActionReason("");
+    setModifyFields({});
+  }
+
+  function cancelAction() {
+    setActiveAction(null);
+    setActionReason("");
+    setModifyFields({});
+  }
+
+  // ── Child breakdown for header ──
+  const childBreakdown = useMemo(() => {
+    const counts: Record<string, number> = {};
+    items.forEach((i) => { counts[i.child_name] = (counts[i.child_name] || 0) + 1; });
+    return Object.entries(counts);
+  }, [items]);
+
+  if (loading) {
+    return (
+      <div className="max-w-3xl">
+        <PageHeader title="Approval Queue" subtitle="Loading your review queue..." />
+        <LoadingSkeleton variant="card" count={3} />
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-4xl">
+    <div className="max-w-3xl">
       <PageHeader
         title="Approval Queue"
-        subtitle={total === 0 ? "All caught up!" : `${total} activities need your review`}
-        actions={selected.size > 0 ? (
-          <Button variant="success" size="md" onClick={bulkApprove}>
-            Approve Selected ({selected.size})
-          </Button>
-        ) : undefined}
+        subtitle="AI recommendations awaiting your decision."
       />
 
       {error && (
@@ -119,112 +173,265 @@ export default function QueuePage() {
         </Card>
       )}
 
-      {total === 0 ? (
-        <EmptyState icon="check" title="All caught up!" description="No activities need your review right now." />
+      {/* ── Queue summary ── */}
+      {items.length === 0 ? (
+        <Card padding="p-8">
+          <div className="text-center">
+            <div className="w-14 h-14 rounded-full bg-(--color-success-light) flex items-center justify-center mx-auto mb-4">
+              <svg className="w-7 h-7 text-(--color-success)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h2 className="text-lg font-semibold text-(--color-text) mb-1">All clear</h2>
+            <p className="text-sm text-(--color-text-secondary) mb-1">No activities need your review right now.</p>
+            <p className="text-xs text-(--color-text-tertiary)">Your governance rules are working.</p>
+          </div>
+        </Card>
       ) : (
         <>
-          {items.length > 1 && (
-            <div className="mb-3">
-              <button onClick={toggleAll} className="text-xs text-(--color-accent) hover:underline">
-                {selected.size === items.length ? "Deselect all" : "Select all"}
-              </button>
+          {/* ── Summary header ── */}
+          <Card padding="p-4" className="mb-5">
+            <div className="flex items-center justify-between flex-wrap gap-3">
+              <div>
+                <h2 className="text-base font-semibold text-(--color-text)">
+                  {items.length} {items.length === 1 ? "activity" : "activities"} awaiting your review
+                </h2>
+                {childBreakdown.length > 0 && (
+                  <div className="flex items-center gap-2 mt-1.5">
+                    {childBreakdown.map(([name, count]) => (
+                      <span key={name} className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-(--color-page) text-xs text-(--color-text-secondary)">
+                        <span className="w-4 h-4 rounded-full bg-(--color-accent-light) text-(--color-accent) text-[9px] font-bold flex items-center justify-center">
+                          {name.charAt(0)}
+                        </span>
+                        {count} for {name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="flex items-center gap-1.5 text-xs text-(--color-text-tertiary)">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Each review is logged in your governance trail
+              </div>
             </div>
-          )}
-          <div className="space-y-8">
-            {Object.entries(byChild).map(([childName, childItems]) => (
-              <div key={childName}>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="w-7 h-7 rounded-full bg-(--color-accent-light) text-(--color-accent) text-xs font-bold flex items-center justify-center">
-                    {childName.charAt(0)}
-                  </span>
-                  <h3 className="text-sm font-semibold text-(--color-text)">{childName}</h3>
-                  <span className="text-xs text-(--color-text-tertiary)">({childItems.length})</span>
-                </div>
-                <div className="space-y-2 ml-9">
-                  {childItems.map((item) => (
-                    <Card
-                      key={item.activity_id}
-                      padding="p-4"
-                      className={`transition-all duration-300 ${
-                        dismissing.has(item.activity_id) ? "opacity-0 -translate-x-4" : "opacity-100"
-                      }`}
-                    >
-                      <div className="flex items-start gap-3">
-                        <input type="checkbox" checked={selected.has(item.activity_id)}
-                          onChange={() => toggleSelect(item.activity_id)} className="mt-1 rounded" />
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <span className="text-sm font-medium text-(--color-text)">{item.title}</span>
-                            <span className="text-[10px] px-1.5 py-0.5 bg-(--color-page) text-(--color-text-secondary) rounded font-medium uppercase">{item.activity_type}</span>
-                            {item.difficulty && (
-                              <span className="text-xs">
-                                <span className="text-(--color-warning)">{"●".repeat(item.difficulty)}</span>
-                                <span className="text-(--color-text-tertiary)">{"●".repeat(5 - item.difficulty)}</span>
-                              </span>
-                            )}
-                            {item.estimated_minutes && <span className="text-xs text-(--color-text-tertiary)">{item.estimated_minutes}m</span>}
-                            {item.scheduled_date && <span className="text-xs text-(--color-text-tertiary)">{item.scheduled_date}</span>}
-                          </div>
-                          <div className="text-[11px] text-(--color-text-tertiary) mt-0.5">{item.plan_name}</div>
-                          {item.ai_rationale && (
-                            <div className="text-xs bg-(--color-accent-light) border border-(--color-accent)/20 rounded px-2.5 py-1.5 mt-2">
-                              <span className="font-medium text-(--color-accent)">AI rationale: </span>
-                              <span className="text-(--color-accent) italic">{item.ai_rationale}</span>
-                            </div>
-                          )}
-                        </div>
-                        {/* Action buttons or form */}
-                        {actionForm?.id !== item.activity_id ? (
-                          <div className="flex gap-2 shrink-0">
-                            <Button variant="success" size="sm" onClick={() => { setActionForm({ id: item.activity_id, type: "approve" }); setActionReason(""); }}>Approve</Button>
-                            <Button variant="danger" size="sm" onClick={() => { setActionForm({ id: item.activity_id, type: "reject" }); setActionReason(""); }}>Reject</Button>
-                          </div>
-                        ) : (
-                          <div className="flex flex-col gap-2 shrink-0 w-48">
-                            <input
-                              value={actionReason}
-                              onChange={(e) => setActionReason(e.target.value)}
-                              placeholder={actionForm.type === "reject" ? "Reason (required)" : "Note (optional)"}
-                              className="px-2 py-1.5 text-xs border border-(--color-border) rounded-[10px] bg-(--color-surface)"
-                              autoFocus
-                            />
-                            <div className="flex gap-1.5">
-                              <Button
-                                variant={actionForm.type === "approve" ? "success" : "danger"}
-                                size="sm"
-                                disabled={actionForm.type === "reject" && !actionReason.trim()}
-                                onClick={() => item.plan_id && doAction(item.activity_id, item.plan_id, actionForm.type, actionReason || undefined)}
-                              >
-                                Confirm
-                              </Button>
-                              <Button variant="ghost" size="sm" onClick={() => setActionForm(null)}>Cancel</Button>
-                            </div>
-                          </div>
-                        )}
-                      </div>
+          </Card>
 
-                      {/* Evaluation chain */}
-                      {item.governance_evaluation?.evaluations && item.governance_evaluation.evaluations.length > 0 && (
-                        <div className="mt-3 pt-3 border-t border-(--color-border)/50">
-                          <button onClick={() => setExpandedDetail(expandedDetail === item.activity_id ? null : item.activity_id)}
-                            className="text-xs font-medium text-(--color-accent) hover:underline">
-                            {expandedDetail === item.activity_id ? "Hide evaluation" : "Why is this here?"}
-                          </button>
-                          {expandedDetail === item.activity_id && (
-                            <div className="mt-2">
-                              <EvaluationChain
-                                evaluations={item.governance_evaluation.evaluations}
-                                blockingRules={item.governance_evaluation.blocking_rules || []}
-                              />
-                            </div>
-                          )}
+          {/* ── Queue items ── */}
+          <div className="space-y-3">
+            {items.map((item) => {
+              const isDismissing = dismissing.has(item.activity_id);
+              const isActive = activeAction?.id === item.activity_id;
+              const isConstitutional = hasConstitutionalViolation(item);
+              const evals = item.governance_evaluation?.evaluations || [];
+              const blockingRules = item.governance_evaluation?.blocking_rules || [];
+
+              return (
+                <div
+                  key={item.activity_id}
+                  className="transition-all duration-300 overflow-hidden"
+                  style={{
+                    opacity: isDismissing ? 0 : 1,
+                    maxHeight: isDismissing ? 0 : 1200,
+                    marginBottom: isDismissing ? 0 : undefined,
+                    transform: isDismissing ? "translateX(-20px)" : "translateX(0)",
+                  }}
+                >
+                  <Card padding="p-0" borderLeft={isConstitutional ? "border-l-(--color-constitutional)" : undefined}>
+                    {/* ── Top row ── */}
+                    <div className="px-5 pt-4 pb-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-sm font-bold text-(--color-text)">{item.child_name}</span>
+                        <StatusBadge status={item.activity_type} />
+                        {item.difficulty != null && item.difficulty > 0 && (
+                          <DifficultyDots level={item.difficulty} />
+                        )}
+                        <span className="ml-auto px-2 py-0.5 rounded-full bg-(--color-warning-light) text-(--color-warning) text-[10px] font-semibold">
+                          Requires Review
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* ── Content ── */}
+                    <div className="px-5 pt-3 pb-4">
+                      <h3 className="text-base font-medium text-(--color-text) mb-2">{item.title}</h3>
+
+                      {/* AI rationale quote block */}
+                      {item.ai_rationale && (
+                        <div className="bg-(--color-page) border-l-2 border-(--color-accent) rounded-r-[8px] px-3 py-2 mb-3">
+                          <span className="text-[10px] font-semibold text-(--color-accent) uppercase tracking-wide block mb-0.5">AI Rationale</span>
+                          <p className="text-xs text-(--color-text-secondary) italic leading-relaxed">{item.ai_rationale}</p>
                         </div>
                       )}
-                    </Card>
-                  ))}
+
+                      {/* Metadata row */}
+                      <div className="flex items-center gap-3 text-xs text-(--color-text-tertiary) mb-4">
+                        {item.scheduled_date && (
+                          <span className="flex items-center gap-1">
+                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            {shortDate(item.scheduled_date)}
+                          </span>
+                        )}
+                        {item.estimated_minutes && (
+                          <span className="flex items-center gap-1">
+                            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            {item.estimated_minutes} min
+                          </span>
+                        )}
+                        <span className="text-(--color-text-tertiary)">{item.plan_name}</span>
+                      </div>
+
+                      {/* ── Rule evaluation section (ALWAYS visible) ── */}
+                      {evals.length > 0 && (
+                        <div className="mb-4">
+                          <div className="flex items-center gap-1.5 mb-2">
+                            {isConstitutional ? (
+                              <svg className="w-4 h-4 text-(--color-constitutional)" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 2.18l7 3.12v4.7c0 4.83-3.4 9.36-7 10.5-3.6-1.14-7-5.67-7-10.5V6.3l7-3.12z" />
+                              </svg>
+                            ) : (
+                              <svg className="w-4 h-4 text-(--color-text-tertiary)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                            )}
+                            <span className={cn(
+                              "text-xs font-semibold",
+                              isConstitutional ? "text-(--color-constitutional)" : "text-(--color-text-secondary)"
+                            )}>
+                              {isConstitutional ? "Constitutional concern flagged" : "Why this needs your review"}
+                            </span>
+                          </div>
+                          <EvaluationChain evaluations={evals} blockingRules={blockingRules} />
+                        </div>
+                      )}
+
+                      {/* ── Action area ── */}
+                      {!isActive ? (
+                        <div className="flex items-center gap-2 pt-3 border-t border-(--color-border)/50">
+                          <Button variant="success" size="lg" className="flex-1" onClick={() => startAction(item.activity_id, "approve")}>
+                            <span className="flex items-center justify-center gap-1.5">
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                              </svg>
+                              Approve
+                            </span>
+                          </Button>
+                          <Button variant="danger" size="lg" className="flex-1" onClick={() => startAction(item.activity_id, "reject")}>
+                            <span className="flex items-center justify-center gap-1.5">
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                              Reject
+                            </span>
+                          </Button>
+                          <Button variant="secondary" size="lg" onClick={() => startAction(item.activity_id, "modify")}>
+                            Modify &amp; Approve
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="pt-3 border-t border-(--color-border)/50 space-y-3">
+                          {/* Action confirmation header */}
+                          <div className="flex items-center justify-between">
+                            <span className={cn(
+                              "text-xs font-semibold capitalize",
+                              activeAction.type === "approve" ? "text-(--color-success)" :
+                              activeAction.type === "reject" ? "text-(--color-danger)" :
+                              "text-(--color-accent)"
+                            )}>
+                              {activeAction.type === "modify" ? "Modify & Approve" : activeAction.type}
+                            </span>
+                            <button onClick={cancelAction} className="text-xs text-(--color-text-tertiary) hover:text-(--color-text-secondary)">
+                              Cancel
+                            </button>
+                          </div>
+
+                          {/* Modify fields */}
+                          {activeAction.type === "modify" && (
+                            <div className="grid grid-cols-2 gap-3">
+                              <div>
+                                <label className="text-[11px] text-(--color-text-tertiary) mb-1 block">Difficulty (1-5)</label>
+                                <input
+                                  type="number" min={1} max={5}
+                                  value={modifyFields.difficulty ?? item.difficulty ?? ""}
+                                  onChange={(e) => setModifyFields({ ...modifyFields, difficulty: parseInt(e.target.value) || undefined })}
+                                  className="w-full px-2.5 py-1.5 text-sm border border-(--color-border-strong) rounded-[10px] bg-(--color-surface) focus:outline-none focus:ring-1 focus:ring-(--color-accent)"
+                                />
+                              </div>
+                              <div>
+                                <label className="text-[11px] text-(--color-text-tertiary) mb-1 block">Duration (minutes)</label>
+                                <input
+                                  type="number" min={1}
+                                  value={modifyFields.duration ?? item.estimated_minutes ?? ""}
+                                  onChange={(e) => setModifyFields({ ...modifyFields, duration: parseInt(e.target.value) || undefined })}
+                                  className="w-full px-2.5 py-1.5 text-sm border border-(--color-border-strong) rounded-[10px] bg-(--color-surface) focus:outline-none focus:ring-1 focus:ring-(--color-accent)"
+                                />
+                              </div>
+                              <div className="col-span-2">
+                                <label className="text-[11px] text-(--color-text-tertiary) mb-1 block">Notes</label>
+                                <input
+                                  value={modifyFields.notes ?? ""}
+                                  onChange={(e) => setModifyFields({ ...modifyFields, notes: e.target.value })}
+                                  placeholder="Any adjustments to note..."
+                                  className="w-full px-2.5 py-1.5 text-sm border border-(--color-border-strong) rounded-[10px] bg-(--color-surface) focus:outline-none focus:ring-1 focus:ring-(--color-accent)"
+                                />
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Reason field */}
+                          <div>
+                            <label className="text-[11px] text-(--color-text-tertiary) mb-1 block">
+                              {activeAction.type === "reject" ? "Reason (required, min 10 characters)" : "Note (optional)"}
+                            </label>
+                            <textarea
+                              value={actionReason}
+                              onChange={(e) => setActionReason(e.target.value)}
+                              placeholder={
+                                activeAction.type === "reject"
+                                  ? "Explain why you're rejecting this recommendation..."
+                                  : activeAction.type === "modify"
+                                  ? "Explain your modifications..."
+                                  : "Add an optional note about your approval..."
+                              }
+                              rows={2}
+                              className="w-full px-3 py-2 text-sm border border-(--color-border-strong) rounded-[10px] bg-(--color-surface) resize-none focus:outline-none focus:ring-1 focus:ring-(--color-accent)"
+                              autoFocus
+                            />
+                            {activeAction.type === "reject" && actionReason.length > 0 && actionReason.length < 10 && (
+                              <p className="text-[10px] text-(--color-danger) mt-1">{10 - actionReason.length} more characters needed</p>
+                            )}
+                          </div>
+
+                          {/* Confirm / Cancel */}
+                          <div className="flex gap-2">
+                            <Button
+                              variant={activeAction.type === "reject" ? "danger" : "success"}
+                              size="md"
+                              className="flex-1"
+                              disabled={submitting || (activeAction.type === "reject" && actionReason.trim().length < 10)}
+                              onClick={() => handleAction(item)}
+                            >
+                              {submitting ? "Submitting..." :
+                                activeAction.type === "approve" ? "Confirm Approval" :
+                                activeAction.type === "reject" ? "Confirm Rejection" :
+                                "Approve with Modifications"}
+                            </Button>
+                            <Button variant="ghost" size="md" onClick={cancelAction} disabled={submitting}>
+                              Cancel
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </Card>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </>
       )}
