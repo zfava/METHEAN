@@ -9,6 +9,7 @@ import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import EmptyState from "@/components/ui/EmptyState";
 import { cn } from "@/lib/cn";
+import DagGraph from "@/components/DagGraph";
 
 // ── Node card styling by mastery + status ──
 function nodeStyle(node: MapNodeState): { bg: string; border: string; text: string } {
@@ -160,76 +161,20 @@ export default function MapsPage() {
           </div>
 
           {/* ── DAG visualization ── */}
-          <Card padding="p-6">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-sm font-semibold text-(--color-text)">{selectedMap.map_name}</h2>
-              <a href={`/curriculum/editor?map_id=${selectedMap.learning_map_id}`}
-                className="text-xs text-(--color-accent) hover:underline">Edit Map</a>
-            </div>
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-sm font-semibold text-(--color-text)">{selectedMap.map_name}</h2>
+            <a href={`/curriculum/editor?map_id=${selectedMap.learning_map_id}`}
+              className="text-xs text-(--color-accent) hover:underline">Edit Map</a>
+          </div>
 
-            <div className="space-y-1">
-              {tiers.map((tier, tierIdx) => (
-                <div key={tierIdx}>
-                  {/* Connector lines from previous tier */}
-                  {tierIdx > 0 && (
-                    <div className="flex justify-center py-1">
-                      <div className="w-px h-4 bg-(--color-border-strong)" />
-                    </div>
-                  )}
-
-                  {/* Nodes in this tier */}
-                  <div className="flex flex-wrap justify-center gap-3">
-                    {tier.map((node) => {
-                      const style = nodeStyle(node);
-                      const isBlocked = node.status === "blocked";
-                      const isMastered = node.mastery_level === "mastered";
-
-                      return (
-                        <div key={node.node_id}
-                          className={`relative w-52 rounded-[14px] border-2 p-3 ${style.bg} ${style.border} ${style.text}`}
-                        >
-                          {/* Checkmark for mastered */}
-                          {isMastered && (
-                            <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-(--color-success) text-white text-[10px] flex items-center justify-center font-bold">
-                              &#10003;
-                            </span>
-                          )}
-
-                          <div className="flex items-center gap-1.5 mb-1">
-                            <span className="text-[9px] font-bold uppercase tracking-wider opacity-60">
-                              {typeLabel[node.node_type] || node.node_type}
-                            </span>
-                          </div>
-                          <div className={`text-sm font-medium ${isBlocked ? "opacity-50" : ""}`}>
-                            {node.title}
-                          </div>
-
-                          {/* Stats row */}
-                          <div className="flex items-center gap-2 mt-1.5 text-[10px] opacity-70">
-                            {node.attempts_count > 0 && <span>{node.attempts_count} attempts</span>}
-                            {node.time_spent_minutes > 0 && <span>{node.time_spent_minutes}m spent</span>}
-                            {node.attempts_count === 0 && node.time_spent_minutes === 0 && !isMastered && (
-                              <span>&mdash;</span>
-                            )}
-                          </div>
-
-                          {/* Blocked unlock button */}
-                          {isBlocked && !node.is_unlocked && (
-                            <button
-                              onClick={() => setOverrideNodeId(node.node_id)}
-                              className="mt-2 text-[10px] text-(--color-accent) hover:underline"
-                            >
-                              Unlock
-                            </button>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
+          <DagGraph
+            nodes={selectedMap.nodes}
+            onNodeClick={(node) => {
+              if (node.status === "blocked" && !node.is_unlocked) {
+                setOverrideNodeId(node.node_id);
+              }
+            }}
+          />
 
           {/* ── Override modal ── */}
           {overrideNodeId && (
