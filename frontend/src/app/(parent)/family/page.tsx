@@ -10,8 +10,15 @@ import StatusBadge from "@/components/StatusBadge";
 import EmptyState from "@/components/ui/EmptyState";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { cn } from "@/lib/cn";
+import SubjectLevelPicker from "@/components/SubjectLevelPicker";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+
+function getCsrf(): string | undefined {
+  if (typeof document === "undefined") return undefined;
+  const m = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);
+  return m ? decodeURIComponent(m[1]) : undefined;
+}
 
 interface TodayActivity {
   id: string;
@@ -47,6 +54,8 @@ export default function FamilyPage() {
   const [showAddChild, setShowAddChild] = useState(false);
   const [newName, setNewName] = useState("");
   const [newGrade, setNewGrade] = useState("");
+  const [editingProfile, setEditingProfile] = useState<string | null>(null);
+  const [profileData, setProfileData] = useState<Record<string, { levels: Record<string, string>; minutes: number; notes: string }>>({});
 
   async function addChild() {
     if (!newName.trim()) return;
@@ -252,6 +261,110 @@ export default function FamilyPage() {
                     <a href={`/plans?child=${child.id}`} className="text-[10px] text-(--color-accent) hover:underline">View plan</a>
                     {pendingAlerts.length > 0 && (
                       <a href="/governance/queue" className="text-[10px] text-(--color-warning) hover:underline">Review alerts</a>
+                    )}
+                  </div>
+
+                  {/* Learning Profile */}
+                  <div className="mt-4 pt-3 border-t border-(--color-border)">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-medium text-(--color-text)">Learning Profile</span>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setEditingProfile(editingProfile === child.id ? null : child.id); }}
+                        className="text-[10px] text-(--color-accent) hover:underline"
+                      >
+                        {editingProfile === child.id ? "Close" : "Edit"}
+                      </button>
+                    </div>
+
+                    {editingProfile !== child.id && (
+                      <div className="flex flex-wrap gap-1">
+                        {(child as any).preferences?.subject_levels && Object.keys((child as any).preferences.subject_levels).length > 0
+                          ? Object.entries((child as any).preferences.subject_levels).map(([s, l]: [string, any]) => (
+                              <span key={s} className="text-[10px] px-1.5 py-0.5 bg-(--color-page) rounded-[var(--radius-badge)] text-(--color-text-secondary)">
+                                {s.replace(/_/g, " ")}: {l}
+                              </span>
+                            ))
+                          : <span className="text-[10px] text-(--color-text-tertiary)">
+                              No profile set.{" "}
+                              <button onClick={(e) => { e.stopPropagation(); setEditingProfile(child.id); }} className="text-(--color-accent)">Set up</button>
+                            </span>
+                        }
+                      </div>
+                    )}
+
+                    {editingProfile === child.id && (
+                      <div className="mt-2" onClick={(e) => e.stopPropagation()}>
+                        <SubjectLevelPicker
+                          selected={profileData[child.id]?.levels ?? (child as any).preferences?.subject_levels ?? {}}
+                          onChange={(levels) => setProfileData(prev => ({
+                            ...prev,
+                            [child.id]: {
+                              levels,
+                              minutes: prev[child.id]?.minutes ?? (child as any).preferences?.daily_duration_minutes ?? 120,
+                              notes: prev[child.id]?.notes ?? (child as any).preferences?.parent_notes ?? "",
+                            },
+                          }))}
+                          showCustom={true}
+                        />
+                        <div className="mt-3">
+                          <label className="text-[10px] text-(--color-text-secondary) block mb-1">Daily minutes</label>
+                          <input
+                            type="number"
+                            className="w-24 px-2 py-1.5 text-xs border border-(--color-border) rounded-[var(--radius-input)]"
+                            value={profileData[child.id]?.minutes ?? (child as any).preferences?.daily_duration_minutes ?? 120}
+                            onChange={(e) => setProfileData(prev => ({
+                              ...prev,
+                              [child.id]: {
+                                levels: prev[child.id]?.levels ?? (child as any).preferences?.subject_levels ?? {},
+                                minutes: +e.target.value,
+                                notes: prev[child.id]?.notes ?? (child as any).preferences?.parent_notes ?? "",
+                              },
+                            }))}
+                          />
+                        </div>
+                        <div className="mt-2">
+                          <label className="text-[10px] text-(--color-text-secondary) block mb-1">Notes</label>
+                          <textarea
+                            className="w-full px-2 py-1.5 text-xs border border-(--color-border) rounded-[var(--radius-input)] min-h-[50px]"
+                            value={profileData[child.id]?.notes ?? (child as any).preferences?.parent_notes ?? ""}
+                            onChange={(e) => setProfileData(prev => ({
+                              ...prev,
+                              [child.id]: {
+                                levels: prev[child.id]?.levels ?? (child as any).preferences?.subject_levels ?? {},
+                                minutes: prev[child.id]?.minutes ?? 120,
+                                notes: e.target.value,
+                              },
+                            }))}
+                            placeholder="Notes about this child..."
+                          />
+                        </div>
+                        <Button
+                          variant="primary"
+                          size="sm"
+                          className="mt-2"
+                          onClick={async (e: React.MouseEvent) => {
+                            e.stopPropagation();
+                            const pd = profileData[child.id];
+                            const csrf = getCsrf();
+                            try {
+                              await fetch(`${API}/children/${child.id}/preferences`, {
+                                method: "PUT",
+                                credentials: "include",
+                                headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
+                                body: JSON.stringify({
+                                  subject_levels: pd?.levels ?? (child as any).preferences?.subject_levels,
+                                  daily_duration_minutes: pd?.minutes ?? (child as any).preferences?.daily_duration_minutes,
+                                  parent_notes: pd?.notes ?? (child as any).preferences?.parent_notes,
+                                }),
+                              });
+                              setEditingProfile(null);
+                              loadAllChildren();
+                            } catch { /* retry later */ }
+                          }}
+                        >
+                          Save Profile
+                        </Button>
+                      </div>
                     )}
                   </div>
                 </div>

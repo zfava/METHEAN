@@ -269,8 +269,9 @@ async def list_children(
     user: User = Depends(get_current_user),
 ) -> list[dict]:
     """List all children in the authenticated user's household."""
+    from sqlalchemy.orm import selectinload
     result = await db.execute(
-        select(Child).where(
+        select(Child).options(selectinload(Child.preferences)).where(
             Child.household_id == user.household_id,
             Child.is_active == True,  # noqa: E712
         ).order_by(Child.first_name)
@@ -279,7 +280,6 @@ async def list_children(
 
     items = []
     for c in children:
-        # Get enrollment count
         enroll_result = await db.execute(
             select(func.count(ChildMapEnrollment.id)).where(
                 ChildMapEnrollment.child_id == c.id,
@@ -295,6 +295,11 @@ async def list_children(
             "date_of_birth": c.date_of_birth.isoformat() if c.date_of_birth else None,
             "grade_level": c.grade_level,
             "enrollment_count": enrollment_count,
+            "preferences": {
+                "subject_levels": c.preferences.subject_levels,
+                "daily_duration_minutes": c.preferences.daily_duration_minutes,
+                "parent_notes": c.preferences.parent_notes,
+            } if c.preferences else None,
         })
     return items
 
