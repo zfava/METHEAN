@@ -384,6 +384,17 @@ export const timeLog = {
     request<any>(`/children/${childId}/time-log`, { method: "POST", body: JSON.stringify(data) }),
 };
 
+// ── Learner Intelligence ──
+export const intelligence = {
+  get: (childId: string) => request<any>(`/children/${childId}/intelligence`),
+  addObservation: (childId: string, observation: string) =>
+    request<any>(`/children/${childId}/intelligence/observations`, { method: "PUT", body: JSON.stringify({ observation }) }),
+  removeObservation: (childId: string, index: number) =>
+    request<any>(`/children/${childId}/intelligence/observations/${index}`, { method: "DELETE" }),
+  override: (childId: string, field: string, value: any) =>
+    request<any>(`/children/${childId}/intelligence/override`, { method: "PUT", body: JSON.stringify({ field, value }) }),
+};
+
 export const account = {
   changePassword: (currentPassword: string, newPassword: string) =>
     request<{ success: boolean }>("/auth/password", { method: "PUT", body: JSON.stringify({ current_password: currentPassword, new_password: newPassword }) }),

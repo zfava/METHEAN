@@ -169,6 +169,7 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
           {navItem("/reading", "Reading Log")}
           {navItem("/resources", "Resources")}
           {navItem("/inspection", "AI Inspection")}
+          {navItem("/intelligence", "Learner Profile")}
         </div>
         <div className={sectionVisibility[2] ? "animate-fade-up" : "opacity-0"}>
           <div className="flex items-center justify-between px-5 mb-1.5">
