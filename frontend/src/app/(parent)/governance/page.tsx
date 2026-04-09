@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { governance, type GovernanceEvent, type GovernanceRule } from "@/lib/api";
+import { governance, household, type GovernanceEvent, type GovernanceRule } from "@/lib/api";
 import { relativeTime } from "@/lib/format";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import StatusBadge from "@/components/StatusBadge";
@@ -13,8 +13,6 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import EmptyState from "@/components/ui/EmptyState";
 import { cn } from "@/lib/cn";
 import EvaluationChain from "@/components/EvaluationChain";
-
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 const RULE_TYPE_LABELS: Record<string, { label: string; icon: string }> = {
   approval_required: { label: "Approval", icon: "🛡️" },
@@ -44,8 +42,8 @@ export default function GovernanceOverviewPage() {
       const [evtsRaw, rulesRaw, qResp, philResp] = await Promise.all([
         governance.events(200),
         governance.rules(),
-        fetch(`${API}/governance/queue?limit=1`, { credentials: "include" }).then((r) => r.ok ? r.json() : { total: 0 }),
-        fetch(`${API}/household/philosophy`, { credentials: "include" }).then((r) => r.ok ? r.json() : {}),
+        governance.queue(1).catch(() => ({ items: [], total: 0 })),
+        household.getPhilosophy().catch(() => ({})),
       ]);
 
       const evtsList: GovernanceEvent[] = (evtsRaw as any).items || evtsRaw;

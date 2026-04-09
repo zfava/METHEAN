@@ -3,13 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, useCallback, useRef } from "react";
-import { auth, notifications as notificationsApi, type User } from "@/lib/api";
+import { auth, governance, notifications as notificationsApi, type User } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
 import { useStagger } from "@/lib/useStagger";
 import { cn } from "@/lib/cn";
 import { MetheanLogo } from "@/components/Brand";
-
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 const govSub = [
   { href: "/governance/queue", label: "Approval Queue", badge: true },
@@ -57,8 +55,7 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
   }, [unreadNotifs]);
 
   useEffect(() => {
-    fetch(`${API}/governance/queue?limit=1`, { credentials: "include" })
-      .then((r) => r.ok ? r.json() : { total: 0 })
+    governance.queue(1)
       .then((d) => setPendingCount(d.total || 0))
       .catch(() => {});
     auth.me().then(setUser).catch(() => {});
@@ -162,6 +159,7 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
           <div className="px-5 mb-1.5 text-[11px] font-medium text-white/30 tracking-wider">Learning</div>
           {navItem("/curriculum", "Curriculum", true)}
           {navItem("/curriculum/year", "Year Plan")}
+          {navItem("/curriculum/scope", "Scope & Sequence")}
           {navItem("/curriculum/history", "History")}
           {navItem("/calendar", "Calendar")}
           {navItem("/plans", "Plans")}
@@ -170,7 +168,7 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
           {navItem("/assessment", "Assessment")}
           {navItem("/reading", "Reading Log")}
           {navItem("/resources", "Resources")}
-          {navItem("/inspection", "Progress")}
+          {navItem("/inspection", "AI Inspection")}
         </div>
         <div className={sectionVisibility[2] ? "animate-fade-up" : "opacity-0"}>
           <div className="flex items-center justify-between px-5 mb-1.5">

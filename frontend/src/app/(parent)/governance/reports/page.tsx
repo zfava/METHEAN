@@ -10,14 +10,8 @@ import MetricCard from "@/components/ui/MetricCard";
 import SectionHeader from "@/components/ui/SectionHeader";
 import EmptyState from "@/components/ui/EmptyState";
 import { ShieldIcon } from "@/components/ConstitutionalCeremony";
+import { governance } from "@/lib/api";
 import { cn } from "@/lib/cn";
-
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
-
-function getCsrf(): string | undefined {
-  if (typeof document === "undefined") return undefined;
-  const m = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);
-  return m ? decodeURIComponent(m[1]) : undefined;
 }
 
 // CSS bar chart component (no external deps)
@@ -66,14 +60,8 @@ export default function ReportsPage() {
     setAttested(false);
     setError("");
     try {
-      const csrf = getCsrf();
-      const resp = await fetch(`${API}/governance/report`, {
-        method: "POST", credentials: "include",
-        headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
-        body: JSON.stringify({ period_start: startDate, period_end: endDate }),
-      });
-      if (resp.ok) setReport(await resp.json());
-      else setError("Failed to generate report.");
+      const data = await governance.report({ period_start: startDate, period_end: endDate });
+      setReport(data);
     } catch (err: any) {
       setError(err?.detail || err?.message || "Couldn't generate report.");
     } finally { setLoading(false); }
@@ -81,13 +69,8 @@ export default function ReportsPage() {
 
   async function attest() {
     if (!attestText.trim() || attestText.length < 10) return;
-    const csrf = getCsrf();
-    const resp = await fetch(`${API}/governance/report/attest`, {
-      method: "POST", credentials: "include",
-      headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
-      body: JSON.stringify({ report_id: report?.generated_at || "report", attestation_text: attestText }),
-    });
-    if (resp.ok) setAttested(true);
+    await governance.attestReport(report?.generated_at || "report", attestText);
+    setAttested(true);
   }
 
   const s = report?.executive_summary;

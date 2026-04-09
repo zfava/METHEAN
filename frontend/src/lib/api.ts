@@ -114,7 +114,6 @@ export const auth = {
 };
 
 // Children
-// Children
 export const children = {
   list: () => request<ChildListItem[]>("/children"),
   create: (data: { first_name: string; last_name?: string; grade_level?: string; date_of_birth?: string }) =>
@@ -128,6 +127,13 @@ export const children = {
     request<RetentionSummary>(`/children/${childId}/retention-summary`),
   nodeHistory: (childId: string, nodeId: string) =>
     request<StateEvent[]>(`/children/${childId}/nodes/${nodeId}/history`),
+  today: (childId: string) => request<any[]>(`/children/${childId}/today`),
+  alerts: (childId: string, limit = 5) => request<any>(`/children/${childId}/alerts?limit=${limit}`),
+  theme: (childId: string) => request<any>(`/children/${childId}/theme`),
+  updateTheme: (childId: string, data: object) =>
+    request<any>(`/children/${childId}/theme`, { method: "PUT", body: JSON.stringify(data) }),
+  updatePreferences: (childId: string, data: object) =>
+    request<any>(`/children/${childId}/preferences`, { method: "PUT", body: JSON.stringify(data) }),
 };
 
 // Snapshots
@@ -193,6 +199,12 @@ export const curriculum = {
   subjects: () => request<Subject[]>("/subjects"),
   createSubject: (data: object) =>
     request("/subjects", { method: "POST", body: JSON.stringify(data) }),
+  batchSave: (mapId: string, data: { nodes: object[]; edges: object[] }) =>
+    request<any>(`/learning-maps/${mapId}/batch`, { method: "PUT", body: JSON.stringify(data) }),
+  enrichMap: (mapId: string) =>
+    request<any>(`/learning-maps/${mapId}/enrich`, { method: "POST" }),
+  mapExisting: (childId: string, data: object) =>
+    request<any>(`/children/${childId}/curriculum/map-existing`, { method: "POST", body: JSON.stringify(data) }),
 };
 
 // Tutor
@@ -279,6 +291,18 @@ export const governance = {
       method: "PUT",
       body: JSON.stringify(data),
     }),
+  report: (data: { period_start: string; period_end: string }) =>
+    request<any>("/governance/report", { method: "POST", body: JSON.stringify(data) }),
+  attestReport: (reportId: string, text: string) =>
+    request<any>(`/governance/report/attest`, { method: "POST", body: JSON.stringify({ report_id: reportId, attestation_text: text }) }),
+};
+
+// Household
+export const household = {
+  get: () => request<any>("/household/settings"),
+  update: (data: object) => request<any>("/household/settings", { method: "PUT", body: JSON.stringify(data) }),
+  getPhilosophy: () => request<any>("/household/philosophy"),
+  updatePhilosophy: (data: object) => request<any>("/household/philosophy", { method: "PUT", body: JSON.stringify(data) }),
 };
 
 // AI

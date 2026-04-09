@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { auth, children as childrenApi, governance, snapshots, type User, type ChildState, type GovernanceEvent, type SnapshotItem } from "@/lib/api";
+import { auth, children as childrenApi, governance, household, snapshots, type User, type ChildState, type GovernanceEvent, type SnapshotItem } from "@/lib/api";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import StatusBadge from "@/components/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
@@ -15,8 +15,6 @@ import { useChild } from "@/lib/ChildContext";
 import { cn } from "@/lib/cn";
 import EmptyState from "@/components/ui/EmptyState";
 import { useStagger } from "@/lib/useStagger";
-
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 interface TodayActivity { id: string; title: string; activity_type: string; status: string; estimated_minutes: number | null; }
 interface AlertItem { title: string; message: string; severity: string; }
@@ -48,11 +46,10 @@ export default function DashboardPage() {
   async function init() {
     try { const me = await auth.me(); setUser(me); } catch { window.location.href = "/auth"; return; }
     try {
-      const [qResp, rResp, eResp] = await Promise.all([
-        fetch(`${API}/governance/queue?limit=1`, { credentials: "include" }),
+      const [qData, rResp, eResp] = await Promise.all([
+        governance.queue(1),
         governance.rules(), governance.events(1),
       ]);
-      const qData = qResp.ok ? await qResp.json() : { total: 0 };
       setPendingReviews(qData.total || 0);
       const rules = (rResp as any).items || rResp;
       const rulesList = Array.isArray(rules) ? rules : [];
@@ -76,7 +73,7 @@ export default function DashboardPage() {
       try {
         const [state, todayResp] = await Promise.all([
           childrenApi.state(c.id).catch(() => null),
-          fetch(`${API}/children/${c.id}/today`, { credentials: "include" }).then((r) => r.ok ? r.json() : []).catch(() => []),
+          childrenApi.today(c.id).catch(() => []),
         ]);
         setSummaries((prev) => ({ ...prev, [c.id]: { id: c.id, mastered: state?.mastered_count || 0, total: state?.total_nodes || 0, todayCount: Array.isArray(todayResp) ? todayResp.length : 0 } }));
       } catch (err: any) {
@@ -90,8 +87,8 @@ export default function DashboardPage() {
     try {
       const [state, todayResp, alertsResp] = await Promise.all([
         childrenApi.state(selectedChild.id).catch(() => null),
-        fetch(`${API}/children/${selectedChild.id}/today`, { credentials: "include" }).then((r) => r.ok ? r.json() : []).catch(() => []),
-        fetch(`${API}/children/${selectedChild.id}/alerts`, { credentials: "include" }).then((r) => r.ok ? r.json() : { items: [] }).catch(() => ({ items: [] })),
+        childrenApi.today(selectedChild.id).catch(() => []),
+        childrenApi.alerts(selectedChild.id).catch(() => ({ items: [] })),
       ]);
       setChildState(state);
       setTodayActivities(Array.isArray(todayResp) ? todayResp : []);

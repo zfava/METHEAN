@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { children as childrenApi } from "@/lib/api";
+import { children as childrenApi, household } from "@/lib/api";
 import { useToast } from "@/components/Toast";
 import { useChild } from "@/lib/ChildContext";
 import PageHeader from "@/components/ui/PageHeader";
@@ -13,13 +13,6 @@ import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { cn } from "@/lib/cn";
 import SubjectLevelPicker from "@/components/SubjectLevelPicker";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
-
-function getCsrf(): string | undefined {
-  if (typeof document === "undefined") return undefined;
-  const m = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);
-  return m ? decodeURIComponent(m[1]) : undefined;
-}
 
 interface TodayActivity {
   id: string;
@@ -80,13 +73,11 @@ export default function FamilyPage() {
 
     await Promise.all(children.map(async (child) => {
       try {
-        const [todayResp, alertsResp] = await Promise.all([
-          fetch(`${API}/children/${child.id}/today`, { credentials: "include" }),
-          fetch(`${API}/children/${child.id}/alerts?limit=5`, { credentials: "include" }),
+        const [activities, alertsData] = await Promise.all([
+          childrenApi.today(child.id).catch(() => []),
+          childrenApi.alerts(child.id).catch(() => []),
         ]);
-        const activities = todayResp.ok ? await todayResp.json() : [];
-        const alertsData = alertsResp.ok ? await alertsResp.json() : [];
-        const alerts = Array.isArray(alertsData) ? alertsData : (alertsData.items || []);
+        const alerts = Array.isArray(alertsData) ? alertsData : ((alertsData as any).items || []);
 
         setChildData((prev) => ({
           ...prev,
@@ -348,17 +339,11 @@ export default function FamilyPage() {
                           onClick={async (e: React.MouseEvent) => {
                             e.stopPropagation();
                             const pd = profileData[child.id];
-                            const csrf = getCsrf();
                             try {
-                              await fetch(`${API}/children/${child.id}/preferences`, {
-                                method: "PUT",
-                                credentials: "include",
-                                headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
-                                body: JSON.stringify({
-                                  subject_levels: pd?.levels ?? (child as any).preferences?.subject_levels,
-                                  daily_duration_minutes: pd?.minutes ?? (child as any).preferences?.daily_duration_minutes,
-                                  parent_notes: pd?.notes ?? (child as any).preferences?.parent_notes,
-                                }),
+                              await childrenApi.updatePreferences(child.id, {
+                                subject_levels: pd?.levels ?? (child as any).preferences?.subject_levels,
+                                daily_duration_minutes: pd?.minutes ?? (child as any).preferences?.daily_duration_minutes,
+                                parent_notes: pd?.notes ?? (child as any).preferences?.parent_notes,
                               });
                               toast("Profile saved", "success");
                               setEditingProfile(null);

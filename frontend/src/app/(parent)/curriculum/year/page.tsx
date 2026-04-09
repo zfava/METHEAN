@@ -102,6 +102,7 @@ export default function YearViewPage() {
     setWeekDetail(detail);
   }
 
+  if (!selectedChild && !curriculumId) return <div className="text-sm text-(--color-text-secondary)">Select a child to view year plans.</div>;
   if (loading) return <div className="max-w-4xl"><LoadingSkeleton variant="list" count={8} /></div>;
 
   // No ID: show curriculum picker

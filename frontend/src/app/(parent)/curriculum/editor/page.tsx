@@ -8,14 +8,6 @@ import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
-
-function getCsrf(): string | undefined {
-  if (typeof document === "undefined") return undefined;
-  const m = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);
-  return m ? decodeURIComponent(m[1]) : undefined;
-}
-
 const typeColors: Record<string, string> = {
   root: "bg-(--color-text) text-white",
   milestone: "bg-(--color-accent-light) text-(--color-accent)",
@@ -172,45 +164,39 @@ export default function EditorPage() {
     setError("");
     setSaved(false);
     try {
-      const csrf = getCsrf();
-      const resp = await fetch(`${API}/learning-maps/${mapId}/batch`, {
-        method: "POST", credentials: "include",
-        headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
-        body: JSON.stringify({
-          nodes_create: nodes.filter((n) => n.is_new && !n.is_deleted).map((n) => ({
-            node_type: n.node_type, title: n.title, description: n.description,
+      await curriculum.batchSave(mapId, {
+        nodes: [
+          ...nodes.filter((n) => n.is_new && !n.is_deleted).map((n) => ({
+            action: "create", node_type: n.node_type, title: n.title, description: n.description,
             estimated_minutes: n.estimated_minutes, sort_order: n.sort_order,
           })),
-          nodes_update: nodes.filter((n) => n.is_modified && !n.is_new && !n.is_deleted).map((n) => ({
-            id: n.id, title: n.title, description: n.description,
+          ...nodes.filter((n) => n.is_modified && !n.is_new && !n.is_deleted).map((n) => ({
+            action: "update", id: n.id, title: n.title, description: n.description,
             node_type: n.node_type, estimated_minutes: n.estimated_minutes, sort_order: n.sort_order,
           })),
-          nodes_delete: nodes.filter((n) => n.is_deleted && !n.is_new).map((n) => n.id),
-          edges_create: edges.filter((e) => e.is_new && !e.is_deleted).map((e) => ({
-            from_node_id: e.from_node_id, to_node_id: e.to_node_id,
+          ...nodes.filter((n) => n.is_deleted && !n.is_new).map((n) => ({
+            action: "delete", id: n.id,
           })),
-          edges_delete: edges.filter((e) => e.is_deleted && !e.is_new).map((e) => e.id),
-        }),
+        ],
+        edges: [
+          ...edges.filter((e) => e.is_new && !e.is_deleted).map((e) => ({
+            action: "create", from_node_id: e.from_node_id, to_node_id: e.to_node_id,
+          })),
+          ...edges.filter((e) => e.is_deleted && !e.is_new).map((e) => ({
+            action: "delete", id: e.id,
+          })),
+        ],
       });
-      if (resp.ok) {
-        setSaved(true);
-        await loadMap(); // Reload to get real IDs
-        setTimeout(() => setSaved(false), 3000);
-      } else {
-        const d = await resp.json();
-        setError(d.detail || "Save failed");
-      }
+      setSaved(true);
+      await loadMap();
+      setTimeout(() => setSaved(false), 3000);
     } catch (e: any) {
       setError(e.message || "Save failed");
     } finally { setSaving(false); }
   }
 
   async function enrichAll() {
-    const csrf = getCsrf();
-    await fetch(`${API}/learning-maps/${mapId}/enrich`, {
-      method: "POST", credentials: "include",
-      headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
-    });
+    await curriculum.enrichMap(mapId);
   }
 
   if (!mapId) return <div className="p-8 text-sm text-(--color-text-secondary)">No map selected. Go to Maps and click Edit.</div>;

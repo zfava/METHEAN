@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { auth, account, academicCalendar, dataExport, type User } from "@/lib/api";
+import { auth, account, academicCalendar, household, dataExport, type User } from "@/lib/api";
 import { useToast } from "@/components/Toast";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
@@ -9,13 +9,6 @@ import Button from "@/components/ui/Button";
 import SectionHeader from "@/components/ui/SectionHeader";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
-
-function getCsrf(): string | undefined {
-  if (typeof document === "undefined") return undefined;
-  const m = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);
-  return m ? decodeURIComponent(m[1]) : undefined;
-}
 
 export default function SettingsPage() {
   useEffect(() => { document.title = "Settings | METHEAN"; }, []);
@@ -48,9 +41,9 @@ export default function SettingsPage() {
   useEffect(() => {
     Promise.all([
       auth.me().then(setUser),
-      fetch(`${API}/household/settings`, { credentials: "include" })
-        .then((r) => r.ok ? r.json() : {})
-        .then((d) => { if (d.name) setHhName(d.name); if (d.timezone) setHhTimezone(d.timezone); }),
+      household.get()
+        .then((d) => { if (d.name) setHhName(d.name); if (d.timezone) setHhTimezone(d.timezone); })
+        .catch(() => {}),
       academicCalendar.get().then((c) => {
         if (c.schedule_type) setCalType(c.schedule_type);
         if (c.total_instructional_weeks) setCalWeeks(c.total_instructional_weeks);
@@ -62,12 +55,7 @@ export default function SettingsPage() {
   }, []);
 
   async function saveHousehold() {
-    const csrf = getCsrf();
-    await fetch(`${API}/household/settings`, {
-      method: "PUT", credentials: "include",
-      headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
-      body: JSON.stringify({ name: hhName, timezone: hhTimezone }),
-    });
+    await household.update({ name: hhName, timezone: hhTimezone });
     setHhSaved(true);
     toast("Settings saved", "success");
     setTimeout(() => setHhSaved(false), 2000);
@@ -116,6 +104,15 @@ export default function SettingsPage() {
   return (
     <div className="max-w-3xl">
       <PageHeader title="Settings" subtitle="Manage your household and account." />
+
+      {error && (
+        <Card className="mb-4" borderLeft="border-l-(--color-danger)">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-(--color-danger)">{error}</p>
+            <Button variant="ghost" size="sm" onClick={() => setError("")}>Dismiss</Button>
+          </div>
+        </Card>
+      )}
 
       {/* Academic Calendar */}
       <Card className="mb-6">

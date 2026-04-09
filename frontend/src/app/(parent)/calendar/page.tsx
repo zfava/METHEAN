@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { plans, activities as activitiesApi, type PlanDetail, type ActivityInPlan } from "@/lib/api";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 import { useChild } from "@/lib/ChildContext";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";

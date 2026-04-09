@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { auth } from "@/lib/api";
 import { MetheanLogo, MetheanMark } from "@/components/Brand";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
@@ -21,9 +22,8 @@ export default function LandingPage() {
 
   useEffect(() => {
     document.title = "METHEAN — A Learning Operating System for Families";
-    const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
-    fetch(`${API}/auth/me`, { credentials: "include" })
-      .then((r) => { if (r.ok) router.replace("/dashboard"); else setChecking(false); })
+    auth.me()
+      .then(() => router.replace("/dashboard"))
       .catch(() => setChecking(false));
   }, [router]);
 

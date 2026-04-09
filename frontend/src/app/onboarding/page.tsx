@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { children as childrenApi, governance, annualCurriculum, plans, curriculum } from "@/lib/api";
+import { children as childrenApi, governance, annualCurriculum, plans, curriculum, household } from "@/lib/api";
 import { MetheanLogoVertical } from "@/components/Brand";
 import { ShieldIcon } from "@/components/ConstitutionalCeremony";
 import { useToast } from "@/components/Toast";
@@ -10,14 +10,6 @@ import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import { cn } from "@/lib/cn";
 import SubjectLevelPicker from "@/components/SubjectLevelPicker";
-
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
-
-function getCsrf(): string | undefined {
-  if (typeof document === "undefined") return undefined;
-  const m = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);
-  return m ? decodeURIComponent(m[1]) : undefined;
-}
 
 const PHILOSOPHIES = [
   { value: "classical", label: "Classical", desc: "Trivium: grammar, logic, rhetoric" },
@@ -107,15 +99,10 @@ export default function OnboardingPage() {
     setLoading(true);
     setError("");
     try {
-      const csrf = getCsrf();
-      await fetch(`${API}/household/philosophy`, {
-        method: "PUT", credentials: "include",
-        headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
-        body: JSON.stringify({
-          educational_philosophy: philosophy,
-          religious_framework: "secular",
-          ai_autonomy_level: autonomy,
-        }),
+      await household.updatePhilosophy({
+        educational_philosophy: philosophy,
+        religious_framework: "secular",
+        ai_autonomy_level: autonomy,
       });
       const rulesResult = await governance.initDefaults();
       const rulesList = (rulesResult as any).items || rulesResult;
@@ -200,11 +187,8 @@ export default function OnboardingPage() {
       try {
         const dailyMinutes = childMinutes[child.id] || 120;
         await plans.generate(child.id, { week_start: weekStart, daily_minutes: dailyMinutes });
-        const resp = await fetch(`${API}/children/${child.id}/today`, { credentials: "include" });
-        if (resp.ok) {
-          const acts = await resp.json();
-          activityCounts[child.firstName] = Array.isArray(acts) ? acts.length : 0;
-        }
+        const acts = await childrenApi.today(child.id).catch(() => []);
+        activityCounts[child.firstName] = Array.isArray(acts) ? acts.length : 0;
       } catch {
         activityCounts[child.firstName] = 0;
       }
@@ -351,19 +335,10 @@ export default function OnboardingPage() {
                 const childId = addedChildren[profileChildIdx].id;
                 const levels = childSubjectLevels[childId] || {};
                 const minutes = childMinutes[childId] || 120;
-                const csrf = getCsrf();
                 try {
-                  await fetch(`${API}/children/${childId}/preferences`, {
-                    method: "PUT",
-                    credentials: "include",
-                    headers: {
-                      "Content-Type": "application/json",
-                      ...(csrf ? { "X-CSRF-Token": csrf } : {}),
-                    },
-                    body: JSON.stringify({
-                      subject_levels: levels,
-                      daily_duration_minutes: minutes,
-                    }),
+                  await childrenApi.updatePreferences(childId, {
+                    subject_levels: levels,
+                    daily_duration_minutes: minutes,
                   });
                 } catch { /* preferences can be set later from family page */ }
                 if (profileChildIdx < addedChildren.length - 1) {

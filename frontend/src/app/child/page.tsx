@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { auth, attempts, learn, type LearningContext } from "@/lib/api";
+import { auth, attempts, learn, children as childrenApi, type LearningContext } from "@/lib/api";
 import { useToast } from "@/components/Toast";
 import { MetheanLogo } from "@/components/Brand";
 import Card from "@/components/ui/Card";
@@ -15,7 +15,6 @@ import FieldTripView from "@/components/child/FieldTripView";
 import CompletionState from "@/components/child/CompletionState";
 import VocationalActivityDetail from "@/components/VocationalActivityDetail";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 interface TodayActivity {
   id: string;
@@ -82,8 +81,7 @@ export default function ChildPage() {
   useEffect(() => {
     if (selectedId) {
       loadToday();
-      fetch(`${API}/children/${selectedId}/theme`, { credentials: "include" })
-        .then((r) => r.ok ? r.json() : {})
+      childrenApi.theme(selectedId)
         .then((t) => setTheme({ background: t.background || "plain", color_accent: t.color_accent || "blue", font_size: t.font_size || "normal", avatar: t.avatar || "owl" }))
         .catch(() => {});
     }
@@ -94,9 +92,7 @@ export default function ChildPage() {
     setError("");
     try {
       await auth.me();
-      const resp = await fetch(`${API}/children`, { credentials: "include" });
-      if (!resp.ok) throw new Error("Couldn't load your learning page.");
-      const data: ChildInfo[] = await resp.json();
+      const data: ChildInfo[] = await childrenApi.list() as any;
       setChildren(Array.isArray(data) ? data : []);
       if (data.length > 0) setSelectedId(data[0].id);
     } catch (err: any) {
@@ -113,8 +109,8 @@ export default function ChildPage() {
   async function loadToday() {
     setError("");
     try {
-      const resp = await fetch(`${API}/children/${selectedId}/today`, { credentials: "include" });
-      if (resp.ok) setActivities(await resp.json());
+      const todayData = await childrenApi.today(selectedId);
+      setActivities(todayData);
     } catch (err: any) {
       setError(err?.message || "Couldn't load today's activities. Try again in a moment.");
     }
@@ -189,12 +185,7 @@ export default function ChildPage() {
   async function saveTheme(updates: Partial<typeof theme>) {
     const newTheme = { ...theme, ...updates };
     setTheme(newTheme);
-    const csrf = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/)?.[1];
-    fetch(`${API}/children/${selectedId}/theme`, {
-      method: "PUT", credentials: "include",
-      headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": decodeURIComponent(csrf) } : {}) },
-      body: JSON.stringify(newTheme),
-    }).catch(() => {});
+    childrenApi.updateTheme(selectedId, newTheme).catch(() => {});
   }
 
   const bgStyles: Record<string, React.CSSProperties> = {

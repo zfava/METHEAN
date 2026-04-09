@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { children as childrenApi, curriculum, annualCurriculum, type MapState } from "@/lib/api";
+import { children as childrenApi, curriculum, annualCurriculum, household, type MapState } from "@/lib/api";
 import { useToast } from "@/components/Toast";
 import { useChild } from "@/lib/ChildContext";
 import SubjectLevelPicker from "@/components/SubjectLevelPicker";
@@ -13,13 +13,6 @@ import Button from "@/components/ui/Button";
 import Tabs from "@/components/ui/Tabs";
 import EmptyState from "@/components/ui/EmptyState";
 import { cn } from "@/lib/cn";
-
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
-function getCsrf(): string | undefined {
-  if (typeof document === "undefined") return undefined;
-  const m = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);
-  return m ? decodeURIComponent(m[1]) : undefined;
-}
 
 export default function CurriculumPage() {
   useEffect(() => { document.title = "Curriculum | METHEAN"; }, []);
@@ -58,9 +51,8 @@ export default function CurriculumPage() {
   // Load philosophy data when entering philosophy path
   useEffect(() => {
     if (buildPath === "philosophy" && selectedChild) {
-      fetch(`${API}/household/philosophy`, { credentials: "include" })
-        .then((r) => r.ok ? r.json() : {})
-        .then((p) => {
+      household.getPhilosophy().catch(() => ({}))
+        .then((p: any) => {
           const phil = p.educational_philosophy?.replace(/_/g, " ") || "Eclectic";
           setPhilosophyLabel(phil);
         })
@@ -127,14 +119,11 @@ export default function CurriculumPage() {
     if (!selectedChild || !materialName || !toc || !subjectArea) return;
     setGenerating(true);
     try {
-      const csrf = getCsrf();
-      const resp = await fetch(`${API}/children/${selectedChild.id}/curriculum/map-existing`, {
-        method: "POST", credentials: "include",
-        headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
-        body: JSON.stringify({ material_name: materialName, material_description: materialDesc,
-          table_of_contents: toc, current_position: position, subject_area: subjectArea }),
+      const result = await curriculum.mapExisting(selectedChild.id, {
+        material_name: materialName, material_description: materialDesc,
+        table_of_contents: toc, current_position: position, subject_area: subjectArea,
       });
-      if (resp.ok) setProposal(await resp.json());
+      setProposal(result);
     } catch (err: any) { setError(err?.detail || err?.message || "Something went wrong."); } finally { setGenerating(false); }
   }
 

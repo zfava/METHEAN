@@ -1,19 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { household } from "@/lib/api";
 import { useToast } from "@/components/Toast";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
-
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
-
-function getCsrf(): string | undefined {
-  if (typeof document === "undefined") return undefined;
-  const m = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);
-  return m ? decodeURIComponent(m[1]) : undefined;
-}
 
 const PHILOSOPHIES = [
   { value: "classical", label: "Classical", desc: "Trivium-based: grammar, logic, rhetoric stages" },
@@ -88,9 +81,8 @@ export default function PhilosophyPage() {
 
   async function load() {
     try {
-      const resp = await fetch(`${API}/household/philosophy`, { credentials: "include" });
-      if (resp.ok) {
-        const data = await resp.json();
+      const data = await household.getPhilosophy();
+      if (data) {
         if (data.educational_philosophy) setPhilosophy(data.educational_philosophy);
         if (data.philosophy_description) setPhilosophyDesc(data.philosophy_description);
         if (data.religious_framework) setReligion(data.religious_framework);
@@ -108,20 +100,15 @@ export default function PhilosophyPage() {
   async function save() {
     setSaving(true);
     setSaved(false);
-    const csrf = getCsrf();
-    await fetch(`${API}/household/philosophy`, {
-      method: "PUT", credentials: "include",
-      headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
-      body: JSON.stringify({
-        educational_philosophy: philosophy,
-        philosophy_description: philosophyDesc || undefined,
-        religious_framework: religion,
-        religious_notes: religionNotes || undefined,
-        content_boundaries: boundaries.filter((b) => b.topic.trim()),
-        ai_autonomy_level: autonomy,
-        pedagogical_preferences: prefs,
-        custom_constraints: customs.filter((c) => c.trim()),
-      }),
+    await household.updatePhilosophy({
+      educational_philosophy: philosophy,
+      philosophy_description: philosophyDesc || undefined,
+      religious_framework: religion,
+      religious_notes: religionNotes || undefined,
+      content_boundaries: boundaries.filter((b) => b.topic.trim()),
+      ai_autonomy_level: autonomy,
+      pedagogical_preferences: prefs,
+      custom_constraints: customs.filter((c) => c.trim()),
     });
     setSaving(false);
     setSaved(true);
