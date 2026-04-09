@@ -165,6 +165,7 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
           {navItem("/plans", "Plans")}
           {navItem("/maps", "Maps")}
           {navItem("/curriculum/editor", "Map Editor")}
+          {navItem("/curriculum/mapper", "Map Curriculum")}
           {navItem("/assessment", "Assessment")}
           {navItem("/reading", "Reading Log")}
           {navItem("/resources", "Resources")}
