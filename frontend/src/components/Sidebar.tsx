@@ -162,7 +162,8 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
           {navItem("/curriculum/scope", "Scope & Sequence")}
           {navItem("/curriculum/history", "History")}
           {navItem("/calendar", "Calendar")}
-          {navItem("/plans", "Plans")}
+          {navItem("/plans", "Weekly Plans")}
+          {navItem("/plans/vision", "Education Plan")}
           {navItem("/maps", "Maps")}
           {navItem("/curriculum/editor", "Map Editor")}
           {navItem("/curriculum/mapper", "Map Curriculum")}
