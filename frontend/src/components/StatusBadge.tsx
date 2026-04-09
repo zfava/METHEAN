@@ -35,11 +35,14 @@ export default function StatusBadge({ status, className = "" }: { status: string
   const style = styles[status] || "bg-(--color-page) text-(--color-text-secondary)";
   const label = status.replace(/_/g, " ");
   return (
-    <span className={cn(
-      "inline-block px-2 py-0.5 rounded-[4px] text-[11px] font-medium capitalize",
-      style,
-      className,
-    )}>
+    <span
+      className={cn(
+        "inline-block px-2 py-0.5 rounded-[4px] text-[11px] font-medium capitalize",
+        style,
+        className,
+      )}
+      aria-label={label}
+    >
       {label}
     </span>
   );

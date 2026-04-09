@@ -115,6 +115,104 @@ body {
 pre, code { overflow-x: auto; max-width: 100%; }
 table { display: block; overflow-x: auto; max-width: 100%; }
 img, svg { max-width: 100%; height: auto; }
+* { scroll-behavior: smooth; }
+
+/* ── Entrance animations ── */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-down {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-16px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.animate-fade-in { animation: fade-in 0.3s var(--ease) both; }
+.animate-fade-out { animation: fade-out 0.2s var(--ease) both; }
+.animate-fade-up { animation: fade-up 0.35s var(--ease) both; }
+.animate-fade-down { animation: fade-down 0.3s var(--ease) both; }
+.animate-scale-in { animation: scale-in 0.25s var(--ease) both; }
+.animate-slide-right { animation: slide-in-right 0.3s var(--ease) both; }
+.animate-slide-left { animation: slide-in-left 0.3s var(--ease) both; }
+
+.stagger-1 { animation-delay: 50ms; }
+.stagger-2 { animation-delay: 100ms; }
+.stagger-3 { animation-delay: 150ms; }
+.stagger-4 { animation-delay: 200ms; }
+.stagger-5 { animation-delay: 250ms; }
+
+/* ── Loading shimmer ── */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton-shimmer {
+  background: linear-gradient(90deg, var(--color-border) 25%, rgba(0,0,0,0.04) 50%, var(--color-border) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+/* ── Input focus glow ── */
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.12);
+  transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+
+/* ── Input base styling ── */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="date"],
+input[type="search"],
+textarea,
+select {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  border-radius: var(--radius-input);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  transition: border-color 0.15s var(--ease), box-shadow 0.15s var(--ease);
+}
+input::placeholder, textarea::placeholder { color: var(--color-text-tertiary); }
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 40px var(--color-surface) inset;
+  -webkit-text-fill-color: var(--color-text);
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
 
 /* ── Mobile scroll fade for horizontal overflow containers ── */
 @media (max-width: 639px) {

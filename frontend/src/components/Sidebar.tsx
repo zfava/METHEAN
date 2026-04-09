@@ -74,6 +74,7 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
     const active = exact ? pathname === href : (pathname === href || pathname.startsWith(href + "/"));
     return (
       <Link key={href} href={href} onClick={handleNav}
+        aria-current={active ? "page" : undefined}
         className={cn(
           "flex items-center px-4 py-2 text-[13px] rounded-r-lg ml-1 transition-colors duration-150",
           active
@@ -147,7 +148,7 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
         </div>
       )}
 
-      <nav className="flex-1 space-y-5 pb-4 overflow-y-auto">
+      <nav aria-label="Main navigation" className="flex-1 space-y-5 pb-4 overflow-y-auto">
         <div>
           <div className="px-5 mb-1.5 text-[11px] font-medium text-white/30 tracking-wider">Overview</div>
           {navItem("/dashboard", "Dashboard", true)}

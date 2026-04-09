@@ -24,7 +24,7 @@ export default function EmptyState({
   };
 
   return (
-    <div className={cn("bg-(--color-surface) rounded-[14px] border border-(--color-border) py-12 px-6 text-center", className)}>
+    <div role="status" className={cn("bg-(--color-surface) rounded-[14px] border border-(--color-border) py-12 px-6 text-center", className)}>
       {icon && icons[icon]}
       <h3 className="text-sm font-medium text-(--color-text)">{title}</h3>
       {description && <p className="text-xs text-(--color-text-secondary) mt-1 max-w-sm mx-auto">{description}</p>}
