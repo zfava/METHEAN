@@ -601,8 +601,8 @@ export default function RulesPage() {
                 <h3 className="text-sm font-semibold text-(--color-constitutional)">Constitutional Rules</h3>
               </div>
               <div className="space-y-2">
-                {constitutional.map((r) => (
-                  <div key={r.id}>
+                {constitutional.map((r, idx) => (
+                  <div key={r.id} className={`animate-fade-up stagger-${Math.min(idx + 1, 5)}`}>
                     <Card padding="p-4" borderLeft="border-l-(--color-constitutional)" className={cn("border-l-4", !r.is_active && "opacity-60")}>
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-2">
@@ -669,10 +669,10 @@ export default function RulesPage() {
                 <span className="text-xs text-(--color-text-tertiary)">({policy.length})</span>
               </div>
               <div className="space-y-2">
-                {policy.map((r) => {
+                {policy.map((r, idx) => {
                   const info = RULE_TYPES.find((t) => t.value === r.rule_type);
                   return (
-                    <Card key={r.id} padding="p-4" className={!r.is_active ? "opacity-50" : ""}>
+                    <Card key={r.id} padding="p-4" animate className={cn(!r.is_active ? "opacity-50" : "", `stagger-${Math.min(idx + 1, 5)}`)}>
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-2">
                           <span>{info?.icon}</span>

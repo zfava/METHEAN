@@ -14,6 +14,7 @@ import { ShieldIcon } from "@/components/ConstitutionalCeremony";
 import { useChild } from "@/lib/ChildContext";
 import { cn } from "@/lib/cn";
 import EmptyState from "@/components/ui/EmptyState";
+import { useStagger } from "@/lib/useStagger";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
@@ -194,13 +195,14 @@ export default function DashboardPage() {
         <EmptyState icon="empty" title="Welcome to METHEAN" description="Add your first child from the Family page to get started." action={<a href="/family" className="text-sm text-(--color-accent) hover:underline">Go to Family</a>} />
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-        {children.map((c) => {
+        {children.map((c, idx) => {
           const s = summaries[c.id];
           const pct = s && s.total > 0 ? Math.round((s.mastered / s.total) * 100) : 0;
           const isSelected = selectedChild?.id === c.id;
           const circ = 2 * Math.PI * 20;
           return (
-            <Card key={c.id} onClick={() => setSelectedChild(c)} selected={isSelected} padding="p-4">
+            <Card key={c.id} onClick={() => setSelectedChild(c)} selected={isSelected} padding="p-4" animate
+              className={`stagger-${Math.min(idx + 1, 5)}`}>
               <div className="flex items-center gap-3">
                 <div className="relative w-12 h-12 shrink-0">
                   <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">

@@ -456,10 +456,10 @@ export default function ChildPage() {
         ) : (
           <div className="space-y-3">
             {/* Active activities */}
-            {activities.filter((a) => a.status !== "completed").map((act) => {
+            {activities.filter((a) => a.status !== "completed").map((act, idx) => {
               const tc = typeConfig[act.activity_type] || { label: act.activity_type, bg: "bg-(--color-page)", icon: "📄" };
               return (
-                <Card key={act.id} padding="p-4">
+                <Card key={act.id} padding="p-4" animate className={`stagger-${Math.min(idx + 1, 5)}`}>
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-[10px] ${tc.bg} flex items-center justify-center text-xl shrink-0`}>
                       {tc.icon}
