@@ -469,4 +469,18 @@ async def log_governance_event(
     )
     db.add(event)
     await db.flush()
+
+    # Record governance pattern for intelligence layer
+    try:
+        from app.services.intelligence import record_governance_pattern
+        meta = metadata or {}
+        await record_governance_pattern(
+            db, household_id,
+            action=action.value if hasattr(action, "value") else str(action),
+            activity_type=meta.get("activity_type"),
+            difficulty=meta.get("difficulty"),
+        )
+    except Exception:
+        pass  # Intelligence recording is non-blocking
+
     return event

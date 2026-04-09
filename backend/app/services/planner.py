@@ -304,7 +304,15 @@ async def _build_planner_context(
                 "estimated_minutes": node.estimated_minutes,
             })
 
+    # Inject learner intelligence context
+    from app.services.intelligence import get_intelligence_context
+    try:
+        intel = await get_intelligence_context(db, child_id, household_id)
+    except Exception:
+        intel = {}
+
     return {
         "daily_minutes": daily_minutes,
         "nodes": nodes,
+        "learner_intelligence": intel,
     }

@@ -27,6 +27,7 @@ from app.models.operational import (
     NotificationLog,
     RefreshToken,
 )
+from app.models.intelligence import LearnerIntelligence
 
 __all__ = [
     "Household",
@@ -62,4 +63,5 @@ __all__ = [
     "RefreshToken",
     "DeviceToken",
     "NotificationLog",
+    "LearnerIntelligence",
 ]

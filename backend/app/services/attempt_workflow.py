@@ -14,6 +14,7 @@ from app.models.enums import ActivityStatus, AttemptStatus
 from app.models.governance import Activity, Attempt
 from app.services.evaluator import mock_evaluator
 from app.services.state_engine import process_review
+from app.services import intelligence
 
 
 async def start_attempt(
@@ -122,6 +123,44 @@ async def submit_attempt(
         duration_minutes=duration_minutes,
         created_by=user_id,
     )
+
+    # Record intelligence observations (non-blocking)
+    try:
+        hour = now.hour
+        time_of_day = "morning" if hour < 12 else "afternoon" if hour < 17 else "evening"
+        subject = activity.subject_area or activity.title or ""
+
+        await intelligence.record_attempt_engagement(
+            db, attempt.child_id, household_id,
+            duration_minutes=duration_minutes or 0,
+            activity_type=activity.activity_type.value if hasattr(activity.activity_type, "value") else str(activity.activity_type),
+            time_of_day=time_of_day,
+            completed=True,
+            estimated_minutes=activity.estimated_minutes,
+        )
+
+        # Record evaluation insight if we have feedback data
+        if feedback:
+            await intelligence.record_evaluation_insight(
+                db, attempt.child_id, household_id,
+                evaluation_result=feedback,
+                activity_title=activity.title or "",
+                subject=subject,
+            )
+
+        # Record mastery transition if level changed
+        prev = review_result.get("previous_mastery")
+        curr = review_result.get("mastery_level")
+        if prev and curr and prev != curr:
+            await intelligence.record_mastery_transition(
+                db, attempt.child_id, household_id,
+                subject=subject,
+                from_level=prev,
+                to_level=curr,
+                node_title=activity.title or "",
+            )
+    except Exception:
+        pass  # Intelligence recording is non-blocking
 
     return {
         "attempt": attempt,

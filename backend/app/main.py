@@ -83,6 +83,9 @@ app.include_router(notifications_router, prefix="/api/v1")
 app.include_router(documents_router, prefix="/api/v1")
 app.include_router(resources_router, prefix="/api/v1")
 
+from app.api.intelligence import router as intelligence_router
+app.include_router(intelligence_router, prefix="/api/v1")
+
 
 @app.get("/health")
 async def health() -> dict:
