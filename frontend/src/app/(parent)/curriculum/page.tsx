@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { children as childrenApi, curriculum, annualCurriculum, type MapState } from "@/lib/api";
+import { useToast } from "@/components/Toast";
 import { useChild } from "@/lib/ChildContext";
 import SubjectLevelPicker from "@/components/SubjectLevelPicker";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
@@ -22,6 +23,7 @@ function getCsrf(): string | undefined {
 
 export default function CurriculumPage() {
   useEffect(() => { document.title = "Curriculum | METHEAN"; }, []);
+  const { toast } = useToast();
 
   const { selectedChild } = useChild();
   const [tab, setTab] = useState<"my" | "build">("my");
@@ -115,8 +117,9 @@ export default function CurriculumPage() {
         scope_notes: scopeNotes || undefined,
       });
       setProposal(result);
+      toast("Curriculum generated", "success");
     } catch (err: any) {
-      alert(err.detail || "Failed to generate curriculum");
+      toast(err.detail || "Failed to generate curriculum", "error");
     } finally { setGenerating(false); }
   }
 
@@ -141,18 +144,20 @@ export default function CurriculumPage() {
     try {
       await annualCurriculum.approve(proposal.id);
       setApproved(true);
+      toast("Curriculum approved", "success");
       await loadMaps();
-    } catch (err: any) { setError(err?.detail || err?.message || "Something went wrong."); } finally { setGenerating(false); }
+    } catch (err: any) { toast(err?.detail || "Something went wrong", "error"); setError(err?.detail || err?.message || "Something went wrong."); } finally { setGenerating(false); }
   }
 
   async function copyTemplate(tid: string) {
     setGenerating(true);
     try {
       await curriculum.copyTemplate(tid);
+      toast("Template applied", "success");
       resetBuild();
       setTab("my");
       await loadMaps();
-    } catch (err: any) { setError(err?.detail || err?.message || "Something went wrong."); } finally { setGenerating(false); }
+    } catch (err: any) { toast(err?.detail || "Something went wrong", "error"); setError(err?.detail || err?.message || "Something went wrong."); } finally { setGenerating(false); }
   }
 
   if (!selectedChild) return <div className="text-sm text-(--color-text-secondary)">Select a child from the sidebar.</div>;

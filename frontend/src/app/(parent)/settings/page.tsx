@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { auth, account, academicCalendar, dataExport, type User } from "@/lib/api";
+import { useToast } from "@/components/Toast";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
@@ -18,6 +19,7 @@ function getCsrf(): string | undefined {
 
 export default function SettingsPage() {
   useEffect(() => { document.title = "Settings | METHEAN"; }, []);
+  const { toast } = useToast();
 
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -67,6 +69,7 @@ export default function SettingsPage() {
       body: JSON.stringify({ name: hhName, timezone: hhTimezone }),
     });
     setHhSaved(true);
+    toast("Settings saved", "success");
     setTimeout(() => setHhSaved(false), 2000);
   }
 
@@ -81,8 +84,10 @@ export default function SettingsPage() {
         start_date: calStart || undefined,
       });
       setCalSaved(true);
+      toast("Calendar saved", "success");
       setTimeout(() => setCalSaved(false), 2000);
     } catch (err: any) {
+      toast(err?.detail || "Couldn't save calendar", "error");
       setError(err?.detail || "Couldn't save calendar.");
     }
   }
@@ -98,8 +103,10 @@ export default function SettingsPage() {
     try {
       await account.changePassword(currentPw, newPw);
       setPwSuccess(true);
+      toast("Password changed", "success");
       setCurrentPw(""); setNewPw(""); setConfirmPw("");
     } catch (err: any) {
+      toast(err?.detail || err?.message || "Couldn't change password", "error");
       setPwError(err?.detail || err?.message || "Couldn't change password.");
     }
   }

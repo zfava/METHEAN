@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { resources } from "@/lib/api";
+import { useToast } from "@/components/Toast";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
@@ -21,6 +22,7 @@ const typeBadge: Record<string, string> = {
 
 export default function ResourcesPage() {
   useEffect(() => { document.title = "Resources | METHEAN"; }, []);
+  const { toast } = useToast();
 
   const [items, setItems] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -74,16 +76,19 @@ export default function ResourcesPage() {
           notes: fNotes || undefined, status: fStatus,
         });
       }
+      toast(editingId ? "Resource updated" : "Resource added", "success");
       resetForm();
       setShowForm(false);
       await loadData();
     } catch (err: any) {
+      toast(err.detail || "Failed to save resource", "error");
       setError(err.detail || "Failed to save resource.");
     }
   }
 
   async function handleDelete(id: string) {
     await resources.remove(id);
+    toast("Resource removed", "info");
     loadData();
   }
 

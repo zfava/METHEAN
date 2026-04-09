@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { governance, type GovernanceRule } from "@/lib/api";
+import { useToast } from "@/components/Toast";
 import { useChild } from "@/lib/ChildContext";
 import ConstitutionalCeremony, { ShieldIcon } from "@/components/ConstitutionalCeremony";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
@@ -56,6 +57,7 @@ type BuilderStep = null | "type" | "tier" | "params" | "details" | "review";
 
 export default function RulesPage() {
   useEffect(() => { document.title = "Rules | METHEAN"; }, []);
+  const { toast } = useToast();
 
   const { children: allChildren } = useChild();
   const [rules, setRules] = useState<GovernanceRule[]>([]);
@@ -173,9 +175,11 @@ export default function RulesPage() {
       } else {
         await governance.createRule(payload);
       }
+      toast(editingId ? "Rule updated" : "Rule created", "success");
       resetBuilder();
       await loadRules();
     } catch (err: any) {
+      toast(err?.detail || err?.message || "Couldn't save rule", "error");
       setError(err?.detail || err?.message || "Couldn't save rule.");
     } finally {
       setSaving(false);
@@ -186,8 +190,10 @@ export default function RulesPage() {
     if (!confirm("Delete this rule? This cannot be undone.")) return;
     try {
       await governance.deleteRule(id);
+      toast("Rule deleted", "info");
       await loadRules();
     } catch (err: any) {
+      toast(err?.detail || err?.message || "Couldn't delete rule", "error");
       setError(err?.detail || err?.message || "Couldn't delete rule.");
     }
   }

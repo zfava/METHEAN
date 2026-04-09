@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { governance } from "@/lib/api";
+import { useToast } from "@/components/Toast";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
@@ -60,6 +61,7 @@ function hasConstitutionalViolation(item: QueueItem): boolean {
 
 export default function QueuePage() {
   useEffect(() => { document.title = "Approval Queue | METHEAN"; }, []);
+  const { toast } = useToast();
 
   const [items, setItems] = useState<QueueItem[]>([]);
   const [total, setTotal] = useState(0);
@@ -116,6 +118,7 @@ export default function QueuePage() {
       setActiveAction(null);
       setActionReason("");
       setModifyFields({});
+      toast(type === "reject" ? "Activity rejected" : type === "modify" ? "Activity modified and approved" : "Activity approved", type === "reject" ? "info" : "success");
 
       setTimeout(() => {
         setItems((prev) => prev.filter((i) => i.activity_id !== item.activity_id));
@@ -123,6 +126,7 @@ export default function QueuePage() {
         setTotal((t) => Math.max(0, t - 1));
       }, 300);
     } catch (err: any) {
+      toast(err?.detail || err?.message || "Action failed", "error");
       setError(err?.detail || err?.message || "Action failed. Please try again.");
     } finally {
       setSubmitting(false);

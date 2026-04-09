@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { children as childrenApi } from "@/lib/api";
+import { useToast } from "@/components/Toast";
 import { useChild } from "@/lib/ChildContext";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
@@ -46,6 +47,7 @@ const typeLabels: Record<string, { label: string; color: string }> = {
 
 export default function FamilyPage() {
   useEffect(() => { document.title = "Family | METHEAN"; }, []);
+  const { toast } = useToast();
 
   const { children, loading: childrenLoading } = useChild();
   const [childData, setChildData] = useState<Record<string, ChildDayData>>({});
@@ -60,6 +62,7 @@ export default function FamilyPage() {
   async function addChild() {
     if (!newName.trim()) return;
     await childrenApi.create({ first_name: newName, grade_level: newGrade || undefined });
+    toast("Child added", "success");
     setNewName(""); setNewGrade(""); setShowAddChild(false);
     window.location.reload();
   }
@@ -357,9 +360,10 @@ export default function FamilyPage() {
                                   parent_notes: pd?.notes ?? (child as any).preferences?.parent_notes,
                                 }),
                               });
+                              toast("Profile saved", "success");
                               setEditingProfile(null);
                               loadAllChildren();
-                            } catch { /* retry later */ }
+                            } catch { toast("Couldn't save profile", "error"); }
                           }}
                         >
                           Save Profile

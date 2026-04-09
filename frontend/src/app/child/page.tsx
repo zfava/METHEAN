@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { auth, attempts, learn, type LearningContext } from "@/lib/api";
+import { useToast } from "@/components/Toast";
 import { MetheanLogo } from "@/components/Brand";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
@@ -49,6 +50,7 @@ const typeConfig: Record<string, { label: string; bg: string; icon: string }> = 
 };
 
 export default function ChildPage() {
+  const { toast } = useToast();
   const [children, setChildren] = useState<ChildInfo[]>([]);
   const [selectedId, setSelectedId] = useState("");
   const [activities, setActivities] = useState<TodayActivity[]>([]);
@@ -145,6 +147,7 @@ export default function ChildPage() {
       // Dismiss overlay on error
       setTransitionVisible(false);
       setTimeout(() => { setTransitioning(false); setTransitionActivity(null); }, 150);
+      toast("Couldn't start activity", "error");
       setActivities((prev) =>
         prev.map((a) => a.id === act.id ? { ...a, error: "Couldn't start this activity. Try again." } : a)
       );
@@ -176,7 +179,9 @@ export default function ChildPage() {
         prevMastery: result.previous_mastery?.replace(/_/g, " "),
       });
       setCompleted(true);
+      toast("Activity submitted", "success");
     } catch (err: any) {
+      toast("Couldn't save your work", "error");
       setError(err?.message || "Couldn't save your work. Don't worry, try submitting again.");
     }
   }

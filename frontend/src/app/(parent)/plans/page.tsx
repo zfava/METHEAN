@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { plans, type Plan, type PlanDetail, type ActivityInPlan } from "@/lib/api";
+import { useToast } from "@/components/Toast";
 import StatusBadge from "@/components/StatusBadge";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { useChild } from "@/lib/ChildContext";
@@ -14,6 +15,7 @@ import VocationalActivityDetail from "@/components/VocationalActivityDetail";
 
 export default function PlansPage() {
   useEffect(() => { document.title = "Plans | METHEAN"; }, []);
+  const { toast } = useToast();
 
   const { selectedChild } = useChild();
   const [planList, setPlanList] = useState<Plan[]>([]);
@@ -52,7 +54,9 @@ export default function PlansPage() {
       await loadPlans();
       const detail = await plans.detail(p.id);
       setSelected(detail);
+      toast("Plan generated", "success");
     } catch (e: any) {
+      toast(e.detail || "Failed to generate plan", "error");
       setError(e.detail || "Failed to generate plan");
     } finally {
       setGenerating(false);
@@ -67,6 +71,7 @@ export default function PlansPage() {
   async function handleApprove(activityId: string) {
     if (!selected) return;
     await plans.approveActivity(selected.id, activityId);
+    toast("Activity approved", "success");
     await loadPlanDetail(selected.id);
   }
 
@@ -75,6 +80,7 @@ export default function PlansPage() {
     const reason = prompt("Reason for rejection:");
     if (!reason) return;
     await plans.rejectActivity(selected.id, activityId, reason);
+    toast("Activity rejected", "info");
     await loadPlanDetail(selected.id);
   }
 
@@ -82,6 +88,7 @@ export default function PlansPage() {
     if (!selected) return;
     try {
       await plans.lock(selected.id);
+      toast("Plan activated", "success");
       await loadPlanDetail(selected.id);
     } catch (e: any) {
       const detail = e.detail;

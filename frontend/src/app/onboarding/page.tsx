@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { children as childrenApi, governance, annualCurriculum, plans, curriculum } from "@/lib/api";
 import { MetheanLogoVertical } from "@/components/Brand";
 import { ShieldIcon } from "@/components/ConstitutionalCeremony";
+import { useToast } from "@/components/Toast";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import { cn } from "@/lib/cn";
@@ -45,6 +46,7 @@ interface OnboardingChild { id: string; firstName: string; grade: string }
 
 export default function OnboardingPage() {
   const router = useRouter();
+  const { toast } = useToast();
   const [step, setStep] = useState(1);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -130,6 +132,7 @@ export default function OnboardingPage() {
   // ── Step 5: Ratify Constitution ──
   function handleRatify() {
     setRatified(true);
+    toast("Your family's constitution is established", "success");
     setTimeout(() => setStep(6), 2000);
   }
 
@@ -164,6 +167,7 @@ export default function OnboardingPage() {
       }
     }
     setGeneratingFor("");
+    toast("Curricula generated", "success");
     setStep(7);
     setLoading(false);
   }
@@ -203,6 +207,7 @@ export default function OnboardingPage() {
       setSummary({ rules: 4, activities: activityCounts });
     }
 
+    toast("First week's plan created", "success");
     setStep(8);
     setLoading(false);
   }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { readingLog } from "@/lib/api";
+import { useToast } from "@/components/Toast";
 import { useChild } from "@/lib/ChildContext";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
@@ -23,6 +24,7 @@ const genreColors: Record<string, string> = {
 
 export default function ReadingPage() {
   useEffect(() => { document.title = "Reading Log | METHEAN"; }, []);
+  const { toast } = useToast();
 
   const { selectedChild } = useChild();
   const [tab, setTab] = useState<Tab>("reading");
@@ -73,6 +75,7 @@ export default function ReadingPage() {
       pages_total: newPages ? parseInt(newPages) : null,
       status: newStatus,
     });
+    toast("Entry logged", "success");
     setNewTitle(""); setNewAuthor(""); setNewGenre(""); setNewSubject(""); setNewPages("");
     setShowAddForm(false);
     loadData();
@@ -86,6 +89,7 @@ export default function ReadingPage() {
 
   async function markComplete(entryId: string) {
     await readingLog.update(entryId, { status: "completed" });
+    toast("Book completed!", "success");
     loadData();
   }
 

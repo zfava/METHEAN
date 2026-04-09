@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useToast } from "@/components/Toast";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
@@ -62,6 +63,7 @@ interface Boundary {
 
 export default function PhilosophyPage() {
   useEffect(() => { document.title = "Philosophy | METHEAN"; }, []);
+  const { toast } = useToast();
 
   const [philosophy, setPhilosophy] = useState("eclectic");
   const [philosophyDesc, setPhilosophyDesc] = useState("");
@@ -123,6 +125,7 @@ export default function PhilosophyPage() {
     });
     setSaving(false);
     setSaved(true);
+    toast("Philosophy saved", "success");
     setTimeout(() => setSaved(false), 4000);
   }
 
