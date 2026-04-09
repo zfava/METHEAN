@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useMemo } from "react";
+import { useState, useRef, useMemo, useEffect } from "react";
 
 interface DataPoint {
   week: string;
@@ -35,13 +35,25 @@ function cubicPath(points: Array<{ x: number; y: number }>): string {
 export default function MasteryChart({ data, height = 200 }: MasteryChartProps) {
   const [hoverIdx, setHoverIdx] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [containerW, setContainerW] = useState(600);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver((entries) => {
+      const w = entries[0]?.contentRect.width;
+      if (w && w > 0) setContainerW(Math.max(w, 320));
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
 
   const paddingL = 36;
   const paddingR = 16;
   const paddingT = 16;
   const paddingB = 32;
 
-  const chartW = 600;
+  const chartW = containerW;
   const chartH = height;
   const plotW = chartW - paddingL - paddingR;
   const plotH = chartH - paddingT - paddingB;
@@ -78,7 +90,6 @@ export default function MasteryChart({ data, height = 200 }: MasteryChartProps) 
       show: !showEveryOther || i % 2 === 0 || i === data.length - 1,
     }));
 
-    // Area fill path under mastered line
     const linePath = cubicPath(masteredPts);
     const lastPt = masteredPts[masteredPts.length - 1];
     const firstPt = masteredPts[0];
@@ -98,9 +109,8 @@ export default function MasteryChart({ data, height = 200 }: MasteryChartProps) 
   const xStep = plotW / Math.max(data.length - 1, 1);
 
   return (
-    <div ref={containerRef} className="relative w-full overflow-x-auto">
-      <svg viewBox={`0 0 ${chartW} ${chartH}`} className="w-full" style={{ minWidth: 400 }}>
-        {/* Grid lines */}
+    <div ref={containerRef} className="relative w-full">
+      <svg viewBox={`0 0 ${chartW} ${chartH}`} className="w-full">
         {gridLines.map((gl) => (
           <g key={gl.label}>
             <line x1={paddingL} y1={gl.y} x2={chartW - paddingR} y2={gl.y}
@@ -111,27 +121,19 @@ export default function MasteryChart({ data, height = 200 }: MasteryChartProps) 
           </g>
         ))}
 
-        {/* Baseline */}
         <line x1={paddingL} y1={paddingT + plotH} x2={chartW - paddingR} y2={paddingT + plotH}
           stroke="var(--color-border)" strokeWidth={1} />
 
-        {/* X labels */}
         {xLabels.map((xl, i) => xl.show && (
           <text key={i} x={xl.x} y={chartH - 6} textAnchor="middle" fill="var(--color-text-tertiary)" fontSize={10}>
             {xl.label}
           </text>
         ))}
 
-        {/* Area fill under mastered line */}
         <path d={areaPath} fill="var(--color-success)" opacity={0.06} />
-
-        {/* Progressed line (dashed, behind) */}
         <path d={cubicPath(progressedPts)} fill="none" stroke="var(--color-accent)" strokeWidth={1.5} strokeDasharray="4 3" />
-
-        {/* Mastered line */}
         <path d={cubicPath(masteredPts)} fill="none" stroke="var(--color-success)" strokeWidth={2} />
 
-        {/* Data points */}
         {masteredPts.map((pt, i) => (
           <circle key={`m${i}`} cx={pt.x} cy={pt.y} r={hoverIdx === i ? 5 : 3}
             fill="var(--color-success)" stroke="var(--color-surface)" strokeWidth={1.5}
@@ -143,7 +145,6 @@ export default function MasteryChart({ data, height = 200 }: MasteryChartProps) 
             style={{ transition: "r 0.15s" }} />
         ))}
 
-        {/* Hover zones */}
         {data.map((_, i) => (
           <rect key={i} x={paddingL + i * xStep - xStep / 2} y={paddingT} width={xStep} height={plotH}
             fill="transparent"
@@ -152,19 +153,15 @@ export default function MasteryChart({ data, height = 200 }: MasteryChartProps) 
           />
         ))}
 
-        {/* Hover line */}
         {hoverIdx !== null && (
           <line
-            x1={paddingL + hoverIdx * xStep}
-            y1={paddingT}
-            x2={paddingL + hoverIdx * xStep}
-            y2={paddingT + plotH}
+            x1={paddingL + hoverIdx * xStep} y1={paddingT}
+            x2={paddingL + hoverIdx * xStep} y2={paddingT + plotH}
             stroke="var(--color-text-tertiary)" strokeWidth={1} strokeDasharray="2 2" opacity={0.5}
           />
         )}
       </svg>
 
-      {/* Tooltip */}
       {hoverIdx !== null && data[hoverIdx] && (
         <div
           className="absolute bg-(--color-surface) border border-(--color-border) rounded-[10px] shadow-lg px-3 py-2 text-xs pointer-events-none z-10"

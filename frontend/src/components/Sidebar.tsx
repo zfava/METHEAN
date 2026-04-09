@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState, useCallback, useRef } from "react";
 import { auth, notifications as notificationsApi, type User } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
+import { useStagger } from "@/lib/useStagger";
 import { cn } from "@/lib/cn";
 import { MetheanLogo } from "@/components/Brand";
 
@@ -35,6 +36,8 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
   useEffect(() => {
     if (mobile) requestAnimationFrame(() => requestAnimationFrame(() => setEntered(true)));
   }, [mobile]);
+
+  const sectionVisibility = useStagger(3, 80);
 
   const loadNotifications = useCallback(async () => {
     try {
@@ -149,13 +152,13 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
       )}
 
       <nav aria-label="Main navigation" className="flex-1 space-y-5 pb-4 overflow-y-auto">
-        <div>
+        <div className={sectionVisibility[0] ? "animate-fade-up" : "opacity-0"}>
           <div className="px-5 mb-1.5 text-[11px] font-medium text-white/30 tracking-wider">Overview</div>
           {navItem("/dashboard", "Dashboard", true)}
           {navItem("/family", "Family")}
           {navItem("/compliance", "Compliance")}
         </div>
-        <div>
+        <div className={sectionVisibility[1] ? "animate-fade-up" : "opacity-0"}>
           <div className="px-5 mb-1.5 text-[11px] font-medium text-white/30 tracking-wider">Learning</div>
           {navItem("/curriculum", "Curriculum", true)}
           {navItem("/curriculum/year", "Year Plan")}
@@ -169,7 +172,7 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
           {navItem("/resources", "Resources")}
           {navItem("/inspection", "Progress")}
         </div>
-        <div>
+        <div className={sectionVisibility[2] ? "animate-fade-up" : "opacity-0"}>
           <div className="flex items-center justify-between px-5 mb-1.5">
             <span className="text-[11px] font-medium text-white/30 tracking-wider">Governance</span>
             {pendingCount > 0 && (

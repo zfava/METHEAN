@@ -69,6 +69,7 @@ export default function OnboardingPage() {
   const [ceremonyChecks, setCeremonyChecks] = useState([false, false, false]);
   const [ceremonyReason, setCeremonyReason] = useState("");
   const [ratified, setRatified] = useState(false);
+  const [constitutionalRuleId, setConstitutionalRuleId] = useState<string | null>(null);
   const [constitutionalRules, setConstitutionalRules] = useState<string[]>([]);
 
   // Step 6: Curriculum
@@ -119,7 +120,9 @@ export default function OnboardingPage() {
       const rulesResult = await governance.initDefaults();
       const rulesList = (rulesResult as any).items || rulesResult;
       if (Array.isArray(rulesList)) {
-        setConstitutionalRules(rulesList.filter((r: any) => r.tier === "constitutional" || r.rule_type === "ai_boundary").map((r: any) => r.name || r.rule_type));
+        const constRules = rulesList.filter((r: any) => r.tier === "constitutional" || r.rule_type === "ai_boundary");
+        setConstitutionalRules(constRules.map((r: any) => r.name || r.rule_type));
+        if (constRules.length > 0) setConstitutionalRuleId(constRules[0].id);
       }
       setStep(5);
     } catch (err: any) {
@@ -130,9 +133,17 @@ export default function OnboardingPage() {
   }
 
   // ── Step 5: Ratify Constitution ──
-  function handleRatify() {
+  async function handleRatify() {
     setRatified(true);
     toast("Your family's constitution is established", "success");
+    // Persist ratification reason to the constitutional rule
+    if (constitutionalRuleId) {
+      try {
+        await governance.updateRule(constitutionalRuleId, {
+          description: `AI Oversight Guarantee — Ratified during onboarding. Parent's reason: "${ceremonyReason.trim()}"`,
+        });
+      } catch { /* Non-blocking: ceremony proceeds even if persistence fails */ }
+    }
     setTimeout(() => setStep(6), 2000);
   }
 

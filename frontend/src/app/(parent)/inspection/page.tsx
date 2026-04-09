@@ -96,6 +96,25 @@ function extractConstraintsBlock(systemPrompt: string): { constraints: string[];
     return { constraints, rest };
   }
 
+  // Last resort: split everything after "PHILOSOPHICAL CONSTRAINTS" by newlines
+  const lastIdx = systemPrompt.toUpperCase().indexOf("PHILOSOPHICAL CONSTRAINTS");
+  if (lastIdx !== -1) {
+    const afterMarker = systemPrompt.substring(lastIdx);
+    const firstNewline = afterMarker.indexOf("\n");
+    if (firstNewline > 0) {
+      const body = afterMarker.substring(firstNewline).trim();
+      const endIdx = body.indexOf("\n\n");
+      const section = endIdx > 0 ? body.substring(0, endIdx) : body;
+      const lines = section.split("\n")
+        .map((l) => l.replace(/^[-*•]\s*/, "").trim())
+        .filter((l) => l.length > 0 && l.length < 300);
+      if (lines.length > 0) {
+        const block = afterMarker.substring(0, firstNewline + (endIdx > 0 ? endIdx : section.length) + 1);
+        return { constraints: lines.slice(0, 20), rest: systemPrompt.replace(block, "").trim() };
+      }
+    }
+  }
+
   return { constraints: [], rest: systemPrompt };
 }
 
@@ -441,6 +460,7 @@ function PromptSection({ inputData }: { inputData: object | null }) {
   }
 
   const { constraints, rest } = systemPrompt ? extractConstraintsBlock(systemPrompt) : { constraints: [], rest: "" };
+  const hasPhilo = systemPrompt ? hasPhilosophicalConstraints({ input_data: inputData } as any) : false;
 
   return (
     <div className="space-y-3">
@@ -471,6 +491,21 @@ function PromptSection({ inputData }: { inputData: object | null }) {
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {/* Fallback: constraints detected but regex couldn't extract cleanly */}
+      {hasPhilo && constraints.length === 0 && (
+        <div className="bg-(--color-constitutional-light) border-l-4 border-(--color-constitutional) rounded-r-[10px] p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <svg className="w-4 h-4 text-(--color-constitutional)" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 2.18l7 3.12v4.7c0 4.83-3.4 9.36-7 10.5-3.6-1.14-7-5.67-7-10.5V6.3l7-3.12z" />
+            </svg>
+            <span className="text-xs font-semibold text-(--color-constitutional)">Philosophical Constraints Detected</span>
+          </div>
+          <p className="text-xs text-(--color-text-secondary)">
+            Your family's philosophical constraints were injected into this AI call. View the full system prompt below to see them in context.
+          </p>
         </div>
       )}
 

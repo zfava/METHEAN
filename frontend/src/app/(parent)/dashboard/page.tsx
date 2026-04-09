@@ -146,6 +146,8 @@ export default function DashboardPage() {
     }
   }
 
+  const cardVisibility = useStagger(children.length, 60);
+
   if (loading || childLoading) return (
     <div className="max-w-5xl space-y-6"><LoadingSkeleton variant="text" count={1} /><LoadingSkeleton variant="card" count={3} /><LoadingSkeleton variant="list" count={5} /></div>
   );
@@ -201,8 +203,8 @@ export default function DashboardPage() {
           const isSelected = selectedChild?.id === c.id;
           const circ = 2 * Math.PI * 20;
           return (
-            <Card key={c.id} onClick={() => setSelectedChild(c)} selected={isSelected} padding="p-4" animate
-              className={`stagger-${Math.min(idx + 1, 5)}`}>
+            <div key={c.id} className={cardVisibility[idx] ? "animate-fade-up" : "opacity-0"}>
+            <Card onClick={() => setSelectedChild(c)} selected={isSelected} padding="p-4">
               <div className="flex items-center gap-3">
                 <div className="relative w-12 h-12 shrink-0">
                   <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
@@ -221,6 +223,7 @@ export default function DashboardPage() {
                 </div>
               </div>
             </Card>
+            </div>
           );
         })}
       </div>

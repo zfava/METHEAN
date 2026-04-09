@@ -608,7 +608,7 @@ export default function RulesPage() {
               </div>
               <div className="space-y-2">
                 {constitutional.map((r, idx) => (
-                  <div key={r.id} className={`animate-fade-up stagger-${Math.min(idx + 1, 5)}`}>
+                  <div key={r.id} className="animate-fade-up" style={{ animationDelay: `${idx * 60}ms` }}>
                     <Card padding="p-4" borderLeft="border-l-(--color-constitutional)" className={cn("border-l-4", !r.is_active && "opacity-60")}>
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-2">
@@ -678,7 +678,8 @@ export default function RulesPage() {
                 {policy.map((r, idx) => {
                   const info = RULE_TYPES.find((t) => t.value === r.rule_type);
                   return (
-                    <Card key={r.id} padding="p-4" animate className={cn(!r.is_active ? "opacity-50" : "", `stagger-${Math.min(idx + 1, 5)}`)}>
+                    <div key={r.id} className="animate-fade-up" style={{ animationDelay: `${idx * 60}ms` }}>
+                    <Card padding="p-4" className={cn(!r.is_active ? "opacity-50" : "")}>
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-2">
                           <span>{info?.icon}</span>
@@ -698,6 +699,7 @@ export default function RulesPage() {
                         {humanize(r)}
                       </div>
                     </Card>
+                    </div>
                   );
                 })}
               </div>
