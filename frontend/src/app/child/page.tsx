@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { auth, attempts, learn, children as childrenApi, achievements as achievementsApi, type LearningContext } from "@/lib/api";
+import { auth, attempts, learn, children as childrenApi, achievements as achievementsApi, type LearningContext, type MapState } from "@/lib/api";
 import { useToast } from "@/components/Toast";
 import { MetheanLogo } from "@/components/Brand";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
+import JourneyMap from "@/components/child/JourneyMap";
 import LessonView from "@/components/child/LessonView";
 import PracticeView from "@/components/child/PracticeView";
 import ReviewView from "@/components/child/ReviewView";
@@ -77,6 +78,7 @@ export default function ChildPage() {
   const [streak, setStreak] = useState<{ current_streak: number; longest_streak: number } | null>(null);
   const [earnedAchievements, setEarnedAchievements] = useState<any[]>([]);
   const [totalMastered, setTotalMastered] = useState(0);
+  const [journeyMaps, setJourneyMaps] = useState<MapState[]>([]);
 
   useEffect(() => { init(); }, []);
   useEffect(() => {
@@ -92,6 +94,7 @@ export default function ChildPage() {
       achievementsApi.streak(selectedId).then(setStreak).catch(() => {});
       achievementsApi.list(selectedId).then((d) => setEarnedAchievements(d.earned || [])).catch(() => {});
       childrenApi.state(selectedId).then((s) => setTotalMastered(s?.mastered_count || 0)).catch(() => {});
+      childrenApi.allMapState(selectedId).then(setJourneyMaps).catch(() => {});
     }
   }, [selectedId]);
 
@@ -484,6 +487,37 @@ export default function ChildPage() {
                         {isNew && <span className="text-[8px] px-1 py-0.5 bg-(--gold) text-white rounded-full font-bold">NEW</span>}
                       </div>
                     </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* Journey Maps */}
+        {journeyMaps.length > 0 && (
+          <div className="mb-6">
+            <div className="text-xs font-medium text-(--color-text-secondary) mb-2">Your Learning Journey</div>
+            <div className="flex gap-4 overflow-x-auto pb-2">
+              {journeyMaps.slice(0, 3).map((ms) => {
+                const journeyNodes = (ms.nodes || []).slice(0, 12).map((n: any) => ({
+                  id: n.node_id,
+                  title: n.title,
+                  mastery: n.mastery_level || "not_started",
+                  is_next: n.status === "available" && n.prerequisites_met,
+                }));
+                // Mark only the first available node as "next"
+                let foundNext = false;
+                for (const jn of journeyNodes) {
+                  if (jn.is_next && !foundNext) { foundNext = true; }
+                  else if (jn.is_next) { jn.is_next = false; }
+                }
+                return (
+                  <div key={ms.learning_map_id} className="shrink-0">
+                    <JourneyMap
+                      nodes={journeyNodes}
+                      subject={ms.map_name || "Learning Path"}
+                    />
                   </div>
                 );
               })}
