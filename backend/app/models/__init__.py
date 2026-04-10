@@ -26,6 +26,8 @@ from app.models.operational import (
     DeviceToken,
     NotificationLog,
     RefreshToken,
+    UsageEvent,
+    UsageLedger,
 )
 from app.models.intelligence import LearnerIntelligence
 from app.models.achievements import Achievement, Streak
@@ -68,4 +70,6 @@ __all__ = [
     "FamilyInvite",
     "Achievement",
     "Streak",
+    "UsageLedger",
+    "UsageEvent",
 ]

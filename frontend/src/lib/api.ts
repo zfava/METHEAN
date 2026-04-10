@@ -424,6 +424,11 @@ export const billing = {
   portal: () => request<{ portal_url: string }>("/billing/portal", { method: "POST" }),
 };
 
+export const usage = {
+  current: () => request<any>("/usage/current"),
+  breakdown: () => request<any>("/usage/breakdown"),
+};
+
 export const familyInvites = {
   invite: (email: string, role: string) =>
     request<{ invited: boolean }>("/household/invite", { method: "POST", body: JSON.stringify({ email, role }) }),

@@ -89,6 +89,9 @@ app.include_router(intelligence_router, prefix="/api/v1")
 from app.api.billing import router as billing_router
 app.include_router(billing_router, prefix="/api/v1")
 
+from app.api.usage import router as usage_router
+app.include_router(usage_router, prefix="/api/v1")
+
 
 @app.get("/health")
 async def health() -> dict:

@@ -64,6 +64,25 @@ async def call_ai(
     max_tokens = max_tokens or settings.AI_MAX_TOKENS
     start = time.monotonic()
 
+    # Budget check before calling any provider
+    try:
+        from app.services.usage import check_budget, UsageLimitExceeded
+        budget = await check_budget(db, household_id)
+        if not budget["allowed"]:
+            ai_run_stub = AIRun(
+                household_id=household_id, triggered_by=triggered_by,
+                run_type=role.value, status=AIRunStatus.failed,
+                error_message="Monthly AI usage limit reached",
+                started_at=datetime.now(UTC), completed_at=datetime.now(UTC),
+            )
+            db.add(ai_run_stub)
+            await db.flush()
+            raise UsageLimitExceeded("Monthly AI token budget exhausted. Resets on your next billing period.")
+    except UsageLimitExceeded:
+        raise
+    except Exception:
+        pass  # Budget check failure should not block AI calls
+
     # Inject philosophical constraints into the system prompt
     from app.ai.prompts import build_philosophical_constraints
     constraints = build_philosophical_constraints(philosophical_profile)
@@ -162,6 +181,18 @@ async def call_ai(
     ai_run.output_data = parsed_output if isinstance(parsed_output, dict) else {"result": parsed_output}
     ai_run.completed_at = datetime.now(UTC)
     await db.flush()
+
+    # Record usage for billing
+    try:
+        from app.services.usage import record_usage
+        if input_tokens or output_tokens:
+            await record_usage(
+                db, household_id, ai_run.id,
+                input_tokens, output_tokens,
+                model_used or "unknown", role.value,
+            )
+    except Exception:
+        pass  # Usage recording should not break AI response
 
     return {
         "ai_run_id": ai_run.id,

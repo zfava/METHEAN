@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { billing } from "@/lib/api";
+import { billing, usage } from "@/lib/api";
+import SectionHeader from "@/components/ui/SectionHeader";
 import { useToast } from "@/components/Toast";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
@@ -14,6 +15,8 @@ export default function BillingPage() {
 
   const { toast } = useToast();
   const [status, setStatus] = useState<any>(null);
+  const [usageData, setUsageData] = useState<any>(null);
+  const [breakdown, setBreakdown] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => { load(); }, []);
@@ -21,8 +24,14 @@ export default function BillingPage() {
   async function load() {
     setLoading(true);
     try {
-      const s = await billing.status();
+      const [s, u, b] = await Promise.all([
+        billing.status(),
+        usage.current().catch(() => null),
+        usage.breakdown().catch(() => null),
+      ]);
       setStatus(s);
+      setUsageData(u);
+      setBreakdown(b);
     } catch { setStatus({ status: "trial", stripe_configured: false }); }
     finally { setLoading(false); }
   }
@@ -143,6 +152,94 @@ export default function BillingPage() {
           ))}
         </div>
       </Card>
+
+      {/* AI Usage */}
+      {usageData && (
+        <Card className="mb-5">
+          <SectionHeader title="AI Usage This Period" />
+          <div className="mt-3">
+            {/* Usage meter */}
+            <div className="flex items-center justify-between text-xs text-(--color-text-secondary) mb-1.5">
+              <span>{Math.round(usageData.pct_used * 100)}% of monthly AI budget used</span>
+              <span>{usageData.ai_calls} calls</span>
+            </div>
+            <div className="w-full h-3 rounded-full bg-(--color-border) mb-1">
+              <div
+                className={cn("h-full rounded-full transition-all",
+                  usageData.pct_used >= 1.0 ? "bg-(--color-danger)" :
+                  usageData.pct_used >= 0.8 ? "bg-(--color-warning)" :
+                  "bg-(--color-success)"
+                )}
+                style={{ width: `${Math.min(100, Math.round(usageData.pct_used * 100))}%` }}
+              />
+            </div>
+            <div className="flex justify-between text-[10px] text-(--color-text-tertiary)">
+              <span>{((usageData.tokens_consumed || 0) / 1000).toFixed(0)}K tokens used</span>
+              <span>{((usageData.token_budget || 0) / 1000).toFixed(0)}K budget</span>
+            </div>
+
+            {/* Warning / exhausted states */}
+            {usageData.pct_used >= 1.0 && (
+              <div className="mt-3 bg-(--color-danger-light) rounded-[10px] p-3 text-xs text-(--color-danger)">
+                Monthly AI budget reached. Existing content and tracking continue. AI features resume {usageData.period_end}.
+              </div>
+            )}
+            {usageData.warning === "approaching_limit" && usageData.pct_used < 1.0 && (
+              <div className="mt-3 bg-(--color-warning-light) rounded-[10px] p-3 text-xs text-(--color-warning)">
+                Approaching your monthly AI limit. Usage resets {usageData.period_end}.
+              </div>
+            )}
+          </div>
+
+          {/* Breakdown by role */}
+          {breakdown?.by_role && Object.keys(breakdown.by_role).length > 0 && (
+            <div className="mt-4">
+              <div className="text-[10px] font-medium text-(--color-text-tertiary) uppercase tracking-wide mb-2">By AI Role</div>
+              <div className="space-y-1.5">
+                {Object.entries(breakdown.by_role)
+                  .sort(([, a]: any, [, b]: any) => b.tokens - a.tokens)
+                  .map(([role, data]: [string, any]) => (
+                    <div key={role} className="flex items-center justify-between text-xs px-3 py-1.5 bg-(--color-page) rounded-[8px]">
+                      <span className="text-(--color-text) capitalize">{role}</span>
+                      <span className="text-(--color-text-tertiary)">{data.calls} calls · {(data.tokens / 1000).toFixed(0)}K tokens · ${data.cost.toFixed(2)}</span>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
+
+          {/* Daily chart */}
+          {breakdown?.by_day && breakdown.by_day.length > 0 && (
+            <div className="mt-4">
+              <div className="text-[10px] font-medium text-(--color-text-tertiary) uppercase tracking-wide mb-2">Last 14 Days</div>
+              <div className="flex items-end gap-1 h-16">
+                {breakdown.by_day.map((d: any, i: number) => {
+                  const maxTokens = Math.max(...breakdown.by_day.map((x: any) => x.tokens), 1);
+                  const height = Math.max(2, (d.tokens / maxTokens) * 100);
+                  return (
+                    <div key={i} className="flex-1 flex flex-col items-center" title={`${d.date}: ${d.calls} calls`}>
+                      <div
+                        className="w-full rounded-t-sm bg-(--color-accent)"
+                        style={{ height: `${height}%` }}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="flex justify-between text-[9px] text-(--color-text-tertiary) mt-1">
+                <span>{breakdown.by_day[0]?.date?.slice(5)}</span>
+                <span>{breakdown.by_day[breakdown.by_day.length - 1]?.date?.slice(5)}</span>
+              </div>
+            </div>
+          )}
+
+          {breakdown?.total_cost != null && (
+            <div className="mt-3 text-[10px] text-(--color-text-tertiary)">
+              Estimated AI cost this period: ${breakdown.total_cost.toFixed(2)}
+            </div>
+          )}
+        </Card>
+      )}
     </div>
   );
 }

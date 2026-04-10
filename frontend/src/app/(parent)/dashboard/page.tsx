@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { auth, children as childrenApi, governance, household, snapshots, type User, type ChildState, type GovernanceEvent, type SnapshotItem } from "@/lib/api";
+import { auth, children as childrenApi, governance, household, snapshots, usage, type User, type ChildState, type GovernanceEvent, type SnapshotItem } from "@/lib/api";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import StatusBadge from "@/components/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
@@ -38,6 +38,7 @@ export default function DashboardPage() {
   const [weeklyStats, setWeeklyStats] = useState({ completed: 0, minutes: 0, mastered: 0 });
   const [chartData, setChartData] = useState<Array<{ week: string; mastered: number; progressed: number; total_minutes: number }>>([]);
   const [govHealth, setGovHealth] = useState<{ rules: number; constitutional: number; transparency: string; pending: number }>({ rules: 0, constitutional: 0, transparency: "full", pending: 0 });
+  const [aiUsagePct, setAiUsagePct] = useState<number | null>(null);
   const [error, setError] = useState("");
 
   useEffect(() => { init(); }, []);
@@ -61,6 +62,8 @@ export default function DashboardPage() {
       const aiRule = rulesList.find((r: any) => r.rule_type === "ai_boundary" && r.is_active);
       const transparency = aiRule ? ((aiRule.parameters as any)?.ai_transparency || "full") : "full";
       setGovHealth({ rules: rulesList.filter((r: any) => r.is_active).length, constitutional, transparency, pending: qData.total || 0 });
+      // Load AI usage
+      usage.current().then((u) => setAiUsagePct(u?.pct_used ?? null)).catch(() => {});
     } catch (err: any) {
       setError(err?.detail || err?.message || "Couldn't load dashboard data. Check your connection.");
     }
@@ -175,6 +178,13 @@ export default function DashboardPage() {
             </span>
             {govHealth.constitutional > 0 && (
               <span className="text-[10px] px-1.5 py-0.5 bg-(--color-constitutional-light) text-(--color-constitutional) rounded-full font-medium hidden sm:inline">{govHealth.constitutional} constitutional</span>
+            )}
+            {aiUsagePct != null && aiUsagePct > 0.8 && (
+              <span className={cn("text-[10px] px-1.5 py-0.5 rounded-full font-medium hidden sm:inline",
+                aiUsagePct >= 1.0 ? "bg-(--color-danger-light) text-(--color-danger)" : "bg-(--color-warning-light) text-(--color-warning)"
+              )}>
+                AI: {Math.round(aiUsagePct * 100)}% used
+              </span>
             )}
           </Card>
         }
