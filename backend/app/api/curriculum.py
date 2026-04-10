@@ -218,6 +218,14 @@ async def copy_template(
         await db.flush()
         ref_to_uuid[tnode.ref] = node.id
 
+        # Inject pre-enriched content if available
+        try:
+            from app.content.math_foundational_content import MATH_FOUNDATIONAL_CONTENT
+            if template.template_id == "math-foundational" and tnode.ref in MATH_FOUNDATIONAL_CONTENT:
+                node.content = MATH_FOUNDATIONAL_CONTENT[tnode.ref]
+        except ImportError:
+            pass
+
     # Create edges
     edge_count = 0
     for tedge in template.edges:
