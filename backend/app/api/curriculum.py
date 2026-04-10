@@ -238,6 +238,13 @@ async def copy_template(
     # Build transitive closure for the new map
     await rebuild_closure_for_map(db, lmap.id)
 
+    # Queue background enrichment
+    try:
+        from app.tasks.worker import enrich_map_task
+        enrich_map_task.delay(str(lmap.id), str(user.household_id))
+    except Exception:
+        pass  # Enrichment failure should not block template application
+
     return TemplateCopyResponse(
         learning_map_id=lmap.id,
         subject_id=subject.id,

@@ -208,6 +208,13 @@ async def apply_curriculum_mapping(
     ))
     await db.flush()
 
+    # Queue background enrichment
+    try:
+        from app.tasks.worker import enrich_map_task
+        enrich_map_task.delay(str(lmap.id), str(household_id))
+    except Exception:
+        pass
+
     return {
         "learning_map_id": str(lmap.id),
         "subject_id": str(subj.id),

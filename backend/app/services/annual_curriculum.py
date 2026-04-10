@@ -278,6 +278,14 @@ async def approve_annual_curriculum(
     # Materialize full year
     await materialize_full_year(db, curriculum)
 
+    # Queue background enrichment for associated learning map
+    try:
+        if curriculum.learning_map_id:
+            from app.tasks.worker import enrich_map_task
+            enrich_map_task.delay(str(curriculum.learning_map_id), str(household_id))
+    except Exception:
+        pass
+
     return curriculum
 
 

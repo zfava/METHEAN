@@ -141,5 +141,15 @@ def weekly_digest_task(self) -> dict:
         self.retry(exc=exc, countdown=30 * (2 ** self.request.retries))
 
 
+@celery_app.task(name="app.tasks.worker.enrich_map_task", bind=True, max_retries=2)
+def enrich_map_task(self, learning_map_id: str, household_id: str) -> dict:
+    """Background task: enrich all nodes in a learning map."""
+    try:
+        from app.tasks.enrichment import enrich_learning_map_sync
+        return enrich_learning_map_sync(learning_map_id, household_id)
+    except Exception as exc:
+        self.retry(exc=exc, countdown=60)
+
+
 # Alias for celery -A app.tasks.worker
 app = celery_app
