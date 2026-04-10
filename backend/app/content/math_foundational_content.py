@@ -782,4 +782,37 @@ MATH_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {"required": ["mixed collection of sortable objects"], "recommended": ["sorting mats", "Venn diagram circles"]},
         "time_estimates": {"first_exposure": 15, "practice_session": 15, "assessment": 10},
     },
+    "mf-30": {
+        "enriched": True,
+        "learning_objectives": ["Demonstrate mastery of all foundational math skills", "Apply skills to novel problems", "Explain mathematical thinking clearly", "Show confidence with numbers"],
+        "teaching_guidance": {
+            "introduction": "This is a comprehensive review and celebration of everything learned. It's not a stressful test. It's a chance for the child to show how much they've grown. Mix oral, written, and hands-on tasks. Celebrate what they know.",
+            "scaffolding_sequence": ["Warm up with favorite activities from earlier topics", "Work through a mix of problems covering all major areas", "Include both computation and word problems", "End with a challenging problem that connects multiple skills", "Celebrate completion and discuss what the child is most proud of"],
+            "socratic_questions": ["Which math skill are you most proud of learning?", "What was the hardest thing you learned? What made it click?", "What do you want to learn next in math?"],
+            "practice_activities": ["Math portfolio review: look at early work and compare to now", "Mixed practice: 2-3 problems from each major topic", "Create a 'math book' showing what you know"],
+            "real_world_connections": ["Plan a simple party: count guests, calculate supplies needed", "Set up a pretend store: price items, make change", "Measure and draw a map of your room"],
+            "common_misconceptions": ["Test anxiety: frame as celebration, not judgment", "Thinking they need to be perfect", "Forgetting strategies under pressure"],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": ["Scores 80%+ across all foundational skill areas", "Explains at least 2 strategies clearly", "Applies math to a real-world scenario"],
+            "assessment_methods": ["mixed computation", "word problems", "oral explanation", "hands-on tasks"],
+            "sample_assessment_prompts": ["Solve 5 computation problems from different topics", "Solve 2 word problems", "Explain how you solved your favorite problem"],
+        },
+        "practice_items": [
+            {"type": "problem", "difficulty": 1, "prompt": "What is 8 + 6?", "expected_type": "number", "correct_answer": "14", "hints": ["Make ten: 8+2=10, then 4 more"], "explanation": "14."},
+            {"type": "problem", "difficulty": 1, "prompt": "What is 15 - 7?", "expected_type": "number", "correct_answer": "8", "hints": ["Think: 7 + ? = 15"], "explanation": "8."},
+            {"type": "problem", "difficulty": 2, "prompt": "What number has 7 tens and 3 ones?", "expected_type": "number", "correct_answer": "73", "hints": ["7 tens = 70, plus 3"], "explanation": "73."},
+            {"type": "problem", "difficulty": 2, "prompt": "You have 2 dimes and 3 nickels. How many cents?", "expected_type": "number", "correct_answer": "35", "hints": ["2 dimes = 20 cents. 3 nickels = 15 cents."], "explanation": "20 + 15 = 35 cents."},
+            {"type": "problem", "difficulty": 3, "prompt": "You have 16 stickers. You want to share them equally with a friend. How many does each person get? Is it an even split?", "expected_type": "text", "hints": ["16 divided into 2 equal groups"], "explanation": "8 each. 16 is even, so it splits equally: 8 and 8."},
+        ],
+        "assessment_items": [
+            {"prompt": "Solve: 9 + 7", "type": "number", "correct_answer": "16", "target_concept": "addition_to_20"},
+            {"prompt": "Solve: 13 - 5", "type": "number", "correct_answer": "8", "target_concept": "subtraction_within_20"},
+            {"prompt": "Write 86 in expanded form.", "type": "text", "correct_answer": "80 + 6", "target_concept": "place_value"},
+            {"prompt": "Order least to greatest: 52, 25, 48, 84", "type": "text", "correct_answer": "25, 48, 52, 84", "target_concept": "ordering"},
+            {"prompt": "What is your favorite math strategy? Explain how it works.", "type": "open_response", "rubric": "Mastery: names a real strategy, explains clearly with example. Proficient: names strategy with partial explanation. Developing: cannot name a strategy.", "target_concept": "mathematical_thinking"},
+        ],
+        "resource_guidance": {"required": ["all previously used materials available for reference"], "recommended": ["portfolio of past work for comparison"]},
+        "time_estimates": {"first_exposure": 30, "practice_session": 20, "assessment": 20},
+    },
 }
