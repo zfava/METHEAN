@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { curriculum, type MapNodeState } from "@/lib/api";
+import { useSearchParams } from "next/navigation";
+import { curriculum, educationPlan, type MapNodeState } from "@/lib/api";
 import { useToast } from "@/components/Toast";
 import { useChild } from "@/lib/ChildContext";
 import PageHeader from "@/components/ui/PageHeader";
@@ -31,6 +32,11 @@ Chapter 10: Fractions Introduction`;
 export default function CurriculumMapperPage() {
   useEffect(() => { document.title = "Map Curriculum | METHEAN"; }, []);
 
+  const params = useSearchParams();
+  const paramSubject = params.get("subject") || "";
+  const paramYear = params.get("year") || "";
+  const paramChildId = params.get("child") || "";
+
   const { selectedChild } = useChild();
   const { toast } = useToast();
 
@@ -39,8 +45,12 @@ export default function CurriculumMapperPage() {
 
   // Step 1
   const [materialName, setMaterialName] = useState("");
-  const [subjectArea, setSubjectArea] = useState("");
+  const [subjectArea, setSubjectArea] = useState(paramSubject);
   const [materialDesc, setMaterialDesc] = useState("");
+
+  // Education plan awareness
+  const [planMatch, setPlanMatch] = useState<string | null>(null); // year key if matched
+  const [planExists, setPlanExists] = useState(false);
 
   // Step 2
   const [toc, setToc] = useState("");
@@ -151,6 +161,13 @@ export default function CurriculumMapperPage() {
         title="Map Your Curriculum"
         subtitle="Bring your existing materials into METHEAN's tracking system."
       />
+
+      {/* Contextual banner when linked from education plan */}
+      {paramSubject && paramYear && (
+        <div className="bg-(--color-accent-light) border border-(--color-accent)/15 rounded-[10px] px-4 py-2.5 mb-4 text-xs text-(--color-accent)">
+          Mapping curriculum for <strong>{childName}'s {paramSubject}</strong> ({paramYear})
+        </div>
+      )}
 
       {error && (
         <Card className="mb-4" borderLeft="border-l-(--color-danger)">
@@ -388,6 +405,24 @@ export default function CurriculumMapperPage() {
               disabled={includedCount === 0}
               onClick={async () => {
                 toast("Curriculum mapped! Enrolling...", "success");
+                // Check education plan for subject match
+                if (selectedChild) {
+                  try {
+                    const plan = await educationPlan.get(selectedChild.id);
+                    const yp = (plan as any)?.year_plans;
+                    if (yp && typeof yp === "object") {
+                      setPlanExists(true);
+                      const subLower = subjectArea.toLowerCase();
+                      for (const [yr, data] of Object.entries(yp)) {
+                        const subjects = (data as any).subjects || [];
+                        if (subjects.some((s: any) => (s.name || s.subject || "").toLowerCase().includes(subLower))) {
+                          setPlanMatch(yr);
+                          break;
+                        }
+                      }
+                    }
+                  } catch { /* no plan */ }
+                }
                 setStep(6);
               }}
             >
@@ -412,6 +447,19 @@ export default function CurriculumMapperPage() {
               <br />
               <span className="text-xs text-(--color-text-tertiary)">{includedCount} nodes, {masteredCount} already mastered</span>
             </p>
+            {/* Education plan connection */}
+            {planMatch && (
+              <div className="bg-(--color-success-light) rounded-[10px] px-4 py-2.5 mb-4 text-xs text-(--color-success) max-w-xs mx-auto">
+                This curriculum has been connected to {childName}'s education plan for {planMatch}.
+              </div>
+            )}
+            {planExists && !planMatch && (
+              <div className="bg-(--color-warning-light) rounded-[10px] px-4 py-2.5 mb-4 text-xs text-(--color-warning) max-w-xs mx-auto">
+                This subject isn't in {childName}'s education plan yet.{" "}
+                <a href="/plans/vision" className="underline">Update their plan</a>
+              </div>
+            )}
+
             <div className="space-y-2 max-w-xs mx-auto">
               <Button variant="primary" size="lg" className="w-full" onClick={() => window.location.href = "/maps"}>
                 View {materialName} map

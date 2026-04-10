@@ -205,6 +205,7 @@ export default function EducationPlanPage() {
           generatingCurricula={generatingCurricula}
           onGenerateCurricula={generateYearCurricula}
           isApproved={isApproved}
+          childId={selectedChild?.id}
         />
 
         {(plan as any).graduation_pathway && (
@@ -427,6 +428,7 @@ export default function EducationPlanPage() {
             generatingCurricula={null}
             onGenerateCurricula={() => {}}
             isApproved={false}
+            childId={selectedChild?.id}
           />
 
           {(plan as any).graduation_pathway && (
@@ -456,12 +458,14 @@ function YearTimeline({
   generatingCurricula,
   onGenerateCurricula,
   isApproved,
+  childId,
 }: {
   yearPlans: Record<string, any>;
   currentYear: string;
   generatingCurricula: string | null;
   onGenerateCurricula: (year: string) => void;
   isApproved: boolean;
+  childId?: string;
 }) {
   const years = Object.entries(yearPlans).sort(([a], [b]) => a.localeCompare(b));
 
@@ -532,6 +536,14 @@ function YearTimeline({
                       )}
                       {subj.approach && (
                         <p className="text-[10px] text-(--color-text-tertiary) mt-1 line-clamp-2">{subj.approach}</p>
+                      )}
+                      {isApproved && childId && (
+                        <a
+                          href={`/curriculum/mapper?child=${childId}&subject=${encodeURIComponent(subj.name || subj.subject)}&year=${encodeURIComponent(year)}`}
+                          className="text-[10px] text-(--color-accent) hover:underline mt-1.5 block"
+                        >
+                          Map existing &rarr;
+                        </a>
                       )}
                     </div>
                   ))}
