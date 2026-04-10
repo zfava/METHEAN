@@ -121,14 +121,14 @@ def curriculum_eval_task(self) -> dict:
         self.retry(exc=exc, countdown=30 * (2 ** self.request.retries))
 
 
-@celery_app.task(name="app.tasks.worker.daily_summary_task", bind=True, max_retries=3)
+@celery_app.task(name="app.tasks.worker.daily_summary_task", bind=True, max_retries=2)
 def daily_summary_task(self) -> dict:
     """Send daily morning summary emails."""
     try:
         from app.tasks.daily_summary import run_daily_summary_sync
         return run_daily_summary_sync()
     except Exception as exc:
-        self.retry(exc=exc, countdown=30 * (2 ** self.request.retries))
+        self.retry(exc=exc, countdown=120)
 
 
 @celery_app.task(name="app.tasks.worker.weekly_digest_task", bind=True, max_retries=3)

@@ -44,3 +44,14 @@ async def read_all_notifications(
     count = await mark_all_read(db, user.id, user.household_id)
     await db.commit()
     return {"marked_read": count}
+
+
+@router.post("/notifications/test-daily-summary")
+async def test_daily_summary(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Send a test daily summary email to the current user's household."""
+    from app.tasks.daily_summary import send_daily_summary_for_household
+    sent = await send_daily_summary_for_household(db, user.household_id, test_mode=True)
+    return {"sent": sent, "test_mode": True}
