@@ -448,6 +448,14 @@ export const calibration = {
     }),
   driftHistory: (childId: string, weeks = 12) =>
     request<{ series: DriftPoint[]; weeks_requested: number }>(`/children/${childId}/calibration/drift-history?weeks=${weeks}`),
+  temporalDrift: (childId: string) =>
+    request<TemporalDriftResponse>(`/children/${childId}/calibration/temporal-drift`),
+  confidenceDistribution: (childId: string) =>
+    request<ConfidenceDistributionResponse>(`/children/${childId}/calibration/confidence-distribution`),
+  subjectDetail: (childId: string) =>
+    request<{ subjects: SubjectCalibrationItem[] }>(`/children/${childId}/calibration/subject-detail`),
+  exportData: (childId: string) =>
+    request<object>(`/children/${childId}/calibration/export`),
 };
 
 export interface CalibrationResponse {
@@ -489,6 +497,30 @@ export interface DriftPoint {
   week: string;
   mean_drift: number;
   count: number;
+}
+
+export interface TemporalDriftResponse {
+  weekly_buckets: Array<{ week: string; mean_drift: number; count: number; bias: number }>;
+  trend: "improving" | "stable" | "worsening" | "insufficient_data";
+  trend_slope: number;
+}
+
+export interface ConfidenceDistributionResponse {
+  histogram: Array<{ band: string; count: number }>;
+  mean: number;
+  std_dev: number;
+  skew: number;
+  compression_warning: boolean;
+  total: number;
+}
+
+export interface SubjectCalibrationItem {
+  subject: string;
+  mean_drift: number;
+  directional_bias: number;
+  reconciled_count: number;
+  action: "well_calibrated" | "offset_active" | "review_recommended" | "insufficient_data";
+  recommendation: string;
 }
 
 export const familyInvites = {

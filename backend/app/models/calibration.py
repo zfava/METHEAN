@@ -14,7 +14,6 @@ from sqlalchemy import (
     ForeignKey,
     Index,
     Integer,
-    String,
     UniqueConstraint,
 )
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -96,4 +95,35 @@ class CalibrationProfile(Base):
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class CalibrationSnapshot(Base):
+    """Point-in-time snapshot of calibration metrics, created on each recompute."""
+    __tablename__ = "calibration_snapshots"
+    __table_args__ = (
+        Index(
+            "ix_calsnap_child_computed",
+            "child_id", "computed_at",
+            postgresql_using="btree",
+        ),
+    )
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
+    )
+    household_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("households.id", ondelete="CASCADE"), nullable=False
+    )
+    child_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("children.id", ondelete="CASCADE"), nullable=False
+    )
+    mean_drift: Mapped[float] = mapped_column(Float, nullable=False)
+    directional_bias: Mapped[float] = mapped_column(Float, nullable=False)
+    recalibration_offset: Mapped[float] = mapped_column(Float, nullable=False)
+    reconciled_count: Mapped[int] = mapped_column(Integer, nullable=False)
+    confidence_band_accuracy: Mapped[dict] = mapped_column(JSONB, default=dict)
+    subject_drift_map: Mapped[dict] = mapped_column(JSONB, default=dict)
+    computed_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now()
     )

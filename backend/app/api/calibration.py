@@ -245,3 +245,135 @@ async def get_drift_history(
         })
 
     return {"series": series, "weeks_requested": weeks}
+
+
+# ── GET /children/{child_id}/calibration/temporal-drift ──
+
+
+@router.get("/children/{child_id}/calibration/temporal-drift")
+async def get_temporal_drift(
+    child_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Temporal drift analysis with trend detection."""
+    await _get_child_or_404(db, child_id, user.household_id)
+    from app.services.calibration import compute_temporal_drift
+    return await compute_temporal_drift(db, child_id, user.household_id)
+
+
+# ── GET /children/{child_id}/calibration/confidence-distribution ──
+
+
+@router.get("/children/{child_id}/calibration/confidence-distribution")
+async def get_confidence_distribution(
+    child_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Confidence score distribution histogram."""
+    await _get_child_or_404(db, child_id, user.household_id)
+    from app.services.calibration import compute_confidence_distribution
+    return await compute_confidence_distribution(db, child_id, user.household_id)
+
+
+# ── GET /children/{child_id}/calibration/subject-detail ──
+
+
+@router.get("/children/{child_id}/calibration/subject-detail")
+async def get_subject_detail(
+    child_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Per-subject calibration detail with recommendations."""
+    await _get_child_or_404(db, child_id, user.household_id)
+    from app.services.calibration import compute_subject_calibration_detail
+    subjects = await compute_subject_calibration_detail(db, child_id, user.household_id)
+    return {"subjects": subjects}
+
+
+# ── GET /children/{child_id}/calibration/export ──
+
+
+@router.get("/children/{child_id}/calibration/export")
+async def export_calibration_data(
+    child_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Full calibration data export for a child. Parent's data."""
+    await _get_child_or_404(db, child_id, user.household_id)
+
+    from app.models.calibration import CalibrationSnapshot
+
+    # Profile
+    profile_result = await db.execute(
+        select(CalibrationProfile).where(
+            CalibrationProfile.child_id == child_id,
+            CalibrationProfile.household_id == user.household_id,
+        )
+    )
+    profile = profile_result.scalar_one_or_none()
+
+    # Snapshots
+    snap_result = await db.execute(
+        select(CalibrationSnapshot).where(
+            CalibrationSnapshot.child_id == child_id,
+            CalibrationSnapshot.household_id == user.household_id,
+        ).order_by(CalibrationSnapshot.computed_at.desc())
+    )
+    snapshots = snap_result.scalars().all()
+
+    # All predictions with outcomes
+    pred_result = await db.execute(
+        select(EvaluatorPrediction).where(
+            EvaluatorPrediction.child_id == child_id,
+            EvaluatorPrediction.household_id == user.household_id,
+        ).order_by(EvaluatorPrediction.created_at.desc())
+    )
+    predictions = pred_result.scalars().all()
+
+    return {
+        "child_id": str(child_id),
+        "exported_at": datetime.now(UTC).isoformat(),
+        "profile": {
+            "total_predictions": profile.total_predictions,
+            "reconciled_predictions": profile.reconciled_predictions,
+            "mean_drift": profile.mean_drift,
+            "directional_bias": profile.directional_bias,
+            "recalibration_offset": profile.recalibration_offset,
+            "offset_active": profile.offset_active,
+            "parent_override_offset": profile.parent_override_offset,
+            "confidence_band_accuracy": profile.confidence_band_accuracy,
+            "subject_drift_map": profile.subject_drift_map,
+            "last_computed_at": profile.last_computed_at.isoformat() if profile.last_computed_at else None,
+        } if profile else None,
+        "snapshots": [
+            {
+                "computed_at": s.computed_at.isoformat() if s.computed_at else None,
+                "mean_drift": s.mean_drift,
+                "directional_bias": s.directional_bias,
+                "recalibration_offset": s.recalibration_offset,
+                "reconciled_count": s.reconciled_count,
+                "confidence_band_accuracy": s.confidence_band_accuracy,
+                "subject_drift_map": s.subject_drift_map,
+            }
+            for s in snapshots
+        ],
+        "predictions": [
+            {
+                "id": str(p.id),
+                "node_id": str(p.node_id),
+                "attempt_id": str(p.attempt_id),
+                "predicted_confidence": p.predicted_confidence,
+                "predicted_fsrs_rating": p.predicted_fsrs_rating,
+                "actual_outcome": p.actual_outcome,
+                "drift_score": p.drift_score,
+                "calibration_offset_applied": p.calibration_offset_applied,
+                "created_at": p.created_at.isoformat() if p.created_at else None,
+                "outcome_recorded_at": p.outcome_recorded_at.isoformat() if p.outcome_recorded_at else None,
+            }
+            for p in predictions
+        ],
+    }

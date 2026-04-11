@@ -98,6 +98,16 @@ async def _run_calibration_batch() -> dict:
 
             await db.commit()
 
+        # Run system health check after all profiles are recomputed
+        try:
+            from app.services.calibration import run_calibration_health_check
+            async with SessionLocal() as db:
+                health = await run_calibration_health_check(db)
+                await db.commit()
+        except Exception:
+            logger.exception("Calibration health check failed")
+            health = {"error": True}
+
     await engine.dispose()
 
     duration_ms = int((time.monotonic() - start) * 1000)
@@ -106,6 +116,7 @@ async def _run_calibration_batch() -> dict:
         "profiles_updated": updated,
         "errors": errors,
         "duration_ms": duration_ms,
+        "health_check": health,
     }
     logger.info("Calibration batch complete: %s", result_info)
     return result_info

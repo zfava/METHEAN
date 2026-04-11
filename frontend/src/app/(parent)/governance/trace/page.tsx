@@ -25,6 +25,7 @@ export default function TracePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [filterAction, setFilterAction] = useState("");
+  const [filterCalibration, setFilterCalibration] = useState(false);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
   useEffect(() => {
@@ -37,7 +38,12 @@ export default function TracePage() {
     setExpanded((prev) => { const n = new Set(prev); n.has(id) ? n.delete(id) : n.add(id); return n; });
   }
 
-  const filtered = filterAction ? events.filter((e) => e.action === filterAction) : events;
+  const calibrationEvents = events.filter((e) => e.target_type === "calibration_profile");
+  const filtered = filterCalibration
+    ? calibrationEvents
+    : filterAction
+      ? events.filter((e) => e.action === filterAction)
+      : events;
   const actions = [...new Set(events.map((e) => e.action))];
 
   if (loading) return <div className="max-w-4xl"><LoadingSkeleton variant="list" count={10} /></div>;
@@ -55,18 +61,18 @@ export default function TracePage() {
       )}
 
       {/* Filter bar */}
-      <div className="flex gap-2 mb-5">
-        <button onClick={() => setFilterAction("")}
+      <div className="flex flex-wrap gap-2 mb-5">
+        <button onClick={() => { setFilterAction(""); setFilterCalibration(false); }}
           className={cn(
             "px-3 py-1 text-xs rounded-full transition-colors",
-            !filterAction ? "bg-(--color-text) text-white" : "bg-(--color-page) text-(--color-text-secondary) hover:bg-(--color-border)"
+            !filterAction && !filterCalibration ? "bg-(--color-text) text-white" : "bg-(--color-page) text-(--color-text-secondary) hover:bg-(--color-border)"
           )}
         >All ({events.length})</button>
         {actions.map((a) => (
-          <button key={a} onClick={() => setFilterAction(a)}
+          <button key={a} onClick={() => { setFilterAction(a); setFilterCalibration(false); }}
             className={cn(
               "px-3 py-1 text-xs rounded-full capitalize transition-colors",
-              filterAction === a
+              filterAction === a && !filterCalibration
                 ? "bg-(--color-text) text-white"
                 : ""
             )}
@@ -79,6 +85,14 @@ export default function TracePage() {
             {" "}({events.filter((e) => e.action === a).length})
           </button>
         ))}
+        {calibrationEvents.length > 0 && (
+          <button onClick={() => { setFilterCalibration(true); setFilterAction(""); }}
+            className={cn(
+              "px-3 py-1 text-xs rounded-full transition-colors",
+              filterCalibration ? "bg-(--color-accent) text-white" : "bg-(--color-page) text-(--color-text-secondary) hover:bg-(--color-border)"
+            )}
+          >Calibration ({calibrationEvents.length})</button>
+        )}
       </div>
 
       {filtered.length === 0 ? (

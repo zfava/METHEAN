@@ -1,25 +1,31 @@
-"""Tests for the Evaluator Calibration Service."""
+"""Tests for the Evaluator Calibration Service (Session 10 + Session 11)."""
 
 import uuid
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 import pytest
 import pytest_asyncio
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.calibration import CalibrationProfile, EvaluatorPrediction
+from app.models.calibration import CalibrationProfile, CalibrationSnapshot, EvaluatorPrediction
 from app.models.curriculum import LearningMap, LearningNode, Subject
 from app.models.enums import NodeType
 from app.models.evidence import Alert
-from app.models.governance import Activity, Attempt
+from app.models.governance import Activity, Attempt, GovernanceEvent
 from app.models.identity import Child, Household
 from app.services.calibration import (
+    MAX_OFFSET_STEP,
     MIN_PREDICTIONS_FOR_CALIBRATION,
     apply_calibration_offset,
+    clamp_offset_change,
+    compute_confidence_distribution,
+    compute_subject_calibration_detail,
+    compute_temporal_drift,
     record_prediction,
     reconcile_outcome,
     recompute_profile,
+    run_calibration_health_check,
 )
 
 
@@ -94,20 +100,46 @@ async def cal_attempt(
     return att
 
 
-# ── record_prediction ──
+async def _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt,
+                               count, predicted_rating, actual_rating, conf=None):
+    """Helper: create N reconciled predictions."""
+    for i in range(count):
+        att = Attempt(
+            activity_id=cal_attempt.activity_id,
+            household_id=cal_household.id,
+            child_id=cal_child.id,
+        )
+        db_session.add(att)
+        await db_session.flush()
+
+        if conf is None:
+            c = 0.85 if predicted_rating == 4 else 0.65 if predicted_rating == 3 else 0.4 if predicted_rating == 2 else 0.15
+        else:
+            c = conf
+        pred = EvaluatorPrediction(
+            household_id=cal_household.id, child_id=cal_child.id,
+            node_id=cal_node.id, attempt_id=att.id,
+            predicted_confidence=c, predicted_fsrs_rating=predicted_rating,
+            actual_outcome=actual_rating,
+            drift_score=abs(predicted_rating - actual_rating),
+            outcome_recorded_at=datetime.now(UTC),
+        )
+        db_session.add(pred)
+    await db_session.flush()
+
+
+# ═══════════════════════════════════════════
+# SESSION 10 TESTS (original)
+# ═══════════════════════════════════════════
 
 
 @pytest.mark.asyncio
 class TestRecordPrediction:
     async def test_creates_prediction(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
         pred = await record_prediction(
-            db_session,
-            child_id=cal_child.id,
-            household_id=cal_household.id,
-            node_id=cal_node.id,
-            attempt_id=cal_attempt.id,
-            evaluator_confidence=0.75,
-            fsrs_rating=3,
+            db_session, child_id=cal_child.id, household_id=cal_household.id,
+            node_id=cal_node.id, attempt_id=cal_attempt.id,
+            evaluator_confidence=0.75, fsrs_rating=3,
         )
         assert pred.id is not None
         assert pred.predicted_confidence == 0.75
@@ -117,89 +149,54 @@ class TestRecordPrediction:
 
     async def test_records_offset_applied(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
         pred = await record_prediction(
-            db_session,
-            child_id=cal_child.id,
-            household_id=cal_household.id,
-            node_id=cal_node.id,
-            attempt_id=cal_attempt.id,
-            evaluator_confidence=0.75,
-            fsrs_rating=3,
-            calibration_offset_applied=0.05,
+            db_session, child_id=cal_child.id, household_id=cal_household.id,
+            node_id=cal_node.id, attempt_id=cal_attempt.id,
+            evaluator_confidence=0.75, fsrs_rating=3, calibration_offset_applied=0.05,
         )
         assert pred.calibration_offset_applied == 0.05
-
-
-# ── reconcile_outcome ──
 
 
 @pytest.mark.asyncio
 class TestReconcileOutcome:
     async def test_reconciles_matching_prediction(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
-        # Create a prediction
-        await record_prediction(
-            db_session, cal_child.id, cal_household.id,
-            cal_node.id, cal_attempt.id, 0.75, 3,
-        )
-
-        # Reconcile with actual outcome
-        result = await reconcile_outcome(
-            db_session, cal_child.id, cal_household.id, cal_node.id, 3,
-        )
+        await record_prediction(db_session, cal_child.id, cal_household.id, cal_node.id, cal_attempt.id, 0.75, 3)
+        result = await reconcile_outcome(db_session, cal_child.id, cal_household.id, cal_node.id, 3)
         assert result is not None
         assert result.actual_outcome == 3
-        assert result.drift_score == 0.0  # predicted 3, actual 3
+        assert result.drift_score == 0.0
         assert result.outcome_recorded_at is not None
 
     async def test_no_match_returns_none(self, db_session, cal_child, cal_household, cal_node):
-        # No prediction exists — should return None gracefully
-        result = await reconcile_outcome(
-            db_session, cal_child.id, cal_household.id, cal_node.id, 3,
-        )
+        result = await reconcile_outcome(db_session, cal_child.id, cal_household.id, cal_node.id, 3)
         assert result is None
 
     async def test_drift_calculation(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
-        await record_prediction(
-            db_session, cal_child.id, cal_household.id,
-            cal_node.id, cal_attempt.id, 0.85, 4,
-        )
-        result = await reconcile_outcome(
-            db_session, cal_child.id, cal_household.id, cal_node.id, 2,
-        )
+        await record_prediction(db_session, cal_child.id, cal_household.id, cal_node.id, cal_attempt.id, 0.85, 4)
+        result = await reconcile_outcome(db_session, cal_child.id, cal_household.id, cal_node.id, 2)
         assert result is not None
-        assert result.drift_score == 2.0  # abs(4 - 2)
+        assert result.drift_score == 2.0
 
     async def test_high_drift_creates_warning_alert(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
-        await record_prediction(
-            db_session, cal_child.id, cal_household.id,
-            cal_node.id, cal_attempt.id, 0.85, 4,
-        )
-        await reconcile_outcome(
-            db_session, cal_child.id, cal_household.id, cal_node.id, 2,
-        )
-
-        alerts = (await db_session.execute(
-            select(Alert).where(Alert.source == "calibration_drift")
-        )).scalars().all()
+        await record_prediction(db_session, cal_child.id, cal_household.id, cal_node.id, cal_attempt.id, 0.85, 4)
+        await reconcile_outcome(db_session, cal_child.id, cal_household.id, cal_node.id, 2)
+        alerts = (await db_session.execute(select(Alert).where(Alert.source == "calibration_drift"))).scalars().all()
         assert len(alerts) == 1
         assert alerts[0].severity.value == "warning"
 
     async def test_extreme_drift_creates_critical_alert(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
-        await record_prediction(
-            db_session, cal_child.id, cal_household.id,
-            cal_node.id, cal_attempt.id, 0.85, 4,
-        )
-        await reconcile_outcome(
-            db_session, cal_child.id, cal_household.id, cal_node.id, 1,
-        )
-
-        alerts = (await db_session.execute(
-            select(Alert).where(Alert.source == "calibration_drift")
-        )).scalars().all()
+        await record_prediction(db_session, cal_child.id, cal_household.id, cal_node.id, cal_attempt.id, 0.85, 4)
+        await reconcile_outcome(db_session, cal_child.id, cal_household.id, cal_node.id, 1)
+        alerts = (await db_session.execute(select(Alert).where(Alert.source == "calibration_drift"))).scalars().all()
         assert len(alerts) == 1
         assert alerts[0].severity.value == "action_required"
 
-
-# ── apply_calibration_offset ──
+    async def test_concurrent_reconciliation_only_first_succeeds(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+        """Two reconcile calls for same prediction: only the first should match."""
+        await record_prediction(db_session, cal_child.id, cal_household.id, cal_node.id, cal_attempt.id, 0.7, 3)
+        r1 = await reconcile_outcome(db_session, cal_child.id, cal_household.id, cal_node.id, 3)
+        r2 = await reconcile_outcome(db_session, cal_child.id, cal_household.id, cal_node.id, 2)
+        assert r1 is not None
+        assert r2 is None  # Already reconciled
 
 
 @pytest.mark.asyncio
@@ -209,159 +206,296 @@ class TestApplyCalibrationOffset:
         assert result == 0.65
 
     async def test_active_offset(self, db_session, cal_child, cal_household):
-        profile = CalibrationProfile(
-            child_id=cal_child.id,
-            household_id=cal_household.id,
-            recalibration_offset=-0.10,
-            offset_active=True,
-        )
-        db_session.add(profile)
+        db_session.add(CalibrationProfile(child_id=cal_child.id, household_id=cal_household.id, recalibration_offset=-0.10, offset_active=True))
         await db_session.flush()
-
         result = await apply_calibration_offset(db_session, 0.65, cal_child.id)
         assert abs(result - 0.55) < 0.001
 
     async def test_inactive_offset_returns_raw(self, db_session, cal_child, cal_household):
-        profile = CalibrationProfile(
-            child_id=cal_child.id,
-            household_id=cal_household.id,
-            recalibration_offset=-0.10,
-            offset_active=False,
-        )
-        db_session.add(profile)
+        db_session.add(CalibrationProfile(child_id=cal_child.id, household_id=cal_household.id, recalibration_offset=-0.10, offset_active=False))
         await db_session.flush()
-
         result = await apply_calibration_offset(db_session, 0.65, cal_child.id)
         assert result == 0.65
 
     async def test_parent_override_takes_precedence(self, db_session, cal_child, cal_household):
-        profile = CalibrationProfile(
-            child_id=cal_child.id,
-            household_id=cal_household.id,
-            recalibration_offset=-0.10,
-            parent_override_offset=0.05,
-            offset_active=True,
-        )
-        db_session.add(profile)
+        db_session.add(CalibrationProfile(child_id=cal_child.id, household_id=cal_household.id, recalibration_offset=-0.10, parent_override_offset=0.05, offset_active=True))
         await db_session.flush()
-
         result = await apply_calibration_offset(db_session, 0.65, cal_child.id)
         assert abs(result - 0.70) < 0.001
 
-    async def test_clamping_to_bounds(self, db_session, cal_child, cal_household):
-        # Test upper bound
-        profile = CalibrationProfile(
-            child_id=cal_child.id,
-            household_id=cal_household.id,
-            recalibration_offset=0.15,
-            offset_active=True,
-        )
-        db_session.add(profile)
+    async def test_clamping_to_upper_bound(self, db_session, cal_child, cal_household):
+        db_session.add(CalibrationProfile(child_id=cal_child.id, household_id=cal_household.id, recalibration_offset=0.15, offset_active=True))
         await db_session.flush()
-
         result = await apply_calibration_offset(db_session, 0.95, cal_child.id)
-        assert result == 1.0  # 0.95 + 0.15 = 1.10, clamped to 1.0
+        assert result == 1.0
 
-    async def test_clamping_lower_bound(self, db_session, cal_child, cal_household):
-        profile = CalibrationProfile(
-            child_id=cal_child.id,
-            household_id=cal_household.id,
-            recalibration_offset=-0.15,
-            offset_active=True,
-        )
-        db_session.add(profile)
+    async def test_clamping_to_lower_bound(self, db_session, cal_child, cal_household):
+        db_session.add(CalibrationProfile(child_id=cal_child.id, household_id=cal_household.id, recalibration_offset=-0.15, offset_active=True))
         await db_session.flush()
-
         result = await apply_calibration_offset(db_session, 0.05, cal_child.id)
-        assert result == 0.0  # 0.05 - 0.15 = -0.10, clamped to 0.0
-
-
-# ── recompute_profile ──
+        assert result == 0.0
 
 
 @pytest.mark.asyncio
 class TestRecomputeProfile:
     async def test_below_threshold_all_zeros(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
-        # Create < 50 reconciled predictions
-        for i in range(10):
-            att = Attempt(
-                activity_id=cal_attempt.activity_id,
-                household_id=cal_household.id,
-                child_id=cal_child.id,
-            )
-            db_session.add(att)
-            await db_session.flush()
-
-            pred = EvaluatorPrediction(
-                household_id=cal_household.id, child_id=cal_child.id,
-                node_id=cal_node.id, attempt_id=att.id,
-                predicted_confidence=0.7, predicted_fsrs_rating=3,
-                actual_outcome=3, drift_score=0.0,
-                outcome_recorded_at=datetime.now(UTC),
-            )
-            db_session.add(pred)
-        await db_session.flush()
-
+        await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 10, 3, 3)
         profile = await recompute_profile(db_session, cal_child.id, cal_household.id)
         assert profile.mean_drift == 0.0
         assert profile.directional_bias == 0.0
         assert profile.recalibration_offset == 0.0
         assert profile.reconciled_predictions == 10
 
-    async def _create_predictions(self, db_session, cal_household, cal_child, cal_node, cal_attempt,
-                                   count, predicted_rating, actual_rating):
-        """Helper: create N reconciled predictions."""
-        for i in range(count):
-            att = Attempt(
-                activity_id=cal_attempt.activity_id,
-                household_id=cal_household.id,
-                child_id=cal_child.id,
-            )
-            db_session.add(att)
-            await db_session.flush()
-
-            conf = 0.85 if predicted_rating == 4 else 0.65 if predicted_rating == 3 else 0.4
-            pred = EvaluatorPrediction(
-                household_id=cal_household.id, child_id=cal_child.id,
-                node_id=cal_node.id, attempt_id=att.id,
-                predicted_confidence=conf, predicted_fsrs_rating=predicted_rating,
-                actual_outcome=actual_rating,
-                drift_score=abs(predicted_rating - actual_rating),
-                outcome_recorded_at=datetime.now(UTC),
-            )
-            db_session.add(pred)
-        await db_session.flush()
-
     async def test_positive_bias_negative_offset(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
-        """Evaluator too generous (predicts higher than actual) → negative offset."""
-        await self._create_predictions(
-            db_session, cal_household, cal_child, cal_node, cal_attempt,
-            count=55, predicted_rating=4, actual_rating=2,
-        )
-
+        await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 55, 4, 2)
         profile = await recompute_profile(db_session, cal_child.id, cal_household.id)
-        assert profile.directional_bias > 0  # positive = too generous
-        assert profile.recalibration_offset < 0  # negative to correct
+        assert profile.directional_bias > 0
+        assert profile.recalibration_offset < 0
         assert profile.recalibration_offset >= -0.15
 
     async def test_negative_bias_positive_offset(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
-        """Evaluator too harsh (predicts lower than actual) → positive offset."""
-        await self._create_predictions(
-            db_session, cal_household, cal_child, cal_node, cal_attempt,
-            count=55, predicted_rating=1, actual_rating=3,
-        )
-
+        await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 55, 1, 3)
         profile = await recompute_profile(db_session, cal_child.id, cal_household.id)
-        assert profile.directional_bias < 0  # negative = too harsh
-        assert profile.recalibration_offset > 0  # positive to correct
+        assert profile.directional_bias < 0
+        assert profile.recalibration_offset > 0
         assert profile.recalibration_offset <= 0.15
 
     async def test_offset_clamping(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
-        """Extreme bias still clamped to [-0.15, 0.15]."""
-        await self._create_predictions(
-            db_session, cal_household, cal_child, cal_node, cal_attempt,
-            count=55, predicted_rating=4, actual_rating=1,
-        )
-
+        await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 55, 4, 1)
         profile = await recompute_profile(db_session, cal_child.id, cal_household.id)
         assert -0.15 <= profile.recalibration_offset <= 0.15
+
+
+# ═══════════════════════════════════════════
+# SESSION 11A TESTS: Regression Safeguards
+# ═══════════════════════════════════════════
+
+
+class TestClampOffsetChange:
+    """Unit tests for the rate limiter function."""
+
+    def test_small_change_passes_through(self):
+        assert clamp_offset_change(0.0, 0.03) == 0.03
+
+    def test_large_positive_jump_clamped(self):
+        assert abs(clamp_offset_change(0.0, 0.15) - 0.05) < 0.001
+
+    def test_large_negative_jump_clamped(self):
+        assert abs(clamp_offset_change(0.0, -0.15) - (-0.05)) < 0.001
+
+    def test_preserves_positive_direction(self):
+        result = clamp_offset_change(0.02, 0.12)
+        assert result > 0.02
+
+    def test_preserves_negative_direction(self):
+        result = clamp_offset_change(-0.02, -0.12)
+        assert result < -0.02
+
+    def test_three_step_convergence(self):
+        """0.0 → 0.15 converges in 3 nightly runs."""
+        current = 0.0
+        current = clamp_offset_change(current, 0.15)
+        assert abs(current - 0.05) < 0.001
+        current = clamp_offset_change(current, 0.15)
+        assert abs(current - 0.10) < 0.001
+        current = clamp_offset_change(current, 0.15)
+        assert abs(current - 0.15) < 0.001
+
+    def test_exact_step_passes_through(self):
+        assert clamp_offset_change(0.0, 0.05) == 0.05
+
+
+@pytest.mark.asyncio
+class TestCalibrationSnapshot:
+    async def test_snapshot_created_on_recompute(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+        """Each recompute_profile call creates exactly one snapshot."""
+        await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 55, 3, 3)
+        await recompute_profile(db_session, cal_child.id, cal_household.id)
+
+        snaps = (await db_session.execute(
+            select(CalibrationSnapshot).where(CalibrationSnapshot.child_id == cal_child.id)
+        )).scalars().all()
+        assert len(snaps) == 1
+        assert snaps[0].reconciled_count == 55
+
+    async def test_snapshots_accumulate(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+        """Multiple recompute calls accumulate snapshots."""
+        await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 55, 3, 3)
+        await recompute_profile(db_session, cal_child.id, cal_household.id)
+        await recompute_profile(db_session, cal_child.id, cal_household.id)
+        await recompute_profile(db_session, cal_child.id, cal_household.id)
+
+        snaps = (await db_session.execute(
+            select(CalibrationSnapshot).where(CalibrationSnapshot.child_id == cal_child.id)
+        )).scalars().all()
+        assert len(snaps) == 3
+
+
+@pytest.mark.asyncio
+class TestRateLimiterInRecompute:
+    async def test_rate_limiter_activates_on_large_jump(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+        """First recompute from 0.0 should be clamped by rate limiter."""
+        await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 55, 4, 1)
+        profile = await recompute_profile(db_session, cal_child.id, cal_household.id)
+        # Max step from 0.0 is 0.05
+        assert abs(profile.recalibration_offset) <= MAX_OFFSET_STEP + 0.001
+
+
+@pytest.mark.asyncio
+class TestHealthCheck:
+    async def test_no_profiles_no_alerts(self, db_session):
+        result = await run_calibration_health_check(db_session)
+        assert result["profiles_checked"] == 0
+        assert result["alerts_created"] == 0
+
+    async def test_well_calibrated_no_alerts(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+        await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 55, 3, 3)
+        await recompute_profile(db_session, cal_child.id, cal_household.id)
+
+        result = await run_calibration_health_check(db_session)
+        assert result["alerts_created"] == 0
+
+    async def test_critical_drift_child_creates_alert(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+        """Child with drift > 2.0 and 100+ predictions triggers critical alert."""
+        await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 110, 4, 1)
+        profile = await recompute_profile(db_session, cal_child.id, cal_household.id)
+        # Force the mean_drift high (recompute may rate-limit offset but drift is direct)
+        assert profile.mean_drift > 2.0
+
+        result = await run_calibration_health_check(db_session)
+        assert result["alerts_created"] >= 1
+
+        alerts = (await db_session.execute(
+            select(Alert).where(Alert.source == "calibration_health_check")
+        )).scalars().all()
+        assert any(a.title == "Critical Calibration Drift" for a in alerts)
+
+
+# ═══════════════════════════════════════════
+# SESSION 11B TESTS: Advanced Analytics
+# ═══════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+class TestTemporalDrift:
+    async def test_insufficient_data(self, db_session, cal_child, cal_household):
+        result = await compute_temporal_drift(db_session, cal_child.id, cal_household.id)
+        assert result["trend"] == "insufficient_data"
+
+    async def test_stable_pattern(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+        """Consistent drift produces stable trend."""
+        await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 55, 3, 3)
+        result = await compute_temporal_drift(db_session, cal_child.id, cal_household.id)
+        assert result["trend"] in ("stable", "insufficient_data")
+
+    async def test_returns_weekly_buckets(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+        await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 55, 3, 2)
+        result = await compute_temporal_drift(db_session, cal_child.id, cal_household.id)
+        assert len(result["weekly_buckets"]) >= 1
+        for bucket in result["weekly_buckets"]:
+            assert "week" in bucket
+            assert "mean_drift" in bucket
+            assert "count" in bucket
+
+
+@pytest.mark.asyncio
+class TestConfidenceDistribution:
+    async def test_insufficient_data(self, db_session, cal_child, cal_household):
+        result = await compute_confidence_distribution(db_session, cal_child.id, cal_household.id)
+        assert result["histogram"] == []
+        assert result["compression_warning"] is False
+
+    async def test_normal_distribution(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+        """Varied confidence scores produce a distribution."""
+        # Create predictions with varied confidence
+        for i, conf in enumerate([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.95]):
+            att = Attempt(activity_id=cal_attempt.activity_id, household_id=cal_household.id, child_id=cal_child.id)
+            db_session.add(att)
+            await db_session.flush()
+            db_session.add(EvaluatorPrediction(
+                household_id=cal_household.id, child_id=cal_child.id,
+                node_id=cal_node.id, attempt_id=att.id,
+                predicted_confidence=conf, predicted_fsrs_rating=3,
+            ))
+        await db_session.flush()
+
+        result = await compute_confidence_distribution(db_session, cal_child.id, cal_household.id)
+        assert len(result["histogram"]) == 10
+        assert result["total"] == 10
+        assert result["std_dev"] > 0.1
+        assert result["compression_warning"] is False
+
+    async def test_compression_warning(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+        """Narrow confidence range triggers compression warning."""
+        for i in range(20):
+            att = Attempt(activity_id=cal_attempt.activity_id, household_id=cal_household.id, child_id=cal_child.id)
+            db_session.add(att)
+            await db_session.flush()
+            db_session.add(EvaluatorPrediction(
+                household_id=cal_household.id, child_id=cal_child.id,
+                node_id=cal_node.id, attempt_id=att.id,
+                predicted_confidence=0.70 + (i * 0.002),  # Very narrow range
+                predicted_fsrs_rating=3,
+            ))
+        await db_session.flush()
+
+        result = await compute_confidence_distribution(db_session, cal_child.id, cal_household.id)
+        assert result["compression_warning"] is True
+        assert result["std_dev"] < 0.1
+
+
+@pytest.mark.asyncio
+class TestSubjectCalibrationDetail:
+    async def test_empty_returns_empty(self, db_session, cal_child, cal_household):
+        result = await compute_subject_calibration_detail(db_session, cal_child.id, cal_household.id)
+        assert result == []
+
+    async def test_well_calibrated_subject(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+        await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 15, 3, 3)
+        result = await compute_subject_calibration_detail(db_session, cal_child.id, cal_household.id)
+        assert len(result) >= 1
+        assert result[0]["action"] == "well_calibrated"
+
+    async def test_review_recommended(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+        await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 15, 4, 1)
+        result = await compute_subject_calibration_detail(db_session, cal_child.id, cal_household.id)
+        assert len(result) >= 1
+        found = [s for s in result if s["action"] == "review_recommended"]
+        assert len(found) >= 1
+
+    async def test_insufficient_data_subject(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+        await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 5, 3, 3)
+        result = await compute_subject_calibration_detail(db_session, cal_child.id, cal_household.id)
+        assert len(result) >= 1
+        assert result[0]["action"] == "insufficient_data"
+
+
+# ═══════════════════════════════════════════
+# SESSION 11D TESTS: Governance & Integration
+# ═══════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+class TestGovernanceEvents:
+    async def test_recompute_emits_governance_event(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+        await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 55, 3, 3)
+        await recompute_profile(db_session, cal_child.id, cal_household.id)
+
+        events = (await db_session.execute(
+            select(GovernanceEvent).where(GovernanceEvent.target_type == "calibration_profile")
+        )).scalars().all()
+        assert len(events) >= 1
+        assert "recomputed" in events[0].reason.lower()
+
+
+@pytest.mark.asyncio
+class TestDegradation:
+    async def test_evaluator_works_without_profile(self, db_session, cal_child):
+        """apply_calibration_offset works even when no profile exists."""
+        result = await apply_calibration_offset(db_session, 0.72, cal_child.id)
+        assert result == 0.72
+
+    async def test_reconcile_works_without_predictions(self, db_session, cal_child, cal_household, cal_node):
+        """reconcile_outcome gracefully handles no predictions."""
+        result = await reconcile_outcome(db_session, cal_child.id, cal_household.id, cal_node.id, 3)
+        assert result is None
