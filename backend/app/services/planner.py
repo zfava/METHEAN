@@ -324,21 +324,49 @@ async def _build_planner_context(
     try:
         from app.content.scope_sequences import get_next_topics
         from app.core.learning_levels import get_level_for_subject, SUBJECT_CATALOG
+        from app.models.curriculum import LearningMap, Subject
+
+        # Fetch subject names for enrolled maps
         scope_context = {}
-        seen_subjects = set()
-        for node in nodes:
-            subj_name = node.get("subject_name", "")
-            if subj_name and subj_name not in seen_subjects:
+        if map_ids:
+            map_result = await db.execute(
+                select(LearningMap.id, Subject.name).join(
+                    Subject, LearningMap.subject_id == Subject.id
+                ).where(LearningMap.id.in_(map_ids))
+            )
+            map_subjects = {str(row[0]): row[1] for row in map_result.all()}
+
+            # Get child preferences for level detection
+            from app.models.identity import ChildPreferences
+            prefs_result = await db.execute(
+                select(ChildPreferences).where(ChildPreferences.child_id == child_id)
+            )
+            child_prefs = prefs_result.scalar_one_or_none()
+
+            # Collect mastered node titles for prerequisite tracking
+            mastered_refs: list[str] = []
+
+            seen_subjects: set[str] = set()
+            for subj_name in map_subjects.values():
+                if subj_name in seen_subjects:
+                    continue
                 seen_subjects.add(subj_name)
+
+                # Resolve to scope sequence subject_id
                 subj_id = subj_name.lower().replace(" ", "_").replace("&", "and")
                 for cat in SUBJECT_CATALOG.values():
                     for s in cat:
                         if s["name"].lower() == subj_name.lower() or s["id"] == subj_id:
                             subj_id = s["id"]
                             break
-                next_topics = get_next_topics(subj_id, "developing", [], count=5)
+
+                level = get_level_for_subject(child_prefs, subj_name) if child_prefs else "developing"
+                next_topics = get_next_topics(subj_id, level, mastered_refs, count=5)
                 if next_topics:
-                    scope_context[subj_name] = [{"title": t["title"], "key_concepts": t["key_concepts"]} for t in next_topics]
+                    scope_context[subj_name] = [
+                        {"title": t["title"], "key_concepts": t["key_concepts"]}
+                        for t in next_topics
+                    ]
         if scope_context:
             context["scope_sequences"] = scope_context
     except Exception:

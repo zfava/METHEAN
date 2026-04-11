@@ -71,10 +71,14 @@ async def _enrich_map(learning_map_id: uuid.UUID, household_id: uuid.UUID) -> di
                     enriched += 1
                     logger.info(f"Seed content applied to node '{node.title}' ({i+1}/{total})")
                 else:
-                    # Mark as needing AI enrichment (actual AI call happens separately)
+                    # Mark as needing AI enrichment and inject scope metadata
                     if not node.content:
                         node.content = {}
                     node.content["needs_enrichment"] = True
+                    scope_meta = _get_scope_metadata(node.title)
+                    if scope_meta:
+                        node.content["scope_metadata"] = scope_meta
+                        logger.info(f"Scope metadata injected for '{node.title}' ({i+1}/{total})")
                     enriched += 1
                     logger.info(f"Marked node '{node.title}' for enrichment ({i+1}/{total})")
             except Exception as e:
@@ -100,4 +104,46 @@ def _get_seed_content(node_title: str) -> dict | None:
                 return content
         return None
     except ImportError:
+        return None
+
+
+def _get_scope_metadata(node_title: str, subject_name: str | None = None) -> dict | None:
+    """Look up scope sequence metadata for a node by title match.
+
+    Returns key_concepts, assessment_indicators, and alignment data
+    that can be injected into content or passed to the content architect.
+    """
+    try:
+        from app.content.scope_sequences import SCOPE_SEQUENCES
+        from app.core.learning_levels import SUBJECT_CATALOG
+
+        title_lower = node_title.lower().strip()
+
+        # Determine which subjects to search
+        search_subjects = list(SCOPE_SEQUENCES.keys())
+        if subject_name:
+            subj_id = subject_name.lower().replace(" ", "_").replace("&", "and")
+            for cat in SUBJECT_CATALOG.values():
+                for s in cat:
+                    if s["name"].lower() == subject_name.lower() or s["id"] == subj_id:
+                        subj_id = s["id"]
+                        break
+            if subj_id in SCOPE_SEQUENCES:
+                search_subjects = [subj_id]
+
+        for subj in search_subjects:
+            for level_name, topics in SCOPE_SEQUENCES[subj].items():
+                for topic in topics:
+                    if topic["title"].lower().strip() == title_lower:
+                        return {
+                            "scope_ref": topic["ref"],
+                            "key_concepts": topic.get("key_concepts", []),
+                            "assessment_indicators": topic.get("assessment_indicators", []),
+                            "classical_alignment": topic.get("classical_alignment", ""),
+                            "charlotte_mason_alignment": topic.get("charlotte_mason_alignment", ""),
+                            "standard_alignment": topic.get("standard_alignment", ""),
+                            "estimated_weeks": topic.get("estimated_weeks", 1),
+                        }
+        return None
+    except Exception:
         return None

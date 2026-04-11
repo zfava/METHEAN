@@ -158,6 +158,35 @@ Use these node IDs in the focus_nodes field for each week."""
     # Build philosophical constraints
     phil_constraints = build_philosophical_constraints(phil)
 
+    # Inject scope sequence context for pedagogically grounded curriculum
+    scope_sequence_context = ""
+    try:
+        from app.content.scope_sequences import get_scope_sequence
+        from app.core.learning_levels import SUBJECT_CATALOG
+        # Resolve subject_name to subject_id
+        subj_id = subject_name.lower().replace(" ", "_").replace("&", "and")
+        for cat in SUBJECT_CATALOG.values():
+            for s in cat:
+                if s["name"].lower() == subject_name.lower() or s["id"] == subj_id:
+                    subj_id = s["id"]
+                    break
+        topics = get_scope_sequence(subj_id, level)
+        if topics:
+            topic_lines = []
+            for t in topics:
+                prereqs = ", ".join(t.get("prerequisites", [])) or "none"
+                concepts = ", ".join(t.get("key_concepts", [])[:5])
+                topic_lines.append(
+                    f"  {t['ref']}: {t['title']} (prereqs: [{prereqs}], ~{t.get('estimated_weeks', 1)}wk, concepts: {concepts})"
+                )
+            scope_sequence_context = f"""
+SCOPE AND SEQUENCE ({len(topics)} topics in pedagogical order for {level} level):
+Follow this topic order. Respect prerequisites. Do NOT skip or reorder topics.
+{chr(10).join(topic_lines)}
+"""
+    except Exception:
+        pass
+
     # Detect vocational subject and use appropriate prompt
     from app.core.learning_levels import SUBJECT_CATALOG
     vocational_names = {s["name"].lower() for s in SUBJECT_CATALOG.get("vocational", [])}
@@ -192,6 +221,7 @@ TOTAL WEEKS: {total_weeks}
 INSTRUCTION DAYS: {days_per_week} days per week ({', '.join(d.capitalize() for d in instruction_days)})
 START DATE: {start_date}
 {nodes_description}
+{scope_sequence_context}
 {f'ADDITIONAL GUIDANCE FROM PARENT: {scope_notes}' if scope_notes else ''}
 
 Generate the complete {total_weeks}-week scope and sequence."""
