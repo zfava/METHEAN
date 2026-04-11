@@ -57,6 +57,7 @@ const NAV_GROUPS = [
     items: [
       { href: "/inspection", label: "AI Inspection" },
       { href: "/intelligence", label: "Learner Profile" },
+      { href: "/calibration", label: "Evaluator Calibration" },
     ],
   },
   {

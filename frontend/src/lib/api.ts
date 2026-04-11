@@ -429,6 +429,68 @@ export const usage = {
   breakdown: () => request<any>("/usage/breakdown"),
 };
 
+// ── Evaluator Calibration ──
+export const calibration = {
+  profile: (childId: string) => request<CalibrationResponse>(`/children/${childId}/calibration`),
+  predictions: (childId: string, params?: { reconciled_only?: boolean; min_drift?: number; skip?: number; limit?: number }) => {
+    const qs = new URLSearchParams();
+    if (params?.reconciled_only) qs.set("reconciled_only", "true");
+    if (params?.min_drift !== undefined) qs.set("min_drift", String(params.min_drift));
+    if (params?.skip !== undefined) qs.set("skip", String(params.skip));
+    if (params?.limit !== undefined) qs.set("limit", String(params.limit));
+    const q = qs.toString();
+    return request<{ items: PredictionItem[]; total: number }>(`/children/${childId}/calibration/predictions${q ? `?${q}` : ""}`);
+  },
+  updateOffset: (childId: string, data: { offset_active?: boolean; parent_override_offset?: number | null }) =>
+    request<{ status: string; changes: object }>(`/children/${childId}/calibration/offset`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+  driftHistory: (childId: string, weeks = 12) =>
+    request<{ series: DriftPoint[]; weeks_requested: number }>(`/children/${childId}/calibration/drift-history?weeks=${weeks}`),
+};
+
+export interface CalibrationResponse {
+  profile: CalibrationProfileData | null;
+  reconciled_predictions?: number;
+  threshold: number;
+  message?: string;
+}
+
+export interface CalibrationProfileData {
+  id: string;
+  child_id: string;
+  total_predictions: number;
+  reconciled_predictions: number;
+  mean_drift: number;
+  directional_bias: number;
+  confidence_band_accuracy: Record<string, { total: number; hit_rate: number }>;
+  subject_drift_map: Record<string, { mean_drift: number; count: number; bias: number }>;
+  recalibration_offset: number;
+  offset_active: boolean;
+  parent_override_offset: number | null;
+  last_computed_at: string | null;
+}
+
+export interface PredictionItem {
+  id: string;
+  node_id: string;
+  attempt_id: string;
+  predicted_confidence: number;
+  predicted_fsrs_rating: number;
+  actual_outcome: number | null;
+  drift_score: number | null;
+  calibration_offset_applied: number;
+  created_at: string;
+  outcome_recorded_at: string | null;
+}
+
+export interface DriftPoint {
+  week: string;
+  mean_drift: number;
+  count: number;
+}
+
 export const familyInvites = {
   invite: (email: string, role: string) =>
     request<{ invited: boolean }>("/household/invite", { method: "POST", body: JSON.stringify({ email, role }) }),

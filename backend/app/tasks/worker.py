@@ -58,6 +58,10 @@ celery_app.conf.beat_schedule = {
         "task": "app.tasks.worker.weekly_digest_task",
         "schedule": crontab(day_of_week="sunday", hour=18, minute=0),
     },
+    "nightly-calibration": {
+        "task": "app.tasks.worker.calibration_nightly_task",
+        "schedule": crontab(hour=3, minute=30),
+    },
 }
 
 
@@ -149,6 +153,16 @@ def enrich_map_task(self, learning_map_id: str, household_id: str) -> dict:
         return enrich_learning_map_sync(learning_map_id, household_id)
     except Exception as exc:
         self.retry(exc=exc, countdown=60)
+
+
+@celery_app.task(name="app.tasks.worker.calibration_nightly_task", bind=True, max_retries=3)
+def calibration_nightly_task(self) -> dict:
+    """Nightly: recompute calibration profiles for eligible children."""
+    try:
+        from app.tasks.calibration_batch import run_calibration_sync
+        return run_calibration_sync()
+    except Exception as exc:
+        self.retry(exc=exc, countdown=30 * (2 ** self.request.retries))
 
 
 # Alias for celery -A app.tasks.worker

@@ -114,6 +114,40 @@ async def submit_attempt(
     if confidence is None:
         confidence = mock_evaluator.evaluate(score=score)
 
+    # Apply calibration offset (advisory — never blocks pipeline)
+    raw_confidence = confidence
+    calibration_offset_applied = 0.0
+    try:
+        from app.services.calibration import apply_calibration_offset
+        adjusted = await apply_calibration_offset(db, confidence, attempt.child_id)
+        calibration_offset_applied = adjusted - confidence
+        confidence = adjusted
+    except Exception:
+        pass  # Calibration is advisory
+
+    # Reconcile calibration on subsequent attempts (same child + node)
+    try:
+        from app.services.calibration import reconcile_outcome
+        from app.services.state_engine import confidence_to_rating
+        from app.models.state import ChildNodeState
+        from sqlalchemy import select as sa_select
+        # Check if child has prior attempts on this node
+        prior_state_result = await db.execute(
+            sa_select(ChildNodeState).where(
+                ChildNodeState.child_id == attempt.child_id,
+                ChildNodeState.node_id == activity.node_id,
+                ChildNodeState.attempts_count > 0,
+            )
+        )
+        if prior_state_result.scalar_one_or_none() is not None:
+            new_rating = confidence_to_rating(confidence)
+            await reconcile_outcome(
+                db, attempt.child_id, household_id, activity.node_id,
+                new_fsrs_rating=new_rating.value,
+            )
+    except Exception:
+        pass  # Calibration reconciliation is advisory
+
     # Process through state engine (FSRS + state transition + cascade)
     review_result = await process_review(
         db,
@@ -124,6 +158,23 @@ async def submit_attempt(
         duration_minutes=duration_minutes,
         created_by=user_id,
     )
+
+    # Record calibration prediction (after FSRS rating computed, advisory)
+    try:
+        from app.services.calibration import record_prediction
+        await record_prediction(
+            db,
+            child_id=attempt.child_id,
+            household_id=household_id,
+            node_id=activity.node_id,
+            attempt_id=attempt.id,
+            evaluator_confidence=confidence,
+            fsrs_rating=review_result["fsrs_rating"],
+            predicted_retention_at=review_result.get("fsrs_due"),
+            calibration_offset_applied=calibration_offset_applied,
+        )
+    except Exception:
+        pass  # Calibration recording is advisory
 
     # Record intelligence observations (non-blocking)
     try:

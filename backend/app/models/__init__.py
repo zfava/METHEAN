@@ -31,6 +31,7 @@ from app.models.operational import (
 )
 from app.models.intelligence import LearnerIntelligence
 from app.models.achievements import Achievement, Streak
+from app.models.calibration import CalibrationProfile, EvaluatorPrediction
 
 __all__ = [
     "Household",
@@ -72,4 +73,6 @@ __all__ = [
     "Streak",
     "UsageLedger",
     "UsageEvent",
+    "EvaluatorPrediction",
+    "CalibrationProfile",
 ]
