@@ -994,7 +994,7 @@ Continue the Socratic dialogue. Reference what was discussed earlier if relevant
                 db,
                 child_id,
                 user.household_id,
-                subject=getattr(activity, "subject_area", None) or node_title or "general",
+                subject=node_title or activity.title or "general",
                 messages_count=history_len + 1,  # includes current message
                 hints_used=hints_in_response,
                 self_corrections=0,  # tracked client-side if available

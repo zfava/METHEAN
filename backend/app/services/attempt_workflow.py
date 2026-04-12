@@ -186,7 +186,7 @@ async def submit_attempt(
     try:
         hour = now.hour
         time_of_day = "morning" if hour < 12 else "afternoon" if hour < 17 else "evening"
-        subject = activity.subject_area or activity.title or ""
+        subject = activity.title or ""
 
         await intelligence.record_attempt_engagement(
             db,
@@ -233,7 +233,7 @@ async def submit_attempt(
     try:
         await achievements_svc.update_streak(db, attempt.child_id, household_id)
         ctx = {
-            "subject": activity.subject_area or activity.title or "",
+            "subject": activity.title or "",
             "new_level": review_result.get("mastery_level"),
             "old_level": review_result.get("previous_mastery"),
             "node_id": str(activity.node_id) if activity.node_id else None,

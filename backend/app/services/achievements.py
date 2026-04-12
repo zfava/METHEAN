@@ -198,13 +198,20 @@ async def check_achievements(
                 if ach:
                     earned.append(ach)
 
-    # Explorer (5 different subjects)
+    # Explorer (5 different subjects — derived through node -> map -> subject)
     if trigger_event == "activity_complete":
+        from app.models.curriculum import LearningMap, LearningNode, Subject
+
         subject_count_result = await db.execute(
-            select(func.count(func.distinct(Activity.subject_area))).where(
+            select(func.count(func.distinct(Subject.name)))
+            .select_from(Activity)
+            .join(LearningNode, Activity.node_id == LearningNode.id)
+            .join(LearningMap, LearningNode.learning_map_id == LearningMap.id)
+            .join(Subject, LearningMap.subject_id == Subject.id)
+            .where(
                 Activity.household_id == household_id,
                 Activity.status == "completed",
-                Activity.subject_area.isnot(None),
+                Activity.node_id.isnot(None),
             )
         )
         subject_count = subject_count_result.scalar() or 0
