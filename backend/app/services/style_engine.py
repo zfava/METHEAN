@@ -444,6 +444,24 @@ async def compute_style_vector(
     vector.dimensions_active = _count_active_dimensions(vector)
     vector.last_computed_at = now
 
+    # Emit audit log
+    try:
+        from app.models.enums import AuditAction
+        from app.models.operational import AuditLog
+        db.add(AuditLog(
+            household_id=household_id,
+            action=AuditAction.update,
+            resource_type="learner_style_vector",
+            resource_id=vector.id,
+            details={
+                "child_id": str(child_id),
+                "dimensions_active": vector.dimensions_active,
+                "data_points_count": vector.data_points_count,
+            },
+        ))
+    except Exception:
+        pass  # Audit logging is advisory
+
     await db.flush()
     return vector
 
