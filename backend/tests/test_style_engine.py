@@ -12,6 +12,10 @@ from app.models.identity import Child, Household
 from app.models.intelligence import LearnerIntelligence
 from app.models.style_vector import LearnerStyleVector
 from app.services.style_engine import (
+    build_style_context,
+    build_tutor_style_guidance,
+    build_planner_style_guidance,
+    build_advisor_style_guidance,
     compute_style_vector,
     decay_weighted_average,
     MIN_OBSERVATIONS,
@@ -380,3 +384,66 @@ class TestUpsert:
             select(LearnerStyleVector).where(LearnerStyleVector.child_id == sv_child.id)
         )).scalars().all()
         assert len(count) == 1
+
+
+# ── Style Context Builder ──
+
+
+@pytest.mark.asyncio
+class TestBuildStyleContext:
+    async def test_no_vector_returns_empty(self, db_session, sv_child, sv_household):
+        """No vector → empty string."""
+        ctx = await build_style_context(db_session, sv_child.id, sv_household.id)
+        assert ctx == ""
+
+    async def test_full_vector_returns_formatted(self, db_session, sv_child, sv_household):
+        """Full vector → formatted block with all active dimensions."""
+        intel = _build_rich_intelligence(sv_child.id, sv_household.id)
+        db_session.add(intel)
+        await db_session.flush()
+
+        await compute_style_vector(db_session, sv_child.id, sv_household.id)
+        ctx = await build_style_context(db_session, sv_child.id, sv_household.id)
+
+        assert "LEARNER STYLE PROFILE" in ctx
+        assert "observations" in ctx
+        assert "Optimal session" in ctx
+        assert "Morning" in ctx
+
+    async def test_partial_vector_only_active(self, db_session, sv_child, sv_household):
+        """Partial vector with few observations → only active dims included."""
+        intel = LearnerIntelligence(
+            child_id=sv_child.id,
+            household_id=sv_household.id,
+            observation_count=25,
+            engagement_patterns={
+                "recent_durations": list(range(15, 36)),
+                "time_of_day_counts": {"morning": 15, "afternoon": 5, "evening": 2},
+                "activity_type_stats": {},
+            },
+            subject_patterns={},
+            tutor_interaction_analysis={},
+            pace_trends={},
+        )
+        db_session.add(intel)
+        await db_session.flush()
+
+        await compute_style_vector(db_session, sv_child.id, sv_household.id)
+        ctx = await build_style_context(db_session, sv_child.id, sv_household.id)
+
+        assert "LEARNER STYLE PROFILE" in ctx
+        assert "Optimal session" in ctx
+        # Socratic shouldn't appear (no tutor sessions)
+        assert "Socratic" not in ctx
+
+
+class TestGuidanceBuilders:
+    def test_tutor_guidance_none(self):
+        assert build_tutor_style_guidance(None) == ""
+
+    def test_planner_guidance_none(self):
+        assert build_planner_style_guidance(None) == ""
+
+    def test_advisor_guidance_content(self):
+        ag = build_advisor_style_guidance()
+        assert "Learning Style Insights" in ag

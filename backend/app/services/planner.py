@@ -91,6 +91,22 @@ Child's current state:
 Create activities spread across {num_days} days ({day_labels}).
 Prioritize nodes that are due for review, then available nodes."""
 
+    # Inject style context (advisory)
+    try:
+        from app.services.style_engine import build_style_context, build_planner_style_guidance
+        from app.models.style_vector import LearnerStyleVector
+        style_ctx = await build_style_context(db, child_id, household_id)
+        if style_ctx:
+            user_prompt += f"\n\n{style_ctx}"
+        vec_result = await db.execute(
+            select(LearnerStyleVector).where(LearnerStyleVector.child_id == child_id)
+        )
+        planner_guidance = build_planner_style_guidance(vec_result.scalar_one_or_none())
+        if planner_guidance:
+            user_prompt += f"\n\nSTYLE-ADAPTED PLANNING:\n{planner_guidance}"
+    except Exception:
+        pass
+
     # Fetch household philosophical profile for AI constraints
     from app.models.identity import Household
     h_result = await db.execute(select(Household).where(Household.id == household_id))

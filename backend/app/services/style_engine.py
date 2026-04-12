@@ -446,3 +446,206 @@ async def compute_style_vector(
 
     await db.flush()
     return vector
+
+
+# ── Style Context Builder for AI Prompt Injection ──
+
+
+def _level_label(value: float) -> str:
+    """Map a 0.0-1.0 float to LOW/MODERATE/HIGH."""
+    if value < 0.3:
+        return "LOW"
+    elif value <= 0.7:
+        return "MODERATE"
+    else:
+        return "HIGH"
+
+
+def _hour_label(hour: int) -> str:
+    """Map hour to readable time period."""
+    if hour < 12:
+        return f"Morning ({hour}-{hour + 1} AM peak)"
+    elif hour < 17:
+        h = hour if hour <= 12 else hour - 12
+        return f"Afternoon ({h}-{h + 1} PM peak)"
+    else:
+        h = hour - 12
+        return f"Evening ({h}-{h + 1} PM peak)"
+
+
+def _modality_label(modality: str) -> str:
+    """Readable modality name."""
+    labels = {
+        "visual": "Visual learning",
+        "auditory": "Auditory learning",
+        "kinesthetic": "Hands-on/kinesthetic",
+        "reading_writing": "Reading/writing",
+        "mixed": "Mixed modalities",
+    }
+    return labels.get(modality, modality)
+
+
+async def build_style_context(
+    db: AsyncSession,
+    child_id: uuid.UUID,
+    household_id: uuid.UUID,
+) -> str:
+    """Build a plain-text style context block for AI prompt injection.
+
+    Returns empty string if no vector exists or insufficient data.
+    """
+    result = await db.execute(
+        select(LearnerStyleVector).where(LearnerStyleVector.child_id == child_id)
+    )
+    vector = result.scalar_one_or_none()
+
+    if vector is None or vector.dimensions_active == 0:
+        return ""
+
+    lines = [f"LEARNER STYLE PROFILE (computed from {vector.data_points_count} observations):"]
+
+    # Optimal session + attention pattern
+    if vector.optimal_session_minutes is not None:
+        attn = f" ({vector.attention_pattern} attention pattern)" if vector.attention_pattern else ""
+        lines.append(f"- Optimal session: {vector.optimal_session_minutes} minutes{attn}")
+
+    # Time of day
+    if vector.time_of_day_peak is not None:
+        lines.append(f"- Best time of day: {_hour_label(vector.time_of_day_peak)}")
+
+    # Socratic responsiveness
+    if vector.socratic_responsiveness is not None:
+        label = _level_label(vector.socratic_responsiveness)
+        desc = {
+            "HIGH": "responds well to questioning",
+            "MODERATE": "benefits from a mix of questioning and direct instruction",
+            "LOW": "prefers worked examples before guided practice",
+        }[label]
+        lines.append(f"- Socratic responsiveness: {label} ({vector.socratic_responsiveness:.2f}) — {desc}")
+
+    # Independence
+    if vector.independence_level is not None:
+        label = _level_label(vector.independence_level)
+        desc = {
+            "HIGH": "highly self-directed, offer space before hints",
+            "MODERATE": "needs occasional scaffolding",
+            "LOW": "benefits from guided support and frequent check-ins",
+        }[label]
+        lines.append(f"- Independence: {label} ({vector.independence_level:.2f}) — {desc}")
+
+    # Frustration threshold
+    if vector.frustration_threshold is not None:
+        label = _level_label(vector.frustration_threshold)
+        desc = {
+            "HIGH": "handles difficulty well, can push harder",
+            "MODERATE": "provide support at higher difficulty levels",
+            "LOW": "provide extra support early, scaffold before frustration",
+        }[label]
+        lines.append(f"- Frustration threshold: {label} ({vector.frustration_threshold:.2f}) — {desc}")
+
+    # Recovery rate
+    if vector.recovery_rate is not None:
+        label = _level_label(vector.recovery_rate)
+        desc = {
+            "HIGH": "bounces back quickly after setbacks",
+            "MODERATE": "recovers with encouragement",
+            "LOW": "needs extra encouragement and easier tasks after setbacks",
+        }[label]
+        lines.append(f"- Recovery rate: {label} ({vector.recovery_rate:.2f}) — {desc}")
+
+    # Pacing
+    if vector.pacing_preference is not None:
+        if vector.pacing_preference > 0.3:
+            lines.append(f"- Pacing: Acceleration preferred (+{vector.pacing_preference:.1f})")
+        elif vector.pacing_preference < -0.3:
+            lines.append(f"- Pacing: Slower pace needed ({vector.pacing_preference:.1f})")
+        else:
+            lines.append(f"- Pacing: Standard pace ({vector.pacing_preference:+.1f})")
+
+    # Subject affinities
+    if vector.subject_affinity_map:
+        sorted_subj = sorted(vector.subject_affinity_map.items(), key=lambda x: -x[1])
+        affinity_strs = [f"{s.title()} ({v:.2f})" for s, v in sorted_subj]
+        lines.append(f"- Subject affinities: {', '.join(affinity_strs)}")
+
+    # Modality
+    if vector.modality_preference:
+        lines.append(f"- Modality: {_modality_label(vector.modality_preference)} preferred")
+
+    # Include parent observations from intelligence profile
+    try:
+        intel_result = await db.execute(
+            select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id)
+        )
+        intel = intel_result.scalar_one_or_none()
+        if intel and intel.parent_observations:
+            obs_texts = [o.get("observation", "") for o in intel.parent_observations if o.get("observation")]
+            if obs_texts:
+                lines.append("")
+                lines.append("PARENT OBSERVATIONS:")
+                for obs in obs_texts[-5:]:
+                    lines.append(f"- {obs}")
+    except Exception:
+        pass
+
+    return "\n".join(lines)
+
+
+def build_tutor_style_guidance(vector: LearnerStyleVector | None) -> str:
+    """Build tutor-specific guidance lines from the style vector."""
+    if vector is None or vector.dimensions_active == 0:
+        return ""
+
+    lines = []
+
+    if vector.socratic_responsiveness is not None:
+        if vector.socratic_responsiveness > 0.7:
+            lines.append("This child responds well to Socratic questioning. Lead with questions.")
+        elif vector.socratic_responsiveness < 0.3:
+            lines.append("This child learns better from worked examples first, then guided practice.")
+
+    if vector.frustration_threshold is not None and vector.frustration_threshold < 0.4:
+        lines.append("This child needs early scaffolding. If they hesitate, offer a smaller step immediately.")
+
+    if vector.independence_level is not None and vector.independence_level > 0.7:
+        lines.append("This child is self-directed. Offer space before hints.")
+
+    if vector.optimal_session_minutes is not None and vector.optimal_session_minutes < 20:
+        lines.append("Keep interactions concise. This child's focus peaks in short sessions.")
+
+    return "\n".join(lines)
+
+
+def build_planner_style_guidance(vector: LearnerStyleVector | None) -> str:
+    """Build planner-specific guidance lines from the style vector."""
+    if vector is None or vector.dimensions_active == 0:
+        return ""
+
+    lines = []
+
+    if vector.optimal_session_minutes is not None:
+        lines.append(f"Schedule activities within {vector.optimal_session_minutes} minutes for this child.")
+
+    if vector.time_of_day_peak is not None:
+        lines.append(f"Schedule highest-priority subjects around {_hour_label(vector.time_of_day_peak)} for peak performance.")
+
+    if vector.pacing_preference is not None:
+        if vector.pacing_preference > 0.3:
+            lines.append("This child thrives with challenge. Include stretch activities.")
+        elif vector.pacing_preference < -0.3:
+            lines.append("This child benefits from consolidation. Include extra review.")
+
+    if vector.subject_affinity_map:
+        sorted_subj = sorted(vector.subject_affinity_map.items(), key=lambda x: -x[1])
+        lines.append(f"Subject affinities (balance high and low): {', '.join(f'{s}={v:.2f}' for s, v in sorted_subj)}")
+
+    return "\n".join(lines)
+
+
+def build_advisor_style_guidance() -> str:
+    """Build advisor-specific guidance for reports."""
+    return (
+        "Include a 'Learning Style Insights' section in your weekly report.\n"
+        "Reference the child's style dimensions and note any notable patterns.\n"
+        "Example: 'Emma's independence level suggests she is building confidence in self-directed work.'"
+    )

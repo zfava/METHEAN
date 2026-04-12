@@ -883,6 +883,24 @@ Child's latest message: {body.message}
 
 Continue the Socratic dialogue. Reference what was discussed earlier if relevant. Guide toward understanding without giving answers."""
 
+    # Inject style context (advisory)
+    style_ctx = ""
+    tutor_guidance = ""
+    try:
+        from app.services.style_engine import build_style_context, build_tutor_style_guidance
+        from sqlalchemy import select as _sel
+        from app.models.style_vector import LearnerStyleVector
+        if body.child_id:
+            style_ctx = await build_style_context(db, body.child_id, user.household_id)
+            vec_r = await db.execute(_sel(LearnerStyleVector).where(LearnerStyleVector.child_id == body.child_id))
+            tutor_guidance = build_tutor_style_guidance(vec_r.scalar_one_or_none())
+    except Exception:
+        pass
+    if style_ctx:
+        user_prompt += f"\n\n{style_ctx}"
+    if tutor_guidance:
+        user_prompt += f"\n\nSTYLE-ADAPTED GUIDANCE:\n{tutor_guidance}"
+
     phil = await _get_philosophical_profile(db, user.household_id)
     result = await call_ai(
         db,
@@ -1031,6 +1049,15 @@ State Summary:
 - Total time: {sum(s.time_spent_minutes for s in states)} minutes
 
 Provide an encouraging, honest assessment."""
+
+    # Inject style context (advisory)
+    try:
+        from app.services.style_engine import build_style_context, build_advisor_style_guidance
+        style_ctx = await build_style_context(db, child_id, user.household_id)
+        if style_ctx:
+            user_prompt += f"\n\n{style_ctx}\n\n{build_advisor_style_guidance()}"
+    except Exception:
+        pass
 
     phil = await _get_philosophical_profile(db, user.household_id)
     result = await call_ai(
