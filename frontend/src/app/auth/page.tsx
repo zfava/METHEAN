@@ -82,7 +82,6 @@ export default function AuthPage() {
               </button>
             )}
           </form>
-        )}
         {mode === "forgot" && (
           <div className="space-y-3">
             {forgotSent ? (

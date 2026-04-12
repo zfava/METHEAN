@@ -12,7 +12,6 @@ import EmptyState from "@/components/ui/EmptyState";
 import { ShieldIcon } from "@/components/ConstitutionalCeremony";
 import { governance } from "@/lib/api";
 import { cn } from "@/lib/cn";
-}
 
 // CSS bar chart component (no external deps)
 function BarChart({ data, maxValue }: { data: Array<{ label: string; value: number; color: string }>; maxValue?: number }) {
