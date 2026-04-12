@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { annualCurriculum } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
@@ -24,7 +25,7 @@ const typeLabel: Record<string, string> = {
   review: "Review", project: "Project", field_trip: "Field Trip",
 };
 
-export default function YearViewPage() {
+function YearViewPageContent() {
   useEffect(() => { document.title = "Year Plan | METHEAN"; }, []);
 
   const params = useSearchParams();
@@ -321,5 +322,14 @@ export default function YearViewPage() {
         </Card>
       )}
     </div>
+  );
+}
+
+
+export default function YearViewPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center py-12">Loading...</div>}>
+      <YearViewPageContent />
+    </Suspense>
   );
 }

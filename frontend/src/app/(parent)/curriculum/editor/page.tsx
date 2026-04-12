@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { curriculum, type MapDetail, type MapNode, type MapEdge } from "@/lib/api";
 import PageHeader from "@/components/ui/PageHeader";
@@ -72,7 +73,7 @@ function buildTiers(nodes: EditorNode[], edges: EditorEdge[]): EditorNode[][] {
   return tiers;
 }
 
-export default function EditorPage() {
+function EditorPageContent() {
   useEffect(() => { document.title = "Map Editor | METHEAN"; }, []);
 
   const params = useSearchParams();
@@ -390,5 +391,14 @@ export default function EditorPage() {
         )}
       </div>
     </div>
+  );
+}
+
+
+export default function EditorPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center py-12">Loading...</div>}>
+      <EditorPageContent />
+    </Suspense>
   );
 }

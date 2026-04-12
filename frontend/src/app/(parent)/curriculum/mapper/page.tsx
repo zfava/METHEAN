@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { curriculum, educationPlan, type MapNodeState } from "@/lib/api";
 import { useToast } from "@/components/Toast";
@@ -29,7 +30,7 @@ Chapter 8: Multiplication Facts 6-9
 Chapter 9: Division Concepts
 Chapter 10: Fractions Introduction`;
 
-export default function CurriculumMapperPage() {
+function CurriculumMapperPageContent() {
   useEffect(() => { document.title = "Map Curriculum | METHEAN"; }, []);
 
   const params = useSearchParams();
@@ -485,5 +486,14 @@ function SectionHeaderInline({ title, count }: { title: string; count: number })
       <h4 className="text-xs font-semibold text-(--color-text-secondary) uppercase tracking-wider">{title}</h4>
       <span className="text-[10px] text-(--color-text-tertiary)">{count} total</span>
     </div>
+  );
+}
+
+
+export default function CurriculumMapperPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center py-12">Loading...</div>}>
+      <CurriculumMapperPageContent />
+    </Suspense>
   );
 }

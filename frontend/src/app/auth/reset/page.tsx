@@ -1,13 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { account } from "@/lib/api";
 import { MetheanLogoVertical } from "@/components/Brand";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 
-export default function ResetPasswordPage() {
+function ResetContent() {
   const params = useSearchParams();
   const router = useRouter();
   const token = params.get("token") || "";
@@ -20,7 +20,7 @@ export default function ResetPasswordPage() {
 
   async function handleReset() {
     if (password.length < 8) { setError("Password must be at least 8 characters"); return; }
-    if (password !== confirm) { setError("Passwords don't match"); return; }
+    if (password !== confirm) { setError("Passwords don&apos;t match"); return; }
     setLoading(true);
     setError("");
     try {
@@ -79,5 +79,13 @@ export default function ResetPasswordPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function ResetPasswordPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+      <ResetContent />
+    </Suspense>
   );
 }
