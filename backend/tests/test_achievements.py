@@ -53,7 +53,7 @@ async def _create_completed_attempt(db, child, household, subject=None):
         title="Test Activity",
         activity_type="lesson",
         status=ActivityStatus.completed,
-        subject_area=subject,
+
     )
     db.add(act)
     await db.flush()
