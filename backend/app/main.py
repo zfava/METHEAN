@@ -101,6 +101,10 @@ app.include_router(style_vector_router, prefix="/api/v1")
 from app.api.family_intelligence import router as family_intelligence_router
 app.include_router(family_intelligence_router, prefix="/api/v1")
 
+# PARENT-ONLY: Wellbeing endpoints must never be accessible from child auth.
+from app.api.wellbeing import router as wellbeing_router
+app.include_router(wellbeing_router, prefix="/api/v1")
+
 
 @app.get("/health")
 async def health() -> dict:
