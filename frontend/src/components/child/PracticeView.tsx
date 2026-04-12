@@ -87,21 +87,29 @@ export default function PracticeView({ context, childId, onComplete }: PracticeV
     const openCount = results.filter((r) => r.correct === null).length;
     return (
       <div className="max-w-2xl mx-auto py-6">
-        <h1 className="text-2xl font-semibold text-(--color-text) mb-2">Practice Complete!</h1>
-        <div className="bg-(--color-surface) border border-(--color-border) rounded-xl p-6 mb-4">
+        <h1 className="text-2xl font-medium text-(--color-text) mb-2">Practice Complete</h1>
+        {/* Encouragement based on performance */}
+        <p className="text-base text-(--color-text-secondary) mb-4 italic">
+          {correctCount === totalItems ? "Perfect score. You clearly know this material."
+            : correctCount >= totalItems * 0.7 ? "Strong work. You're building real understanding."
+            : "Good effort. Every practice session makes you stronger."}
+        </p>
+        <div className="bg-(--color-surface) border border-(--color-border) rounded-2xl p-6 mb-4">
           <div className="flex items-center gap-6 mb-4">
             <div className="text-center">
               <div className="text-3xl font-bold text-(--color-success)">{correctCount}</div>
               <div className="text-xs text-(--color-text-tertiary)">Correct</div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-(--color-danger)">{totalItems - correctCount - openCount}</div>
-              <div className="text-xs text-(--color-text-tertiary)">Incorrect</div>
-            </div>
+            {totalItems - correctCount - openCount > 0 && (
+              <div className="text-center">
+                <div className="text-3xl font-bold text-(--color-text-secondary)">{totalItems - correctCount - openCount}</div>
+                <div className="text-xs text-(--color-text-tertiary)">To review</div>
+              </div>
+            )}
             {openCount > 0 && (
               <div className="text-center">
                 <div className="text-3xl font-bold text-(--color-accent)">{openCount}</div>
-                <div className="text-xs text-(--color-text-tertiary)">Submitted for review</div>
+                <div className="text-xs text-(--color-text-tertiary)">For parent review</div>
               </div>
             )}
           </div>
@@ -215,10 +223,15 @@ export default function PracticeView({ context, childId, onComplete }: PracticeV
         </div>
       )}
 
-      {/* Tutor toggle */}
-      <div className="mt-4 text-center">
-        <button onClick={() => setShowTutor(!showTutor)} className="text-sm text-(--color-accent) hover:underline">
-          {showTutor ? "Hide Tutor" : "Need help? Ask the Tutor"}
+      {/* Help buttons */}
+      <div className="flex items-center justify-center gap-4 mt-6">
+        <button onClick={() => setShowTutor(true)} className="text-sm text-(--color-accent) hover:underline min-h-[44px]">
+          Ask the Tutor
+        </button>
+        <button onClick={() => { setShowTutor(true); }}
+          className="px-4 py-2 text-sm text-(--color-warning) border border-(--color-warning)/30 rounded-xl hover:bg-(--color-warning-light) transition-colors min-h-[44px]"
+          aria-label="I'm stuck — opens tutor for help">
+          I'm stuck
         </button>
       </div>
       {showTutor && <TutorChat activityId={context.activity.id} childId={childId} onClose={() => setShowTutor(false)} />}
