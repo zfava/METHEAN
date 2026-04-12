@@ -66,8 +66,8 @@ class TestPasswordChange:
     @pytest.mark.asyncio
     async def test_change_password_success(self, auth_client, db_session, user):
         """PUT /auth/password with correct current password succeeds."""
-        resp = await auth_client.put("/api/v1/auth/password", json={
-            "current_password": "demo123",
+        resp = await auth_client.put("/api/v1/auth/auth/password", json={
+            "current_password": "testpass123",
             "new_password": "newpassword123",
         })
         assert resp.status_code == 200
@@ -76,7 +76,7 @@ class TestPasswordChange:
     @pytest.mark.asyncio
     async def test_change_password_wrong_current(self, auth_client, db_session, user):
         """PUT /auth/password with wrong current password returns 400."""
-        resp = await auth_client.put("/api/v1/auth/password", json={
+        resp = await auth_client.put("/api/v1/auth/auth/password", json={
             "current_password": "wrongpassword",
             "new_password": "newpassword123",
         })

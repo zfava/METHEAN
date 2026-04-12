@@ -172,7 +172,10 @@ class TestMaterialization:
         )
         plan = plan_result.scalar_one()
 
-        # Check weeks 1-4 are approved, weeks 5-6 are not
+        # Weeks whose start_date <= today + 4 weeks are approved.
+        # With start_date=today, week N starts at today + (N-1) weeks.
+        # So weeks 1-5 satisfy: today + (N-1) weeks <= today + 4 weeks → N <= 5.
+        # Only week 6 (start = today + 5 weeks) is NOT approved.
         for wn in range(1, 7):
             wk_result = await db_session.execute(
                 select(PlanWeek).where(PlanWeek.plan_id == plan.id, PlanWeek.week_number == wn)
@@ -182,7 +185,7 @@ class TestMaterialization:
                 select(Activity).where(Activity.plan_week_id == wk.id)
             )
             acts = acts_result.scalars().all()
-            if wn <= 4:
+            if wn <= 5:
                 assert all(a.governance_approved for a in acts), f"Week {wn} should be approved"
             else:
                 assert all(not a.governance_approved for a in acts), f"Week {wn} should NOT be approved"

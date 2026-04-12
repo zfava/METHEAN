@@ -1,7 +1,7 @@
 """Comprehensive tests for the Context Assembly Service."""
 
 import uuid
-from datetime import UTC, datetime, timedelta, timezone
+from datetime import UTC, date, datetime, timedelta, timezone
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -12,7 +12,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.calibration import CalibrationProfile
 from app.models.curriculum import LearningMap, LearningNode, Subject
 from app.models.enums import MasteryLevel, NodeType
-from app.models.governance import Activity, Attempt, GovernanceRule
+from app.models.governance import Activity, Attempt, GovernanceRule, Plan, PlanWeek
 from app.models.identity import Child, ChildPreferences, Household
 from app.models.intelligence import LearnerIntelligence
 from app.models.state import ChildNodeState, FSRSCard
@@ -271,7 +271,17 @@ class TestFetchers:
         assert "Note 0" not in result["text"]
 
     async def test_fetch_recent_attempts_node_limits_to_three(self, db_session, ctx_child, ctx_household, ctx_node):
+        plan = Plan(household_id=ctx_household.id, child_id=ctx_child.id, name="Test Plan")
+        db_session.add(plan)
+        await db_session.flush()
+        plan_week = PlanWeek(
+            plan_id=plan.id, household_id=ctx_household.id, week_number=1,
+            start_date=date(2026, 1, 5), end_date=date(2026, 1, 11),
+        )
+        db_session.add(plan_week)
+        await db_session.flush()
         act = Activity(
+            plan_week_id=plan_week.id,
             household_id=ctx_household.id, title="Practice", activity_type="practice",
             node_id=ctx_node.id,
         )

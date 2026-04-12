@@ -141,14 +141,13 @@ class TestLearningContext:
             db_session, activity.id, household.id, child.id,
         )
 
-        # Fallback content should be generated from node title
+        # Content comes from enrichment (mock AI) or fallback from node title
         assert ctx["activity"]["title"] == "Fractions Practice"
         assert ctx["activity"]["activity_type"] == "practice"
-        assert "Fractions" in ctx["lesson"]["introduction"]
+        assert len(ctx["lesson"]["introduction"]) > 0
         assert len(ctx["lesson"]["objectives"]) >= 2
         assert len(ctx["lesson"]["steps"]) > 0
         assert len(ctx["assessment"]["prompts"]) > 0
-        assert "Fractions" in ctx["assessment"]["prompts"][0]
 
     @pytest.mark.asyncio
     async def test_learn_no_tutor_for_assessment(

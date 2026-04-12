@@ -2,7 +2,7 @@
 
 import os
 import uuid
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 
 import pytest
 import pytest_asyncio
@@ -12,12 +12,21 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.calibration import EvaluatorPrediction
 from app.models.curriculum import LearningMap, LearningNode, Subject
 from app.models.enums import AnomalyStatus, AnomalyType, NodeType, SensitivityLevel
-from app.models.governance import Activity, Attempt
+from app.models.governance import Activity, Attempt, Plan, PlanWeek
 from app.models.identity import Child, Household
 from app.models.intelligence import LearnerIntelligence
 from app.models.operational import AuditLog
 from app.models.state import ChildNodeState
 from app.models.wellbeing import WellbeingAnomaly, WellbeingConfig
+
+
+class _MockConfig:
+    """Lightweight stand-in for WellbeingConfig in pure unit tests (no DB)."""
+
+    def __init__(self, sensitivity_level, custom_thresholds=None, threshold_adjustments=None):
+        self.sensitivity_level = sensitivity_level
+        self.custom_thresholds = custom_thresholds or {}
+        self.threshold_adjustments = threshold_adjustments or {}
 from app.services.wellbeing_detection import (
     _detect_broad_disengagement,
     _detect_frustration_spike,
@@ -78,10 +87,19 @@ async def _seed_attempts(db_session, wb_household, wb_child, nodes,
                           days_start, days_end, status="completed", duration=25, count=8):
     """Seed attempts across all subjects in a date range."""
     now = datetime.now(UTC)
+    # Create a Plan+PlanWeek scaffold for the activities
+    plan = Plan(household_id=wb_household.id, child_id=wb_child.id, name="WB Seed Plan")
+    db_session.add(plan)
+    await db_session.flush()
+    week = PlanWeek(plan_id=plan.id, household_id=wb_household.id, week_number=1,
+                    start_date=date(2026, 1, 5), end_date=date(2026, 1, 11))
+    db_session.add(week)
+    await db_session.flush()
     for subj_name, node in nodes.items():
         for i in range(count):
             day = days_start - (i * max(1, (days_start - days_end) // max(count - 1, 1)))
-            act = Activity(household_id=wb_household.id, title=f"{subj_name} {i}",
+            act = Activity(plan_week_id=week.id, household_id=wb_household.id,
+                           title=f"{subj_name} {i}",
                            activity_type="practice", node_id=node.id, estimated_minutes=30,
                            scheduled_date=(now - timedelta(days=day)).date())
             db_session.add(act)
@@ -105,24 +123,15 @@ class TestThresholds:
         assert get_effective_threshold(None, "broad_disengagement") == 1.5
 
     def test_conservative(self):
-        c = WellbeingConfig.__new__(WellbeingConfig)
-        c.sensitivity_level = SensitivityLevel.conservative
-        c.custom_thresholds = {}
-        c.threshold_adjustments = {}
+        c = _MockConfig(SensitivityLevel.conservative)
         assert get_effective_threshold(c, "broad_disengagement") == 2.0
 
     def test_sensitive(self):
-        c = WellbeingConfig.__new__(WellbeingConfig)
-        c.sensitivity_level = SensitivityLevel.sensitive
-        c.custom_thresholds = {}
-        c.threshold_adjustments = {}
+        c = _MockConfig(SensitivityLevel.sensitive)
         assert get_effective_threshold(c, "broad_disengagement") == 1.0
 
     def test_self_calibrated(self):
-        c = WellbeingConfig.__new__(WellbeingConfig)
-        c.sensitivity_level = SensitivityLevel.balanced
-        c.custom_thresholds = {}
-        c.threshold_adjustments = {"broad_disengagement": 0.3}
+        c = _MockConfig(SensitivityLevel.balanced, threshold_adjustments={"broad_disengagement": 0.3})
         assert get_effective_threshold(c, "broad_disengagement") == 1.8
 
 
@@ -322,11 +331,7 @@ class TestSensitivity:
         } for s in subjects}}
 
     def _config(self, level):
-        c = WellbeingConfig.__new__(WellbeingConfig)
-        c.sensitivity_level = SensitivityLevel(level)
-        c.custom_thresholds = {}
-        c.threshold_adjustments = {}
-        return c
+        return _MockConfig(SensitivityLevel(level))
 
     def test_conservative_requires_larger(self):
         # 1.8 SD drop — below conservative 2.0 threshold
@@ -348,8 +353,8 @@ class TestSensitivity:
         assert result is not None
 
     def test_custom_threshold_overrides(self):
-        c = self._config("balanced")
-        c.custom_thresholds = {"broad_disengagement": {"sd_threshold": 3.0}}
+        c = _MockConfig(SensitivityLevel.balanced,
+                        custom_thresholds={"broad_disengagement": {"sd_threshold": 3.0}})
         bl = self._bl(["M", "R", "S"])
         rc = self._rc(["M", "R", "S"], effort=0.55)  # 2.5 SD < custom 3.0
         result = _detect_broad_disengagement(bl, rc, c, "E")

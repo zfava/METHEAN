@@ -1,7 +1,7 @@
 """Tests for the Evaluator Calibration Service (Session 10 + Session 11)."""
 
 import uuid
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 
 import pytest
 import pytest_asyncio
@@ -12,7 +12,7 @@ from app.models.calibration import CalibrationProfile, CalibrationSnapshot, Eval
 from app.models.curriculum import LearningMap, LearningNode, Subject
 from app.models.enums import NodeType
 from app.models.evidence import Alert
-from app.models.governance import Activity, Attempt, GovernanceEvent
+from app.models.governance import Activity, Attempt, GovernanceEvent, Plan, PlanWeek
 from app.models.identity import Child, Household
 from app.services.calibration import (
     MAX_OFFSET_STEP,
@@ -81,7 +81,16 @@ async def cal_node(db_session: AsyncSession, cal_household: Household, cal_map: 
 async def cal_attempt(
     db_session: AsyncSession, cal_household: Household, cal_child: Child, cal_node: LearningNode,
 ) -> Attempt:
+    plan = Plan(household_id=cal_household.id, child_id=cal_child.id, name="Cal Plan")
+    db_session.add(plan)
+    await db_session.flush()
+    week = PlanWeek(plan_id=plan.id, household_id=cal_household.id, week_number=1,
+                    start_date=date(2026, 1, 5), end_date=date(2026, 1, 11))
+    db_session.add(week)
+    await db_session.flush()
+
     act = Activity(
+        plan_week_id=week.id,
         household_id=cal_household.id,
         title="Practice Addition",
         activity_type="practice",

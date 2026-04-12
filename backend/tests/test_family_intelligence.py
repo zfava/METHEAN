@@ -1,7 +1,7 @@
 """Comprehensive tests for Family Intelligence: detection, scaffolding, batch, API, context."""
 
 import uuid
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 
 import pytest
 import pytest_asyncio
@@ -12,7 +12,7 @@ from app.models.calibration import EvaluatorPrediction
 from app.models.curriculum import LearningEdge, LearningMap, LearningMapClosure, LearningNode, Subject
 from app.models.enums import EdgeRelation, FamilyPatternType, InsightStatus, MasteryLevel, NodeType
 from app.models.family_insight import FamilyInsight, FamilyInsightConfig
-from app.models.governance import Activity, Attempt, GovernanceEvent
+from app.models.governance import Activity, Attempt, GovernanceEvent, Plan, PlanWeek
 from app.models.identity import Child, Household
 from app.models.state import ChildNodeState
 from app.services.family_intelligence import (
@@ -91,7 +91,17 @@ async def fi_node(db_session, fi_household, fi_map) -> LearningNode:
 
 
 async def _make_attempt(db_session, fi_household, child, node) -> Attempt:
+    plan = Plan(household_id=fi_household.id, child_id=child.id, name="Test Plan")
+    db_session.add(plan)
+    await db_session.flush()
+    plan_week = PlanWeek(
+        plan_id=plan.id, household_id=fi_household.id, week_number=1,
+        start_date=date(2026, 1, 5), end_date=date(2026, 1, 11),
+    )
+    db_session.add(plan_week)
+    await db_session.flush()
     act = Activity(
+        plan_week_id=plan_week.id,
         household_id=fi_household.id, title="Practice", activity_type="practice",
         node_id=node.id,
     )
@@ -518,7 +528,8 @@ class TestPredictiveScaffolding:
 
         # Edge: prereq → fi_node
         db_session.add(LearningEdge(
-            learning_map_id=fi_map.id, from_node_id=prereq.id, to_node_id=fi_node.id,
+            learning_map_id=fi_map.id, household_id=fi_household.id,
+            from_node_id=prereq.id, to_node_id=fi_node.id,
             relation=EdgeRelation.prerequisite,
         ))
         # Closure entry: prereq is ancestor of fi_node at depth 1

@@ -12,7 +12,7 @@ class TestVocationalTemplates:
         assert resp.status_code == 200
         templates = resp.json()
         names = [t["name"] for t in templates]
-        assert "K-2 Foundations" in names
+        assert "Mathematics Foundational" in names
         assert "Welding Fundamentals" in names
         assert "Electrical Fundamentals" in names
         assert "Automotive Fundamentals" in names

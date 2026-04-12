@@ -1,7 +1,7 @@
 """Tests for the attempt workflow pipeline — the heartbeat of METHEAN."""
 
 import uuid
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
 
 import pytest
 import pytest_asyncio
@@ -46,10 +46,14 @@ async def aw_node(db_session, aw_household):
 
 @pytest_asyncio.fixture
 async def aw_activity(db_session, aw_household, aw_node):
-    plan = Plan(household_id=aw_household.id, name="Test Plan", status="active")
+    c = Child(household_id=aw_household.id, first_name="PlanChild")
+    db_session.add(c)
+    await db_session.flush()
+    plan = Plan(household_id=aw_household.id, child_id=c.id, name="Test Plan", status="active")
     db_session.add(plan)
     await db_session.flush()
-    week = PlanWeek(plan_id=plan.id, household_id=aw_household.id, week_number=1)
+    week = PlanWeek(plan_id=plan.id, household_id=aw_household.id, week_number=1,
+                    start_date=date(2026, 1, 5), end_date=date(2026, 1, 11))
     db_session.add(week)
     await db_session.flush()
     a = Activity(plan_week_id=week.id, household_id=aw_household.id, title="Practice",
@@ -98,10 +102,11 @@ class TestSubmitAttempt:
         assert result["fsrs_rating"] is not None
 
     async def test_no_node_returns_null_mastery(self, db_session, aw_household, aw_child):
-        plan = Plan(household_id=aw_household.id, name="P", status="active")
+        plan = Plan(household_id=aw_household.id, child_id=aw_child.id, name="P", status="active")
         db_session.add(plan)
         await db_session.flush()
-        week = PlanWeek(plan_id=plan.id, household_id=aw_household.id, week_number=1)
+        week = PlanWeek(plan_id=plan.id, household_id=aw_household.id, week_number=1,
+                        start_date=date(2026, 1, 5), end_date=date(2026, 1, 11))
         db_session.add(week)
         await db_session.flush()
         a = Activity(plan_week_id=week.id, household_id=aw_household.id, title="No Node",

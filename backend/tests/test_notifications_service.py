@@ -39,18 +39,20 @@ async def notif_user(db_session, notif_household):
 @pytest.mark.asyncio
 class TestNotifications:
     async def test_send_creates_record(self, db_session, notif_household, notif_user):
+        # Use alert_triggered so quiet-hours check is skipped and delivery is guaranteed
         n = await send_notification(
             db_session, notif_household.id, notif_user.id,
-            event_type="test", title="Test Notification", body="Test body",
+            event_type="alert_triggered", title="Test Notification", body="Test body",
         )
         assert n is not None
         assert n.title == "Test Notification"
 
     async def test_get_notifications(self, db_session, notif_household, notif_user):
+        # Use alert_triggered so quiet-hours check is skipped and delivery is guaranteed
         await send_notification(db_session, notif_household.id, notif_user.id,
-                                event_type="test", title="N1", body="B1")
+                                event_type="alert_triggered", title="N1", body="B1")
         await send_notification(db_session, notif_household.id, notif_user.id,
-                                event_type="test2", title="N2", body="B2")
+                                event_type="alert_triggered", title="N2", body="B2")
         await db_session.flush()
         results = await get_notifications(db_session, notif_user.id, notif_household.id)
         assert len(results) >= 2

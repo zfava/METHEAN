@@ -687,9 +687,9 @@ class TestTemplates:
         resp = await auth_client.get("/api/v1/learning-maps/templates")
         assert resp.status_code == 200
         templates = resp.json()
-        assert len(templates) == 3
+        assert len(templates) == 7
         ids = {t["template_id"] for t in templates}
-        assert "k2-foundations" in ids
+        assert "math-foundational" in ids
         assert "elementary-core" in ids
         assert "classical-logic" in ids
 
@@ -698,24 +698,24 @@ class TestTemplates:
         self, auth_client, db_session, household,
     ):
         resp = await auth_client.post(
-            "/api/v1/learning-maps/from-template/k2-foundations"
+            "/api/v1/learning-maps/from-template/elementary-core"
         )
         assert resp.status_code == 201
         data = resp.json()
-        assert data["name"] == "K-2 Foundations"
-        assert data["node_count"] == 10
-        assert data["edge_count"] == 9
+        assert data["name"] == "Elementary Core"
+        assert data["node_count"] == 13
+        assert data["edge_count"] == 10
 
         # Verify nodes were created with new UUIDs
         map_id = data["learning_map_id"]
         detail = await auth_client.get(f"/api/v1/learning-maps/{map_id}")
         assert detail.status_code == 200
         nodes = detail.json()["nodes"]
-        assert len(nodes) == 10
+        assert len(nodes) == 13
 
         # Verify edges exist
         edges = detail.json()["edges"]
-        assert len(edges) == 9
+        assert len(edges) == 10
 
         # Verify closure table was built
         closure_result = await db_session.execute(
@@ -724,9 +724,8 @@ class TestTemplates:
             )
         )
         closures = closure_result.scalars().all()
-        # K2 has chains: lit-root->letter->phonics->sight->read (depth up to 4)
-        # and num-root->counting->{add,sub}->word (various depths)
-        assert len(closures) > 9  # More than just direct edges
+        # Elementary Core has chains: math-root->mult->div->frac->dec (depth up to 4)
+        assert len(closures) > 10  # More than just direct edges
 
     @pytest.mark.asyncio
     async def test_template_not_found(self, auth_client):
