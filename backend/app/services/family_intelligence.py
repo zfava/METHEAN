@@ -577,3 +577,223 @@ async def run_family_intelligence(
         "insights_created": total,
         "counts": counts,
     }
+
+
+# ── Predictive Scaffolding ──
+
+
+async def generate_predictive_scaffolding(
+    db: AsyncSession,
+    household_id: uuid.UUID,
+) -> list[FamilyInsight]:
+    """For nodes where older siblings struggled, create predictive insights
+    for younger siblings approaching those nodes.
+
+    Uses the transitive closure table to check if a child is within 2
+    prerequisite hops of a difficult node.
+    """
+    from app.models.curriculum import LearningMapClosure, ChildMapEnrollment
+
+    children = await _get_household_children(db, household_id)
+    if len(children) < 2:
+        return []
+
+    child_ids = [c.id for c in children]
+    child_names = {c.id: c.first_name for c in children}
+
+    # Get active shared_struggle and curriculum_gap insights
+    result = await db.execute(
+        select(FamilyInsight).where(
+            FamilyInsight.household_id == household_id,
+            FamilyInsight.pattern_type.in_([
+                FamilyPatternType.shared_struggle,
+                FamilyPatternType.curriculum_gap,
+            ]),
+            FamilyInsight.status.in_([s.value for s in ACTIVE_STATUSES]),
+        )
+    )
+    source_insights = result.scalars().all()
+
+    if not source_insights:
+        return []
+
+    # Get all node states per child (nodes they've attempted)
+    state_result = await db.execute(
+        select(ChildNodeState.child_id, ChildNodeState.node_id).where(
+            ChildNodeState.household_id == household_id,
+            ChildNodeState.child_id.in_(child_ids),
+        )
+    )
+    child_attempted: dict[uuid.UUID, set[uuid.UUID]] = defaultdict(set)
+    for row in state_result.all():
+        child_attempted[row[0]].add(row[1])
+
+    insights = []
+
+    for source in source_insights:
+        affected_node_strs = source.affected_nodes or []
+        affected_child_strs = set(source.affected_children or [])
+
+        for node_id_str in affected_node_strs:
+            try:
+                target_node_id = uuid.UUID(node_id_str)
+            except ValueError:
+                continue
+
+            # Find children who have NOT attempted this node
+            for child in children:
+                if str(child.id) in affected_child_strs:
+                    continue  # Already affected
+                if target_node_id in child_attempted.get(child.id, set()):
+                    continue  # Already attempted
+
+                # Check if this child is within 2 hops via closure table
+                closure_result = await db.execute(
+                    select(LearningMapClosure).where(
+                        LearningMapClosure.descendant_id == target_node_id,
+                        LearningMapClosure.depth <= 2,
+                        LearningMapClosure.depth >= 1,
+                    )
+                )
+                ancestors = closure_result.scalars().all()
+                ancestor_ids = {a.ancestor_id for a in ancestors}
+
+                # Check if child has mastered any ancestor (meaning they're approaching)
+                if not ancestor_ids:
+                    continue
+
+                mastered_ancestors = child_attempted.get(child.id, set()) & ancestor_ids
+                if not mastered_ancestors:
+                    continue
+
+                # Check for existing predictive insight
+                existing = await db.execute(
+                    select(func.count()).select_from(FamilyInsight).where(
+                        FamilyInsight.household_id == household_id,
+                        FamilyInsight.predictive_child_id == child.id,
+                        FamilyInsight.predictive_node_id == target_node_id,
+                        FamilyInsight.status.in_([s.value for s in ACTIVE_STATUSES]),
+                    )
+                )
+                if (existing.scalar() or 0) > 0:
+                    continue
+
+                node_title = await _get_node_title(db, target_node_id)
+                affected_names = [child_names.get(uuid.UUID(cid), "?") for cid in affected_child_strs]
+                names_str = " and ".join(affected_names[:2])
+
+                insight = FamilyInsight(
+                    household_id=household_id,
+                    pattern_type=source.pattern_type,
+                    affected_children=list(affected_child_strs) + [str(child.id)],
+                    affected_nodes=[node_id_str],
+                    affected_subjects=source.affected_subjects,
+                    evidence_json={
+                        "source_insight_id": str(source.id),
+                        "predictive": True,
+                        "approaching_child": str(child.id),
+                    },
+                    confidence=round(source.confidence * 0.8, 2),
+                    recommendation=(
+                        f"{child.first_name} will encounter {node_title} soon. "
+                        f"{names_str} both found this challenging. Consider allocating "
+                        f"extra time or supplementary materials when {child.first_name} "
+                        f"reaches this point."
+                    ),
+                    predictive_child_id=child.id,
+                    predictive_node_id=target_node_id,
+                )
+                db.add(insight)
+                insights.append(insight)
+
+    if insights:
+        await db.flush()
+
+    return insights
+
+
+# ── Context Builders for AI Prompt Injection ──
+
+
+PATTERN_LABELS = {
+    FamilyPatternType.shared_struggle: "SHARED STRUGGLE",
+    FamilyPatternType.curriculum_gap: "CURRICULUM GAP",
+    FamilyPatternType.pacing_divergence: "PACING DIVERGENCE",
+    FamilyPatternType.environmental_correlation: "ENVIRONMENTAL",
+    FamilyPatternType.material_effectiveness: "MATERIAL EFFECTIVENESS",
+}
+
+
+async def build_family_context(
+    db: AsyncSession,
+    household_id: uuid.UUID,
+) -> str:
+    """Build plain-text family intelligence context for Advisor prompt injection.
+
+    Returns empty string if no active insights exist.
+    """
+    result = await db.execute(
+        select(FamilyInsight).where(
+            FamilyInsight.household_id == household_id,
+            FamilyInsight.status.in_([s.value for s in ACTIVE_STATUSES]),
+        ).order_by(FamilyInsight.confidence.desc()).limit(5)
+    )
+    insights = result.scalars().all()
+
+    if not insights:
+        return ""
+
+    lines = ["FAMILY PATTERNS (across your children):"]
+    for insight in insights:
+        label = PATTERN_LABELS.get(insight.pattern_type, insight.pattern_type.value.upper())
+        conf = f" (confidence: {insight.confidence:.2f})" if insight.confidence else ""
+        lines.append(f"- {label}: {insight.recommendation}{conf}")
+
+    lines.append("")
+    lines.append(
+        "Include a 'Family Patterns' section in your weekly report. "
+        "Reference any active family insights. Explain what the pattern "
+        "means and suggest concrete actions the parent can consider."
+    )
+
+    return "\n".join(lines)
+
+
+async def build_planner_scaffolding_context(
+    db: AsyncSession,
+    child_id: uuid.UUID,
+    household_id: uuid.UUID,
+) -> str:
+    """Build plain-text predictive scaffolding context for Planner prompt.
+
+    Returns warnings about upcoming nodes where siblings struggled.
+    """
+    result = await db.execute(
+        select(FamilyInsight).where(
+            FamilyInsight.household_id == household_id,
+            FamilyInsight.predictive_child_id == child_id,
+            FamilyInsight.status.in_([s.value for s in ACTIVE_STATUSES]),
+        ).order_by(FamilyInsight.confidence.desc()).limit(5)
+    )
+    insights = result.scalars().all()
+
+    if not insights:
+        return ""
+
+    lines = ["SIBLING INTELLIGENCE:"]
+    for insight in insights:
+        node_title = "unknown"
+        if insight.affected_nodes:
+            node_title = insight.evidence_json.get("node_title", "")
+            if not node_title:
+                try:
+                    node_title = await _get_node_title(db, uuid.UUID(insight.affected_nodes[0]))
+                except Exception:
+                    node_title = "unknown"
+        lines.append(
+            f'- WARNING: "{node_title}" was challenging for siblings. '
+            f"Allocate extra time and consider supplementary materials "
+            f"when scheduling this node."
+        )
+
+    return "\n".join(lines)

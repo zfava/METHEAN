@@ -66,6 +66,10 @@ celery_app.conf.beat_schedule = {
         "task": "app.tasks.worker.style_vector_nightly_task",
         "schedule": crontab(hour=4, minute=0),
     },
+    "family-intelligence-nightly": {
+        "task": "app.tasks.worker.family_intelligence_nightly_task",
+        "schedule": crontab(hour=4, minute=30),
+    },
 }
 
 
@@ -175,6 +179,16 @@ def style_vector_nightly_task(self) -> dict:
     try:
         from app.tasks.style_vector_batch import run_style_vector_sync
         return run_style_vector_sync()
+    except Exception as exc:
+        self.retry(exc=exc, countdown=30 * (2 ** self.request.retries))
+
+
+@celery_app.task(name="app.tasks.worker.family_intelligence_nightly_task", bind=True, max_retries=3)
+def family_intelligence_nightly_task(self) -> dict:
+    """Nightly: run cross-child pattern detection for multi-child households."""
+    try:
+        from app.tasks.family_intelligence_batch import run_family_intelligence_sync
+        return run_family_intelligence_sync()
     except Exception as exc:
         self.retry(exc=exc, countdown=30 * (2 ** self.request.retries))
 

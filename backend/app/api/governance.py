@@ -1059,6 +1059,15 @@ Provide an encouraging, honest assessment."""
     except Exception:
         pass
 
+    # Inject family intelligence context (advisory)
+    try:
+        from app.services.family_intelligence import build_family_context
+        family_ctx = await build_family_context(db, user.household_id)
+        if family_ctx:
+            user_prompt += f"\n\n{family_ctx}"
+    except Exception:
+        pass
+
     phil = await _get_philosophical_profile(db, user.household_id)
     result = await call_ai(
         db,

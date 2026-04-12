@@ -107,6 +107,15 @@ Prioritize nodes that are due for review, then available nodes."""
     except Exception:
         pass
 
+    # Inject sibling intelligence / predictive scaffolding (advisory)
+    try:
+        from app.services.family_intelligence import build_planner_scaffolding_context
+        scaffolding_ctx = await build_planner_scaffolding_context(db, child_id, household_id)
+        if scaffolding_ctx:
+            user_prompt += f"\n\n{scaffolding_ctx}"
+    except Exception:
+        pass
+
     # Fetch household philosophical profile for AI constraints
     from app.models.identity import Household
     h_result = await db.execute(select(Household).where(Household.id == household_id))
