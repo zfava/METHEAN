@@ -3,13 +3,13 @@
 import enum
 
 
-class UserRole(enum.StrEnum):
+class UserRole(str, enum.Enum):
     owner = "owner"
     co_parent = "co_parent"
     observer = "observer"
 
 
-class NodeType(enum.StrEnum):
+class NodeType(str, enum.Enum):
     # Academic
     root = "root"
     milestone = "milestone"
@@ -23,13 +23,13 @@ class NodeType(enum.StrEnum):
     certification_prep = "certification_prep"
 
 
-class EdgeRelation(enum.StrEnum):
+class EdgeRelation(str, enum.Enum):
     prerequisite = "prerequisite"
     corequisite = "corequisite"
     recommended = "recommended"
 
 
-class MasteryLevel(enum.StrEnum):
+class MasteryLevel(str, enum.Enum):
     not_started = "not_started"
     emerging = "emerging"
     developing = "developing"
@@ -37,7 +37,7 @@ class MasteryLevel(enum.StrEnum):
     mastered = "mastered"
 
 
-class StateEventType(enum.StrEnum):
+class StateEventType(str, enum.Enum):
     mastery_change = "mastery_change"
     review_completed = "review_completed"
     node_unlocked = "node_unlocked"
@@ -52,7 +52,7 @@ class FSRSRating(int, enum.Enum):
     easy = 4
 
 
-class RuleType(enum.StrEnum):
+class RuleType(str, enum.Enum):
     pace_limit = "pace_limit"
     content_filter = "content_filter"
     schedule_constraint = "schedule_constraint"
@@ -60,26 +60,26 @@ class RuleType(enum.StrEnum):
     approval_required = "approval_required"
 
 
-class RuleTier(enum.StrEnum):
+class RuleTier(str, enum.Enum):
     constitutional = "constitutional"  # Requires ceremony to change
     policy = "policy"  # Normal CRUD
 
 
-class RuleScope(enum.StrEnum):
+class RuleScope(str, enum.Enum):
     household = "household"
     child = "child"
     subject = "subject"
     map = "map"
 
 
-class GovernanceAction(enum.StrEnum):
+class GovernanceAction(str, enum.Enum):
     approve = "approve"
     reject = "reject"
     modify = "modify"
     defer = "defer"
 
 
-class PlanStatus(enum.StrEnum):
+class PlanStatus(str, enum.Enum):
     draft = "draft"
     proposed = "proposed"
     approved = "approved"
@@ -88,7 +88,7 @@ class PlanStatus(enum.StrEnum):
     archived = "archived"
 
 
-class ActivityType(enum.StrEnum):
+class ActivityType(str, enum.Enum):
     lesson = "lesson"
     practice = "practice"
     assessment = "assessment"
@@ -97,7 +97,7 @@ class ActivityType(enum.StrEnum):
     field_trip = "field_trip"
 
 
-class ActivityStatus(enum.StrEnum):
+class ActivityStatus(str, enum.Enum):
     scheduled = "scheduled"
     in_progress = "in_progress"
     completed = "completed"
@@ -105,13 +105,13 @@ class ActivityStatus(enum.StrEnum):
     cancelled = "cancelled"
 
 
-class AttemptStatus(enum.StrEnum):
+class AttemptStatus(str, enum.Enum):
     started = "started"
     completed = "completed"
     abandoned = "abandoned"
 
 
-class ArtifactType(enum.StrEnum):
+class ArtifactType(str, enum.Enum):
     photo = "photo"
     video = "video"
     document = "document"
@@ -119,27 +119,27 @@ class ArtifactType(enum.StrEnum):
     link = "link"
 
 
-class AlertSeverity(enum.StrEnum):
+class AlertSeverity(str, enum.Enum):
     info = "info"
     warning = "warning"
     action_required = "action_required"
 
 
-class AlertStatus(enum.StrEnum):
+class AlertStatus(str, enum.Enum):
     unread = "unread"
     read = "read"
     dismissed = "dismissed"
     acted_on = "acted_on"
 
 
-class AIRunStatus(enum.StrEnum):
+class AIRunStatus(str, enum.Enum):
     pending = "pending"
     running = "running"
     completed = "completed"
     failed = "failed"
 
 
-class AuditAction(enum.StrEnum):
+class AuditAction(str, enum.Enum):
     create = "create"
     read = "read"
     update = "update"
@@ -149,7 +149,7 @@ class AuditAction(enum.StrEnum):
     export = "export"
 
 
-class FamilyPatternType(enum.StrEnum):
+class FamilyPatternType(str, enum.Enum):
     shared_struggle = "shared_struggle"
     curriculum_gap = "curriculum_gap"
     pacing_divergence = "pacing_divergence"
@@ -157,7 +157,7 @@ class FamilyPatternType(enum.StrEnum):
     material_effectiveness = "material_effectiveness"
 
 
-class InsightStatus(enum.StrEnum):
+class InsightStatus(str, enum.Enum):
     detected = "detected"
     notified = "notified"
     acknowledged = "acknowledged"
@@ -165,14 +165,14 @@ class InsightStatus(enum.StrEnum):
     dismissed = "dismissed"
 
 
-class AnomalyType(enum.StrEnum):
+class AnomalyType(str, enum.Enum):
     broad_disengagement = "broad_disengagement"
     frustration_spike = "frustration_spike"
     performance_cliff = "performance_cliff"
     session_avoidance = "session_avoidance"
 
 
-class AnomalyStatus(enum.StrEnum):
+class AnomalyStatus(str, enum.Enum):
     detected = "detected"
     notified = "notified"
     acknowledged = "acknowledged"
@@ -180,7 +180,7 @@ class AnomalyStatus(enum.StrEnum):
     resolved = "resolved"
 
 
-class SensitivityLevel(enum.StrEnum):
+class SensitivityLevel(str, enum.Enum):
     conservative = "conservative"
     balanced = "balanced"
     sensitive = "sensitive"

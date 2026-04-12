@@ -15,7 +15,7 @@ import json
 import time
 import uuid
 from datetime import UTC, datetime
-from enum import StrEnum
+from enum import Enum
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -24,7 +24,7 @@ from app.models.enums import AIRunStatus
 from app.models.operational import AIRun
 
 
-class AIRole(StrEnum):
+class AIRole(str, Enum):
     planner = "planner"
     tutor = "tutor"
     evaluator = "evaluator"
@@ -35,7 +35,7 @@ class AIRole(StrEnum):
     curriculum_mapper = "curriculum_mapper"
 
 
-class AIProvider(StrEnum):
+class AIProvider(str, Enum):
     claude = "claude"
     openai = "openai"
     mock = "mock"
