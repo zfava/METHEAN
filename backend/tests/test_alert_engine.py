@@ -62,12 +62,12 @@ class TestAlertEngine:
 
     async def test_regression_detection(self, db_session, alert_household, alert_child, alert_node):
         """Regression (mastered → lower) should be detectable."""
-        from app.services.alert_engine import detect_regressions
-        alerts = await detect_regressions(db_session, alert_household.id)
+        from app.services.alert_engine import detect_regression
+        alerts = await detect_regression(db_session, alert_household.id)
         assert isinstance(alerts, list)
 
     async def test_pattern_detection(self, db_session, alert_household, alert_child, alert_node):
         """Pattern detection should return list."""
-        from app.services.alert_engine import detect_patterns
-        alerts = await detect_patterns(db_session, alert_household.id)
+        from app.services.alert_engine import detect_pattern_failure
+        alerts = await detect_pattern_failure(db_session, alert_household.id)
         assert isinstance(alerts, list)
