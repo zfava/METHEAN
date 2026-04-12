@@ -105,6 +105,9 @@ app.include_router(family_intelligence_router, prefix="/api/v1")
 from app.api.wellbeing import router as wellbeing_router
 app.include_router(wellbeing_router, prefix="/api/v1")
 
+from app.api.child_dashboard import router as child_dashboard_router
+app.include_router(child_dashboard_router, prefix="/api/v1")
+
 
 @app.get("/health")
 async def health() -> dict:
