@@ -62,6 +62,10 @@ celery_app.conf.beat_schedule = {
         "task": "app.tasks.worker.calibration_nightly_task",
         "schedule": crontab(hour=3, minute=30),
     },
+    "style-vector-nightly": {
+        "task": "app.tasks.worker.style_vector_nightly_task",
+        "schedule": crontab(hour=4, minute=0),
+    },
 }
 
 
@@ -161,6 +165,16 @@ def calibration_nightly_task(self) -> dict:
     try:
         from app.tasks.calibration_batch import run_calibration_sync
         return run_calibration_sync()
+    except Exception as exc:
+        self.retry(exc=exc, countdown=30 * (2 ** self.request.retries))
+
+
+@celery_app.task(name="app.tasks.worker.style_vector_nightly_task", bind=True, max_retries=3)
+def style_vector_nightly_task(self) -> dict:
+    """Nightly: recompute style vectors for eligible children."""
+    try:
+        from app.tasks.style_vector_batch import run_style_vector_sync
+        return run_style_vector_sync()
     except Exception as exc:
         self.retry(exc=exc, countdown=30 * (2 ** self.request.retries))
 

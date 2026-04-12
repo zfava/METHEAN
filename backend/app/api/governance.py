@@ -895,6 +895,24 @@ Continue the Socratic dialogue. Reference what was discussed earlier if relevant
     )
 
     output = result["output"]
+
+    # Record tutor interaction for style vector computation (advisory)
+    try:
+        from app.services.intelligence import record_tutor_interaction
+        child_id = body.child_id
+        if child_id:
+            history_len = len(body.conversation_history or [])
+            hints_in_response = len(output.get("hints", []))
+            await record_tutor_interaction(
+                db, child_id, user.household_id,
+                subject=getattr(activity, "subject_area", None) or node_title or "general",
+                messages_count=history_len + 1,  # includes current message
+                hints_used=hints_in_response,
+                self_corrections=0,  # tracked client-side if available
+            )
+    except Exception:
+        pass  # Intelligence recording is advisory, never blocking
+
     return TutorMessageResponse(
         message=output.get("message", "Could you tell me more about your thinking?"),
         hints=output.get("hints", []),
