@@ -7,7 +7,7 @@ import {
 } from "@/lib/api";
 import { useToast } from "@/components/Toast";
 import { MetheanLogo } from "@/components/Brand";
-import JourneyMap from "@/components/child/JourneyMap";
+import JourneyMap, { JourneyCarousel } from "@/components/child/JourneyMap";
 import LessonView from "@/components/child/LessonView";
 import PracticeView from "@/components/child/PracticeView";
 import ReviewView from "@/components/child/ReviewView";
@@ -522,17 +522,13 @@ export default function ChildPage() {
               </svg>
             </button>
             {showJourney && (
-              <div className="flex gap-6 overflow-x-auto pb-2">
-                {dash.journey_maps.map(jm => (
-                  <div key={jm.map_id} className="shrink-0">
-                    <JourneyMap
-                      nodes={jm.nodes.map(n => ({ id: n.id, title: n.title, mastery: n.mastery, is_next: n.is_next }))}
-                      subject={jm.subject}
-                      subjectColor={jm.subject_color}
-                    />
-                  </div>
-                ))}
-              </div>
+              <JourneyCarousel maps={dash.journey_maps.map(jm => ({
+                ...jm,
+                nodes: jm.nodes.map(n => ({
+                  id: n.id, title: n.title, mastery: n.mastery,
+                  is_next: n.is_next, is_current: n.is_current,
+                })),
+              }))} />
             )}
           </div>
         )}
