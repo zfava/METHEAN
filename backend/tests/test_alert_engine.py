@@ -61,13 +61,21 @@ class TestAlertEngine:
         assert isinstance(alerts, list)
 
     async def test_regression_detection(self, db_session, alert_household, alert_child, alert_node):
-        """Regression (mastered → lower) should be detectable."""
+        """Regression (mastered → lower) should create a warning alert."""
         from app.services.alert_engine import detect_regression
-        alerts = await detect_regression(db_session, alert_household.id)
-        assert isinstance(alerts, list)
+        alert = await detect_regression(
+            db_session, alert_child.id, alert_household.id, alert_node.id,
+            "mastered", "developing",
+        )
+        assert alert is not None
+        assert alert.severity.value == "warning"
+        assert alert.source == "regression_detection"
 
     async def test_pattern_detection(self, db_session, alert_household, alert_child, alert_node):
-        """Pattern detection should return list."""
+        """Pattern detection with <3 events should return None."""
         from app.services.alert_engine import detect_pattern_failure
-        alerts = await detect_pattern_failure(db_session, alert_household.id)
-        assert isinstance(alerts, list)
+        result = await detect_pattern_failure(
+            db_session, alert_child.id, alert_household.id, alert_node.id,
+        )
+        # No StateEvents created, so fewer than 3 — should return None
+        assert result is None
