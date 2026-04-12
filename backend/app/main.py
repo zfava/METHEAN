@@ -98,6 +98,9 @@ app.include_router(calibration_router, prefix="/api/v1")
 from app.api.style_vector import router as style_vector_router
 app.include_router(style_vector_router, prefix="/api/v1")
 
+from app.api.family_intelligence import router as family_intelligence_router
+app.include_router(family_intelligence_router, prefix="/api/v1")
+
 
 @app.get("/health")
 async def health() -> dict:

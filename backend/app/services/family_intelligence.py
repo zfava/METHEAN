@@ -566,6 +566,24 @@ async def run_family_intelligence(
             results = await detector(db, household_id, children, config)
             counts[name] = len(results)
             total += len(results)
+
+            # AuditLog per new insight
+            for insight in results:
+                try:
+                    from app.models.enums import AuditAction
+                    from app.models.operational import AuditLog
+                    db.add(AuditLog(
+                        household_id=household_id,
+                        action=AuditAction.create,
+                        resource_type="family_insight",
+                        resource_id=insight.id,
+                        details={
+                            "pattern_type": name,
+                            "confidence": insight.confidence,
+                        },
+                    ))
+                except Exception:
+                    pass
         except Exception:
             logger.exception("Family intelligence detector '%s' failed for household %s", name, household_id)
             counts[name] = 0
