@@ -64,7 +64,7 @@ const typeLabels: Record<string, { label: string; color: string }> = {
 export default function CalendarPage() {
   useEffect(() => { document.title = "Calendar | METHEAN"; }, []);
 
-  const { selectedChild } = useChild();
+  const { selectedChild, children } = useChild();
   const [weekStart, setWeekStart] = useState(() => getMonday(new Date()));
   const [planList, setPlanList] = useState<any[]>([]);
   const [activities, setActivities] = useState<ActivityInPlan[]>([]);

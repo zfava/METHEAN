@@ -299,7 +299,7 @@ export default function GovernanceOverviewPage() {
 
       {/* ── Section 3: Rule Coverage Matrix ── */}
       <Card className="mb-8" padding="p-5">
-        <SectionHeader title="Rule Coverage" link={{ href: "/governance/rules", label: "Manage rules" }} />
+        <SectionHeader title="Rule Coverage" action="Manage rules" actionHref="/governance/rules" />
         <div className="mt-3 space-y-2">
           {coverage.map((c) => (
             <div key={c.type} className="flex items-center justify-between py-2 px-3 rounded-[10px] bg-(--color-page)">
@@ -332,7 +332,7 @@ export default function GovernanceOverviewPage() {
         {/* ── Section 4: Recent Timeline ── */}
         <Card padding="p-0">
           <div className="px-5 py-3 border-b border-(--color-border)">
-            <SectionHeader title="Recent Decisions" link={{ href: "/governance/trace", label: "Full trace" }} />
+            <SectionHeader title="Recent Decisions" action="Full trace" actionHref="/governance/trace" />
           </div>
           {recentEvents.length === 0 ? (
             <div className="p-5">
@@ -363,7 +363,7 @@ export default function GovernanceOverviewPage() {
 
         {/* ── Section 5: Philosophy Summary ── */}
         <Card href="/governance/philosophy" padding="p-5">
-          <SectionHeader title="Philosophy" link={{ href: "/governance/philosophy", label: "Edit" }} />
+          <SectionHeader title="Philosophy" action="Edit" actionHref="/governance/philosophy" />
           <div className="mt-3 space-y-2">
             {philSummary.philosophy ? (
               <>

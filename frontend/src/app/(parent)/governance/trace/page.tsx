@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { governance, type GovernanceEvent } from "@/lib/api";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
+import Card from "@/components/ui/Card";
 import EmptyState from "@/components/ui/EmptyState";
 import StatusBadge from "@/components/StatusBadge";
 import { cn } from "@/lib/cn";

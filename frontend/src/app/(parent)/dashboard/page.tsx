@@ -6,6 +6,7 @@ import { auth, children as childrenApi, governance, household, snapshots, usage,
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import StatusBadge from "@/components/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
+import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import MetricCard from "@/components/ui/MetricCard";
 import SectionHeader from "@/components/ui/SectionHeader";

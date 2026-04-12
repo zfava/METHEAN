@@ -336,8 +336,7 @@ export default function FamilyPage() {
                           variant="primary"
                           size="sm"
                           className="mt-2"
-                          onClick={async (e: React.MouseEvent) => {
-                            e.stopPropagation();
+                          onClick={async () => {
                             const pd = profileData[child.id];
                             try {
                               await childrenApi.updatePreferences(child.id, {
