@@ -163,3 +163,24 @@ class InsightStatus(str, enum.Enum):
     acknowledged = "acknowledged"
     acted_on = "acted_on"
     dismissed = "dismissed"
+
+
+class AnomalyType(str, enum.Enum):
+    broad_disengagement = "broad_disengagement"
+    frustration_spike = "frustration_spike"
+    performance_cliff = "performance_cliff"
+    session_avoidance = "session_avoidance"
+
+
+class AnomalyStatus(str, enum.Enum):
+    detected = "detected"
+    notified = "notified"
+    acknowledged = "acknowledged"
+    dismissed = "dismissed"
+    resolved = "resolved"
+
+
+class SensitivityLevel(str, enum.Enum):
+    conservative = "conservative"
+    balanced = "balanced"
+    sensitive = "sensitive"

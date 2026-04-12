@@ -34,6 +34,7 @@ from app.models.achievements import Achievement, Streak
 from app.models.calibration import CalibrationProfile, CalibrationSnapshot, EvaluatorPrediction
 from app.models.style_vector import LearnerStyleVector
 from app.models.family_insight import FamilyInsight, FamilyInsightConfig
+from app.models.wellbeing import WellbeingAnomaly, WellbeingConfig
 
 __all__ = [
     "Household",
@@ -81,4 +82,6 @@ __all__ = [
     "LearnerStyleVector",
     "FamilyInsight",
     "FamilyInsightConfig",
+    "WellbeingAnomaly",
+    "WellbeingConfig",
 ]
