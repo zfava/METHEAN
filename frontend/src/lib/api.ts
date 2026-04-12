@@ -128,6 +128,7 @@ export const children = {
   nodeHistory: (childId: string, nodeId: string) =>
     request<StateEvent[]>(`/children/${childId}/nodes/${nodeId}/history`),
   today: (childId: string) => request<any[]>(`/children/${childId}/today`),
+  dashboard: (childId: string) => request<ChildDashboardResponse>(`/children/${childId}/dashboard`),
   alerts: (childId: string, limit = 5) => request<any>(`/children/${childId}/alerts?limit=${limit}`),
   theme: (childId: string) => request<any>(`/children/${childId}/theme`),
   updateTheme: (childId: string, data: object) =>
@@ -794,6 +795,41 @@ export const annualCurriculum = {
 };
 
 // Types
+export interface ChildDashboardResponse {
+  child: {
+    first_name: string;
+    grade_level: string | null;
+    streak: { current: number; longest: number; is_today_complete: boolean };
+    recent_achievements: Array<{ title: string; icon: string; earned_at: string | null }>;
+  };
+  greeting: string;
+  today: {
+    total_activities: number;
+    completed: number;
+    estimated_minutes_remaining: number;
+    activities: Array<{
+      id: string; title: string; subject: string; subject_color: string;
+      type: string; estimated_minutes: number | null; status: string;
+      is_review: boolean; node_title: string; node_mastery: string;
+      sequence_number: number;
+    }>;
+  };
+  progress: {
+    overall_mastery_percentage: number;
+    nodes_mastered: number;
+    nodes_total: number;
+    subjects: Array<{ name: string; color: string; mastered: number; total: number; percentage: number }>;
+    this_week: { activities_completed: number; time_spent_minutes: number; mastery_transitions_up: number; mastery_transitions_down: number };
+  };
+  journey_maps: Array<{
+    map_id: string; subject: string; subject_color: string;
+    nodes: Array<{ id: string; title: string; mastery: string; is_current: boolean; is_next: boolean }>;
+    total_nodes: number; mastered_nodes: number;
+  }>;
+  encouragement: string;
+  style_hints: { optimal_session_minutes: number | null; best_time_of_day: string | null; attention_pattern: string | null };
+}
+
 export interface ChildListItem {
   id: string;
   first_name: string;

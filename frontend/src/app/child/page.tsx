@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { auth, attempts, learn, children as childrenApi, achievements as achievementsApi, type LearningContext, type MapState } from "@/lib/api";
+import {
+  auth, attempts, learn, children as childrenApi,
+  type LearningContext, type ChildDashboardResponse,
+} from "@/lib/api";
 import { useToast } from "@/components/Toast";
 import { MetheanLogo } from "@/components/Brand";
-import Card from "@/components/ui/Card";
-import Button from "@/components/ui/Button";
 import JourneyMap from "@/components/child/JourneyMap";
 import LessonView from "@/components/child/LessonView";
 import PracticeView from "@/components/child/PracticeView";
@@ -14,236 +15,222 @@ import AssessmentView from "@/components/child/AssessmentView";
 import ProjectView from "@/components/child/ProjectView";
 import FieldTripView from "@/components/child/FieldTripView";
 import CompletionState from "@/components/child/CompletionState";
-import VocationalActivityDetail from "@/components/VocationalActivityDetail";
 
+// ── Types ──
 
-interface TodayActivity {
-  id: string;
-  title: string;
-  activity_type: string;
-  status: string;
-  estimated_minutes: number | null;
-  node_id: string | null;
-  error?: string;
-}
+interface ChildInfo { id: string; first_name: string; grade_level: string | null }
 
-interface ChildInfo {
-  id: string;
-  first_name: string;
-  grade_level: string | null;
-}
+type DashActivity = ChildDashboardResponse["today"]["activities"][0];
 
-function greeting(name: string): string {
-  const h = new Date().getHours();
-  if (h < 12) return `Good morning, ${name}!`;
-  if (h < 17) return `Good afternoon, ${name}!`;
-  return `Good evening, ${name}!`;
-}
+// ── Theme ──
 
-const typeConfig: Record<string, { label: string; bg: string; icon: string }> = {
-  lesson:     { label: "Lesson",     bg: "bg-(--color-accent-light)",         icon: "📖" },
-  practice:   { label: "Practice",   bg: "bg-(--color-success-light)",        icon: "✏️" },
-  review:     { label: "Review",     bg: "bg-(--color-warning-light)",        icon: "🔄" },
-  assessment: { label: "Assessment", bg: "bg-(--color-constitutional-light)", icon: "📋" },
-  project:    { label: "Project",    bg: "bg-(--color-danger-light)",         icon: "🔨" },
-  field_trip: { label: "Field Trip", bg: "bg-(--color-accent-light)",         icon: "🧭" },
+const bgStyles: Record<string, React.CSSProperties> = {
+  plain: { background: "#FDF6E3" },
+  meadow: { background: "linear-gradient(180deg, #E8F5E9 0%, #C8E6C9 100%)" },
+  ocean: { background: "linear-gradient(180deg, #E3F2FD 0%, #BBDEFB 100%)" },
+  forest: { background: "linear-gradient(180deg, #E8F0E4 0%, #C5D9BA 100%)" },
+  space: { background: "linear-gradient(180deg, #1A1A2E 0%, #16213E 100%)", color: "#E0E0E0" },
+  desert: { background: "linear-gradient(180deg, #FFF3E0 0%, #FFE0B2 100%)" },
+  mountains: { background: "linear-gradient(180deg, #ECEFF1 0%, #CFD8DC 100%)" },
 };
+
+const avatarEmoji: Record<string, string> = {
+  bear: "\uD83D\uDC3B", owl: "\uD83E\uDD89", fox: "\uD83E\uDD8A", rabbit: "\uD83D\uDC30",
+  deer: "\uD83E\uDD8C", eagle: "\uD83E\uDD85", wolf: "\uD83D\uDC3A",
+};
+
+const typeLabels: Record<string, { label: string; icon: string }> = {
+  lesson: { label: "Lesson", icon: "\uD83D\uDCD6" },
+  practice: { label: "Practice", icon: "\u270F\uFE0F" },
+  review: { label: "Review", icon: "\uD83D\uDD04" },
+  assessment: { label: "Assessment", icon: "\uD83D\uDCCB" },
+  project: { label: "Project", icon: "\uD83D\uDD28" },
+  field_trip: { label: "Field Trip", icon: "\uD83E\uDDED" },
+};
+
+// ── Progress Ring ──
+
+function ProgressRing({ completed, total, minutesRemaining }: {
+  completed: number; total: number; minutesRemaining: number;
+}) {
+  const pct = total > 0 ? completed / total : 0;
+  const r = 36;
+  const circ = 2 * Math.PI * r;
+  const offset = circ * (1 - pct);
+  const allDone = completed >= total && total > 0;
+
+  return (
+    <div className="relative w-24 h-24 shrink-0" role="img" aria-label={`${completed} of ${total} activities completed`}>
+      <svg viewBox="0 0 80 80" className="w-full h-full">
+        <circle cx="40" cy="40" r={r} fill="none" stroke="var(--color-border)" strokeWidth="5" />
+        <circle cx="40" cy="40" r={r} fill="none"
+          stroke={allDone ? "var(--color-success)" : "var(--color-accent)"}
+          strokeWidth="5" strokeLinecap="round"
+          strokeDasharray={circ} strokeDashoffset={offset}
+          transform="rotate(-90 40 40)"
+          className="transition-all duration-700" />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        {allDone ? (
+          <span className="text-lg" role="img" aria-label="complete">&#10003;</span>
+        ) : (
+          <>
+            <span className="text-sm font-semibold text-(--color-text)">{minutesRemaining}</span>
+            <span className="text-[9px] text-(--color-text-tertiary)">min left</span>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Main Page ──
 
 export default function ChildPage() {
   const { toast } = useToast();
-  const [children, setChildren] = useState<ChildInfo[]>([]);
+
+  // Auth state
+  const [childrenList, setChildrenList] = useState<ChildInfo[]>([]);
   const [selectedId, setSelectedId] = useState("");
-  const [activities, setActivities] = useState<TodayActivity[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Learning state
-  const [activeActivity, setActiveActivity] = useState<TodayActivity | null>(null);
+  // Dashboard data (single API call)
+  const [dash, setDash] = useState<ChildDashboardResponse | null>(null);
+
+  // Activity mode
+  const [activeActivity, setActiveActivity] = useState<DashActivity | null>(null);
   const [attemptId, setAttemptId] = useState("");
   const [learningContext, setLearningContext] = useState<LearningContext | null>(null);
   const [completed, setCompleted] = useState(false);
   const [completionData, setCompletionData] = useState<{ mastery?: string; prevMastery?: string }>({});
-  const startTimeRef = useRef<number>(0);
+  const startTimeRef = useRef(0);
 
-  // Transition overlay state
+  // Transition
   const [transitioning, setTransitioning] = useState(false);
-  const [transitionActivity, setTransitionActivity] = useState<TodayActivity | null>(null);
-  const [transitionVisible, setTransitionVisible] = useState(false);
+  const [transitionAct, setTransitionAct] = useState<DashActivity | null>(null);
+  const [transVisible, setTransVisible] = useState(false);
 
-  // Theme
+  // Theme & settings
   const [theme, setTheme] = useState({ background: "plain", color_accent: "blue", font_size: "normal", avatar: "owl" });
   const [showSettings, setShowSettings] = useState(false);
+  const [showJourney, setShowJourney] = useState(false);
 
-  // Achievements & streak
-  const [streak, setStreak] = useState<{ current_streak: number; longest_streak: number } | null>(null);
-  const [earnedAchievements, setEarnedAchievements] = useState<any[]>([]);
-  const [totalMastered, setTotalMastered] = useState(0);
-  const [journeyMaps, setJourneyMaps] = useState<MapState[]>([]);
+  // ── Init ──
 
   useEffect(() => { init(); }, []);
   useEffect(() => {
-    const c = children.find((ch) => ch.id === selectedId);
-    document.title = c ? `${c.first_name}'s Learning | METHEAN` : "Learning | METHEAN";
-  }, [selectedId, children]);
-  useEffect(() => {
-    if (selectedId) {
-      loadToday();
-      childrenApi.theme(selectedId)
-        .then((t) => setTheme({ background: t.background || "plain", color_accent: t.color_accent || "blue", font_size: t.font_size || "normal", avatar: t.avatar || "owl" }))
-        .catch(() => {});
-      achievementsApi.streak(selectedId).then(setStreak).catch(() => {});
-      achievementsApi.list(selectedId).then((d) => setEarnedAchievements(d.earned || [])).catch(() => {});
-      childrenApi.state(selectedId).then((s) => setTotalMastered(s?.mastered_count || 0)).catch(() => {});
-      childrenApi.allMapState(selectedId).then(setJourneyMaps).catch(() => {});
-    }
+    if (selectedId) loadDashboard();
   }, [selectedId]);
+  useEffect(() => {
+    if (dash) document.title = `${dash.child.first_name}'s Learning | METHEAN`;
+  }, [dash]);
 
   async function init() {
     setLoading(true);
-    setError("");
     try {
       await auth.me();
       const data: ChildInfo[] = await childrenApi.list() as any;
-      setChildren(Array.isArray(data) ? data : []);
+      setChildrenList(Array.isArray(data) ? data : []);
       if (data.length > 0) setSelectedId(data[0].id);
     } catch (err: any) {
-      if (err?.message?.includes("auth") || err?.status === 401) {
-        window.location.href = "/auth";
-        return;
-      }
-      setError(err?.message || "Something went wrong loading your learning page.");
+      if (err?.status === 401) { window.location.href = "/auth"; return; }
+      setError("Something went wrong. Try refreshing.");
     } finally {
       setLoading(false);
     }
   }
 
-  async function loadToday() {
+  async function loadDashboard() {
     setError("");
     try {
-      const todayData = await childrenApi.today(selectedId);
-      setActivities(todayData);
+      // Single API call — no waterfall
+      const [d, t] = await Promise.all([
+        childrenApi.dashboard(selectedId),
+        childrenApi.theme(selectedId).catch(() => null),
+      ]);
+      setDash(d);
+      if (t) setTheme({ background: t.background || "plain", color_accent: t.color_accent || "blue", font_size: t.font_size || "normal", avatar: t.avatar || "owl" });
     } catch (err: any) {
-      setError(err?.message || "Couldn't load today's activities. Try again in a moment.");
+      setError("Couldn't load your learning page. Try again in a moment.");
     }
   }
 
-  async function startActivity(act: TodayActivity) {
-    // Show transition overlay
-    setTransitionActivity(act);
-    setTransitioning(true);
-    // Trigger fade-in on next frame
-    requestAnimationFrame(() => setTransitionVisible(true));
+  // ── Activity Lifecycle ──
 
+  async function startActivity(act: DashActivity) {
+    setTransitionAct(act);
+    setTransitioning(true);
+    requestAnimationFrame(() => setTransVisible(true));
     try {
-      // Start attempt and track time
       const attempt = await attempts.start(act.id, selectedId);
       setAttemptId(attempt.id);
       startTimeRef.current = Date.now();
-
-      // Fetch learning context
       const ctx = await learn.context(act.id, selectedId);
       setLearningContext(ctx);
       setActiveActivity(act);
       setCompleted(false);
       setCompletionData({});
-
-      // Fade out transition overlay
-      setTransitionVisible(false);
-      setTimeout(() => { setTransitioning(false); setTransitionActivity(null); }, 150);
-    } catch (err: any) {
-      // Dismiss overlay on error
-      setTransitionVisible(false);
-      setTimeout(() => { setTransitioning(false); setTransitionActivity(null); }, 150);
+      setTransVisible(false);
+      setTimeout(() => { setTransitioning(false); setTransitionAct(null); }, 150);
+    } catch {
+      setTransVisible(false);
+      setTimeout(() => { setTransitioning(false); setTransitionAct(null); }, 150);
       toast("Couldn't start activity", "error");
-      setActivities((prev) =>
-        prev.map((a) => a.id === act.id ? { ...a, error: "Couldn't start this activity. Try again." } : a)
-      );
     }
   }
 
-  async function handleActivityComplete(data: {
+  async function handleComplete(data: {
     confidence: number;
     responses: Array<{ prompt: string; response: string }>;
     self_reflection: string;
   }) {
     if (!attemptId) return;
-
-    // Calculate actual duration
-    const durationMinutes = Math.max(1, Math.round((Date.now() - startTimeRef.current) / 60000));
-
+    const dur = Math.max(1, Math.round((Date.now() - startTimeRef.current) / 60000));
     try {
       const result = await attempts.submit(attemptId, {
-        confidence: data.confidence,
-        duration_minutes: durationMinutes,
-        feedback: {
-          responses: data.responses,
-          self_reflection: data.self_reflection,
-        },
+        confidence: data.confidence, duration_minutes: dur,
+        feedback: { responses: data.responses, self_reflection: data.self_reflection },
       });
-
       setCompletionData({
         mastery: result.mastery_level?.replace(/_/g, " "),
         prevMastery: result.previous_mastery?.replace(/_/g, " "),
       });
       setCompleted(true);
-      toast("Activity submitted", "success");
-    } catch (err: any) {
-      toast("Couldn't save your work", "error");
-      setError(err?.message || "Couldn't save your work. Don't worry, try submitting again.");
+    } catch {
+      toast("Couldn't save your work. Try again.", "error");
     }
   }
-
-  async function saveTheme(updates: Partial<typeof theme>) {
-    const newTheme = { ...theme, ...updates };
-    setTheme(newTheme);
-    childrenApi.updateTheme(selectedId, newTheme).catch(() => {});
-  }
-
-  const bgStyles: Record<string, React.CSSProperties> = {
-    plain: { background: "#FDF6E3" },
-    meadow: { background: "linear-gradient(180deg, #E8F5E9 0%, #C8E6C9 100%)" },
-    ocean: { background: "linear-gradient(180deg, #E3F2FD 0%, #BBDEFB 100%)" },
-    forest: { background: "linear-gradient(180deg, #E8F0E4 0%, #C5D9BA 100%)" },
-    space: { background: "linear-gradient(180deg, #1A1A2E 0%, #16213E 100%)", color: "#E0E0E0" },
-    desert: { background: "linear-gradient(180deg, #FFF3E0 0%, #FFE0B2 100%)" },
-    mountains: { background: "linear-gradient(180deg, #ECEFF1 0%, #CFD8DC 100%)" },
-  };
-
-  const avatarEmoji: Record<string, string> = {
-    bear: "🐻", owl: "🦉", fox: "🦊", rabbit: "🐰", deer: "🦌", eagle: "🦅", wolf: "🐺",
-  };
-
-  const fontSizeClass = theme.font_size === "large" ? "text-lg" : theme.font_size === "extra-large" ? "text-xl" : "";
 
   function goNext() {
     setActiveActivity(null);
     setAttemptId("");
     setLearningContext(null);
     setCompleted(false);
-    loadToday();
+    loadDashboard();
   }
 
+  async function saveTheme(updates: Partial<typeof theme>) {
+    const t = { ...theme, ...updates };
+    setTheme(t);
+    childrenApi.updateTheme(selectedId, t).catch(() => {});
+  }
+
+  const fontSizeClass = theme.font_size === "large" ? "text-lg" : theme.font_size === "extra-large" ? "text-xl" : "";
+  const bg = bgStyles[theme.background] || bgStyles.plain;
+  const avatar = avatarEmoji[theme.avatar] || "\uD83E\uDD89";
+
+  // ── Loading ──
+
   if (loading) {
-    const bgStyle = bgStyles[theme.background] || bgStyles.plain;
     return (
-      <div className="min-h-screen" style={bgStyle}>
-        <header className="bg-(--color-surface) border-b border-(--color-border) px-6 py-4">
-          <div className="max-w-2xl mx-auto flex justify-between items-center">
-            <MetheanLogo markSize={24} wordmarkHeight={12} color="#0F1B2D" gap={8} />
-            <div className="w-24 h-8 rounded-lg bg-(--color-border) animate-pulse" />
-          </div>
-        </header>
-        <div className="max-w-2xl mx-auto px-6 py-8">
-          <div className="h-8 w-48 rounded bg-(--color-border) animate-pulse mb-2" />
-          <div className="h-5 w-64 rounded bg-(--color-border) animate-pulse mb-6" />
-          <div className="h-2 rounded-full bg-(--color-border) animate-pulse mb-8" />
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-(--color-surface) border border-(--color-border) rounded-2xl p-5 mb-3">
-              <div className="h-5 w-40 rounded bg-(--color-border) animate-pulse mb-3" />
-              <div className="flex gap-2">
-                <div className="h-4 w-16 rounded bg-(--color-border) animate-pulse" />
-                <div className="h-4 w-12 rounded bg-(--color-border) animate-pulse" />
-              </div>
+      <div className="min-h-screen" style={bg}>
+        <div className="max-w-2xl mx-auto px-8 py-12">
+          <div className="h-8 w-48 rounded bg-(--color-border) animate-pulse mb-3" />
+          <div className="h-5 w-72 rounded bg-(--color-border) animate-pulse mb-10" />
+          {[1, 2, 3].map(i => (
+            <div key={i} className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 mb-4">
+              <div className="h-5 w-40 rounded bg-(--color-border) animate-pulse" />
             </div>
           ))}
         </div>
@@ -252,32 +239,30 @@ export default function ChildPage() {
   }
 
   if (error) {
-    const bgStyle = bgStyles[theme.background] || bgStyles.plain;
     return (
-      <div className="min-h-screen flex items-center justify-center" style={bgStyle}>
-        <div className="text-center px-6 max-w-sm">
-          <div className="text-5xl mb-4">🌧️</div>
-          <h2 className="text-xl font-semibold text-(--color-text) mb-2">Oops! Something went wrong</h2>
+      <div className="min-h-screen flex items-center justify-center" style={bg}>
+        <div className="text-center px-8 max-w-sm">
+          <p className="text-lg font-medium text-(--color-text) mb-2">Something went wrong</p>
           <p className="text-sm text-(--color-text-secondary) mb-6">{error}</p>
-          <button
-            onClick={() => { setError(""); init(); }}
-            className="px-6 py-3 text-sm font-semibold text-white bg-(--color-accent) rounded-2xl hover:opacity-90 transition-opacity"
-          >Try Again</button>
+          <button onClick={() => { setError(""); init(); }}
+            className="px-6 py-3 text-sm font-medium text-white bg-(--color-accent) rounded-2xl">Try Again</button>
         </div>
       </div>
     );
   }
 
-  const child = children.find((c) => c.id === selectedId);
-  const childName = child?.first_name || "Student";
-  const remaining = activities.filter((a) => a.status !== "completed");
-  const completedCount = activities.filter((a) => a.status === "completed").length;
+  if (!dash) return null;
 
-  // ── COMPLETION STATE ──
+  const activities = dash.today.activities;
+  const remaining = activities.filter(a => a.status !== "completed");
+  const allDone = remaining.length === 0 && activities.length > 0;
+
+  // ═══ PHASE 3: COMPLETION ═══
   if (activeActivity && completed) {
+    const isReview = activeActivity.is_review;
     return (
-      <div className={`min-h-screen ${fontSizeClass}`} style={bgStyles[theme.background] || bgStyles.plain}>
-        <div className="max-w-xl mx-auto px-6 py-12">
+      <div className={`min-h-screen ${fontSizeClass}`} style={bg}>
+        <div className="max-w-xl mx-auto px-8 py-16">
           <CompletionState
             activityTitle={activeActivity.title}
             masteryLevel={completionData.mastery}
@@ -285,94 +270,87 @@ export default function ChildPage() {
             onNext={goNext}
             allDone={remaining.length <= 1}
           />
+          {isReview && !completionData.mastery?.includes("mastered") && (
+            <p className="text-center text-sm text-(--color-text-secondary) mt-4 italic">Your memory is getting stronger.</p>
+          )}
+          <p className="text-center text-xs text-(--color-text-tertiary) mt-6">
+            {remaining.length > 1 ? `${remaining.length - 1} activit${remaining.length - 1 === 1 ? "y" : "ies"} remaining today.` : ""}
+          </p>
         </div>
       </div>
     );
   }
 
-  // ── FOCUSED LEARNING VIEW ──
+  // ═══ PHASE 2: ACTIVITY MODE ═══
   if (activeActivity && learningContext) {
-    const actType = activeActivity.activity_type;
-
+    const t = activeActivity.type;
     return (
-      <div className={`min-h-screen ${fontSizeClass}`} style={bgStyles[theme.background] || bgStyles.plain}>
-        {/* Top bar */}
-        <header className="bg-(--color-surface)/80 backdrop-blur border-b border-(--color-border)/50 px-6 py-3">
+      <div className={`min-h-screen ${fontSizeClass}`} style={bg}>
+        <header className="bg-(--color-surface)/80 backdrop-blur border-b border-(--color-border)/50 px-8 py-3">
           <div className="max-w-2xl mx-auto flex items-center justify-between">
-            <button onClick={goNext} className="text-sm text-(--color-text-tertiary) hover:text-(--color-text-secondary) transition-colors">
-              &larr; Back to activities
+            <button onClick={goNext} className="text-sm text-(--color-text-tertiary) hover:text-(--color-text-secondary) min-h-[44px] min-w-[44px] flex items-center" aria-label="Back to activities">
+              &larr; Back
             </button>
-            <span className="text-sm font-medium text-(--color-text)">{childName}</span>
+            <div className="text-center">
+              <span className="text-sm font-medium text-(--color-text)">{activeActivity.title}</span>
+              {activeActivity.subject && <span className="text-xs text-(--color-text-tertiary) ml-2">{activeActivity.subject}</span>}
+            </div>
+            <div className="w-11" />
           </div>
         </header>
-
-        <div className="max-w-2xl mx-auto px-6 py-8">
-          {actType === "lesson" && (
-            <LessonView context={learningContext} childId={selectedId} onComplete={handleActivityComplete} />
-          )}
-          {actType === "practice" && (
-            <PracticeView context={learningContext} childId={selectedId} onComplete={handleActivityComplete} />
-          )}
-          {actType === "review" && (
-            <ReviewView context={learningContext} childId={selectedId} onComplete={handleActivityComplete} />
-          )}
-          {actType === "assessment" && (
-            <AssessmentView context={learningContext} onComplete={handleActivityComplete} />
-          )}
-          {actType === "project" && (
-            <ProjectView context={learningContext} childId={selectedId} onComplete={handleActivityComplete} />
-          )}
-          {actType === "field_trip" && (
-            <FieldTripView context={learningContext} onComplete={handleActivityComplete} />
-          )}
+        <div className="max-w-2xl mx-auto px-8 py-10">
+          {t === "lesson" && <LessonView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
+          {t === "practice" && <PracticeView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
+          {t === "review" && <ReviewView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
+          {t === "assessment" && <AssessmentView context={learningContext} onComplete={handleComplete} />}
+          {t === "project" && <ProjectView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
+          {t === "field_trip" && <FieldTripView context={learningContext} onComplete={handleComplete} />}
         </div>
       </div>
     );
   }
 
-  // ── TRANSITION OVERLAY ──
-  const transitionOverlay = transitioning && transitionActivity && (() => {
-    const tc = typeConfig[transitionActivity.activity_type] || { label: transitionActivity.activity_type, bg: "bg-(--color-page)", icon: "📄" };
-    return (
-      <div
-        className="fixed inset-0 z-50 flex items-center justify-center"
-        style={{
-          background: "var(--color-page)",
-          opacity: transitionVisible ? 1 : 0,
-          transition: transitionVisible ? "opacity 200ms ease-out" : "opacity 150ms ease-in",
-        }}
-      >
-        <div className="text-center">
-          <div className="w-16 h-16 rounded-2xl bg-(--color-surface) border border-(--color-border) flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm">
-            {tc.icon}
-          </div>
-          <p className="text-sm font-medium text-(--color-text) mb-4">{transitionActivity.title}</p>
-          <div className="w-5 h-5 mx-auto border-2 border-(--color-accent) border-t-transparent rounded-full animate-spin" />
+  // ═══ TRANSITION OVERLAY ═══
+  const overlay = transitioning && transitionAct && (
+    <div className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{ background: "var(--color-page)", opacity: transVisible ? 1 : 0, transition: "opacity 200ms ease" }}>
+      <div className="text-center">
+        <div className="w-16 h-16 rounded-2xl bg-(--color-surface) border border-(--color-border) flex items-center justify-center text-3xl mx-auto mb-4">
+          {typeLabels[transitionAct.type]?.icon || "\uD83D\uDCC4"}
         </div>
+        <p className="text-sm font-medium text-(--color-text) mb-4">{transitionAct.title}</p>
+        <div className="w-5 h-5 mx-auto border-2 border-(--color-accent) border-t-transparent rounded-full animate-spin" />
       </div>
-    );
-  })();
+    </div>
+  );
 
-  // ── DAILY OVERVIEW ──
+  // ═══ PHASE 1: MORNING VIEW / PHASE 4: ALL DONE ═══
   return (
-    <div className={`min-h-screen ${fontSizeClass}`} style={bgStyles[theme.background] || bgStyles.plain}>
+    <div className={`min-h-screen ${fontSizeClass}`} style={bg}>
       {/* Header */}
-      <header className="bg-(--color-surface) border-b border-(--color-border) px-6 py-5">
+      <header className="bg-(--color-surface) border-b border-(--color-border) px-8 py-5">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
-          <MetheanLogo markSize={24} wordmarkHeight={12} color="#0F1B2D" gap={8} />
           <div className="flex items-center gap-3">
-            {children.length > 1 && (
-              <select
-                value={selectedId}
-                onChange={(e) => setSelectedId(e.target.value)}
-                className="text-sm border border-(--color-border) rounded-[14px] px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-(--color-accent)/30"
-              >
-                {children.map((c) => (
-                  <option key={c.id} value={c.id}>{c.first_name}</option>
-                ))}
+            <div className="w-10 h-10 rounded-full bg-(--color-accent-light) flex items-center justify-center text-xl" aria-hidden="true">
+              {avatar}
+            </div>
+            <span className="text-sm font-medium text-(--color-text)">{dash.child.first_name}</span>
+            {dash.child.streak.current > 0 && (
+              <span className="text-xs text-(--color-warning) font-medium flex items-center gap-1" aria-label={`${dash.child.streak.current} day streak`}>
+                <span aria-hidden="true">{dash.child.streak.current >= 7 ? "\uD83D\uDD25" : "\u2B50"}</span>
+                {dash.child.streak.current}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            {childrenList.length > 1 && (
+              <select value={selectedId} onChange={e => setSelectedId(e.target.value)}
+                className="text-sm border border-(--color-border) rounded-xl px-3 py-1.5 min-h-[44px]" aria-label="Switch child">
+                {childrenList.map(c => <option key={c.id} value={c.id}>{c.first_name}</option>)}
               </select>
             )}
-            <button onClick={() => setShowSettings(!showSettings)} className="p-1.5 text-(--color-text-tertiary) hover:text-(--color-text) transition-colors">
+            <button onClick={() => setShowSettings(!showSettings)}
+              className="p-2 text-(--color-text-tertiary) hover:text-(--color-text) min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Settings">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -382,18 +360,18 @@ export default function ChildPage() {
         </div>
       </header>
 
-      {/* Settings panel */}
+      {/* Settings */}
       {showSettings && (
-        <div className="max-w-2xl mx-auto px-6 pt-4">
-          <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-5 mb-4">
+        <div className="max-w-2xl mx-auto px-8 pt-4">
+          <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 mb-4">
             <h3 className="text-sm font-semibold text-(--color-text) mb-4">My Settings</h3>
             <div className="space-y-4">
               <div>
                 <label className="text-xs text-(--color-text-secondary) mb-2 block">Background</label>
                 <div className="flex gap-2 flex-wrap">
-                  {(["plain", "meadow", "ocean", "forest", "space", "desert", "mountains"] as const).map((bg) => (
+                  {(["plain", "meadow", "ocean", "forest", "space", "desert", "mountains"] as const).map(bg => (
                     <button key={bg} onClick={() => saveTheme({ background: bg })}
-                      className={`w-14 h-10 rounded-xl border-2 text-[9px] font-medium capitalize transition-all ${theme.background === bg ? "border-(--color-accent) ring-1 ring-(--color-accent)/20" : "border-(--color-border)"}`}
+                      className={`w-14 h-10 rounded-xl border-2 text-[9px] font-medium capitalize min-h-[44px] ${theme.background === bg ? "border-(--color-accent)" : "border-(--color-border)"}`}
                       style={bgStyles[bg]}>{bg}</button>
                   ))}
                 </div>
@@ -401,18 +379,18 @@ export default function ChildPage() {
               <div>
                 <label className="text-xs text-(--color-text-secondary) mb-2 block">Avatar</label>
                 <div className="flex gap-2">
-                  {(["bear", "owl", "fox", "rabbit", "deer", "eagle", "wolf"] as const).map((a) => (
+                  {(["bear", "owl", "fox", "rabbit", "deer", "eagle", "wolf"] as const).map(a => (
                     <button key={a} onClick={() => saveTheme({ avatar: a })}
-                      className={`w-10 h-10 rounded-full text-xl border-2 transition-all ${theme.avatar === a ? "border-(--color-accent) ring-1 ring-(--color-accent)/20" : "border-(--color-border)"}`}>{avatarEmoji[a]}</button>
+                      className={`w-11 h-11 rounded-full text-xl border-2 min-h-[44px] ${theme.avatar === a ? "border-(--color-accent)" : "border-(--color-border)"}`}>{avatarEmoji[a]}</button>
                   ))}
                 </div>
               </div>
               <div>
                 <label className="text-xs text-(--color-text-secondary) mb-2 block">Text Size</label>
                 <div className="flex gap-2">
-                  {([["normal", "Normal"], ["large", "Large"], ["extra-large", "Extra Large"]] as const).map(([val, label]) => (
-                    <button key={val} onClick={() => saveTheme({ font_size: val })}
-                      className={`px-3 py-1.5 text-xs rounded-lg border-2 transition-all ${theme.font_size === val ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)"}`}>{label}</button>
+                  {([["normal", "Normal"], ["large", "Large"], ["extra-large", "Extra Large"]] as const).map(([v, l]) => (
+                    <button key={v} onClick={() => saveTheme({ font_size: v })}
+                      className={`px-4 py-2 text-xs rounded-lg border-2 min-h-[44px] ${theme.font_size === v ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)"}`}>{l}</button>
                   ))}
                 </div>
               </div>
@@ -421,175 +399,153 @@ export default function ChildPage() {
         </div>
       )}
 
-      <div className="max-w-2xl mx-auto px-6 py-8">
-        {/* Greeting */}
-        <div className="flex items-center gap-4 mb-2">
-          <div className="w-12 h-12 rounded-full bg-(--color-accent-light) flex items-center justify-center text-2xl shrink-0">
-            {avatarEmoji[theme.avatar] || "🦉"}
+      <div className="max-w-2xl mx-auto px-8 py-10">
+        {/* Hero: Greeting + Progress Ring */}
+        <div className="flex items-start justify-between gap-6 mb-3">
+          <div className="flex-1">
+            <h1 className="text-2xl font-medium text-(--color-text) leading-snug mb-1">
+              {allDone ? `You finished everything today. Well done, ${dash.child.first_name}.` : dash.greeting}
+            </h1>
+            {dash.encouragement && (
+              <p className="text-base text-(--color-text-secondary) italic leading-relaxed">{dash.encouragement}</p>
+            )}
           </div>
-          <div>
-            <h2 className="text-2xl font-semibold text-(--color-text)">{greeting(childName)}</h2>
-            <p className="text-sm text-(--color-text-secondary)">
-              {activities.length > 0
-                ? `You have ${activities.length} activities today. ${completedCount} completed.`
-                : new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
-            </p>
-          </div>
+          {activities.length > 0 && (
+            <ProgressRing completed={dash.today.completed} total={dash.today.total_activities}
+              minutesRemaining={dash.today.estimated_minutes_remaining} />
+          )}
         </div>
 
-        {/* Progress bar */}
-        {activities.length > 0 && (
-          <div className="mb-8 mt-4">
-            <div className="w-full h-2 rounded-full bg-(--color-border)">
-              <div
-                className="h-full rounded-full bg-(--color-success) transition-all duration-500"
-                style={{ width: `${activities.length > 0 ? (completedCount / activities.length) * 100 : 0}%` }}
-              />
-            </div>
+        {/* Achievements */}
+        {dash.child.recent_achievements.length > 0 && (
+          <div className="flex gap-2 mb-8 overflow-x-auto pb-1">
+            {dash.child.recent_achievements.map((ach, i) => (
+              <div key={i} className="shrink-0 bg-(--color-surface) rounded-xl border border-(--color-border) px-3 py-2 flex items-center gap-2">
+                <span className="text-lg">{ach.icon}</span>
+                <span className="text-xs font-medium text-(--color-text)">{ach.title}</span>
+              </div>
+            ))}
           </div>
         )}
 
-        {/* Stats row */}
-        <div className="grid grid-cols-3 gap-2 mb-6">
-          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-3 text-center">
-            <div className="text-xl font-bold text-(--color-text)">
-              {streak && streak.current_streak > 0 ? (
-                <>{streak.current_streak >= 7 && <span className="animate-pulse">🔥</span>} {streak.current_streak}</>
-              ) : "0"}
-            </div>
-            <div className="text-[10px] text-(--color-text-tertiary)">day streak</div>
-          </div>
-          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-3 text-center">
-            <div className="text-xl font-bold text-(--color-success)">⭐ {totalMastered}</div>
-            <div className="text-[10px] text-(--color-text-tertiary)">mastered</div>
-          </div>
-          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-3 text-center">
-            <div className="text-xl font-bold text-(--color-accent)">📚 {completedCount}</div>
-            <div className="text-[10px] text-(--color-text-tertiary)">completed</div>
-          </div>
-        </div>
-
-        {/* Recent achievements */}
-        {earnedAchievements.length > 0 && (
-          <div className="mb-6">
-            <div className="flex items-center gap-1.5 mb-2">
-              <span className="text-xs font-medium text-(--color-text-secondary)">Recent achievements</span>
-            </div>
-            <div className="flex gap-2 overflow-x-auto pb-1">
-              {earnedAchievements.slice(0, 3).map((ach: any) => {
-                const isNew = ach.earned_at && (Date.now() - new Date(ach.earned_at).getTime()) < 86400000;
-                return (
-                  <div key={ach.id} className={`shrink-0 bg-(--color-surface) rounded-[12px] border px-3 py-2 flex items-center gap-2 ${isNew ? "border-(--gold) ring-1 ring-(--gold)/20" : "border-(--color-border)"}`}>
-                    <span className="text-lg">{ach.icon}</span>
-                    <div>
-                      <div className="text-xs font-medium text-(--color-text) flex items-center gap-1">
-                        {ach.title}
-                        {isNew && <span className="text-[8px] px-1 py-0.5 bg-(--gold) text-white rounded-full font-bold">NEW</span>}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Journey Maps */}
-        {journeyMaps.length > 0 && (
-          <div className="mb-6">
-            <div className="text-xs font-medium text-(--color-text-secondary) mb-2">Your Learning Journey</div>
-            <div className="flex gap-4 overflow-x-auto pb-2">
-              {journeyMaps.slice(0, 3).map((ms) => {
-                const journeyNodes = (ms.nodes || []).slice(0, 12).map((n: any) => ({
-                  id: n.node_id,
-                  title: n.title,
-                  mastery: n.mastery_level || "not_started",
-                  is_next: n.status === "available" && n.prerequisites_met,
-                }));
-                // Mark only the first available node as "next"
-                let foundNext = false;
-                for (const jn of journeyNodes) {
-                  if (jn.is_next && !foundNext) { foundNext = true; }
-                  else if (jn.is_next) { jn.is_next = false; }
-                }
-                return (
-                  <div key={ms.learning_map_id} className="shrink-0">
-                    <JourneyMap
-                      nodes={journeyNodes}
-                      subject={ms.map_name || "Learning Path"}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        {/* Activities */}
+        {/* Today's Activities */}
         {activities.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="text-5xl mb-4">{avatarEmoji[theme.avatar] || "🦉"}</div>
-            <h3 className="text-lg font-semibold text-(--color-text) mb-2">
-              No learning scheduled for today!
-            </h3>
-            <p className="text-sm text-(--color-text-secondary)">
-              Enjoy your free time, {childName}. Your next activities will show up here when they're ready.
-            </p>
+          <div className="text-center py-20">
+            <div className="text-5xl mb-4" aria-hidden="true">{avatar}</div>
+            <h2 className="text-lg font-medium text-(--color-text) mb-2">No learning scheduled today</h2>
+            <p className="text-sm text-(--color-text-secondary)">Enjoy your free time, {dash.child.first_name}.</p>
           </div>
         ) : (
-          <div className="space-y-3">
-            {/* Active activities */}
-            {activities.filter((a) => a.status !== "completed").map((act, idx) => {
-              const tc = typeConfig[act.activity_type] || { label: act.activity_type, bg: "bg-(--color-page)", icon: "📄" };
+          <div className="space-y-3 mb-10">
+            {/* Uncompleted activities */}
+            {activities.filter(a => a.status !== "completed").map((act, idx) => {
+              const tl = typeLabels[act.type] || { label: act.type, icon: "\uD83D\uDCC4" };
+              const isNext = idx === 0;
               return (
-                <div key={act.id} className="animate-fade-up" style={{ animationDelay: `${idx * 60}ms` }}>
-                <Card padding="p-4">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-[10px] ${tc.bg} flex items-center justify-center text-xl shrink-0`}>
-                      {tc.icon}
-                    </div>
+                <button key={act.id} onClick={() => startActivity(act)}
+                  className={`w-full text-left bg-(--color-surface) rounded-2xl border p-5 transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-(--color-accent)/30 min-h-[72px] ${
+                    isNext ? "border-(--color-accent)/30 shadow-sm" : "border-(--color-border)"
+                  }`}
+                  style={{ borderLeftWidth: 4, borderLeftColor: act.subject_color }}
+                  aria-label={`Start ${act.title}`}>
+                  <div className="flex items-center gap-4">
+                    <span className="text-xl shrink-0" aria-hidden="true">{tl.icon}</span>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-sm font-medium text-(--color-text) truncate">{act.title}</h3>
-                      <p className="text-xs text-(--color-text-tertiary)">{tc.label}{act.estimated_minutes ? ` · ${act.estimated_minutes} min` : ""}</p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-xs text-(--color-text-secondary)">{tl.label}</span>
+                        {act.estimated_minutes && <span className="text-xs text-(--color-text-tertiary)">{act.estimated_minutes} min</span>}
+                        {act.subject && <span className="text-xs text-(--color-text-tertiary)">{act.subject}</span>}
+                      </div>
                     </div>
-                    <Button variant="primary" size="sm" onClick={() => startActivity(act)}>
-                      {act.status === "in_progress" ? "Continue" : "Start"}
-                    </Button>
+                    {isNext && (
+                      <span className="text-xs font-medium text-(--color-accent) shrink-0">Next</span>
+                    )}
                   </div>
-                  {act.error && <p className="text-xs text-(--color-danger) mt-2">{act.error}</p>}
-                </Card>
-                </div>
+                </button>
               );
             })}
 
             {/* Completed activities */}
-            {activities.filter((a) => a.status === "completed").map((act) => {
-              const tc = typeConfig[act.activity_type] || { label: act.activity_type, bg: "bg-(--color-page)", icon: "📄" };
+            {activities.filter(a => a.status === "completed").map(act => {
+              const tl = typeLabels[act.type] || { label: act.type, icon: "\uD83D\uDCC4" };
               return (
-                <Card key={act.id} padding="p-4" className="opacity-60">
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-[10px] ${tc.bg} flex items-center justify-center text-xl shrink-0`}>
-                      {tc.icon}
-                    </div>
+                <div key={act.id} className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-5 opacity-50"
+                  style={{ borderLeftWidth: 4, borderLeftColor: act.subject_color }}>
+                  <div className="flex items-center gap-4">
+                    <span className="text-xl shrink-0" aria-hidden="true">{tl.icon}</span>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-medium text-(--color-text-tertiary) line-through truncate">{act.title}</h3>
-                      <p className="text-xs text-(--color-text-tertiary)">{tc.label}</p>
+                      <h3 className="text-sm text-(--color-text-tertiary) line-through truncate">{act.title}</h3>
+                      <span className="text-xs text-(--color-text-tertiary)">{tl.label}</span>
                     </div>
-                    <span className="w-7 h-7 rounded-full bg-(--color-success-light) flex items-center justify-center shrink-0">
+                    <span className="w-7 h-7 rounded-full bg-(--color-success-light) flex items-center justify-center shrink-0" aria-label="Completed">
                       <svg className="w-4 h-4 text-(--color-success)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                     </span>
                   </div>
-                </Card>
+                </div>
               );
             })}
           </div>
         )}
+
+        {/* Subject Progress */}
+        {dash.progress.subjects.length > 0 && (
+          <div className="mb-10">
+            <h3 className="text-xs font-medium text-(--color-text-secondary) uppercase tracking-wide mb-3">Your Progress</h3>
+            <div className="grid grid-cols-2 gap-3">
+              {dash.progress.subjects.map(s => (
+                <div key={s.name} className="bg-(--color-surface) rounded-xl border border-(--color-border) p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="w-2.5 h-2.5 rounded-full" style={{ background: s.color }} />
+                    <span className="text-xs font-medium text-(--color-text)">{s.name}</span>
+                  </div>
+                  <div className="h-1.5 rounded-full bg-(--color-border) mb-1">
+                    <div className="h-full rounded-full transition-all" style={{ width: `${s.percentage}%`, background: s.color }} />
+                  </div>
+                  <span className="text-[10px] text-(--color-text-tertiary)">{s.mastered} of {s.total} mastered</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Journey Maps */}
+        {dash.journey_maps.length > 0 && (
+          <div className="mb-10">
+            <button onClick={() => setShowJourney(!showJourney)}
+              className="text-xs font-medium text-(--color-text-secondary) uppercase tracking-wide mb-3 flex items-center gap-1 min-h-[44px]">
+              Your Learning Journey
+              <svg className={`w-3 h-3 transition-transform ${showJourney ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {showJourney && (
+              <div className="flex gap-6 overflow-x-auto pb-2">
+                {dash.journey_maps.map(jm => (
+                  <div key={jm.map_id} className="shrink-0">
+                    <JourneyMap
+                      nodes={jm.nodes.map(n => ({ id: n.id, title: n.title, mastery: n.mastery, is_next: n.is_next }))}
+                      subject={jm.subject}
+                      subjectColor={jm.subject_color}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Week stats */}
+        {dash.progress.this_week.activities_completed > 0 && (
+          <div className="text-center text-xs text-(--color-text-tertiary) py-4 border-t border-(--color-border)/50">
+            This week: {dash.progress.this_week.activities_completed} activities &middot; {dash.progress.this_week.time_spent_minutes} minutes &middot; {dash.progress.this_week.mastery_transitions_up} mastered
+          </div>
+        )}
       </div>
 
-      {/* Transition overlay */}
-      {transitionOverlay}
+      {overlay}
     </div>
   );
 }
