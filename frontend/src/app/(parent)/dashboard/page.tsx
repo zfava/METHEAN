@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { auth, children as childrenApi, governance, household, snapshots, usage, type User, type ChildState, type GovernanceEvent, type SnapshotItem } from "@/lib/api";
+import { auth, children as childrenApi, governance, household, snapshots, usage, familyInsights, type User, type ChildState, type GovernanceEvent, type SnapshotItem, type FamilyInsightSummary, type FamilyInsightItem } from "@/lib/api";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import StatusBadge from "@/components/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
@@ -19,6 +19,44 @@ import { useStagger } from "@/lib/useStagger";
 interface TodayActivity { id: string; title: string; activity_type: string; status: string; estimated_minutes: number | null; }
 interface AlertItem { title: string; message: string; severity: string; }
 interface ChildSummary { id: string; mastered: number; total: number; todayCount: number; }
+
+function FamilyInsightsWidget({ childCount }: { childCount: number }) {
+  const [summary, setSummary] = useState<FamilyInsightSummary | null>(null);
+  const [topInsight, setTopInsight] = useState<FamilyInsightItem | null>(null);
+
+  useEffect(() => {
+    if (childCount < 2) return;
+    familyInsights.summary().then(setSummary).catch(() => {});
+    familyInsights.list({ per_page: 1 }).then(r => setTopInsight(r.items[0] || null)).catch(() => {});
+  }, [childCount]);
+
+  if (childCount < 2 || !summary) return null;
+  if (summary.total_active === 0) return null;
+
+  return (
+    <Card>
+      <div className="flex items-center justify-between mb-2">
+        <SectionHeader title="Family Insights" actionHref="/family-insights" action="View all" />
+      </div>
+      <div className="flex items-center gap-3 mb-2">
+        <span className="text-xs font-medium px-2 py-0.5 rounded-full border" style={{
+          color: summary.total_active <= 3 ? "var(--color-warning)" : "var(--color-danger)",
+          borderColor: summary.total_active <= 3 ? "var(--color-warning)" : "var(--color-danger)",
+        }}>
+          {summary.total_active} active
+        </span>
+        {summary.predictive_count > 0 && (
+          <span className="text-[10px] text-(--color-accent)">{summary.predictive_count} predictive</span>
+        )}
+      </div>
+      {topInsight && (
+        <p className="text-xs text-(--color-text-secondary) leading-relaxed line-clamp-2">
+          {topInsight.recommendation}
+        </p>
+      )}
+    </Card>
+  );
+}
 
 export default function DashboardPage() {
   useEffect(() => { document.title = "Dashboard | METHEAN"; }, []);
@@ -345,6 +383,9 @@ export default function DashboardPage() {
               </div>
             </Card>
           )}
+
+          {/* ── Family Insights Widget ── */}
+          <FamilyInsightsWidget childCount={children.length} />
 
           {/* ── Weekly Summary ── */}
           <div className="flex items-center gap-4 text-xs text-(--color-text-tertiary) mb-6">

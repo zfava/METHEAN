@@ -59,6 +59,7 @@ const NAV_GROUPS = [
       { href: "/intelligence", label: "Learner Profile" },
       { href: "/calibration", label: "Evaluator Calibration" },
       { href: "/style-profile", label: "Learning Style" },
+      { href: "/family-insights", label: "Family Insights" },
     ],
   },
   {

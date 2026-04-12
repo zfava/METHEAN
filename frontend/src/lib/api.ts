@@ -567,6 +567,68 @@ export interface StyleVectorData {
   last_computed_at: string | null;
 }
 
+// ── Family Intelligence ──
+export const familyInsights = {
+  list: (params?: { status?: string; pattern_type?: string; child_id?: string; page?: number; per_page?: number }) => {
+    const qs = new URLSearchParams();
+    if (params?.status) qs.set("status", params.status);
+    if (params?.pattern_type) qs.set("pattern_type", params.pattern_type);
+    if (params?.child_id) qs.set("child_id", params.child_id);
+    if (params?.page) qs.set("page", String(params.page));
+    if (params?.per_page) qs.set("per_page", String(params.per_page));
+    const q = qs.toString();
+    return request<{ items: FamilyInsightItem[]; total: number; page: number; per_page: number }>(
+      `/household/family-insights${q ? `?${q}` : ""}`
+    );
+  },
+  get: (id: string) => request<FamilyInsightDetail>(`/household/family-insights/${id}`),
+  updateStatus: (id: string, data: { status: string; parent_response?: string }) =>
+    request<{ status: string; insight_id: string }>(`/household/family-insights/${id}/status`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+  config: () => request<FamilyInsightConfigData>(`/household/family-insights/config`),
+  updateConfig: (data: { enabled?: boolean; pattern_settings?: Record<string, object> }) =>
+    request<{ status: string; changes: object }>(`/household/family-insights/config`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+  summary: () => request<FamilyInsightSummary>(`/household/family-insights/summary`),
+};
+
+export interface FamilyInsightItem {
+  id: string;
+  pattern_type: string;
+  affected_children: Array<{ id: string; name: string }>;
+  affected_nodes: Array<{ id: string; title: string }>;
+  affected_subjects: string[];
+  confidence: number;
+  recommendation: string;
+  status: string;
+  is_predictive: boolean;
+  predictive_child: { id: string; name: string } | null;
+  parent_response: string | null;
+  false_positive: boolean | null;
+  created_at: string;
+}
+
+export interface FamilyInsightDetail extends FamilyInsightItem {
+  evidence_json: object;
+}
+
+export interface FamilyInsightConfigData {
+  enabled: boolean;
+  pattern_settings: Record<string, Record<string, any>>;
+  is_default?: boolean;
+}
+
+export interface FamilyInsightSummary {
+  total_active: number;
+  by_pattern_type: Record<string, number>;
+  by_status: Record<string, number>;
+  predictive_count: number;
+}
+
 export const familyInvites = {
   invite: (email: string, role: string) =>
     request<{ invited: boolean }>("/household/invite", { method: "POST", body: JSON.stringify({ email, role }) }),
