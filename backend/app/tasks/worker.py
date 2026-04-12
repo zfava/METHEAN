@@ -70,6 +70,10 @@ celery_app.conf.beat_schedule = {
         "task": "app.tasks.worker.family_intelligence_nightly_task",
         "schedule": crontab(hour=4, minute=30),
     },
+    "wellbeing-detection-daily": {
+        "task": "app.tasks.worker.wellbeing_detection_task",
+        "schedule": crontab(hour=5, minute=0),
+    },
 }
 
 
@@ -189,6 +193,16 @@ def family_intelligence_nightly_task(self) -> dict:
     try:
         from app.tasks.family_intelligence_batch import run_family_intelligence_sync
         return run_family_intelligence_sync()
+    except Exception as exc:
+        self.retry(exc=exc, countdown=30 * (2 ** self.request.retries))
+
+
+@celery_app.task(name="app.tasks.worker.wellbeing_detection_task", bind=True, max_retries=3)
+def wellbeing_detection_task(self) -> dict:
+    """Daily: scan children for wellbeing anomalies. PARENT-ONLY."""
+    try:
+        from app.tasks.wellbeing_batch import run_wellbeing_sync
+        return run_wellbeing_sync()
     except Exception as exc:
         self.retry(exc=exc, countdown=30 * (2 ** self.request.retries))
 

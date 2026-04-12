@@ -634,3 +634,246 @@ def asyncio_iscoroutine(fn):
     import asyncio
     import inspect
     return inspect.iscoroutinefunction(fn)
+
+
+# ═══════════════════════════════════════════
+# False Positive Self-Calibration
+# ═══════════════════════════════════════════
+
+
+MAX_THRESHOLD_ADJUSTMENT = 1.0  # Cap: don't let dismissals disable detection
+
+
+async def record_dismissal(
+    db: AsyncSession,
+    anomaly_id: uuid.UUID,
+    household_id: uuid.UUID,
+    parent_response: str | None = None,
+) -> WellbeingAnomaly:
+    """Record a parent's dismissal and adjust future thresholds.
+
+    Each dismissal increases the threshold for that anomaly type by 0.1 SD
+    for that child, self-calibrating to the family's tolerance.
+    Capped at +1.0 SD to prevent disabling detection entirely.
+    """
+    result = await db.execute(
+        select(WellbeingAnomaly).where(
+            WellbeingAnomaly.id == anomaly_id,
+            WellbeingAnomaly.household_id == household_id,
+        )
+    )
+    anomaly = result.scalar_one_or_none()
+    if not anomaly:
+        raise ValueError("Anomaly not found")
+
+    anomaly.status = AnomalyStatus.dismissed
+    anomaly.false_positive = True
+    if parent_response:
+        anomaly.parent_response = parent_response
+
+    # Adjust threshold for this child + anomaly type
+    config_result = await db.execute(
+        select(WellbeingConfig).where(WellbeingConfig.child_id == anomaly.child_id)
+    )
+    config = config_result.scalar_one_or_none()
+    if config is None:
+        config = WellbeingConfig(
+            child_id=anomaly.child_id,
+            household_id=household_id,
+        )
+        db.add(config)
+        await db.flush()
+
+    atype = anomaly.anomaly_type.value if hasattr(anomaly.anomaly_type, "value") else str(anomaly.anomaly_type)
+    adjustments = dict(config.threshold_adjustments or {})
+    current = adjustments.get(atype, 0.0)
+    adjustments[atype] = min(current + 0.1, MAX_THRESHOLD_ADJUSTMENT)
+    config.threshold_adjustments = adjustments
+    config.total_false_positives = (config.total_false_positives or 0) + 1
+
+    # Governance event
+    try:
+        from app.models.enums import GovernanceAction
+        from app.models.governance import GovernanceEvent
+        db.add(GovernanceEvent(
+            household_id=household_id,
+            user_id=None,
+            action=GovernanceAction.modify,
+            target_type="wellbeing_anomaly",
+            target_id=anomaly.id,
+            reason=f"wellbeing_anomaly_dismissed: {atype}",
+            metadata_={
+                "anomaly_type": atype,
+                "new_threshold_adjustment": adjustments[atype],
+                "total_false_positives": config.total_false_positives,
+            },
+        ))
+    except Exception:
+        pass
+
+    # Audit log
+    try:
+        from app.models.enums import AuditAction
+        from app.models.operational import AuditLog
+        db.add(AuditLog(
+            household_id=household_id,
+            action=AuditAction.update,
+            resource_type="wellbeing_anomaly",
+            resource_id=anomaly.id,
+            details={"action": "dismissal_recorded", "anomaly_type": atype},
+        ))
+    except Exception:
+        pass
+
+    await db.flush()
+    return anomaly
+
+
+# ═══════════════════════════════════════════
+# Resolution Tracking
+# ═══════════════════════════════════════════
+
+
+async def check_for_resolution(
+    db: AsyncSession,
+    child_id: uuid.UUID,
+    household_id: uuid.UUID,
+) -> list[WellbeingAnomaly]:
+    """Check if any active anomalies have naturally resolved.
+
+    An anomaly is resolved when the triggering metrics return to within
+    0.5 SD of the baseline for all affected subjects.
+    """
+    result = await db.execute(
+        select(WellbeingAnomaly).where(
+            WellbeingAnomaly.child_id == child_id,
+            WellbeingAnomaly.status.in_([s.value for s in ACTIVE_STATUSES]),
+        )
+    )
+    active = result.scalars().all()
+    if not active:
+        return []
+
+    baselines = await compute_child_baselines(db, child_id, household_id)
+    if baselines is None:
+        return []
+
+    recent = await compute_recent_window(db, child_id, household_id)
+    if recent is None:
+        return []
+
+    resolved = []
+    for anomaly in active:
+        atype = anomaly.anomaly_type.value if hasattr(anomaly.anomaly_type, "value") else str(anomaly.anomaly_type)
+        affected = anomaly.affected_subjects or []
+        if not affected:
+            continue
+
+        # Check if all affected subjects have recovered
+        all_recovered = True
+        for subj in affected:
+            bl = baselines["subjects"].get(subj)
+            rc = recent["subjects"].get(subj)
+            if not bl or not rc:
+                all_recovered = False
+                break
+
+            # Check the primary metric for this anomaly type
+            if atype == "broad_disengagement":
+                bl_mean, bl_std = bl["effort_quality_mean"], bl["effort_quality_std"]
+                rc_mean = rc["effort_quality_mean"]
+            elif atype == "frustration_spike":
+                bl_mean, bl_std = bl["frustration_frequency"], bl["frustration_std"]
+                rc_mean = rc["frustration_frequency"]
+            elif atype == "performance_cliff":
+                bl_mean, bl_std = bl["evaluator_confidence_mean"], bl["evaluator_confidence_std"]
+                rc_mean = rc.get("evaluator_confidence_mean", bl_mean)
+            elif atype == "session_avoidance":
+                bl_mean, bl_std = bl["session_completion_rate"], bl["completion_std"]
+                rc_mean = rc["session_completion_rate"]
+            else:
+                all_recovered = False
+                break
+
+            # Recovered = within 0.5 SD of baseline
+            if bl_std > 0 and abs(bl_mean - rc_mean) / bl_std > 0.5:
+                all_recovered = False
+                break
+
+        if all_recovered:
+            anomaly.status = AnomalyStatus.resolved
+            resolved.append(anomaly)
+
+            try:
+                from app.models.enums import AuditAction
+                from app.models.operational import AuditLog
+                db.add(AuditLog(
+                    household_id=household_id,
+                    action=AuditAction.update,
+                    resource_type="wellbeing_anomaly",
+                    resource_id=anomaly.id,
+                    details={"action": "anomaly_resolved", "anomaly_type": atype},
+                ))
+            except Exception:
+                pass
+
+    if resolved:
+        await db.flush()
+
+    return resolved
+
+
+# ═══════════════════════════════════════════
+# Parent Notification
+# ═══════════════════════════════════════════
+
+
+async def notify_parent_of_anomaly(
+    db: AsyncSession,
+    anomaly: WellbeingAnomaly,
+) -> None:
+    """Create an in-app notification for the parent.
+
+    CRITICAL: Notifications go ONLY to parents. Never to child-facing UI.
+    """
+    from sqlalchemy import select as _sel
+    from app.models.identity import User
+
+    # Find the household owner
+    user_result = await db.execute(
+        _sel(User).where(User.household_id == anomaly.household_id, User.role == "owner")
+    )
+    owner = user_result.scalar_one_or_none()
+    if not owner:
+        return
+
+    # Get child name
+    child_result = await db.execute(
+        _sel(Child.first_name).where(Child.id == anomaly.child_id)
+    )
+    child_row = child_result.one_or_none()
+    child_name = child_row[0] if child_row else "your child"
+
+    try:
+        from app.services.notifications import send_notification
+        from app.models.identity import Household
+        h_result = await db.execute(_sel(Household.timezone).where(Household.id == anomaly.household_id))
+        h_row = h_result.one_or_none()
+        tz = h_row[0] if h_row else "UTC"
+
+        await send_notification(
+            db,
+            household_id=anomaly.household_id,
+            user_id=owner.id,
+            event_type="wellbeing",
+            title=f"Wellbeing observation for {child_name}",
+            body=anomaly.parent_message,
+            timezone=tz,
+        )
+    except Exception:
+        logger.warning("Failed to send wellbeing notification for anomaly %s", anomaly.id)
+        return
+
+    # Update status to notified
+    anomaly.status = AnomalyStatus.notified
+    await db.flush()
