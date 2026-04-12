@@ -234,7 +234,8 @@ export default function PracticeView({ context, childId, onComplete }: PracticeV
           I'm stuck
         </button>
       </div>
-      {showTutor && <TutorChat activityId={context.activity.id} childId={childId} onClose={() => setShowTutor(false)} />}
+      {showTutor && <TutorChat activityId={context.activity.id} childId={childId} onClose={() => setShowTutor(false)}
+        activityTitle={context.activity.title} currentStep={currentIdx} totalSteps={totalItems} />}
     </div>
   );
 }
