@@ -40,9 +40,10 @@ ENUM_DEFINITIONS = {
 
 
 def upgrade() -> None:
-    # ── Create all PostgreSQL enums ──
+    # ── Create all PostgreSQL enums (checkfirst for CI idempotency) ──
+    bind = op.get_bind()
     for name, values in ENUM_DEFINITIONS.items():
-        sa.Enum(*values, name=name).create(op.get_bind())
+        sa.Enum(*values, name=name).create(bind, checkfirst=True)
 
     # ── Section 3.1: Identity & Tenancy ──
 
@@ -585,6 +586,7 @@ def downgrade() -> None:
     for table in tables:
         op.drop_table(table)
 
-    # Drop all enums
+    # Drop all enums (checkfirst for safety)
+    bind = op.get_bind()
     for name in ENUM_DEFINITIONS:
-        sa.Enum(name=name).drop(op.get_bind())
+        sa.Enum(name=name).drop(bind, checkfirst=True)
