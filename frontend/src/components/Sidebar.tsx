@@ -60,6 +60,7 @@ const NAV_GROUPS = [
       { href: "/calibration", label: "Evaluator Calibration" },
       { href: "/style-profile", label: "Learning Style" },
       { href: "/family-insights", label: "Family Insights" },
+      { href: "/wellbeing", label: "Wellbeing" },
     ],
   },
   {

@@ -630,6 +630,67 @@ export interface FamilyInsightSummary {
   predictive_count: number;
 }
 
+// ── Wellbeing (PARENT-ONLY) ──
+export const wellbeing = {
+  anomalies: (childId: string, params?: { status?: string; anomaly_type?: string; page?: number }) => {
+    const qs = new URLSearchParams();
+    if (params?.status) qs.set("status", params.status);
+    if (params?.anomaly_type) qs.set("anomaly_type", params.anomaly_type);
+    if (params?.page) qs.set("page", String(params.page));
+    const q = qs.toString();
+    return request<{ items: WellbeingAnomalyItem[]; total: number }>(`/children/${childId}/wellbeing/anomalies${q ? `?${q}` : ""}`);
+  },
+  anomalyDetail: (childId: string, anomalyId: string) =>
+    request<WellbeingAnomalyDetail>(`/children/${childId}/wellbeing/anomalies/${anomalyId}`),
+  updateStatus: (childId: string, anomalyId: string, data: { status: string; parent_response?: string }) =>
+    request<{ status: string; anomaly_id: string }>(`/children/${childId}/wellbeing/anomalies/${anomalyId}/status`, {
+      method: "PATCH", body: JSON.stringify(data),
+    }),
+  config: (childId: string) => request<WellbeingConfigData>(`/children/${childId}/wellbeing/config`),
+  updateConfig: (childId: string, data: Record<string, unknown>) =>
+    request<{ status: string; changes: object }>(`/children/${childId}/wellbeing/config`, {
+      method: "PATCH", body: JSON.stringify(data),
+    }),
+  summary: (childId: string) => request<WellbeingSummary>(`/children/${childId}/wellbeing/summary`),
+};
+
+export interface WellbeingAnomalyItem {
+  id: string;
+  anomaly_type: string;
+  severity: number;
+  affected_subjects: string[];
+  parent_message: string;
+  status: string;
+  sensitivity_level: string;
+  created_at: string;
+  false_positive: boolean | null;
+  parent_response: string | null;
+}
+
+export interface WellbeingAnomalyDetail extends WellbeingAnomalyItem {
+  evidence_json: Record<string, any>;
+}
+
+export interface WellbeingConfigData {
+  enabled: boolean;
+  sensitivity_level: string;
+  custom_thresholds: Record<string, any>;
+  threshold_adjustments: Record<string, number>;
+  total_false_positives: number;
+  is_default?: boolean;
+}
+
+export interface WellbeingSummary {
+  total_active: number;
+  by_type: Record<string, number>;
+  by_status: Record<string, number>;
+  total_resolved: number;
+  total_dismissed: number;
+  sensitivity_level: string;
+  enabled: boolean;
+  threshold_adjustments: Record<string, number>;
+}
+
 export const familyInvites = {
   invite: (email: string, role: string) =>
     request<{ invited: boolean }>("/household/invite", { method: "POST", body: JSON.stringify({ email, role }) }),

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { auth, children as childrenApi, governance, household, snapshots, usage, familyInsights, type User, type ChildState, type GovernanceEvent, type SnapshotItem, type FamilyInsightSummary, type FamilyInsightItem } from "@/lib/api";
+import { auth, children as childrenApi, governance, household, snapshots, usage, familyInsights, wellbeing, type User, type ChildState, type GovernanceEvent, type SnapshotItem, type FamilyInsightSummary, type FamilyInsightItem, type WellbeingSummary } from "@/lib/api";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import StatusBadge from "@/components/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
@@ -55,6 +55,21 @@ function FamilyInsightsWidget({ childCount }: { childCount: number }) {
         </p>
       )}
     </Card>
+  );
+}
+
+function WellbeingIndicator({ childId }: { childId: string | undefined }) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    if (!childId) return;
+    wellbeing.summary(childId).then(s => setCount(s.total_active)).catch(() => {});
+  }, [childId]);
+  if (!childId || count === 0) return null;
+  return (
+    <Link href="/wellbeing" className="flex items-center gap-2 px-3 py-2 bg-(--color-warning-light) border border-(--color-warning)/10 rounded-[10px] text-xs text-(--color-warning) hover:bg-(--color-warning)/10 transition-colors">
+      <span className="w-2 h-2 rounded-full bg-(--color-warning)" />
+      {count} wellbeing observation{count > 1 ? "s" : ""} to review
+    </Link>
   );
 }
 
@@ -386,6 +401,7 @@ export default function DashboardPage() {
 
           {/* ── Family Insights Widget ── */}
           <FamilyInsightsWidget childCount={children.length} />
+          <WellbeingIndicator childId={selectedChild?.id} />
 
           {/* ── Weekly Summary ── */}
           <div className="flex items-center gap-4 text-xs text-(--color-text-tertiary) mb-6">
