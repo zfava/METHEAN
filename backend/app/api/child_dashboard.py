@@ -2,9 +2,11 @@
 
 Single endpoint that assembles everything a child needs on load.
 No waterfall of API calls — one request, complete dashboard.
+Performance-critical: ZERO database queries inside loops.
 """
 
 import uuid
+from collections import defaultdict
 from datetime import UTC, date, datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -25,7 +27,6 @@ from app.models.state import ChildNodeState, StateEvent
 
 router = APIRouter(tags=["child-dashboard"])
 
-# Default subject colors when none set
 DEFAULT_COLORS = {
     "Mathematics": "#3b82f6",
     "Reading": "#10b981",
@@ -60,7 +61,7 @@ async def get_child_dashboard(
     now = datetime.now(UTC)
     week_start = today - timedelta(days=today.weekday())
 
-    # ── Streak & achievements ──
+    # ── Streak & achievements (2 queries) ──
     try:
         from app.services.achievements import get_streak, get_achievements
         streak_data = await get_streak(db, child_id, household_id)
@@ -72,7 +73,7 @@ async def get_child_dashboard(
     current_streak = streak_data.get("current_streak", 0)
     is_today_complete = streak_data.get("last_activity_date") == today.isoformat()
 
-    # ── Today's activities ──
+    # ── Today's activities (1 query) ──
     act_result = await db.execute(
         select(Activity).where(
             Activity.household_id == household_id,
@@ -82,7 +83,7 @@ async def get_child_dashboard(
     )
     today_activities = act_result.scalars().all()
 
-    # Resolve node info and subjects for activities
+    # Resolve node+subject info for activities (1 query, batch)
     node_ids = [a.node_id for a in today_activities if a.node_id]
     node_map: dict[uuid.UUID, dict] = {}
     subject_map: dict[uuid.UUID, dict] = {}
@@ -98,7 +99,7 @@ async def get_child_dashboard(
             node_map[node.id] = {"title": node.title, "subject_id": subj.id}
             subject_map[subj.id] = {"name": subj.name, "color": subj.color or DEFAULT_COLORS.get(subj.name, "#6b7280")}
 
-    # Get mastery states for today's nodes
+    # Mastery states for today's nodes (1 query, batch)
     state_result = await db.execute(
         select(ChildNodeState).where(
             ChildNodeState.child_id == child_id,
@@ -121,7 +122,6 @@ async def get_child_dashboard(
         state = node_states.get(a.node_id) if a.node_id else None
         mastery = (state.mastery_level.value if state and hasattr(state.mastery_level, "value")
                    else str(state.mastery_level) if state else "not_started")
-
         activity_items.append({
             "id": str(a.id),
             "title": a.title,
@@ -136,7 +136,9 @@ async def get_child_dashboard(
             "sequence_number": i + 1,
         })
 
-    # ── Progress ──
+    # ── Progress (pre-fetch all data outside loops) ──
+
+    # All child states (1 query)
     all_states = await db.execute(
         select(ChildNodeState).where(
             ChildNodeState.child_id == child_id,
@@ -144,8 +146,9 @@ async def get_child_dashboard(
         )
     )
     all_states_list = all_states.scalars().all()
+    all_states_by_node = {s.node_id: s for s in all_states_list}
 
-    # Get total enrolled nodes
+    # Enrolled maps (1 query)
     enrolled_maps = await db.execute(
         select(ChildMapEnrollment.learning_map_id).where(
             ChildMapEnrollment.child_id == child_id,
@@ -155,22 +158,28 @@ async def get_child_dashboard(
     )
     map_ids = list(enrolled_maps.scalars().all())
 
-    total_nodes = 0
+    # PRE-FETCH: All nodes grouped by map (1 query, replaces N per-map queries)
+    nodes_by_map: dict[uuid.UUID, list[uuid.UUID]] = defaultdict(list)
+    all_map_nodes: dict[uuid.UUID, LearningNode] = {}
     if map_ids:
-        total_r = await db.execute(
-            select(func.count()).select_from(LearningNode).where(
+        all_nodes_result = await db.execute(
+            select(LearningNode).where(
                 LearningNode.learning_map_id.in_(map_ids),
                 LearningNode.is_active == True,  # noqa: E712
-            )
+            ).order_by(LearningNode.sort_order)
         )
-        total_nodes = total_r.scalar() or 0
+        for node in all_nodes_result.scalars().all():
+            nodes_by_map[node.learning_map_id].append(node.id)
+            all_map_nodes[node.id] = node
 
+    total_nodes = len(all_map_nodes)
     mastered_count = sum(1 for s in all_states_list
                          if (s.mastery_level.value if hasattr(s.mastery_level, "value") else str(s.mastery_level)) == "mastered")
     overall_pct = round((mastered_count / max(total_nodes, 1)) * 100)
 
-    # Per-subject progress
+    # PRE-FETCH: Map-to-subject mapping (1 query, replaces N per-map queries)
     subject_progress = []
+    map_subject_info: dict[uuid.UUID, tuple[str, str]] = {}  # map_id -> (name, color)
     if map_ids:
         map_subj_result = await db.execute(
             select(LearningMap.id, Subject.name, Subject.color).join(
@@ -179,19 +188,18 @@ async def get_child_dashboard(
         )
         for map_id, subj_name, subj_color in map_subj_result.all():
             color = subj_color or DEFAULT_COLORS.get(subj_name, "#6b7280")
+            map_subject_info[map_id] = (subj_name, color)
 
-            node_count_r = await db.execute(
-                select(func.count()).select_from(LearningNode).where(
-                    LearningNode.learning_map_id == map_id, LearningNode.is_active == True  # noqa: E712
-                )
+            # O(1) dict lookups — NO database queries in this loop
+            map_node_ids = set(nodes_by_map.get(map_id, []))
+            subj_total = len(map_node_ids)
+            subj_mastered = sum(
+                1 for nid in map_node_ids
+                if nid in all_states_by_node
+                and (all_states_by_node[nid].mastery_level.value
+                     if hasattr(all_states_by_node[nid].mastery_level, "value")
+                     else str(all_states_by_node[nid].mastery_level)) == "mastered"
             )
-            subj_total = node_count_r.scalar() or 0
-
-            subj_mastered = sum(1 for s in all_states_list
-                                 if s.node_id in [n.id for n in (await db.execute(
-                                     select(LearningNode.id).where(LearningNode.learning_map_id == map_id)
-                                 )).scalars().all()]
-                                 and (s.mastery_level.value if hasattr(s.mastery_level, "value") else str(s.mastery_level)) == "mastered")
 
             subject_progress.append({
                 "name": subj_name,
@@ -201,7 +209,7 @@ async def get_child_dashboard(
                 "percentage": round((subj_mastered / max(subj_total, 1)) * 100),
             })
 
-    # This week stats
+    # ── This week stats (2 queries, outside loops) ──
     week_events_r = await db.execute(
         select(StateEvent).where(
             StateEvent.child_id == child_id,
@@ -223,34 +231,23 @@ async def get_child_dashboard(
     week_completed = week_row[0] or 0
     week_minutes = week_row[1] or 0
 
-    # ── Journey Maps ──
+    # ── Journey Maps (0 additional queries — uses pre-fetched data) ──
     journey_maps = []
     if map_ids:
-        for map_id in map_ids[:5]:  # Limit to 5 maps
-            map_r = await db.execute(
-                select(LearningMap, Subject.name, Subject.color)
-                .join(Subject, LearningMap.subject_id == Subject.id)
-                .where(LearningMap.id == map_id)
-            )
-            row = map_r.one_or_none()
-            if not row:
+        for map_id in map_ids[:5]:
+            subj_info_tuple = map_subject_info.get(map_id)
+            if not subj_info_tuple:
                 continue
-            lmap, subj_name, subj_color = row
-            color = subj_color or DEFAULT_COLORS.get(subj_name, "#6b7280")
-
-            nodes_r = await db.execute(
-                select(LearningNode).where(
-                    LearningNode.learning_map_id == map_id,
-                    LearningNode.is_active == True,  # noqa: E712
-                ).order_by(LearningNode.sort_order)
-            )
-            nodes = nodes_r.scalars().all()
+            subj_name, color = subj_info_tuple
 
             map_mastered = 0
             node_items = []
             found_current = False
-            for n in nodes:
-                state = next((s for s in all_states_list if s.node_id == n.id), None)
+            for nid in nodes_by_map.get(map_id, []):
+                node = all_map_nodes.get(nid)
+                if not node:
+                    continue
+                state = all_states_by_node.get(nid)
                 m = (state.mastery_level.value if state and hasattr(state.mastery_level, "value")
                      else str(state.mastery_level) if state else "not_started")
                 is_current = m not in ("mastered", "not_started")
@@ -260,7 +257,7 @@ async def get_child_dashboard(
                 if m == "mastered":
                     map_mastered += 1
                 node_items.append({
-                    "id": str(n.id), "title": n.title, "mastery": m,
+                    "id": str(nid), "title": node.title, "mastery": m,
                     "is_current": is_current, "is_next": is_next,
                 })
 
@@ -269,40 +266,46 @@ async def get_child_dashboard(
                 "subject": subj_name,
                 "subject_color": color,
                 "nodes": node_items,
-                "total_nodes": len(nodes),
+                "total_nodes": len(node_items),
                 "mastered_nodes": map_mastered,
             })
 
-    # ── Greeting & Encouragement ──
+    # ── Greeting & Encouragement (1 query for node titles, pre-fetched) ──
     first_subject = activity_items[0]["subject"] if activity_items else None
     recent_mastery_node = None
     for e in sorted(week_events, key=lambda x: x.created_at or datetime.min.replace(tzinfo=UTC), reverse=True):
         if e.to_state == "mastered" and e.from_state != "mastered":
-            # Look up node title
-            nr = await db.execute(select(LearningNode.title).where(LearningNode.id == e.node_id))
-            title_row = nr.one_or_none()
-            if title_row:
-                recent_mastery_node = title_row[0]
+            # Use pre-fetched node data (0 additional queries)
+            node = all_map_nodes.get(e.node_id)
+            if node:
+                recent_mastery_node = node.title
             break
 
     from app.services.child_greeting import generate_greeting, generate_encouragement
 
-    # Best week mastery (last 4 weeks for comparison)
+    # Best week mastery (1 query for ALL past weeks, not 3 separate queries)
     best_week = ups
-    for w in range(1, 4):
-        ws = week_start - timedelta(weeks=w)
-        we = ws + timedelta(days=6)
-        past_r = await db.execute(
-            select(func.count()).select_from(StateEvent).where(
+    if week_start > date.today() - timedelta(weeks=4):
+        past_weeks_start = week_start - timedelta(weeks=3)
+        past_events_r = await db.execute(
+            select(StateEvent.created_at).where(
                 StateEvent.child_id == child_id,
                 StateEvent.to_state == "mastered",
-                StateEvent.created_at >= datetime.combine(ws, datetime.min.time(), tzinfo=UTC),
-                StateEvent.created_at <= datetime.combine(we, datetime.max.time(), tzinfo=UTC),
+                StateEvent.created_at >= datetime.combine(past_weeks_start, datetime.min.time(), tzinfo=UTC),
+                StateEvent.created_at < datetime.combine(week_start, datetime.min.time(), tzinfo=UTC),
             )
         )
-        past_ups = past_r.scalar() or 0
-        if past_ups > best_week:
-            best_week = past_ups
+        past_events = past_events_r.scalars().all()
+        # Group by week
+        week_counts: dict[int, int] = defaultdict(int)
+        for evt_dt in past_events:
+            if evt_dt:
+                week_num = (evt_dt.date() - past_weeks_start).days // 7
+                week_counts[week_num] += 1
+        if week_counts:
+            best_past = max(week_counts.values())
+            if best_past > best_week:
+                best_week = best_past
 
     greeting = generate_greeting(
         first_name=child.first_name,
@@ -312,7 +315,7 @@ async def get_child_dashboard(
         recent_mastery=recent_mastery_node,
     )
 
-    # Avg session minutes from intelligence
+    # Avg session minutes from intelligence (1 query)
     avg_session = None
     try:
         from app.models.intelligence import LearnerIntelligence
@@ -333,7 +336,7 @@ async def get_child_dashboard(
         avg_session_minutes=avg_session,
     )
 
-    # ── Style hints ──
+    # ── Style hints (1 query) ──
     style_hints = {}
     try:
         from app.models.style_vector import LearnerStyleVector
