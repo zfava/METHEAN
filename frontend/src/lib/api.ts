@@ -523,6 +523,50 @@ export interface SubjectCalibrationItem {
   recommendation: string;
 }
 
+// ── Learner Style Vector ──
+export const styleVector = {
+  get: (childId: string) => request<StyleVectorResponse>(`/children/${childId}/style-vector`),
+  setOverride: (childId: string, data: { dimension: string; value: number | string; locked: boolean }) =>
+    request<{ status: string; dimension: string; overrides: Record<string, object> }>(`/children/${childId}/style-vector/overrides`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+  setBounds: (childId: string, data: { dimension: string; min: number | null; max: number | null }) =>
+    request<{ status: string; dimension: string; bounds: Record<string, object> }>(`/children/${childId}/style-vector/bounds`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
+    }),
+  history: (childId: string) =>
+    request<{ entries: StyleVectorData[]; total: number }>(`/children/${childId}/style-vector/history`),
+};
+
+export interface StyleVectorResponse {
+  vector: StyleVectorData | null;
+  observation_count?: number;
+  threshold?: number;
+  message?: string;
+}
+
+export interface StyleVectorData {
+  id: string;
+  child_id: string;
+  optimal_session_minutes: number | null;
+  socratic_responsiveness: number | null;
+  frustration_threshold: number | null;
+  recovery_rate: number | null;
+  time_of_day_peak: number | null;
+  subject_affinity_map: Record<string, number>;
+  modality_preference: string | null;
+  pacing_preference: number | null;
+  independence_level: number | null;
+  attention_pattern: string | null;
+  data_points_count: number;
+  dimensions_active: number;
+  parent_overrides: Record<string, { value: number | string; locked: boolean }>;
+  parent_bounds: Record<string, { min?: number; max?: number }>;
+  last_computed_at: string | null;
+}
+
 export const familyInvites = {
   invite: (email: string, role: string) =>
     request<{ invited: boolean }>("/household/invite", { method: "POST", body: JSON.stringify({ email, role }) }),
