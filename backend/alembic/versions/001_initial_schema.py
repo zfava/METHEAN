@@ -546,7 +546,7 @@ def upgrade() -> None:
     # Enable RLS on all household-scoped tables
     household_tables = [
         "users", "children", "child_preferences", "subjects", "learning_maps",
-        "learning_nodes", "learning_edges", "learning_map_closure",
+        "learning_nodes", "learning_edges",
         "child_map_enrollments", "child_node_states", "state_events",
         "fsrs_cards", "review_logs", "governance_rules", "governance_events",
         "plans", "plan_weeks", "activities", "attempts", "artifacts",
