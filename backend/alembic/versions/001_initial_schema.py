@@ -40,10 +40,13 @@ ENUM_DEFINITIONS = {
 
 
 def upgrade() -> None:
-    # ── Create all PostgreSQL enums (checkfirst for CI idempotency) ──
-    bind = op.get_bind()
+    # ── Create all PostgreSQL enum types via raw SQL (CI-safe, idempotent) ──
     for name, values in ENUM_DEFINITIONS.items():
-        sa.Enum(*values, name=name).create(bind, checkfirst=True)
+        values_str = ", ".join(f"'{v}'" for v in values)
+        op.execute(sa.text(
+            f"DO $$ BEGIN CREATE TYPE {name} AS ENUM ({values_str}); "
+            f"EXCEPTION WHEN duplicate_object THEN NULL; END $$"
+        ))
 
     # ── Section 3.1: Identity & Tenancy ──
 
@@ -586,7 +589,6 @@ def downgrade() -> None:
     for table in tables:
         op.drop_table(table)
 
-    # Drop all enums (checkfirst for safety)
-    bind = op.get_bind()
+    # Drop all enum types
     for name in ENUM_DEFINITIONS:
-        sa.Enum(name=name).drop(bind, checkfirst=True)
+        op.execute(sa.text(f"DROP TYPE IF EXISTS {name}"))
