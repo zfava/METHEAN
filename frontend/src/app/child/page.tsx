@@ -76,7 +76,7 @@ function ProgressRing({ completed, total, minutesRemaining }: {
         ) : (
           <>
             <span className="text-sm font-semibold text-(--color-text)">{minutesRemaining}</span>
-            <span className="text-[9px] text-(--color-text-tertiary)">min left</span>
+            <span className="text-[10px] text-(--color-text-tertiary)">min left</span>
           </>
         )}
       </div>
@@ -371,7 +371,7 @@ export default function ChildPage() {
                 <div className="flex gap-2 flex-wrap">
                   {(["plain", "meadow", "ocean", "forest", "space", "desert", "mountains"] as const).map(bg => (
                     <button key={bg} onClick={() => saveTheme({ background: bg })}
-                      className={`w-14 h-10 rounded-xl border-2 text-[9px] font-medium capitalize min-h-[44px] ${theme.background === bg ? "border-(--color-accent)" : "border-(--color-border)"}`}
+                      className={`w-14 h-10 rounded-xl border-2 text-[10px] font-medium capitalize min-h-[44px] ${theme.background === bg ? "border-(--color-accent)" : "border-(--color-border)"}`}
                       style={bgStyles[bg]}>{bg}</button>
                   ))}
                 </div>
