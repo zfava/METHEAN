@@ -1,5 +1,7 @@
 # METHEAN
 
+![CI](https://github.com/zfava/METHEAN/actions/workflows/ci.yml/badge.svg)
+
 **Learning governance operating system for homeschool families.**
 
 METHEAN is an AI-augmented platform that gives parents sovereign control over their children's education. It combines DAG-based curriculum maps, FSRS v6 spaced repetition, and an AI governance gateway where every AI recommendation flows through parent-defined rules before reaching the child.
