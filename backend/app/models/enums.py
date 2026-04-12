@@ -147,3 +147,19 @@ class AuditAction(str, enum.Enum):
     login = "login"
     logout = "logout"
     export = "export"
+
+
+class FamilyPatternType(str, enum.Enum):
+    shared_struggle = "shared_struggle"
+    curriculum_gap = "curriculum_gap"
+    pacing_divergence = "pacing_divergence"
+    environmental_correlation = "environmental_correlation"
+    material_effectiveness = "material_effectiveness"
+
+
+class InsightStatus(str, enum.Enum):
+    detected = "detected"
+    notified = "notified"
+    acknowledged = "acknowledged"
+    acted_on = "acted_on"
+    dismissed = "dismissed"

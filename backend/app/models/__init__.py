@@ -33,6 +33,7 @@ from app.models.intelligence import LearnerIntelligence
 from app.models.achievements import Achievement, Streak
 from app.models.calibration import CalibrationProfile, CalibrationSnapshot, EvaluatorPrediction
 from app.models.style_vector import LearnerStyleVector
+from app.models.family_insight import FamilyInsight, FamilyInsightConfig
 
 __all__ = [
     "Household",
@@ -78,4 +79,6 @@ __all__ = [
     "CalibrationProfile",
     "CalibrationSnapshot",
     "LearnerStyleVector",
+    "FamilyInsight",
+    "FamilyInsightConfig",
 ]
