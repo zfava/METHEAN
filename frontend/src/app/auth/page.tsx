@@ -92,7 +92,7 @@ export default function AuthPage() {
               </div>
             ) : (
               <>
-                <p className="text-xs text-(--color-text-secondary) mb-2">Enter your email and we'll send a reset link.</p>
+                <p className="text-xs text-(--color-text-secondary) mb-2">Enter your email and we&apos;ll send a reset link.</p>
                 <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-3 py-2.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
                 {error && <p className="text-xs text-(--color-danger)">{error}</p>}

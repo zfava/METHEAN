@@ -49,7 +49,7 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
 
           {lesson.objectives?.length > 0 && (
             <div className="text-left bg-(--color-surface) rounded-2xl p-6 mb-6">
-              <h3 className="text-sm font-semibold text-(--color-text-secondary) uppercase tracking-wider mb-2">What you'll learn today</h3>
+              <h3 className="text-sm font-semibold text-(--color-text-secondary) uppercase tracking-wider mb-2">What you&apos;ll learn today</h3>
               <ul className="space-y-1.5">
                 {lesson.objectives.map((obj, i) => (
                   <li key={i} className="text-base text-(--color-text) flex items-start gap-2">
@@ -62,7 +62,7 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
 
           {lesson.resources_needed?.length > 0 && (
             <div className="text-left bg-(--color-warning-light) rounded-2xl p-5 mb-6">
-              <h3 className="text-sm font-semibold text-(--color-warning) mb-1">What you'll need</h3>
+              <h3 className="text-sm font-semibold text-(--color-warning) mb-1">What you&apos;ll need</h3>
               <p className="text-sm text-(--color-text-secondary)">{lesson.resources_needed.join(", ")}</p>
             </div>
           )}
@@ -77,7 +77,7 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
       {/* Phase: Introduction */}
       {phase === "intro" && (
         <div className="py-6">
-          <h2 className="text-2xl font-semibold text-(--color-text) mb-4">Let's get started</h2>
+          <h2 className="text-2xl font-semibold text-(--color-text) mb-4">Let&apos;s get started</h2>
           {lesson.introduction && (
             <div className="text-base leading-relaxed text-(--color-text) mb-6 whitespace-pre-line">
               {lesson.introduction}
@@ -101,7 +101,7 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
         <div className="py-6 text-center">
           <h2 className="text-lg font-semibold text-(--color-text) mb-4">Guided Learning</h2>
           <p className="text-base text-(--color-text-secondary) mb-6">
-            Work through this activity at your own pace. When you're ready, move on to practice.
+            Work through this activity at your own pace. When you&apos;re ready, move on to practice.
           </p>
           <button onClick={() => setPhase(prompts.length > 0 ? "practice" : "reflect")}
             className="py-3 px-8 text-base font-semibold text-white bg-(--color-accent) rounded-2xl hover:opacity-90 transition-opacity">
@@ -235,7 +235,7 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
 
           <div className="mb-8">
             <label className="block text-sm text-(--color-text-secondary) mb-2">
-              Anything you want to tell your parent about today's lesson? (optional)
+              Anything you want to tell your parent about today&apos;s lesson? (optional)
             </label>
             <textarea
               value={reflection}

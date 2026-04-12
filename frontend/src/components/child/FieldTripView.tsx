@@ -60,7 +60,7 @@ export default function FieldTripView({ context, onComplete }: FieldTripViewProp
 
           <button onClick={() => setPhase("reflect")}
             className="w-full py-4 text-lg font-semibold text-white bg-(--color-accent) rounded-2xl hover:opacity-90 transition-opacity">
-            I'm back — time to reflect
+            I&apos;m back — time to reflect
           </button>
         </>
       )}

@@ -66,7 +66,7 @@ export default function CompletionState({
           </div>
 
           <p className="text-sm text-(--color-text-secondary) mb-1">{activityTitle}</p>
-          <p className="text-xs text-(--color-text-tertiary) mb-8">Keep going, you're building something amazing.</p>
+          <p className="text-xs text-(--color-text-tertiary) mb-8">Keep going, you&apos;re building something amazing.</p>
         </>
       ) : (
         <>

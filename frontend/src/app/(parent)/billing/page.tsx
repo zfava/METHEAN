@@ -129,7 +129,7 @@ export default function BillingPage() {
 
       {/* Plan details */}
       <Card className="mb-5">
-        <h3 className="text-sm font-semibold text-(--color-text) mb-3">What's included</h3>
+        <h3 className="text-sm font-semibold text-(--color-text) mb-3">What&apos;s included</h3>
         <div className="space-y-2">
           {[
             "Unlimited children",

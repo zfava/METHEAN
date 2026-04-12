@@ -381,7 +381,7 @@ export default function GovernanceOverviewPage() {
                 </div>
               </>
             ) : (
-              <p className="text-xs text-(--color-text-secondary)">No philosophy configured yet. Set your family's foundational principles.</p>
+              <p className="text-xs text-(--color-text-secondary)">No philosophy configured yet. Set your family&apos;s foundational principles.</p>
             )}
           </div>
         </Card>

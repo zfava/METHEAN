@@ -287,7 +287,7 @@ export default function ReportsPage() {
               <div className="mt-3 print:hidden">
                 <p className="text-xs text-(--color-text-secondary) mb-3">
                   By signing below, I attest that this report accurately reflects the governance
-                  decisions made during this period, and that I was in control of my children's
+                  decisions made during this period, and that I was in control of my children&apos;s
                   educational program at all times.
                 </p>
                 <textarea

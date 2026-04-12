@@ -66,7 +66,7 @@ export default function LandingPage() {
         <div className="max-w-[1100px] mx-auto">
           <p className="text-[13px] uppercase tracking-[0.1em] text-white/40 text-center mb-3">Features</p>
           <p className="text-[22px] font-medium text-white text-center max-w-[600px] mx-auto mb-12 tracking-tight">
-            Navigate your family's education with confidence.
+            Navigate your family&apos;s education with confidence.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Large sovereignty card */}
@@ -95,7 +95,7 @@ export default function LandingPage() {
           <p className="text-[22px] font-medium text-(--color-text) mb-6 tracking-tight">Built by a homeschool father of six.</p>
           <p className="text-[15px] text-(--color-text-secondary) leading-relaxed mb-6">
             METHEAN was born from the conviction that families, not institutions, should control
-            their children's education. Every line of code is written with one principle:
+            their children&apos;s education. Every line of code is written with one principle:
             AI advises, parents govern.
           </p>
           <p className="text-[15px] font-medium text-(--color-text)">— Zack Fava, Founder</p>

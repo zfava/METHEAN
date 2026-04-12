@@ -78,7 +78,7 @@ export default function ConstitutionalCeremony({
               <div>
                 <h3 className="text-sm font-bold text-(--color-constitutional) mb-2">You are creating a CONSTITUTIONAL RULE.</h3>
                 <p className="text-xs text-(--color-text-secondary) leading-relaxed">
-                  Constitutional rules are your family's foundational governance principles. They are protected by ceremony:
+                  Constitutional rules are your family&apos;s foundational governance principles. They are protected by ceremony:
                   once created, they cannot be deleted and require documented justification to modify.
                   This rule will be permanently recorded in your governance history.
                 </p>

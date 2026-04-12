@@ -138,7 +138,7 @@ export default function AssessmentView({ context, onComplete }: AssessmentViewPr
         ) : !showConfirm ? (
           <button onClick={() => setShowConfirm(true)}
             className="py-3 px-8 text-base font-medium text-white bg-(--color-success) rounded-2xl min-h-[44px]">
-            I'm Finished
+            I&apos;m Finished
           </button>
         ) : (
           <div className="flex items-center gap-2">

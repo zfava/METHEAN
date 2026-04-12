@@ -252,7 +252,7 @@ export default function TutorChat({
           {/* Rate limit message */}
           {rateLimited && (
             <div className="text-center text-xs text-(--color-text-secondary) py-2 italic">
-              Take a breath. I'm reading what you wrote.
+              Take a breath. I&apos;m reading what you wrote.
             </div>
           )}
 

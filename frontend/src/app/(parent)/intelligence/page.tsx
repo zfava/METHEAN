@@ -339,7 +339,7 @@ export default function IntelligencePage() {
             {govPrefs.rejected_activity_types?.length > 0 && (
               <div className="bg-(--color-page) rounded-[10px] p-3">
                 <p className="text-xs text-(--color-text-secondary)">
-                  Activity types you've frequently modified or rejected:
+                  Activity types you&apos;ve frequently modified or rejected:
                 </p>
                 <div className="flex flex-wrap gap-1.5 mt-1.5">
                   {govPrefs.rejected_activity_types.map((t: string) => (

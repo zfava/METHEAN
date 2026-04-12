@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { auth, account, academicCalendar, household, familyInvites, dataExport, type User } from "@/lib/api";
 import { useToast } from "@/components/Toast";
 import PageHeader from "@/components/ui/PageHeader";
@@ -252,7 +253,7 @@ export default function SettingsPage() {
         <div className="mt-2 text-xs text-(--color-text-tertiary) space-y-1">
           <p>METHEAN v0.1.0</p>
           <p>Built by Spartan Solutions</p>
-          <a href="/" className="text-(--color-accent) hover:underline">Visit landing page</a>
+          <Link href="/" className="text-(--color-accent) hover:underline">Visit landing page</Link>
         </div>
       </Card>
 

@@ -99,11 +99,11 @@ function AnomalyCard({ anomaly, childId, onUpdate }: {
           <div className="flex items-center gap-2 pt-2 border-t border-(--color-border)">
             <button onClick={() => handleStatus("acknowledged")}
               className="px-3 py-1 text-xs text-(--color-text-secondary) border border-(--color-border) rounded-[10px] hover:bg-(--color-page) transition-colors">
-              I've seen this
+              I&apos;ve seen this
             </button>
             <button onClick={() => setShowNote(!showNote)}
               className="px-3 py-1 text-xs text-(--color-accent) border border-(--color-accent)/30 rounded-[10px] hover:bg-(--color-accent)/5 transition-colors">
-              We're addressing it
+              We&apos;re addressing it
             </button>
             {!confirming ? (
               <button onClick={() => setConfirming(true)}

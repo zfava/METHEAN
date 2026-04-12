@@ -287,7 +287,7 @@ export default function CurriculumMapperPage() {
             placeholder="Chapter 5, Lesson 23, Unit 3, etc."
             className="w-full px-3 py-2.5 text-sm border border-(--color-border-strong) rounded-[10px]"
           />
-          <p className="text-[10px] text-(--color-text-tertiary) mt-1.5">Leave blank if you're starting from the beginning.</p>
+          <p className="text-[10px] text-(--color-text-tertiary) mt-1.5">Leave blank if you&apos;re starting from the beginning.</p>
           <div className="flex gap-2 mt-5">
             <Button variant="ghost" size="md" onClick={() => setStep(2)}>Back</Button>
             <Button variant="gold" size="lg" className="flex-1" onClick={runMapping}>

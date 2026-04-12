@@ -221,7 +221,7 @@ export default function OnboardingPage() {
           {step === 1 && (
             <>
               <h2 className="text-lg font-medium text-(--color-text) mt-4">Welcome</h2>
-              <p className="text-sm text-(--color-text-secondary) mt-1">Let's set up your learning environment.</p>
+              <p className="text-sm text-(--color-text-secondary) mt-1">Let&apos;s set up your learning environment.</p>
             </>
           )}
           {step > 1 && (
@@ -248,7 +248,7 @@ export default function OnboardingPage() {
           <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-8 text-center">
             <p className="text-sm text-(--color-text-secondary) mb-6">
               METHEAN is a learning operating system where AI advises, but you govern.
-              In the next few steps, we'll add your children, set your educational philosophy,
+              In the next few steps, we&apos;ll add your children, set your educational philosophy,
               and generate their first curriculum.
             </p>
             <Button variant="primary" size="lg" onClick={() => setStep(2)} className="w-full max-w-xs mx-auto">
@@ -260,7 +260,7 @@ export default function OnboardingPage() {
         {/* ── Step 2: Add Children ── */}
         {step === 2 && (
           <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6">
-            <h3 className="text-sm font-semibold text-(--color-text) mb-1">Who's learning at home?</h3>
+            <h3 className="text-sm font-semibold text-(--color-text) mb-1">Who&apos;s learning at home?</h3>
             <p className="text-xs text-(--color-text-secondary) mb-4">Add at least one child to continue.</p>
 
             <div className="flex flex-col sm:flex-row gap-2 mb-4">
@@ -401,7 +401,7 @@ export default function OnboardingPage() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-(--color-text)">
-                    Establishing Your Family's AI Constitution
+                    Establishing Your Family&apos;s AI Constitution
                   </h3>
                   <p className="text-xs text-(--color-text-secondary) mt-1 leading-relaxed">
                     These are the foundational rules that govern how AI interacts with your children.
@@ -490,7 +490,7 @@ export default function OnboardingPage() {
               </div>
             </div>
             <h2 className="text-lg font-semibold text-(--color-text) mb-1">
-              Your family's AI constitution is established.
+              Your family&apos;s AI constitution is established.
             </h2>
             <p className="text-xs text-(--color-text-secondary)">
               These protections are now active for every AI interaction.
@@ -570,14 +570,14 @@ export default function OnboardingPage() {
           <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6 text-center">
             <h3 className="text-sm font-semibold text-(--color-text) mb-2">Curricula ready!</h3>
             <p className="text-xs text-(--color-text-secondary) mb-6">
-              Now let's create this week's activity schedule.
+              Now let&apos;s create this week&apos;s activity schedule.
             </p>
             <Button variant="primary" size="lg" onClick={generatePlans} className="w-full">
-              Generate First Week's Plan
+              Generate First Week&apos;s Plan
             </Button>
             <button onClick={() => { setStep(8); setSummary({ rules: 4, activities: {} }); }}
               className="block mx-auto mt-3 text-xs text-(--color-text-tertiary) hover:underline">
-              Skip — I'll generate plans later
+              Skip — I&apos;ll generate plans later
             </button>
           </div>
         )}

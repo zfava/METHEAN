@@ -231,7 +231,7 @@ export default function PracticeView({ context, childId, onComplete }: PracticeV
         <button onClick={() => { setShowTutor(true); }}
           className="px-4 py-2 text-sm text-(--color-warning) border border-(--color-warning)/30 rounded-xl hover:bg-(--color-warning-light) transition-colors min-h-[44px]"
           aria-label="I'm stuck — opens tutor for help">
-          I'm stuck
+          I&apos;m stuck
         </button>
       </div>
       {showTutor && <TutorChat activityId={context.activity.id} childId={childId} onClose={() => setShowTutor(false)}

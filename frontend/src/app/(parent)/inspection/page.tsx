@@ -589,7 +589,7 @@ function PromptSection({ inputData }: { inputData: object | null }) {
             <span className="text-xs font-semibold text-(--color-constitutional)">Philosophical Constraints Detected</span>
           </div>
           <p className="text-xs text-(--color-text-secondary)">
-            Your family's philosophical constraints were injected into this AI call. View the full system prompt below to see them in context.
+            Your family&apos;s philosophical constraints were injected into this AI call. View the full system prompt below to see them in context.
           </p>
         </div>
       )}
