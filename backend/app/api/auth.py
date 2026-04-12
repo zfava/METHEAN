@@ -4,7 +4,8 @@ import hashlib
 import uuid
 from datetime import UTC, datetime, timedelta
 
-from fastapi import APIRouter, Depends, HTTPException, Response, status, Cookie
+from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
+from pydantic import BaseModel, Field
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -17,9 +18,9 @@ from app.core.security import (
     hash_password,
     verify_password,
 )
+from app.models.enums import UserRole
 from app.models.identity import Household, User
 from app.models.operational import RefreshToken
-from pydantic import BaseModel, Field
 from app.schemas.auth import (
     LoginRequest,
     MessageResponse,
@@ -81,6 +82,7 @@ async def register(
 
     # Auto-grant owner permissions
     from app.core.permissions import grant_role_permissions
+
     await grant_role_permissions(db, user.id, household.id, "owner", user.id)
 
     # Generate tokens
@@ -199,9 +201,7 @@ async def refresh(
         )
 
     # Look up the token record (regardless of revocation status).
-    result = await db.execute(
-        select(RefreshToken).where(RefreshToken.id == token_id)
-    )
+    result = await db.execute(select(RefreshToken).where(RefreshToken.id == token_id))
     stored_token = result.scalar_one_or_none()
 
     if not stored_token:
@@ -215,9 +215,7 @@ async def refresh(
     # for the user because the old token may have been stolen.
     if stored_token.is_revoked:
         await db.execute(
-            update(RefreshToken)
-            .where(RefreshToken.user_id == stored_token.user_id)
-            .values(is_revoked=True)
+            update(RefreshToken).where(RefreshToken.user_id == stored_token.user_id).values(is_revoked=True)
         )
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -227,9 +225,7 @@ async def refresh(
     # Verify hash matches (guards against forged token IDs)
     if stored_token.token_hash != _hash_token(refresh_token):
         await db.execute(
-            update(RefreshToken)
-            .where(RefreshToken.user_id == stored_token.user_id)
-            .values(is_revoked=True)
+            update(RefreshToken).where(RefreshToken.user_id == stored_token.user_id).values(is_revoked=True)
         )
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -287,9 +283,7 @@ async def logout(
         try:
             payload = decode_token(refresh_token)
             token_id = uuid.UUID(payload["tid"])
-            result = await db.execute(
-                select(RefreshToken).where(RefreshToken.id == token_id)
-            )
+            result = await db.execute(select(RefreshToken).where(RefreshToken.id == token_id))
             stored = result.scalar_one_or_none()
             if stored:
                 stored.is_revoked = True
@@ -346,7 +340,13 @@ async def update_notification_preferences(
     user: User = Depends(get_current_user),
 ) -> dict:
     """Update notification preferences."""
-    allowed = {"email_daily_summary", "email_milestones", "email_governance_alerts", "email_weekly_digest", "email_compliance_warnings"}
+    allowed = {
+        "email_daily_summary",
+        "email_milestones",
+        "email_governance_alerts",
+        "email_weekly_digest",
+        "email_compliance_warnings",
+    }
     current = dict(user.notification_preferences or {})
     for key, val in body.items():
         if key in allowed and isinstance(val, bool):
@@ -358,12 +358,15 @@ async def update_notification_preferences(
 
 # ── Password Reset ──
 
+
 class ForgotPasswordRequest(BaseModel):
     email: str
+
 
 class ResetPasswordRequest(BaseModel):
     token: str
     new_password: str = Field(min_length=8)
+
 
 @router.post("/auth/forgot-password")
 async def forgot_password(
@@ -372,6 +375,7 @@ async def forgot_password(
 ) -> dict:
     """Send password reset email."""
     from app.services.password_reset import generate_reset_token
+
     await generate_reset_token(db, body.email)
     return {"message": "If that email exists, a reset link has been sent."}
 
@@ -383,6 +387,7 @@ async def reset_password_endpoint(
 ) -> dict:
     """Reset password with token."""
     from app.services.password_reset import reset_password
+
     success = await reset_password(db, body.token, body.new_password)
     if not success:
         raise HTTPException(status_code=400, detail="Invalid or expired reset token")
@@ -391,6 +396,7 @@ async def reset_password_endpoint(
 
 
 # ── Email Verification ──
+
 
 @router.post("/auth/verify-email")
 async def verify_email(
@@ -415,8 +421,9 @@ async def resend_verification(
     user: User = Depends(get_current_user),
 ) -> dict:
     """Resend verification email."""
-    from app.services.email import send_email
     from app.core.config import settings
+    from app.services.email import send_email
+
     verify_url = f"{settings.APP_URL}/auth/verify?token={user.id}"
     html = f'<a href="{verify_url}" style="background:#4A6FA5;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;">Verify Email</a>'
     await send_email(user.email, "Verify your METHEAN email", html)
@@ -425,14 +432,17 @@ async def resend_verification(
 
 # ── Family Invites ──
 
+
 class InviteRequest(BaseModel):
     email: str
     role: str = "parent"
+
 
 class AcceptInviteRequest(BaseModel):
     token: str
     password: str = Field(min_length=8)
     display_name: str
+
 
 @router.post("/household/invite")
 async def invite_family_member(
@@ -442,10 +452,11 @@ async def invite_family_member(
 ) -> dict:
     """Invite a co-parent or observer to the household."""
     import secrets
-    from datetime import timedelta, timezone as tz
+    from datetime import timedelta
+
+    from app.core.config import settings
     from app.models.identity import FamilyInvite
     from app.services.email import send_email
-    from app.core.config import settings
 
     token = secrets.token_urlsafe(32)
     invite = FamilyInvite(
@@ -454,7 +465,7 @@ async def invite_family_member(
         role=body.role,
         invited_by=user.id,
         token=token,
-        expires_at=datetime.now(tz.utc) + timedelta(days=7),
+        expires_at=datetime.now(UTC) + timedelta(days=7),
     )
     db.add(invite)
     await db.flush()
@@ -479,6 +490,7 @@ async def list_invites(
 ) -> list:
     """List pending invites for the household."""
     from app.models.identity import FamilyInvite
+
     result = await db.execute(
         select(FamilyInvite).where(
             FamilyInvite.household_id == user.household_id,
@@ -499,6 +511,7 @@ async def revoke_invite(
 ) -> dict:
     """Revoke a pending invite."""
     from app.models.identity import FamilyInvite
+
     result = await db.execute(
         select(FamilyInvite).where(
             FamilyInvite.id == invite_id,
@@ -540,9 +553,13 @@ async def accept_invite(
     # Check if user already exists
     existing = await db.execute(select(User).where(User.email == invite.email))
     if existing.scalar_one_or_none():
-        raise HTTPException(status_code=400, detail="An account with this email already exists. Log in and contact the household owner.")
+        raise HTTPException(
+            status_code=400, detail="An account with this email already exists. Log in and contact the household owner."
+        )
 
-    role_enum = UserRole.owner if invite.role == "owner" else UserRole.parent if invite.role == "parent" else UserRole.viewer
+    role_enum = (
+        UserRole.owner if invite.role == "owner" else UserRole.parent if invite.role == "parent" else UserRole.viewer
+    )
     new_user = User(
         household_id=invite.household_id,
         email=invite.email,

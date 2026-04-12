@@ -52,9 +52,7 @@ async def _run_wellbeing_batch() -> dict:
         )
 
         result = await db.execute(
-            select(Child.id, Child.household_id).where(
-                Child.id.in_(select(eligible_subq.c.child_id))
-            )
+            select(Child.id, Child.household_id).where(Child.id.in_(select(eligible_subq.c.child_id)))
         )
         eligible = result.all()
 
@@ -67,15 +65,19 @@ async def _run_wellbeing_batch() -> dict:
                 scanned += 1
                 try:
                     from app.services.wellbeing_detection import (
-                        run_wellbeing_detection,
                         check_for_resolution,
                         notify_parent_of_anomaly,
+                        run_wellbeing_detection,
                     )
 
                     # Detect new anomalies
                     new_anomalies = await run_wellbeing_detection(db, child_id, household_id)
                     for anomaly in new_anomalies:
-                        atype = anomaly.anomaly_type.value if hasattr(anomaly.anomaly_type, "value") else str(anomaly.anomaly_type)
+                        atype = (
+                            anomaly.anomaly_type.value
+                            if hasattr(anomaly.anomaly_type, "value")
+                            else str(anomaly.anomaly_type)
+                        )
                         anomaly_counts[atype] += 1
 
                         # Notify parent

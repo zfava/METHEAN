@@ -5,7 +5,6 @@ through the Content Architect AI role. Stores results in the node's
 content JSONB field.
 """
 
-import json
 import uuid
 
 from sqlalchemy import select
@@ -59,8 +58,8 @@ async def enrich_nodes(
 
 Node Title: {node.title}
 Node Type: {ntype}
-Description: {node.description or 'No description provided'}
-Estimated Minutes: {node.estimated_minutes or 'Not specified'}
+Description: {node.description or "No description provided"}
+Estimated Minutes: {node.estimated_minutes or "Not specified"}
 
 Generate complete teaching guidance, assessment criteria, resource guidance, accommodations, and time estimates."""
 
@@ -115,8 +114,8 @@ async def enrich_single_node(
 
 Node Title: {node.title}
 Node Type: {ntype}
-Description: {node.description or 'No description provided'}
-Estimated Minutes: {node.estimated_minutes or 'Not specified'}
+Description: {node.description or "No description provided"}
+Estimated Minutes: {node.estimated_minutes or "Not specified"}
 
 Generate complete teaching guidance, assessment criteria, resource guidance, accommodations, and time estimates."""
 

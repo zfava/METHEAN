@@ -6,13 +6,12 @@ the planner. The parent's review history becomes planning intelligence.
 
 import uuid
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
-from sqlalchemy import select, desc
+from sqlalchemy import desc, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.governance import GovernanceEvent
-from app.models.enums import GovernanceAction
 
 
 async def analyze_governance_patterns(
@@ -20,7 +19,7 @@ async def analyze_governance_patterns(
     household_id: uuid.UUID,
 ) -> dict:
     """Analyze all governance events and compute behavioral patterns."""
-    cutoff = datetime.now(timezone.utc) - timedelta(days=90)
+    cutoff = datetime.now(UTC) - timedelta(days=90)
 
     result = await db.execute(
         select(GovernanceEvent)
@@ -85,7 +84,7 @@ async def analyze_governance_patterns(
         if queued_at and evt.created_at:
             try:
                 q = datetime.fromisoformat(queued_at.replace("Z", "+00:00"))
-                diff_hours = (evt.created_at.replace(tzinfo=timezone.utc) - q).total_seconds() / 3600
+                diff_hours = (evt.created_at.replace(tzinfo=UTC) - q).total_seconds() / 3600
                 if 0 < diff_hours < 168:  # Ignore outliers > 1 week
                     review_times.append(diff_hours)
             except (ValueError, TypeError):

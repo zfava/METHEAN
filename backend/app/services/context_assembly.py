@@ -10,7 +10,7 @@ import logging
 import math
 import uuid
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 logger = logging.getLogger(__name__)
 
@@ -21,17 +21,19 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ContextSource:
     """Defines a single data source for an AI role's context."""
-    name: str                    # e.g. "recent_attempts", "style_vector"
-    query_fn: str                # Name of the async function to call
-    max_tokens: int              # Token budget for this source's output
-    relevance_weight: float      # How important this source is for this role (0.0-1.0)
+
+    name: str  # e.g. "recent_attempts", "style_vector"
+    query_fn: str  # Name of the async function to call
+    max_tokens: int  # Token budget for this source's output
+    relevance_weight: float  # How important this source is for this role (0.0-1.0)
     recency_half_life_days: int  # Exponential decay half-life for recency scoring
-    required: bool = False       # If True, always include even if low relevance score
+    required: bool = False  # If True, always include even if low relevance score
 
 
 @dataclass
 class RoleContextProfile:
     """Defines the full context needs for an AI role."""
+
     role: str
     total_token_budget: int
     sources: list[ContextSource] = field(default_factory=list)
@@ -40,10 +42,11 @@ class RoleContextProfile:
 @dataclass
 class ScoredContext:
     """A context block with its computed relevance score."""
+
     source_name: str
     text: str
     token_estimate: int
-    relevance_score: float       # Combined score: weight * recency * signal
+    relevance_score: float  # Combined score: weight * recency * signal
     required: bool
 
 
@@ -162,9 +165,9 @@ def recency_score(timestamp: datetime | None, half_life_days: int) -> float:
     """
     if timestamp is None:
         return 0.5  # Neutral if no timestamp
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     if timestamp.tzinfo is None:
-        timestamp = timestamp.replace(tzinfo=timezone.utc)
+        timestamp = timestamp.replace(tzinfo=UTC)
     age_days = (now - timestamp).total_seconds() / 86400
     if age_days <= 0:
         return 1.0
@@ -230,14 +233,15 @@ def _empty(ts: datetime | None = None) -> dict:
 
 
 def _now() -> datetime:
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 async def fetch_current_activity(db, child_id, household_id, **kw) -> dict:
     """Current activity details for Tutor."""
     from sqlalchemy import select
-    from app.models.governance import Activity
+
     from app.models.curriculum import LearningNode
+    from app.models.governance import Activity
 
     activity_id = kw.get("activity_id")
     if not activity_id:
@@ -261,6 +265,7 @@ async def fetch_current_activity(db, child_id, household_id, **kw) -> dict:
 async def fetch_style_context(db, child_id, household_id, **kw) -> dict:
     """Style vector as formatted text."""
     from app.services.style_engine import build_style_context
+
     text = await build_style_context(db, child_id, household_id)
     return {"text": text, "metadata": {"timestamp": _now()}}
 
@@ -268,6 +273,7 @@ async def fetch_style_context(db, child_id, household_id, **kw) -> dict:
 async def fetch_recent_attempts_node(db, child_id, household_id, **kw) -> dict:
     """Last 3 attempts on the current node."""
     from sqlalchemy import select
+
     from app.models.governance import Activity, Attempt
     from app.models.state import ChildNodeState
 
@@ -276,10 +282,14 @@ async def fetch_recent_attempts_node(db, child_id, household_id, **kw) -> dict:
         return _empty()
 
     result = await db.execute(
-        select(Attempt).join(Activity, Attempt.activity_id == Activity.id).where(
+        select(Attempt)
+        .join(Activity, Attempt.activity_id == Activity.id)
+        .where(
             Attempt.child_id == child_id,
             Activity.node_id == node_id,
-        ).order_by(Attempt.created_at.desc()).limit(3)
+        )
+        .order_by(Attempt.created_at.desc())
+        .limit(3)
     )
     attempts = result.scalars().all()
     if not attempts:
@@ -307,7 +317,8 @@ async def fetch_recent_attempts_node(db, child_id, household_id, **kw) -> dict:
 async def fetch_recent_attempts_related(db, child_id, household_id, **kw) -> dict:
     """Recent attempts on related nodes (within DAG distance 2)."""
     from sqlalchemy import select
-    from app.models.curriculum import LearningMapClosure, LearningNode
+
+    from app.models.curriculum import LearningMapClosure
     from app.models.governance import Activity, Attempt
 
     node_id = kw.get("node_id")
@@ -316,7 +327,9 @@ async def fetch_recent_attempts_related(db, child_id, household_id, **kw) -> dic
 
     cr = await db.execute(
         select(LearningMapClosure.ancestor_id).where(
-            LearningMapClosure.descendant_id == node_id, LearningMapClosure.depth <= 2, LearningMapClosure.depth >= 1,
+            LearningMapClosure.descendant_id == node_id,
+            LearningMapClosure.depth <= 2,
+            LearningMapClosure.depth >= 1,
         )
     )
     related_ids = [r[0] for r in cr.all()]
@@ -324,9 +337,14 @@ async def fetch_recent_attempts_related(db, child_id, household_id, **kw) -> dic
         return _empty()
 
     result = await db.execute(
-        select(Attempt, Activity.title).join(Activity, Attempt.activity_id == Activity.id).where(
-            Attempt.child_id == child_id, Activity.node_id.in_(related_ids),
-        ).order_by(Attempt.created_at.desc()).limit(5)
+        select(Attempt, Activity.title)
+        .join(Activity, Attempt.activity_id == Activity.id)
+        .where(
+            Attempt.child_id == child_id,
+            Activity.node_id.in_(related_ids),
+        )
+        .order_by(Attempt.created_at.desc())
+        .limit(5)
     )
     rows = result.all()
     if not rows:
@@ -334,7 +352,7 @@ async def fetch_recent_attempts_related(db, child_id, household_id, **kw) -> dic
 
     lines = ["Related node attempts:"]
     for att, title in rows:
-        dt = (att.completed_at or att.created_at)
+        dt = att.completed_at or att.created_at
         date_str = dt.strftime("%b %d") if dt else "?"
         lines.append(f"  {title}: {date_str}")
     return {"text": "\n".join(lines), "metadata": {"timestamp": rows[0][0].created_at if rows else None}}
@@ -343,6 +361,7 @@ async def fetch_recent_attempts_related(db, child_id, household_id, **kw) -> dic
 async def fetch_frustration_signals(db, child_id, household_id, **kw) -> dict:
     """Active frustration signals from recent evaluations."""
     from sqlalchemy import select
+
     from app.models.intelligence import LearnerIntelligence
     from app.models.state import StateEvent
 
@@ -350,18 +369,19 @@ async def fetch_frustration_signals(db, child_id, household_id, **kw) -> dict:
 
     # Check regressions
     sr = await db.execute(
-        select(StateEvent).where(
-            StateEvent.child_id == child_id, StateEvent.event_type == "mastery_change",
+        select(StateEvent)
+        .where(
+            StateEvent.child_id == child_id,
+            StateEvent.event_type == "mastery_change",
             StateEvent.created_at >= cutoff,
-        ).order_by(StateEvent.created_at.desc()).limit(5)
+        )
+        .order_by(StateEvent.created_at.desc())
+        .limit(5)
     )
-    regressions = [e for e in sr.scalars().all()
-                   if e.from_state and e.to_state and e.from_state > e.to_state]
+    regressions = [e for e in sr.scalars().all() if e.from_state and e.to_state and e.from_state > e.to_state]
 
     # Check struggles from intelligence
-    ir = await db.execute(
-        select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id)
-    )
+    ir = await db.execute(select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id))
     intel = ir.scalar_one_or_none()
 
     lines = []
@@ -374,7 +394,9 @@ async def fetch_frustration_signals(db, child_id, household_id, **kw) -> dict:
         for subj, data in intel.subject_patterns.items():
             struggles = [s for s in data.get("struggles", []) if s.get("confidence", 0) >= 0.7]
             for s in struggles[:2]:
-                lines.append(f"Active frustration: {subj} - {s.get('text', '?')} (confidence {s.get('confidence', 0):.1f})")
+                lines.append(
+                    f"Active frustration: {subj} - {s.get('text', '?')} (confidence {s.get('confidence', 0):.1f})"
+                )
 
     ts = regressions[0].created_at if regressions else None
     return {"text": "\n".join(lines), "metadata": {"timestamp": ts}}
@@ -383,10 +405,11 @@ async def fetch_frustration_signals(db, child_id, household_id, **kw) -> dict:
 async def fetch_governance_constraints(db, child_id, household_id, **kw) -> dict:
     """Active governance rules affecting this child."""
     from sqlalchemy import select
+
     from app.models.governance import GovernanceRule
 
     result = await db.execute(
-        select(GovernanceRule).where(GovernanceRule.household_id == household_id, GovernanceRule.is_active == True)
+        select(GovernanceRule).where(GovernanceRule.household_id == household_id, GovernanceRule.is_active)
     )
     rules = result.scalars().all()
     if not rules:
@@ -401,6 +424,7 @@ async def fetch_governance_constraints(db, child_id, household_id, **kw) -> dict
 async def fetch_parent_observations(db, child_id, household_id, **kw) -> dict:
     """Parent observations from intelligence profile."""
     from sqlalchemy import select
+
     from app.models.intelligence import LearnerIntelligence
 
     result = await db.execute(select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id))
@@ -417,9 +441,11 @@ async def fetch_parent_observations(db, child_id, household_id, **kw) -> dict:
 
 async def fetch_attempt_transcript(db, child_id, household_id, **kw) -> dict:
     """Full attempt data for Evaluator (not compressed)."""
-    from sqlalchemy import select
-    from app.models.governance import Attempt
     import json
+
+    from sqlalchemy import select
+
+    from app.models.governance import Attempt
 
     attempt_id = kw.get("attempt_id")
     if not attempt_id:
@@ -436,6 +462,7 @@ async def fetch_attempt_transcript(db, child_id, household_id, **kw) -> dict:
 async def fetch_calibration_context(db, child_id, household_id, **kw) -> dict:
     """Calibration profile summary."""
     from sqlalchemy import select
+
     from app.models.calibration import CalibrationProfile
 
     result = await db.execute(select(CalibrationProfile).where(CalibrationProfile.child_id == child_id))
@@ -451,6 +478,7 @@ async def fetch_calibration_context(db, child_id, household_id, **kw) -> dict:
 async def fetch_node_history(db, child_id, household_id, **kw) -> dict:
     """Historical performance on current node."""
     from sqlalchemy import select
+
     from app.models.state import ChildNodeState, StateEvent
 
     node_id = kw.get("node_id")
@@ -468,9 +496,13 @@ async def fetch_node_history(db, child_id, household_id, **kw) -> dict:
     lines = [f"Node history: {mastery}, {state.attempts_count} attempts, {state.time_spent_minutes}m total"]
 
     er = await db.execute(
-        select(StateEvent).where(
-            StateEvent.child_id == child_id, StateEvent.node_id == node_id,
-        ).order_by(StateEvent.created_at.desc()).limit(5)
+        select(StateEvent)
+        .where(
+            StateEvent.child_id == child_id,
+            StateEvent.node_id == node_id,
+        )
+        .order_by(StateEvent.created_at.desc())
+        .limit(5)
     )
     for e in er.scalars().all():
         lines.append(f"  {e.event_type.value}: {e.from_state} -> {e.to_state}")
@@ -481,6 +513,7 @@ async def fetch_node_history(db, child_id, household_id, **kw) -> dict:
 async def fetch_style_evaluator(db, child_id, household_id, **kw) -> dict:
     """Style dimensions relevant to evaluation."""
     from sqlalchemy import select
+
     from app.models.style_vector import LearnerStyleVector
 
     result = await db.execute(select(LearnerStyleVector).where(LearnerStyleVector.child_id == child_id))
@@ -501,6 +534,7 @@ async def fetch_style_evaluator(db, child_id, household_id, **kw) -> dict:
 async def fetch_node_rubric(db, child_id, household_id, **kw) -> dict:
     """Rubric/mastery criteria from node content."""
     from sqlalchemy import select
+
     from app.models.curriculum import LearningNode
 
     node_id = kw.get("node_id")
@@ -528,8 +562,9 @@ async def fetch_node_rubric(db, child_id, household_id, **kw) -> dict:
 async def fetch_fsrs_snapshot(db, child_id, household_id, **kw) -> dict:
     """FSRS state for all enrolled nodes."""
     from sqlalchemy import select
-    from app.models.state import ChildNodeState, FSRSCard
+
     from app.models.curriculum import LearningNode
+    from app.models.state import ChildNodeState, FSRSCard
 
     sr = await db.execute(
         select(ChildNodeState).where(ChildNodeState.child_id == child_id, ChildNodeState.household_id == household_id)
@@ -559,8 +594,9 @@ async def fetch_fsrs_snapshot(db, child_id, household_id, **kw) -> dict:
 async def fetch_retention_schedule(db, child_id, household_id, **kw) -> dict:
     """Nodes due for review within 7 days."""
     from sqlalchemy import select
-    from app.models.state import FSRSCard
+
     from app.models.curriculum import LearningNode
+    from app.models.state import FSRSCard
     from app.services.state_engine import compute_retrievability
 
     cutoff = _now() + timedelta(days=7)
@@ -589,6 +625,7 @@ async def fetch_retention_schedule(db, child_id, household_id, **kw) -> dict:
 async def fetch_pace_metrics(db, child_id, household_id, **kw) -> dict:
     """Pace trends for planner."""
     from sqlalchemy import select
+
     from app.models.intelligence import LearnerIntelligence
 
     result = await db.execute(select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id))
@@ -606,12 +643,14 @@ async def fetch_pace_metrics(db, child_id, household_id, **kw) -> dict:
 
 async def fetch_governance_rules(db, child_id, household_id, **kw) -> dict:
     """Full governance rule set for planner."""
-    from sqlalchemy import select
-    from app.models.governance import GovernanceRule
     import json
 
+    from sqlalchemy import select
+
+    from app.models.governance import GovernanceRule
+
     result = await db.execute(
-        select(GovernanceRule).where(GovernanceRule.household_id == household_id, GovernanceRule.is_active == True)
+        select(GovernanceRule).where(GovernanceRule.household_id == household_id, GovernanceRule.is_active)
     )
     rules = result.scalars().all()
     if not rules:
@@ -628,19 +667,22 @@ async def fetch_governance_rules(db, child_id, household_id, **kw) -> dict:
 async def fetch_family_planner_context(db, child_id, household_id, **kw) -> dict:
     """Planner-specific family intelligence."""
     from app.services.family_intelligence import build_planner_scaffolding_context
+
     text = await build_planner_scaffolding_context(db, child_id, household_id)
     return {"text": text, "metadata": {"timestamp": _now()}}
 
 
 async def fetch_previous_week_signals(db, child_id, household_id, **kw) -> dict:
     """Summary of last week's evaluator signals."""
-    from sqlalchemy import select, func
+    from sqlalchemy import select
+
     from app.models.calibration import EvaluatorPrediction
 
     cutoff = _now() - timedelta(days=7)
     result = await db.execute(
         select(EvaluatorPrediction).where(
-            EvaluatorPrediction.child_id == child_id, EvaluatorPrediction.created_at >= cutoff,
+            EvaluatorPrediction.child_id == child_id,
+            EvaluatorPrediction.created_at >= cutoff,
         )
     )
     preds = result.scalars().all()
@@ -660,6 +702,7 @@ async def fetch_previous_week_signals(db, child_id, household_id, **kw) -> dict:
 async def fetch_intelligence_summary(db, child_id, household_id, **kw) -> dict:
     """Intelligence context summary."""
     from app.services.intelligence import get_intelligence_context
+
     ctx = await get_intelligence_context(db, child_id, household_id)
     if not ctx:
         return _empty()
@@ -678,13 +721,18 @@ async def fetch_intelligence_summary(db, child_id, household_id, **kw) -> dict:
 async def fetch_weekly_events(db, child_id, household_id, **kw) -> dict:
     """All state events from past week for Advisor."""
     from sqlalchemy import select
+
     from app.models.state import StateEvent
 
     cutoff = _now() - timedelta(days=7)
     result = await db.execute(
-        select(StateEvent).where(
-            StateEvent.child_id == child_id, StateEvent.created_at >= cutoff,
-        ).order_by(StateEvent.created_at.desc()).limit(30)
+        select(StateEvent)
+        .where(
+            StateEvent.child_id == child_id,
+            StateEvent.created_at >= cutoff,
+        )
+        .order_by(StateEvent.created_at.desc())
+        .limit(30)
     )
     events = result.scalars().all()
     if not events:
@@ -710,6 +758,7 @@ async def fetch_style_trends(db, child_id, household_id, **kw) -> dict:
 async def fetch_family_context(db, child_id, household_id, **kw) -> dict:
     """Family intelligence for Advisor."""
     from app.services.family_intelligence import build_family_context
+
     text = await build_family_context(db, household_id)
     return {"text": text, "metadata": {"timestamp": _now()}}
 
@@ -717,13 +766,18 @@ async def fetch_family_context(db, child_id, household_id, **kw) -> dict:
 async def fetch_governance_week(db, child_id, household_id, **kw) -> dict:
     """Governance events from past week for Advisor."""
     from sqlalchemy import select
+
     from app.models.governance import GovernanceEvent
 
     cutoff = _now() - timedelta(days=7)
     result = await db.execute(
-        select(GovernanceEvent).where(
-            GovernanceEvent.household_id == household_id, GovernanceEvent.created_at >= cutoff,
-        ).order_by(GovernanceEvent.created_at.desc()).limit(10)
+        select(GovernanceEvent)
+        .where(
+            GovernanceEvent.household_id == household_id,
+            GovernanceEvent.created_at >= cutoff,
+        )
+        .order_by(GovernanceEvent.created_at.desc())
+        .limit(10)
     )
     events = result.scalars().all()
     if not events:
@@ -738,12 +792,11 @@ async def fetch_governance_week(db, child_id, household_id, **kw) -> dict:
 
 async def fetch_retention_summary(db, child_id, household_id, **kw) -> dict:
     """Aggregate retention stats for Advisor."""
-    from sqlalchemy import select, func
+    from sqlalchemy import func, select
+
     from app.models.state import FSRSCard
 
-    result = await db.execute(
-        select(func.count(), func.avg(FSRSCard.stability)).where(FSRSCard.child_id == child_id)
-    )
+    result = await db.execute(select(func.count(), func.avg(FSRSCard.stability)).where(FSRSCard.child_id == child_id))
     row = result.one_or_none()
     if not row or row[0] == 0:
         return _empty()
@@ -753,8 +806,10 @@ async def fetch_retention_summary(db, child_id, household_id, **kw) -> dict:
 
 async def fetch_intelligence_full(db, child_id, household_id, **kw) -> dict:
     """Full intelligence context for Advisor."""
-    from app.services.intelligence import get_intelligence_context
     import json
+
+    from app.services.intelligence import get_intelligence_context
+
     ctx = await get_intelligence_context(db, child_id, household_id)
     if not ctx:
         return _empty()
@@ -765,6 +820,7 @@ async def fetch_intelligence_full(db, child_id, household_id, **kw) -> dict:
 async def fetch_parent_goals(db, child_id, household_id, **kw) -> dict:
     """Education plan goals for Cartographer."""
     from sqlalchemy import select
+
     from app.models.identity import Household
 
     result = await db.execute(select(Household).where(Household.id == household_id))
@@ -785,6 +841,7 @@ async def fetch_parent_goals(db, child_id, household_id, **kw) -> dict:
 async def fetch_child_profile(db, child_id, household_id, **kw) -> dict:
     """Child age, grade, preferences for Cartographer."""
     from sqlalchemy import select
+
     from app.models.identity import Child, ChildPreferences
 
     result = await db.execute(select(Child).where(Child.id == child_id))
@@ -795,6 +852,7 @@ async def fetch_child_profile(db, child_id, household_id, **kw) -> dict:
     age = ""
     if child.date_of_birth:
         from datetime import date
+
         age_days = (date.today() - child.date_of_birth).days
         age = f"{age_days / 365.25:.1f} years"
 
@@ -810,11 +868,13 @@ async def fetch_child_profile(db, child_id, household_id, **kw) -> dict:
 async def fetch_map_structure(db, child_id, household_id, **kw) -> dict:
     """Existing learning map DAG structure for Cartographer."""
     from sqlalchemy import select
+
     from app.models.curriculum import ChildMapEnrollment, LearningMap, LearningNode
 
     er = await db.execute(
         select(ChildMapEnrollment.learning_map_id).where(
-            ChildMapEnrollment.child_id == child_id, ChildMapEnrollment.is_active == True,
+            ChildMapEnrollment.child_id == child_id,
+            ChildMapEnrollment.is_active,
         )
     )
     map_ids = [r[0] for r in er.all()]
@@ -827,9 +887,7 @@ async def fetch_map_structure(db, child_id, household_id, **kw) -> dict:
         m = mr.scalar_one_or_none()
         if not m:
             continue
-        nr = await db.execute(
-            select(LearningNode).where(LearningNode.learning_map_id == mid, LearningNode.is_active == True)
-        )
+        nr = await db.execute(select(LearningNode).where(LearningNode.learning_map_id == mid, LearningNode.is_active))
         nodes = nr.scalars().all()
         lines.append(f"  {m.name}: {len(nodes)} nodes")
     return {"text": "\n".join(lines), "metadata": {"timestamp": _now()}}
@@ -838,6 +896,7 @@ async def fetch_map_structure(db, child_id, household_id, **kw) -> dict:
 async def fetch_style_strategic(db, child_id, household_id, **kw) -> dict:
     """Pacing and subject affinity for Cartographer."""
     from sqlalchemy import select
+
     from app.models.style_vector import LearnerStyleVector
 
     result = await db.execute(select(LearnerStyleVector).where(LearnerStyleVector.child_id == child_id))
@@ -857,14 +916,18 @@ async def fetch_style_strategic(db, child_id, household_id, **kw) -> dict:
 async def fetch_material_effectiveness(db, child_id, household_id, **kw) -> dict:
     """Family-level material effectiveness for Cartographer."""
     from sqlalchemy import select
-    from app.models.family_insight import FamilyInsight
+
     from app.models.enums import FamilyPatternType
+    from app.models.family_insight import FamilyInsight
 
     result = await db.execute(
-        select(FamilyInsight).where(
+        select(FamilyInsight)
+        .where(
             FamilyInsight.household_id == household_id,
             FamilyInsight.pattern_type == FamilyPatternType.material_effectiveness,
-        ).order_by(FamilyInsight.confidence.desc()).limit(3)
+        )
+        .order_by(FamilyInsight.confidence.desc())
+        .limit(3)
     )
     insights = result.scalars().all()
     if not insights:
@@ -879,6 +942,7 @@ async def fetch_material_effectiveness(db, child_id, household_id, **kw) -> dict
 async def fetch_subject_affinity(db, child_id, household_id, **kw) -> dict:
     """Subject affinity map from style vector."""
     from sqlalchemy import select
+
     from app.models.style_vector import LearnerStyleVector
 
     result = await db.execute(select(LearnerStyleVector).where(LearnerStyleVector.child_id == child_id))
@@ -951,8 +1015,12 @@ async def assemble_context(
     profile = ROLE_PROFILES.get(role)
     if not profile:
         return {
-            "context_text": "", "sources_used": [], "tokens_used": 0,
-            "tokens_budget": 0, "sources_truncated": [], "sources_failed": [],
+            "context_text": "",
+            "sources_used": [],
+            "tokens_used": 0,
+            "tokens_budget": 0,
+            "sources_truncated": [],
+            "sources_failed": [],
         }
 
     # 1. Fetch all sources
@@ -986,13 +1054,15 @@ async def assemble_context(
                 text = truncate_to_tokens(text, source.max_tokens)
                 token_est = estimate_tokens(text)
 
-            fetched.append(ScoredContext(
-                source_name=source.name,
-                text=text,
-                token_estimate=token_est,
-                relevance_score=rel,
-                required=source.required,
-            ))
+            fetched.append(
+                ScoredContext(
+                    source_name=source.name,
+                    text=text,
+                    token_estimate=token_est,
+                    relevance_score=rel,
+                    required=source.required,
+                )
+            )
         except Exception:
             logger.warning("Fetcher %s failed for child %s", source.query_fn, child_id, exc_info=True)
             failed.append(source.name)

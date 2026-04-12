@@ -1,22 +1,22 @@
 """Operations API: Alerts, Notifications, Artifacts, Snapshots, Compliance, Health."""
 
 import uuid
-from datetime import UTC, date, datetime, timedelta
+from datetime import UTC, date, datetime
 
-from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File
+from fastapi import APIRouter, Depends, File, HTTPException, Query, UploadFile
 from fastapi.responses import RedirectResponse
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import PaginationParams, get_current_user, get_db, require_role
-from app.models.enums import AlertSeverity, AlertStatus, ArtifactType, MasteryLevel
+from app.api.deps import PaginationParams, get_current_user, get_db
+from app.models.curriculum import LearningNode
+from app.models.enums import AlertStatus, ArtifactType, MasteryLevel
 from app.models.evidence import Alert, Artifact, WeeklySnapshot
 from app.models.identity import Child, Household, User
 from app.models.operational import NotificationLog
 from app.models.state import ChildNodeState
-from app.models.curriculum import ChildMapEnrollment, LearningNode
-from app.services.notifications import get_unread_notifications, send_notification
 from app.services.data_export import export_family_data
+from app.services.notifications import send_notification
 from app.services.storage import get_presigned_url, upload_artifact
 
 MAX_UPLOAD_BYTES = 50 * 1024 * 1024  # 50 MB
@@ -43,31 +43,41 @@ def _detect_artifact_type(content_type: str | None, filename: str | None) -> Art
     if filename:
         ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
         ext_map = {
-            "jpg": ArtifactType.photo, "jpeg": ArtifactType.photo,
-            "png": ArtifactType.photo, "gif": ArtifactType.photo,
-            "webp": ArtifactType.photo, "svg": ArtifactType.photo,
-            "mp4": ArtifactType.video, "mov": ArtifactType.video,
-            "webm": ArtifactType.video, "avi": ArtifactType.video,
-            "mp3": ArtifactType.audio, "wav": ArtifactType.audio,
-            "ogg": ArtifactType.audio, "m4a": ArtifactType.audio,
-            "pdf": ArtifactType.document, "doc": ArtifactType.document,
-            "docx": ArtifactType.document, "txt": ArtifactType.document,
-            "md": ArtifactType.document, "csv": ArtifactType.document,
+            "jpg": ArtifactType.photo,
+            "jpeg": ArtifactType.photo,
+            "png": ArtifactType.photo,
+            "gif": ArtifactType.photo,
+            "webp": ArtifactType.photo,
+            "svg": ArtifactType.photo,
+            "mp4": ArtifactType.video,
+            "mov": ArtifactType.video,
+            "webm": ArtifactType.video,
+            "avi": ArtifactType.video,
+            "mp3": ArtifactType.audio,
+            "wav": ArtifactType.audio,
+            "ogg": ArtifactType.audio,
+            "m4a": ArtifactType.audio,
+            "pdf": ArtifactType.document,
+            "doc": ArtifactType.document,
+            "docx": ArtifactType.document,
+            "txt": ArtifactType.document,
+            "md": ArtifactType.document,
+            "csv": ArtifactType.document,
         }
         if ext in ext_map:
             return ext_map[ext]
 
     return ArtifactType.document  # safe default
 
+
 router = APIRouter(tags=["operations"])
 
 
 # ── Helpers ──
 
+
 async def _get_child_or_404(db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID) -> Child:
-    result = await db.execute(
-        select(Child).where(Child.id == child_id, Child.household_id == household_id)
-    )
+    result = await db.execute(select(Child).where(Child.id == child_id, Child.household_id == household_id))
     child = result.scalar_one_or_none()
     if not child:
         raise HTTPException(status_code=404, detail="Child not found")
@@ -78,6 +88,7 @@ async def _get_child_or_404(db: AsyncSession, child_id: uuid.UUID, household_id:
 # Alerts
 # ══════════════════════════════════════════════════
 
+
 @router.get("/children/{child_id}/alerts")
 async def list_alerts(
     child_id: uuid.UUID,
@@ -86,7 +97,7 @@ async def list_alerts(
     user: User = Depends(get_current_user),
     pagination: PaginationParams = Depends(),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     base = select(Alert).where(
         Alert.child_id == child_id,
         Alert.household_id == user.household_id,
@@ -96,15 +107,13 @@ async def list_alerts(
     total_result = await db.execute(select(func.count()).select_from(base.subquery()))
     total = total_result.scalar() or 0
 
-    result = await db.execute(
-        base.order_by(Alert.created_at.desc()).offset(pagination.skip).limit(pagination.limit)
-    )
+    result = await db.execute(base.order_by(Alert.created_at.desc()).offset(pagination.skip).limit(pagination.limit))
     alerts = result.scalars().all()
     items = [
         {
             "id": str(a.id),
-            "severity": a.severity.value if hasattr(a.severity, 'value') else str(a.severity),
-            "status": a.status.value if hasattr(a.status, 'value') else str(a.status),
+            "severity": a.severity.value if hasattr(a.severity, "value") else str(a.severity),
+            "status": a.status.value if hasattr(a.status, "value") else str(a.status),
             "title": a.title,
             "message": a.message,
             "source": a.source,
@@ -127,9 +136,7 @@ async def acknowledge_alert(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> dict:
-    result = await db.execute(
-        select(Alert).where(Alert.id == alert_id, Alert.household_id == user.household_id)
-    )
+    result = await db.execute(select(Alert).where(Alert.id == alert_id, Alert.household_id == user.household_id))
     alert = result.scalar_one_or_none()
     if not alert:
         raise HTTPException(status_code=404, detail="Alert not found")
@@ -147,9 +154,7 @@ async def dismiss_alert(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> dict:
-    result = await db.execute(
-        select(Alert).where(Alert.id == alert_id, Alert.household_id == user.household_id)
-    )
+    result = await db.execute(select(Alert).where(Alert.id == alert_id, Alert.household_id == user.household_id))
     alert = result.scalar_one_or_none()
     if not alert:
         raise HTTPException(status_code=404, detail="Alert not found")
@@ -164,6 +169,7 @@ async def dismiss_alert(
 # Notifications
 # ══════════════════════════════════════════════════
 
+
 @router.get("/notifications")
 async def list_notifications(
     db: AsyncSession = Depends(get_db),
@@ -177,8 +183,7 @@ async def list_notifications(
     total_result = await db.execute(select(func.count()).select_from(base.subquery()))
     total = total_result.scalar() or 0
     result = await db.execute(
-        base.order_by(NotificationLog.created_at.desc())
-        .offset(pagination.skip).limit(pagination.limit)
+        base.order_by(NotificationLog.created_at.desc()).offset(pagination.skip).limit(pagination.limit)
     )
     return {
         "items": [
@@ -205,13 +210,15 @@ async def send_test_notification(
 ) -> dict:
     """Send a test notification to verify the system."""
     # Look up household timezone for quiet hours check
-    h_result = await db.execute(
-        select(Household).where(Household.id == user.household_id)
-    )
+    h_result = await db.execute(select(Household).where(Household.id == user.household_id))
     household = h_result.scalar_one()
     notif = await send_notification(
-        db, user.household_id, user.id,
-        "test", "Test Notification", "This is a test notification from METHEAN.",
+        db,
+        user.household_id,
+        user.id,
+        "test",
+        "Test Notification",
+        "This is a test notification from METHEAN.",
         timezone=household.timezone or "UTC",
     )
     return {"sent": notif is not None}
@@ -221,6 +228,7 @@ async def send_test_notification(
 # Weekly Snapshots
 # ══════════════════════════════════════════════════
 
+
 @router.get("/children/{child_id}/snapshots")
 async def list_snapshots(
     child_id: uuid.UUID,
@@ -228,7 +236,7 @@ async def list_snapshots(
     user: User = Depends(get_current_user),
     pagination: PaginationParams = Depends(),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     base = select(WeeklySnapshot).where(
         WeeklySnapshot.child_id == child_id,
         WeeklySnapshot.household_id == user.household_id,
@@ -236,8 +244,7 @@ async def list_snapshots(
     total_result = await db.execute(select(func.count()).select_from(base.subquery()))
     total = total_result.scalar() or 0
     result = await db.execute(
-        base.order_by(WeeklySnapshot.week_start.desc())
-        .offset(pagination.skip).limit(pagination.limit)
+        base.order_by(WeeklySnapshot.week_start.desc()).offset(pagination.skip).limit(pagination.limit)
     )
     return {
         "items": [
@@ -268,7 +275,7 @@ async def compare_snapshots(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     from_result = await db.execute(
         select(WeeklySnapshot).where(
@@ -302,6 +309,7 @@ async def compare_snapshots(
 # Compliance Report
 # ══════════════════════════════════════════════════
 
+
 @router.get("/children/{child_id}/compliance-report")
 async def compliance_report(
     child_id: uuid.UUID,
@@ -324,9 +332,7 @@ async def compliance_report(
 
     # Get node titles
     node_ids = [s.node_id for s in states]
-    nodes_result = await db.execute(
-        select(LearningNode).where(LearningNode.id.in_(node_ids))
-    ) if node_ids else None
+    nodes_result = await db.execute(select(LearningNode).where(LearningNode.id.in_(node_ids))) if node_ids else None
     node_map = {n.id: n for n in (nodes_result.scalars().all() if nodes_result else [])}
 
     total_minutes = sum(s.time_spent_minutes or 0 for s in states)
@@ -340,7 +346,9 @@ async def compliance_report(
         "total_hours_logged": round(total_minutes / 60, 1),
         "total_activities_attempted": total_attempts,
         "nodes_mastered": len(mastered),
-        "nodes_in_progress": len([s for s in states if s.mastery_level not in (MasteryLevel.mastered, MasteryLevel.not_started)]),
+        "nodes_in_progress": len(
+            [s for s in states if s.mastery_level not in (MasteryLevel.mastered, MasteryLevel.not_started)]
+        ),
         "mastered_skills": [
             {
                 "title": node_map[s.node_id].title if s.node_id in node_map else "Unknown",
@@ -357,6 +365,7 @@ async def compliance_report(
 # Artifacts
 # ══════════════════════════════════════════════════
 
+
 @router.post("/children/{child_id}/artifacts", status_code=201)
 async def upload_artifact_endpoint(
     child_id: uuid.UUID,
@@ -366,13 +375,13 @@ async def upload_artifact_endpoint(
     user: User = Depends(get_current_user),
 ) -> dict:
     """Upload an artifact file for a child. Max 50 MB."""
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     contents = await file.read()
     if len(contents) > MAX_UPLOAD_BYTES:
         raise HTTPException(
             status_code=413,
-            detail=f"File too large. Maximum size is {MAX_UPLOAD_BYTES // (1024*1024)} MB.",
+            detail=f"File too large. Maximum size is {MAX_UPLOAD_BYTES // (1024 * 1024)} MB.",
         )
 
     content_type = file.content_type or "application/octet-stream"
@@ -425,7 +434,7 @@ async def list_artifacts(
     pagination: PaginationParams = Depends(),
 ) -> dict:
     """List artifacts for a child with pagination."""
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     base = select(Artifact).where(
         Artifact.child_id == child_id,
@@ -434,10 +443,7 @@ async def list_artifacts(
     total_result = await db.execute(select(func.count()).select_from(base.subquery()))
     total = total_result.scalar() or 0
 
-    result = await db.execute(
-        base.order_by(Artifact.created_at.desc())
-        .offset(pagination.skip).limit(pagination.limit)
-    )
+    result = await db.execute(base.order_by(Artifact.created_at.desc()).offset(pagination.skip).limit(pagination.limit))
     items = []
     for a in result.scalars().all():
         item = {
@@ -491,6 +497,7 @@ async def export_household_data(
 ):
     """Export complete family educational record as ZIP."""
     from fastapi.responses import Response
+
     data = await export_family_data(db, user.household_id)
     return Response(
         content=data,

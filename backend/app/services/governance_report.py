@@ -8,15 +8,15 @@ decision during the period.
 import uuid
 from datetime import UTC, date, datetime, timedelta
 
-from sqlalchemy import and_, func, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.enums import GovernanceAction, MasteryLevel
 from app.models.evidence import WeeklySnapshot
-from app.models.governance import GovernanceEvent, GovernanceRule
+from app.models.governance import GovernanceEvent
 from app.models.identity import Child, Household
 from app.models.operational import AIRun
-from app.models.state import ChildNodeState, StateEvent
+from app.models.state import ChildNodeState
 
 
 async def generate_governance_report(
@@ -41,18 +41,21 @@ async def generate_governance_report(
 
     # ── Governance events in period ──
     events_result = await db.execute(
-        select(GovernanceEvent).where(
+        select(GovernanceEvent)
+        .where(
             GovernanceEvent.household_id == household_id,
             GovernanceEvent.created_at >= datetime(period_start.year, period_start.month, period_start.day, tzinfo=UTC),
-            GovernanceEvent.created_at < datetime(period_end.year, period_end.month, period_end.day, tzinfo=UTC) + timedelta(days=1),
-        ).order_by(GovernanceEvent.created_at.asc())
+            GovernanceEvent.created_at
+            < datetime(period_end.year, period_end.month, period_end.day, tzinfo=UTC) + timedelta(days=1),
+        )
+        .order_by(GovernanceEvent.created_at.asc())
     )
     events = events_result.scalars().all()
 
     # Categorize events
     approvals = [e for e in events if e.action == GovernanceAction.approve]
     rejections = [e for e in events if e.action == GovernanceAction.reject]
-    modifications = [e for e in events if e.action == GovernanceAction.modify]
+    [e for e in events if e.action == GovernanceAction.modify]
     deferrals = [e for e in events if e.action == GovernanceAction.defer]
     overrides = [e for e in events if e.target_type == "child_node_state"]
     constitutional_changes = [e for e in events if e.target_type == "constitutional_rule_change"]
@@ -63,7 +66,8 @@ async def generate_governance_report(
         select(AIRun).where(
             AIRun.household_id == household_id,
             AIRun.created_at >= datetime(period_start.year, period_start.month, period_start.day, tzinfo=UTC),
-            AIRun.created_at < datetime(period_end.year, period_end.month, period_end.day, tzinfo=UTC) + timedelta(days=1),
+            AIRun.created_at
+            < datetime(period_end.year, period_end.month, period_end.day, tzinfo=UTC) + timedelta(days=1),
         )
     )
     ai_runs = ai_result.scalars().all()
@@ -87,25 +91,29 @@ async def generate_governance_report(
         total_minutes = sum(s.time_spent_minutes or 0 for s in states)
         total_attempts = sum(s.attempts_count or 0 for s in states)
 
-        child_progress.append({
-            "child_id": str(child.id),
-            "child_name": child_names[child.id],
-            "grade_level": child.grade_level,
-            "nodes_mastered": mastered,
-            "nodes_total": total,
-            "total_hours": round(total_minutes / 60, 1),
-            "total_attempts": total_attempts,
-        })
+        child_progress.append(
+            {
+                "child_id": str(child.id),
+                "child_name": child_names[child.id],
+                "grade_level": child.grade_level,
+                "nodes_mastered": mastered,
+                "nodes_total": total,
+                "total_hours": round(total_minutes / 60, 1),
+                "total_attempts": total_attempts,
+            }
+        )
 
     # ── Snapshots for progress trends ──
     snapshots_result = await db.execute(
-        select(WeeklySnapshot).where(
+        select(WeeklySnapshot)
+        .where(
             WeeklySnapshot.household_id == household_id,
             WeeklySnapshot.week_start >= period_start,
             WeeklySnapshot.week_end <= period_end,
-        ).order_by(WeeklySnapshot.week_start.asc())
+        )
+        .order_by(WeeklySnapshot.week_start.asc())
     )
-    snapshots = snapshots_result.scalars().all()
+    snapshots_result.scalars().all()
 
     # ── AI acceptance rate ──
     total_ai_decisions = len(approvals) + len(rejections)
@@ -125,7 +133,6 @@ async def generate_governance_report(
             "name": household.name,
             "timezone": household.timezone,
         },
-
         "executive_summary": {
             "children_covered": len(children),
             "total_governance_events": len(events),
@@ -138,7 +145,6 @@ async def generate_governance_report(
             "ai_runs_count": len(ai_runs),
             "ai_acceptance_rate_pct": ai_acceptance_rate,
         },
-
         "governance_decisions": [
             {
                 "timestamp": e.created_at.isoformat() if e.created_at else None,
@@ -149,7 +155,6 @@ async def generate_governance_report(
             }
             for e in events
         ],
-
         "ai_oversight": {
             "total_ai_runs": len(ai_runs),
             "runs_by_role": {role: len(runs) for role, runs in ai_by_role.items()},
@@ -163,7 +168,6 @@ async def generate_governance_report(
                 for e in rejections
             ],
         },
-
         "rule_changes": [
             {
                 "timestamp": e.created_at.isoformat() if e.created_at else None,
@@ -173,7 +177,6 @@ async def generate_governance_report(
             }
             for e in rule_changes
         ],
-
         "constitutional_actions": [
             {
                 "timestamp": e.created_at.isoformat() if e.created_at else None,
@@ -182,7 +185,6 @@ async def generate_governance_report(
             }
             for e in constitutional_changes
         ],
-
         "overrides": [
             {
                 "timestamp": e.created_at.isoformat() if e.created_at else None,
@@ -191,17 +193,13 @@ async def generate_governance_report(
             }
             for e in overrides
         ],
-
         "learning_progress": child_progress,
-
         "compliance_metrics": {
             "total_hours_logged": round(sum(cp["total_hours"] for cp in child_progress), 1),
             "total_attempts": sum(cp["total_attempts"] for cp in child_progress),
             "children_with_mastery_gains": sum(1 for cp in child_progress if cp["nodes_mastered"] > 0),
         },
-
         "rule_enforcement": _compute_rule_enforcement(events),
-
         "parent_attestation": {
             "status": "pending",
             "text": None,
@@ -219,8 +217,10 @@ def _compute_rule_enforcement(events: list) -> dict:
             name = ev.get("rule", "unknown")
             if name not in stats:
                 stats[name] = {
-                    "evaluated": 0, "triggered": 0,
-                    "type": ev.get("type", ""), "tier": "",
+                    "evaluated": 0,
+                    "triggered": 0,
+                    "type": ev.get("type", ""),
+                    "tier": "",
                 }
             stats[name]["evaluated"] += 1
             if not ev.get("passed", True):

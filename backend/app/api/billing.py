@@ -6,9 +6,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import get_current_user, get_db
 from app.models.identity import User
 from app.services.billing import (
+    cancel_subscription,
     create_checkout_session,
     create_portal_session,
-    cancel_subscription,
     get_subscription_status,
     handle_webhook,
 )

@@ -10,9 +10,8 @@ from app.models.assessment import Assessment, PortfolioEntry
 from app.models.curriculum import LearningNode, Subject
 from app.models.enums import GovernanceAction, MasteryLevel, StateEventType
 from app.models.governance import GovernanceEvent
-from app.models.state import ChildNodeState, StateEvent
+from app.models.state import ChildNodeState
 from app.services.state_engine import get_or_create_node_state, process_review
-
 
 MASTERY_MAP = {
     "mastered": MasteryLevel.mastered,
@@ -68,12 +67,16 @@ async def record_assessment(
 
         if prev != target_mastery:
             from app.services.state_engine import emit_state_event
+
             state.mastery_level = target_mastery
             state.attempts_count += 1
             state.last_activity_at = datetime.now(UTC)
 
             await emit_state_event(
-                db, child_id, household_id, node_id,
+                db,
+                child_id,
+                household_id,
+                node_id,
                 event_type=StateEventType.mastery_change,
                 from_state=prev.value if hasattr(prev, "value") else str(prev),
                 to_state=target_mastery.value,
@@ -87,22 +90,28 @@ async def record_assessment(
             )
 
             # Log governance event for mastery override
-            db.add(GovernanceEvent(
-                household_id=household_id,
-                user_id=user_id,
-                action=GovernanceAction.modify,
-                target_type="mastery_override",
-                target_id=node_id,
-                reason=f"Parent assessment: {prev.value if hasattr(prev, 'value') else prev} -> {target_mastery.value}",
-                metadata_={"assessment_id": str(assessment.id)},
-            ))
+            db.add(
+                GovernanceEvent(
+                    household_id=household_id,
+                    user_id=user_id,
+                    action=GovernanceAction.modify,
+                    target_type="mastery_override",
+                    target_id=node_id,
+                    reason=f"Parent assessment: {prev.value if hasattr(prev, 'value') else prev} -> {target_mastery.value}",
+                    metadata_={"assessment_id": str(assessment.id)},
+                )
+            )
 
     # If confidence_override is provided, run through FSRS
     confidence = assessment_data.get("confidence_override")
     if confidence is not None and node_id:
         await process_review(
-            db, child_id, household_id, node_id,
-            confidence=confidence, created_by=user_id,
+            db,
+            child_id,
+            household_id,
+            node_id,
+            confidence=confidence,
+            created_by=user_id,
         )
 
     await db.flush()
@@ -148,9 +157,8 @@ async def generate_transcript(
         if node:
             # Try to get subject name from the map
             from app.models.curriculum import LearningMap
-            map_result = await db.execute(
-                select(LearningMap).where(LearningMap.id == node.learning_map_id)
-            )
+
+            map_result = await db.execute(select(LearningMap).where(LearningMap.id == node.learning_map_id))
             lmap = map_result.scalar_one_or_none()
             if lmap:
                 s_result = await db.execute(select(Subject).where(Subject.id == lmap.subject_id))
@@ -160,7 +168,10 @@ async def generate_transcript(
 
         if subj_name not in subjects:
             subjects[subj_name] = {
-                "mastered": 0, "total": 0, "hours": 0.0, "assessments": 0,
+                "mastered": 0,
+                "total": 0,
+                "hours": 0.0,
+                "assessments": 0,
                 "highest_mastery": MasteryLevel.not_started,
             }
         entry = subjects[subj_name]
@@ -169,21 +180,28 @@ async def generate_transcript(
         if state.mastery_level == MasteryLevel.mastered:
             entry["mastered"] += 1
         # Track highest mastery for grade assignment
-        levels = [MasteryLevel.not_started, MasteryLevel.emerging, MasteryLevel.developing,
-                  MasteryLevel.proficient, MasteryLevel.mastered]
+        levels = [
+            MasteryLevel.not_started,
+            MasteryLevel.emerging,
+            MasteryLevel.developing,
+            MasteryLevel.proficient,
+            MasteryLevel.mastered,
+        ]
         if levels.index(state.mastery_level) > levels.index(entry["highest_mastery"]):
             entry["highest_mastery"] = state.mastery_level
 
     rows = []
     for name, data in sorted(subjects.items()):
         grade = GRADE_MAP.get(data["highest_mastery"], "I")
-        rows.append({
-            "subject": name,
-            "grade": grade,
-            "nodes_mastered": data["mastered"],
-            "nodes_total": data["total"],
-            "hours_logged": round(data["hours"], 1),
-        })
+        rows.append(
+            {
+                "subject": name,
+                "grade": grade,
+                "nodes_mastered": data["mastered"],
+                "nodes_total": data["total"],
+                "hours_logged": round(data["hours"], 1),
+            }
+        )
 
     gpa_map = {"A": 4.0, "B": 3.0, "C": 2.0, "D": 1.0, "I": 0.0}
     grades = [gpa_map.get(r["grade"], 0) for r in rows]
@@ -209,23 +227,27 @@ async def generate_portfolio_export(
     """Generate a portfolio summary organized by subject."""
 
     entries_result = await db.execute(
-        select(PortfolioEntry).where(
+        select(PortfolioEntry)
+        .where(
             PortfolioEntry.child_id == child_id,
             PortfolioEntry.household_id == household_id,
-        ).order_by(PortfolioEntry.date_completed.desc())
+        )
+        .order_by(PortfolioEntry.date_completed.desc())
     )
     entries = entries_result.scalars().all()
 
     by_subject: dict[str, list] = {}
     for e in entries:
         subj = e.subject or "General"
-        by_subject.setdefault(subj, []).append({
-            "title": e.title,
-            "type": e.entry_type,
-            "date": e.date_completed.isoformat() if e.date_completed else None,
-            "notes": e.parent_notes,
-            "tags": e.tags or [],
-        })
+        by_subject.setdefault(subj, []).append(
+            {
+                "title": e.title,
+                "type": e.entry_type,
+                "date": e.date_completed.isoformat() if e.date_completed else None,
+                "notes": e.parent_notes,
+                "tags": e.tags or [],
+            }
+        )
 
     return {
         "child_id": str(child_id),

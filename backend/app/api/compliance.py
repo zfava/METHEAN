@@ -58,7 +58,7 @@ async def compliance_check(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     return await check_compliance(db, user.household_id, child_id, state)
 
 
@@ -70,7 +70,7 @@ async def get_attendance(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     return await get_attendance_record(db, user.household_id, child_id, start, end)
 
 
@@ -80,5 +80,5 @@ async def get_hours(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     return await get_hours_breakdown(db, user.household_id, child_id)

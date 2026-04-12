@@ -1,8 +1,8 @@
 """Password reset via email token."""
 
-import uuid
 import secrets
-from datetime import datetime, timedelta, timezone
+import uuid
+from datetime import UTC, datetime, timedelta
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,7 +11,6 @@ from app.core.config import settings
 from app.core.security import hash_password
 from app.models.identity import User
 from app.services.email import send_email
-
 
 # In-memory token store (production: use Redis or DB table)
 _reset_tokens: dict[str, dict] = {}  # token -> { user_id, expires_at }
@@ -27,7 +26,7 @@ async def generate_reset_token(db: AsyncSession, email: str) -> bool:
     token = secrets.token_urlsafe(32)
     _reset_tokens[token] = {
         "user_id": str(user.id),
-        "expires_at": datetime.now(timezone.utc) + timedelta(hours=1),
+        "expires_at": datetime.now(UTC) + timedelta(hours=1),
     }
 
     reset_url = f"{settings.APP_URL}/auth/reset?token={token}"
@@ -48,7 +47,7 @@ def verify_reset_token(token: str) -> str | None:
     data = _reset_tokens.get(token)
     if not data:
         return None
-    if datetime.now(timezone.utc) > data["expires_at"]:
+    if datetime.now(UTC) > data["expires_at"]:
         del _reset_tokens[token]
         return None
     return data["user_id"]

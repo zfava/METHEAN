@@ -13,9 +13,8 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.enums import GovernanceAction, RuleScope, RuleTier, RuleType
-from app.models.governance import Activity, Attempt, GovernanceEvent, GovernanceRule
+from app.models.governance import Attempt, GovernanceEvent, GovernanceRule
 from app.models.operational import AIRun
-
 
 # ══════════════════════════════════════════════════
 # Data classes
@@ -25,6 +24,7 @@ from app.models.operational import AIRun
 @dataclass
 class ActivityContext:
     """Everything needed to evaluate governance rules against an activity."""
+
     household_id: uuid.UUID
     child_id: uuid.UUID | None = None
     activity_type: str | None = None
@@ -41,6 +41,7 @@ class ActivityContext:
 @dataclass
 class RuleEvaluation:
     """Result of evaluating a single rule."""
+
     rule_id: uuid.UUID
     rule_name: str
     rule_type: str
@@ -53,6 +54,7 @@ class RuleEvaluation:
 @dataclass
 class GovernanceDecision:
     """Aggregate decision after evaluating all rules."""
+
     action: str  # auto_approve, require_review, block
     reason: str
     evaluations: list[RuleEvaluation] = field(default_factory=list)
@@ -78,9 +80,13 @@ class GovernanceDecision:
 def _eval_result(rule: GovernanceRule, passed: bool, action: str, reason: str) -> RuleEvaluation:
     tier = rule.tier.value if hasattr(rule.tier, "value") else str(rule.tier)
     return RuleEvaluation(
-        rule_id=rule.id, rule_name=rule.name,
+        rule_id=rule.id,
+        rule_name=rule.name,
         rule_type=rule.rule_type.value if hasattr(rule.rule_type, "value") else str(rule.rule_type),
-        tier=tier, passed=passed, action=action, reason=reason,
+        tier=tier,
+        passed=passed,
+        action=action,
+        reason=reason,
     )
 
 
@@ -97,11 +103,13 @@ async def _evaluate_approval(db: AsyncSession, rule: GovernanceRule, ctx: Activi
         max_diff = params.get("max_difficulty")
         min_diff = params.get("min_difficulty")
         if max_diff is not None and ctx.difficulty < max_diff:
-            return _eval_result(rule, action == "auto_approve", action,
-                f"Difficulty {ctx.difficulty} < threshold {max_diff}")
+            return _eval_result(
+                rule, action == "auto_approve", action, f"Difficulty {ctx.difficulty} < threshold {max_diff}"
+            )
         if min_diff is not None and ctx.difficulty >= min_diff:
-            return _eval_result(rule, action == "auto_approve", action,
-                f"Difficulty {ctx.difficulty} >= threshold {min_diff}")
+            return _eval_result(
+                rule, action == "auto_approve", action, f"Difficulty {ctx.difficulty} >= threshold {min_diff}"
+            )
 
     if action == "always_review":
         return _eval_result(rule, False, "require_review", "All activities require review")
@@ -134,8 +142,12 @@ async def _evaluate_pace_limit(db: AsyncSession, rule: GovernanceRule, ctx: Acti
 
     if projected > max_daily:
         action = "block" if enforce == "hard" else "warn"
-        return _eval_result(rule, False, action,
-            f"Daily limit: {current_minutes}m used + {new_minutes}m planned = {projected}m (limit: {max_daily}m)")
+        return _eval_result(
+            rule,
+            False,
+            action,
+            f"Daily limit: {current_minutes}m used + {new_minutes}m planned = {projected}m (limit: {max_daily}m)",
+        )
 
     # Check weekly limit
     max_weekly = params.get("max_weekly_minutes")
@@ -152,8 +164,12 @@ async def _evaluate_pace_limit(db: AsyncSession, rule: GovernanceRule, ctx: Acti
         weekly_minutes = weekly_result.scalar() or 0
         if weekly_minutes + new_minutes > max_weekly:
             action = "block" if enforce == "hard" else "warn"
-            return _eval_result(rule, False, action,
-                f"Weekly limit: {weekly_minutes}m used + {new_minutes}m = {weekly_minutes + new_minutes}m (limit: {max_weekly}m)")
+            return _eval_result(
+                rule,
+                False,
+                action,
+                f"Weekly limit: {weekly_minutes}m used + {new_minutes}m = {weekly_minutes + new_minutes}m (limit: {max_weekly}m)",
+            )
 
     return _eval_result(rule, True, "pass", f"Within limits ({current_minutes}m/{max_daily}m daily)")
 
@@ -177,8 +193,12 @@ async def _evaluate_content_filter(db: AsyncSession, rule: GovernanceRule, ctx: 
         "age_appropriate": "warn",
     }
     notes = params.get("notes", "")
-    return _eval_result(rule, False, action_map.get(stance, "require_review"),
-        f"Content filter: '{topic}' ({stance.replace('_', ' ')}){'. ' + notes if notes else ''}")
+    return _eval_result(
+        rule,
+        False,
+        action_map.get(stance, "require_review"),
+        f"Content filter: '{topic}' ({stance.replace('_', ' ')}){'. ' + notes if notes else ''}",
+    )
 
 
 async def _evaluate_schedule(db: AsyncSession, rule: GovernanceRule, ctx: ActivityContext) -> RuleEvaluation:
@@ -194,14 +214,14 @@ async def _evaluate_schedule(db: AsyncSession, rule: GovernanceRule, ctx: Activi
         day_name = ctx.scheduled_date.strftime("%A").lower()
         if day_name not in [d.lower() for d in allowed]:
             action = "block" if enforce == "hard" else "warn"
-            return _eval_result(rule, False, action,
-                f"Schedule: {day_name.capitalize()} is not in allowed days ({', '.join(allowed)})")
+            return _eval_result(
+                rule, False, action, f"Schedule: {day_name.capitalize()} is not in allowed days ({', '.join(allowed)})"
+            )
 
     # Check blackout dates
     blackout = params.get("no_learning_dates", [])
     if ctx.scheduled_date.isoformat() in blackout:
-        return _eval_result(rule, False, "block",
-            f"Schedule: {ctx.scheduled_date.isoformat()} is a blackout date")
+        return _eval_result(rule, False, "block", f"Schedule: {ctx.scheduled_date.isoformat()} is a blackout date")
 
     return _eval_result(rule, True, "pass", "Within schedule")
 
@@ -213,8 +233,9 @@ async def _evaluate_ai_boundary(db: AsyncSession, rule: GovernanceRule, ctx: Act
     if ctx.ai_role:
         allowed = params.get("allowed_roles", [])
         if allowed and ctx.ai_role not in allowed:
-            return _eval_result(rule, False, "block",
-                f"AI boundary: role '{ctx.ai_role}' not in allowed roles ({', '.join(allowed)})")
+            return _eval_result(
+                rule, False, "block", f"AI boundary: role '{ctx.ai_role}' not in allowed roles ({', '.join(allowed)})"
+            )
 
     # Check rate limit
     max_calls = params.get("max_ai_calls_per_day")
@@ -229,18 +250,15 @@ async def _evaluate_ai_boundary(db: AsyncSession, rule: GovernanceRule, ctx: Act
         )
         current_count = count_result.scalar() or 0
         if current_count >= max_calls:
-            return _eval_result(rule, False, "block",
-                f"AI boundary: {current_count}/{max_calls} daily AI calls used")
+            return _eval_result(rule, False, "block", f"AI boundary: {current_count}/{max_calls} daily AI calls used")
 
     # Check human review requirement
     if params.get("require_human_review", False):
-        return _eval_result(rule, False, "require_review",
-            "AI boundary: all AI actions require human review")
+        return _eval_result(rule, False, "require_review", "AI boundary: all AI actions require human review")
 
     # Check ai_direct_action (if False, AI can't act without review)
     if params.get("ai_direct_action") is False and ctx.ai_role:
-        return _eval_result(rule, False, "require_review",
-            "AI boundary: AI cannot act without parent review")
+        return _eval_result(rule, False, "require_review", "AI boundary: AI cannot act without parent review")
 
     return _eval_result(rule, True, "pass", "Within AI boundaries")
 
@@ -295,10 +313,12 @@ async def evaluate_activity(
 
     # Get ALL active rules for household
     result = await db.execute(
-        select(GovernanceRule).where(
+        select(GovernanceRule)
+        .where(
             GovernanceRule.household_id == context.household_id,
             GovernanceRule.is_active.is_(True),
-        ).order_by(GovernanceRule.priority.asc())
+        )
+        .order_by(GovernanceRule.priority.asc())
     )
     all_rules = result.scalars().all()
 
@@ -473,9 +493,11 @@ async def log_governance_event(
     # Record governance pattern for intelligence layer
     try:
         from app.services.intelligence import record_governance_pattern
+
         meta = metadata or {}
         await record_governance_pattern(
-            db, household_id,
+            db,
+            household_id,
             action=action.value if hasattr(action, "value") else str(action),
             activity_type=meta.get("activity_type"),
             difficulty=meta.get("difficulty"),

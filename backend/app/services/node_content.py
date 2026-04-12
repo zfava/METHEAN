@@ -8,7 +8,6 @@ and the parent what resources to gather.
 # Expected structure for LearningNode.content JSONB
 NODE_CONTENT_SCHEMA = {
     "learning_objectives": ["list of specific, measurable objectives"],
-
     "teaching_guidance": {
         "introduction": "How to introduce this concept",
         "practice_activities": ["activity types that build this skill"],
@@ -17,7 +16,6 @@ NODE_CONTENT_SCHEMA = {
         "socratic_questions": ["key questions to ask rather than tell"],
         "real_world_connections": ["how this concept connects to life"],
     },
-
     "assessment_criteria": {
         "mastery_indicators": ["observable behaviors demonstrating mastery"],
         "proficiency_indicators": ["understanding but not fluency"],
@@ -25,19 +23,16 @@ NODE_CONTENT_SCHEMA = {
         "assessment_methods": ["oral narration", "written work", "demonstration", "project"],
         "sample_assessment_prompts": ["specific questions or tasks"],
     },
-
     "resource_guidance": {
         "required": ["what's needed (never brand names, always types)"],
         "recommended": ["nice to have"],
         "philosophy_specific": {},
     },
-
     "connections": {
         "prerequisite_skills_from_other_subjects": [],
         "feeds_into": [],
         "parallel_topics": [],
     },
-
     "accommodations": {
         "dyslexia": "",
         "adhd": "",
@@ -46,7 +41,6 @@ NODE_CONTENT_SCHEMA = {
         "kinesthetic_learner": "",
         "auditory_learner": "",
     },
-
     "time_estimates": {
         "first_exposure": 30,
         "practice_session": 20,

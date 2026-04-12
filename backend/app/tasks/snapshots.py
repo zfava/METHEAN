@@ -2,14 +2,13 @@
 
 import asyncio
 import time
-from datetime import UTC, date, datetime, timedelta
+from datetime import date, timedelta
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
-from app.models.curriculum import ChildMapEnrollment, LearningNode
 from app.models.enums import MasteryLevel
 from app.models.evidence import WeeklySnapshot
 from app.models.identity import Child
@@ -39,10 +38,12 @@ async def capture_weekly_snapshots(
         for child in children:
             # Check if snapshot already exists for this week
             existing = await db.execute(
-                select(WeeklySnapshot.id).where(
+                select(WeeklySnapshot.id)
+                .where(
                     WeeklySnapshot.child_id == child.id,
                     WeeklySnapshot.week_start == week_start,
-                ).limit(1)
+                )
+                .limit(1)
             )
             if existing.scalar_one_or_none():
                 continue
@@ -57,9 +58,9 @@ async def capture_weekly_snapshots(
             states = states_result.scalars().all()
 
             mastered = sum(1 for s in states if s.mastery_level == MasteryLevel.mastered)
-            in_progress = sum(1 for s in states if s.mastery_level not in (
-                MasteryLevel.mastered, MasteryLevel.not_started
-            ))
+            in_progress = sum(
+                1 for s in states if s.mastery_level not in (MasteryLevel.mastered, MasteryLevel.not_started)
+            )
             total_minutes = sum(s.time_spent_minutes or 0 for s in states)
             total_attempts = sum(s.attempts_count or 0 for s in states)
 

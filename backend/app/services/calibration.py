@@ -63,19 +63,21 @@ async def record_prediction(
     )
     db.add(prediction)
 
-    db.add(AuditLog(
-        household_id=household_id,
-        action=AuditAction.create,
-        resource_type="evaluator_prediction",
-        resource_id=prediction.id,
-        details={
-            "child_id": str(child_id),
-            "node_id": str(node_id),
-            "confidence": evaluator_confidence,
-            "fsrs_rating": fsrs_rating,
-            "offset_applied": calibration_offset_applied,
-        },
-    ))
+    db.add(
+        AuditLog(
+            household_id=household_id,
+            action=AuditAction.create,
+            resource_type="evaluator_prediction",
+            resource_id=prediction.id,
+            details={
+                "child_id": str(child_id),
+                "node_id": str(node_id),
+                "confidence": evaluator_confidence,
+                "fsrs_rating": fsrs_rating,
+                "offset_applied": calibration_offset_applied,
+            },
+        )
+    )
 
     await db.flush()
     return prediction
@@ -115,42 +117,46 @@ async def reconcile_outcome(
     prediction.outcome_recorded_at = now
     prediction.drift_score = abs(prediction.predicted_fsrs_rating - new_fsrs_rating)
 
-    db.add(AuditLog(
-        household_id=household_id,
-        action=AuditAction.update,
-        resource_type="evaluator_prediction",
-        resource_id=prediction.id,
-        details={
-            "child_id": str(child_id),
-            "node_id": str(node_id),
-            "predicted": prediction.predicted_fsrs_rating,
-            "actual": new_fsrs_rating,
-            "drift": prediction.drift_score,
-        },
-    ))
-
-    # Alert on high drift
-    if prediction.drift_score >= 2.0:
-        severity = AlertSeverity.action_required if prediction.drift_score >= 3.0 else AlertSeverity.warning
-        db.add(Alert(
+    db.add(
+        AuditLog(
             household_id=household_id,
-            child_id=child_id,
-            severity=severity,
-            status=AlertStatus.unread,
-            title="Evaluator Calibration Drift",
-            message=(
-                f"Evaluator predicted rating {prediction.predicted_fsrs_rating} "
-                f"but actual was {new_fsrs_rating} (drift: {prediction.drift_score:.1f}). "
-                f"The evaluator may need recalibration."
-            ),
-            source="calibration_drift",
-            metadata_={
+            action=AuditAction.update,
+            resource_type="evaluator_prediction",
+            resource_id=prediction.id,
+            details={
+                "child_id": str(child_id),
                 "node_id": str(node_id),
                 "predicted": prediction.predicted_fsrs_rating,
                 "actual": new_fsrs_rating,
                 "drift": prediction.drift_score,
             },
-        ))
+        )
+    )
+
+    # Alert on high drift
+    if prediction.drift_score >= 2.0:
+        severity = AlertSeverity.action_required if prediction.drift_score >= 3.0 else AlertSeverity.warning
+        db.add(
+            Alert(
+                household_id=household_id,
+                child_id=child_id,
+                severity=severity,
+                status=AlertStatus.unread,
+                title="Evaluator Calibration Drift",
+                message=(
+                    f"Evaluator predicted rating {prediction.predicted_fsrs_rating} "
+                    f"but actual was {new_fsrs_rating} (drift: {prediction.drift_score:.1f}). "
+                    f"The evaluator may need recalibration."
+                ),
+                source="calibration_drift",
+                metadata_={
+                    "node_id": str(node_id),
+                    "predicted": prediction.predicted_fsrs_rating,
+                    "actual": new_fsrs_rating,
+                    "drift": prediction.drift_score,
+                },
+            )
+        )
 
     await db.flush()
     return prediction
@@ -206,7 +212,9 @@ async def recompute_profile(
 
     # Count total and reconciled predictions
     total_count_result = await db.execute(
-        select(func.count()).select_from(EvaluatorPrediction).where(
+        select(func.count())
+        .select_from(EvaluatorPrediction)
+        .where(
             EvaluatorPrediction.child_id == child_id,
         )
     )
@@ -222,9 +230,7 @@ async def recompute_profile(
     reconciled_count = len(reconciled)
 
     # Get or create profile
-    profile_result = await db.execute(
-        select(CalibrationProfile).where(CalibrationProfile.child_id == child_id)
-    )
+    profile_result = await db.execute(select(CalibrationProfile).where(CalibrationProfile.child_id == child_id))
     profile = profile_result.scalar_one_or_none()
 
     if profile is None:
@@ -292,11 +298,7 @@ async def recompute_profile(
 
     # 4. subject_drift_map — join with nodes to get subject info
     node_ids = list({p.node_id for p in reconciled})
-    node_result = await db.execute(
-        select(LearningNode.id, LearningNode.title).where(
-            LearningNode.id.in_(node_ids)
-        )
-    )
+    node_result = await db.execute(select(LearningNode.id, LearningNode.title).where(LearningNode.id.in_(node_ids)))
     node_titles = {row[0]: row[1] for row in node_result.all()}
 
     # Group predictions by subject (using node title as proxy since nodes don't have subject_name)
@@ -332,54 +334,63 @@ async def recompute_profile(
     rate_limited = clamp_offset_change(previous_offset, target_offset)
     if rate_limited != target_offset:
         logger.warning(
-            "Calibration rate limiter activated for child %s: "
-            "target=%.4f, applied=%.4f (clamped from %.4f)",
-            child_id, target_offset, rate_limited, previous_offset,
+            "Calibration rate limiter activated for child %s: target=%.4f, applied=%.4f (clamped from %.4f)",
+            child_id,
+            target_offset,
+            rate_limited,
+            previous_offset,
         )
     profile.recalibration_offset = rate_limited
 
     profile.last_computed_at = now
 
     # 6. Save CalibrationSnapshot for historical tracking
-    db.add(CalibrationSnapshot(
-        household_id=household_id,
-        child_id=child_id,
-        mean_drift=profile.mean_drift,
-        directional_bias=profile.directional_bias,
-        recalibration_offset=profile.recalibration_offset,
-        reconciled_count=reconciled_count,
-        confidence_band_accuracy=profile.confidence_band_accuracy,
-        subject_drift_map=profile.subject_drift_map,
-        computed_at=now,
-    ))
+    db.add(
+        CalibrationSnapshot(
+            household_id=household_id,
+            child_id=child_id,
+            mean_drift=profile.mean_drift,
+            directional_bias=profile.directional_bias,
+            recalibration_offset=profile.recalibration_offset,
+            reconciled_count=reconciled_count,
+            confidence_band_accuracy=profile.confidence_band_accuracy,
+            subject_drift_map=profile.subject_drift_map,
+            computed_at=now,
+        )
+    )
 
     # Emit audit and governance events
-    db.add(AuditLog(
-        household_id=household_id,
-        action=AuditAction.update,
-        resource_type="calibration_profile",
-        resource_id=profile.id,
-        details={
-            "child_id": str(child_id),
-            "mean_drift": profile.mean_drift,
-            "directional_bias": profile.directional_bias,
-            "offset": profile.recalibration_offset,
-            "previous_offset": previous_offset,
-            "target_offset": target_offset,
-            "rate_limited": rate_limited != target_offset,
-            "reconciled_count": reconciled_count,
-        },
-    ))
+    db.add(
+        AuditLog(
+            household_id=household_id,
+            action=AuditAction.update,
+            resource_type="calibration_profile",
+            resource_id=profile.id,
+            details={
+                "child_id": str(child_id),
+                "mean_drift": profile.mean_drift,
+                "directional_bias": profile.directional_bias,
+                "offset": profile.recalibration_offset,
+                "previous_offset": previous_offset,
+                "target_offset": target_offset,
+                "rate_limited": rate_limited != target_offset,
+                "reconciled_count": reconciled_count,
+            },
+        )
+    )
 
     from app.models.governance import GovernanceEvent
-    db.add(GovernanceEvent(
-        household_id=household_id,
-        user_id=None,
-        action=GovernanceAction.modify,
-        target_type="calibration_profile",
-        target_id=profile.id,
-        reason=f"Calibration profile recomputed: mean_drift={profile.mean_drift:.3f}, bias={profile.directional_bias:.3f}, offset={profile.recalibration_offset:.3f}",
-    ))
+
+    db.add(
+        GovernanceEvent(
+            household_id=household_id,
+            user_id=None,
+            action=GovernanceAction.modify,
+            target_type="calibration_profile",
+            target_id=profile.id,
+            reason=f"Calibration profile recomputed: mean_drift={profile.mean_drift:.3f}, bias={profile.directional_bias:.3f}, offset={profile.recalibration_offset:.3f}",
+        )
+    )
 
     await db.flush()
     return profile
@@ -403,24 +414,26 @@ async def run_calibration_health_check(db: AsyncSession) -> dict:
     # Per-child critical drift check
     for p in profiles:
         if p.mean_drift > 2.0 and p.reconciled_predictions >= 100:
-            db.add(Alert(
-                household_id=p.household_id,
-                child_id=p.child_id,
-                severity=AlertSeverity.action_required,
-                status=AlertStatus.unread,
-                title="Critical Calibration Drift",
-                message=(
-                    f"Evaluator calibration drift is critically high "
-                    f"(mean_drift={p.mean_drift:.2f}) after {p.reconciled_predictions} "
-                    f"reconciled predictions. Consider reviewing evaluator configuration."
-                ),
-                source="calibration_health_check",
-                metadata_={
-                    "mean_drift": p.mean_drift,
-                    "reconciled_predictions": p.reconciled_predictions,
-                    "directional_bias": p.directional_bias,
-                },
-            ))
+            db.add(
+                Alert(
+                    household_id=p.household_id,
+                    child_id=p.child_id,
+                    severity=AlertSeverity.action_required,
+                    status=AlertStatus.unread,
+                    title="Critical Calibration Drift",
+                    message=(
+                        f"Evaluator calibration drift is critically high "
+                        f"(mean_drift={p.mean_drift:.2f}) after {p.reconciled_predictions} "
+                        f"reconciled predictions. Consider reviewing evaluator configuration."
+                    ),
+                    source="calibration_health_check",
+                    metadata_={
+                        "mean_drift": p.mean_drift,
+                        "reconciled_predictions": p.reconciled_predictions,
+                        "directional_bias": p.directional_bias,
+                    },
+                )
+            )
             alerts_created += 1
 
     # System-wide average drift check
@@ -429,22 +442,24 @@ async def run_calibration_health_check(db: AsyncSession) -> dict:
         avg_drift = sum(drifts) / len(drifts)
         if avg_drift > 1.5:
             # Use the first profile's household for the system alert
-            db.add(Alert(
-                household_id=profiles[0].household_id,
-                severity=AlertSeverity.action_required,
-                status=AlertStatus.unread,
-                title="System-Wide Calibration Drift",
-                message=(
-                    f"Average calibration drift across {len(drifts)} children "
-                    f"is {avg_drift:.2f}, exceeding the 1.5 threshold. "
-                    f"The evaluator may have a systemic accuracy issue."
-                ),
-                source="calibration_health_check",
-                metadata_={
-                    "average_drift": avg_drift,
-                    "children_count": len(drifts),
-                },
-            ))
+            db.add(
+                Alert(
+                    household_id=profiles[0].household_id,
+                    severity=AlertSeverity.action_required,
+                    status=AlertStatus.unread,
+                    title="System-Wide Calibration Drift",
+                    message=(
+                        f"Average calibration drift across {len(drifts)} children "
+                        f"is {avg_drift:.2f}, exceeding the 1.5 threshold. "
+                        f"The evaluator may have a systemic accuracy issue."
+                    ),
+                    source="calibration_health_check",
+                    metadata_={
+                        "average_drift": avg_drift,
+                        "children_count": len(drifts),
+                    },
+                )
+            )
             alerts_created += 1
 
     logger.info(
@@ -470,11 +485,13 @@ async def compute_temporal_drift(
     from datetime import timedelta
 
     result = await db.execute(
-        select(EvaluatorPrediction).where(
+        select(EvaluatorPrediction)
+        .where(
             EvaluatorPrediction.child_id == child_id,
             EvaluatorPrediction.household_id == household_id,
             EvaluatorPrediction.actual_outcome.isnot(None),
-        ).order_by(EvaluatorPrediction.created_at)
+        )
+        .order_by(EvaluatorPrediction.created_at)
     )
     predictions = result.scalars().all()
 
@@ -495,12 +512,14 @@ async def compute_temporal_drift(
         preds = weekly[week_key]
         drifts = [p.drift_score for p in preds if p.drift_score is not None]
         biases = [p.predicted_fsrs_rating - p.actual_outcome for p in preds]
-        buckets.append({
-            "week": week_key,
-            "mean_drift": round(sum(drifts) / len(drifts), 3) if drifts else 0.0,
-            "count": len(preds),
-            "bias": round(sum(biases) / len(biases), 3) if biases else 0.0,
-        })
+        buckets.append(
+            {
+                "week": week_key,
+                "mean_drift": round(sum(drifts) / len(drifts), 3) if drifts else 0.0,
+                "count": len(preds),
+                "bias": round(sum(biases) / len(biases), 3) if biases else 0.0,
+            }
+        )
 
     # Linear regression on weekly mean_drift
     if len(buckets) < 2:
@@ -511,7 +530,7 @@ async def compute_temporal_drift(
     y_vals = [b["mean_drift"] for b in buckets]
     x_mean = sum(x_vals) / n
     y_mean = sum(y_vals) / n
-    numerator = sum((x - x_mean) * (y - y_mean) for x, y in zip(x_vals, y_vals))
+    numerator = sum((x - x_mean) * (y - y_mean) for x, y in zip(x_vals, y_vals, strict=False))
     denominator = sum((x - x_mean) ** 2 for x in x_vals)
     slope = numerator / denominator if denominator != 0 else 0.0
 
@@ -559,7 +578,7 @@ async def compute_confidence_distribution(
         }
 
     # Build histogram: 10 bands of 0.1 width
-    bands = [{"band": f"{i/10:.1f}-{(i+1)/10:.1f}", "count": 0} for i in range(10)]
+    bands = [{"band": f"{i / 10:.1f}-{(i + 1) / 10:.1f}", "count": 0} for i in range(10)]
     for c in confidences:
         idx = min(int(c * 10), 9)
         bands[idx]["count"] += 1
@@ -571,7 +590,7 @@ async def compute_confidence_distribution(
 
     # Skewness (Fisher's)
     if std_dev > 0 and n >= 3:
-        skew = (sum((c - mean) ** 3 for c in confidences) / n) / (std_dev ** 3)
+        skew = (sum((c - mean) ** 3 for c in confidences) / n) / (std_dev**3)
     else:
         skew = 0.0
 
@@ -579,24 +598,26 @@ async def compute_confidence_distribution(
 
     if compression_warning:
         # Emit alert about evaluator not discriminating
-        db.add(Alert(
-            household_id=household_id,
-            child_id=child_id,
-            severity=AlertSeverity.warning,
-            status=AlertStatus.unread,
-            title="Evaluator Confidence Compression",
-            message=(
-                f"Evaluator confidence scores have very low variance "
-                f"(std_dev={std_dev:.3f}). The evaluator may not be effectively "
-                f"discriminating between different quality levels."
-            ),
-            source="calibration_confidence_compression",
-            metadata_={
-                "std_dev": std_dev,
-                "mean": mean,
-                "total_predictions": n,
-            },
-        ))
+        db.add(
+            Alert(
+                household_id=household_id,
+                child_id=child_id,
+                severity=AlertSeverity.warning,
+                status=AlertStatus.unread,
+                title="Evaluator Confidence Compression",
+                message=(
+                    f"Evaluator confidence scores have very low variance "
+                    f"(std_dev={std_dev:.3f}). The evaluator may not be effectively "
+                    f"discriminating between different quality levels."
+                ),
+                source="calibration_confidence_compression",
+                metadata_={
+                    "std_dev": std_dev,
+                    "mean": mean,
+                    "total_predictions": n,
+                },
+            )
+        )
         await db.flush()
 
     return {
@@ -634,9 +655,7 @@ async def compute_subject_calibration_detail(
 
     # Get node titles
     node_ids = list({p.node_id for p in predictions})
-    node_result = await db.execute(
-        select(LearningNode.id, LearningNode.title).where(LearningNode.id.in_(node_ids))
-    )
+    node_result = await db.execute(select(LearningNode.id, LearningNode.title).where(LearningNode.id.in_(node_ids)))
     node_titles = {row[0]: row[1] for row in node_result.all()}
 
     # Group by node title
@@ -674,13 +693,15 @@ async def compute_subject_calibration_detail(
                 f"(mean drift: {mean_drift:.1f}). Review evaluation criteria."
             )
 
-        details.append({
-            "subject": subject,
-            "mean_drift": round(mean_drift, 3),
-            "directional_bias": round(bias, 3),
-            "reconciled_count": count,
-            "action": action,
-            "recommendation": recommendation,
-        })
+        details.append(
+            {
+                "subject": subject,
+                "mean_drift": round(mean_drift, 3),
+                "directional_bias": round(bias, 3),
+                "reconciled_count": count,
+                "action": action,
+                "recommendation": recommendation,
+            }
+        )
 
     return details

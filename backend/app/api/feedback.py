@@ -5,7 +5,7 @@ from datetime import date
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
-from sqlalchemy import select, func
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user, get_db
@@ -72,7 +72,9 @@ async def list_feedback(
     )
     return [
         {
-            "id": str(f.id), "message": f.message, "feedback_type": f.feedback_type,
+            "id": str(f.id),
+            "message": f.message,
+            "feedback_type": f.feedback_type,
             "author_id": str(f.author_id) if f.author_id else None,
             "created_at": str(f.created_at),
         }
@@ -97,8 +99,10 @@ async def recent_feedback(
     )
     return [
         {
-            "id": str(f.id), "activity_id": str(f.activity_id),
-            "message": f.message, "feedback_type": f.feedback_type,
+            "id": str(f.id),
+            "activity_id": str(f.activity_id),
+            "message": f.message,
+            "feedback_type": f.feedback_type,
             "created_at": str(f.created_at),
         }
         for f in result.scalars().all()
@@ -211,8 +215,18 @@ async def update_reading_entry(
     if not entry:
         raise HTTPException(404, "Entry not found")
 
-    for field in ["book_title", "book_author", "status", "pages_read", "pages_total",
-                  "narration", "parent_notes", "child_rating", "minutes_spent", "completed_date"]:
+    for field in [
+        "book_title",
+        "book_author",
+        "status",
+        "pages_read",
+        "pages_total",
+        "narration",
+        "parent_notes",
+        "child_rating",
+        "minutes_spent",
+        "completed_date",
+    ]:
         val = getattr(body, field, None)
         if val is not None:
             setattr(entry, field, val)
@@ -273,11 +287,13 @@ async def current_reading(
     """Books currently being read."""
     await _get_child(db, child_id, user.household_id)
     result = await db.execute(
-        select(ReadingLogEntry).where(
+        select(ReadingLogEntry)
+        .where(
             ReadingLogEntry.child_id == child_id,
             ReadingLogEntry.household_id == user.household_id,
             ReadingLogEntry.status == "reading",
-        ).order_by(ReadingLogEntry.updated_at.desc())
+        )
+        .order_by(ReadingLogEntry.updated_at.desc())
     )
     return [_entry_dict(e) for e in result.scalars().all()]
 

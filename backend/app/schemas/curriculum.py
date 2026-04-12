@@ -7,8 +7,8 @@ from pydantic import BaseModel, Field
 
 from app.models.enums import EdgeRelation, MasteryLevel, NodeType
 
-
 # ── Subject schemas ──
+
 
 class SubjectCreate(BaseModel):
     name: str = Field(min_length=1, max_length=255)
@@ -33,6 +33,7 @@ class SubjectResponse(BaseModel):
 
 
 # ── Learning Map schemas ──
+
 
 class LearningMapCreate(BaseModel):
     subject_id: uuid.UUID
@@ -66,6 +67,7 @@ class LearningMapDetailResponse(LearningMapResponse):
 
 
 # ── Node schemas ──
+
 
 class NodeCreate(BaseModel):
     node_type: NodeType
@@ -103,6 +105,7 @@ class NodeResponse(BaseModel):
 
 # ── Edge schemas ──
 
+
 class EdgeCreate(BaseModel):
     from_node_id: uuid.UUID
     to_node_id: uuid.UUID
@@ -124,8 +127,10 @@ class EdgeResponse(BaseModel):
 
 # ── Child Map State schemas ──
 
+
 class NodeStateStatus(BaseModel):
     """Per-node status for a child in a map."""
+
     node_id: uuid.UUID
     node_type: NodeType
     title: str
@@ -149,6 +154,7 @@ class ChildMapStateResponse(BaseModel):
 
 # ── Enrollment schemas ──
 
+
 class EnrollmentCreate(BaseModel):
     learning_map_id: uuid.UUID
 
@@ -168,6 +174,7 @@ class EnrollmentResponse(BaseModel):
 
 # ── Override schemas ──
 
+
 class OverrideRequest(BaseModel):
     reason: str = Field(min_length=1, max_length=1000)
 
@@ -180,6 +187,7 @@ class OverrideResponse(BaseModel):
 
 
 # ── Template schemas ──
+
 
 class TemplateInfo(BaseModel):
     template_id: str

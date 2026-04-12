@@ -6,7 +6,7 @@ change to a learning map flows through this engine to maintain DAG integrity.
 
 import uuid
 
-from sqlalchemy import and_, delete, select, text
+from sqlalchemy import delete, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.curriculum import (
@@ -38,11 +38,13 @@ async def would_create_cycle(
 
     # Check if to_node is an ancestor of from_node via the closure table
     result = await db.execute(
-        select(LearningMapClosure.id).where(
+        select(LearningMapClosure.id)
+        .where(
             LearningMapClosure.learning_map_id == learning_map_id,
             LearningMapClosure.ancestor_id == to_node_id,
             LearningMapClosure.descendant_id == from_node_id,
-        ).limit(1)
+        )
+        .limit(1)
     )
     return result.scalar_one_or_none() is not None
 
@@ -82,12 +84,14 @@ async def add_closure_entries(
     ancestor_rows = ancestors.scalars().all()
 
     for anc in ancestor_rows:
-        db.add(LearningMapClosure(
-            learning_map_id=learning_map_id,
-            ancestor_id=anc.ancestor_id,
-            descendant_id=to_node_id,
-            depth=anc.depth + 1,
-        ))
+        db.add(
+            LearningMapClosure(
+                learning_map_id=learning_map_id,
+                ancestor_id=anc.ancestor_id,
+                descendant_id=to_node_id,
+                depth=anc.depth + 1,
+            )
+        )
 
     # 3. from_node can now reach all descendants of to_node
     descendants = await db.execute(
@@ -99,22 +103,26 @@ async def add_closure_entries(
     descendant_rows = descendants.scalars().all()
 
     for desc in descendant_rows:
-        db.add(LearningMapClosure(
-            learning_map_id=learning_map_id,
-            ancestor_id=from_node_id,
-            descendant_id=desc.descendant_id,
-            depth=1 + desc.depth,
-        ))
+        db.add(
+            LearningMapClosure(
+                learning_map_id=learning_map_id,
+                ancestor_id=from_node_id,
+                descendant_id=desc.descendant_id,
+                depth=1 + desc.depth,
+            )
+        )
 
     # 4. Cross-product: ancestors of from_node × descendants of to_node
     for anc in ancestor_rows:
         for desc in descendant_rows:
-            db.add(LearningMapClosure(
-                learning_map_id=learning_map_id,
-                ancestor_id=anc.ancestor_id,
-                descendant_id=desc.descendant_id,
-                depth=anc.depth + 1 + desc.depth,
-            ))
+            db.add(
+                LearningMapClosure(
+                    learning_map_id=learning_map_id,
+                    ancestor_id=anc.ancestor_id,
+                    descendant_id=desc.descendant_id,
+                    depth=anc.depth + 1 + desc.depth,
+                )
+            )
 
     await db.flush()
 
@@ -128,11 +136,7 @@ async def rebuild_closure_for_map(
     Called after edge deletion when incremental update is not feasible.
     """
     # Clear existing closure entries for this map
-    await db.execute(
-        delete(LearningMapClosure).where(
-            LearningMapClosure.learning_map_id == learning_map_id
-        )
-    )
+    await db.execute(delete(LearningMapClosure).where(LearningMapClosure.learning_map_id == learning_map_id))
     await db.flush()
 
     # Use recursive CTE to compute all reachable pairs
@@ -169,12 +173,14 @@ async def rebuild_closure_for_map(
     rows = result.fetchall()
 
     for row in rows:
-        db.add(LearningMapClosure(
-            learning_map_id=learning_map_id,
-            ancestor_id=row.ancestor_id,
-            descendant_id=row.descendant_id,
-            depth=row.depth,
-        ))
+        db.add(
+            LearningMapClosure(
+                learning_map_id=learning_map_id,
+                ancestor_id=row.ancestor_id,
+                descendant_id=row.descendant_id,
+                depth=row.depth,
+            )
+        )
 
     await db.flush()
 
@@ -236,11 +242,13 @@ async def compute_map_state(
     """
     # Get all active nodes in the map
     nodes_result = await db.execute(
-        select(LearningNode).where(
+        select(LearningNode)
+        .where(
             LearningNode.learning_map_id == learning_map_id,
             LearningNode.household_id == household_id,
             LearningNode.is_active == True,  # noqa: E712
-        ).order_by(LearningNode.sort_order)
+        )
+        .order_by(LearningNode.sort_order)
     )
     nodes = nodes_result.scalars().all()
 
@@ -275,10 +283,7 @@ async def compute_map_state(
             prereqs[edge.to_node_id].append(edge.from_node_id)
 
     # Build mastered set for fast lookup
-    mastered_set = {
-        nid for nid, state in states.items()
-        if state.mastery_level == MasteryLevel.mastered
-    }
+    mastered_set = {nid for nid, state in states.items() if state.mastery_level == MasteryLevel.mastered}
 
     in_progress_levels = {
         MasteryLevel.emerging,
@@ -314,18 +319,20 @@ async def compute_map_state(
         else:
             status = "blocked"
 
-        result.append({
-            "node_id": node.id,
-            "node_type": node.node_type,
-            "title": node.title,
-            "mastery_level": mastery,
-            "status": status,
-            "is_unlocked": is_unlocked,
-            "prerequisites_met": all_prereqs_met or (not prereq_ids),
-            "prerequisite_node_ids": prereq_ids,
-            "attempts_count": attempts,
-            "time_spent_minutes": time_spent,
-        })
+        result.append(
+            {
+                "node_id": node.id,
+                "node_type": node.node_type,
+                "title": node.title,
+                "mastery_level": mastery,
+                "status": status,
+                "is_unlocked": is_unlocked,
+                "prerequisites_met": all_prereqs_met or (not prereq_ids),
+                "prerequisite_node_ids": prereq_ids,
+                "attempts_count": attempts,
+                "time_spent_minutes": time_spent,
+            }
+        )
 
     return result
 
@@ -335,9 +342,7 @@ async def increment_map_version(
     learning_map_id: uuid.UUID,
 ) -> int:
     """Increment the version of a learning map on structural change."""
-    result = await db.execute(
-        select(LearningMap).where(LearningMap.id == learning_map_id)
-    )
+    result = await db.execute(select(LearningMap).where(LearningMap.id == learning_map_id))
     lmap = result.scalar_one()
     lmap.version += 1
     await db.flush()

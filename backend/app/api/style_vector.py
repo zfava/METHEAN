@@ -4,8 +4,8 @@ import uuid
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel, Field
-from sqlalchemy import func, select
+from pydantic import BaseModel
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user, get_db
@@ -33,9 +33,7 @@ VALID_DIMENSIONS: dict[str, dict[str, Any]] = {
 
 
 async def _get_child_or_404(db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID) -> Child:
-    result = await db.execute(
-        select(Child).where(Child.id == child_id, Child.household_id == household_id)
-    )
+    result = await db.execute(select(Child).where(Child.id == child_id, Child.household_id == household_id))
     child = result.scalar_one_or_none()
     if not child:
         raise HTTPException(status_code=404, detail="Child not found")
@@ -172,30 +170,34 @@ async def set_style_override(
 
     vector.parent_overrides = overrides
 
-    db.add(GovernanceEvent(
-        household_id=user.household_id,
-        user_id=user.id,
-        action=GovernanceAction.modify,
-        target_type="learner_style_vector",
-        target_id=vector.id,
-        reason=f"{action}: {body.dimension}",
-        metadata_={
-            "action": action,
-            "dimension": body.dimension,
-            "old_value": old_value,
-            "new_value": overrides.get(body.dimension),
-            "child_id": str(child_id),
-        },
-    ))
+    db.add(
+        GovernanceEvent(
+            household_id=user.household_id,
+            user_id=user.id,
+            action=GovernanceAction.modify,
+            target_type="learner_style_vector",
+            target_id=vector.id,
+            reason=f"{action}: {body.dimension}",
+            metadata_={
+                "action": action,
+                "dimension": body.dimension,
+                "old_value": old_value,
+                "new_value": overrides.get(body.dimension),
+                "child_id": str(child_id),
+            },
+        )
+    )
 
-    db.add(AuditLog(
-        household_id=user.household_id,
-        user_id=user.id,
-        action=AuditAction.update,
-        resource_type="learner_style_vector",
-        resource_id=vector.id,
-        details={"action": action, "dimension": body.dimension},
-    ))
+    db.add(
+        AuditLog(
+            household_id=user.household_id,
+            user_id=user.id,
+            action=AuditAction.update,
+            resource_type="learner_style_vector",
+            resource_id=vector.id,
+            details={"action": action, "dimension": body.dimension},
+        )
+    )
 
     await db.flush()
     await db.commit()
@@ -264,30 +266,34 @@ async def set_style_bounds(
 
     vector.parent_bounds = bounds
 
-    db.add(GovernanceEvent(
-        household_id=user.household_id,
-        user_id=user.id,
-        action=GovernanceAction.modify,
-        target_type="learner_style_vector",
-        target_id=vector.id,
-        reason=f"{action}: {body.dimension}",
-        metadata_={
-            "action": action,
-            "dimension": body.dimension,
-            "old_bounds": old_bounds,
-            "new_bounds": bounds.get(body.dimension),
-            "child_id": str(child_id),
-        },
-    ))
+    db.add(
+        GovernanceEvent(
+            household_id=user.household_id,
+            user_id=user.id,
+            action=GovernanceAction.modify,
+            target_type="learner_style_vector",
+            target_id=vector.id,
+            reason=f"{action}: {body.dimension}",
+            metadata_={
+                "action": action,
+                "dimension": body.dimension,
+                "old_bounds": old_bounds,
+                "new_bounds": bounds.get(body.dimension),
+                "child_id": str(child_id),
+            },
+        )
+    )
 
-    db.add(AuditLog(
-        household_id=user.household_id,
-        user_id=user.id,
-        action=AuditAction.update,
-        resource_type="learner_style_vector",
-        resource_id=vector.id,
-        details={"action": action, "dimension": body.dimension},
-    ))
+    db.add(
+        AuditLog(
+            household_id=user.household_id,
+            user_id=user.id,
+            action=AuditAction.update,
+            resource_type="learner_style_vector",
+            resource_id=vector.id,
+            details={"action": action, "dimension": body.dimension},
+        )
+    )
 
     await db.flush()
     await db.commit()

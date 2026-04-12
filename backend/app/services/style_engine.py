@@ -22,22 +22,28 @@ logger = logging.getLogger(__name__)
 
 # ── Thresholds ──
 
-MIN_OBSERVATIONS = 20          # Global minimum before any computation
-MIN_DURATIONS = 20             # For optimal_session_minutes, attention_pattern
-MIN_TUTOR_SESSIONS = 20        # For socratic_responsiveness
+MIN_OBSERVATIONS = 20  # Global minimum before any computation
+MIN_DURATIONS = 20  # For optimal_session_minutes, attention_pattern
+MIN_TUTOR_SESSIONS = 20  # For socratic_responsiveness
 MIN_TUTOR_SESSIONS_INDEP = 15  # For independence_level
-MIN_EVALUATED_ATTEMPTS = 20    # For frustration_threshold
+MIN_EVALUATED_ATTEMPTS = 20  # For frustration_threshold
 MIN_DOWNWARD_TRANSITIONS = 10  # For recovery_rate
-MIN_TIME_DATA = 20             # For time_of_day_peak
-MIN_SUBJECT_ATTEMPTS = 10      # Per-subject for subject_affinity_map
-MIN_TOTAL_ATTEMPTS = 30        # For modality_preference
-MIN_MASTERY_TRANSITIONS = 20   # For pacing_preference
+MIN_TIME_DATA = 20  # For time_of_day_peak
+MIN_SUBJECT_ATTEMPTS = 10  # Per-subject for subject_affinity_map
+MIN_TOTAL_ATTEMPTS = 30  # For modality_preference
+MIN_MASTERY_TRANSITIONS = 20  # For pacing_preference
 
 # Dimensions list (for counting active)
 DIMENSION_FIELDS = [
-    "optimal_session_minutes", "socratic_responsiveness", "frustration_threshold",
-    "recovery_rate", "time_of_day_peak", "modality_preference",
-    "pacing_preference", "independence_level", "attention_pattern",
+    "optimal_session_minutes",
+    "socratic_responsiveness",
+    "frustration_threshold",
+    "recovery_rate",
+    "time_of_day_peak",
+    "modality_preference",
+    "pacing_preference",
+    "independence_level",
+    "attention_pattern",
 ]
 
 
@@ -57,7 +63,7 @@ def decay_weighted_average(values: list[float], decay_lambda: float = 0.95) -> f
     total_weight = sum(weights)
     if total_weight == 0:
         return sum(values) / n
-    return sum(v * w for v, w in zip(values, weights)) / total_weight
+    return sum(v * w for v, w in zip(values, weights, strict=False)) / total_weight
 
 
 # ── Dimension Computations ──
@@ -252,11 +258,7 @@ def _compute_modality_preference(eng: dict) -> str | None:
         return None
 
     # Average completion rate per modality
-    modality_avg = {
-        m: sum(rates) / len(rates)
-        for m, rates in modality_scores.items()
-        if rates
-    }
+    modality_avg = {m: sum(rates) / len(rates) for m, rates in modality_scores.items() if rates}
 
     if not modality_avg:
         return None
@@ -386,9 +388,7 @@ async def compute_style_vector(
     now = datetime.now(UTC)
 
     # Get or create the vector
-    result = await db.execute(
-        select(LearnerStyleVector).where(LearnerStyleVector.child_id == child_id)
-    )
+    result = await db.execute(select(LearnerStyleVector).where(LearnerStyleVector.child_id == child_id))
     vector = result.scalar_one_or_none()
 
     if vector is None:
@@ -400,9 +400,7 @@ async def compute_style_vector(
         await db.flush()
 
     # Fetch intelligence profile
-    intel_result = await db.execute(
-        select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id)
-    )
+    intel_result = await db.execute(select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id))
     intel = intel_result.scalar_one_or_none()
 
     if intel is None or (intel.observation_count or 0) < MIN_OBSERVATIONS:
@@ -448,17 +446,20 @@ async def compute_style_vector(
     try:
         from app.models.enums import AuditAction
         from app.models.operational import AuditLog
-        db.add(AuditLog(
-            household_id=household_id,
-            action=AuditAction.update,
-            resource_type="learner_style_vector",
-            resource_id=vector.id,
-            details={
-                "child_id": str(child_id),
-                "dimensions_active": vector.dimensions_active,
-                "data_points_count": vector.data_points_count,
-            },
-        ))
+
+        db.add(
+            AuditLog(
+                household_id=household_id,
+                action=AuditAction.update,
+                resource_type="learner_style_vector",
+                resource_id=vector.id,
+                details={
+                    "child_id": str(child_id),
+                    "dimensions_active": vector.dimensions_active,
+                    "data_points_count": vector.data_points_count,
+                },
+            )
+        )
     except Exception:
         pass  # Audit logging is advisory
 
@@ -512,9 +513,7 @@ async def build_style_context(
 
     Returns empty string if no vector exists or insufficient data.
     """
-    result = await db.execute(
-        select(LearnerStyleVector).where(LearnerStyleVector.child_id == child_id)
-    )
+    result = await db.execute(select(LearnerStyleVector).where(LearnerStyleVector.child_id == child_id))
     vector = result.scalar_one_or_none()
 
     if vector is None or vector.dimensions_active == 0:
@@ -592,9 +591,7 @@ async def build_style_context(
 
     # Include parent observations from intelligence profile
     try:
-        intel_result = await db.execute(
-            select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id)
-        )
+        intel_result = await db.execute(select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id))
         intel = intel_result.scalar_one_or_none()
         if intel and intel.parent_observations:
             obs_texts = [o.get("observation", "") for o in intel.parent_observations if o.get("observation")]
@@ -645,7 +642,9 @@ def build_planner_style_guidance(vector: LearnerStyleVector | None) -> str:
         lines.append(f"Schedule activities within {vector.optimal_session_minutes} minutes for this child.")
 
     if vector.time_of_day_peak is not None:
-        lines.append(f"Schedule highest-priority subjects around {_hour_label(vector.time_of_day_peak)} for peak performance.")
+        lines.append(
+            f"Schedule highest-priority subjects around {_hour_label(vector.time_of_day_peak)} for peak performance."
+        )
 
     if vector.pacing_preference is not None:
         if vector.pacing_preference > 0.3:

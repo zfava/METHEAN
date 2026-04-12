@@ -28,7 +28,9 @@ class EvaluatorPrediction(Base):
     __table_args__ = (
         Index(
             "ix_evalpred_child_node_created",
-            "child_id", "node_id", "created_at",
+            "child_id",
+            "node_id",
+            "created_at",
             postgresql_using="btree",
         ),
         Index(
@@ -38,9 +40,7 @@ class EvaluatorPrediction(Base):
         ),
     )
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     household_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("households.id", ondelete="CASCADE"), nullable=False
     )
@@ -60,20 +60,14 @@ class EvaluatorPrediction(Base):
     outcome_recorded_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     drift_score: Mapped[float | None] = mapped_column(Float)
     calibration_offset_applied: Mapped[float] = mapped_column(Float, nullable=False, default=0.0)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
 class CalibrationProfile(Base):
     __tablename__ = "calibration_profiles"
-    __table_args__ = (
-        UniqueConstraint("child_id", name="uq_calibration_child"),
-    )
+    __table_args__ = (UniqueConstraint("child_id", name="uq_calibration_child"),)
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     household_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("households.id", ondelete="CASCADE"), nullable=False
     )
@@ -90,9 +84,7 @@ class CalibrationProfile(Base):
     offset_active: Mapped[bool] = mapped_column(Boolean, default=True)
     parent_override_offset: Mapped[float | None] = mapped_column(Float)
     last_computed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
@@ -100,18 +92,18 @@ class CalibrationProfile(Base):
 
 class CalibrationSnapshot(Base):
     """Point-in-time snapshot of calibration metrics, created on each recompute."""
+
     __tablename__ = "calibration_snapshots"
     __table_args__ = (
         Index(
             "ix_calsnap_child_computed",
-            "child_id", "computed_at",
+            "child_id",
+            "computed_at",
             postgresql_using="btree",
         ),
     )
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     household_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("households.id", ondelete="CASCADE"), nullable=False
     )
@@ -124,6 +116,4 @@ class CalibrationSnapshot(Base):
     reconciled_count: Mapped[int] = mapped_column(Integer, nullable=False)
     confidence_band_accuracy: Mapped[dict] = mapped_column(JSONB, default=dict)
     subject_drift_map: Mapped[dict] = mapped_column(JSONB, default=dict)
-    computed_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    computed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

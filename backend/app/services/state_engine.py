@@ -7,7 +7,9 @@ and state event emission. Every state change is immutable and auditable.
 import uuid
 from datetime import UTC, datetime
 
-from fsrs import Card as FSRSCardObj, Rating, Scheduler, State as FSRSState
+from fsrs import Card as FSRSCardObj
+from fsrs import Rating, Scheduler
+from fsrs import State as FSRSState
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -173,7 +175,7 @@ def _fsrs_card_to_db(fsrs_card: FSRSCardObj, db_card: FSRSCard) -> None:
     """Update DB FSRSCard from py-fsrs Card after review."""
     db_card.stability = fsrs_card.stability or 0.0
     db_card.difficulty = fsrs_card.difficulty or 0.0
-    db_card.state = fsrs_card.state.value if hasattr(fsrs_card.state, 'value') else int(fsrs_card.state)
+    db_card.state = fsrs_card.state.value if hasattr(fsrs_card.state, "value") else int(fsrs_card.state)
     db_card.due = fsrs_card.due
     db_card.last_review = fsrs_card.last_review
     # Compute scheduled_days from due and last_review
@@ -246,10 +248,13 @@ async def process_review(
         event_type = StateEventType.mastery_change
 
     state_event = await emit_state_event(
-        db, child_id, household_id, node_id,
+        db,
+        child_id,
+        household_id,
+        node_id,
         event_type=event_type,
-        from_state=previous_mastery.value if hasattr(previous_mastery, 'value') else str(previous_mastery),
-        to_state=new_mastery.value if hasattr(new_mastery, 'value') else str(new_mastery),
+        from_state=previous_mastery.value if hasattr(previous_mastery, "value") else str(previous_mastery),
+        to_state=new_mastery.value if hasattr(new_mastery, "value") else str(new_mastery),
         trigger="attempt",
         metadata={
             "confidence": confidence,
@@ -265,9 +270,7 @@ async def process_review(
     # 7. Cascade unblock if node just mastered
     nodes_unblocked: list[uuid.UUID] = []
     if new_mastery == MasteryLevel.mastered and previous_mastery != MasteryLevel.mastered:
-        nodes_unblocked = await _cascade_unblock(
-            db, child_id, household_id, node_id
-        )
+        nodes_unblocked = await _cascade_unblock(db, child_id, household_id, node_id)
 
     return {
         "mastery_level": new_mastery,
@@ -318,12 +321,13 @@ async def _cascade_unblock(
         mastered_count = len(mastered_result.scalars().all())
 
         if mastered_count == len(all_prereq_ids):
-            downstream_state = await get_or_create_node_state(
-                db, child_id, household_id, downstream_id
-            )
+            downstream_state = await get_or_create_node_state(db, child_id, household_id, downstream_id)
             if downstream_state.mastery_level == MasteryLevel.not_started:
                 await emit_state_event(
-                    db, child_id, household_id, downstream_id,
+                    db,
+                    child_id,
+                    household_id,
+                    downstream_id,
                     event_type=StateEventType.node_unlocked,
                     from_state="blocked",
                     to_state="not_started",

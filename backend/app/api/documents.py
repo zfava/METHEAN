@@ -5,6 +5,7 @@ from datetime import date
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import Response
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user, get_db
@@ -15,7 +16,6 @@ from app.services.document_generator import (
     generate_quarterly_report,
     generate_transcript,
 )
-from sqlalchemy import select
 
 router = APIRouter(tags=["documents"])
 

@@ -15,15 +15,14 @@ logger = logging.getLogger(__name__)
 
 def enrich_learning_map_sync(learning_map_id: str, household_id: str) -> dict:
     """Synchronous wrapper for the async enrichment pipeline."""
-    return asyncio.run(
-        _enrich_map(uuid.UUID(learning_map_id), uuid.UUID(household_id))
-    )
+    return asyncio.run(_enrich_map(uuid.UUID(learning_map_id), uuid.UUID(household_id)))
 
 
 async def _enrich_map(learning_map_id: uuid.UUID, household_id: uuid.UUID) -> dict:
     """Enrich all unenriched nodes in a learning map."""
     from sqlalchemy import select
-    from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+    from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+
     from app.core.config import settings
     from app.models.curriculum import LearningMap, LearningNode
 
@@ -69,7 +68,7 @@ async def _enrich_map(learning_map_id: uuid.UUID, household_id: uuid.UUID) -> di
                 if seed:
                     node.content = seed
                     enriched += 1
-                    logger.info(f"Seed content applied to node '{node.title}' ({i+1}/{total})")
+                    logger.info(f"Seed content applied to node '{node.title}' ({i + 1}/{total})")
                 else:
                     # Mark as needing AI enrichment and inject scope metadata
                     if not node.content:
@@ -78,9 +77,9 @@ async def _enrich_map(learning_map_id: uuid.UUID, household_id: uuid.UUID) -> di
                     scope_meta = _get_scope_metadata(node.title)
                     if scope_meta:
                         node.content["scope_metadata"] = scope_meta
-                        logger.info(f"Scope metadata injected for '{node.title}' ({i+1}/{total})")
+                        logger.info(f"Scope metadata injected for '{node.title}' ({i + 1}/{total})")
                     enriched += 1
-                    logger.info(f"Marked node '{node.title}' for enrichment ({i+1}/{total})")
+                    logger.info(f"Marked node '{node.title}' for enrichment ({i + 1}/{total})")
             except Exception as e:
                 failed += 1
                 logger.warning(f"Failed to enrich node '{node.title}': {e}")
@@ -98,6 +97,7 @@ def _get_seed_content(node_title: str) -> dict | None:
     """Check if pre-written seed content exists for this topic."""
     try:
         from app.content.seed_content import SEED_CONTENT
+
         title_lower = node_title.lower().strip()
         for key, content in SEED_CONTENT.items():
             if key.lower() in title_lower or title_lower in key.lower():
@@ -132,7 +132,7 @@ def _get_scope_metadata(node_title: str, subject_name: str | None = None) -> dic
                 search_subjects = [subj_id]
 
         for subj in search_subjects:
-            for level_name, topics in SCOPE_SEQUENCES[subj].items():
+            for _level_name, topics in SCOPE_SEQUENCES[subj].items():
                 for topic in topics:
                     if topic["title"].lower().strip() == title_lower:
                         return {

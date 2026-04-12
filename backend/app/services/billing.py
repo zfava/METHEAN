@@ -4,7 +4,7 @@ Graceful degradation: no STRIPE_SECRET_KEY = billing features disabled.
 """
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 try:
     import stripe
@@ -47,7 +47,9 @@ async def create_customer(db: AsyncSession, household_id: uuid.UUID, email: str)
 
 
 async def create_checkout_session(
-    db: AsyncSession, household_id: uuid.UUID, email: str,
+    db: AsyncSession,
+    household_id: uuid.UUID,
+    email: str,
 ) -> str | None:
     """Create a Stripe checkout session with 30-day trial. Returns session URL."""
     _init_stripe()
@@ -70,7 +72,8 @@ async def create_checkout_session(
 
 
 async def create_portal_session(
-    db: AsyncSession, household_id: uuid.UUID,
+    db: AsyncSession,
+    household_id: uuid.UUID,
 ) -> str | None:
     """Create a Stripe customer portal session. Returns portal URL."""
     _init_stripe()
@@ -138,7 +141,8 @@ async def handle_webhook(payload: bytes, signature: str) -> bool:
         return False
 
     # Import here to avoid circular imports
-    from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+    from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+
     engine = create_async_engine(settings.DATABASE_URL)
     SessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
@@ -165,9 +169,7 @@ async def _update_subscription(db: AsyncSession, subscription: object, status: s
     if not customer_id:
         return
 
-    result = await db.execute(
-        select(Household).where(Household.stripe_customer_id == str(customer_id))
-    )
+    result = await db.execute(select(Household).where(Household.stripe_customer_id == str(customer_id)))
     hh = result.scalar_one_or_none()
     if not hh:
         return
@@ -175,8 +177,8 @@ async def _update_subscription(db: AsyncSession, subscription: object, status: s
     hh.subscription_status = status
     trial_end = getattr(subscription, "trial_end", None)
     if trial_end:
-        hh.trial_ends_at = datetime.fromtimestamp(trial_end, tz=timezone.utc)
+        hh.trial_ends_at = datetime.fromtimestamp(trial_end, tz=UTC)
     period_end = getattr(subscription, "current_period_end", None)
     if period_end:
-        hh.subscription_ends_at = datetime.fromtimestamp(period_end, tz=timezone.utc)
+        hh.subscription_ends_at = datetime.fromtimestamp(period_end, tz=UTC)
     await db.flush()

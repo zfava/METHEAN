@@ -62,7 +62,7 @@ TABLE OF CONTENTS / STRUCTURE:
 CHILD'S CURRENT POSITION:
 {current_position}
 
-CHILD: {child.first_name}, grade {child.grade_level or 'K'}
+CHILD: {child.first_name}, grade {child.grade_level or "K"}
 
 Map this into a DAG structure with root, milestone, concept, and skill nodes.
 Mark already-completed sections as mastered."""
@@ -142,21 +142,25 @@ async def apply_curriculum_mapping(
         from_ref = edge_data.get("from_ref")
         to_ref = edge_data.get("to_ref")
         if from_ref in ref_to_id and to_ref in ref_to_id:
-            db.add(LearningEdge(
-                learning_map_id=lmap.id,
-                household_id=household_id,
-                from_node_id=ref_to_id[from_ref],
-                to_node_id=ref_to_id[to_ref],
-                relation=EdgeRelation.prerequisite,
-            ))
+            db.add(
+                LearningEdge(
+                    learning_map_id=lmap.id,
+                    household_id=household_id,
+                    from_node_id=ref_to_id[from_ref],
+                    to_node_id=ref_to_id[to_ref],
+                    relation=EdgeRelation.prerequisite,
+                )
+            )
     await db.flush()
 
     # Enroll child
-    db.add(ChildMapEnrollment(
-        child_id=child_id,
-        household_id=household_id,
-        learning_map_id=lmap.id,
-    ))
+    db.add(
+        ChildMapEnrollment(
+            child_id=child_id,
+            household_id=household_id,
+            learning_map_id=lmap.id,
+        )
+    )
 
     # Set mastery state for already-completed nodes
     mastered_refs = proposal.get("nodes_already_mastered", [])
@@ -164,53 +168,62 @@ async def apply_curriculum_mapping(
     for ref in mastered_refs:
         node_id = ref_to_id.get(ref)
         if node_id:
-            db.add(ChildNodeState(
-                child_id=child_id,
-                household_id=household_id,
-                node_id=node_id,
-                mastery_level=MasteryLevel.mastered,
-                is_unlocked=True,
-                attempts_count=1,
-            ))
-            db.add(FSRSCard(
-                child_id=child_id,
-                household_id=household_id,
-                node_id=node_id,
-                stability=10.0,
-                difficulty=2.5,
-                reps=1,
-                state=2,
-                last_review=datetime.now(UTC),
-                due=datetime.now(UTC),
-            ))
+            db.add(
+                ChildNodeState(
+                    child_id=child_id,
+                    household_id=household_id,
+                    node_id=node_id,
+                    mastery_level=MasteryLevel.mastered,
+                    is_unlocked=True,
+                    attempts_count=1,
+                )
+            )
+            db.add(
+                FSRSCard(
+                    child_id=child_id,
+                    household_id=household_id,
+                    node_id=node_id,
+                    stability=10.0,
+                    difficulty=2.5,
+                    reps=1,
+                    state=2,
+                    last_review=datetime.now(UTC),
+                    due=datetime.now(UTC),
+                )
+            )
             mastered_count += 1
 
     # Set current position
     current = proposal.get("current_position", {})
     current_ref = current.get("ref")
     if current_ref and current_ref in ref_to_id:
-        db.add(ChildNodeState(
-            child_id=child_id,
-            household_id=household_id,
-            node_id=ref_to_id[current_ref],
-            mastery_level=MasteryLevel.developing,
-            is_unlocked=True,
-        ))
+        db.add(
+            ChildNodeState(
+                child_id=child_id,
+                household_id=household_id,
+                node_id=ref_to_id[current_ref],
+                mastery_level=MasteryLevel.developing,
+                is_unlocked=True,
+            )
+        )
 
     # Log governance event
-    db.add(GovernanceEvent(
-        household_id=household_id,
-        user_id=user_id,
-        action=GovernanceAction.approve,
-        target_type="curriculum_mapping",
-        target_id=lmap.id,
-        reason=f"Mapped '{proposal.get('material_name', '')}' into METHEAN",
-    ))
+    db.add(
+        GovernanceEvent(
+            household_id=household_id,
+            user_id=user_id,
+            action=GovernanceAction.approve,
+            target_type="curriculum_mapping",
+            target_id=lmap.id,
+            reason=f"Mapped '{proposal.get('material_name', '')}' into METHEAN",
+        )
+    )
     await db.flush()
 
     # Queue background enrichment
     try:
         from app.tasks.worker import enrich_map_task
+
         enrich_map_task.delay(str(lmap.id), str(household_id))
     except Exception:
         pass

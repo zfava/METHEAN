@@ -69,7 +69,7 @@ Learning Node: {node_title}
 Child's responses/work:
 {child_responses}
 
-{f'Tutor transcript:{chr(10)}{tutor_transcript}' if tutor_transcript else ''}
+{f"Tutor transcript:{chr(10)}{tutor_transcript}" if tutor_transcript else ""}
 
 Provide your assessment."""
 
@@ -77,8 +77,12 @@ Provide your assessment."""
     assembled_ctx = ""
     try:
         from app.services.context_assembly import assemble_context
+
         assembled = await assemble_context(
-            db, role="evaluator", child_id=None, household_id=household_id,
+            db,
+            role="evaluator",
+            child_id=None,
+            household_id=household_id,
             node_id=None,
         )
         assembled_ctx = assembled["context_text"]
@@ -89,7 +93,9 @@ Provide your assessment."""
 
     # Fetch philosophical profile for AI constraints
     from sqlalchemy import select as sa_select
+
     from app.models.identity import Household
+
     h_result = await db.execute(sa_select(Household).where(Household.id == household_id))
     h = h_result.scalar_one_or_none()
     phil = h.philosophical_profile if h else None

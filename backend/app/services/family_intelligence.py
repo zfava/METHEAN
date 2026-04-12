@@ -11,7 +11,7 @@ import uuid
 from collections import defaultdict
 from datetime import UTC, datetime, timedelta
 
-from sqlalchemy import and_, func, select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.calibration import EvaluatorPrediction
@@ -39,9 +39,7 @@ DEFAULT_CONFIG = {
 
 
 async def _get_household_children(db: AsyncSession, household_id: uuid.UUID) -> list[Child]:
-    result = await db.execute(
-        select(Child).where(Child.household_id == household_id)
-    )
+    result = await db.execute(select(Child).where(Child.household_id == household_id))
     return list(result.scalars().all())
 
 
@@ -70,7 +68,9 @@ async def _insight_exists(
 ) -> bool:
     """Check if a non-dismissed insight already exists for this pattern + nodes."""
     result = await db.execute(
-        select(func.count()).select_from(FamilyInsight).where(
+        select(func.count())
+        .select_from(FamilyInsight)
+        .where(
             FamilyInsight.household_id == household_id,
             FamilyInsight.pattern_type == pattern_type,
             FamilyInsight.affected_nodes == affected_nodes,
@@ -149,7 +149,9 @@ async def detect_shared_struggles(
                 {
                     "child_id": str(s.child_id),
                     "child_name": child_names.get(s.child_id, "?"),
-                    "mastery_level": s.mastery_level.value if hasattr(s.mastery_level, "value") else str(s.mastery_level),
+                    "mastery_level": s.mastery_level.value
+                    if hasattr(s.mastery_level, "value")
+                    else str(s.mastery_level),
                     "attempts_count": s.attempts_count,
                 }
                 for s in child_states
@@ -195,14 +197,16 @@ async def detect_curriculum_gaps(
     settings = _get_setting(config, "curriculum_gap")
     conf_threshold = settings.get("confidence_threshold", 0.5)
     child_ids = [c.id for c in children]
-    child_names = {c.id: c.first_name for c in children}
+    {c.id: c.first_name for c in children}
 
     # Get all predictions, grouped by child+node, find first per child per node
     result = await db.execute(
-        select(EvaluatorPrediction).where(
+        select(EvaluatorPrediction)
+        .where(
             EvaluatorPrediction.household_id == household_id,
             EvaluatorPrediction.child_id.in_(child_ids),
-        ).order_by(EvaluatorPrediction.created_at)
+        )
+        .order_by(EvaluatorPrediction.created_at)
     )
     all_preds = result.scalars().all()
 
@@ -215,7 +219,7 @@ async def detect_curriculum_gaps(
 
     # Group by node: find nodes attempted by 2+ children
     node_first_attempts: dict[uuid.UUID, list[EvaluatorPrediction]] = defaultdict(list)
-    for (child_id, node_id), pred in first_pred.items():
+    for (_child_id, node_id), pred in first_pred.items():
         node_first_attempts[node_id].append(pred)
 
     insights = []
@@ -243,8 +247,7 @@ async def detect_curriculum_gaps(
                 evidence_json={
                     "node_title": node_title,
                     "first_attempt_confidences": [
-                        {"child_id": str(p.child_id), "confidence": p.predicted_confidence}
-                        for p in preds
+                        {"child_id": str(p.child_id), "confidence": p.predicted_confidence} for p in preds
                     ],
                 },
                 confidence=round(1.0 - avg_conf, 2),
@@ -275,7 +278,7 @@ async def detect_pacing_divergence(
     settings = _get_setting(config, "pacing_divergence")
     divergence_factor = settings.get("divergence_factor", 2.0)
 
-    child_ids = [c.id for c in children]
+    [c.id for c in children]
     child_names = {c.id: c.first_name for c in children}
     cutoff = datetime.now(UTC) - timedelta(weeks=4)
 
@@ -283,7 +286,9 @@ async def detect_pacing_divergence(
     child_rates: dict[uuid.UUID, float] = {}
     for child in children:
         result = await db.execute(
-            select(func.count()).select_from(ChildNodeState).where(
+            select(func.count())
+            .select_from(ChildNodeState)
+            .where(
                 ChildNodeState.child_id == child.id,
                 ChildNodeState.household_id == household_id,
                 ChildNodeState.mastery_level == MasteryLevel.mastered,
@@ -359,11 +364,13 @@ async def detect_environmental_correlation(
 
     # Get daily confidence averages per child
     result = await db.execute(
-        select(EvaluatorPrediction).where(
+        select(EvaluatorPrediction)
+        .where(
             EvaluatorPrediction.household_id == household_id,
             EvaluatorPrediction.child_id.in_(child_ids),
             EvaluatorPrediction.created_at >= cutoff,
-        ).order_by(EvaluatorPrediction.created_at)
+        )
+        .order_by(EvaluatorPrediction.created_at)
     )
     preds = result.scalars().all()
 
@@ -422,7 +429,7 @@ async def detect_environmental_correlation(
     if await _insight_exists(db, household_id, FamilyPatternType.environmental_correlation, []):
         return []
 
-    child_names = {c.id: c.first_name for c in children}
+    {c.id: c.first_name for c in children}
     date_range = f"{dip_days[0]} to {dip_days[-1]}" if len(dip_days) > 1 else dip_days[0]
 
     insight = FamilyInsight(
@@ -572,16 +579,19 @@ async def run_family_intelligence(
                 try:
                     from app.models.enums import AuditAction
                     from app.models.operational import AuditLog
-                    db.add(AuditLog(
-                        household_id=household_id,
-                        action=AuditAction.create,
-                        resource_type="family_insight",
-                        resource_id=insight.id,
-                        details={
-                            "pattern_type": name,
-                            "confidence": insight.confidence,
-                        },
-                    ))
+
+                    db.add(
+                        AuditLog(
+                            household_id=household_id,
+                            action=AuditAction.create,
+                            resource_type="family_insight",
+                            resource_id=insight.id,
+                            details={
+                                "pattern_type": name,
+                                "confidence": insight.confidence,
+                            },
+                        )
+                    )
                 except Exception:
                     pass
         except Exception:
@@ -610,7 +620,7 @@ async def generate_predictive_scaffolding(
     Uses the transitive closure table to check if a child is within 2
     prerequisite hops of a difficult node.
     """
-    from app.models.curriculum import LearningMapClosure, ChildMapEnrollment
+    from app.models.curriculum import LearningMapClosure
 
     children = await _get_household_children(db, household_id)
     if len(children) < 2:
@@ -623,10 +633,12 @@ async def generate_predictive_scaffolding(
     result = await db.execute(
         select(FamilyInsight).where(
             FamilyInsight.household_id == household_id,
-            FamilyInsight.pattern_type.in_([
-                FamilyPatternType.shared_struggle,
-                FamilyPatternType.curriculum_gap,
-            ]),
+            FamilyInsight.pattern_type.in_(
+                [
+                    FamilyPatternType.shared_struggle,
+                    FamilyPatternType.curriculum_gap,
+                ]
+            ),
             FamilyInsight.status.in_([s.value for s in ACTIVE_STATUSES]),
         )
     )
@@ -686,7 +698,9 @@ async def generate_predictive_scaffolding(
 
                 # Check for existing predictive insight
                 existing = await db.execute(
-                    select(func.count()).select_from(FamilyInsight).where(
+                    select(func.count())
+                    .select_from(FamilyInsight)
+                    .where(
                         FamilyInsight.household_id == household_id,
                         FamilyInsight.predictive_child_id == child.id,
                         FamilyInsight.predictive_node_id == target_node_id,
@@ -751,10 +765,13 @@ async def build_family_context(
     Returns empty string if no active insights exist.
     """
     result = await db.execute(
-        select(FamilyInsight).where(
+        select(FamilyInsight)
+        .where(
             FamilyInsight.household_id == household_id,
             FamilyInsight.status.in_([s.value for s in ACTIVE_STATUSES]),
-        ).order_by(FamilyInsight.confidence.desc()).limit(5)
+        )
+        .order_by(FamilyInsight.confidence.desc())
+        .limit(5)
     )
     insights = result.scalars().all()
 
@@ -787,11 +804,14 @@ async def build_planner_scaffolding_context(
     Returns warnings about upcoming nodes where siblings struggled.
     """
     result = await db.execute(
-        select(FamilyInsight).where(
+        select(FamilyInsight)
+        .where(
             FamilyInsight.household_id == household_id,
             FamilyInsight.predictive_child_id == child_id,
             FamilyInsight.status.in_([s.value for s in ACTIVE_STATUSES]),
-        ).order_by(FamilyInsight.confidence.desc()).limit(5)
+        )
+        .order_by(FamilyInsight.confidence.desc())
+        .limit(5)
     )
     insights = result.scalars().all()
 

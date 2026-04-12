@@ -7,14 +7,13 @@ Runs as daily Celery task + triggered inline on state changes.
 import uuid
 from datetime import UTC, datetime, timedelta
 
-from sqlalchemy import and_, func, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.models.curriculum import LearningNode
 from app.models.enums import AlertSeverity, AlertStatus, MasteryLevel
 from app.models.evidence import Alert
-from app.models.state import ChildNodeState, FSRSCard, ReviewLog, StateEvent
-from app.models.curriculum import LearningEdge, LearningNode
-from app.models.enums import EdgeRelation
+from app.models.state import ChildNodeState, StateEvent
 
 
 async def detect_stalls(
@@ -25,7 +24,9 @@ async def detect_stalls(
     cutoff = datetime.now(UTC) - timedelta(days=14)  # 2 weeks default
 
     in_progress_levels = [
-        MasteryLevel.emerging, MasteryLevel.developing, MasteryLevel.proficient,
+        MasteryLevel.emerging,
+        MasteryLevel.developing,
+        MasteryLevel.proficient,
     ]
 
     result = await db.execute(
@@ -42,21 +43,21 @@ async def detect_stalls(
     for state in stalled:
         # Check no existing active stall alert for this node
         existing = await db.execute(
-            select(Alert.id).where(
+            select(Alert.id)
+            .where(
                 Alert.household_id == household_id,
                 Alert.child_id == state.child_id,
                 Alert.source == "stall_detection",
                 Alert.status.in_([AlertStatus.unread, AlertStatus.read]),
                 Alert.metadata_["node_id"].as_string() == str(state.node_id),
-            ).limit(1)
+            )
+            .limit(1)
         )
         if existing.scalar_one_or_none():
             continue
 
         # Get node title
-        node_result = await db.execute(
-            select(LearningNode.title).where(LearningNode.id == state.node_id)
-        )
+        node_result = await db.execute(select(LearningNode.title).where(LearningNode.id == state.node_id))
         title = node_result.scalar_one_or_none() or "Unknown"
 
         days_stalled = (datetime.now(UTC) - state.last_activity_at).days if state.last_activity_at else 0
@@ -90,9 +91,7 @@ async def detect_regression(
     if from_mastery != "mastered":
         return None
 
-    node_result = await db.execute(
-        select(LearningNode.title).where(LearningNode.id == node_id)
-    )
+    node_result = await db.execute(select(LearningNode.title).where(LearningNode.id == node_id))
     title = node_result.scalar_one_or_none() or "Unknown"
 
     alert = Alert(
@@ -118,10 +117,13 @@ async def detect_pattern_failure(
 ) -> Alert | None:
     """Detect 3+ consecutive low-quality attempts on same node."""
     result = await db.execute(
-        select(StateEvent).where(
+        select(StateEvent)
+        .where(
             StateEvent.child_id == child_id,
             StateEvent.node_id == node_id,
-        ).order_by(StateEvent.created_at.desc()).limit(3)
+        )
+        .order_by(StateEvent.created_at.desc())
+        .limit(3)
     )
     events = result.scalars().all()
 
@@ -139,9 +141,7 @@ async def detect_pattern_failure(
     if low_count < 3:
         return None
 
-    node_result = await db.execute(
-        select(LearningNode.title).where(LearningNode.id == node_id)
-    )
+    node_result = await db.execute(select(LearningNode.title).where(LearningNode.id == node_id))
     title = node_result.scalar_one_or_none() or "Unknown"
 
     alert = Alert(

@@ -12,10 +12,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.enums import ActivityStatus, AttemptStatus
 from app.models.governance import Activity, Attempt
+from app.services import achievements as achievements_svc
+from app.services import intelligence
 from app.services.evaluator import mock_evaluator
 from app.services.state_engine import process_review
-from app.services import intelligence
-from app.services import achievements as achievements_svc
 
 
 async def start_attempt(
@@ -77,7 +77,9 @@ async def submit_attempt(
         raise ValueError("Attempt not found")
 
     if attempt.status != AttemptStatus.started:
-        raise ValueError(f"Attempt is already {attempt.status.value if hasattr(attempt.status, 'value') else attempt.status}")
+        raise ValueError(
+            f"Attempt is already {attempt.status.value if hasattr(attempt.status, 'value') else attempt.status}"
+        )
 
     # Complete the attempt
     now = datetime.now(UTC)
@@ -88,9 +90,7 @@ async def submit_attempt(
     attempt.feedback = feedback or {}
 
     # Get the activity to find the linked node
-    activity_result = await db.execute(
-        select(Activity).where(Activity.id == attempt.activity_id)
-    )
+    activity_result = await db.execute(select(Activity).where(Activity.id == attempt.activity_id))
     activity = activity_result.scalar_one()
 
     # Update activity status
@@ -115,10 +115,10 @@ async def submit_attempt(
         confidence = mock_evaluator.evaluate(score=score)
 
     # Apply calibration offset (advisory — never blocks pipeline)
-    raw_confidence = confidence
     calibration_offset_applied = 0.0
     try:
         from app.services.calibration import apply_calibration_offset
+
         adjusted = await apply_calibration_offset(db, confidence, attempt.child_id)
         calibration_offset_applied = adjusted - confidence
         confidence = adjusted
@@ -127,10 +127,12 @@ async def submit_attempt(
 
     # Reconcile calibration on subsequent attempts (same child + node)
     try:
+        from sqlalchemy import select as sa_select
+
+        from app.models.state import ChildNodeState
         from app.services.calibration import reconcile_outcome
         from app.services.state_engine import confidence_to_rating
-        from app.models.state import ChildNodeState
-        from sqlalchemy import select as sa_select
+
         # Check if child has prior attempts on this node
         prior_state_result = await db.execute(
             sa_select(ChildNodeState).where(
@@ -142,7 +144,10 @@ async def submit_attempt(
         if prior_state_result.scalar_one_or_none() is not None:
             new_rating = confidence_to_rating(confidence)
             await reconcile_outcome(
-                db, attempt.child_id, household_id, activity.node_id,
+                db,
+                attempt.child_id,
+                household_id,
+                activity.node_id,
                 new_fsrs_rating=new_rating.value,
             )
     except Exception:
@@ -162,6 +167,7 @@ async def submit_attempt(
     # Record calibration prediction (after FSRS rating computed, advisory)
     try:
         from app.services.calibration import record_prediction
+
         await record_prediction(
             db,
             child_id=attempt.child_id,
@@ -183,9 +189,13 @@ async def submit_attempt(
         subject = activity.subject_area or activity.title or ""
 
         await intelligence.record_attempt_engagement(
-            db, attempt.child_id, household_id,
+            db,
+            attempt.child_id,
+            household_id,
             duration_minutes=duration_minutes or 0,
-            activity_type=activity.activity_type.value if hasattr(activity.activity_type, "value") else str(activity.activity_type),
+            activity_type=activity.activity_type.value
+            if hasattr(activity.activity_type, "value")
+            else str(activity.activity_type),
             time_of_day=time_of_day,
             completed=True,
             estimated_minutes=activity.estimated_minutes,
@@ -194,7 +204,9 @@ async def submit_attempt(
         # Record evaluation insight if we have feedback data
         if feedback:
             await intelligence.record_evaluation_insight(
-                db, attempt.child_id, household_id,
+                db,
+                attempt.child_id,
+                household_id,
                 evaluation_result=feedback,
                 activity_title=activity.title or "",
                 subject=subject,
@@ -205,7 +217,9 @@ async def submit_attempt(
         curr = review_result.get("mastery_level")
         if prev and curr and prev != curr:
             await intelligence.record_mastery_transition(
-                db, attempt.child_id, household_id,
+                db,
+                attempt.child_id,
+                household_id,
                 subject=subject,
                 from_level=prev,
                 to_level=curr,
@@ -225,7 +239,9 @@ async def submit_attempt(
             "node_id": str(activity.node_id) if activity.node_id else None,
         }
         new_achievements = await achievements_svc.check_achievements(
-            db, attempt.child_id, household_id,
+            db,
+            attempt.child_id,
+            household_id,
             trigger_event="mastery_change" if ctx["new_level"] != ctx["old_level"] else "activity_complete",
             context=ctx,
         )

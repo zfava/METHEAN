@@ -6,18 +6,17 @@ child map state, enrollment, parent overrides, and template copying.
 
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.api.deps import PaginationParams, get_current_user, get_db, require_permission, require_role
+from app.api.deps import PaginationParams, get_current_user, get_db, require_permission
 from app.models.curriculum import (
     ChildMapEnrollment,
     LearningEdge,
     LearningMap,
-    LearningMapClosure,
     LearningNode,
     Subject,
 )
@@ -48,7 +47,6 @@ from app.schemas.curriculum import (
 )
 from app.services.dag_engine import (
     add_closure_entries,
-    check_prerequisites_met,
     compute_map_state,
     increment_map_version,
     rebuild_closure_for_map,
@@ -61,8 +59,11 @@ router = APIRouter(tags=["curriculum"])
 
 # ── Helpers ──
 
+
 async def _get_map_or_404(
-    db: AsyncSession, map_id: uuid.UUID, household_id: uuid.UUID,
+    db: AsyncSession,
+    map_id: uuid.UUID,
+    household_id: uuid.UUID,
 ) -> LearningMap:
     result = await db.execute(
         select(LearningMap).where(
@@ -77,7 +78,10 @@ async def _get_map_or_404(
 
 
 async def _get_node_or_404(
-    db: AsyncSession, map_id: uuid.UUID, node_id: uuid.UUID, household_id: uuid.UUID,
+    db: AsyncSession,
+    map_id: uuid.UUID,
+    node_id: uuid.UUID,
+    household_id: uuid.UUID,
 ) -> LearningNode:
     result = await db.execute(
         select(LearningNode).where(
@@ -93,7 +97,9 @@ async def _get_node_or_404(
 
 
 async def _get_child_or_404(
-    db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID,
+    db: AsyncSession,
+    child_id: uuid.UUID,
+    household_id: uuid.UUID,
 ) -> Child:
     result = await db.execute(
         select(Child).where(
@@ -108,6 +114,7 @@ async def _get_child_or_404(
 
 
 # ── Subject endpoints ──
+
 
 @router.post("/subjects", response_model=SubjectResponse, status_code=201)
 async def create_subject(
@@ -135,13 +142,12 @@ async def list_subjects(
     pagination: PaginationParams = Depends(),
 ) -> dict:
     base = select(Subject).where(
-        Subject.household_id == user.household_id, Subject.is_active == True  # noqa: E712
+        Subject.household_id == user.household_id,
+        Subject.is_active == True,  # noqa: E712
     )
     total_result = await db.execute(select(func.count()).select_from(base.subquery()))
     total = total_result.scalar() or 0
-    result = await db.execute(
-        base.order_by(Subject.sort_order).offset(pagination.skip).limit(pagination.limit)
-    )
+    result = await db.execute(base.order_by(Subject.sort_order).offset(pagination.skip).limit(pagination.limit))
     return {
         "items": [SubjectResponse.model_validate(s) for s in result.scalars().all()],
         "total": total,
@@ -151,6 +157,7 @@ async def list_subjects(
 
 
 # ── Templates (must be before {map_id} routes to avoid path conflicts) ──
+
 
 @router.get("/learning-maps/templates", response_model=list[TemplateInfo])
 async def list_templates(
@@ -221,6 +228,7 @@ async def copy_template(
         # Inject pre-enriched content if available
         try:
             from app.content.math_foundational_content import MATH_FOUNDATIONAL_CONTENT
+
             if template.template_id == "math-foundational" and tnode.ref in MATH_FOUNDATIONAL_CONTENT:
                 node.content = MATH_FOUNDATIONAL_CONTENT[tnode.ref]
         except ImportError:
@@ -249,6 +257,7 @@ async def copy_template(
     # Queue background enrichment
     try:
         from app.tasks.worker import enrich_map_task
+
         enrich_map_task.delay(str(lmap.id), str(user.household_id))
     except Exception:
         pass  # Enrichment failure should not block template application
@@ -263,6 +272,7 @@ async def copy_template(
 
 
 # ── Learning Map CRUD ──
+
 
 @router.post("/learning-maps", response_model=LearningMapResponse, status_code=201)
 async def create_learning_map(
@@ -373,6 +383,7 @@ async def update_learning_map(
 
 # ── Node endpoints ──
 
+
 @router.post(
     "/learning-maps/{map_id}/nodes",
     response_model=NodeResponse,
@@ -452,7 +463,8 @@ async def delete_node(
     await db.flush()
 
     # Remove edges involving this node and rebuild closure
-    from sqlalchemy import or_, delete as sa_delete
+    from sqlalchemy import delete as sa_delete
+    from sqlalchemy import or_
 
     await db.execute(
         sa_delete(LearningEdge).where(
@@ -474,6 +486,7 @@ async def delete_node(
 
 # ── Edge endpoints ──
 
+
 @router.post(
     "/learning-maps/{map_id}/edges",
     response_model=EdgeResponse,
@@ -485,11 +498,11 @@ async def create_edge(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> EdgeResponse:
-    lmap = await _get_map_or_404(db, map_id, user.household_id)
+    await _get_map_or_404(db, map_id, user.household_id)
 
     # Verify both nodes exist and belong to this map
-    from_node = await _get_node_or_404(db, map_id, body.from_node_id, user.household_id)
-    to_node = await _get_node_or_404(db, map_id, body.to_node_id, user.household_id)
+    await _get_node_or_404(db, map_id, body.from_node_id, user.household_id)
+    await _get_node_or_404(db, map_id, body.to_node_id, user.household_id)
 
     # Check for duplicate edge
     existing = await db.execute(
@@ -500,9 +513,7 @@ async def create_edge(
         )
     )
     if existing.scalar_one_or_none():
-        raise HTTPException(
-            status_code=409, detail="Edge already exists between these nodes"
-        )
+        raise HTTPException(status_code=409, detail="Edge already exists between these nodes")
 
     # CRITICAL: cycle detection
     if await would_create_cycle(db, map_id, body.from_node_id, body.to_node_id):
@@ -565,6 +576,7 @@ async def delete_edge(
 
 # ── Child Map State ──
 
+
 @router.get(
     "/children/{child_id}/map-state",
     response_model=list[ChildMapStateResponse],
@@ -574,7 +586,7 @@ async def get_child_map_state(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> list[ChildMapStateResponse]:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     # Get all active enrollments for this child
     enrollments_result = await db.execute(
@@ -589,25 +601,23 @@ async def get_child_map_state(
     responses = []
     for enrollment in enrollments:
         # Get the map
-        map_result = await db.execute(
-            select(LearningMap).where(LearningMap.id == enrollment.learning_map_id)
-        )
+        map_result = await db.execute(select(LearningMap).where(LearningMap.id == enrollment.learning_map_id))
         lmap = map_result.scalar_one_or_none()
         if not lmap:
             continue
 
-        node_states = await compute_map_state(
-            db, child_id, user.household_id, enrollment.learning_map_id
-        )
+        node_states = await compute_map_state(db, child_id, user.household_id, enrollment.learning_map_id)
 
-        responses.append(ChildMapStateResponse(
-            child_id=child_id,
-            learning_map_id=enrollment.learning_map_id,
-            map_name=lmap.name,
-            enrolled=True,
-            progress_pct=enrollment.progress_pct,
-            nodes=[NodeStateStatus(**ns) for ns in node_states],
-        ))
+        responses.append(
+            ChildMapStateResponse(
+                child_id=child_id,
+                learning_map_id=enrollment.learning_map_id,
+                map_name=lmap.name,
+                enrolled=True,
+                progress_pct=enrollment.progress_pct,
+                nodes=[NodeStateStatus(**ns) for ns in node_states],
+            )
+        )
 
     return responses
 
@@ -622,7 +632,7 @@ async def get_child_single_map_state(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> ChildMapStateResponse:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     lmap = await _get_map_or_404(db, map_id, user.household_id)
 
     # Check enrollment
@@ -634,9 +644,7 @@ async def get_child_single_map_state(
     )
     enrollment = enroll_result.scalar_one_or_none()
 
-    node_states = await compute_map_state(
-        db, child_id, user.household_id, map_id
-    )
+    node_states = await compute_map_state(db, child_id, user.household_id, map_id)
 
     return ChildMapStateResponse(
         child_id=child_id,
@@ -650,6 +658,7 @@ async def get_child_single_map_state(
 
 # ── Enrollment ──
 
+
 @router.post(
     "/children/{child_id}/enrollments",
     response_model=EnrollmentResponse,
@@ -661,7 +670,7 @@ async def enroll_child(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("manage.children")),
 ) -> EnrollmentResponse:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     lmap = await _get_map_or_404(db, body.learning_map_id, user.household_id)
 
     # Check for existing enrollment
@@ -672,9 +681,7 @@ async def enroll_child(
         )
     )
     if existing.scalar_one_or_none():
-        raise HTTPException(
-            status_code=409, detail="Child is already enrolled in this map"
-        )
+        raise HTTPException(status_code=409, detail="Child is already enrolled in this map")
 
     enrollment = ChildMapEnrollment(
         child_id=child_id,
@@ -690,12 +697,14 @@ async def enroll_child(
 
 # ── Batch Update ──
 
+
 class BatchNodeCreate(BaseModel):
     node_type: str
     title: str
     description: str | None = None
     estimated_minutes: int | None = None
     sort_order: int = 0
+
 
 class BatchNodeUpdate(BaseModel):
     id: str
@@ -705,9 +714,11 @@ class BatchNodeUpdate(BaseModel):
     estimated_minutes: int | None = None
     sort_order: int | None = None
 
+
 class BatchEdgeCreate(BaseModel):
     from_node_id: str
     to_node_id: str
+
 
 class BatchRequest(BaseModel):
     nodes_create: list[BatchNodeCreate] = []
@@ -725,7 +736,7 @@ async def batch_update(
     user: User = Depends(get_current_user),
 ) -> dict:
     """Process all map changes in a single transaction."""
-    lmap = await _get_map_or_404(db, map_id, user.household_id)
+    await _get_map_or_404(db, map_id, user.household_id)
 
     created_nodes: dict[str, uuid.UUID] = {}  # temp_id -> real_id
     errors = []
@@ -753,7 +764,9 @@ async def batch_update(
             node = await _get_node_or_404(db, map_id, nid, user.household_id)
             node.is_active = False
             # Remove edges involving this node
-            from sqlalchemy import or_ as sa_or, delete as sa_delete
+            from sqlalchemy import delete as sa_delete
+            from sqlalchemy import or_ as sa_or
+
             await db.execute(
                 sa_delete(LearningEdge).where(
                     LearningEdge.learning_map_id == map_id,
@@ -842,7 +855,8 @@ async def batch_update(
 
     # Return updated map
     result = await db.execute(
-        select(LearningMap).where(LearningMap.id == map_id)
+        select(LearningMap)
+        .where(LearningMap.id == map_id)
         .options(selectinload(LearningMap.nodes), selectinload(LearningMap.edges))
     )
     updated_map = result.scalar_one()
@@ -852,8 +866,13 @@ async def batch_update(
         "map_id": str(map_id),
         "version": updated_map.version,
         "nodes": [
-            {"id": str(n.id), "title": n.title, "node_type": n.node_type.value if hasattr(n.node_type, "value") else str(n.node_type),
-             "sort_order": n.sort_order, "estimated_minutes": n.estimated_minutes}
+            {
+                "id": str(n.id),
+                "title": n.title,
+                "node_type": n.node_type.value if hasattr(n.node_type, "value") else str(n.node_type),
+                "sort_order": n.sort_order,
+                "estimated_minutes": n.estimated_minutes,
+            }
             for n in sorted(active_nodes, key=lambda x: x.sort_order)
         ],
         "edges": [
@@ -870,6 +889,7 @@ async def batch_update(
 
 
 # ── Curriculum Mapper ──
+
 
 class MapExistingRequest(BaseModel):
     material_name: str = Field(min_length=1, max_length=255)
@@ -889,9 +909,12 @@ async def map_existing_curriculum_endpoint(
     """Map an existing curriculum into METHEAN's DAG structure."""
     from app.services.curriculum_mapper import map_existing_curriculum
 
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     proposal = await map_existing_curriculum(
-        db, user.household_id, child_id, user.id,
+        db,
+        user.household_id,
+        child_id,
+        user.id,
         material_name=body.material_name,
         material_description=body.material_description,
         table_of_contents=body.table_of_contents,
@@ -911,14 +934,19 @@ async def apply_mapping_endpoint(
     """Apply an approved curriculum mapping: create map, nodes, mastery state."""
     from app.services.curriculum_mapper import apply_curriculum_mapping
 
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     result = await apply_curriculum_mapping(
-        db, user.household_id, child_id, user.id, proposal,
+        db,
+        user.household_id,
+        child_id,
+        user.id,
+        proposal,
     )
     return result
 
 
 # ── Content Enrichment ──
+
 
 @router.post("/learning-maps/{map_id}/enrich")
 async def enrich_map_nodes(
@@ -928,7 +956,8 @@ async def enrich_map_nodes(
 ) -> dict:
     """Trigger content enrichment for all unenriched nodes in the map."""
     from app.services.content_engine import enrich_nodes
-    lmap = await _get_map_or_404(db, map_id, user.household_id)
+
+    await _get_map_or_404(db, map_id, user.household_id)
     result = await enrich_nodes(db, user.household_id, map_id, user_id=user.id)
     return result
 
@@ -942,7 +971,8 @@ async def enrich_single_node_endpoint(
 ) -> dict:
     """Enrich a single node with teaching/assessment/resource guidance."""
     from app.services.content_engine import enrich_single_node
-    node = await _get_node_or_404(db, map_id, node_id, user.household_id)
+
+    await _get_node_or_404(db, map_id, node_id, user.household_id)
     result = await enrich_single_node(db, node_id, user.household_id, user_id=user.id)
     return result
 
@@ -961,6 +991,7 @@ async def get_node_content(
 
 # ── Parent Override ──
 
+
 @router.post(
     "/children/{child_id}/nodes/{node_id}/override",
     response_model=OverrideResponse,
@@ -972,7 +1003,7 @@ async def override_blocked_node(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("override.prerequisites")),
 ) -> OverrideResponse:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     # Find the node
     node_result = await db.execute(

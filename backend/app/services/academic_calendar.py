@@ -12,7 +12,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.identity import Household
 
-
 DEFAULT_CALENDAR = {
     "schedule_type": "traditional",
     "total_instructional_weeks": 36,

@@ -25,13 +25,9 @@ from app.core.database import Base
 
 class LearnerStyleVector(Base):
     __tablename__ = "learner_style_vectors"
-    __table_args__ = (
-        UniqueConstraint("child_id", name="uq_style_vector_child"),
-    )
+    __table_args__ = (UniqueConstraint("child_id", name="uq_style_vector_child"),)
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     household_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("households.id", ondelete="CASCADE"), nullable=False
     )
@@ -61,9 +57,7 @@ class LearnerStyleVector(Base):
 
     # ── Timestamps ──
     last_computed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )

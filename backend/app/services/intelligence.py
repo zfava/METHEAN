@@ -4,23 +4,19 @@ The intelligence layer OBSERVES. The parent GOVERNS. The AI ADAPTS.
 """
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.intelligence import LearnerIntelligence
 
-
 # ── Helpers ──
 
-async def _get_or_create(
-    db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID
-) -> LearnerIntelligence:
+
+async def _get_or_create(db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID) -> LearnerIntelligence:
     """Get existing intelligence profile or create a new one."""
-    result = await db.execute(
-        select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id)
-    )
+    result = await db.execute(select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id))
     profile = result.scalar_one_or_none()
     if profile:
         return profile
@@ -42,10 +38,11 @@ async def _get_or_create(
 
 
 def _now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 # ── Accumulation Functions ──
+
 
 async def record_evaluation_insight(
     db: AsyncSession,
@@ -95,7 +92,7 @@ async def record_evaluation_insight(
     patterns[subject] = sub
     profile.subject_patterns = patterns
     profile.observation_count = (profile.observation_count or 0) + 1
-    profile.last_updated_at = datetime.now(timezone.utc)
+    profile.last_updated_at = datetime.now(UTC)
     await db.flush()
 
 
@@ -135,19 +132,24 @@ async def record_attempt_engagement(
         ts["completed"] += 1
     type_stats[activity_type] = ts
     eng["activity_type_stats"] = type_stats
-    eng["activity_type_preferences"] = {
-        k: round(v["completed"] / max(v["total"], 1), 2) for k, v in type_stats.items()
-    }
+    eng["activity_type_preferences"] = {k: round(v["completed"] / max(v["total"], 1), 2) for k, v in type_stats.items()}
 
     # Focus flag
     if estimated_minutes and duration_minutes < estimated_minutes * 0.5:
         flags = eng.get("focus_flags", [])
-        flags.append({"activity_type": activity_type, "duration": duration_minutes, "expected": estimated_minutes, "at": _now_iso()})
+        flags.append(
+            {
+                "activity_type": activity_type,
+                "duration": duration_minutes,
+                "expected": estimated_minutes,
+                "at": _now_iso(),
+            }
+        )
         eng["focus_flags"] = flags[-10:]
 
     profile.engagement_patterns = eng
     profile.observation_count = (profile.observation_count or 0) + 1
-    profile.last_updated_at = datetime.now(timezone.utc)
+    profile.last_updated_at = datetime.now(UTC)
     await db.flush()
 
 
@@ -185,7 +187,7 @@ async def record_tutor_interaction(
 
     profile.tutor_interaction_analysis = analysis
     profile.observation_count = (profile.observation_count or 0) + 1
-    profile.last_updated_at = datetime.now(timezone.utc)
+    profile.last_updated_at = datetime.now(UTC)
     await db.flush()
 
 
@@ -208,14 +210,16 @@ async def record_mastery_transition(
 
     pace = dict(profile.pace_trends or {})
     transitions = pace.get("transitions", [])
-    transitions.append({
-        "subject": subject,
-        "node": node_title,
-        "from": from_level,
-        "to": to_level,
-        "direction": "up" if is_upward else "down",
-        "at": _now_iso(),
-    })
+    transitions.append(
+        {
+            "subject": subject,
+            "node": node_title,
+            "from": from_level,
+            "to": to_level,
+            "direction": "up" if is_upward else "down",
+            "at": _now_iso(),
+        }
+    )
     transitions = transitions[-50:]
     pace["transitions"] = transitions
 
@@ -234,7 +238,7 @@ async def record_mastery_transition(
 
     profile.pace_trends = pace
     profile.observation_count = (profile.observation_count or 0) + 1
-    profile.last_updated_at = datetime.now(timezone.utc)
+    profile.last_updated_at = datetime.now(UTC)
     await db.flush()
 
 
@@ -247,9 +251,7 @@ async def record_governance_pattern(
 ) -> None:
     """Called after every governance decision. Updates governance_learned_preferences for all children."""
     # Get all intelligence profiles for this household
-    result = await db.execute(
-        select(LearnerIntelligence).where(LearnerIntelligence.household_id == household_id)
-    )
+    result = await db.execute(select(LearnerIntelligence).where(LearnerIntelligence.household_id == household_id))
     profiles = result.scalars().all()
     if not profiles:
         return
@@ -259,18 +261,20 @@ async def record_governance_pattern(
 
         # Track decisions
         decisions = prefs.get("decisions", [])
-        decisions.append({
-            "action": action,
-            "activity_type": activity_type,
-            "difficulty": difficulty,
-            "at": _now_iso(),
-        })
+        decisions.append(
+            {
+                "action": action,
+                "activity_type": activity_type,
+                "difficulty": difficulty,
+                "at": _now_iso(),
+            }
+        )
         decisions = decisions[-100:]
         prefs["decisions"] = decisions
 
         # After 20+ decisions, compute difficulty ceiling
         if len(decisions) >= 20:
-            approved = [d for d in decisions if d["action"] in ("approve", "auto_approve")]
+            [d for d in decisions if d["action"] in ("approve", "auto_approve")]
             rejected = [d for d in decisions if d["action"] == "reject"]
 
             if difficulty is not None:
@@ -278,7 +282,9 @@ async def record_governance_pattern(
                 for ceiling in range(5, 0, -1):
                     at_level = [d for d in decisions if d.get("difficulty") == ceiling]
                     if len(at_level) >= 3:
-                        approve_rate = sum(1 for d in at_level if d["action"] in ("approve", "auto_approve")) / len(at_level)
+                        approve_rate = sum(1 for d in at_level if d["action"] in ("approve", "auto_approve")) / len(
+                            at_level
+                        )
                         if approve_rate >= 0.9:
                             prefs["auto_approve_difficulty_ceiling"] = ceiling
                             break
@@ -291,12 +297,13 @@ async def record_governance_pattern(
             prefs["rejected_activity_types"] = [k for k, v in rejected_types.items() if v >= 2]
 
         profile.governance_learned_preferences = prefs
-        profile.last_updated_at = datetime.now(timezone.utc)
+        profile.last_updated_at = datetime.now(UTC)
 
     await db.flush()
 
 
 # ── Synthesis Function ──
+
 
 async def get_intelligence_context(
     db: AsyncSession,
@@ -324,8 +331,12 @@ async def get_intelligence_context(
     subject_summary = {}
     for subject, data in (profile.subject_patterns or {}).items():
         subject_summary[subject] = {
-            "strengths": [s["text"] for s in sorted(data.get("strengths", []), key=lambda x: -x.get("confidence", 0))[:3]],
-            "struggles": [s["text"] for s in sorted(data.get("struggles", []), key=lambda x: -x.get("confidence", 0))[:3]],
+            "strengths": [
+                s["text"] for s in sorted(data.get("strengths", []), key=lambda x: -x.get("confidence", 0))[:3]
+            ],
+            "struggles": [
+                s["text"] for s in sorted(data.get("struggles", []), key=lambda x: -x.get("confidence", 0))[:3]
+            ],
         }
 
     # Engagement summary

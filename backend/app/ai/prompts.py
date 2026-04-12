@@ -256,7 +256,7 @@ def build_philosophical_constraints(profile: dict | None) -> str:
         parts.append(f"- Educational approach: {label}")
         desc = profile.get("philosophy_description", "")
         if desc:
-            parts.append(f"  Parent's description: \"{desc}\"")
+            parts.append(f'  Parent\'s description: "{desc}"')
 
     # Religious framework
     religion = profile.get("religious_framework", "")
@@ -264,7 +264,7 @@ def build_philosophical_constraints(profile: dict | None) -> str:
         parts.append(f"- Religious framework: {religion}")
         notes = profile.get("religious_notes", "")
         if notes:
-            parts.append(f"  Details: \"{notes}\"")
+            parts.append(f'  Details: "{notes}"')
 
     # Content boundaries
     boundaries = profile.get("content_boundaries", [])

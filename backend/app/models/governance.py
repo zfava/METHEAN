@@ -5,8 +5,8 @@ from datetime import date, datetime
 
 from sqlalchemy import (
     Boolean,
-    DateTime,
     Date,
+    DateTime,
     Float,
     ForeignKey,
     Integer,
@@ -33,15 +33,11 @@ from app.models.enums import (
 class GovernanceRule(Base):
     __tablename__ = "governance_rules"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     household_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("households.id", ondelete="CASCADE"), nullable=False
     )
-    created_by: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL")
-    )
+    created_by: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"))
     rule_type: Mapped[RuleType] = mapped_column(nullable=False)
     tier: Mapped[RuleTier] = mapped_column(nullable=False, default=RuleTier.policy)
     scope: Mapped[RuleScope] = mapped_column(nullable=False, default=RuleScope.household)
@@ -54,9 +50,7 @@ class GovernanceRule(Base):
     effective_from: Mapped[date | None] = mapped_column(Date)
     effective_until: Mapped[date | None] = mapped_column(Date)
     trigger_conditions: Mapped[dict | None] = mapped_column(JSONB, default=dict)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
@@ -67,40 +61,30 @@ class GovernanceEvent(Base):
 
     __tablename__ = "governance_events"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     household_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("households.id", ondelete="CASCADE"), nullable=False
     )
-    user_id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL")
-    )
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"))
     action: Mapped[GovernanceAction] = mapped_column(nullable=False)
     target_type: Mapped[str] = mapped_column(String(100), nullable=False)
     target_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False)
     reason: Mapped[str | None] = mapped_column(Text)
     metadata_: Mapped[dict | None] = mapped_column("metadata", JSONB, default=dict)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
 class Plan(Base):
     __tablename__ = "plans"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     household_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("households.id", ondelete="CASCADE"), nullable=False
     )
     child_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("children.id", ondelete="CASCADE"), nullable=False
     )
-    created_by: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL")
-    )
+    created_by: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"))
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     description: Mapped[str | None] = mapped_column(Text)
     status: Mapped[PlanStatus] = mapped_column(nullable=False, default=PlanStatus.draft)
@@ -112,9 +96,7 @@ class Plan(Base):
         UUID(as_uuid=True), ForeignKey("annual_curricula.id", ondelete="SET NULL")
     )
     curriculum_week_number: Mapped[int | None] = mapped_column(Integer)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
@@ -126,9 +108,7 @@ class Plan(Base):
 class PlanWeek(Base):
     __tablename__ = "plan_weeks"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     plan_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("plans.id", ondelete="CASCADE"), nullable=False
     )
@@ -139,9 +119,7 @@ class PlanWeek(Base):
     start_date: Mapped[date] = mapped_column(Date, nullable=False)
     end_date: Mapped[date] = mapped_column(Date, nullable=False)
     notes: Mapped[str | None] = mapped_column(Text)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships
     plan: Mapped["Plan"] = relationship(back_populates="weeks")
@@ -151,9 +129,7 @@ class PlanWeek(Base):
 class Activity(Base):
     __tablename__ = "activities"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     plan_week_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("plan_weeks.id", ondelete="CASCADE"), nullable=False
     )
@@ -168,9 +144,7 @@ class Activity(Base):
     description: Mapped[str | None] = mapped_column(Text)
     instructions: Mapped[dict | None] = mapped_column(JSONB, default=dict)
     estimated_minutes: Mapped[int | None] = mapped_column(Integer)
-    status: Mapped[ActivityStatus] = mapped_column(
-        nullable=False, default=ActivityStatus.scheduled
-    )
+    status: Mapped[ActivityStatus] = mapped_column(nullable=False, default=ActivityStatus.scheduled)
     scheduled_date: Mapped[date | None] = mapped_column(Date)
     sort_order: Mapped[int] = mapped_column(Integer, default=0)
     governance_approved: Mapped[bool] = mapped_column(Boolean, default=False)
@@ -178,9 +152,7 @@ class Activity(Base):
         UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL")
     )
     governance_reviewed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
@@ -193,9 +165,7 @@ class Activity(Base):
 class Attempt(Base):
     __tablename__ = "attempts"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     activity_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("activities.id", ondelete="CASCADE"), nullable=False
     )
@@ -205,19 +175,13 @@ class Attempt(Base):
     child_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("children.id", ondelete="CASCADE"), nullable=False
     )
-    status: Mapped[AttemptStatus] = mapped_column(
-        nullable=False, default=AttemptStatus.started
-    )
-    started_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    status: Mapped[AttemptStatus] = mapped_column(nullable=False, default=AttemptStatus.started)
+    started_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     completed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     duration_minutes: Mapped[int | None] = mapped_column(Integer)
     score: Mapped[float | None] = mapped_column(Float)
     feedback: Mapped[dict | None] = mapped_column(JSONB, default=dict)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships
     activity: Mapped["Activity"] = relationship(back_populates="attempts")

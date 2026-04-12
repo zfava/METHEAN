@@ -48,6 +48,7 @@ class ErrorHandlerMiddleware(BaseHTTPMiddleware):
             )
 
             from app.core.config import settings
+
             detail = str(exc) if not settings.is_production else "Internal server error"
 
             return JSONResponse(

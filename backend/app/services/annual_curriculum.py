@@ -9,14 +9,13 @@ import json
 import uuid
 from datetime import UTC, date, datetime, timedelta
 
-from sqlalchemy import select, and_
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 
 from app.ai.gateway import AIRole, call_ai
 from app.ai.prompts import build_philosophical_constraints
 from app.models.annual_curriculum import AnnualCurriculum
-from app.models.curriculum import LearningEdge, LearningMap, LearningNode, Subject
+from app.models.curriculum import LearningEdge, LearningNode
 from app.models.enums import (
     ActivityStatus,
     ActivityType,
@@ -25,8 +24,6 @@ from app.models.enums import (
 )
 from app.models.governance import Activity, Attempt, GovernanceEvent, Plan, PlanWeek
 from app.models.identity import Child, ChildPreferences, Household
-from app.models.state import ChildNodeState
-
 
 ANNUAL_CURRICULUM_SYSTEM = """You are METHEAN's Annual Curriculum Architect.
 
@@ -89,9 +86,7 @@ async def generate_annual_curriculum(
     child_result = await db.execute(select(Child).where(Child.id == child_id))
     child = child_result.scalar_one()
 
-    prefs_result = await db.execute(
-        select(ChildPreferences).where(ChildPreferences.child_id == child_id)
-    )
+    prefs_result = await db.execute(select(ChildPreferences).where(ChildPreferences.child_id == child_id))
     prefs = prefs_result.scalar_one_or_none()
 
     # Fetch household philosophical profile
@@ -100,7 +95,8 @@ async def generate_annual_curriculum(
     phil = household.philosophical_profile or {}
 
     # Read academic calendar
-    from app.services.academic_calendar import get_academic_calendar, get_instruction_days, calculate_end_date
+    from app.services.academic_calendar import calculate_end_date, get_academic_calendar, get_instruction_days
+
     calendar = await get_academic_calendar(db, household_id)
     if total_weeks == 36:
         total_weeks = calendar.get("total_instructional_weeks", 36)
@@ -121,7 +117,8 @@ async def generate_annual_curriculum(
     child_age = (date.today() - child.date_of_birth).days / 365.25 if child.date_of_birth else 6
 
     # Learning level for AI prompt
-    from app.core.learning_levels import get_level_for_subject, LEARNING_LEVELS
+    from app.core.learning_levels import LEARNING_LEVELS, get_level_for_subject
+
     level = get_level_for_subject(prefs, subject_name)
     level_info = LEARNING_LEVELS.get(level, LEARNING_LEVELS["developing"])
 
@@ -134,9 +131,7 @@ async def generate_annual_curriculum(
             .order_by(LearningNode.sort_order)
         )
         nodes = nodes_result.scalars().all()
-        edges_result = await db.execute(
-            select(LearningEdge).where(LearningEdge.learning_map_id == learning_map_id)
-        )
+        edges_result = await db.execute(select(LearningEdge).where(LearningEdge.learning_map_id == learning_map_id))
         edges = edges_result.scalars().all()
 
         # Build topological description
@@ -163,6 +158,7 @@ Use these node IDs in the focus_nodes field for each week."""
     try:
         from app.content.scope_sequences import get_scope_sequence
         from app.core.learning_levels import SUBJECT_CATALOG
+
         # Resolve subject_name to subject_id
         subj_id = subject_name.lower().replace(" ", "_").replace("&", "and")
         for cat in SUBJECT_CATALOG.values():
@@ -189,12 +185,14 @@ Follow this topic order. Respect prerequisites. Do NOT skip or reorder topics.
 
     # Detect vocational subject and use appropriate prompt
     from app.core.learning_levels import SUBJECT_CATALOG
+
     vocational_names = {s["name"].lower() for s in SUBJECT_CATALOG.get("vocational", [])}
     vocational_ids = {s["id"] for s in SUBJECT_CATALOG.get("vocational", [])}
     is_vocational = subject_name.lower() in vocational_names or subject_name.lower().replace(" ", "_") in vocational_ids
 
     if is_vocational:
         from app.ai.prompts import VOCATIONAL_CURRICULUM_SYSTEM
+
         system_prompt = VOCATIONAL_CURRICULUM_SYSTEM
     else:
         system_prompt = ANNUAL_CURRICULUM_SYSTEM.format(
@@ -210,7 +208,7 @@ ACADEMIC YEAR: {academic_year}
 CHILD PROFILE:
 - Name: {child.first_name}
 - Age: {child_age:.1f} years
-- Learning level for {subject_name}: {level_info['label']} — {level_info['ai_instruction']}
+- Learning level for {subject_name}: {level_info["label"]} — {level_info["ai_instruction"]}
 - Age: {child_age:.0f} (developmental context only)
 - Learning style: {json.dumps(prefs.learning_style if prefs else {}, default=str)}
 - Interests: {json.dumps(prefs.interests if prefs else [], default=str)}
@@ -218,11 +216,11 @@ CHILD PROFILE:
 
 TIME BUDGET: {hours_per_week} hours per week ({hours_per_week * 60:.0f} minutes)
 TOTAL WEEKS: {total_weeks}
-INSTRUCTION DAYS: {days_per_week} days per week ({', '.join(d.capitalize() for d in instruction_days)})
+INSTRUCTION DAYS: {days_per_week} days per week ({", ".join(d.capitalize() for d in instruction_days)})
 START DATE: {start_date}
 {nodes_description}
 {scope_sequence_context}
-{f'ADDITIONAL GUIDANCE FROM PARENT: {scope_notes}' if scope_notes else ''}
+{f"ADDITIONAL GUIDANCE FROM PARENT: {scope_notes}" if scope_notes else ""}
 
 Generate the complete {total_weeks}-week scope and sequence."""
 
@@ -259,14 +257,16 @@ Generate the complete {total_weeks}-week scope and sequence."""
     db.add(curriculum)
     await db.flush()
 
-    db.add(GovernanceEvent(
-        household_id=household_id,
-        user_id=user_id,
-        action=GovernanceAction.modify,
-        target_type="annual_curriculum",
-        target_id=curriculum.id,
-        reason=f"Annual curriculum generated: {subject_name} {academic_year}",
-    ))
+    db.add(
+        GovernanceEvent(
+            household_id=household_id,
+            user_id=user_id,
+            action=GovernanceAction.modify,
+            target_type="annual_curriculum",
+            target_id=curriculum.id,
+            reason=f"Annual curriculum generated: {subject_name} {academic_year}",
+        )
+    )
     await db.flush()
 
     return curriculum
@@ -295,14 +295,16 @@ async def approve_annual_curriculum(
     curriculum.approved_at = datetime.now(UTC)
     curriculum.approved_by = user_id
 
-    db.add(GovernanceEvent(
-        household_id=household_id,
-        user_id=user_id,
-        action=GovernanceAction.approve,
-        target_type="annual_curriculum",
-        target_id=curriculum.id,
-        reason=f"Annual curriculum approved: {curriculum.subject_name} {curriculum.academic_year}",
-    ))
+    db.add(
+        GovernanceEvent(
+            household_id=household_id,
+            user_id=user_id,
+            action=GovernanceAction.approve,
+            target_type="annual_curriculum",
+            target_id=curriculum.id,
+            reason=f"Annual curriculum approved: {curriculum.subject_name} {curriculum.academic_year}",
+        )
+    )
     await db.flush()
 
     # Materialize full year
@@ -312,6 +314,7 @@ async def approve_annual_curriculum(
     try:
         if curriculum.learning_map_id:
             from app.tasks.worker import enrich_map_task
+
             enrich_map_task.delay(str(curriculum.learning_map_id), str(household_id))
     except Exception:
         pass
@@ -434,9 +437,7 @@ async def evaluate_approaching_weeks(
     as their scheduled week approaches. This ensures rule changes
     mid-year are respected for future activities.
     """
-    result = await db.execute(
-        select(AnnualCurriculum).where(AnnualCurriculum.id == curriculum_id)
-    )
+    result = await db.execute(select(AnnualCurriculum).where(AnnualCurriculum.id == curriculum_id))
     curriculum = result.scalar_one_or_none()
     if not curriculum or curriculum.status != "active":
         return []
@@ -445,9 +446,7 @@ async def evaluate_approaching_weeks(
     threshold = today + timedelta(weeks=weeks_ahead)
 
     # Find unapproved activities in the approaching window
-    plans_result = await db.execute(
-        select(Plan).where(Plan.annual_curriculum_id == curriculum_id)
-    )
+    plans_result = await db.execute(select(Plan).where(Plan.annual_curriculum_id == curriculum_id))
     plans = plans_result.scalars().all()
     evaluated = []
 
@@ -488,17 +487,13 @@ async def record_week_completion(
     parent_notes: str | None = None,
 ) -> dict:
     """Record what actually happened during a completed week."""
-    result = await db.execute(
-        select(AnnualCurriculum).where(AnnualCurriculum.id == curriculum_id)
-    )
+    result = await db.execute(select(AnnualCurriculum).where(AnnualCurriculum.id == curriculum_id))
     curriculum = result.scalar_one_or_none()
     if not curriculum:
         raise ValueError("Curriculum not found")
 
     # Find the plan and week
-    plan_result = await db.execute(
-        select(Plan).where(Plan.annual_curriculum_id == curriculum_id)
-    )
+    plan_result = await db.execute(select(Plan).where(Plan.annual_curriculum_id == curriculum_id))
     plan = plan_result.scalar_one_or_none()
     if not plan:
         raise ValueError("No plan found for this curriculum")
@@ -514,9 +509,7 @@ async def record_week_completion(
         raise ValueError(f"Week {week_number} not found")
 
     # Fetch all activities and their attempts
-    acts_result = await db.execute(
-        select(Activity).where(Activity.plan_week_id == week.id)
-    )
+    acts_result = await db.execute(select(Activity).where(Activity.plan_week_id == week.id))
     activities = acts_result.scalars().all()
 
     completed = [a for a in activities if a.status == ActivityStatus.completed]
@@ -524,9 +517,7 @@ async def record_week_completion(
 
     total_minutes = 0
     for act in activities:
-        attempts_result = await db.execute(
-            select(Attempt).where(Attempt.activity_id == act.id)
-        )
+        attempts_result = await db.execute(select(Attempt).where(Attempt.activity_id == act.id))
         attempts = attempts_result.scalars().all()
         total_minutes += sum(a.duration_minutes or 0 for a in attempts)
 
@@ -548,6 +539,7 @@ async def record_week_completion(
 
     # Force SQLAlchemy to detect JSONB change
     from sqlalchemy.orm.attributes import flag_modified
+
     flag_modified(curriculum, "actual_record")
 
     await db.flush()
@@ -560,9 +552,7 @@ async def get_curriculum_history(
     week_number: int | None = None,
 ) -> dict:
     """Get planned vs actual for a curriculum, optionally for one week."""
-    result = await db.execute(
-        select(AnnualCurriculum).where(AnnualCurriculum.id == curriculum_id)
-    )
+    result = await db.execute(select(AnnualCurriculum).where(AnnualCurriculum.id == curriculum_id))
     curriculum = result.scalar_one_or_none()
     if not curriculum:
         raise ValueError("Curriculum not found")
@@ -577,9 +567,7 @@ async def get_curriculum_history(
         actual_week = actual.get("weeks", {}).get(str(week_number), {})
 
         # Fetch real activities
-        plan_result = await db.execute(
-            select(Plan).where(Plan.annual_curriculum_id == curriculum_id)
-        )
+        plan_result = await db.execute(select(Plan).where(Plan.annual_curriculum_id == curriculum_id))
         plan = plan_result.scalar_one_or_none()
         activities_data = []
         if plan:
@@ -592,19 +580,20 @@ async def get_curriculum_history(
             week = week_result.scalar_one_or_none()
             if week:
                 acts_result = await db.execute(
-                    select(Activity).where(Activity.plan_week_id == week.id)
-                    .order_by(Activity.sort_order)
+                    select(Activity).where(Activity.plan_week_id == week.id).order_by(Activity.sort_order)
                 )
                 for act in acts_result.scalars().all():
-                    activities_data.append({
-                        "id": str(act.id),
-                        "title": act.title,
-                        "type": act.activity_type.value,
-                        "status": act.status.value,
-                        "scheduled_date": str(act.scheduled_date) if act.scheduled_date else None,
-                        "estimated_minutes": act.estimated_minutes,
-                        "governance_approved": act.governance_approved,
-                    })
+                    activities_data.append(
+                        {
+                            "id": str(act.id),
+                            "title": act.title,
+                            "type": act.activity_type.value,
+                            "status": act.status.value,
+                            "scheduled_date": str(act.scheduled_date) if act.scheduled_date else None,
+                            "estimated_minutes": act.estimated_minutes,
+                            "governance_approved": act.governance_approved,
+                        }
+                    )
 
         return {
             "week_number": week_number,
@@ -621,15 +610,17 @@ async def get_curriculum_history(
     for pw in planned_weeks:
         wn = pw.get("week_number", 0)
         aw = actual_weeks.get(str(wn), {})
-        week_summaries.append({
-            "week_number": wn,
-            "title": pw.get("title", ""),
-            "objectives": pw.get("objectives", []),
-            "has_actual": bool(aw),
-            "completed_activities": aw.get("completed_activities", 0) if aw else None,
-            "planned_activities": len(pw.get("suggested_activities", [])),
-            "parent_notes": aw.get("parent_notes", "") if aw else None,
-        })
+        week_summaries.append(
+            {
+                "week_number": wn,
+                "title": pw.get("title", ""),
+                "objectives": pw.get("objectives", []),
+                "has_actual": bool(aw),
+                "completed_activities": aw.get("completed_activities", 0) if aw else None,
+                "planned_activities": len(pw.get("suggested_activities", [])),
+                "parent_notes": aw.get("parent_notes", "") if aw else None,
+            }
+        )
 
     return {
         "curriculum_id": str(curriculum.id),

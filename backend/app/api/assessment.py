@@ -56,6 +56,7 @@ class PortfolioCreate(BaseModel):
 
 # ── Assessments ──
 
+
 @router.post("/children/{child_id}/assessments", status_code=201)
 async def create_assessment(
     child_id: uuid.UUID,
@@ -63,10 +64,14 @@ async def create_assessment(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     assessment = await record_assessment(
-        db, user.household_id, child_id, body.node_id,
-        body.model_dump(), user.id,
+        db,
+        user.household_id,
+        child_id,
+        body.node_id,
+        body.model_dump(),
+        user.id,
     )
     return {
         "id": str(assessment.id),
@@ -86,7 +91,7 @@ async def list_assessments(
     user: User = Depends(get_current_user),
     pagination: PaginationParams = Depends(),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     base = select(Assessment).where(
         Assessment.child_id == child_id,
         Assessment.household_id == user.household_id,
@@ -99,8 +104,7 @@ async def list_assessments(
     total_result = await db.execute(select(func.count()).select_from(base.subquery()))
     total = total_result.scalar() or 0
     result = await db.execute(
-        base.order_by(Assessment.assessed_at.desc())
-        .offset(pagination.skip).limit(pagination.limit)
+        base.order_by(Assessment.assessed_at.desc()).offset(pagination.skip).limit(pagination.limit)
     )
     return {
         "items": [
@@ -123,6 +127,7 @@ async def list_assessments(
 
 # ── Portfolio ──
 
+
 @router.post("/children/{child_id}/portfolio", status_code=201)
 async def create_portfolio_entry(
     child_id: uuid.UUID,
@@ -130,7 +135,7 @@ async def create_portfolio_entry(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     entry = PortfolioEntry(
         household_id=user.household_id,
         child_id=child_id,
@@ -162,7 +167,7 @@ async def list_portfolio(
     user: User = Depends(get_current_user),
     pagination: PaginationParams = Depends(),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     base = select(PortfolioEntry).where(
         PortfolioEntry.child_id == child_id,
         PortfolioEntry.household_id == user.household_id,
@@ -170,8 +175,7 @@ async def list_portfolio(
     total_result = await db.execute(select(func.count()).select_from(base.subquery()))
     total = total_result.scalar() or 0
     result = await db.execute(
-        base.order_by(PortfolioEntry.created_at.desc())
-        .offset(pagination.skip).limit(pagination.limit)
+        base.order_by(PortfolioEntry.created_at.desc()).offset(pagination.skip).limit(pagination.limit)
     )
     return {
         "items": [
@@ -193,6 +197,7 @@ async def list_portfolio(
 
 # ── Transcript & Export ──
 
+
 @router.get("/children/{child_id}/transcript")
 async def get_transcript(
     child_id: uuid.UUID,
@@ -200,7 +205,7 @@ async def get_transcript(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     return await generate_transcript(db, user.household_id, child_id, year)
 
 
@@ -212,5 +217,5 @@ async def portfolio_export(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     return await generate_portfolio_export(db, user.household_id, child_id, period_start, period_end)

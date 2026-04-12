@@ -24,7 +24,6 @@ async def _run_style_vector_batch() -> dict:
     from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
     from app.core.config import settings
-    from app.models.identity import Child
     from app.models.intelligence import LearnerIntelligence
     from app.services.style_engine import MIN_OBSERVATIONS, compute_style_vector
 
@@ -40,8 +39,9 @@ async def _run_style_vector_batch() -> dict:
     async with SessionLocal() as db:
         # Find children with 20+ observations
         result = await db.execute(
-            select(LearnerIntelligence.child_id, LearnerIntelligence.household_id)
-            .where(LearnerIntelligence.observation_count >= MIN_OBSERVATIONS)
+            select(LearnerIntelligence.child_id, LearnerIntelligence.household_id).where(
+                LearnerIntelligence.observation_count >= MIN_OBSERVATIONS
+            )
         )
         eligible = result.all()
 

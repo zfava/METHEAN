@@ -9,7 +9,7 @@ import uuid
 from collections import defaultdict
 from datetime import date, timedelta
 
-from sqlalchemy import and_, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.enums import AttemptStatus

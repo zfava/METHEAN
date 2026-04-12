@@ -36,10 +36,8 @@ async def generate_education_plan(
     child = child_result.scalar_one()
 
     # Fetch preferences
-    prefs_result = await db.execute(
-        select(ChildPreferences).where(ChildPreferences.child_id == child_id)
-    )
-    prefs = prefs_result.scalar_one_or_none()
+    prefs_result = await db.execute(select(ChildPreferences).where(ChildPreferences.child_id == child_id))
+    prefs_result.scalar_one_or_none()
 
     # Fetch household philosophical profile
     h_result = await db.execute(select(Household).where(Household.id == household_id))
@@ -57,23 +55,23 @@ async def generate_education_plan(
 CHILD PROFILE:
 - Name: {child.first_name}
 - Age: {child_age:.1f} years
-- Grade: {child.grade_level or 'K'}
-- Strengths: {json.dumps(baseline_assessment.get('strengths', []))}
-- Struggles: {json.dumps(baseline_assessment.get('struggles', []))}
-- Diagnosed conditions: {json.dumps(baseline_assessment.get('diagnosed_conditions', []))}
-- Prior education: {baseline_assessment.get('prior_education', 'homeschool')}
-- Reading level: {baseline_assessment.get('reading_level', 'at_grade')}
-- Math level: {baseline_assessment.get('math_level', 'at_grade')}
+- Grade: {child.grade_level or "K"}
+- Strengths: {json.dumps(baseline_assessment.get("strengths", []))}
+- Struggles: {json.dumps(baseline_assessment.get("struggles", []))}
+- Diagnosed conditions: {json.dumps(baseline_assessment.get("diagnosed_conditions", []))}
+- Prior education: {baseline_assessment.get("prior_education", "homeschool")}
+- Reading level: {baseline_assessment.get("reading_level", "at_grade")}
+- Math level: {baseline_assessment.get("math_level", "at_grade")}
 
 FAMILY PHILOSOPHY:
 {json.dumps(phil, indent=2, default=str)}
 
 GOALS:
 - Graduation target: {grad_target}
-- Post-graduation path: {goals.get('post_graduation', 'undecided')}
-- College prep level: {goals.get('college_prep_level', 'standard')}
-- Target skills: {json.dumps(goals.get('target_skills', []))}
-- Parent's vision: {goals.get('parent_vision', '')}
+- Post-graduation path: {goals.get("post_graduation", "undecided")}
+- College prep level: {goals.get("college_prep_level", "standard")}
+- Target skills: {json.dumps(goals.get("target_skills", []))}
+- Parent's vision: {goals.get("parent_vision", "")}
 
 TIME BUDGET: {time_budget_hours_per_week} hours per week
 
@@ -93,7 +91,11 @@ Limit to the next {min(years_remaining, 5)} years for now (the plan can be exten
 
     output = ai_result["output"]
     year_plans = output.get("year_plans", {}) if isinstance(output, dict) else {}
-    plan_name = output.get("plan_name", f"{child.first_name}'s Education Plan") if isinstance(output, dict) else f"{child.first_name}'s Education Plan"
+    plan_name = (
+        output.get("plan_name", f"{child.first_name}'s Education Plan")
+        if isinstance(output, dict)
+        else f"{child.first_name}'s Education Plan"
+    )
 
     # Delete any existing draft plan for this child
     existing = await db.execute(
@@ -120,14 +122,16 @@ Limit to the next {min(years_remaining, 5)} years for now (the plan can be exten
     await db.flush()
 
     # Log governance event
-    db.add(GovernanceEvent(
-        household_id=household_id,
-        user_id=user_id,
-        action=GovernanceAction.modify,
-        target_type="education_plan",
-        target_id=plan.id,
-        reason=f"Education plan generated for {child.first_name}",
-    ))
+    db.add(
+        GovernanceEvent(
+            household_id=household_id,
+            user_id=user_id,
+            action=GovernanceAction.modify,
+            target_type="education_plan",
+            target_id=plan.id,
+            reason=f"Education plan generated for {child.first_name}",
+        )
+    )
     await db.flush()
 
     return plan
@@ -154,14 +158,16 @@ async def approve_education_plan(
     plan.approved_at = datetime.now(UTC)
     plan.approved_by = user_id
 
-    db.add(GovernanceEvent(
-        household_id=household_id,
-        user_id=user_id,
-        action=GovernanceAction.approve,
-        target_type="education_plan",
-        target_id=plan.id,
-        reason="Education plan approved by parent",
-    ))
+    db.add(
+        GovernanceEvent(
+            household_id=household_id,
+            user_id=user_id,
+            action=GovernanceAction.approve,
+            target_type="education_plan",
+            target_id=plan.id,
+            reason="Education plan approved by parent",
+        )
+    )
     await db.flush()
     return plan
 
@@ -194,14 +200,16 @@ async def generate_year_curricula(
 
     proposals = []
     for subj in subjects:
-        proposals.append({
-            "subject": subj.get("subject", "Unknown"),
-            "priority": subj.get("priority", "core"),
-            "hours_per_week": subj.get("hours_per_week", 3),
-            "description": subj.get("description", ""),
-            "approach": subj.get("approach", ""),
-            "status": "proposed",
-            "year_key": year_key,
-        })
+        proposals.append(
+            {
+                "subject": subj.get("subject", "Unknown"),
+                "priority": subj.get("priority", "core"),
+                "hours_per_week": subj.get("hours_per_week", 3),
+                "description": subj.get("description", ""),
+                "approach": subj.get("approach", ""),
+                "status": "proposed",
+                "year_key": year_key,
+            }
+        )
 
     return proposals

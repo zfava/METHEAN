@@ -5,7 +5,7 @@ daily dashboard. Never condescending. Always respectful.
 """
 
 import random
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 
 
 def generate_greeting(
@@ -87,9 +87,13 @@ def generate_encouragement(
 
     if mastery_ups_this_week > 0:
         if best_week_mastery > 0 and mastery_ups_this_week >= best_week_mastery:
-            options.append(f"You mastered {mastery_ups_this_week} new concepts this week. That's your best week this month.")
+            options.append(
+                f"You mastered {mastery_ups_this_week} new concepts this week. That's your best week this month."
+            )
         else:
-            options.append(f"You mastered {mastery_ups_this_week} new concept{'s' if mastery_ups_this_week > 1 else ''} this week.")
+            options.append(
+                f"You mastered {mastery_ups_this_week} new concept{'s' if mastery_ups_this_week > 1 else ''} this week."
+            )
 
     if reviews_this_week >= 10:
         options.append(f"You've reviewed {reviews_this_week} topics this week. Your memory is getting stronger.")

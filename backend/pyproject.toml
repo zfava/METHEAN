@@ -14,10 +14,14 @@ select = [
 ignore = [
     "E501",  # line too long (handled by formatter)
     "B008",  # function call in default arg (FastAPI Depends pattern)
+    "B007",  # unused loop variable (often intentional in SQLAlchemy patterns)
+    "B904",  # raise from in except (too noisy for advisory try/except blocks)
+    "B905",  # zip strict (Python 3.10+, but we use manual patterns)
 ]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101", "S106"]
+"app/main.py" = ["E402"]  # FastAPI router imports after app creation
 
 [tool.bandit]
 exclude_dirs = ["tests"]

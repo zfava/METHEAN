@@ -4,13 +4,13 @@ import asyncio
 import logging
 from datetime import date
 
-from sqlalchemy import select, func
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from sqlalchemy import func, select
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.core.config import settings
-from app.models.identity import Household, User, Child
-from app.models.governance import Activity
 from app.models.enums import ActivityStatus
+from app.models.governance import Activity
+from app.models.identity import Child, Household, User
 from app.services.email import send_email
 from app.services.email_templates import daily_summary_email
 
@@ -23,19 +23,22 @@ async def send_daily_summary_for_household(
     test_mode: bool = False,
 ) -> int:
     """Send daily summary for a single household. Returns number of emails sent."""
-    from sqlalchemy.dialects.postgresql import UUID as PG_UUID
     import uuid
 
     hh_id = household_id if isinstance(household_id, uuid.UUID) else uuid.UUID(str(household_id))
 
     # Get parent users
-    users = (await db.execute(
-        select(User).where(User.household_id == hh_id, User.is_active == True)  # noqa: E712
-    )).scalars().all()
+    users = (
+        (
+            await db.execute(
+                select(User).where(User.household_id == hh_id, User.is_active == True)  # noqa: E712
+            )
+        )
+        .scalars()
+        .all()
+    )
 
-    children = (await db.execute(
-        select(Child).where(Child.household_id == hh_id)
-    )).scalars().all()
+    children = (await db.execute(select(Child).where(Child.household_id == hh_id))).scalars().all()
 
     if not users or not children:
         return 0
@@ -44,32 +47,44 @@ async def send_daily_summary_for_household(
     children_data = []
     for child in children:
         # Filter activities for THIS child specifically
-        acts = (await db.execute(
-            select(Activity).where(
-                Activity.household_id == hh_id,
-                Activity.scheduled_date == today,
+        acts = (
+            (
+                await db.execute(
+                    select(Activity).where(
+                        Activity.household_id == hh_id,
+                        Activity.scheduled_date == today,
+                    )
+                )
             )
-        )).scalars().all()
+            .scalars()
+            .all()
+        )
         # Filter by child_id if the field exists
         child_acts = [a for a in acts if getattr(a, "child_id", None) == child.id]
         # Fallback: if no child_id field on Activity, count all
         if not child_acts and acts:
             child_acts = acts
 
-        children_data.append({
-            "name": child.first_name,
-            "activity_count": len(child_acts),
-            "total_minutes": sum(a.estimated_minutes or 0 for a in child_acts),
-        })
+        children_data.append(
+            {
+                "name": child.first_name,
+                "activity_count": len(child_acts),
+                "total_minutes": sum(a.estimated_minutes or 0 for a in child_acts),
+            }
+        )
 
     # Count pending reviews
-    pending = (await db.execute(
-        select(func.count()).select_from(Activity).where(
-            Activity.household_id == hh_id,
-            Activity.governance_approved == False,  # noqa: E712
-            Activity.status == ActivityStatus.scheduled,
+    pending = (
+        await db.execute(
+            select(func.count())
+            .select_from(Activity)
+            .where(
+                Activity.household_id == hh_id,
+                Activity.governance_approved == False,  # noqa: E712
+                Activity.status == ActivityStatus.scheduled,
+            )
         )
-    )).scalar() or 0
+    ).scalar() or 0
 
     date_str = date.today().strftime("%A, %B %d")
     sent = 0

@@ -7,8 +7,8 @@ from pydantic import BaseModel, Field
 
 from app.models.enums import GovernanceAction, PlanStatus, RuleScope, RuleTier, RuleType
 
-
 # ── Governance Rules ──
+
 
 class GovernanceRuleCreate(BaseModel):
     rule_type: RuleType
@@ -71,6 +71,7 @@ class GovernanceEventResponse(BaseModel):
 
 # ── Plans ──
 
+
 class PlanGenerateRequest(BaseModel):
     week_start: date
     daily_minutes: int = Field(default=120, ge=15, le=480)
@@ -116,6 +117,7 @@ class ActivityApproveReject(BaseModel):
 
 # ── AI Runs ──
 
+
 class AIRunResponse(BaseModel):
     model_config = {"from_attributes": True}
 
@@ -136,6 +138,7 @@ class AIRunResponse(BaseModel):
 
 # ── Tutor ──
 
+
 class TutorMessageRequest(BaseModel):
     child_id: uuid.UUID | None = None
     message: str = Field(min_length=1, max_length=2000)
@@ -151,6 +154,7 @@ class TutorMessageResponse(BaseModel):
 
 # ── Evaluator ──
 
+
 class EvaluatorResult(BaseModel):
     quality_rating: int = Field(ge=1, le=5)
     confidence_score: float = Field(ge=0.0, le=1.0)
@@ -161,6 +165,7 @@ class EvaluatorResult(BaseModel):
 
 
 # ── Cartographer ──
+
 
 class CartographerCalibrateRequest(BaseModel):
     learning_map_id: uuid.UUID
@@ -178,6 +183,7 @@ class CartographerRecommendation(BaseModel):
 
 
 # ── Advisor ──
+
 
 class AdvisorReportResponse(BaseModel):
     model_config = {"from_attributes": True}

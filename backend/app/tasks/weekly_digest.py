@@ -1,15 +1,15 @@
 """Weekly digest email task."""
 
 import asyncio
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
-from sqlalchemy import select, func
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from sqlalchemy import select
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.core.config import settings
-from app.models.identity import Household, User
-from app.models.governance import GovernanceEvent
 from app.models.enums import GovernanceAction
+from app.models.governance import GovernanceEvent
+from app.models.identity import Household, User
 from app.services.email import send_email
 from app.services.email_templates import weekly_digest_email
 
@@ -20,22 +20,34 @@ async def _send_weekly_digests():
 
     async with SessionLocal() as db:
         households = (await db.execute(select(Household))).scalars().all()
-        week_ago = datetime.now(timezone.utc) - timedelta(days=7)
+        week_ago = datetime.now(UTC) - timedelta(days=7)
 
         for hh in households:
-            users = (await db.execute(
-                select(User).where(User.household_id == hh.id, User.is_active == True)  # noqa: E712
-            )).scalars().all()
+            users = (
+                (
+                    await db.execute(
+                        select(User).where(User.household_id == hh.id, User.is_active == True)  # noqa: E712
+                    )
+                )
+                .scalars()
+                .all()
+            )
             if not users:
                 continue
 
             # Governance events this week
-            events = (await db.execute(
-                select(GovernanceEvent).where(
-                    GovernanceEvent.household_id == hh.id,
-                    GovernanceEvent.created_at >= week_ago,
+            events = (
+                (
+                    await db.execute(
+                        select(GovernanceEvent).where(
+                            GovernanceEvent.household_id == hh.id,
+                            GovernanceEvent.created_at >= week_ago,
+                        )
+                    )
                 )
-            )).scalars().all()
+                .scalars()
+                .all()
+            )
 
             approved = sum(1 for e in events if e.action == GovernanceAction.approve)
             rejected = sum(1 for e in events if e.action == GovernanceAction.reject)

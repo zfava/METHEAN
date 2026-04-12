@@ -5,10 +5,10 @@ Quiet hours are evaluated in the household's local timezone.
 """
 
 import uuid
-from datetime import UTC, date, datetime, timedelta
+from datetime import UTC, datetime, timedelta
 from zoneinfo import ZoneInfo
 
-from sqlalchemy import select, func
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.enums import ActivityStatus
@@ -18,20 +18,20 @@ from app.models.operational import NotificationLog
 
 # Dedup windows per event type (in seconds)
 DEDUP_WINDOWS = {
-    "plan_ready": 3600,        # 1h
-    "review_needed": 14400,    # 4h
-    "node_mastered": 0,        # none
-    "node_decayed": 86400,     # 24h
+    "plan_ready": 3600,  # 1h
+    "review_needed": 14400,  # 4h
+    "node_mastered": 0,  # none
+    "node_decayed": 86400,  # 24h
     "alert_triggered": 86400,  # 24h
-    "attempt_evaluated": 3600, # 1h
-    "advisor_report_ready": 0, # none
-    "plan_reminder": 86400,    # 24h
-    "review_overdue": 86400,   # 24h
+    "attempt_evaluated": 3600,  # 1h
+    "advisor_report_ready": 0,  # none
+    "plan_reminder": 86400,  # 24h
+    "review_overdue": 86400,  # 24h
 }
 
 # Quiet hours: no notifications between these hours (household timezone)
 DEFAULT_QUIET_START = 21  # 9 PM
-DEFAULT_QUIET_END = 7     # 7 AM
+DEFAULT_QUIET_END = 7  # 7 AM
 
 
 def _is_quiet_hours(
@@ -63,12 +63,14 @@ async def should_send(
     if window > 0 and dedup_key:
         cutoff = datetime.now(UTC) - timedelta(seconds=window)
         result = await db.execute(
-            select(NotificationLog.id).where(
+            select(NotificationLog.id)
+            .where(
                 NotificationLog.household_id == household_id,
                 NotificationLog.user_id == user_id,
                 NotificationLog.title.contains(dedup_key),
                 NotificationLog.created_at > cutoff,
-            ).limit(1)
+            )
+            .limit(1)
         )
         if result.scalar_one_or_none():
             return False
@@ -103,8 +105,12 @@ async def send_notification(
             Quiet hours are checked in this timezone.
     """
     if not await should_send(
-        db, household_id, user_id, event_type,
-        dedup_key=title, timezone=timezone,
+        db,
+        household_id,
+        user_id,
+        event_type,
+        dedup_key=title,
+        timezone=timezone,
     ):
         return None
 
@@ -130,14 +136,13 @@ async def send_notification(
     pref_key = EMAIL_EVENTS.get(event_type)
     if pref_key:
         try:
-            user_result = await db.execute(
-                select(User).where(User.id == user_id)
-            )
+            user_result = await db.execute(select(User).where(User.id == user_id))
             user_obj = user_result.scalar_one_or_none()
             if user_obj:
                 prefs = user_obj.notification_preferences or {}
                 if prefs.get(pref_key, True):
                     from app.services.email import send_email
+
                     await send_email(user_obj.email, title, body)
         except Exception:
             pass  # Email delivery is non-blocking
@@ -153,10 +158,13 @@ async def get_unread_notifications(
 ) -> list[NotificationLog]:
     """Get recent notifications for a user."""
     result = await db.execute(
-        select(NotificationLog).where(
+        select(NotificationLog)
+        .where(
             NotificationLog.household_id == household_id,
             NotificationLog.user_id == user_id,
-        ).order_by(NotificationLog.created_at.desc()).limit(limit)
+        )
+        .order_by(NotificationLog.created_at.desc())
+        .limit(limit)
     )
     return list(result.scalars().all())
 
@@ -226,9 +234,7 @@ async def mark_all_read(db: AsyncSession, user_id: uuid.UUID, household_id: uuid
 async def check_and_send_alerts(db: AsyncSession, household_id: uuid.UUID) -> list[dict]:
     """Check conditions that should trigger notifications."""
     alerts = []
-    user_result = await db.execute(
-        select(User).where(User.household_id == household_id).limit(1)
-    )
+    user_result = await db.execute(select(User).where(User.household_id == household_id).limit(1))
     user = user_result.scalar_one_or_none()
     if not user:
         return alerts
@@ -236,7 +242,9 @@ async def check_and_send_alerts(db: AsyncSession, household_id: uuid.UUID) -> li
     # Pending approval > 24 hours
     stale_cutoff = datetime.now(UTC) - timedelta(hours=24)
     pending_result = await db.execute(
-        select(func.count()).select_from(Activity).where(
+        select(func.count())
+        .select_from(Activity)
+        .where(
             Activity.household_id == household_id,
             Activity.governance_approved.is_(False),
             Activity.status == ActivityStatus.scheduled,
@@ -246,7 +254,9 @@ async def check_and_send_alerts(db: AsyncSession, household_id: uuid.UUID) -> li
     pending = pending_result.scalar() or 0
     if pending > 0:
         await send_notification(
-            db, household_id, user.id,
+            db,
+            household_id,
+            user.id,
             event_type="alert_triggered",
             title=f"{pending} activities awaiting approval",
             body=f"You have {pending} activities waiting for approval for more than 24 hours.",

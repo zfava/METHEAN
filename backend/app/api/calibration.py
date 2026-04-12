@@ -18,9 +18,7 @@ router = APIRouter(tags=["calibration"])
 
 
 async def _get_child_or_404(db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID) -> Child:
-    result = await db.execute(
-        select(Child).where(Child.id == child_id, Child.household_id == household_id)
-    )
+    result = await db.execute(select(Child).where(Child.id == child_id, Child.household_id == household_id))
     child = result.scalar_one_or_none()
     if not child:
         raise HTTPException(status_code=404, detail="Child not found")
@@ -50,7 +48,9 @@ async def get_calibration_profile(
     if profile is None:
         # Count total predictions to show progress toward threshold
         count_result = await db.execute(
-            select(func.count()).select_from(EvaluatorPrediction).where(
+            select(func.count())
+            .select_from(EvaluatorPrediction)
+            .where(
                 EvaluatorPrediction.child_id == child_id,
                 EvaluatorPrediction.actual_outcome.isnot(None),
             )
@@ -120,18 +120,20 @@ async def list_predictions(
 
     items = []
     for p in predictions:
-        items.append({
-            "id": str(p.id),
-            "node_id": str(p.node_id),
-            "attempt_id": str(p.attempt_id),
-            "predicted_confidence": p.predicted_confidence,
-            "predicted_fsrs_rating": p.predicted_fsrs_rating,
-            "actual_outcome": p.actual_outcome,
-            "drift_score": p.drift_score,
-            "calibration_offset_applied": p.calibration_offset_applied,
-            "created_at": p.created_at.isoformat() if p.created_at else None,
-            "outcome_recorded_at": p.outcome_recorded_at.isoformat() if p.outcome_recorded_at else None,
-        })
+        items.append(
+            {
+                "id": str(p.id),
+                "node_id": str(p.node_id),
+                "attempt_id": str(p.attempt_id),
+                "predicted_confidence": p.predicted_confidence,
+                "predicted_fsrs_rating": p.predicted_fsrs_rating,
+                "actual_outcome": p.actual_outcome,
+                "drift_score": p.drift_score,
+                "calibration_offset_applied": p.calibration_offset_applied,
+                "created_at": p.created_at.isoformat() if p.created_at else None,
+                "outcome_recorded_at": p.outcome_recorded_at.isoformat() if p.outcome_recorded_at else None,
+            }
+        )
 
     return {"items": items, "total": total}
 
@@ -184,14 +186,16 @@ async def update_calibration_offset(
         changes["parent_override_offset"] = None
 
     # Emit governance event
-    db.add(GovernanceEvent(
-        household_id=user.household_id,
-        user_id=user.id,
-        action=GovernanceAction.modify,
-        target_type="calibration_profile",
-        target_id=profile.id,
-        reason=f"Calibration offset updated: {changes}",
-    ))
+    db.add(
+        GovernanceEvent(
+            household_id=user.household_id,
+            user_id=user.id,
+            action=GovernanceAction.modify,
+            target_type="calibration_profile",
+            target_id=profile.id,
+            reason=f"Calibration offset updated: {changes}",
+        )
+    )
 
     await db.flush()
     await db.commit()
@@ -215,12 +219,14 @@ async def get_drift_history(
     cutoff = datetime.now(UTC) - timedelta(weeks=weeks)
 
     result = await db.execute(
-        select(EvaluatorPrediction).where(
+        select(EvaluatorPrediction)
+        .where(
             EvaluatorPrediction.child_id == child_id,
             EvaluatorPrediction.household_id == user.household_id,
             EvaluatorPrediction.actual_outcome.isnot(None),
             EvaluatorPrediction.outcome_recorded_at >= cutoff,
-        ).order_by(EvaluatorPrediction.outcome_recorded_at)
+        )
+        .order_by(EvaluatorPrediction.outcome_recorded_at)
     )
     predictions = result.scalars().all()
 
@@ -238,11 +244,13 @@ async def get_drift_history(
     series = []
     for week_key in sorted(weekly.keys()):
         drifts = weekly[week_key]
-        series.append({
-            "week": week_key,
-            "mean_drift": round(sum(drifts) / len(drifts), 3),
-            "count": len(drifts),
-        })
+        series.append(
+            {
+                "week": week_key,
+                "mean_drift": round(sum(drifts) / len(drifts), 3),
+                "count": len(drifts),
+            }
+        )
 
     return {"series": series, "weeks_requested": weeks}
 
@@ -259,6 +267,7 @@ async def get_temporal_drift(
     """Temporal drift analysis with trend detection."""
     await _get_child_or_404(db, child_id, user.household_id)
     from app.services.calibration import compute_temporal_drift
+
     return await compute_temporal_drift(db, child_id, user.household_id)
 
 
@@ -274,6 +283,7 @@ async def get_confidence_distribution(
     """Confidence score distribution histogram."""
     await _get_child_or_404(db, child_id, user.household_id)
     from app.services.calibration import compute_confidence_distribution
+
     return await compute_confidence_distribution(db, child_id, user.household_id)
 
 
@@ -289,6 +299,7 @@ async def get_subject_detail(
     """Per-subject calibration detail with recommendations."""
     await _get_child_or_404(db, child_id, user.household_id)
     from app.services.calibration import compute_subject_calibration_detail
+
     subjects = await compute_subject_calibration_detail(db, child_id, user.household_id)
     return {"subjects": subjects}
 
@@ -318,19 +329,23 @@ async def export_calibration_data(
 
     # Snapshots
     snap_result = await db.execute(
-        select(CalibrationSnapshot).where(
+        select(CalibrationSnapshot)
+        .where(
             CalibrationSnapshot.child_id == child_id,
             CalibrationSnapshot.household_id == user.household_id,
-        ).order_by(CalibrationSnapshot.computed_at.desc())
+        )
+        .order_by(CalibrationSnapshot.computed_at.desc())
     )
     snapshots = snap_result.scalars().all()
 
     # All predictions with outcomes
     pred_result = await db.execute(
-        select(EvaluatorPrediction).where(
+        select(EvaluatorPrediction)
+        .where(
             EvaluatorPrediction.child_id == child_id,
             EvaluatorPrediction.household_id == user.household_id,
-        ).order_by(EvaluatorPrediction.created_at.desc())
+        )
+        .order_by(EvaluatorPrediction.created_at.desc())
     )
     predictions = pred_result.scalars().all()
 
@@ -348,7 +363,9 @@ async def export_calibration_data(
             "confidence_band_accuracy": profile.confidence_band_accuracy,
             "subject_drift_map": profile.subject_drift_map,
             "last_computed_at": profile.last_computed_at.isoformat() if profile.last_computed_at else None,
-        } if profile else None,
+        }
+        if profile
+        else None,
         "snapshots": [
             {
                 "computed_at": s.computed_at.isoformat() if s.computed_at else None,

@@ -1,7 +1,7 @@
 """Learner Intelligence API — read, observe, override."""
 
 import uuid
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
@@ -17,9 +17,7 @@ router = APIRouter(tags=["intelligence"])
 
 
 async def _get_child_or_404(db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID) -> Child:
-    result = await db.execute(
-        select(Child).where(Child.id == child_id, Child.household_id == household_id)
-    )
+    result = await db.execute(select(Child).where(Child.id == child_id, Child.household_id == household_id))
     child = result.scalar_one_or_none()
     if not child:
         raise HTTPException(status_code=404, detail="Child not found")
@@ -80,11 +78,9 @@ async def add_observation(
     user: User = Depends(get_current_user),
 ) -> dict:
     """Parent adds a manual observation. Parent's word is law."""
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
-    result = await db.execute(
-        select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id)
-    )
+    result = await db.execute(select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id))
     profile = result.scalar_one_or_none()
 
     if not profile:
@@ -96,13 +92,15 @@ async def add_observation(
         await db.flush()
 
     observations = list(profile.parent_observations or [])
-    observations.append({
-        "observation": body.observation.strip(),
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "created_by": str(user.id),
-    })
+    observations.append(
+        {
+            "observation": body.observation.strip(),
+            "created_at": datetime.now(UTC).isoformat(),
+            "created_by": str(user.id),
+        }
+    )
     profile.parent_observations = observations
-    profile.last_updated_at = datetime.now(timezone.utc)
+    profile.last_updated_at = datetime.now(UTC)
     await db.flush()
     await db.commit()
 
@@ -119,9 +117,7 @@ async def remove_observation(
     """Parent removes a specific observation by index."""
     await _get_child_or_404(db, child_id, user.household_id)
 
-    result = await db.execute(
-        select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id)
-    )
+    result = await db.execute(select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id))
     profile = result.scalar_one_or_none()
     if not profile:
         raise HTTPException(status_code=404, detail="No intelligence profile found")
@@ -132,7 +128,7 @@ async def remove_observation(
 
     observations.pop(index)
     profile.parent_observations = observations
-    profile.last_updated_at = datetime.now(timezone.utc)
+    profile.last_updated_at = datetime.now(UTC)
     await db.flush()
     await db.commit()
 
@@ -149,9 +145,7 @@ async def override_intelligence(
     """Parent overrides any AI-accumulated observation. Parent governs."""
     await _get_child_or_404(db, child_id, user.household_id)
 
-    result = await db.execute(
-        select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id)
-    )
+    result = await db.execute(select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id))
     profile = result.scalar_one_or_none()
     if not profile:
         raise HTTPException(status_code=404, detail="No intelligence profile found")
@@ -159,11 +153,17 @@ async def override_intelligence(
     # Parse dotted field path and set value
     parts = body.field.split(".")
     allowed_top = {
-        "learning_style_observations", "subject_patterns", "engagement_patterns",
-        "tutor_interaction_analysis", "pace_trends", "governance_learned_preferences",
+        "learning_style_observations",
+        "subject_patterns",
+        "engagement_patterns",
+        "tutor_interaction_analysis",
+        "pace_trends",
+        "governance_learned_preferences",
     }
     if parts[0] not in allowed_top:
-        raise HTTPException(status_code=400, detail=f"Cannot override field '{parts[0]}'. Allowed: {', '.join(allowed_top)}")
+        raise HTTPException(
+            status_code=400, detail=f"Cannot override field '{parts[0]}'. Allowed: {', '.join(allowed_top)}"
+        )
 
     if len(parts) == 1:
         setattr(profile, parts[0], body.value)
@@ -180,7 +180,7 @@ async def override_intelligence(
         current[parts[-1]] = body.value
         setattr(profile, parts[0], container)
 
-    profile.last_updated_at = datetime.now(timezone.utc)
+    profile.last_updated_at = datetime.now(UTC)
     await db.flush()
     await db.commit()
 
@@ -194,6 +194,7 @@ async def get_governance_intelligence(
 ) -> dict:
     """Returns governance pattern analysis for the current household."""
     from app.services.governance_intelligence import analyze_governance_patterns
+
     return await analyze_governance_patterns(db, user.household_id)
 
 
@@ -206,6 +207,7 @@ async def list_achievements(
     """List earned achievements and all possible definitions."""
     await _get_child_or_404(db, child_id, user.household_id)
     from app.services.achievements import get_achievements, get_all_definitions
+
     earned = await get_achievements(db, child_id)
     return {"earned": earned, "definitions": get_all_definitions()}
 
@@ -219,4 +221,5 @@ async def get_child_streak(
     """Get current streak info for a child."""
     await _get_child_or_404(db, child_id, user.household_id)
     from app.services.achievements import get_streak
+
     return await get_streak(db, child_id, user.household_id)

@@ -11,7 +11,6 @@ from app.api.deps import get_current_user, get_db
 from app.models.curriculum import LearningNode
 from app.models.enums import (
     AuditAction,
-    FamilyPatternType,
     GovernanceAction,
     InsightStatus,
 )
@@ -73,7 +72,9 @@ async def _serialize_insight(db: AsyncSession, insight: FamilyInsight) -> dict:
 
     return {
         "id": str(insight.id),
-        "pattern_type": insight.pattern_type.value if hasattr(insight.pattern_type, "value") else str(insight.pattern_type),
+        "pattern_type": insight.pattern_type.value
+        if hasattr(insight.pattern_type, "value")
+        else str(insight.pattern_type),
         "affected_children": children,
         "affected_nodes": nodes,
         "affected_subjects": insight.affected_subjects or [],
@@ -200,31 +201,37 @@ async def update_insight_status(
         "dismissed": "family_insight_dismissed",
     }
 
-    db.add(GovernanceEvent(
-        household_id=user.household_id,
-        user_id=user.id,
-        action=GovernanceAction.modify,
-        target_type="family_insight",
-        target_id=insight.id,
-        reason=f"{action_map[body.status]}: {insight.pattern_type.value if hasattr(insight.pattern_type, 'value') else insight.pattern_type}",
-        metadata_={
-            "action": action_map[body.status],
-            "insight_id": str(insight.id),
-            "pattern_type": insight.pattern_type.value if hasattr(insight.pattern_type, "value") else str(insight.pattern_type),
-            "previous_status": previous_status,
-            "new_status": body.status,
-            "parent_response": body.parent_response,
-        },
-    ))
+    db.add(
+        GovernanceEvent(
+            household_id=user.household_id,
+            user_id=user.id,
+            action=GovernanceAction.modify,
+            target_type="family_insight",
+            target_id=insight.id,
+            reason=f"{action_map[body.status]}: {insight.pattern_type.value if hasattr(insight.pattern_type, 'value') else insight.pattern_type}",
+            metadata_={
+                "action": action_map[body.status],
+                "insight_id": str(insight.id),
+                "pattern_type": insight.pattern_type.value
+                if hasattr(insight.pattern_type, "value")
+                else str(insight.pattern_type),
+                "previous_status": previous_status,
+                "new_status": body.status,
+                "parent_response": body.parent_response,
+            },
+        )
+    )
 
-    db.add(AuditLog(
-        household_id=user.household_id,
-        user_id=user.id,
-        action=AuditAction.update,
-        resource_type="family_insight",
-        resource_id=insight.id,
-        details={"action": action_map[body.status], "previous_status": previous_status},
-    ))
+    db.add(
+        AuditLog(
+            household_id=user.household_id,
+            user_id=user.id,
+            action=AuditAction.update,
+            resource_type="family_insight",
+            resource_id=insight.id,
+            details={"action": action_map[body.status], "previous_status": previous_status},
+        )
+    )
 
     await db.flush()
     await db.commit()
@@ -310,24 +317,28 @@ async def update_insight_config(
         config.pattern_settings = current
         changes["pattern_settings"] = body.pattern_settings
 
-    db.add(GovernanceEvent(
-        household_id=user.household_id,
-        user_id=user.id,
-        action=GovernanceAction.modify,
-        target_type="family_insight_config",
-        target_id=config.id,
-        reason=f"Family insight config updated: {list(changes.keys())}",
-        metadata_={"changes": changes},
-    ))
+    db.add(
+        GovernanceEvent(
+            household_id=user.household_id,
+            user_id=user.id,
+            action=GovernanceAction.modify,
+            target_type="family_insight_config",
+            target_id=config.id,
+            reason=f"Family insight config updated: {list(changes.keys())}",
+            metadata_={"changes": changes},
+        )
+    )
 
-    db.add(AuditLog(
-        household_id=user.household_id,
-        user_id=user.id,
-        action=AuditAction.update,
-        resource_type="family_insight_config",
-        resource_id=config.id,
-        details=changes,
-    ))
+    db.add(
+        AuditLog(
+            household_id=user.household_id,
+            user_id=user.id,
+            action=AuditAction.update,
+            resource_type="family_insight_config",
+            resource_id=config.id,
+            details=changes,
+        )
+    )
 
     await db.flush()
     await db.commit()
@@ -347,7 +358,9 @@ async def get_insight_summary(
 
     # Total active
     total_result = await db.execute(
-        select(func.count()).select_from(FamilyInsight).where(
+        select(func.count())
+        .select_from(FamilyInsight)
+        .where(
             FamilyInsight.household_id == user.household_id,
             FamilyInsight.status.in_(active_statuses),
         )
@@ -356,25 +369,31 @@ async def get_insight_summary(
 
     # By pattern type
     pattern_result = await db.execute(
-        select(FamilyInsight.pattern_type, func.count()).where(
+        select(FamilyInsight.pattern_type, func.count())
+        .where(
             FamilyInsight.household_id == user.household_id,
             FamilyInsight.status.in_(active_statuses),
-        ).group_by(FamilyInsight.pattern_type)
+        )
+        .group_by(FamilyInsight.pattern_type)
     )
     by_pattern = {row[0].value if hasattr(row[0], "value") else str(row[0]): row[1] for row in pattern_result.all()}
 
     # By status
     status_result = await db.execute(
-        select(FamilyInsight.status, func.count()).where(
+        select(FamilyInsight.status, func.count())
+        .where(
             FamilyInsight.household_id == user.household_id,
             FamilyInsight.status.in_(active_statuses),
-        ).group_by(FamilyInsight.status)
+        )
+        .group_by(FamilyInsight.status)
     )
     by_status = {row[0].value if hasattr(row[0], "value") else str(row[0]): row[1] for row in status_result.all()}
 
     # Predictive count
     predictive_result = await db.execute(
-        select(func.count()).select_from(FamilyInsight).where(
+        select(func.count())
+        .select_from(FamilyInsight)
+        .where(
             FamilyInsight.household_id == user.household_id,
             FamilyInsight.status.in_(active_statuses),
             FamilyInsight.predictive_child_id.isnot(None),

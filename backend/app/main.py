@@ -1,31 +1,31 @@
 """FastAPI application factory with lifespan handler."""
 
-from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 
 import redis.asyncio as aioredis
 import structlog
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.annual_curriculum import router as annual_curriculum_router
+from app.api.assessment import router as assessment_router
+from app.api.auth import router as auth_router
+from app.api.compliance import router as compliance_router
+from app.api.curriculum import router as curriculum_router
+from app.api.documents import router as documents_router
+from app.api.education_plan import router as education_plan_router
+from app.api.feedback import router as feedback_router
+from app.api.governance import router as governance_router
+from app.api.notifications import router as notifications_router
+from app.api.operations import router as operations_router
+from app.api.resources import router as resources_router
+from app.api.spec_coverage import router as spec_router
+from app.api.state import router as state_router
 from app.core.config import settings
 from app.core.database import engine
 from app.core.logging import setup_logging
 from app.core.middleware import CSRFMiddleware, ErrorHandlerMiddleware, RateLimitMiddleware
-from app.api.auth import router as auth_router
-from app.api.curriculum import router as curriculum_router
-from app.api.state import router as state_router
-from app.api.governance import router as governance_router
-from app.api.operations import router as operations_router
-from app.api.spec_coverage import router as spec_router
-from app.api.education_plan import router as education_plan_router
-from app.api.assessment import router as assessment_router
-from app.api.compliance import router as compliance_router
-from app.api.annual_curriculum import router as annual_curriculum_router
-from app.api.feedback import router as feedback_router
-from app.api.notifications import router as notifications_router
-from app.api.documents import router as documents_router
-from app.api.resources import router as resources_router
 
 logger = structlog.get_logger()
 
@@ -84,28 +84,36 @@ app.include_router(documents_router, prefix="/api/v1")
 app.include_router(resources_router, prefix="/api/v1")
 
 from app.api.intelligence import router as intelligence_router
+
 app.include_router(intelligence_router, prefix="/api/v1")
 
 from app.api.billing import router as billing_router
+
 app.include_router(billing_router, prefix="/api/v1")
 
 from app.api.usage import router as usage_router
+
 app.include_router(usage_router, prefix="/api/v1")
 
 from app.api.calibration import router as calibration_router
+
 app.include_router(calibration_router, prefix="/api/v1")
 
 from app.api.style_vector import router as style_vector_router
+
 app.include_router(style_vector_router, prefix="/api/v1")
 
 from app.api.family_intelligence import router as family_intelligence_router
+
 app.include_router(family_intelligence_router, prefix="/api/v1")
 
 # PARENT-ONLY: Wellbeing endpoints must never be accessible from child auth.
 from app.api.wellbeing import router as wellbeing_router
+
 app.include_router(wellbeing_router, prefix="/api/v1")
 
 from app.api.child_dashboard import router as child_dashboard_router
+
 app.include_router(child_dashboard_router, prefix="/api/v1")
 
 
@@ -119,6 +127,7 @@ async def health() -> dict:
 async def health_ready() -> dict:
     """Readiness probe — DB + Redis + Celery status."""
     import asyncio
+
     from app.tasks.worker import celery_app
 
     checks = {"api": "ok"}
@@ -126,7 +135,9 @@ async def health_ready() -> dict:
     # Check DB
     try:
         from sqlalchemy import text
+
         from app.core.database import engine as db_engine
+
         async with db_engine.connect() as conn:
             await conn.execute(text("SELECT 1"))
         checks["database"] = "ok"
@@ -144,9 +155,7 @@ async def health_ready() -> dict:
     # Check Celery (non-blocking — Celery down = degraded, not unready)
     try:
         loop = asyncio.get_event_loop()
-        responses = await loop.run_in_executor(
-            None, lambda: celery_app.control.ping(timeout=2.0)
-        )
+        responses = await loop.run_in_executor(None, lambda: celery_app.control.ping(timeout=2.0))
         if responses:
             checks["celery"] = "ok"
         else:

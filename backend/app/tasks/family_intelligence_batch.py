@@ -26,7 +26,7 @@ async def _run_family_intelligence_batch() -> dict:
     from app.core.config import settings
     from app.models.identity import Child
     from app.models.state import ChildNodeState
-    from app.services.family_intelligence import run_family_intelligence, generate_predictive_scaffolding
+    from app.services.family_intelligence import generate_predictive_scaffolding, run_family_intelligence
 
     engine = create_async_engine(settings.DATABASE_URL)
     SessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
@@ -75,9 +75,9 @@ async def _run_family_intelligence_batch() -> dict:
                         scaffolding = await generate_predictive_scaffolding(db, household_id)
                         total_insights += len(scaffolding)
                         if scaffolding:
-                            pattern_counts["predictive_scaffolding"] = (
-                                pattern_counts.get("predictive_scaffolding", 0) + len(scaffolding)
-                            )
+                            pattern_counts["predictive_scaffolding"] = pattern_counts.get(
+                                "predictive_scaffolding", 0
+                            ) + len(scaffolding)
                     except Exception:
                         logger.exception("Predictive scaffolding failed for household %s", household_id)
 

@@ -7,7 +7,6 @@ predictions whose profile is stale (last_computed_at > 24h or NULL).
 import asyncio
 import logging
 import time
-import uuid
 from datetime import UTC, datetime, timedelta
 
 logger = logging.getLogger(__name__)
@@ -55,24 +54,21 @@ async def _run_calibration_batch() -> dict:
         cutoff = datetime.now(UTC) - timedelta(hours=24)
 
         # Get children who have enough data
-        result = await db.execute(
-            select(eligible_subq.c.child_id)
-        )
+        result = await db.execute(select(eligible_subq.c.child_id))
         eligible_child_ids = [row[0] for row in result.all()]
 
         # Filter out those with fresh profiles
         stale_ids = []
         for child_id in eligible_child_ids:
-            profile_result = await db.execute(
-                select(CalibrationProfile).where(CalibrationProfile.child_id == child_id)
-            )
+            profile_result = await db.execute(select(CalibrationProfile).where(CalibrationProfile.child_id == child_id))
             profile = profile_result.scalar_one_or_none()
             if profile is None or profile.last_computed_at is None or profile.last_computed_at < cutoff:
                 stale_ids.append(child_id)
 
         logger.info(
             "Calibration batch: %d eligible children, %d stale",
-            len(eligible_child_ids), len(stale_ids),
+            len(eligible_child_ids),
+            len(stale_ids),
         )
 
         # Process in batches
@@ -82,9 +78,7 @@ async def _run_calibration_batch() -> dict:
                 processed += 1
                 try:
                     # Get household_id for this child
-                    child_result = await db.execute(
-                        select(Child.household_id).where(Child.id == child_id)
-                    )
+                    child_result = await db.execute(select(Child.household_id).where(Child.id == child_id))
                     row = child_result.one_or_none()
                     if row is None:
                         continue
@@ -101,6 +95,7 @@ async def _run_calibration_batch() -> dict:
         # Run system health check after all profiles are recomputed
         try:
             from app.services.calibration import run_calibration_health_check
+
             async with SessionLocal() as db:
                 health = await run_calibration_health_check(db)
                 await db.commit()

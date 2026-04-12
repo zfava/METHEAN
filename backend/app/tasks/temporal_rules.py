@@ -12,19 +12,17 @@ import asyncio
 import time
 from datetime import UTC, date, datetime
 
+import structlog
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
-from app.models.enums import GovernanceAction
+from app.models.curriculum import LearningNode
+from app.models.enums import GovernanceAction, MasteryLevel
 from app.models.governance import GovernanceEvent, GovernanceRule
 from app.models.identity import Child
-from app.models.curriculum import ChildMapEnrollment, LearningNode
 from app.models.state import ChildNodeState
-from app.models.enums import MasteryLevel
-
-import structlog
 
 logger = structlog.get_logger()
 
@@ -70,9 +68,7 @@ async def evaluate_temporal_triggers(
                 child_id = tc.get("child_id")
                 age_years = tc.get("age_years")
                 if child_id and age_years:
-                    child_result = await db.execute(
-                        select(Child).where(Child.id == child_id)
-                    )
+                    child_result = await db.execute(select(Child).where(Child.id == child_id))
                     child = child_result.scalar_one_or_none()
                     if child and child.date_of_birth:
                         age = (today - child.date_of_birth).days / 365.25
@@ -124,24 +120,27 @@ async def evaluate_temporal_triggers(
 
                 # Mark as triggered — use flag_modified so SQLAlchemy detects the JSONB change
                 from sqlalchemy.orm.attributes import flag_modified
+
                 tc["triggered_at"] = datetime.now(UTC).isoformat()
                 rule.trigger_conditions = tc
                 flag_modified(rule, "trigger_conditions")
 
                 # Log governance event
-                db.add(GovernanceEvent(
-                    household_id=rule.household_id,
-                    user_id=rule.created_by,
-                    action=GovernanceAction.modify,
-                    target_type="temporal_trigger",
-                    target_id=rule.id,
-                    reason=f"Temporal trigger fired: {fire_reason}. Rule '{rule.name}' {action}d.",
-                    metadata_={
-                        "trigger_type": trigger_type,
-                        "action": action,
-                        "reason": fire_reason,
-                    },
-                ))
+                db.add(
+                    GovernanceEvent(
+                        household_id=rule.household_id,
+                        user_id=rule.created_by,
+                        action=GovernanceAction.modify,
+                        target_type="temporal_trigger",
+                        target_id=rule.id,
+                        reason=f"Temporal trigger fired: {fire_reason}. Rule '{rule.name}' {action}d.",
+                        metadata_={
+                            "trigger_type": trigger_type,
+                            "action": action,
+                            "reason": fire_reason,
+                        },
+                    )
+                )
 
                 triggers_fired += 1
                 logger.info(

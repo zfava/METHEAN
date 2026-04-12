@@ -53,5 +53,6 @@ async def test_daily_summary(
 ) -> dict:
     """Send a test daily summary email to the current user's household."""
     from app.tasks.daily_summary import send_daily_summary_for_household
+
     sent = await send_daily_summary_for_household(db, user.household_id, test_mode=True)
     return {"sent": sent, "test_mode": True}

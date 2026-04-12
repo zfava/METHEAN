@@ -70,10 +70,7 @@ class Settings(BaseSettings):
     def jwt_secret_must_not_be_default_in_prod(cls, v: str, info) -> str:
         env = info.data.get("APP_ENV", "development")
         if env == "production" and v == "CHANGE_ME_IN_PRODUCTION":
-            raise ValueError(
-                "JWT_SECRET must be changed from default in production. "
-                "Refusing to boot."
-            )
+            raise ValueError("JWT_SECRET must be changed from default in production. Refusing to boot.")
         return v
 
     @property

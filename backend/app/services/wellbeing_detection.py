@@ -21,7 +21,6 @@ from app.models.enums import AnomalyStatus, AnomalyType, SensitivityLevel
 from app.models.governance import Activity, Attempt
 from app.models.identity import Child
 from app.models.intelligence import LearnerIntelligence
-from app.models.state import ChildNodeState
 from app.models.wellbeing import WellbeingAnomaly, WellbeingConfig
 
 logger = logging.getLogger(__name__)
@@ -88,9 +87,9 @@ async def _compute_metrics(
     """
     # Get attempts in the window joined with activity/node/subject
     result = await db.execute(
-        select(Attempt, Activity.node_id, Activity.estimated_minutes).join(
-            Activity, Attempt.activity_id == Activity.id
-        ).where(
+        select(Attempt, Activity.node_id, Activity.estimated_minutes)
+        .join(Activity, Attempt.activity_id == Activity.id)
+        .where(
             Attempt.child_id == child_id,
             Attempt.household_id == household_id,
             Attempt.created_at >= start_date,
@@ -126,11 +125,13 @@ async def _compute_metrics(
         duration_ratio = min(1.0, dur / max(expected, 1)) if dur > 0 else 0.0
         effort = (1.0 if completed else 0.3) * max(0.3, duration_ratio)
 
-        subject_attempts[subj].append({
-            "completed": completed,
-            "effort": effort,
-            "node_id": str(node_id) if node_id else None,
-        })
+        subject_attempts[subj].append(
+            {
+                "completed": completed,
+                "effort": effort,
+                "node_id": str(node_id) if node_id else None,
+            }
+        )
 
     # Get evaluator confidence per subject
     pred_result = await db.execute(
@@ -150,9 +151,7 @@ async def _compute_metrics(
             subject_confidences[subj].append(p.predicted_confidence)
 
     # Get frustration data from intelligence
-    intel_result = await db.execute(
-        select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id)
-    )
+    intel_result = await db.execute(select(LearnerIntelligence).where(LearnerIntelligence.child_id == child_id))
     intel = intel_result.scalar_one_or_none()
 
     # Build per-subject metrics
@@ -229,10 +228,7 @@ async def compute_child_baselines(
         return None
 
     # Filter subjects with insufficient data
-    filtered = {
-        s: m for s, m in metrics["subjects"].items()
-        if m["data_points"] >= MIN_DATA_POINTS_PER_SUBJECT
-    }
+    filtered = {s: m for s, m in metrics["subjects"].items() if m["data_points"] >= MIN_DATA_POINTS_PER_SUBJECT}
 
     if not filtered:
         return None
@@ -351,8 +347,7 @@ def _detect_frustration_spike(
         return None
 
     severity = sum(
-        evidence[s].get("ratio", 2.0) if evidence[s].get("ratio") != float("inf") else 3.0
-        for s in affected
+        evidence[s].get("ratio", 2.0) if evidence[s].get("ratio") != float("inf") else 3.0 for s in affected
     ) / len(affected)
     sens = config.sensitivity_level if config else SensitivityLevel.balanced
 
@@ -449,16 +444,20 @@ async def _detect_session_avoidance(
 
     # Check last 7 days of scheduled activities
     result = await db.execute(
-        select(Activity.scheduled_date, Attempt.status).outerjoin(
-            Attempt, and_(
+        select(Activity.scheduled_date, Attempt.status)
+        .outerjoin(
+            Attempt,
+            and_(
                 Attempt.activity_id == Activity.id,
                 Attempt.child_id == child_id,
-            )
-        ).where(
+            ),
+        )
+        .where(
             Activity.household_id == household_id,
             Activity.scheduled_date >= (now - timedelta(days=7)).date(),
             Activity.scheduled_date <= now.date(),
-        ).order_by(Activity.scheduled_date)
+        )
+        .order_by(Activity.scheduled_date)
     )
     rows = result.all()
 
@@ -526,7 +525,9 @@ async def _anomaly_exists_recent(
     """Check if an active anomaly of this type exists within the dedup window."""
     cutoff = datetime.now(UTC) - timedelta(days=DEDUP_WINDOW_DAYS)
     result = await db.execute(
-        select(func.count()).select_from(WellbeingAnomaly).where(
+        select(func.count())
+        .select_from(WellbeingAnomaly)
+        .where(
             WellbeingAnomaly.child_id == child_id,
             WellbeingAnomaly.anomaly_type == anomaly_type,
             WellbeingAnomaly.status.in_([s.value for s in ACTIVE_STATUSES]),
@@ -551,9 +552,7 @@ async def run_wellbeing_detection(
     Returns list of newly created anomalies (may be empty).
     """
     # 1. Fetch config
-    config_result = await db.execute(
-        select(WellbeingConfig).where(WellbeingConfig.child_id == child_id)
-    )
+    config_result = await db.execute(select(WellbeingConfig).where(WellbeingConfig.child_id == child_id))
     config = config_result.scalar_one_or_none()
 
     if config and not config.enabled:
@@ -580,8 +579,14 @@ async def run_wellbeing_detection(
     detectors = [
         ("broad_disengagement", lambda: _detect_broad_disengagement(baselines, recent, config, child_name)),
         ("frustration_spike", lambda: _detect_frustration_spike(baselines, recent, config, child_name)),
-        ("performance_cliff", lambda: _detect_performance_cliff(db, baselines, recent, config, child_id, household_id, child_name)),
-        ("session_avoidance", lambda: _detect_session_avoidance(db, baselines, config, child_id, household_id, child_name)),
+        (
+            "performance_cliff",
+            lambda: _detect_performance_cliff(db, baselines, recent, config, child_id, household_id, child_name),
+        ),
+        (
+            "session_avoidance",
+            lambda: _detect_session_avoidance(db, baselines, config, child_id, household_id, child_name),
+        ),
     ]
 
     for name, detector in detectors:
@@ -606,17 +611,20 @@ async def run_wellbeing_detection(
             try:
                 from app.models.enums import AuditAction
                 from app.models.operational import AuditLog
-                db.add(AuditLog(
-                    household_id=household_id,
-                    action=AuditAction.create,
-                    resource_type="wellbeing_anomaly",
-                    resource_id=result.id,
-                    details={
-                        "anomaly_type": name,
-                        "severity": result.severity,
-                        "affected_subjects": result.affected_subjects,
-                    },
-                ))
+
+                db.add(
+                    AuditLog(
+                        household_id=household_id,
+                        action=AuditAction.create,
+                        resource_type="wellbeing_anomaly",
+                        resource_id=result.id,
+                        details={
+                            "anomaly_type": name,
+                            "severity": result.severity,
+                            "affected_subjects": result.affected_subjects,
+                        },
+                    )
+                )
             except Exception:
                 pass
 
@@ -631,8 +639,8 @@ async def run_wellbeing_detection(
 
 def asyncio_iscoroutine(fn):
     """Check if calling fn() would return a coroutine."""
-    import asyncio
     import inspect
+
     return inspect.iscoroutinefunction(fn)
 
 
@@ -672,9 +680,7 @@ async def record_dismissal(
         anomaly.parent_response = parent_response
 
     # Adjust threshold for this child + anomaly type
-    config_result = await db.execute(
-        select(WellbeingConfig).where(WellbeingConfig.child_id == anomaly.child_id)
-    )
+    config_result = await db.execute(select(WellbeingConfig).where(WellbeingConfig.child_id == anomaly.child_id))
     config = config_result.scalar_one_or_none()
     if config is None:
         config = WellbeingConfig(
@@ -695,19 +701,22 @@ async def record_dismissal(
     try:
         from app.models.enums import GovernanceAction
         from app.models.governance import GovernanceEvent
-        db.add(GovernanceEvent(
-            household_id=household_id,
-            user_id=None,
-            action=GovernanceAction.modify,
-            target_type="wellbeing_anomaly",
-            target_id=anomaly.id,
-            reason=f"wellbeing_anomaly_dismissed: {atype}",
-            metadata_={
-                "anomaly_type": atype,
-                "new_threshold_adjustment": adjustments[atype],
-                "total_false_positives": config.total_false_positives,
-            },
-        ))
+
+        db.add(
+            GovernanceEvent(
+                household_id=household_id,
+                user_id=None,
+                action=GovernanceAction.modify,
+                target_type="wellbeing_anomaly",
+                target_id=anomaly.id,
+                reason=f"wellbeing_anomaly_dismissed: {atype}",
+                metadata_={
+                    "anomaly_type": atype,
+                    "new_threshold_adjustment": adjustments[atype],
+                    "total_false_positives": config.total_false_positives,
+                },
+            )
+        )
     except Exception:
         pass
 
@@ -715,13 +724,16 @@ async def record_dismissal(
     try:
         from app.models.enums import AuditAction
         from app.models.operational import AuditLog
-        db.add(AuditLog(
-            household_id=household_id,
-            action=AuditAction.update,
-            resource_type="wellbeing_anomaly",
-            resource_id=anomaly.id,
-            details={"action": "dismissal_recorded", "anomaly_type": atype},
-        ))
+
+        db.add(
+            AuditLog(
+                household_id=household_id,
+                action=AuditAction.update,
+                resource_type="wellbeing_anomaly",
+                resource_id=anomaly.id,
+                details={"action": "dismissal_recorded", "anomaly_type": atype},
+            )
+        )
     except Exception:
         pass
 
@@ -807,13 +819,16 @@ async def check_for_resolution(
             try:
                 from app.models.enums import AuditAction
                 from app.models.operational import AuditLog
-                db.add(AuditLog(
-                    household_id=household_id,
-                    action=AuditAction.update,
-                    resource_type="wellbeing_anomaly",
-                    resource_id=anomaly.id,
-                    details={"action": "anomaly_resolved", "anomaly_type": atype},
-                ))
+
+                db.add(
+                    AuditLog(
+                        household_id=household_id,
+                        action=AuditAction.update,
+                        resource_type="wellbeing_anomaly",
+                        resource_id=anomaly.id,
+                        details={"action": "anomaly_resolved", "anomaly_type": atype},
+                    )
+                )
             except Exception:
                 pass
 
@@ -837,26 +852,24 @@ async def notify_parent_of_anomaly(
     CRITICAL: Notifications go ONLY to parents. Never to child-facing UI.
     """
     from sqlalchemy import select as _sel
+
     from app.models.identity import User
 
     # Find the household owner
-    user_result = await db.execute(
-        _sel(User).where(User.household_id == anomaly.household_id, User.role == "owner")
-    )
+    user_result = await db.execute(_sel(User).where(User.household_id == anomaly.household_id, User.role == "owner"))
     owner = user_result.scalar_one_or_none()
     if not owner:
         return
 
     # Get child name
-    child_result = await db.execute(
-        _sel(Child.first_name).where(Child.id == anomaly.child_id)
-    )
+    child_result = await db.execute(_sel(Child.first_name).where(Child.id == anomaly.child_id))
     child_row = child_result.one_or_none()
     child_name = child_row[0] if child_row else "your child"
 
     try:
-        from app.services.notifications import send_notification
         from app.models.identity import Household
+        from app.services.notifications import send_notification
+
         h_result = await db.execute(_sel(Household.timezone).where(Household.id == anomaly.household_id))
         h_row = h_result.one_or_none()
         tz = h_row[0] if h_row else "UTC"

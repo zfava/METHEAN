@@ -4,15 +4,13 @@ Every achievement is parent-governed via achievement_visibility rules.
 """
 
 import uuid
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, timedelta
 
-from sqlalchemy import select, func
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.achievements import Achievement, Streak
 from app.models.governance import Activity, Attempt
-from app.models.state import ChildNodeState
-
 
 # ── Built-in achievement definitions ──
 
@@ -87,10 +85,12 @@ DEFS_BY_TYPE = {d["type"]: d for d in ACHIEVEMENT_DEFS}
 
 async def _has_achievement(db: AsyncSession, child_id: uuid.UUID, achievement_type: str) -> bool:
     result = await db.execute(
-        select(Achievement.id).where(
+        select(Achievement.id)
+        .where(
             Achievement.child_id == child_id,
             Achievement.achievement_type == achievement_type,
-        ).limit(1)
+        )
+        .limit(1)
     )
     return result.scalar_one_or_none() is not None
 
@@ -134,7 +134,9 @@ async def check_achievements(
 
     # Count total completed activities
     total_result = await db.execute(
-        select(func.count()).select_from(Attempt).where(
+        select(func.count())
+        .select_from(Attempt)
+        .where(
             Attempt.child_id == child_id,
             Attempt.status == "completed",
         )
@@ -156,9 +158,12 @@ async def check_achievements(
     # Subject Star (first mastery in any subject)
     if trigger_event == "mastery_change" and ctx.get("new_level") == "mastered":
         subject = ctx.get("subject", "")
-        type_key = f"subject_star_{subject.lower().replace(' ', '_')}" if subject else "subject_star"
+        f"subject_star_{subject.lower().replace(' ', '_')}" if subject else "subject_star"
         ach = await _grant(
-            db, child_id, household_id, "subject_star",
+            db,
+            child_id,
+            household_id,
+            "subject_star",
             title_override=f"Subject Star: {subject}" if subject else "Subject Star",
             metadata={"subject": subject},
         )
@@ -166,7 +171,11 @@ async def check_achievements(
             earned.append(ach)
 
     # Comeback Kid (re-mastered after decay)
-    if trigger_event == "mastery_change" and ctx.get("new_level") == "mastered" and ctx.get("old_level") in ("developing", "emerging"):
+    if (
+        trigger_event == "mastery_change"
+        and ctx.get("new_level") == "mastered"
+        and ctx.get("old_level") in ("developing", "emerging")
+    ):
         ach = await _grant(db, child_id, household_id, "comeback_kid", metadata=ctx)
         if ach:
             earned.append(ach)
@@ -176,7 +185,9 @@ async def check_achievements(
         node_id = ctx.get("node_id")
         if node_id:
             attempt_count_result = await db.execute(
-                select(func.count()).select_from(Attempt).where(
+                select(func.count())
+                .select_from(Attempt)
+                .where(
                     Attempt.child_id == child_id,
                 )
             )
@@ -217,7 +228,9 @@ async def check_achievements(
 
 
 async def _get_or_create_streak(
-    db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID,
+    db: AsyncSession,
+    child_id: uuid.UUID,
+    household_id: uuid.UUID,
 ) -> Streak:
     result = await db.execute(select(Streak).where(Streak.child_id == child_id))
     streak = result.scalar_one_or_none()
@@ -230,7 +243,9 @@ async def _get_or_create_streak(
 
 
 async def update_streak(
-    db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID,
+    db: AsyncSession,
+    child_id: uuid.UUID,
+    household_id: uuid.UUID,
 ) -> Streak:
     """Update streak based on activity completion today."""
     streak = await _get_or_create_streak(db, child_id, household_id)
@@ -257,8 +272,7 @@ async def update_streak(
 async def get_achievements(db: AsyncSession, child_id: uuid.UUID) -> list[dict]:
     """Get all earned achievements for a child."""
     result = await db.execute(
-        select(Achievement).where(Achievement.child_id == child_id)
-        .order_by(Achievement.earned_at.desc())
+        select(Achievement).where(Achievement.child_id == child_id).order_by(Achievement.earned_at.desc())
     )
     return [
         {
@@ -287,6 +301,12 @@ async def get_streak(db: AsyncSession, child_id: uuid.UUID, household_id: uuid.U
 def get_all_definitions() -> list[dict]:
     """Return all possible achievement definitions (for gallery display)."""
     return [
-        {"type": d["type"], "title": d["title"], "description": d["description"], "icon": d["icon"], "category": d["category"]}
+        {
+            "type": d["type"],
+            "title": d["title"],
+            "description": d["description"],
+            "icon": d["icon"],
+            "category": d["category"],
+        }
         for d in ACHIEVEMENT_DEFS
     ]

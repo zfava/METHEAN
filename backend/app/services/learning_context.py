@@ -73,18 +73,18 @@ async def get_activity_learning_context(
             .limit(5)
         )
         for att in prev_result.scalars().all():
-            context["previous_attempts"].append({
-                "date": str(att.created_at.date()) if att.created_at else None,
-                "status": att.status.value,
-                "duration_minutes": att.duration_minutes,
-                "score": att.score,
-            })
+            context["previous_attempts"].append(
+                {
+                    "date": str(att.created_at.date()) if att.created_at else None,
+                    "status": att.status.value,
+                    "duration_minutes": att.duration_minutes,
+                    "score": att.score,
+                }
+            )
 
     # Fetch and potentially enrich linked node content
     if activity.node_id:
-        node_result = await db.execute(
-            select(LearningNode).where(LearningNode.id == activity.node_id)
-        )
+        node_result = await db.execute(select(LearningNode).where(LearningNode.id == activity.node_id))
         node = node_result.scalar_one_or_none()
         if node:
             # Ensure content exists
@@ -142,42 +142,41 @@ async def get_activity_learning_context(
             steps = []
             # Introduction as a "read" step
             if tg.get("introduction"):
-                steps.append({
-                    "title": "Introduction",
-                    "content": tg["introduction"],
-                    "type": "read",
-                })
+                steps.append(
+                    {
+                        "title": "Introduction",
+                        "content": tg["introduction"],
+                        "type": "read",
+                    }
+                )
             # Scaffolding as sequential steps
             for i, scaffold in enumerate(tg.get("scaffolding_sequence", [])):
-                steps.append({
-                    "title": f"Step {i + 1}",
-                    "content": scaffold,
-                    "type": "do",
-                })
+                steps.append(
+                    {
+                        "title": f"Step {i + 1}",
+                        "content": scaffold,
+                        "type": "do",
+                    }
+                )
             # Socratic questions as "think" steps
             for q in tg.get("socratic_questions", []):
-                steps.append({
-                    "title": "Think about this",
-                    "content": q,
-                    "type": "think",
-                })
+                steps.append(
+                    {
+                        "title": "Think about this",
+                        "content": q,
+                        "type": "think",
+                    }
+                )
 
             context["lesson"] = {
                 "introduction": tg.get("introduction", ""),
                 "objectives": objectives,
                 "steps": steps,
                 "key_questions": tg.get("socratic_questions", []),
-                "practice_prompts": (
-                    tg.get("practice_activities", [])
-                    + ac.get("sample_assessment_prompts", [])
-                ),
-                "resources_needed": (
-                    rg.get("required", []) + rg.get("recommended", [])
-                ),
+                "practice_prompts": (tg.get("practice_activities", []) + ac.get("sample_assessment_prompts", [])),
+                "resources_needed": (rg.get("required", []) + rg.get("recommended", [])),
                 "real_world_connection": (
-                    "; ".join(tg.get("real_world_connections", []))
-                    if tg.get("real_world_connections")
-                    else ""
+                    "; ".join(tg.get("real_world_connections", [])) if tg.get("real_world_connections") else ""
                 ),
                 "common_misconceptions": tg.get("common_misconceptions", []),
                 "estimated_time": {

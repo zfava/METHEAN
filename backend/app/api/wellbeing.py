@@ -13,10 +13,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import get_current_user, get_db
 from app.models.enums import (
     AnomalyStatus,
-    AnomalyType,
     AuditAction,
     GovernanceAction,
-    SensitivityLevel,
 )
 from app.models.governance import GovernanceEvent
 from app.models.identity import Child, User
@@ -27,9 +25,7 @@ router = APIRouter(tags=["wellbeing"])
 
 
 async def _get_child_or_404(db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID) -> Child:
-    result = await db.execute(
-        select(Child).where(Child.id == child_id, Child.household_id == household_id)
-    )
+    result = await db.execute(select(Child).where(Child.id == child_id, Child.household_id == household_id))
     child = result.scalar_one_or_none()
     if not child:
         raise HTTPException(status_code=404, detail="Child not found")
@@ -145,6 +141,7 @@ async def update_anomaly_status(
 
     if body.status == "dismissed":
         from app.services.wellbeing_detection import record_dismissal
+
         await record_dismissal(db, anomaly_id, user.household_id, body.parent_response)
     else:
         anomaly.status = body.status
@@ -157,30 +154,34 @@ async def update_anomaly_status(
         "resolved": "wellbeing_anomaly_resolved",
     }
 
-    db.add(GovernanceEvent(
-        household_id=user.household_id,
-        user_id=user.id,
-        action=GovernanceAction.modify,
-        target_type="wellbeing_anomaly",
-        target_id=anomaly.id,
-        reason=f"{action_map[body.status]}: {atype}",
-        metadata_={
-            "action": action_map[body.status],
-            "anomaly_type": atype,
-            "previous_status": prev_status,
-            "new_status": body.status,
-            "child_id": str(child_id),
-        },
-    ))
+    db.add(
+        GovernanceEvent(
+            household_id=user.household_id,
+            user_id=user.id,
+            action=GovernanceAction.modify,
+            target_type="wellbeing_anomaly",
+            target_id=anomaly.id,
+            reason=f"{action_map[body.status]}: {atype}",
+            metadata_={
+                "action": action_map[body.status],
+                "anomaly_type": atype,
+                "previous_status": prev_status,
+                "new_status": body.status,
+                "child_id": str(child_id),
+            },
+        )
+    )
 
-    db.add(AuditLog(
-        household_id=user.household_id,
-        user_id=user.id,
-        action=AuditAction.update,
-        resource_type="wellbeing_anomaly",
-        resource_id=anomaly.id,
-        details={"action": action_map[body.status], "previous_status": prev_status},
-    ))
+    db.add(
+        AuditLog(
+            household_id=user.household_id,
+            user_id=user.id,
+            action=AuditAction.update,
+            resource_type="wellbeing_anomaly",
+            resource_id=anomaly.id,
+            details={"action": action_map[body.status], "previous_status": prev_status},
+        )
+    )
 
     await db.flush()
     await db.commit()
@@ -219,7 +220,9 @@ async def get_config(
 
     return {
         "enabled": config.enabled,
-        "sensitivity_level": config.sensitivity_level.value if hasattr(config.sensitivity_level, "value") else str(config.sensitivity_level),
+        "sensitivity_level": config.sensitivity_level.value
+        if hasattr(config.sensitivity_level, "value")
+        else str(config.sensitivity_level),
         "custom_thresholds": config.custom_thresholds,
         "threshold_adjustments": config.threshold_adjustments,
         "total_false_positives": config.total_false_positives,
@@ -283,24 +286,28 @@ async def update_config(
         config.custom_thresholds = current
         changes["custom_thresholds"] = body.custom_thresholds
 
-    db.add(GovernanceEvent(
-        household_id=user.household_id,
-        user_id=user.id,
-        action=GovernanceAction.modify,
-        target_type="wellbeing_config",
-        target_id=config.id,
-        reason=f"wellbeing_config_updated: {list(changes.keys())}",
-        metadata_={"changes": changes, "child_id": str(child_id)},
-    ))
+    db.add(
+        GovernanceEvent(
+            household_id=user.household_id,
+            user_id=user.id,
+            action=GovernanceAction.modify,
+            target_type="wellbeing_config",
+            target_id=config.id,
+            reason=f"wellbeing_config_updated: {list(changes.keys())}",
+            metadata_={"changes": changes, "child_id": str(child_id)},
+        )
+    )
 
-    db.add(AuditLog(
-        household_id=user.household_id,
-        user_id=user.id,
-        action=AuditAction.update,
-        resource_type="wellbeing_config",
-        resource_id=config.id,
-        details=changes,
-    ))
+    db.add(
+        AuditLog(
+            household_id=user.household_id,
+            user_id=user.id,
+            action=AuditAction.update,
+            resource_type="wellbeing_config",
+            resource_id=config.id,
+            details=changes,
+        )
+    )
 
     await db.flush()
     await db.commit()
@@ -323,7 +330,9 @@ async def get_summary(
 
     # Active count
     total_active_r = await db.execute(
-        select(func.count()).select_from(WellbeingAnomaly).where(
+        select(func.count())
+        .select_from(WellbeingAnomaly)
+        .where(
             WellbeingAnomaly.child_id == child_id,
             WellbeingAnomaly.household_id == user.household_id,
             WellbeingAnomaly.status.in_(active_statuses),
@@ -333,42 +342,48 @@ async def get_summary(
 
     # By type
     type_r = await db.execute(
-        select(WellbeingAnomaly.anomaly_type, func.count()).where(
+        select(WellbeingAnomaly.anomaly_type, func.count())
+        .where(
             WellbeingAnomaly.child_id == child_id,
             WellbeingAnomaly.household_id == user.household_id,
             WellbeingAnomaly.status.in_(active_statuses),
-        ).group_by(WellbeingAnomaly.anomaly_type)
+        )
+        .group_by(WellbeingAnomaly.anomaly_type)
     )
     by_type = {r[0].value if hasattr(r[0], "value") else str(r[0]): r[1] for r in type_r.all()}
 
     # By status
     status_r = await db.execute(
-        select(WellbeingAnomaly.status, func.count()).where(
+        select(WellbeingAnomaly.status, func.count())
+        .where(
             WellbeingAnomaly.child_id == child_id,
             WellbeingAnomaly.household_id == user.household_id,
             WellbeingAnomaly.status.in_(active_statuses),
-        ).group_by(WellbeingAnomaly.status)
+        )
+        .group_by(WellbeingAnomaly.status)
     )
     by_status = {r[0].value if hasattr(r[0], "value") else str(r[0]): r[1] for r in status_r.all()}
 
     # Resolved and dismissed totals
     resolved_r = await db.execute(
-        select(func.count()).select_from(WellbeingAnomaly).where(
+        select(func.count())
+        .select_from(WellbeingAnomaly)
+        .where(
             WellbeingAnomaly.child_id == child_id,
             WellbeingAnomaly.status == AnomalyStatus.resolved.value,
         )
     )
     dismissed_r = await db.execute(
-        select(func.count()).select_from(WellbeingAnomaly).where(
+        select(func.count())
+        .select_from(WellbeingAnomaly)
+        .where(
             WellbeingAnomaly.child_id == child_id,
             WellbeingAnomaly.status == AnomalyStatus.dismissed.value,
         )
     )
 
     # Config
-    config_r = await db.execute(
-        select(WellbeingConfig).where(WellbeingConfig.child_id == child_id)
-    )
+    config_r = await db.execute(select(WellbeingConfig).where(WellbeingConfig.child_id == child_id))
     config = config_r.scalar_one_or_none()
 
     return {
@@ -377,7 +392,9 @@ async def get_summary(
         "by_status": by_status,
         "total_resolved": resolved_r.scalar() or 0,
         "total_dismissed": dismissed_r.scalar() or 0,
-        "sensitivity_level": (config.sensitivity_level.value if config and hasattr(config.sensitivity_level, "value") else "balanced"),
+        "sensitivity_level": (
+            config.sensitivity_level.value if config and hasattr(config.sensitivity_level, "value") else "balanced"
+        ),
         "enabled": config.enabled if config else True,
         "threshold_adjustments": config.threshold_adjustments if config else {},
     }
@@ -394,7 +411,9 @@ def _serialize(a: WellbeingAnomaly) -> dict:
         "affected_subjects": a.affected_subjects or [],
         "parent_message": a.parent_message,
         "status": a.status.value if hasattr(a.status, "value") else str(a.status),
-        "sensitivity_level": a.sensitivity_level.value if hasattr(a.sensitivity_level, "value") else str(a.sensitivity_level),
+        "sensitivity_level": a.sensitivity_level.value
+        if hasattr(a.sensitivity_level, "value")
+        else str(a.sensitivity_level),
         "created_at": a.created_at.isoformat() if a.created_at else None,
         "false_positive": a.false_positive,
         "parent_response": a.parent_response,

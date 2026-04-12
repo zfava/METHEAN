@@ -32,9 +32,7 @@ class UpdatePlanRequest(BaseModel):
 
 
 async def _get_child_or_404(db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID) -> Child:
-    result = await db.execute(
-        select(Child).where(Child.id == child_id, Child.household_id == household_id)
-    )
+    result = await db.execute(select(Child).where(Child.id == child_id, Child.household_id == household_id))
     child = result.scalar_one_or_none()
     if not child:
         raise HTTPException(status_code=404, detail="Child not found")
@@ -48,10 +46,13 @@ async def generate_plan_endpoint(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("plans.generate")),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     plan = await generate_education_plan(
-        db, user.household_id, child_id, user.id,
+        db,
+        user.household_id,
+        child_id,
+        user.id,
         goals=body.goals,
         baseline_assessment=body.baseline_assessment,
         time_budget_hours_per_week=body.time_budget_hours_per_week,
@@ -75,7 +76,7 @@ async def get_plan(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     result = await db.execute(
         select(EducationPlan).where(
@@ -107,7 +108,7 @@ async def update_plan(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("plans.generate")),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     result = await db.execute(
         select(EducationPlan).where(
@@ -136,7 +137,7 @@ async def approve_plan_endpoint(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("approve.activities")),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     result = await db.execute(
         select(EducationPlan).where(
@@ -167,7 +168,7 @@ async def generate_curricula_endpoint(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("plans.generate")),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     result = await db.execute(
         select(EducationPlan).where(
@@ -181,7 +182,11 @@ async def generate_curricula_endpoint(
 
     try:
         proposals = await generate_year_curricula(
-            db, plan.id, year_key, user.id, user.household_id,
+            db,
+            plan.id,
+            year_key,
+            user.id,
+            user.household_id,
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))

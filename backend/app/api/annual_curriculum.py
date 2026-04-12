@@ -4,15 +4,15 @@ import uuid
 from datetime import date
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user, get_db, require_permission
 from app.models.annual_curriculum import AnnualCurriculum
+from app.models.enums import ActivityStatus, ActivityType
 from app.models.governance import Activity, Plan, PlanWeek
 from app.models.identity import Child, User
-from app.models.enums import ActivityStatus, ActivityType
 from app.services.annual_curriculum import (
     approve_annual_curriculum,
     generate_annual_curriculum,
@@ -82,9 +82,7 @@ async def _get_curriculum(db: AsyncSession, cid: uuid.UUID, hid: uuid.UUID) -> A
 
 
 async def _get_plan_week(db: AsyncSession, curriculum: AnnualCurriculum, week_number: int) -> PlanWeek:
-    plan_result = await db.execute(
-        select(Plan).where(Plan.annual_curriculum_id == curriculum.id)
-    )
+    plan_result = await db.execute(select(Plan).where(Plan.annual_curriculum_id == curriculum.id))
     plan = plan_result.scalar_one_or_none()
     if not plan:
         raise HTTPException(404, "No plan for this curriculum")
@@ -110,7 +108,10 @@ async def generate_curriculum(
     """Generate a new annual curriculum draft."""
     await _get_child(db, child_id, user.household_id)
     curriculum = await generate_annual_curriculum(
-        db, user.household_id, child_id, user.id,
+        db,
+        user.household_id,
+        child_id,
+        user.id,
         subject_name=body.subject_name,
         academic_year=body.academic_year,
         learning_map_id=body.learning_map_id,
@@ -139,11 +140,15 @@ async def list_curricula(
     curricula = result.scalars().all()
     return [
         {
-            "id": str(c.id), "subject_name": c.subject_name,
-            "academic_year": c.academic_year, "grade_level": c.grade_level,
-            "status": c.status, "total_weeks": c.total_weeks,
+            "id": str(c.id),
+            "subject_name": c.subject_name,
+            "academic_year": c.academic_year,
+            "grade_level": c.grade_level,
+            "status": c.status,
+            "total_weeks": c.total_weeks,
             "hours_per_week": c.hours_per_week,
-            "start_date": str(c.start_date), "end_date": str(c.end_date),
+            "start_date": str(c.start_date),
+            "end_date": str(c.end_date),
         }
         for c in curricula
     ]
@@ -158,11 +163,15 @@ async def get_curriculum(
     """Get full curriculum detail including scope_sequence."""
     c = await _get_curriculum(db, curriculum_id, user.household_id)
     return {
-        "id": str(c.id), "subject_name": c.subject_name,
-        "academic_year": c.academic_year, "grade_level": c.grade_level,
-        "status": c.status, "total_weeks": c.total_weeks,
+        "id": str(c.id),
+        "subject_name": c.subject_name,
+        "academic_year": c.academic_year,
+        "grade_level": c.grade_level,
+        "status": c.status,
+        "total_weeks": c.total_weeks,
         "hours_per_week": c.hours_per_week,
-        "start_date": str(c.start_date), "end_date": str(c.end_date),
+        "start_date": str(c.start_date),
+        "end_date": str(c.end_date),
         "scope_sequence": c.scope_sequence,
         "actual_record": c.actual_record,
         "approved_at": str(c.approved_at) if c.approved_at else None,
@@ -212,6 +221,7 @@ async def update_week_notes(
     actual["weeks"] = weeks
     curriculum.actual_record = actual
     from sqlalchemy.orm.attributes import flag_modified
+
     flag_modified(curriculum, "actual_record")
     await db.commit()
     return {"week_number": week_number, "notes": body.notes}
@@ -234,9 +244,12 @@ async def add_activity_to_week(
     scheduled = week.start_date + __import__("datetime").timedelta(days=offset)
 
     type_map = {
-        "lesson": ActivityType.lesson, "practice": ActivityType.practice,
-        "assessment": ActivityType.assessment, "review": ActivityType.review,
-        "project": ActivityType.project, "field_trip": ActivityType.field_trip,
+        "lesson": ActivityType.lesson,
+        "practice": ActivityType.practice,
+        "assessment": ActivityType.assessment,
+        "review": ActivityType.review,
+        "project": ActivityType.project,
+        "field_trip": ActivityType.field_trip,
     }
 
     activity = Activity(
@@ -299,9 +312,12 @@ async def edit_activity(
         activity.estimated_minutes = body.estimated_minutes
     if body.activity_type is not None:
         type_map = {
-            "lesson": ActivityType.lesson, "practice": ActivityType.practice,
-            "assessment": ActivityType.assessment, "review": ActivityType.review,
-            "project": ActivityType.project, "field_trip": ActivityType.field_trip,
+            "lesson": ActivityType.lesson,
+            "practice": ActivityType.practice,
+            "assessment": ActivityType.assessment,
+            "review": ActivityType.review,
+            "project": ActivityType.project,
+            "field_trip": ActivityType.field_trip,
         }
         activity.activity_type = type_map.get(body.activity_type, activity.activity_type)
 
@@ -370,12 +386,17 @@ async def curriculum_history(
         year_list = by_year.setdefault(c.academic_year, [])
         actual = c.actual_record or {}
         completed_weeks = len(actual.get("weeks", {}))
-        year_list.append({
-            "id": str(c.id), "subject_name": c.subject_name,
-            "grade_level": c.grade_level, "status": c.status,
-            "total_weeks": c.total_weeks, "completed_weeks": completed_weeks,
-            "hours_per_week": c.hours_per_week,
-        })
+        year_list.append(
+            {
+                "id": str(c.id),
+                "subject_name": c.subject_name,
+                "grade_level": c.grade_level,
+                "status": c.status,
+                "total_weeks": c.total_weeks,
+                "completed_weeks": completed_weeks,
+                "hours_per_week": c.hours_per_week,
+            }
+        )
 
     return {"child_id": str(child_id), "years": by_year}
 
@@ -390,17 +411,21 @@ async def curriculum_history_year(
     """Get all curricula for a specific academic year."""
     await _get_child(db, child_id, user.household_id)
     result = await db.execute(
-        select(AnnualCurriculum).where(
+        select(AnnualCurriculum)
+        .where(
             AnnualCurriculum.child_id == child_id,
             AnnualCurriculum.household_id == user.household_id,
             AnnualCurriculum.academic_year == academic_year,
-        ).order_by(AnnualCurriculum.subject_name)
+        )
+        .order_by(AnnualCurriculum.subject_name)
     )
     curricula = result.scalars().all()
     return [
         {
-            "id": str(c.id), "subject_name": c.subject_name,
-            "grade_level": c.grade_level, "status": c.status,
+            "id": str(c.id),
+            "subject_name": c.subject_name,
+            "grade_level": c.grade_level,
+            "status": c.status,
             "total_weeks": c.total_weeks,
             "hours_per_week": c.hours_per_week,
             "scope_overview": c.scope_sequence.get("overview", ""),

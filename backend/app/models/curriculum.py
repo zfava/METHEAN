@@ -24,9 +24,7 @@ from app.models.enums import EdgeRelation, NodeType
 class Subject(Base):
     __tablename__ = "subjects"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     household_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("households.id", ondelete="CASCADE"), nullable=False
     )
@@ -36,9 +34,7 @@ class Subject(Base):
     icon: Mapped[str | None] = mapped_column(String(50))
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     sort_order: Mapped[int] = mapped_column(Integer, default=0)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
@@ -50,9 +46,7 @@ class Subject(Base):
 class LearningMap(Base):
     __tablename__ = "learning_maps"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     household_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("households.id", ondelete="CASCADE"), nullable=False
     )
@@ -64,9 +58,7 @@ class LearningMap(Base):
     version: Mapped[int] = mapped_column(Integer, default=1)
     is_published: Mapped[bool] = mapped_column(Boolean, default=False)
     metadata_: Mapped[dict | None] = mapped_column("metadata", JSONB, default=dict)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
@@ -80,9 +72,7 @@ class LearningMap(Base):
 class LearningNode(Base):
     __tablename__ = "learning_nodes"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     learning_map_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("learning_maps.id", ondelete="CASCADE"), nullable=False
     )
@@ -96,9 +86,7 @@ class LearningNode(Base):
     estimated_minutes: Mapped[int | None] = mapped_column(Integer)
     sort_order: Mapped[int] = mapped_column(Integer, default=0)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
@@ -111,13 +99,9 @@ class LearningEdge(Base):
     """Adjacency list for the DAG."""
 
     __tablename__ = "learning_edges"
-    __table_args__ = (
-        UniqueConstraint("learning_map_id", "from_node_id", "to_node_id", name="uq_edge"),
-    )
+    __table_args__ = (UniqueConstraint("learning_map_id", "from_node_id", "to_node_id", name="uq_edge"),)
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     learning_map_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("learning_maps.id", ondelete="CASCADE"), nullable=False
     )
@@ -130,13 +114,9 @@ class LearningEdge(Base):
     to_node_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("learning_nodes.id", ondelete="CASCADE"), nullable=False
     )
-    relation: Mapped[EdgeRelation] = mapped_column(
-        nullable=False, default=EdgeRelation.prerequisite
-    )
+    relation: Mapped[EdgeRelation] = mapped_column(nullable=False, default=EdgeRelation.prerequisite)
     weight: Mapped[float] = mapped_column(Float, default=1.0)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     # Relationships
     learning_map: Mapped["LearningMap"] = relationship(back_populates="edges")
@@ -146,13 +126,9 @@ class LearningMapClosure(Base):
     """Transitive closure table for DAG reachability queries."""
 
     __tablename__ = "learning_map_closure"
-    __table_args__ = (
-        UniqueConstraint("learning_map_id", "ancestor_id", "descendant_id", name="uq_closure"),
-    )
+    __table_args__ = (UniqueConstraint("learning_map_id", "ancestor_id", "descendant_id", name="uq_closure"),)
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     learning_map_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("learning_maps.id", ondelete="CASCADE"), nullable=False
     )
@@ -167,13 +143,9 @@ class LearningMapClosure(Base):
 
 class ChildMapEnrollment(Base):
     __tablename__ = "child_map_enrollments"
-    __table_args__ = (
-        UniqueConstraint("child_id", "learning_map_id", name="uq_child_map"),
-    )
+    __table_args__ = (UniqueConstraint("child_id", "learning_map_id", name="uq_child_map"),)
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     child_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("children.id", ondelete="CASCADE"), nullable=False
     )
@@ -183,12 +155,8 @@ class ChildMapEnrollment(Base):
     learning_map_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("learning_maps.id", ondelete="CASCADE"), nullable=False
     )
-    enrolled_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    enrolled_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     enrolled_at_version: Mapped[int] = mapped_column(Integer, default=1)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     progress_pct: Mapped[float] = mapped_column(Float, default=0.0)
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

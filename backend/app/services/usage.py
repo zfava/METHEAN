@@ -7,11 +7,10 @@ import uuid
 from collections import defaultdict
 from datetime import UTC, date, datetime, timedelta
 
-from sqlalchemy import select, func
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.operational import UsageEvent, UsageLedger
-
 
 # Cost per million tokens by model family
 COST_TABLE = {
@@ -43,7 +42,8 @@ def _current_period() -> tuple[date, date]:
 
 
 async def get_or_create_current_period(
-    db: AsyncSession, household_id: uuid.UUID,
+    db: AsyncSession,
+    household_id: uuid.UUID,
 ) -> UsageLedger:
     """Get current billing period ledger. Create if doesn't exist."""
     start, end = _current_period()
@@ -103,7 +103,8 @@ async def record_usage(
 
 
 async def check_budget(
-    db: AsyncSession, household_id: uuid.UUID,
+    db: AsyncSession,
+    household_id: uuid.UUID,
 ) -> dict:
     """Check remaining budget. Returns status dict."""
     ledger = await get_or_create_current_period(db, household_id)
@@ -125,16 +126,19 @@ async def check_budget(
 
 
 async def get_usage_breakdown(
-    db: AsyncSession, household_id: uuid.UUID,
+    db: AsyncSession,
+    household_id: uuid.UUID,
 ) -> dict:
     """Detailed usage breakdown by role and by day for current period."""
     start, end = _current_period()
 
     result = await db.execute(
-        select(UsageEvent).where(
+        select(UsageEvent)
+        .where(
             UsageEvent.household_id == household_id,
             UsageEvent.created_at >= datetime.combine(start, datetime.min.time()).replace(tzinfo=UTC),
-        ).order_by(UsageEvent.created_at)
+        )
+        .order_by(UsageEvent.created_at)
     )
     events = list(result.scalars().all())
 
@@ -156,7 +160,9 @@ async def get_usage_breakdown(
     sorted_days = sorted(by_day.items())[-14:]  # Last 14 days
 
     return {
-        "by_role": {k: {"calls": v["calls"], "tokens": v["tokens"], "cost": round(v["cost"], 4)} for k, v in by_role.items()},
+        "by_role": {
+            k: {"calls": v["calls"], "tokens": v["tokens"], "cost": round(v["cost"], 4)} for k, v in by_role.items()
+        },
         "by_day": [{"date": d, "tokens": v["tokens"], "calls": v["calls"]} for d, v in sorted_days],
         "total_cost": round(total_cost, 4),
         "total_events": len(events),
@@ -165,4 +171,5 @@ async def get_usage_breakdown(
 
 class UsageLimitExceeded(Exception):
     """Raised when monthly AI token budget is exhausted."""
+
     pass

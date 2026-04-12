@@ -2,7 +2,7 @@
 
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -36,9 +36,14 @@ class UpdateResourceRequest(BaseModel):
 
 def _serialize(r: FamilyResource) -> dict:
     return {
-        "id": str(r.id), "name": r.name, "resource_type": r.resource_type,
-        "subject_area": r.subject_area, "publisher": r.publisher,
-        "grade_range": r.grade_range, "notes": r.notes, "status": r.status,
+        "id": str(r.id),
+        "name": r.name,
+        "resource_type": r.resource_type,
+        "subject_area": r.subject_area,
+        "publisher": r.publisher,
+        "grade_range": r.grade_range,
+        "notes": r.notes,
+        "status": r.status,
         "linked_node_ids": r.linked_node_ids or [],
         "created_at": r.created_at.isoformat() if r.created_at else None,
     }
@@ -155,6 +160,7 @@ async def link_to_node(
     if node_str not in (resource.linked_node_ids or []):
         resource.linked_node_ids = (resource.linked_node_ids or []) + [node_str]
         from sqlalchemy.orm.attributes import flag_modified
+
         flag_modified(resource, "linked_node_ids")
     await db.commit()
     return _serialize(resource)
@@ -179,6 +185,7 @@ async def unlink_from_node(
         raise HTTPException(status_code=404, detail="Resource not found")
     resource.linked_node_ids = [nid for nid in (resource.linked_node_ids or []) if nid != str(node_id)]
     from sqlalchemy.orm.attributes import flag_modified
+
     flag_modified(resource, "linked_node_ids")
     await db.commit()
     return _serialize(resource)
