@@ -883,23 +883,20 @@ Child's latest message: {body.message}
 
 Continue the Socratic dialogue. Reference what was discussed earlier if relevant. Guide toward understanding without giving answers."""
 
-    # Inject style context (advisory)
-    style_ctx = ""
-    tutor_guidance = ""
+    # Assemble context via centralized service (advisory, never blocking)
+    assembled_ctx = ""
     try:
-        from app.services.style_engine import build_style_context, build_tutor_style_guidance
-        from sqlalchemy import select as _sel
-        from app.models.style_vector import LearnerStyleVector
+        from app.services.context_assembly import assemble_context
         if body.child_id:
-            style_ctx = await build_style_context(db, body.child_id, user.household_id)
-            vec_r = await db.execute(_sel(LearnerStyleVector).where(LearnerStyleVector.child_id == body.child_id))
-            tutor_guidance = build_tutor_style_guidance(vec_r.scalar_one_or_none())
+            assembled = await assemble_context(
+                db, role="tutor", child_id=body.child_id, household_id=user.household_id,
+                activity_id=activity_id, node_id=activity.node_id,
+            )
+            assembled_ctx = assembled["context_text"]
+            if assembled_ctx:
+                user_prompt += f"\n\n{assembled_ctx}"
     except Exception:
         pass
-    if style_ctx:
-        user_prompt += f"\n\n{style_ctx}"
-    if tutor_guidance:
-        user_prompt += f"\n\nSTYLE-ADAPTED GUIDANCE:\n{tutor_guidance}"
 
     phil = await _get_philosophical_profile(db, user.household_id)
     result = await call_ai(
@@ -910,6 +907,7 @@ Continue the Socratic dialogue. Reference what was discussed earlier if relevant
         household_id=user.household_id,
         triggered_by=user.id,
         philosophical_profile=phil,
+        assembled_context=assembled_ctx,
     )
 
     output = result["output"]
@@ -987,6 +985,19 @@ Current nodes:
 
 Provide calibration recommendations."""
 
+    # Assemble context via centralized service (advisory, never blocking)
+    assembled_ctx = ""
+    try:
+        from app.services.context_assembly import assemble_context
+        assembled = await assemble_context(
+            db, role="cartographer", child_id=child_id, household_id=user.household_id,
+        )
+        assembled_ctx = assembled["context_text"]
+        if assembled_ctx:
+            user_prompt += f"\n\n{assembled_ctx}"
+    except Exception:
+        pass
+
     phil = await _get_philosophical_profile(db, user.household_id)
     result = await call_ai(
         db,
@@ -996,6 +1007,7 @@ Provide calibration recommendations."""
         philosophical_profile=phil,
         household_id=user.household_id,
         triggered_by=user.id,
+        assembled_context=assembled_ctx,
     )
 
     output = result["output"]
@@ -1050,21 +1062,16 @@ State Summary:
 
 Provide an encouraging, honest assessment."""
 
-    # Inject style context (advisory)
+    # Assemble context via centralized service (advisory, never blocking)
+    assembled_ctx = ""
     try:
-        from app.services.style_engine import build_style_context, build_advisor_style_guidance
-        style_ctx = await build_style_context(db, child_id, user.household_id)
-        if style_ctx:
-            user_prompt += f"\n\n{style_ctx}\n\n{build_advisor_style_guidance()}"
-    except Exception:
-        pass
-
-    # Inject family intelligence context (advisory)
-    try:
-        from app.services.family_intelligence import build_family_context
-        family_ctx = await build_family_context(db, user.household_id)
-        if family_ctx:
-            user_prompt += f"\n\n{family_ctx}"
+        from app.services.context_assembly import assemble_context
+        assembled = await assemble_context(
+            db, role="advisor", child_id=child_id, household_id=user.household_id,
+        )
+        assembled_ctx = assembled["context_text"]
+        if assembled_ctx:
+            user_prompt += f"\n\n{assembled_ctx}"
     except Exception:
         pass
 
@@ -1077,6 +1084,7 @@ Provide an encouraging, honest assessment."""
         household_id=user.household_id,
         triggered_by=user.id,
         philosophical_profile=phil,
+        assembled_context=assembled_ctx,
     )
 
     output = result["output"]

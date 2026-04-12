@@ -51,6 +51,7 @@ async def call_ai(
     expected_json: bool = True,
     max_tokens: int | None = None,
     philosophical_profile: dict | None = None,
+    assembled_context: str | None = None,
 ) -> dict:
     """Call AI through the governance gateway.
 
@@ -90,17 +91,21 @@ async def call_ai(
         system_prompt = system_prompt + "\n" + constraints
 
     # Create AIRun record
+    input_log = {
+        "system_prompt": system_prompt,
+        "user_prompt": user_prompt,
+        "role": role.value,
+        "expected_json": expected_json,
+    }
+    if assembled_context:
+        input_log["assembled_context"] = assembled_context
+
     ai_run = AIRun(
         household_id=household_id,
         triggered_by=triggered_by,
         run_type=role.value,
         status=AIRunStatus.running,
-        input_data={
-            "system_prompt": system_prompt,
-            "user_prompt": user_prompt,
-            "role": role.value,
-            "expected_json": expected_json,
-        },
+        input_data=input_log,
         started_at=datetime.now(UTC),
     )
     db.add(ai_run)

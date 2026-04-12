@@ -73,6 +73,20 @@ Child's responses/work:
 
 Provide your assessment."""
 
+    # Assemble context via centralized service (advisory, never blocking)
+    assembled_ctx = ""
+    try:
+        from app.services.context_assembly import assemble_context
+        assembled = await assemble_context(
+            db, role="evaluator", child_id=None, household_id=household_id,
+            node_id=None,
+        )
+        assembled_ctx = assembled["context_text"]
+        if assembled_ctx:
+            user_prompt += f"\n\n{assembled_ctx}"
+    except Exception:
+        pass
+
     # Fetch philosophical profile for AI constraints
     from sqlalchemy import select as sa_select
     from app.models.identity import Household
@@ -88,6 +102,7 @@ Provide your assessment."""
         household_id=household_id,
         triggered_by=user_id,
         philosophical_profile=phil,
+        assembled_context=assembled_ctx,
     )
 
     output = result["output"]

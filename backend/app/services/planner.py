@@ -91,28 +91,16 @@ Child's current state:
 Create activities spread across {num_days} days ({day_labels}).
 Prioritize nodes that are due for review, then available nodes."""
 
-    # Inject style context (advisory)
+    # Assemble context via centralized service (advisory, never blocking)
+    assembled_ctx = ""
     try:
-        from app.services.style_engine import build_style_context, build_planner_style_guidance
-        from app.models.style_vector import LearnerStyleVector
-        style_ctx = await build_style_context(db, child_id, household_id)
-        if style_ctx:
-            user_prompt += f"\n\n{style_ctx}"
-        vec_result = await db.execute(
-            select(LearnerStyleVector).where(LearnerStyleVector.child_id == child_id)
+        from app.services.context_assembly import assemble_context
+        assembled = await assemble_context(
+            db, role="planner", child_id=child_id, household_id=household_id,
         )
-        planner_guidance = build_planner_style_guidance(vec_result.scalar_one_or_none())
-        if planner_guidance:
-            user_prompt += f"\n\nSTYLE-ADAPTED PLANNING:\n{planner_guidance}"
-    except Exception:
-        pass
-
-    # Inject sibling intelligence / predictive scaffolding (advisory)
-    try:
-        from app.services.family_intelligence import build_planner_scaffolding_context
-        scaffolding_ctx = await build_planner_scaffolding_context(db, child_id, household_id)
-        if scaffolding_ctx:
-            user_prompt += f"\n\n{scaffolding_ctx}"
+        assembled_ctx = assembled["context_text"]
+        if assembled_ctx:
+            user_prompt += f"\n\n{assembled_ctx}"
     except Exception:
         pass
 
@@ -131,6 +119,7 @@ Prioritize nodes that are due for review, then available nodes."""
         household_id=household_id,
         triggered_by=user_id,
         philosophical_profile=phil_profile,
+        assembled_context=assembled_ctx,
     )
 
     ai_output = ai_result["output"]
