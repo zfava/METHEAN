@@ -16,7 +16,7 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    sa.Enum("constitutional", "policy", name="ruletier").create(op.get_bind())
+    sa.Enum("constitutional", "policy", name="ruletier", create_type=False).create(op.get_bind())
     op.add_column("governance_rules", sa.Column(
         "tier",
         sa.Enum("constitutional", "policy", name="ruletier", create_type=False),
@@ -27,4 +27,4 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     op.drop_column("governance_rules", "tier")
-    sa.Enum(name="ruletier").drop(op.get_bind())
+    sa.Enum(name="ruletier", create_type=False).drop(op.get_bind())
