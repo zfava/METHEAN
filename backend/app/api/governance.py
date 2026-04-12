@@ -1192,6 +1192,80 @@ async def get_ai_run(
     return AIRunResponse.model_validate(ai_run)
 
 
+@router.get("/ai-runs/{run_id}/context-detail")
+async def get_ai_run_context_detail(
+    run_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Returns structured context breakdown for an AIRun.
+
+    Parses the assembled_context from input_data and returns source-level detail.
+    For legacy runs without assembled context, returns the raw input_data.
+    """
+    result = await db.execute(
+        select(AIRun).where(AIRun.id == run_id, AIRun.household_id == user.household_id)
+    )
+    ai_run = result.scalar_one_or_none()
+    if not ai_run:
+        raise HTTPException(status_code=404, detail="AI run not found")
+
+    input_data = ai_run.input_data or {}
+    role = input_data.get("role", ai_run.run_type)
+    assembled_context = input_data.get("assembled_context", "")
+
+    if not assembled_context:
+        # Legacy run without context assembly
+        return {
+            "role": role,
+            "legacy": True,
+            "token_budget": 0,
+            "tokens_used": 0,
+            "sources": [],
+            "sources_excluded": [],
+            "context_text": "",
+            "raw_input": input_data,
+        }
+
+    # Parse context into source blocks by looking for section headers
+    from app.services.context_assembly import ROLE_PROFILES, estimate_tokens
+    profile = ROLE_PROFILES.get(role)
+    budget = profile.total_token_budget if profile else 0
+
+    tokens_used = estimate_tokens(assembled_context)
+
+    # Build source list from the profile (we know which sources could have contributed)
+    sources = []
+    sources_excluded = []
+    if profile:
+        # Split context by double-newlines to estimate per-source tokens
+        blocks = [b.strip() for b in assembled_context.split("\n\n") if b.strip()]
+        block_tokens = [estimate_tokens(b) for b in blocks]
+
+        # Match blocks to profile sources by order (best effort)
+        source_names = [s.name for s in profile.sources]
+        for i, source in enumerate(profile.sources):
+            if i < len(blocks):
+                sources.append({
+                    "name": source.name,
+                    "tokens": block_tokens[i] if i < len(block_tokens) else 0,
+                    "required": source.required,
+                    "truncated": "[...truncated]" in blocks[i] if i < len(blocks) else False,
+                })
+            else:
+                sources_excluded.append(source.name)
+
+    return {
+        "role": role,
+        "legacy": False,
+        "token_budget": budget,
+        "tokens_used": tokens_used,
+        "sources": sources,
+        "sources_excluded": sources_excluded,
+        "context_text": assembled_context,
+    }
+
+
 @router.get("/plans/{plan_id}/decision-trace")
 async def get_decision_trace(
     plan_id: uuid.UUID,

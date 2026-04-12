@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { ai, type AIRun } from "@/lib/api";
+import { ai, type AIRun, type ContextDetailResponse } from "@/lib/api";
 import StatusBadge from "@/components/StatusBadge";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
@@ -211,6 +211,85 @@ function RenderGenericOutput({ data, exclude = [] }: { data: any; exclude?: stri
   );
 }
 
+// ── Context Breakdown Panel ──
+
+function ContextBreakdown({ runId }: { runId: string }) {
+  const [detail, setDetail] = useState<ContextDetailResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [expandedSource, setExpandedSource] = useState<string | null>(null);
+
+  useEffect(() => {
+    ai.contextDetail(runId).then(setDetail).catch(() => setDetail(null)).finally(() => setLoading(false));
+  }, [runId]);
+
+  if (loading) return <div className="py-3 text-center"><div className="w-4 h-4 border-2 border-(--color-accent) border-t-transparent rounded-full animate-spin mx-auto" /></div>;
+  if (!detail || detail.legacy) return null;
+  if (!detail.sources.length && !detail.sources_excluded.length) return null;
+
+  const pct = detail.token_budget > 0 ? (detail.tokens_used / detail.token_budget) * 100 : 0;
+  const hasAllRequired = detail.sources.every(s => !s.required || s.tokens > 0);
+  const hasTruncation = detail.sources.some(s => s.truncated);
+  const quality = pct >= 80 && !hasTruncation && hasAllRequired ? "green"
+    : pct >= 50 ? "yellow"
+    : "red";
+  const qualityColor = quality === "green" ? "var(--color-success)" : quality === "yellow" ? "var(--color-warning)" : "var(--color-danger)";
+  const qualityLabel = quality === "green" ? "Excellent" : quality === "yellow" ? "Moderate" : "Limited";
+
+  return (
+    <div className="space-y-3">
+      {/* Quality + budget bar */}
+      <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full" style={{ background: qualityColor }} />
+          <span className="text-[11px] font-medium" style={{ color: qualityColor }}>{qualityLabel} context</span>
+        </div>
+        <span className="text-[10px] text-(--color-text-tertiary)">{detail.tokens_used} / {detail.token_budget} tokens ({pct.toFixed(0)}%)</span>
+      </div>
+
+      {/* Token budget bar */}
+      <div className="h-3 rounded-full bg-(--color-page) overflow-hidden flex">
+        {detail.sources.map((s, i) => {
+          const segPct = detail.token_budget > 0 ? (s.tokens / detail.token_budget) * 100 : 0;
+          if (segPct < 0.5) return null;
+          const colors = ["var(--color-accent)", "var(--color-success)", "var(--color-warning)", "#8B5CF6", "#0D9488", "var(--color-constitutional)"];
+          return (
+            <div key={s.name} className="h-full transition-all" title={`${s.name}: ${s.tokens} tokens`}
+              style={{ width: `${segPct}%`, background: colors[i % colors.length], opacity: s.required ? 1 : 0.6 }} />
+          );
+        })}
+      </div>
+
+      {/* Source list */}
+      <div className="space-y-1">
+        {detail.sources.map(s => (
+          <div key={s.name}>
+            <button onClick={() => setExpandedSource(expandedSource === s.name ? null : s.name)}
+              className="w-full flex items-center justify-between py-1 text-left hover:bg-(--color-page) rounded px-1 -mx-1">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[11px] text-(--color-text)">{s.name.replace(/_/g, " ")}</span>
+                {s.required && <span className="text-[9px] px-1 py-0 rounded bg-(--color-accent)/10 text-(--color-accent)">required</span>}
+                {s.truncated && <span className="text-[9px] px-1 py-0 rounded bg-(--color-warning)/10 text-(--color-warning)">truncated</span>}
+              </div>
+              <span className="text-[10px] text-(--color-text-tertiary)">{s.tokens} tok</span>
+            </button>
+            {expandedSource === s.name && detail.context_text && (
+              <pre className="text-[10px] font-mono bg-(--color-page) rounded-[8px] p-2 mt-1 mb-2 max-h-32 overflow-auto whitespace-pre-wrap text-(--color-text-secondary)">
+                {detail.context_text.split("\n\n")[detail.sources.indexOf(s)] || "(source text)"}
+              </pre>
+            )}
+          </div>
+        ))}
+        {detail.sources_excluded.map(name => (
+          <div key={name} className="flex items-center justify-between py-1 px-1 opacity-50">
+            <span className="text-[11px] text-(--color-text-tertiary)">{name.replace(/_/g, " ")}</span>
+            <span className="text-[9px] text-(--color-text-tertiary)">excluded (budget)</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // ── Main page ──
 export default function InspectionPage() {
   useEffect(() => { document.title = "AI Inspection | METHEAN"; }, []);
@@ -412,6 +491,12 @@ export default function InspectionPage() {
                         <div>
                           <SectionHeader title="What We Asked the AI" />
                           <PromptSection inputData={detail.input_data} />
+                        </div>
+
+                        {/* ── Section A.5: Context Breakdown ── */}
+                        <div>
+                          <SectionHeader title="Context Provided" />
+                          <ContextBreakdown runId={detail.id} />
                         </div>
 
                         {/* ── Section B: What the AI Returned ── */}

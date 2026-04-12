@@ -311,6 +311,7 @@ export const ai = {
   runs: (params?: { role?: string }) =>
     request<AIRun[]>(`/ai-runs${params?.role ? `?role=${params.role}` : ""}`),
   run: (runId: string) => request<AIRun>(`/ai-runs/${runId}`),
+  contextDetail: (runId: string) => request<ContextDetailResponse>(`/ai-runs/${runId}/context-detail`),
   advisorReports: (childId: string) =>
     request<AdvisorReport[]>(`/children/${childId}/advisor-reports`),
   generateReport: (childId: string) =>
@@ -974,6 +975,17 @@ export interface AIRun {
   started_at: string | null;
   completed_at: string | null;
   created_at: string;
+}
+
+export interface ContextDetailResponse {
+  role: string;
+  legacy: boolean;
+  token_budget: number;
+  tokens_used: number;
+  sources: Array<{ name: string; tokens: number; required: boolean; truncated: boolean }>;
+  sources_excluded: string[];
+  context_text: string;
+  raw_input?: object;
 }
 
 export interface AdvisorReport {
