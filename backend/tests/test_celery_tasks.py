@@ -51,8 +51,9 @@ async def task_child(db_session: AsyncSession, task_household: Household) -> Chi
 
 
 @pytest.mark.asyncio
+@patch("app.services.notifications._is_quiet_hours", return_value=False)
 @patch("app.services.email.send_email", new_callable=AsyncMock, return_value=True)
-async def test_notification_sends_email_for_high_priority(mock_email, db_session, task_household, task_user):
+async def test_notification_sends_email_for_high_priority(mock_email, mock_quiet, db_session, task_household, task_user):
     """High-priority notifications trigger email delivery."""
     from app.services.notifications import send_notification
     await send_notification(
@@ -67,8 +68,9 @@ async def test_notification_sends_email_for_high_priority(mock_email, db_session
 
 
 @pytest.mark.asyncio
+@patch("app.services.notifications._is_quiet_hours", return_value=False)
 @patch("app.services.email.send_email", new_callable=AsyncMock, return_value=True)
-async def test_notification_respects_preferences(mock_email, db_session, task_household, task_user):
+async def test_notification_respects_preferences(mock_email, mock_quiet, db_session, task_household, task_user):
     """Disabled preference prevents email."""
     task_user.notification_preferences = {"email_milestones": False}
     await db_session.flush()
@@ -85,8 +87,9 @@ async def test_notification_respects_preferences(mock_email, db_session, task_ho
 
 
 @pytest.mark.asyncio
+@patch("app.services.notifications._is_quiet_hours", return_value=False)
 @patch("app.services.email.send_email", new_callable=AsyncMock, return_value=True)
-async def test_notification_governance_alert_sends_email(mock_email, db_session, task_household, task_user):
+async def test_notification_governance_alert_sends_email(mock_email, mock_quiet, db_session, task_household, task_user):
     """Governance alerts trigger email."""
     from app.services.notifications import send_notification
     await send_notification(
@@ -100,8 +103,9 @@ async def test_notification_governance_alert_sends_email(mock_email, db_session,
 
 
 @pytest.mark.asyncio
+@patch("app.services.notifications._is_quiet_hours", return_value=False)
 @patch("app.services.email.send_email", new_callable=AsyncMock, return_value=True)
-async def test_notification_low_priority_no_email(mock_email, db_session, task_household, task_user):
+async def test_notification_low_priority_no_email(mock_email, mock_quiet, db_session, task_household, task_user):
     """Low-priority notifications don't trigger email."""
     from app.services.notifications import send_notification
     await send_notification(
