@@ -114,6 +114,8 @@ nav, header, footer, [data-no-select] {
 }
 @media (pointer: coarse) {
   button, a, [role="button"], select { min-height: 44px; }
+  .press-scale { transition: transform 0.1s var(--ease); }
+  .press-scale:active { transform: scale(0.97); }
 }
 
 ::selection { background: rgba(198, 162, 78, 0.15); color: var(--color-text); }
@@ -177,6 +179,10 @@ img, svg { max-width: 100%; height: auto; }
 @keyframes slide-up {
   from { transform: translateY(100%); }
   to { transform: translateY(0); }
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .animate-fade-in { animation: fade-in 0.3s var(--ease) both; }

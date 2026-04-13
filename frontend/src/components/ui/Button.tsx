@@ -41,7 +41,7 @@ export default function Button({
       disabled={disabled}
       aria-disabled={disabled || undefined}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-[10px] font-medium",
+        "inline-flex items-center justify-center gap-2 rounded-[10px] font-medium press-scale",
         "transition-all duration-150 active:scale-[0.97] active:shadow-none",
         "disabled:opacity-40 disabled:saturate-50 disabled:cursor-not-allowed disabled:pointer-events-none",
         "focus-visible:ring-2 focus-visible:ring-(--color-accent)/30 focus-visible:ring-offset-2",

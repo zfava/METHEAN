@@ -15,7 +15,7 @@ export default function ListRow({
 }) {
   return (
     <div className={cn(
-      "flex items-center justify-between py-3 px-5",
+      "flex items-center justify-between py-3 px-5 press-scale",
       borderBottom && "border-b border-(--color-border)/50 last:border-0",
       className,
     )}>

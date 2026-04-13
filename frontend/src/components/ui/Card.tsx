@@ -28,7 +28,7 @@ export default function Card({
     padding,
     borderLeft && `border-l-[3px] ${borderLeft}`,
     selected && "border-(--color-accent) ring-2 ring-(--color-accent)/15",
-    (onClick || href) && "cursor-pointer hover:shadow-[var(--shadow-card-hover)] hover:-translate-y-[1px]",
+    (onClick || href) && "cursor-pointer hover:shadow-[var(--shadow-card-hover)] hover:-translate-y-[1px] press-scale",
     animate && "animate-fade-up",
     className,
   );
