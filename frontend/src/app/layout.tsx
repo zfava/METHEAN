@@ -3,6 +3,7 @@ import "./globals.css";
 import ClientProviders from "@/components/ClientProviders";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import OfflineBanner from "@/components/OfflineBanner";
+import AppLifecycle from "@/components/AppLifecycle";
 
 export const viewport = {
   width: "device-width",
@@ -44,6 +45,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <ServiceWorkerRegistration />
+        <AppLifecycle />
         <OfflineBanner />
         <ClientProviders>{children}</ClientProviders>
       </body>

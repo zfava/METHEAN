@@ -1,15 +1,8 @@
-type HapticStyle = "light" | "medium" | "heavy" | "success" | "error";
-
-const patterns: Record<HapticStyle, number | number[]> = {
-  light: 10,
-  medium: 20,
-  heavy: 30,
-  success: [10, 50, 10],
-  error: [30, 50, 30, 50, 30],
-};
-
-/** Trigger haptic feedback. No-op if vibration API is unavailable. */
-export function haptic(style: HapticStyle = "light"): void {
-  if (typeof navigator === "undefined" || !navigator.vibrate) return;
-  navigator.vibrate(patterns[style]);
-}
+/**
+ * Haptic feedback — delegates to Capacitor native haptics when available,
+ * falls back to web navigator.vibrate.
+ *
+ * Re-exports from the native bridge so existing imports continue to work.
+ */
+export { haptic } from "./native";
+export type { } from "./native";
