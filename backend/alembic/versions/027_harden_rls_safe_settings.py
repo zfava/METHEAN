@@ -84,12 +84,17 @@ SAFE_USING_NULLABLE = (
 
 
 def upgrade() -> None:
-    # 1. Ensure app role is not a superuser and has necessary grants.
-    #    Always strip superuser from current_user so RLS is enforced.
+    # 1. Strip superuser (if we have it) and grant table/sequence permissions.
+    #    The ALTER ROLE requires superuser privilege, so guard with an IF check
+    #    to avoid failure on managed PG services and CI where the role is not superuser.
     op.execute("""
 DO $$
 BEGIN
-    EXECUTE 'ALTER ROLE ' || quote_ident(current_user) || ' NOSUPERUSER';
+    -- Only strip superuser if current role actually has it
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = current_user AND rolsuper = true) THEN
+        EXECUTE 'ALTER ROLE ' || quote_ident(current_user) || ' NOSUPERUSER';
+    END IF;
+    -- GRANTs are safe regardless of role privileges
     EXECUTE 'GRANT ALL ON ALL TABLES IN SCHEMA public TO ' || quote_ident(current_user);
     EXECUTE 'GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO ' || quote_ident(current_user);
 END $$;
@@ -118,11 +123,17 @@ END $$;
 
 
 def downgrade() -> None:
-    # Restore superuser so previous migrations work without GRANT issues
+    # Restore superuser if we can (requires current role to already be superuser).
+    # In non-superuser environments this is a no-op — you can't grant yourself superuser.
     op.execute("""
 DO $$
 BEGIN
-    EXECUTE 'ALTER ROLE ' || quote_ident(current_user) || ' SUPERUSER';
+    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = current_user AND rolsuper = true) THEN
+        -- Already superuser, nothing to restore
+        NULL;
+    ELSE
+        RAISE NOTICE 'Skipping SUPERUSER restore - current role is not superuser';
+    END IF;
 END $$;
 """)
 
