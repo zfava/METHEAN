@@ -154,8 +154,13 @@ async def test_csrf_skips_auth_endpoints(db_session):
 async def test_rls_isolates_households(db_session):
     """Verify that RLS policies prevent cross-household data access.
 
-    Creates two households with subjects, enables RLS + FORCE + NOSUPERUSER,
+    Creates two households with subjects, enables RLS + FORCE,
     then verifies that SET LOCAL scopes visibility per-household.
+
+    RLS only applies to non-superuser roles. In CI the user is already
+    non-superuser so policies are enforced automatically. Locally the dev
+    user may be superuser — in that case we skip, since stripping superuser
+    via ALTER ROLE requires the very privilege we're trying to remove.
     """
     from sqlalchemy import text, select
     from app.core.database import set_tenant
@@ -164,15 +169,14 @@ async def test_rls_isolates_households(db_session):
 
     conn = await db_session.connection()
 
-    # Check if current role is superuser; if so, strip it for this test
+    # RLS bypass: superusers bypass all RLS. This test needs a non-superuser
+    # role to verify policies. In CI we're already non-super. Locally the dev
+    # user is typically superuser and ALTER ROLE can't be safely run here.
     is_super_result = await conn.execute(text(
         "SELECT rolsuper FROM pg_roles WHERE rolname = current_user"
     ))
-    was_superuser = is_super_result.scalar()
-    if was_superuser:
-        await conn.execute(text(
-            "DO $$ BEGIN EXECUTE 'ALTER ROLE ' || quote_ident(current_user) || ' NOSUPERUSER'; END $$"
-        ))
+    if is_super_result.scalar():
+        pytest.skip("RLS test requires non-superuser role; run in CI or as non-super user")
 
     # Create two households
     household_a = Household(name="Family A")
@@ -220,13 +224,8 @@ async def test_rls_isolates_households(db_session):
     assert "Math B" in visible_names2, "Household B's subject should be visible"
     assert "Math A" not in visible_names2, "Household A's subject should be hidden by RLS"
 
-    # Cleanup: disable RLS and restore superuser if we changed it
+    # Cleanup: disable RLS so it doesn't affect other tests
     await conn.execute(text("ALTER TABLE subjects DISABLE ROW LEVEL SECURITY"))
-    if was_superuser:
-        # Need a superuser to restore — use postgres via a separate connection
-        # Since we're non-super now, we can't restore ourselves. But in test
-        # teardown the DB gets dropped anyway, so just skip restore.
-        pass
 
 
 @pytest.mark.asyncio
