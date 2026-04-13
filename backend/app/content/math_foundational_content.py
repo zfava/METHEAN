@@ -736,6 +736,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["fact family triangles"],
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Manipulatives extensively. Oral practice before written. Fact family triangles as anchors.', 'adhd': 'Game-based: bowling, cards. Never timed tests.', 'gifted': 'Subtraction within 20. Missing subtrahend. Negative number concepts.', 'visual_learner': 'Number line backward hops in color. Ten-frame removal.', 'kinesthetic_learner': 'Physical removal of objects. Walk backward on floor number line.', 'auditory_learner': 'Chant fact families. Subtraction songs. Partner quizzing.'},
+        "philosophy_specific": {'classical': 'Memorize all facts through daily drill. Fact families connect operations.', 'charlotte_mason': 'Real sharing situations. Concrete before abstract, always.', 'montessori': 'Subtraction strip board. Golden bead taking away.', 'traditional': 'Worksheets. Timed drills after conceptual understanding.'},
+        "connections": {'reading': 'Subtraction word problems need comprehension', 'science': 'Measuring differences: taller, heavier', 'history': 'Time spans between historical dates'},
     },
     "mf-07": {
         "enriched": True,
@@ -842,6 +845,9 @@ MATH_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {"required": ["ten-frame boards", "counters"], "recommended": ["Rekenrek"]},
         "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Ten-frame visuals, not written symbols. Oral strategy names.', 'adhd': 'High-engagement dice and card games. Rotate strategies.', 'gifted': 'Addition within 100. Two-digit plus one-digit mentally.', 'visual_learner': 'Double ten-frames. Arrow diagrams for make-ten.', 'kinesthetic_learner': 'Two ten-frames with counters. Move to fill one frame.', 'auditory_learner': "Verbalize: 'Eight needs two to make ten. Five is two and three. Thirteen.'"},
+        "philosophy_specific": {'classical': 'Systematic mastery. Name strategies: doubles, near-doubles, make-ten.', 'charlotte_mason': 'Discover strategies through exploration. Child finds the pattern.', 'montessori': 'Bead bars. Snake game for making tens. Addition charts.', 'traditional': 'Strategy worksheets. Fact family houses. Timed after mastery.'},
+        "connections": {'reading': 'Two-step word problems to 20', 'science': 'Adding measurements exceeding 10', 'history': 'Adding groups of people or years'},
     },
     "mf-08": {
         "enriched": True,
@@ -956,6 +962,9 @@ MATH_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {"required": ["ten-frames", "counters"], "recommended": ["fact family triangles"]},
         "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Think-addition: 15-8 becomes 8+?=15. Avoids backward counting.', 'adhd': 'Vary modality every 3-4 problems: oral, written, manipulative, game.', 'gifted': 'Subtraction within 100. Mental strategies. Check with addition.', 'visual_learner': 'Number line jumps color-coded. Fact family triangle cards.', 'kinesthetic_learner': 'Snap cube trains: break 15 into 8 and remainder.', 'auditory_learner': "Verbalize: 'Nine plus what is sixteen? Seven. So sixteen minus nine is seven.'"},
+        "philosophy_specific": {'classical': 'Connect every subtraction to addition. Fact families as system.', 'charlotte_mason': 'Real situations: had 17 strawberries, ate 9. Always concrete.', 'montessori': 'Bead bar subtraction. Strip board. Stamp game.', 'traditional': 'Think-addition worksheets. Fact family drills.'},
+        "connections": {'reading': 'Comparison word problems: who has more?', 'science': 'Differences in measurements', 'history': 'Years between events'},
     },
     "mf-09": {
         "enriched": True,
@@ -1056,6 +1065,9 @@ MATH_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {"required": ["base-ten blocks"], "recommended": ["place value mat", "dimes and pennies"]},
         "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': "Physical base-ten blocks before written notation. Say 'four tens and two ones' before 42.", 'adhd': 'Build numbers with blocks. Race to build: call a number, build fast.', 'gifted': 'Hundreds, thousands. Expanded notation: 342 = 300+40+2.', 'visual_learner': 'Place value mat with marked columns. Tens blue, ones green.', 'kinesthetic_learner': 'Bundle craft sticks into tens. Physical grouping essential.', 'auditory_learner': "Say place value name: 'The five means five TENS which is FIFTY.'"},
+        "philosophy_specific": {'classical': 'Systematic instruction with formal notation. Expanded form standard.', 'charlotte_mason': 'Real objects: bundle 10 sticks, 10 pennies make a dime.', 'montessori': 'Golden bead material. Place value overlay cards.', 'traditional': 'Place value charts and worksheets.'},
+        "connections": {'reading': 'Understanding page and chapter numbers', 'science': 'Recording two-digit measurements', 'history': 'Understanding years and decades'},
     },
     "mf-10": {
         "enriched": True,
@@ -1150,6 +1162,9 @@ MATH_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {"required": ["hundred chart"], "recommended": ["coins", "objects for grouping"]},
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Oral skip counting with rhythm. Highlighted skip-count numbers on chart.', 'adhd': 'Full-body: jump on every count. Bounce ball while skip counting.', 'gifted': 'By 3s, 4s, 6s, 7s, 8s, 9s. Connect to multiplication. Common multiples.', 'visual_learner': 'Color-coded chart: 2s red, 5s blue, 10s green.', 'kinesthetic_learner': 'Walk floor line stepping on every 2nd, 5th, 10th number.', 'auditory_learner': 'Rhythmic chanting. Whisper skipped, shout counted. Songs.'},
+        "philosophy_specific": {'classical': 'Daily chanting of sequences. This IS pre-multiplication memory work.', 'charlotte_mason': 'Count real groups: shoe pairs, grape bunches, penny stacks.', 'montessori': 'Bead chains: short for skip counting, long for extended.', 'traditional': 'Skip-counting worksheets. Fill-in-the-sequence.'},
+        "connections": {'reading': 'Rhythm in poetry connects to skip counting rhythm', 'science': 'Counting by groups when tallying observations', 'history': 'Decades (by 10s) and centuries on timelines'},
     },
     "mf-11": {
         "enriched": True,
