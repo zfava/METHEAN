@@ -84,8 +84,22 @@ SAFE_USING_NULLABLE = (
 
 
 def upgrade() -> None:
-    # 1. Ensure app role is not a superuser (superusers bypass RLS)
-    op.execute("ALTER ROLE methean NOSUPERUSER")
+    # 1. Ensure app role is not a superuser and has necessary grants.
+    #    Detect role dynamically so this works in CI where the role name may differ.
+    op.execute("""
+DO $$
+DECLARE
+    current_role text := current_user;
+BEGIN
+    -- Only remove superuser if the role has it (skip in CI where role may differ)
+    IF current_role = 'methean' THEN
+        EXECUTE 'ALTER ROLE methean NOSUPERUSER';
+    END IF;
+    EXECUTE 'GRANT ALL ON ALL TABLES IN SCHEMA public TO ' || quote_ident(current_role);
+    EXECUTE 'GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO ' || quote_ident(current_role);
+    EXECUTE 'GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO ' || quote_ident(current_role);
+END $$;
+""")
 
     # 2. Recreate policies with safe current_setting (missing_ok = true)
     for table in HOUSEHOLD_TABLES:
@@ -106,10 +120,7 @@ def upgrade() -> None:
         f"ON {NULLABLE_HID_TABLE} {SAFE_USING_NULLABLE}"
     )
 
-    # 4. Grant permissions so non-superuser role can still operate
-    op.execute("GRANT ALL ON ALL TABLES IN SCHEMA public TO methean")
-    op.execute("GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO methean")
-    op.execute("GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO methean")
+    # 4. Grants already handled in step 1 above
 
 
 def downgrade() -> None:
