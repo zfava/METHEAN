@@ -147,6 +147,29 @@ async def send_notification(
         except Exception:
             pass  # Email delivery is non-blocking
 
+    # Send push notification for high-priority events (non-blocking)
+    PUSH_EVENTS = {
+        "review_needed", "alert_triggered", "node_mastered",
+        "compliance_warning", "advisor_report_ready", "plan_ready",
+    }
+    if event_type in PUSH_EVENTS:
+        try:
+            from app.services.push import send_push_to_user
+
+            # Build deep link URL
+            deep_links = {
+                "review_needed": "/governance/queue",
+                "alert_triggered": "/wellbeing",
+                "node_mastered": "/child",
+                "compliance_warning": "/compliance",
+                "advisor_report_ready": "/governance/reports",
+                "plan_ready": "/plans",
+            }
+            data = {"url": deep_links.get(event_type, "/dashboard")}
+            await send_push_to_user(db, user_id, household_id, title, body, data)
+        except Exception:
+            pass  # Push delivery is non-blocking
+
     return log
 
 

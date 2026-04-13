@@ -106,3 +106,152 @@ export async function getNetworkStatus(): Promise<boolean> {
     return true;
   }
 }
+
+// ── Push Notifications ──
+
+let _pushToken: string | null = null;
+
+export async function registerPushNotifications(): Promise<string | null> {
+  if (!isNative()) return null;
+  try {
+    const { PushNotifications } = await import("@capacitor/push-notifications");
+
+    const permission = await PushNotifications.requestPermissions();
+    if (permission.receive !== "granted") return null;
+
+    await PushNotifications.register();
+
+    return new Promise((resolve) => {
+      PushNotifications.addListener("registration", (token) => {
+        _pushToken = token.value;
+
+        // Send token to backend
+        fetch("/api/v1/notifications/devices", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ token: token.value, platform: getPlatform() }),
+        }).catch(() => {});
+
+        resolve(token.value);
+      });
+
+      PushNotifications.addListener("registrationError", () => {
+        resolve(null);
+      });
+
+      // Handle foreground notifications
+      PushNotifications.addListener("pushNotificationReceived", () => {
+        // In-app notifications are handled by the polling system
+      });
+
+      // Handle notification tap
+      PushNotifications.addListener("pushNotificationActionPerformed", (action) => {
+        const data = action.notification.data;
+        if (data?.url && typeof window !== "undefined") {
+          window.location.href = data.url;
+        }
+      });
+    });
+  } catch {
+    return null;
+  }
+}
+
+export async function unregisterPush(): Promise<void> {
+  if (!isNative() || !_pushToken) return;
+  try {
+    await fetch(`/api/v1/notifications/devices/${encodeURIComponent(_pushToken)}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    _pushToken = null;
+  } catch {}
+}
+
+// ── App Badge ──
+
+export async function setAppBadge(count: number): Promise<void> {
+  if (!isNative()) {
+    // PWA badge API (limited browser support)
+    try {
+      if (count > 0) (navigator as any).setAppBadge?.(count);
+      else (navigator as any).clearAppBadge?.();
+    } catch {}
+    return;
+  }
+  try {
+    const { Badge } = await import("@capawesome/capacitor-badge");
+    if (count > 0) await Badge.set({ count });
+    else await Badge.clear();
+  } catch {}
+}
+
+// ── Native Share ──
+
+export async function nativeShare(
+  title: string,
+  text: string,
+  url?: string,
+): Promise<void> {
+  if (!isNative()) {
+    if (typeof navigator !== "undefined" && navigator.share) {
+      await navigator.share({ title, text, url });
+    }
+    return;
+  }
+  try {
+    const { Share } = await import("@capacitor/share");
+    await Share.share({ title, text, url, dialogTitle: "Share from METHEAN" });
+  } catch {}
+}
+
+// ── Biometric Authentication ──
+
+export async function biometricAvailable(): Promise<boolean> {
+  if (!isNative()) return false;
+  try {
+    const mod = await import("capacitor-native-biometric");
+    const result = await mod.NativeBiometric.isAvailable();
+    return result.isAvailable;
+  } catch {
+    return false;
+  }
+}
+
+export async function biometricVerify(): Promise<boolean> {
+  if (!isNative()) return false;
+  try {
+    const mod = await import("capacitor-native-biometric");
+    await mod.NativeBiometric.verifyIdentity({
+      reason: "Log in to METHEAN",
+      title: "Authentication",
+    });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export async function biometricSaveCredentials(refreshToken: string): Promise<void> {
+  if (!isNative()) return;
+  try {
+    const mod = await import("capacitor-native-biometric");
+    await mod.NativeBiometric.setCredentials({
+      server: "methean.app",
+      username: "methean-user",
+      password: refreshToken,
+    });
+  } catch {}
+}
+
+export async function biometricGetCredentials(): Promise<string | null> {
+  if (!isNative()) return null;
+  try {
+    const mod = await import("capacitor-native-biometric");
+    const creds = await mod.NativeBiometric.getCredentials({ server: "methean.app" });
+    return creds.password || null;
+  } catch {
+    return null;
+  }
+}

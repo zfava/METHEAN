@@ -55,6 +55,10 @@ class Settings(BaseSettings):
     STRIPE_PRICE_ID: str = ""
     APP_URL: str = "http://localhost:3000"
 
+    # Push Notifications (FCM)
+    FCM_PROJECT_ID: str = ""
+    FCM_SERVICE_ACCOUNT_JSON: str = ""  # Path or inline JSON for service account
+
     # FSRS / Retention
     FSRS_WEIGHTS: list[float] = []  # Empty = use py-fsrs defaults
     MASTERY_THRESHOLD: float = 0.8  # Confidence threshold to reach mastered
