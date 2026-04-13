@@ -166,6 +166,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["number line", "ten-frame boards"],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Focus on oral counting before numeral writing. Use large numerals with directional arrows.', 'adhd': 'Keep sessions to 5-10 minutes. Count while jumping, clapping, or walking.', 'gifted': 'Extend to 100 by 1s, 2s, 5s, 10s. Introduce skip counting.', 'visual_learner': 'Color-coded number lines and ten-frames with bright counters.', 'kinesthetic_learner': 'Walk a floor number line. Move objects into counted piles.', 'auditory_learner': 'Chant counting sequences rhythmically. Sing counting songs.'},
+        "philosophy_specific": {'classical': 'Chant number sequences daily as math memory work.', 'charlotte_mason': 'Count real objects in nature: acorns, leaves, birds. Short lessons.', 'montessori': 'Sandpaper numerals. Golden bead material. Spindle boxes.', 'traditional': 'Structured counting worksheets with graduated difficulty.'},
+        "connections": {'reading': 'Number words as sight words', 'science': 'Counting specimens during nature observation', 'history': 'Counting on a timeline'},
     },
     "mf-02": {
         "enriched": True,
@@ -281,6 +284,9 @@ MATH_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {"required": ["hundred chart", "numeral cards"], "recommended": ["number line to 100"]},
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Extra-large numerals. One decade at a time. Watch for 12/21 reversals.', 'adhd': 'Hundred chart games with movement. Number scavenger hunts.', 'gifted': 'Extend to 1000. Place value notation. Number patterns on the chart.', 'visual_learner': 'Color-coded hundred chart with decades in different colors.', 'kinesthetic_learner': 'Floor hundred chart to walk on. Magnetic number tiles.', 'auditory_learner': 'Say number names aloud while pointing. Partner quizzing.'},
+        "philosophy_specific": {'classical': 'Systematic drill with the hundred chart. Memorize decades.', 'charlotte_mason': 'Find numbers in real life: addresses, page numbers, prices.', 'montessori': 'Hundred board with tiles. Teen board and ten board.', 'traditional': 'Number writing practice sheets. Fill-in-the-blank sequences.'},
+        "connections": {'reading': 'Reading number words and matching to numerals', 'science': 'Recording two-digit measurement data', 'history': 'Years and dates on timelines'},
     },
     "mf-03": {
         "enriched": True,
@@ -383,6 +389,9 @@ MATH_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {"required": ["small counting objects"], "recommended": ["sorting trays"]},
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 10},
+        "accommodations": {'dyslexia': 'No reading required. Purely manipulative-based counting.', 'adhd': 'Large satisfying objects. Sets under 15. Frequent switching.', 'gifted': 'Larger sets (30+). Estimation before counting.', 'visual_learner': 'Brightly colored objects. Mark counted items with stickers.', 'kinesthetic_learner': 'Move every object. Sort into containers as counted.', 'auditory_learner': 'Say each number aloud with emphasis. Tap table with each count.'},
+        "philosophy_specific": {'classical': 'Systematic practice with increasing set sizes.', 'charlotte_mason': 'Count objects from nature walks. Real objects, not worksheets.', 'montessori': 'Number rods, spindle boxes, cards-and-counters.', 'traditional': 'Counting mats with printed objects to cross off.'},
+        "connections": {'reading': 'Tracking words while reading one at a time', 'science': 'Counting specimens in a collection', 'history': 'Counting items in historical illustrations'},
     },
     "mf-04": {
         "enriched": True,
@@ -487,6 +496,9 @@ MATH_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {"required": ["hundred chart"], "recommended": ["number line to 100"]},
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Oral counting primary. Written sequences as reinforcement.', 'adhd': 'Full-body counting: jump, step, clap. Decade movement breaks.', 'gifted': 'Count to 1000. By 3s, 4s, 6s. Multiple skip-count overlap.', 'visual_learner': 'Hundred chart with color patterns. Wall number line.', 'kinesthetic_learner': 'Walk a giant floor hundred chart. Snap cubes into tens.', 'auditory_learner': 'Counting songs. Rhythmic chanting at decade transitions.'},
+        "philosophy_specific": {'classical': 'Daily recitation. Speed and accuracy drills.', 'charlotte_mason': 'Count real things: 100 pennies, 100 steps. Concrete and purposeful.', 'montessori': 'Hundred chain (10 bars of 10 beads). Bead counting to 100.', 'traditional': 'Fill-in-the-blank hundred charts. Timed exercises.'},
+        "connections": {'reading': 'Counting syllables in longer words', 'science': 'Counting to 100 for measurement', 'history': '100 years is a century on the timeline'},
     },
     "mf-05": {
         "enriched": True,
@@ -602,6 +614,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["dice", "playing cards", "ten-frames"],
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Oral practice before written. Manipulatives longer than typical. No timed tests.', 'adhd': 'Games: dice, cards, dominoes. Never worksheets for drill. 5-minute max.', 'gifted': 'Addition within 20. Missing addend. Commutativity as concept.', 'visual_learner': 'Ten-frames with two-color counters. Number bond diagrams.', 'kinesthetic_learner': 'Snap cubes in different colors, snap together, count.', 'auditory_learner': 'Chant fact families. Partner quizzing. Doubles songs.'},
+        "philosophy_specific": {'classical': 'Systematic memorization. Daily oral drill. Flashcards.', 'charlotte_mason': 'Discover through combining real object groups. Concrete first.', 'montessori': 'Addition strip board. Golden beads. Addition charts.', 'traditional': 'Graduated worksheets. Timed tests after mastery.'},
+        "connections": {'reading': 'Addition word problems need reading comprehension', 'science': 'Adding measurements in experiments', 'history': 'Adding dates to find time spans'},
     },
     "mf-06": {
         "enriched": True,
