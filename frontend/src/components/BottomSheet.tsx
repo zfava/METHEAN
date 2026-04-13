@@ -1,0 +1,123 @@
+"use client";
+
+import { useEffect, useRef, useCallback } from "react";
+
+interface BottomSheetProps {
+  open: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+  snapPoints?: number[];
+}
+
+export default function BottomSheet({ open, onClose, children, snapPoints }: BottomSheetProps) {
+  const sheetRef = useRef<HTMLDivElement>(null);
+  const dragStart = useRef<{ y: number; time: number } | null>(null);
+  const dragOffset = useRef(0);
+  const animFrame = useRef(0);
+  const prevBodyOverflow = useRef("");
+
+  // Lock body scroll when open
+  useEffect(() => {
+    if (open) {
+      prevBodyOverflow.current = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = prevBodyOverflow.current;
+    }
+    return () => {
+      document.body.style.overflow = prevBodyOverflow.current;
+    };
+  }, [open]);
+
+  const setTransform = useCallback((y: number, animate: boolean) => {
+    const sheet = sheetRef.current;
+    if (!sheet) return;
+    if (animate) {
+      sheet.style.transition = "transform 0.35s cubic-bezier(0.32, 0.72, 0, 1)";
+    } else {
+      sheet.style.transition = "none";
+    }
+    sheet.style.transform = `translateY(${Math.max(0, y)}px)`;
+  }, []);
+
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    dragStart.current = { y: touch.clientY, time: Date.now() };
+    dragOffset.current = 0;
+    const sheet = sheetRef.current;
+    if (sheet) sheet.style.transition = "none";
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    if (!dragStart.current) return;
+    const touch = e.touches[0];
+    const dy = touch.clientY - dragStart.current.y;
+    dragOffset.current = dy;
+    cancelAnimationFrame(animFrame.current);
+    animFrame.current = requestAnimationFrame(() => {
+      setTransform(dy, false);
+    });
+  }, [setTransform]);
+
+  const handleTouchEnd = useCallback(() => {
+    if (!dragStart.current) return;
+    const dy = dragOffset.current;
+    const dt = Date.now() - dragStart.current.time;
+    const velocity = dy / Math.max(dt, 1) * 1000;
+    const sheet = sheetRef.current;
+    const sheetH = sheet?.offsetHeight || 400;
+
+    dragStart.current = null;
+
+    // Dismiss if dragged past 40% or flick velocity > 500px/s downward
+    if (dy > sheetH * 0.4 || velocity > 500) {
+      setTransform(sheetH, true);
+      setTimeout(onClose, 350);
+    } else {
+      setTransform(0, true);
+    }
+  }, [onClose, setTransform]);
+
+  // Reset position when opening
+  useEffect(() => {
+    if (open) {
+      requestAnimationFrame(() => setTransform(0, true));
+    }
+  }, [open, setTransform]);
+
+  if (!open) return null;
+
+  const maxH = snapPoints?.[0] ? `${snapPoints[0] * 100}vh` : "85vh";
+
+  return (
+    <div className="fixed inset-0 z-50">
+      {/* Overlay */}
+      <div
+        className="absolute inset-0 bg-black/40 animate-fade-in"
+        onClick={onClose}
+      />
+      {/* Sheet */}
+      <div
+        ref={sheetRef}
+        className="absolute bottom-0 left-0 right-0 bg-(--color-surface) rounded-t-[16px] shadow-lg animate-slide-up"
+        style={{
+          maxHeight: maxH,
+          paddingBottom: "var(--safe-bottom)",
+          animation: "slide-up 0.35s cubic-bezier(0.32, 0.72, 0, 1) both",
+        }}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Drag handle */}
+        <div className="flex justify-center pt-2.5 pb-1">
+          <div className="w-9 h-1 rounded-full bg-(--color-border-strong)" />
+        </div>
+        {/* Content */}
+        <div className="overflow-y-auto" style={{ maxHeight: `calc(${maxH} - 28px)` }}>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
