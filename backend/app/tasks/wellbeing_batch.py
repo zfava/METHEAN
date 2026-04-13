@@ -25,6 +25,7 @@ async def _run_wellbeing_batch() -> dict:
     from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
     from app.core.config import settings
+    from app.core.database import set_tenant
     from app.models.governance import Attempt
     from app.models.identity import Child
 
@@ -64,6 +65,7 @@ async def _run_wellbeing_batch() -> dict:
             for child_id, household_id in batch:
                 scanned += 1
                 try:
+                    await set_tenant(db, household_id)
                     from app.services.wellbeing_detection import (
                         check_for_resolution,
                         notify_parent_of_anomaly,

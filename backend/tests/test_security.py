@@ -154,10 +154,11 @@ async def test_csrf_skips_auth_endpoints(db_session):
 async def test_rls_isolates_households(db_session):
     """Verify that RLS policies prevent cross-household data access.
 
-    Creates two households with subjects, enables RLS on the subjects table,
-    then verifies that setting the tenant to household A hides household B's data.
+    The migration-created policies use current_setting('app.current_household_id', true)
+    which returns NULL when unset (= no rows visible). This test creates inline
+    policies (since test DB is rebuilt per test) and verifies tenant isolation.
     """
-    from sqlalchemy import text
+    from sqlalchemy import text, select
     from app.core.database import set_tenant
     from app.models.identity import Household
     from app.models.curriculum import Subject
@@ -179,20 +180,19 @@ async def test_rls_isolates_households(db_session):
     await conn.execute(text("ALTER TABLE subjects ENABLE ROW LEVEL SECURITY"))
     await conn.execute(text("ALTER TABLE subjects FORCE ROW LEVEL SECURITY"))
 
-    # Drop policy if exists (idempotent), then create
+    # Create policy with safe missing_ok=true parameter
     await conn.execute(text(
         "DROP POLICY IF EXISTS subjects_household_isolation ON subjects"
     ))
     await conn.execute(text(
         "CREATE POLICY subjects_household_isolation ON subjects "
-        "USING (household_id = current_setting('app.current_household_id')::uuid)"
+        "USING (household_id = current_setting('app.current_household_id', true)::uuid)"
     ))
 
     # Set tenant to household A
     await set_tenant(db_session, household_a.id)
 
     # Query subjects — should only see household A's
-    from sqlalchemy import select
     result = await db_session.execute(select(Subject))
     visible = result.scalars().all()
 

@@ -15,7 +15,7 @@ from sqlalchemy.ext.asyncio import (
 from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
-from app.core.database import Base
+from app.core.database import Base, set_tenant
 from app.core.security import create_access_token, hash_password
 from app.api.deps import get_db
 from app.main import app
@@ -76,6 +76,8 @@ async def household(db_session: AsyncSession) -> Household:
     h = Household(name="Test Family", timezone="America/New_York")
     db_session.add(h)
     await db_session.flush()
+    # Set RLS tenant context so all subsequent queries are scoped
+    await set_tenant(db_session, h.id)
     return h
 
 

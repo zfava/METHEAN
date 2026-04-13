@@ -24,12 +24,14 @@ async def _enrich_map(learning_map_id: uuid.UUID, household_id: uuid.UUID) -> di
     from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
     from app.core.config import settings
+    from app.core.database import set_tenant
     from app.models.curriculum import LearningMap, LearningNode
 
     engine = create_async_engine(settings.DATABASE_URL)
     SessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
     async with SessionLocal() as db:
+        await set_tenant(db, household_id)
         # Get the map
         map_result = await db.execute(
             select(LearningMap).where(

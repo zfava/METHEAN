@@ -232,6 +232,10 @@ async def seed():
         await db.flush()
         hid = household.id
 
+        # Set RLS tenant context for all subsequent inserts
+        from app.core.database import set_tenant
+        await set_tenant(db, hid)
+
         # Set philosophical profile
         household.philosophical_profile = {
             "educational_philosophy": "classical",

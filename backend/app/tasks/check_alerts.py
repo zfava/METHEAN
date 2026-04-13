@@ -4,7 +4,7 @@ import asyncio
 
 from sqlalchemy import select
 
-from app.core.database import async_session_factory
+from app.core.database import async_session_factory, set_tenant
 from app.models.identity import Household
 from app.services.notifications import check_and_send_alerts
 
@@ -15,6 +15,7 @@ async def _run_check_alerts() -> dict:
         households = result.scalars().all()
         total_alerts = 0
         for hh in households:
+            await set_tenant(db, hh.id)
             alerts = await check_and_send_alerts(db, hh.id)
             total_alerts += len(alerts)
         await db.commit()

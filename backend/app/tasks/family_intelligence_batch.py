@@ -24,6 +24,7 @@ async def _run_family_intelligence_batch() -> dict:
     from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
     from app.core.config import settings
+    from app.core.database import set_tenant
     from app.models.identity import Child
     from app.models.state import ChildNodeState
     from app.services.family_intelligence import generate_predictive_scaffolding, run_family_intelligence
@@ -63,6 +64,7 @@ async def _run_family_intelligence_batch() -> dict:
             for household_id in batch:
                 processed += 1
                 try:
+                    await set_tenant(db, household_id)
                     result_info = await run_family_intelligence(db, household_id)
                     if not result_info.get("skipped"):
                         created = result_info.get("insights_created", 0)

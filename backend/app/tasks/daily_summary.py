@@ -8,6 +8,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.core.config import settings
+from app.core.database import set_tenant
 from app.models.enums import ActivityStatus
 from app.models.governance import Activity
 from app.models.identity import Child, Household, User
@@ -117,6 +118,7 @@ async def _send_daily_summaries():
 
         for hh in households:
             try:
+                await set_tenant(db, hh.id)
                 sent = await send_daily_summary_for_household(db, hh.id)
                 total_sent += sent
             except Exception as e:

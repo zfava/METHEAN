@@ -18,6 +18,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
+from app.core.database import set_tenant
 from app.models.curriculum import LearningNode
 from app.models.enums import GovernanceAction, MasteryLevel
 from app.models.governance import GovernanceEvent, GovernanceRule
@@ -51,6 +52,7 @@ async def evaluate_temporal_triggers(
         rules = result.scalars().all()
 
         for rule in rules:
+            await set_tenant(db, rule.household_id)
             tc = rule.trigger_conditions or {}
             if not tc or not tc.get("type"):
                 continue

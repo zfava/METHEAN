@@ -7,6 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.core.config import settings
+from app.core.database import set_tenant
 from app.models.enums import GovernanceAction
 from app.models.governance import GovernanceEvent
 from app.models.identity import Household, User
@@ -23,6 +24,7 @@ async def _send_weekly_digests():
         week_ago = datetime.now(UTC) - timedelta(days=7)
 
         for hh in households:
+            await set_tenant(db, hh.id)
             users = (
                 (
                     await db.execute(

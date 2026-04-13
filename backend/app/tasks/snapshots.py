@@ -9,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
+from app.core.database import set_tenant
 from app.models.enums import MasteryLevel
 from app.models.evidence import WeeklySnapshot
 from app.models.identity import Child
@@ -36,6 +37,7 @@ async def capture_weekly_snapshots(
         children = children_result.scalars().all()
 
         for child in children:
+            await set_tenant(db, child.household_id)
             # Check if snapshot already exists for this week
             existing = await db.execute(
                 select(WeeklySnapshot.id)

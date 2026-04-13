@@ -24,6 +24,7 @@ async def _run_style_vector_batch() -> dict:
     from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
     from app.core.config import settings
+    from app.core.database import set_tenant
     from app.models.intelligence import LearnerIntelligence
     from app.services.style_engine import MIN_OBSERVATIONS, compute_style_vector
 
@@ -53,6 +54,7 @@ async def _run_style_vector_batch() -> dict:
             for child_id, household_id in batch:
                 processed += 1
                 try:
+                    await set_tenant(db, household_id)
                     vector = await compute_style_vector(db, child_id, household_id)
                     total_dimensions += vector.dimensions_active
                     updated += 1

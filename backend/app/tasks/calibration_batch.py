@@ -25,6 +25,7 @@ async def _run_calibration_batch() -> dict:
     from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
     from app.core.config import settings
+    from app.core.database import set_tenant
     from app.models.calibration import CalibrationProfile, EvaluatorPrediction
     from app.models.identity import Child
     from app.services.calibration import MIN_PREDICTIONS_FOR_CALIBRATION, recompute_profile
@@ -84,6 +85,7 @@ async def _run_calibration_batch() -> dict:
                         continue
 
                     household_id = row[0]
+                    await set_tenant(db, household_id)
                     await recompute_profile(db, child_id, household_id)
                     updated += 1
                 except Exception:
