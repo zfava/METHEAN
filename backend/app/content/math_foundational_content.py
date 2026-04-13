@@ -1268,6 +1268,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["number line"],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Base-ten blocks to compare visually. Say comparison aloud, not just symbols.', 'adhd': 'Comparison war card game: flip two, compare, slap bigger. High engagement.', 'gifted': 'Three-digit numbers. Order 5+. Density: always a number between two numbers.', 'visual_learner': 'Number line with both marked. Block towers side by side.', 'kinesthetic_learner': 'Build both numbers with blocks. Compare heights physically.', 'auditory_learner': "Say: 'Seven tens is more than four tens. Seventy-four is greater.'"},
+        "philosophy_specific": {'classical': 'Memorize rules: compare tens first, then ones. Systematic drill.', 'charlotte_mason': 'Compare real quantities: which bag has more? Real before abstract.', 'montessori': 'Greater than/less than with golden bead material.', 'traditional': 'Comparison worksheets with >, <, = exercises.'},
+        "connections": {'reading': 'Comparing word lengths or page counts', 'science': 'Comparing measurements: heavier, taller, longer', 'history': 'Comparing dates: which came first?'},
     },
     "mf-12": {
         "enriched": True,
@@ -1362,6 +1365,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["calendar", "ordinal number cards"],
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 10},
+        "accommodations": {'dyslexia': 'Oral practice first. Physical lineup. Written abbreviations after oral is solid.', 'adhd': 'Active games: race to be first, second, third. Line up toys.', 'gifted': 'Extend to 20th, 50th, 100th. Calendar dates. Historical sequences.', 'visual_learner': 'Numbered position cards next to objects in line.', 'kinesthetic_learner': 'Walk the line pointing and naming positions.', 'auditory_learner': "Chant ordinals. Stories: 'The THIRD little pig.'"},
+        "philosophy_specific": {'classical': 'Memorize through recitation. Latin roots: primary, secondary, tertiary.', 'charlotte_mason': "Use naturally in daily life: 'Tell me the second event.'", 'montessori': 'Ordinal exercises with objects. Calendar ordinal dates.', 'traditional': 'Ordinal number worksheets. Matching exercises.'},
+        "connections": {'reading': 'Sequence: first, second, third in stories', 'science': 'Experiment steps: first, second, third', 'history': 'Chronological order of events'},
     },
     "mf-13": {
         "enriched": True,
@@ -1466,6 +1472,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["blocks", "measuring tape"],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Hands-on measuring, not reading rulers. Nonstandard units first.', 'adhd': 'Measure everything. Scavenger hunt: find something 5 clips long.', 'gifted': 'Inches and centimeters. Half-inch. Unit conversion.', 'visual_learner': 'Bright rulers. Mark length with tape or stickers.', 'kinesthetic_learner': 'Body parts as units: hand spans, foot lengths.', 'auditory_learner': "Narrate: 'The pencil reaches to 6. Six inches.'"},
+        "philosophy_specific": {'classical': 'Systematic instruction with formal units. Precision as virtue.', 'charlotte_mason': 'Measure in nature: how tall is the sunflower? Real questions.', 'montessori': 'Red rods for comparison. Metric rods. Practical life.', 'traditional': 'Measurement worksheets with ruler practice.'},
+        "connections": {'reading': 'Reading numbers on rulers and tape measures', 'science': 'Measuring plant growth and object sizes', 'history': 'Historical measurements: cubits, spans'},
     },
     "mf-14": {
         "enriched": True,
@@ -1570,6 +1579,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["uniform cubes for measuring"],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Purely hands-on. No reading. Balance scale is naturally accessible.', 'adhd': 'Prediction games: which heavier? Guess then test. Surprise maintains engagement.', 'gifted': 'Grams and kilograms. Estimate before measuring. Calculate differences.', 'visual_learner': 'Clear balance scale showing which side goes down.', 'kinesthetic_learner': 'Hold objects in each hand. Feel the difference first.', 'auditory_learner': "Narrate: 'Rock side DOWN. Rock is HEAVIER.'"},
+        "philosophy_specific": {'classical': 'Systematic comparison with formal vocabulary.', 'charlotte_mason': 'Weigh nature objects: rocks, pinecones. Size is not weight.', 'montessori': 'Baric tablets. Balance beam activities.', 'traditional': 'Worksheets. Balance scale with standard weights.'},
+        "connections": {'reading': 'Reading weight labels on packages', 'science': 'Weighing specimens in experiments', 'history': 'Historical weight units: stones, pounds, talents'},
     },
     "mf-15": {
         "enriched": True,
@@ -1686,6 +1698,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["digital clock for comparison", "daily schedule template"],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Geared clock with color-coded hands. One concept at a time.', 'adhd': "Connect to child's schedule: 'At 3:00 we have snack. Show me 3:00.'", 'gifted': 'Quarter hours, 5-minute intervals. Elapsed time problems.', 'visual_learner': 'Color hour and minute sides differently. Clock face templates.', 'kinesthetic_learner': 'Large play clock with moveable hands. Paper plate clocks.', 'auditory_learner': "Say: 'Short hand THREE. Long hand TWELVE. THREE O'CLOCK.'"},
+        "philosophy_specific": {'classical': "Systematic instruction. Short hand = hour, long on 12 = o'clock.", 'charlotte_mason': 'Daily rhythm: what time wake up, eat lunch, go to bed?', 'montessori': 'Clock stamps. Time cards analog to digital. Schedule following.', 'traditional': 'Clock worksheets. Draw-the-hands exercises.'},
+        "connections": {'reading': 'Time words: morning, afternoon, evening in stories', 'science': 'Timing experiments: how long did it take?', 'history': 'Morning vs afternoon of a famous historical day'},
     },
     "mf-16": {
         "enriched": True,
