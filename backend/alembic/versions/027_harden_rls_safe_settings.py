@@ -84,17 +84,13 @@ SAFE_USING_NULLABLE = (
 
 
 def upgrade() -> None:
-    # 1. Strip superuser (if we have it) and grant table/sequence permissions.
-    #    The ALTER ROLE requires superuser privilege, so guard with an IF check
-    #    to avoid failure on managed PG services and CI where the role is not superuser.
+    # 1. Grant table/sequence permissions to current role.
+    #    NOTE: ALTER ROLE NOSUPERUSER should be applied manually in production by a DBA.
+    #    It cannot be in a migration because it requires SUPERUSER privilege, which
+    #    CI runners, managed PG services (RDS, Cloud SQL, Neon), and Railway lack.
     op.execute("""
 DO $$
 BEGIN
-    -- Only strip superuser if current role actually has it
-    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = current_user AND rolsuper = true) THEN
-        EXECUTE 'ALTER ROLE ' || quote_ident(current_user) || ' NOSUPERUSER';
-    END IF;
-    -- GRANTs are safe regardless of role privileges
     EXECUTE 'GRANT ALL ON ALL TABLES IN SCHEMA public TO ' || quote_ident(current_user);
     EXECUTE 'GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO ' || quote_ident(current_user);
 END $$;
@@ -123,19 +119,7 @@ END $$;
 
 
 def downgrade() -> None:
-    # Restore superuser if we can (requires current role to already be superuser).
-    # In non-superuser environments this is a no-op — you can't grant yourself superuser.
-    op.execute("""
-DO $$
-BEGIN
-    IF EXISTS (SELECT 1 FROM pg_roles WHERE rolname = current_user AND rolsuper = true) THEN
-        -- Already superuser, nothing to restore
-        NULL;
-    ELSE
-        RAISE NOTICE 'Skipping SUPERUSER restore - current role is not superuser';
-    END IF;
-END $$;
-""")
+    # NOTE: ALTER ROLE NOSUPERUSER should be applied manually in production by a DBA.
 
     # Revert to old policies without missing_ok
     old_using = (
