@@ -30,9 +30,7 @@ async def register_device(
     user: User = Depends(get_current_user),
 ):
     """Register a push notification token. Upserts by token value."""
-    result = await db.execute(
-        select(DeviceToken).where(DeviceToken.token == body.token)
-    )
+    result = await db.execute(select(DeviceToken).where(DeviceToken.token == body.token))
     existing = result.scalar_one_or_none()
     if existing:
         existing.is_active = True
@@ -40,13 +38,15 @@ async def register_device(
         existing.household_id = user.household_id
         existing.device_type = body.platform
     else:
-        db.add(DeviceToken(
-            user_id=user.id,
-            household_id=user.household_id,
-            device_type=body.platform,
-            token=body.token,
-            is_active=True,
-        ))
+        db.add(
+            DeviceToken(
+                user_id=user.id,
+                household_id=user.household_id,
+                device_type=body.platform,
+                token=body.token,
+                is_active=True,
+            )
+        )
     await db.commit()
     return {"status": "registered"}
 

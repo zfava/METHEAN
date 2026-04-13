@@ -149,8 +149,12 @@ async def send_notification(
 
     # Send push notification for high-priority events (non-blocking)
     PUSH_EVENTS = {
-        "review_needed", "alert_triggered", "node_mastered",
-        "compliance_warning", "advisor_report_ready", "plan_ready",
+        "review_needed",
+        "alert_triggered",
+        "node_mastered",
+        "compliance_warning",
+        "advisor_report_ready",
+        "plan_ready",
     }
     if event_type in PUSH_EVENTS:
         try:

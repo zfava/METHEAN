@@ -169,11 +169,7 @@ async def send_push_to_user(
 
     # Deactivate stale tokens
     if stale_ids:
-        await db.execute(
-            update(DeviceToken)
-            .where(DeviceToken.id.in_(stale_ids))
-            .values(is_active=False)
-        )
+        await db.execute(update(DeviceToken).where(DeviceToken.id.in_(stale_ids)).values(is_active=False))
 
     await db.flush()
     return sent
