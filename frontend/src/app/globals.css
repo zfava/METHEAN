@@ -19,6 +19,7 @@
   --color-sidebar-active: #223350;
 
   --color-brand-gold: #C6A24E;
+  --color-brand-gold-text: #8B6914; /* WCAG AA on white (4.58:1) */
   --color-brand-navy: #0F1B2D;
   --color-brand-cream: #F5F1E8;
 

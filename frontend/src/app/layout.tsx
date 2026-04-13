@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ClientProviders from "@/components/ClientProviders";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
+import OfflineBanner from "@/components/OfflineBanner";
 
 export const viewport = {
   width: "device-width",
@@ -43,6 +44,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <ServiceWorkerRegistration />
+        <OfflineBanner />
         <ClientProviders>{children}</ClientProviders>
       </body>
     </html>

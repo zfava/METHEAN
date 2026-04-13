@@ -68,7 +68,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
       return { opacity: 1, transform: "translateY(0)", transition: `opacity 0.2s ${spring}, transform 0.2s ${spring}` };
     }
 
-    return { opacity: 1, transform: "translateX(0) translateY(0)" };
+    return { opacity: 1, transform: "translateX(0) translateY(0)", willChange: "auto" };
   };
 
   return (

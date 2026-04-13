@@ -119,6 +119,8 @@ export default function BottomTabBar({ onMorePress }: { onMorePress: () => void 
   return (
     <nav
       data-no-select
+      role="tablist"
+      aria-label="Main navigation"
       className="fixed bottom-0 left-0 right-0 z-40 border-t border-(--color-border) md:hidden"
       style={{
         height: `calc(56px + var(--safe-bottom))`,
@@ -128,6 +130,7 @@ export default function BottomTabBar({ onMorePress }: { onMorePress: () => void 
         background: "rgba(255,255,255,0.85)",
         transform: visible ? "translateY(0)" : "translateY(100%)",
         transition: "transform 0.2s cubic-bezier(0.25, 0.1, 0.25, 1)",
+        willChange: "transform",
       }}
     >
       <div className="flex items-center justify-around h-14">
@@ -136,10 +139,11 @@ export default function BottomTabBar({ onMorePress }: { onMorePress: () => void 
           return (
             <button
               key={tab.key}
+              role="tab"
               onClick={() => handleTab(tab)}
               className="flex flex-col items-center justify-center flex-1 h-14 gap-0.5"
               aria-label={tab.label}
-              aria-current={active ? "page" : undefined}
+              aria-selected={active}
             >
               <div
                 style={{
