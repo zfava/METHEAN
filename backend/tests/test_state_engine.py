@@ -717,6 +717,10 @@ class TestFSRSOptimizer:
         mismatched* intervals — reviews that happen much earlier than
         scheduled — to create divergence from the model's predictions.
         """
+        try:
+            from fsrs.optimizer import Optimizer  # noqa: F401
+        except ImportError:
+            pytest.skip("fsrs[optimizer] not installed")
         from datetime import timezone
         from fsrs import Rating as FSRSRating, Scheduler as FSRSScheduler, Card as FSRSCard_
         from app.models.state import FSRSCard as DBFSRSCard, ReviewLog as DBReviewLog
