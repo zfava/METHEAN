@@ -77,8 +77,22 @@
   --transition-base: 0.2s var(--ease);
 }
 
+/* ── Safe area insets (notch / home indicator) ── */
+:root {
+  --safe-top: env(safe-area-inset-top);
+  --safe-bottom: env(safe-area-inset-bottom);
+  --safe-left: env(safe-area-inset-left);
+  --safe-right: env(safe-area-inset-right);
+}
+
 * { box-sizing: border-box; }
-html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+  height: -webkit-fill-available;
+}
 
 body {
   font-family: var(--font-sans);
@@ -86,6 +100,20 @@ body {
   line-height: 1.6;
   color: var(--color-text);
   background: var(--color-page);
+  min-height: 100dvh;
+  min-height: -webkit-fill-available;
+}
+
+/* ── Touch device optimizations ── */
+button, a, [role="button"], input, select, textarea {
+  -webkit-tap-highlight-color: transparent;
+}
+nav, header, footer, [data-no-select] {
+  -webkit-user-select: none;
+  user-select: none;
+}
+@media (pointer: coarse) {
+  button, a, [role="button"], select { min-height: 44px; }
 }
 
 ::selection { background: rgba(198, 162, 78, 0.15); color: var(--color-text); }
