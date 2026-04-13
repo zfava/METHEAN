@@ -1820,6 +1820,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["play store setup", "coin sorting tray"],
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Physical coin handling. Size and color as identifiers, not text.', 'adhd': 'Play store: price items, buy and sell. Real coins.', 'gifted': 'Mixed coins. Make change. How many ways to make 50 cents?', 'visual_learner': 'Coin posters with large images and values.', 'kinesthetic_learner': 'Handle real coins. Sort by size and feel. Coin rubbings.', 'auditory_learner': "Chants: 'Penny one cent! Nickel five cents!'"},
+        "philosophy_specific": {'classical': 'Memorize names and values. Systematic drill.', 'charlotte_mason': 'Real coins for real purposes: saving, buying, giving.', 'montessori': 'Coin exercises in practical life. Making change.', 'traditional': 'Coin identification worksheets. Value matching.'},
+        "connections": {'reading': 'Reading price tags and coin names', 'science': 'Coins as metals: properties of different metals', 'history': 'History of money: why coins exist'},
     },
     "mf-17": {
         "enriched": True,
@@ -1939,6 +1942,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["geoboards", "pattern blocks", "toothpicks and marshmallows"],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Shape recognition is a visual strength. Hands-on exploration.', 'adhd': 'Shape scavenger hunt with movement. Build with sticks and clay.', 'gifted': '3D shapes. Perimeter. Symmetry and tessellation.', 'visual_learner': 'Colorful posters. Pattern blocks. Symmetry with mirrors.', 'kinesthetic_learner': 'Build with toothpicks, pipe cleaners. Geoboard. Tangrams.', 'auditory_learner': 'Shape songs. Verbal property descriptions.'},
+        "philosophy_specific": {'classical': 'Memorize names, properties, definitions. Geometry vocabulary.', 'charlotte_mason': 'Find shapes in nature and architecture. Draw from life.', 'montessori': 'Geometric cabinet. Metal insets. Constructive triangles.', 'traditional': 'Shape worksheets. Draw and label exercises.'},
+        "connections": {'reading': 'Shape words as vocabulary', 'science': 'Shapes in nature: hexagons, circles, triangles', 'history': 'Geometry in ancient architecture: pyramids, arches'},
     },
     "mf-18": {
         "enriched": True,
@@ -2045,6 +2051,9 @@ MATH_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {"required": ["colored blocks or shapes"], "recommended": ["pattern block templates"]},
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Physical objects, not written symbols. Color and shape patterns.', 'adhd': 'Body patterns: clap-snap-stomp. Musical patterns. Frequent changes.', 'gifted': 'Growing patterns with rules. Function machines. Input-output.', 'visual_learner': 'Color patterns. Bead strings. Pattern block designs.', 'kinesthetic_learner': 'Block patterns. Body movement: jump-clap-jump-clap.', 'auditory_learner': 'Sound patterns: clap-snap. Musical rhythms.'},
+        "philosophy_specific": {'classical': 'Patterns as foundation of reasoning. Identify, extend, create.', 'charlotte_mason': 'Patterns in nature: leaf arrangements, petals, spirals.', 'montessori': 'Bead chains. Geometric pattern work.', 'traditional': 'Pattern worksheets. What-comes-next exercises.'},
+        "connections": {'reading': 'Rhyming patterns in poetry', 'science': 'Patterns: seasons, day/night, life cycles', 'history': 'Historical patterns: rise and fall of civilizations'},
     },
     "mf-19": {
         "enriched": True,
@@ -2154,6 +2163,9 @@ MATH_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {"required": ["number line (floor or paper)"], "recommended": ["walk-on number line"]},
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Large clear lines with consistent spacing. Walking before paper.', 'adhd': 'Floor line with full-body hopping. Sidewalk chalk outside.', 'gifted': 'Negative numbers. Open number lines. Fraction placement.', 'visual_learner': 'Color-coded: even one color, odd another. Wall display.', 'kinesthetic_learner': 'Walk-on line. Jump forward add, backward subtract.', 'auditory_learner': 'Count aloud while pointing. Narrate hops.'},
+        "philosophy_specific": {'classical': 'Number line as foundational tool. Systematic instruction.', 'charlotte_mason': 'A ruler IS a number line. Real measurement connection.', 'montessori': 'Bead stair as physical line. Number line rug.', 'traditional': 'Number line worksheets. Printed line operations.'},
+        "connections": {'reading': 'Timelines as number lines for stories', 'science': 'Thermometers as vertical number lines', 'history': 'Timelines ARE number lines for events'},
     },
     "mf-20": {
         "enriched": True,
@@ -2250,6 +2262,9 @@ MATH_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {"required": ["counters for pairing"], "recommended": ["hundred chart"]},
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 10},
+        "accommodations": {'dyslexia': 'Physical pairing. No reading. Purely manipulative.', 'adhd': "Grab objects, pair them, shout 'even!' or 'odd!' Quick and active.", 'gifted': 'Even+even=? Odd+odd=? Even+odd=? Discover and prove.', 'visual_learner': 'Two-color counters in pairs. Highlighted on chart.', 'kinesthetic_learner': 'Pair socks, shoes, gloves. Real objects.', 'auditory_learner': "'2, 4, 6, 8, who do we appreciate? EVEN!'"},
+        "philosophy_specific": {'classical': 'Formal: even divisible by 2. Odd has remainder 1.', 'charlotte_mason': 'Discover through sharing: can we split 7 cookies evenly?', 'montessori': 'Cards and counters: pairs. Even perfect, odd one left.', 'traditional': 'Even/odd worksheets. Hundred chart coloring.'},
+        "connections": {'reading': 'Even/odd page numbers (left vs right)', 'science': 'Symmetry: even numbers of legs, wings', 'history': 'Roman numerals: which even, which odd?'},
     },
     "mf-21": {
         "enriched": True,
