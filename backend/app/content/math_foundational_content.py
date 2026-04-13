@@ -2928,6 +2928,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["strategy reference cards", "number talk prompts"],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Name strategies verbally. Mental math removes written barriers. Strength-based.', 'adhd': 'Number talks: short, social, varied. 2-3 minutes per problem.', 'gifted': 'Two-digit mental math. Multiple strategies per problem. Invent new ones.', 'visual_learner': 'Draw strategy diagrams: number line hops, bond splits.', 'kinesthetic_learner': 'Fingers for tracking strategy steps, not counting.', 'auditory_learner': 'Think-alouds: verbalize every step. Partner sharing.'},
+        "philosophy_specific": {'classical': 'Name each strategy. Practice each systematically before mixing.', 'charlotte_mason': 'Daily warm-up. Short, focused, oral mathematics.', 'montessori': 'Mental math from extensive concrete work. Abstraction follows.', 'traditional': 'Strategy sheets. Timed mental math challenges.'},
+        "connections": {'reading': 'Mental math while reading: estimating pages', 'science': 'Quick calculations during experiments', 'history': 'Mental arithmetic for dates between events'},
     },
     "mf-27": {
         "enriched": True,
@@ -3031,6 +3034,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["estimation mats with benchmarks"],
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 10},
+        "accommodations": {'dyslexia': 'Oral and visual. No reading or writing. Strong area for many.', 'adhd': 'Estimation jars and guessing games. Surprise maintains engagement.', 'gifted': "Larger numbers. Percentage error. When is 'good enough'?", 'visual_learner': 'Benchmark groups visible: group of 10 and 20 as reference.', 'kinesthetic_learner': 'Grab handful, estimate, count. Physical interaction.', 'auditory_learner': "Talk through: 'About 20 because this looks like two groups of ten.'"},
+        "philosophy_specific": {'classical': 'Estimation as mathematical habit. Systematic benchmarking.', 'charlotte_mason': 'Estimate everything: steps to mailbox, apples in bag.', 'montessori': 'Estimation from concrete work. Feel for number grows.', 'traditional': 'Estimation worksheets. Is-it-reasonable exercises.'},
+        "connections": {'reading': 'Estimating how long a book takes', 'science': 'Estimating before measuring', 'history': 'Estimating historical populations and distances'},
     },
     "mf-28": {
         "enriched": True,
@@ -3150,6 +3156,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["ten-frame boards", "bond flashcards"],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Visual bond diagrams. Three-circle format is intuitive.', 'adhd': 'Bond games: flash whole, race to name parts. Quick-fire.', 'gifted': 'Bonds to 100. Three parts. Algebraic: a+b=15, a=7, b=?', 'visual_learner': 'Color bond diagrams. Part-whole mats. Visual cards.', 'kinesthetic_learner': 'Snap cube trains: break 12 into parts. Record. Break differently.', 'auditory_learner': "Chant: 'Ten is five and five, six and four, seven and three.'"},
+        "philosophy_specific": {'classical': 'Memorize all bonds for 10 and 20. These unlock everything.', 'charlotte_mason': 'Discover through real objects: ways to split 15 acorns.', 'montessori': 'Strip boards reveal bonds. Teen bead bars for bonds to 20.', 'traditional': 'Bond worksheets. Fill-in-missing-part. Flashcards.'},
+        "connections": {'reading': 'Word families are like number bonds', 'science': 'Part-whole: legs on 3 insects (6+6+6)', 'history': 'Dividing groups: armies, resources'},
     },
     "mf-29": {
         "enriched": True,
@@ -3253,6 +3262,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["sorting mats", "Venn diagram circles"],
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Non-reading. Real objects with obvious visual/tactile differences.', 'adhd': 'Sort real collections they care about: LEGO, cards, rocks.', 'gifted': 'Two-attribute Venn. Hierarchies. Design own sorting rules.', 'visual_learner': 'Sorting mats with labeled columns. Color-coded categories.', 'kinesthetic_learner': 'Handle and move every object. Sort into containers.', 'auditory_learner': "State rule aloud: 'My rule is SHAPE. Circles here, squares here.'"},
+        "philosophy_specific": {'classical': 'Classification as foundation of systematic knowledge.', 'charlotte_mason': 'Sort nature collections: leaves by shape, rocks by color.', 'montessori': 'Sorting in practical life. Geometric cabinet classification.', 'traditional': 'Sorting worksheets. Attribute block exercises.'},
+        "connections": {'reading': 'Sorting words by beginning sound or family', 'science': 'Classification is core science: living things, rocks, materials', 'history': 'Categorizing artifacts, cultures, time periods'},
     },
     "mf-30": {
         "enriched": True,
@@ -3383,5 +3395,8 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["portfolio of past work for comparison"],
         },
         "time_estimates": {"first_exposure": 30, "practice_session": 20, "assessment": 20},
+        "accommodations": {'dyslexia': 'Oral assessment options for every section. No writing barriers.', 'adhd': '3-4 short sessions across 2 days. Movement breaks between.', 'gifted': 'Challenge problems into developing level. Show their ceiling.', 'visual_learner': 'Manipulatives, diagrams, picture-based problems available.', 'kinesthetic_learner': 'Hands-on stations: build with blocks, measure, sort.', 'auditory_learner': 'Oral narration: tell everything about addition. Verbal demo.'},
+        "philosophy_specific": {'classical': 'Formal assessment with pass criteria. Oral recitation. Written computation.', 'charlotte_mason': 'Narration and demonstration. No tricks, no stress. Show what you know.', 'montessori': 'Observation-based. Mastery demonstrated through work, not tests.', 'traditional': 'Written test: computation, word problems, identification.'},
+        "connections": {'reading': 'Reading word problems on assessment', 'science': 'Measurement and data sections connect to science', 'history': 'Timeline and ordering connect to historical sequencing'},
     },
 }
