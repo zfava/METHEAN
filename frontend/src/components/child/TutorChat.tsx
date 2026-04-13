@@ -161,7 +161,7 @@ export default function TutorChat({
 
       {/* Panel — slides up from bottom */}
       <div className="fixed inset-x-0 bottom-0 z-50 flex flex-col bg-[#FFFDF8] rounded-t-2xl shadow-2xl"
-        style={{ height: "60vh", minHeight: 320 }}
+        style={{ height: "min(80dvh, 600px)", minHeight: 320, paddingBottom: "var(--safe-bottom)" }}
         role="dialog" aria-label="Tutor chat">
 
         {/* Drag handle */}
@@ -206,7 +206,7 @@ export default function TutorChat({
                 )}
 
                 {msg.role === "tutor" ? (
-                  <div className={`max-w-[85%] ${grouped ? "mt-0.5" : "mt-3"}`} role="status">
+                  <div className={`max-w-[85%] md:max-w-[60%] ${grouped ? "mt-0.5" : "mt-3"}`} role="status">
                     <div className="bg-[#F5F0E6] text-(--color-text) rounded-2xl rounded-bl-md px-4 py-3 text-[15px] leading-relaxed">
                       {msg.text}
                     </div>
@@ -227,7 +227,7 @@ export default function TutorChat({
                   </div>
                 ) : (
                   <div className={`flex justify-end ${grouped ? "mt-0.5" : "mt-3"}`}>
-                    <div className="max-w-[85%] rounded-2xl rounded-br-md px-4 py-3 text-[15px] leading-relaxed text-white"
+                    <div className="max-w-[85%] md:max-w-[60%] rounded-2xl rounded-br-md px-4 py-3 text-[15px] leading-relaxed text-white"
                       style={{ background: accent }}>
                       {msg.text}
                     </div>
@@ -281,7 +281,7 @@ export default function TutorChat({
               onKeyDown={handleKeyDown}
               placeholder="Type your question or answer..."
               rows={1}
-              className="flex-1 px-4 py-3 text-[15px] border border-(--color-border) rounded-2xl bg-white text-(--color-text) resize-none focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 leading-relaxed min-h-[44px]"
+              className="flex-1 px-4 py-3 text-[16px] border border-(--color-border) rounded-2xl bg-white text-(--color-text) resize-none focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 leading-relaxed min-h-[44px]"
               style={{ maxHeight: 96 }}
               aria-label="Message to tutor"
             />

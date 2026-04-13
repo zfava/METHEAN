@@ -6,7 +6,10 @@ import {
   type LearningContext, type ChildDashboardResponse,
 } from "@/lib/api";
 import { useToast } from "@/components/Toast";
-import { MetheanLogo } from "@/components/Brand";
+import { MetheanMark } from "@/components/Brand";
+import { useMobile } from "@/lib/useMobile";
+import { haptic } from "@/lib/haptics";
+import BottomSheet from "@/components/BottomSheet";
 import JourneyMap, { JourneyCarousel } from "@/components/child/JourneyMap";
 import LessonView from "@/components/child/LessonView";
 import PracticeView from "@/components/child/PracticeView";
@@ -50,33 +53,34 @@ const typeLabels: Record<string, { label: string; icon: string }> = {
 
 // ── Progress Ring ──
 
-function ProgressRing({ completed, total, minutesRemaining }: {
-  completed: number; total: number; minutesRemaining: number;
+function ProgressRing({ completed, total, minutesRemaining, large }: {
+  completed: number; total: number; minutesRemaining: number; large?: boolean;
 }) {
   const pct = total > 0 ? completed / total : 0;
   const r = 36;
   const circ = 2 * Math.PI * r;
   const offset = circ * (1 - pct);
   const allDone = completed >= total && total > 0;
+  const sizeClass = large ? "w-[120px] h-[120px] md:w-[140px] md:h-[140px]" : "w-24 h-24";
 
   return (
-    <div className="relative w-24 h-24 shrink-0" role="img" aria-label={`${completed} of ${total} activities completed`}>
+    <div className={`relative ${sizeClass} shrink-0`} role="img" aria-label={`${completed} of ${total} activities completed`}>
       <svg viewBox="0 0 80 80" className="w-full h-full">
-        <circle cx="40" cy="40" r={r} fill="none" stroke="var(--color-border)" strokeWidth="5" />
+        <circle cx="40" cy="40" r={r} fill="none" stroke="var(--color-border)" strokeWidth="4" />
         <circle cx="40" cy="40" r={r} fill="none"
           stroke={allDone ? "var(--color-success)" : "var(--color-accent)"}
-          strokeWidth="5" strokeLinecap="round"
+          strokeWidth="4" strokeLinecap="round"
           strokeDasharray={circ} strokeDashoffset={offset}
           transform="rotate(-90 40 40)"
           className="transition-all duration-700" />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         {allDone ? (
-          <span className="text-lg" role="img" aria-label="complete">&#10003;</span>
+          <span className="text-2xl" role="img" aria-label="complete">&#10003;</span>
         ) : (
           <>
-            <span className="text-sm font-semibold text-(--color-text)">{minutesRemaining}</span>
-            <span className="text-[10px] text-(--color-text-tertiary)">min left</span>
+            <span className={`${large ? "text-lg" : "text-sm"} font-bold text-(--color-text)`}>{completed}/{total}</span>
+            <span className={`${large ? "text-xs" : "text-[10px]"} text-(--color-text-tertiary)`}>{minutesRemaining}m left</span>
           </>
         )}
       </div>
@@ -115,6 +119,8 @@ export default function ChildPage() {
   const [theme, setTheme] = useState({ background: "plain", color_accent: "blue", font_size: "normal", avatar: "owl" });
   const [showSettings, setShowSettings] = useState(false);
   const [showJourney, setShowJourney] = useState(false);
+  const isMobile = useMobile();
+  const [showCelebration, setShowCelebration] = useState(false);
 
   // ── Init ──
 
@@ -196,7 +202,9 @@ export default function ChildPage() {
         mastery: result.mastery_level?.replace(/_/g, " "),
         prevMastery: result.previous_mastery?.replace(/_/g, " "),
       });
-      setCompleted(true);
+      haptic("success");
+      setShowCelebration(true);
+      setTimeout(() => { setShowCelebration(false); setCompleted(true); }, 1500);
     } catch {
       toast("Couldn't save your work. Try again.", "error");
     }
@@ -360,8 +368,44 @@ export default function ChildPage() {
         </div>
       </header>
 
-      {/* Settings */}
-      {showSettings && (
+      {/* Settings — BottomSheet on mobile, inline on desktop */}
+      {isMobile ? (
+        <BottomSheet open={showSettings} onClose={() => setShowSettings(false)}>
+          <div className="px-5 pb-6">
+            <h3 className="text-base font-semibold text-(--color-text) mb-5">My Settings</h3>
+            <div className="space-y-5">
+              <div>
+                <label className="text-sm text-(--color-text-secondary) mb-3 block">Background</label>
+                <div className="grid grid-cols-4 gap-2">
+                  {(["plain", "meadow", "ocean", "forest", "space", "desert", "mountains"] as const).map(bg => (
+                    <button key={bg} onClick={() => saveTheme({ background: bg })}
+                      className={`h-14 rounded-xl border-2 text-[11px] font-medium capitalize ${theme.background === bg ? "border-(--color-brand-gold) ring-2 ring-(--color-brand-gold)/20" : "border-(--color-border)"}`}
+                      style={bgStyles[bg]}>{bg}</button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="text-sm text-(--color-text-secondary) mb-3 block">Avatar</label>
+                <div className="flex gap-3 justify-center">
+                  {(["bear", "owl", "fox", "rabbit", "deer", "eagle", "wolf"] as const).map(a => (
+                    <button key={a} onClick={() => saveTheme({ avatar: a })}
+                      className={`w-12 h-12 rounded-full text-2xl border-2 transition-transform ${theme.avatar === a ? "border-(--color-brand-gold) scale-110" : "border-(--color-border)"}`}>{avatarEmoji[a]}</button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="text-sm text-(--color-text-secondary) mb-3 block">Text Size</label>
+                <div className="flex gap-2">
+                  {([["normal", "Normal"], ["large", "Large"], ["extra-large", "Extra Large"]] as const).map(([v, l]) => (
+                    <button key={v} onClick={() => saveTheme({ font_size: v })}
+                      className={`flex-1 py-3 text-sm rounded-xl border-2 ${theme.font_size === v ? "border-(--color-brand-gold) bg-(--color-accent-light) font-medium" : "border-(--color-border)"}`}>{l}</button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </BottomSheet>
+      ) : showSettings && (
         <div className="max-w-2xl mx-auto px-8 pt-4">
           <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 mb-4">
             <h3 className="text-sm font-semibold text-(--color-text) mb-4">My Settings</h3>
@@ -401,20 +445,40 @@ export default function ChildPage() {
 
       <div className="max-w-2xl mx-auto px-8 py-10">
         {/* Hero: Greeting + Progress Ring */}
-        <div className="flex items-start justify-between gap-6 mb-3">
-          <div className="flex-1">
-            <h1 className="text-2xl font-medium text-(--color-text) leading-snug mb-1">
-              {allDone ? `You finished everything today. Well done, ${dash.child.first_name}.` : dash.greeting}
+        {isMobile ? (
+          <div className="text-center mb-6">
+            <p className="text-sm text-(--color-text-tertiary) mb-2">
+              {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+            </p>
+            <h1 className="text-xl font-medium text-(--color-text) leading-snug mb-4">
+              {allDone ? `You finished everything today!` : dash.greeting}
             </h1>
+            {activities.length > 0 && (
+              <div className="flex justify-center mb-3">
+                <ProgressRing completed={dash.today.completed} total={dash.today.total_activities}
+                  minutesRemaining={dash.today.estimated_minutes_remaining} large />
+              </div>
+            )}
             {dash.encouragement && (
-              <p className="text-base text-(--color-text-secondary) italic leading-relaxed">{dash.encouragement}</p>
+              <p className="text-sm text-(--color-text-secondary) italic">{dash.encouragement}</p>
             )}
           </div>
-          {activities.length > 0 && (
-            <ProgressRing completed={dash.today.completed} total={dash.today.total_activities}
-              minutesRemaining={dash.today.estimated_minutes_remaining} />
-          )}
-        </div>
+        ) : (
+          <div className="flex items-start justify-between gap-6 mb-3">
+            <div className="flex-1">
+              <h1 className="text-2xl font-medium text-(--color-text) leading-snug mb-1">
+                {allDone ? `You finished everything today. Well done, ${dash.child.first_name}.` : dash.greeting}
+              </h1>
+              {dash.encouragement && (
+                <p className="text-base text-(--color-text-secondary) italic leading-relaxed">{dash.encouragement}</p>
+              )}
+            </div>
+            {activities.length > 0 && (
+              <ProgressRing completed={dash.today.completed} total={dash.today.total_activities}
+                minutesRemaining={dash.today.estimated_minutes_remaining} />
+            )}
+          </div>
+        )}
 
         {/* Achievements */}
         {dash.child.recent_achievements.length > 0 && (
@@ -436,7 +500,7 @@ export default function ChildPage() {
             <p className="text-sm text-(--color-text-secondary)">Enjoy your free time, {dash.child.first_name}.</p>
           </div>
         ) : (
-          <div className="space-y-3 mb-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-10">
             {/* Uncompleted activities */}
             {activities.filter(a => a.status !== "completed").map((act, idx) => {
               const tl = typeLabels[act.type] || { label: act.type, icon: "\uD83D\uDCC4" };
@@ -494,7 +558,7 @@ export default function ChildPage() {
         {dash.progress.subjects.length > 0 && (
           <div className="mb-10">
             <h3 className="text-xs font-medium text-(--color-text-secondary) uppercase tracking-wide mb-3">Your Progress</h3>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {dash.progress.subjects.map(s => (
                 <div key={s.name} className="bg-(--color-surface) rounded-xl border border-(--color-border) p-4">
                   <div className="flex items-center gap-2 mb-2">
@@ -542,6 +606,26 @@ export default function ChildPage() {
       </div>
 
       {overlay}
+
+      {/* Celebration animation */}
+      {showCelebration && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20">
+          <div className="w-24 h-24 rounded-full bg-(--color-success) flex items-center justify-center"
+            style={{ animation: "celebration-pop 0.4s cubic-bezier(0.32, 0.72, 0, 1) both" }}>
+            <svg className="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes celebration-pop {
+          0% { transform: scale(0); opacity: 0; }
+          60% { transform: scale(1.1); opacity: 1; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+      `}</style>
     </div>
   );
 }
