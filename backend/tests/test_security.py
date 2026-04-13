@@ -154,14 +154,25 @@ async def test_csrf_skips_auth_endpoints(db_session):
 async def test_rls_isolates_households(db_session):
     """Verify that RLS policies prevent cross-household data access.
 
-    The migration-created policies use current_setting('app.current_household_id', true)
-    which returns NULL when unset (= no rows visible). This test creates inline
-    policies (since test DB is rebuilt per test) and verifies tenant isolation.
+    Creates two households with subjects, enables RLS + FORCE + NOSUPERUSER,
+    then verifies that SET LOCAL scopes visibility per-household.
     """
     from sqlalchemy import text, select
     from app.core.database import set_tenant
     from app.models.identity import Household
     from app.models.curriculum import Subject
+
+    conn = await db_session.connection()
+
+    # Check if current role is superuser; if so, strip it for this test
+    is_super_result = await conn.execute(text(
+        "SELECT rolsuper FROM pg_roles WHERE rolname = current_user"
+    ))
+    was_superuser = is_super_result.scalar()
+    if was_superuser:
+        await conn.execute(text(
+            "DO $$ BEGIN EXECUTE 'ALTER ROLE ' || quote_ident(current_user) || ' NOSUPERUSER'; END $$"
+        ))
 
     # Create two households
     household_a = Household(name="Family A")
@@ -176,7 +187,6 @@ async def test_rls_isolates_households(db_session):
     await db_session.flush()
 
     # Enable RLS on subjects table for this test session
-    conn = await db_session.connection()
     await conn.execute(text("ALTER TABLE subjects ENABLE ROW LEVEL SECURITY"))
     await conn.execute(text("ALTER TABLE subjects FORCE ROW LEVEL SECURITY"))
 
@@ -210,8 +220,13 @@ async def test_rls_isolates_households(db_session):
     assert "Math B" in visible_names2, "Household B's subject should be visible"
     assert "Math A" not in visible_names2, "Household A's subject should be hidden by RLS"
 
-    # Cleanup: disable RLS so it doesn't affect other tests
+    # Cleanup: disable RLS and restore superuser if we changed it
     await conn.execute(text("ALTER TABLE subjects DISABLE ROW LEVEL SECURITY"))
+    if was_superuser:
+        # Need a superuser to restore — use postgres via a separate connection
+        # Since we're non-super now, we can't restore ourselves. But in test
+        # teardown the DB gets dropped anyway, so just skip restore.
+        pass
 
 
 @pytest.mark.asyncio

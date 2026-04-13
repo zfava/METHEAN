@@ -85,19 +85,13 @@ SAFE_USING_NULLABLE = (
 
 def upgrade() -> None:
     # 1. Ensure app role is not a superuser and has necessary grants.
-    #    Detect role dynamically so this works in CI where the role name may differ.
+    #    Always strip superuser from current_user so RLS is enforced.
     op.execute("""
 DO $$
-DECLARE
-    current_role text := current_user;
 BEGIN
-    -- Only remove superuser if the role has it (skip in CI where role may differ)
-    IF current_role = 'methean' THEN
-        EXECUTE 'ALTER ROLE methean NOSUPERUSER';
-    END IF;
-    EXECUTE 'GRANT ALL ON ALL TABLES IN SCHEMA public TO ' || quote_ident(current_role);
-    EXECUTE 'GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO ' || quote_ident(current_role);
-    EXECUTE 'GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO ' || quote_ident(current_role);
+    EXECUTE 'ALTER ROLE ' || quote_ident(current_user) || ' NOSUPERUSER';
+    EXECUTE 'GRANT ALL ON ALL TABLES IN SCHEMA public TO ' || quote_ident(current_user);
+    EXECUTE 'GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO ' || quote_ident(current_user);
 END $$;
 """)
 
@@ -124,6 +118,14 @@ END $$;
 
 
 def downgrade() -> None:
+    # Restore superuser so previous migrations work without GRANT issues
+    op.execute("""
+DO $$
+BEGIN
+    EXECUTE 'ALTER ROLE ' || quote_ident(current_user) || ' SUPERUSER';
+END $$;
+""")
+
     # Revert to old policies without missing_ok
     old_using = (
         "USING (household_id = current_setting('app.current_household_id')::uuid)"
