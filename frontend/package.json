@@ -10,7 +10,11 @@
     "cap:export": "CAP_BUILD=true next build",
     "cap:sync": "npm run cap:export && npx cap sync",
     "cap:ios": "npx cap open ios",
-    "cap:android": "npx cap open android"
+    "cap:android": "npx cap open android",
+    "build:ios": "npm run cap:export && npx cap sync ios",
+    "build:android": "npm run cap:export && npx cap sync android",
+    "build:android:release": "npm run cap:export && npx cap sync android && cd android && ./gradlew bundleRelease",
+    "version:bump": "node scripts/bump-version.js"
   },
   "dependencies": {
     "@capacitor/app": "^6.0.0",
