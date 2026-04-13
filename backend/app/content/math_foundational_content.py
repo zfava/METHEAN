@@ -2373,6 +2373,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["fraction circles", "play food for sharing"],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'No fraction notation. Only words (half, quarter) and physical folding/cutting.', 'adhd': 'Cut real food: sandwiches, apples, pizza. Eat the fractions.', 'gifted': 'Thirds, sixths, eighths. Compare: which bigger, 1/2 or 1/4?', 'visual_learner': 'Fraction circles and bars, color coded. Fold and shade.', 'kinesthetic_learner': 'Fold paper. Cut playdough. Break crackers. Physical division.', 'auditory_learner': "Narrate: 'Folding in HALF. TWO EQUAL parts. Each ONE HALF.'"},
+        "philosophy_specific": {'classical': 'Fraction vocabulary: numerator, denominator introduced visually.', 'charlotte_mason': 'Fractions through cooking: half a cup, quarter recipe.', 'montessori': 'Fraction skittles. Fraction circles. Metal insets.', 'traditional': 'Fraction worksheets: shade half, shade quarter.'},
+        "connections": {'reading': "Half-hour in time. 'Half' as vocabulary.", 'science': 'Dividing specimens for observation', 'history': 'Dividing land and territories'},
     },
     "mf-22": {
         "enriched": True,
@@ -2482,6 +2485,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["collections to sort and count", "chart paper"],
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Tally marks are non-reading. Highly accessible. Count by fives.', 'adhd': 'Data about things they care about: snacks, pet behaviors, weather.', 'gifted': 'Bar graphs, pictographs. Own survey questions. Analyze results.', 'visual_learner': 'Color-coded charts. Large chart paper. Sticky note graphs.', 'kinesthetic_learner': 'Craft sticks bundled in fives as physical tallies.', 'auditory_learner': "Count aloud by fives: 'Five, ten, fifteen, and two is seventeen.'"},
+        "philosophy_specific": {'classical': 'Systematic observation. Formal tally chart structure.', 'charlotte_mason': 'Nature tallies: birds of each type. Real data, real observation.', 'montessori': 'Sort and count materials. Graph daily weather.', 'traditional': 'Tally worksheets. Pre-made data sets to organize.'},
+        "connections": {'reading': 'Reading chart titles and labels', 'science': 'Recording observation data in journals', 'history': 'Census: counting populations through history'},
     },
     "mf-23": {
         "enriched": True,
@@ -2595,6 +2601,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["drawing paper", "word problem cards"],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Read problems aloud. Picture representations. Focus on math, not reading.', 'adhd': 'Act out with real objects. Child is the character. Personal and physical.', 'gifted': 'Two-step problems. Extra information distractors. Write own problems.', 'visual_learner': 'Draw every problem. Bar model diagrams.', 'kinesthetic_learner': 'Act out with objects before writing.', 'auditory_learner': 'Read aloud. Retell in own words. State question before solving.'},
+        "philosophy_specific": {'classical': 'Applied logic. Identify operation before computing.', 'charlotte_mason': "Real stories, real numbers from the child's own life.", 'montessori': 'Story problems with golden bead material.', 'traditional': 'Graded worksheets. Key word strategy.'},
+        "connections": {'reading': 'Comprehension required for word problems', 'science': 'Science problems: measuring, counting, comparing', 'history': 'Historical problems: armies, populations, distances'},
     },
     "mf-24": {
         "enriched": True,
@@ -2708,6 +2717,9 @@ MATH_FOUNDATIONAL_CONTENT = {
             "recommended": ["word problem cards", "drawing paper"],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Read aloud. Three subtraction types look different. Visual models for each.', 'adhd': 'Physical acting out: remove objects, count remaining.', 'gifted': 'Mixed operations (add or subtract?). Multi-step. Missing part.', 'visual_learner': 'Bar models for each type. Circle-and-cross-out for take-away.', 'kinesthetic_learner': 'Act out all three: take away, comparison, missing part.', 'auditory_learner': "Categorize: 'Take-away, comparison, or missing-part story?'"},
+        "philosophy_specific": {'classical': 'Classify types explicitly. Identify type before solving.', 'charlotte_mason': 'Real stories from daily life. Concrete and meaningful.', 'montessori': 'Subtraction stories with bead material.', 'traditional': 'Problem-type worksheets. Key word identification.'},
+        "connections": {'reading': 'Comparison language: more, fewer, less', 'science': 'Differences in experimental data', 'history': 'Losses in events: how many remained'},
     },
     "mf-25": {
         "enriched": True,
@@ -2809,6 +2821,9 @@ MATH_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {"required": ["three dice"], "recommended": ["number cards"]},
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {'dyslexia': 'Write vertically. Color to group the pair added first.', 'adhd': 'Three-dice games: roll, find ten-pair, add third. Quick rounds.', 'gifted': 'Four numbers. Three two-digit numbers. Multiple ten opportunities.', 'visual_learner': 'Circle make-ten pair in color. Three-part bond diagrams.', 'kinesthetic_learner': 'Three object groups. Combine two, add third.', 'auditory_learner': "Verbalize: '7 and 3 make ten. Ten plus 5 is fifteen.'"},
+        "philosophy_specific": {'classical': 'Associative property named. Look for tens systematically.', 'charlotte_mason': 'Real three-group addition: apples from three trees.', 'montessori': 'Three bead bar groups on addition strip board.', 'traditional': 'Three-addend worksheets. Strategy identification.'},
+        "connections": {'reading': 'Adding three things in a story', 'science': 'Combining three experimental trials', 'history': 'Adding populations of three cities'},
     },
     "mf-26": {
         "enriched": True,
