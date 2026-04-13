@@ -84,55 +84,35 @@ SAFE_USING_NULLABLE = (
 
 
 def upgrade() -> None:
-    conn = op.get_bind()
-
     # 1. Ensure app role is not a superuser (superusers bypass RLS)
-    conn.execute(op.inline_literal("ALTER ROLE methean NOSUPERUSER"))
+    op.execute("ALTER ROLE methean NOSUPERUSER")
 
     # 2. Recreate policies with safe current_setting (missing_ok = true)
     for table in HOUSEHOLD_TABLES:
         policy = f"{table}_household_isolation"
-        conn.execute(op.inline_literal(f"DROP POLICY IF EXISTS {policy} ON {table}"))
-        conn.execute(op.inline_literal(
-            f"ALTER TABLE {table} ENABLE ROW LEVEL SECURITY"
-        ))
-        conn.execute(op.inline_literal(
-            f"ALTER TABLE {table} FORCE ROW LEVEL SECURITY"
-        ))
-        conn.execute(op.inline_literal(
-            f"CREATE POLICY {policy} ON {table} {SAFE_USING}"
-        ))
+        op.execute(f"DROP POLICY IF EXISTS {policy} ON {table}")
+        op.execute(f"ALTER TABLE {table} ENABLE ROW LEVEL SECURITY")
+        op.execute(f"ALTER TABLE {table} FORCE ROW LEVEL SECURITY")
+        op.execute(f"CREATE POLICY {policy} ON {table} {SAFE_USING}")
 
     # 3. Audit logs — nullable household_id
-    conn.execute(op.inline_literal(
+    op.execute(
         f"DROP POLICY IF EXISTS {NULLABLE_HID_TABLE}_household_isolation ON {NULLABLE_HID_TABLE}"
-    ))
-    conn.execute(op.inline_literal(
-        f"ALTER TABLE {NULLABLE_HID_TABLE} ENABLE ROW LEVEL SECURITY"
-    ))
-    conn.execute(op.inline_literal(
-        f"ALTER TABLE {NULLABLE_HID_TABLE} FORCE ROW LEVEL SECURITY"
-    ))
-    conn.execute(op.inline_literal(
+    )
+    op.execute(f"ALTER TABLE {NULLABLE_HID_TABLE} ENABLE ROW LEVEL SECURITY")
+    op.execute(f"ALTER TABLE {NULLABLE_HID_TABLE} FORCE ROW LEVEL SECURITY")
+    op.execute(
         f"CREATE POLICY {NULLABLE_HID_TABLE}_household_isolation "
         f"ON {NULLABLE_HID_TABLE} {SAFE_USING_NULLABLE}"
-    ))
+    )
 
     # 4. Grant permissions so non-superuser role can still operate
-    conn.execute(op.inline_literal(
-        "GRANT ALL ON ALL TABLES IN SCHEMA public TO methean"
-    ))
-    conn.execute(op.inline_literal(
-        "GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO methean"
-    ))
-    conn.execute(op.inline_literal(
-        "GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO methean"
-    ))
+    op.execute("GRANT ALL ON ALL TABLES IN SCHEMA public TO methean")
+    op.execute("GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO methean")
+    op.execute("GRANT USAGE ON ALL SEQUENCES IN SCHEMA public TO methean")
 
 
 def downgrade() -> None:
-    conn = op.get_bind()
-
     # Revert to old policies without missing_ok
     old_using = (
         "USING (household_id = current_setting('app.current_household_id')::uuid)"
@@ -144,15 +124,13 @@ def downgrade() -> None:
 
     for table in HOUSEHOLD_TABLES:
         policy = f"{table}_household_isolation"
-        conn.execute(op.inline_literal(f"DROP POLICY IF EXISTS {policy} ON {table}"))
-        conn.execute(op.inline_literal(
-            f"CREATE POLICY {policy} ON {table} {old_using}"
-        ))
+        op.execute(f"DROP POLICY IF EXISTS {policy} ON {table}")
+        op.execute(f"CREATE POLICY {policy} ON {table} {old_using}")
 
-    conn.execute(op.inline_literal(
+    op.execute(
         f"DROP POLICY IF EXISTS {NULLABLE_HID_TABLE}_household_isolation ON {NULLABLE_HID_TABLE}"
-    ))
-    conn.execute(op.inline_literal(
+    )
+    op.execute(
         f"CREATE POLICY {NULLABLE_HID_TABLE}_household_isolation "
         f"ON {NULLABLE_HID_TABLE} {old_using_nullable}"
-    ))
+    )
