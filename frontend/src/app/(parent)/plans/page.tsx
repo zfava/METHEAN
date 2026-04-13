@@ -12,6 +12,7 @@ import Button from "@/components/ui/Button";
 import EmptyState from "@/components/ui/EmptyState";
 import { cn } from "@/lib/cn";
 import VocationalActivityDetail from "@/components/VocationalActivityDetail";
+import { useMobile } from "@/lib/useMobile";
 
 export default function PlansPage() {
   useEffect(() => { document.title = "Plans | METHEAN"; }, []);
@@ -106,6 +107,13 @@ export default function PlansPage() {
     await loadPlanDetail(selected.id);
   }
 
+  const isMobile = useMobile();
+  const [expandedDay, setExpandedDay] = useState<string | null>(null);
+  const todayDow = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][new Date().getDay()] || "Mon";
+
+  // Auto-expand current day on mobile
+  useEffect(() => { if (isMobile) setExpandedDay(todayDow); }, [isMobile, todayDow]);
+
   if (!selectedChild) return <div className="text-sm text-(--color-text-secondary)">Select a child from the sidebar.</div>;
 
   const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
@@ -183,33 +191,85 @@ export default function PlansPage() {
                 </div>
               </Card>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-                {days.map((day) => {
-                  const dayActivities = activitiesByDay(selected.activities)[day] || [];
-                  return (
-                    <Card key={day} padding="p-0">
-                      <div className="px-3 py-2 border-b border-(--color-border) text-xs font-semibold text-(--color-text-secondary)">{day}</div>
-                      <div className="p-2 space-y-2 min-h-32">
-                        {dayActivities.map((a) => (
-                          <div key={a.id} className="p-2.5 rounded-[10px] border border-(--color-border) bg-(--color-page)">
-                            <div className="text-xs font-medium text-(--color-text)">{a.title}</div>
-                            <div className="flex items-center gap-2 mt-1">
-                              <StatusBadge status={a.status} />
-                              {a.estimated_minutes && <span className="text-[10px] text-(--color-text-secondary)">{a.estimated_minutes}m</span>}
-                            </div>
-                            {a.status === "scheduled" && (
-                              <div className="flex gap-1 mt-2">
-                                <button onClick={() => handleApprove(a.id)} className="px-2 py-0.5 text-[10px] font-medium bg-(--color-success-light) text-(--color-success) rounded-[6px] hover:opacity-80">Approve</button>
-                                <button onClick={() => handleReject(a.id)} className="px-2 py-0.5 text-[10px] font-medium bg-(--color-danger-light) text-(--color-danger) rounded-[6px] hover:opacity-80">Reject</button>
-                              </div>
-                            )}
+              {isMobile ? (
+                /* Mobile: day-by-day accordion */
+                <div className="space-y-2">
+                  {days.map((day) => {
+                    const dayActivities = activitiesByDay(selected.activities)[day] || [];
+                    const totalMin = dayActivities.reduce((s, a) => s + (a.estimated_minutes || 0), 0);
+                    const isOpen = expandedDay === day;
+                    return (
+                      <Card key={day} padding="p-0">
+                        <button
+                          onClick={() => setExpandedDay(isOpen ? null : day)}
+                          className="w-full flex items-center justify-between px-4 py-3"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className={cn("text-sm font-semibold", day === todayDow ? "text-(--color-accent)" : "text-(--color-text)")}>{day}</span>
+                            {day === todayDow && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-(--color-accent-light) text-(--color-accent) font-medium">Today</span>}
                           </div>
-                        ))}
-                      </div>
-                    </Card>
-                  );
-                })}
-              </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-(--color-text-tertiary)">{dayActivities.length} activities</span>
+                            {totalMin > 0 && <span className="text-xs text-(--color-text-tertiary)">{totalMin}m</span>}
+                            <svg className={cn("w-4 h-4 text-(--color-text-tertiary) transition-transform", isOpen && "rotate-180")} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                          </div>
+                        </button>
+                        {isOpen && (
+                          <div className="px-3 pb-3 space-y-2">
+                            {dayActivities.length === 0 ? (
+                              <div className="text-center py-4 text-xs text-(--color-text-tertiary)">No activities</div>
+                            ) : dayActivities.map((a) => (
+                              <div key={a.id} className="flex items-center gap-3 p-3 rounded-[10px] border border-(--color-border) bg-(--color-page)">
+                                <span className={cn("w-2 h-2 rounded-full shrink-0",
+                                  a.status === "completed" ? "bg-(--color-success)" : a.status === "in_progress" ? "bg-(--color-accent)" : "bg-(--color-border-strong)"
+                                )} />
+                                <div className="flex-1 min-w-0">
+                                  <div className="text-sm font-medium text-(--color-text) truncate">{a.title}</div>
+                                  <div className="flex items-center gap-2 mt-0.5">
+                                    <StatusBadge status={a.status} />
+                                  </div>
+                                </div>
+                                {a.estimated_minutes && <span className="text-xs text-(--color-text-tertiary) shrink-0">{a.estimated_minutes}m</span>}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </Card>
+                    );
+                  })}
+                </div>
+              ) : (
+                /* Desktop: 5-column grid */
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                  {days.map((day) => {
+                    const dayActivities = activitiesByDay(selected.activities)[day] || [];
+                    return (
+                      <Card key={day} padding="p-0">
+                        <div className="px-3 py-2 border-b border-(--color-border) text-xs font-semibold text-(--color-text-secondary)">{day}</div>
+                        <div className="p-2 space-y-2 min-h-32">
+                          {dayActivities.map((a) => (
+                            <div key={a.id} className="p-2.5 rounded-[10px] border border-(--color-border) bg-(--color-page)">
+                              <div className="text-xs font-medium text-(--color-text)">{a.title}</div>
+                              <div className="flex items-center gap-2 mt-1">
+                                <StatusBadge status={a.status} />
+                                {a.estimated_minutes && <span className="text-[10px] text-(--color-text-secondary)">{a.estimated_minutes}m</span>}
+                              </div>
+                              {a.status === "scheduled" && (
+                                <div className="flex gap-1 mt-2">
+                                  <button onClick={() => handleApprove(a.id)} className="px-2 py-0.5 text-[10px] font-medium bg-(--color-success-light) text-(--color-success) rounded-[6px] hover:opacity-80">Approve</button>
+                                  <button onClick={() => handleReject(a.id)} className="px-2 py-0.5 text-[10px] font-medium bg-(--color-danger-light) text-(--color-danger) rounded-[6px] hover:opacity-80">Reject</button>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </Card>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           ) : (
             <EmptyState

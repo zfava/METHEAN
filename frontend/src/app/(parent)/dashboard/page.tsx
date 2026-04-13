@@ -16,6 +16,8 @@ import { useChild } from "@/lib/ChildContext";
 import { cn } from "@/lib/cn";
 import EmptyState from "@/components/ui/EmptyState";
 import { useStagger } from "@/lib/useStagger";
+import { useMobile } from "@/lib/useMobile";
+import SwipeAction from "@/components/SwipeAction";
 
 interface TodayActivity { id: string; title: string; activity_type: string; status: string; estimated_minutes: number | null; }
 interface AlertItem { title: string; message: string; severity: string; }
@@ -200,6 +202,7 @@ export default function DashboardPage() {
     }
   }
 
+  const isMobile = useMobile();
   const cardVisibility = useStagger(children.length, 60);
 
   if (loading || childLoading) return (
@@ -257,37 +260,82 @@ export default function DashboardPage() {
       {children.length === 0 && !childLoading && (
         <EmptyState icon="empty" title="Welcome to METHEAN" description="Add your first child from the Family page to get started." action={<a href="/family" className="text-sm text-(--color-accent) hover:underline">Go to Family</a>} />
       )}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
-        {children.map((c, idx) => {
-          const s = summaries[c.id];
-          const pct = s && s.total > 0 ? Math.round((s.mastered / s.total) * 100) : 0;
-          const isSelected = selectedChild?.id === c.id;
-          const circ = 2 * Math.PI * 20;
-          return (
-            <div key={c.id} className={cardVisibility[idx] ? "animate-fade-up" : "opacity-0"}>
-            <Card onClick={() => setSelectedChild(c)} selected={isSelected} padding="p-4">
-              <div className="flex items-center gap-3">
-                <div className="relative w-12 h-12 shrink-0">
-                  <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
-                    <circle cx="24" cy="24" r="20" fill="none" stroke="var(--color-border)" strokeWidth="3.5" />
-                    <circle cx="24" cy="24" r="20" fill="none" stroke="var(--color-success)" strokeWidth="3.5"
-                      strokeDasharray={`${(pct / 100) * circ} ${circ}`} strokeLinecap="round" />
-                  </svg>
-                  <div className="absolute inset-0 flex items-center justify-center text-xs font-medium text-(--color-text)">{pct}%</div>
+      {isMobile ? (
+        /* Mobile: horizontal snap-scroll carousel */
+        <div className="mb-6">
+          <div className="snap-carousel gap-3 px-0">
+            {children.map((c, idx) => {
+              const s = summaries[c.id];
+              const pct = s && s.total > 0 ? Math.round((s.mastered / s.total) * 100) : 0;
+              const isSelected = selectedChild?.id === c.id;
+              const circ = 2 * Math.PI * 20;
+              return (
+                <div key={c.id} style={{ width: "calc(100vw - 32px)", minWidth: "calc(100vw - 32px)" }}>
+                  <Card onClick={() => setSelectedChild(c)} selected={isSelected} padding="p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="relative w-12 h-12 shrink-0">
+                        <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
+                          <circle cx="24" cy="24" r="20" fill="none" stroke="var(--color-border)" strokeWidth="3.5" />
+                          <circle cx="24" cy="24" r="20" fill="none" stroke="var(--color-success)" strokeWidth="3.5"
+                            strokeDasharray={`${(pct / 100) * circ} ${circ}`} strokeLinecap="round" />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center text-xs font-medium text-(--color-text)">{pct}%</div>
+                      </div>
+                      <div className="flex-1">
+                        <div className="text-sm font-medium text-(--color-text)">{c.first_name}</div>
+                        <div className="text-xs text-(--color-text-secondary)">{c.grade_level || ""}</div>
+                        <div className="text-[13px] text-(--color-text-tertiary) mt-0.5">
+                          {s ? (s.todayCount > 0 ? `${s.todayCount} activities today` : "No activities today") : "..."}
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
                 </div>
-                <div>
-                  <div className="text-sm font-medium text-(--color-text)">{c.first_name}</div>
-                  <div className="text-xs text-(--color-text-secondary)">{c.grade_level || ""}</div>
-                  <div className="text-[11px] text-(--color-text-tertiary) mt-0.5">
-                    {s ? (s.todayCount > 0 ? `${s.todayCount} activities today` : "No activities today") : "..."}
+              );
+            })}
+          </div>
+          {children.length > 1 && (
+            <div className="flex justify-center gap-1.5 mt-2">
+              {children.map((c) => (
+                <span key={c.id} className={cn("w-1.5 h-1.5 rounded-full transition-colors", selectedChild?.id === c.id ? "bg-(--color-accent)" : "bg-(--color-border-strong)")} />
+              ))}
+            </div>
+          )}
+        </div>
+      ) : (
+        /* Desktop: grid */
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-6">
+          {children.map((c, idx) => {
+            const s = summaries[c.id];
+            const pct = s && s.total > 0 ? Math.round((s.mastered / s.total) * 100) : 0;
+            const isSelected = selectedChild?.id === c.id;
+            const circ = 2 * Math.PI * 20;
+            return (
+              <div key={c.id} className={cardVisibility[idx] ? "animate-fade-up" : "opacity-0"}>
+              <Card onClick={() => setSelectedChild(c)} selected={isSelected} padding="p-4">
+                <div className="flex items-center gap-3">
+                  <div className="relative w-12 h-12 shrink-0">
+                    <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
+                      <circle cx="24" cy="24" r="20" fill="none" stroke="var(--color-border)" strokeWidth="3.5" />
+                      <circle cx="24" cy="24" r="20" fill="none" stroke="var(--color-success)" strokeWidth="3.5"
+                        strokeDasharray={`${(pct / 100) * circ} ${circ}`} strokeLinecap="round" />
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center text-xs font-medium text-(--color-text)">{pct}%</div>
+                  </div>
+                  <div>
+                    <div className="text-sm font-medium text-(--color-text)">{c.first_name}</div>
+                    <div className="text-xs text-(--color-text-secondary)">{c.grade_level || ""}</div>
+                    <div className="text-[11px] text-(--color-text-tertiary) mt-0.5">
+                      {s ? (s.todayCount > 0 ? `${s.todayCount} activities today` : "No activities today") : "..."}
+                    </div>
                   </div>
                 </div>
+              </Card>
               </div>
-            </Card>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
 
       {selectedChild && (
         <>

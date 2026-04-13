@@ -13,6 +13,8 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import EvaluationChain from "@/components/EvaluationChain";
 import { cn } from "@/lib/cn";
 import { shortDate } from "@/lib/format";
+import { useMobile } from "@/lib/useMobile";
+import SwipeAction from "@/components/SwipeAction";
 
 interface QueueItem {
   activity_id: string;
@@ -74,6 +76,8 @@ export default function QueuePage() {
   const [modifyFields, setModifyFields] = useState<{ difficulty?: number; duration?: number; notes?: string }>({});
   const [submitting, setSubmitting] = useState(false);
   const [dismissing, setDismissing] = useState<Set<string>>(new Set());
+  const [expandedItem, setExpandedItem] = useState<string | null>(null);
+  const isMobile = useMobile();
 
   useEffect(() => { loadQueue(); }, []);
 
@@ -230,18 +234,29 @@ export default function QueuePage() {
               const isConstitutional = hasConstitutionalViolation(item);
               const evals = item.governance_evaluation?.evaluations || [];
               const blockingRules = item.governance_evaluation?.blocking_rules || [];
+              const isExpanded = expandedItem === item.activity_id;
 
-              return (
-                <div
-                  key={item.activity_id}
-                  className="transition-all duration-300 overflow-hidden"
-                  style={{
-                    opacity: isDismissing ? 0 : 1,
-                    maxHeight: isDismissing ? 0 : 1200,
-                    marginBottom: isDismissing ? 0 : undefined,
-                    transform: isDismissing ? "translateX(-20px)" : "translateX(0)",
-                  }}
-                >
+              async function swipeApprove() {
+                if (!item.plan_id) return;
+                try {
+                  await governance.approve(item.plan_id, item.activity_id);
+                  setDismissing((prev) => new Set(prev).add(item.activity_id));
+                  toast("Activity approved", "success");
+                  setTimeout(() => {
+                    setItems((prev) => prev.filter((i) => i.activity_id !== item.activity_id));
+                    setDismissing((prev) => { const n = new Set(prev); n.delete(item.activity_id); return n; });
+                    setTotal((t) => Math.max(0, t - 1));
+                  }, 300);
+                } catch (err: any) { toast(err?.detail || "Approve failed", "error"); }
+              }
+
+              async function swipeReject() {
+                startAction(item.activity_id, "reject");
+                setExpandedItem(item.activity_id);
+              }
+
+              const cardContent = (
+                <div onClick={isMobile && !isActive ? () => setExpandedItem(isExpanded ? null : item.activity_id) : undefined}>
                   <Card padding="p-0" borderLeft={isConstitutional ? "border-l-(--color-constitutional)" : undefined}>
                     {/* ── Top row ── */}
                     <div className="px-5 pt-4 pb-0">
@@ -433,6 +448,32 @@ export default function QueuePage() {
                       )}
                     </div>
                   </Card>
+                </div>
+              );
+
+              return (
+                <div
+                  key={item.activity_id}
+                  className="transition-all duration-300 overflow-hidden"
+                  style={{
+                    opacity: isDismissing ? 0 : 1,
+                    maxHeight: isDismissing ? 0 : 1200,
+                    marginBottom: isDismissing ? 0 : undefined,
+                    transform: isDismissing ? "translateX(-20px)" : "translateX(0)",
+                  }}
+                >
+                  {isMobile ? (
+                    <SwipeAction
+                      onSwipeRight={swipeApprove}
+                      onSwipeLeft={swipeReject}
+                      leftLabel="Approve"
+                      rightLabel="Reject"
+                      leftColor="var(--color-success)"
+                      rightColor="var(--color-danger)"
+                    >
+                      {cardContent}
+                    </SwipeAction>
+                  ) : cardContent}
                 </div>
               );
             })}
