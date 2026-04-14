@@ -5,6 +5,7 @@ import { useChild } from "@/lib/ChildContext";
 import { notifications as notificationsApi } from "@/lib/api";
 import { MetheanMark } from "@/components/Brand";
 import BottomSheet from "@/components/BottomSheet";
+import { haptic } from "@/lib/native";
 
 export default function MobileHeader() {
   const { children, selectedChild, setSelectedChild, loading } = useChild();
@@ -38,18 +39,23 @@ export default function MobileHeader() {
           <MetheanMark size={24} color="#C6A24E" />
 
           {/* Center: child selector pill */}
-          {!loading && children.length > 0 && selectedChild && (
-            <button
-              onClick={() => setChildSheetOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-(--color-page) border border-(--color-border)"
-            >
-              <span className="text-sm font-medium text-(--color-text) truncate max-w-[120px]">
-                {selectedChild.first_name}
-              </span>
-              <svg className="w-3 h-3 text-(--color-text-tertiary)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-              </svg>
-            </button>
+          {!loading && selectedChild && (
+            children.length > 1 ? (
+              <button
+                onClick={() => setChildSheetOpen(true)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-(--color-page) border border-(--color-border) press-scale"
+                style={{ minHeight: 36 }}
+              >
+                <span className="text-sm font-medium text-(--color-text) truncate max-w-[120px]">
+                  {selectedChild.first_name}
+                </span>
+                <svg className="w-3.5 h-3.5 text-(--color-text-tertiary)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+              </button>
+            ) : (
+              <span className="text-sm font-medium text-(--color-text)">{selectedChild.first_name}</span>
+            )
           )}
 
           {/* Right: notification bell */}
@@ -65,38 +71,36 @@ export default function MobileHeader() {
       </header>
 
       {/* Child selector sheet */}
-      <BottomSheet open={childSheetOpen} onClose={() => setChildSheetOpen(false)}>
-        <div className="px-4 pb-6">
+      <BottomSheet open={childSheetOpen} onClose={() => setChildSheetOpen(false)} label="Select child">
+        <div className="px-4 pt-2 pb-4">
           <h3 className="text-base font-semibold text-(--color-text) mb-3">Switch Child</h3>
-          <div className="space-y-2">
-            {children.map((child) => (
-              <button
-                key={child.id}
-                onClick={() => { setSelectedChild(child); setChildSheetOpen(false); }}
-                className="w-full flex items-center gap-3 p-3 rounded-[12px] text-left transition-colors"
-                style={{
-                  background: child.id === selectedChild?.id ? "var(--color-accent-light)" : "transparent",
-                  border: child.id === selectedChild?.id ? "1px solid var(--color-accent)" : "1px solid var(--color-border)",
-                }}
-              >
-                <div className="w-10 h-10 rounded-full bg-(--color-accent) text-white text-sm font-bold flex items-center justify-center shrink-0">
-                  {child.first_name.charAt(0)}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-medium text-(--color-text)">
-                    {child.first_name} {child.last_name || ""}
+          <div className="flex flex-col gap-2">
+            {children.map((child) => {
+              const isSelected = child.id === selectedChild?.id;
+              return (
+                <button
+                  key={child.id}
+                  onClick={() => { setSelectedChild(child); setChildSheetOpen(false); haptic("light"); }}
+                  className={`flex items-center gap-3 p-3 rounded-xl press-scale transition-colors ${
+                    isSelected ? "bg-(--color-accent-light) border-l-3 border-(--color-brand-gold)" : "bg-(--color-surface)"
+                  }`}
+                  style={{ minHeight: 56 }}
+                >
+                  <div className="w-10 h-10 rounded-full bg-(--color-border) flex items-center justify-center text-lg shrink-0">
+                    {child.first_name.charAt(0)}
                   </div>
-                  {child.grade_level && (
-                    <div className="text-xs text-(--color-text-secondary)">{child.grade_level}</div>
+                  <div className="flex-1 min-w-0 text-left">
+                    <div className="text-sm font-semibold text-(--color-text)">{child.first_name} {child.last_name || ""}</div>
+                    <div className="text-xs text-(--color-text-secondary)">{child.grade_level || "No grade set"}</div>
+                  </div>
+                  {isSelected && (
+                    <svg className="w-5 h-5 text-(--color-brand-gold) shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
                   )}
-                </div>
-                {child.id === selectedChild?.id && (
-                  <svg className="w-5 h-5 text-(--color-accent) shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                  </svg>
-                )}
-              </button>
-            ))}
+                </button>
+              );
+            })}
           </div>
         </div>
       </BottomSheet>
