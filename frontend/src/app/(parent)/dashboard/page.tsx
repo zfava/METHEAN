@@ -97,6 +97,7 @@ export default function DashboardPage() {
   const [govHealth, setGovHealth] = useState<{ rules: number; constitutional: number; transparency: string; pending: number }>({ rules: 0, constitutional: 0, transparency: "full", pending: 0 });
   const [aiUsagePct, setAiUsagePct] = useState<number | null>(null);
   const [error, setError] = useState("");
+  const [queueItems, setQueueItems] = useState<any[]>([]);
 
   useEffect(() => { init(); }, []);
   useEffect(() => { if (selectedChild) loadChildDetail(); }, [selectedChild]);
@@ -105,10 +106,11 @@ export default function DashboardPage() {
     try { const me = await auth.me(); setUser(me); } catch { window.location.href = "/auth"; return; }
     try {
       const [qData, rResp, eResp] = await Promise.all([
-        governance.queue(1),
+        governance.queue(3),
         governance.rules(), governance.events(1),
       ]);
       setPendingReviews(qData.total || 0);
+      setQueueItems((qData.items || []).slice(0, 3));
       const rules = (rResp as any).items || rResp;
       const rulesList = Array.isArray(rules) ? rules : [];
       setRulesCount(rulesList.length);
@@ -206,6 +208,24 @@ export default function DashboardPage() {
   async function reload() {
     await init();
     if (selectedChild) await loadChildDetail();
+  }
+
+  async function handleQueueApprove(item: any) {
+    if (!item.plan_id) return;
+    try {
+      await governance.approve(item.plan_id, item.activity_id);
+      setQueueItems((prev) => prev.filter((i) => i.activity_id !== item.activity_id));
+      setPendingReviews((p) => Math.max(0, p - 1));
+    } catch {}
+  }
+
+  async function handleQueueReject(item: any) {
+    if (!item.plan_id) return;
+    try {
+      await governance.reject(item.plan_id, item.activity_id, "Rejected from dashboard");
+      setQueueItems((prev) => prev.filter((i) => i.activity_id !== item.activity_id));
+      setPendingReviews((p) => Math.max(0, p - 1));
+    } catch {}
   }
 
   const isMobile = useMobile();
@@ -346,52 +366,133 @@ export default function DashboardPage() {
       {selectedChild && (
         <>
           {/* ── Activities + Alerts ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-            <div className="lg:col-span-2">
-              <Card padding="p-0">
-                <div className="px-5 py-3 border-b border-(--color-border)">
-                  <SectionHeader title={`${selectedChild.first_name}'s Activities Today`} />
+          {isMobile ? (
+            <>
+              {/* Mobile: sticky header + full-width activity cards */}
+              <div className="sticky z-10 bg-(--color-page) py-2 -mx-4 px-4" style={{ top: "calc(48px + var(--safe-top))" }}>
+                <SectionHeader title={`${selectedChild.first_name}'s Activities`} />
+              </div>
+              {todayActivities.length === 0 ? (
+                <div className="py-8 text-center text-sm text-(--color-text-tertiary)">No activities scheduled today.</div>
+              ) : (
+                <div className="space-y-2 mb-6">
+                  {[...todayActivities].sort((a, b) => (a.status === "completed" ? 1 : 0) - (b.status === "completed" ? 1 : 0)).map((a) => {
+                    const typeIcons: Record<string, string> = { lesson: "\uD83D\uDCD6", practice: "\u270F\uFE0F", review: "\uD83D\uDD04", assessment: "\uD83D\uDCCB", project: "\uD83D\uDD28", field_trip: "\uD83E\uDDED" };
+                    const statusColor = a.status === "completed" ? "var(--color-success)" : a.status === "in_progress" ? "var(--color-warning)" : "var(--color-border-strong)";
+                    return (
+                      <div key={a.id} className={cn("flex items-center gap-3 p-3 rounded-xl bg-(--color-surface) border border-(--color-border) shadow-sm press-scale", a.status === "completed" && "opacity-50")} style={{ minHeight: 64 }}>
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0" style={{ background: "var(--color-accent-light)" }}>
+                          {typeIcons[a.activity_type] || "\uD83D\uDCC4"}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="font-semibold text-[15px] text-(--color-text) truncate">{a.title}</div>
+                          <div className="text-[13px] text-(--color-text-secondary)">{a.activity_type}{a.estimated_minutes ? ` · ${a.estimated_minutes} min` : ""}</div>
+                        </div>
+                        <div className="w-3 h-3 rounded-full shrink-0" style={{ background: statusColor }} />
+                      </div>
+                    );
+                  })}
                 </div>
-                {todayActivities.length === 0 ? (
-                  <div className="px-5 py-8 text-center text-sm text-(--color-text-tertiary)">No activities scheduled for today. Generate a weekly plan or build a curriculum to get started.</div>
-                ) : todayActivities.map((a) => (
-                  <div key={a.id} className="flex items-center justify-between px-5 py-3 border-b border-(--color-border)/50 last:border-0">
-                    <div className="flex items-center gap-3">
-                      <span className={cn("w-1.5 h-1.5 rounded-full shrink-0",
-                        a.status === "completed" ? "bg-(--color-success)" : a.status === "in_progress" ? "bg-(--color-accent)" : "bg-(--color-border-strong)"
-                      )} />
-                      <span className="text-sm text-(--color-text)">{a.title}</span>
-                      <StatusBadge status={a.activity_type} />
-                    </div>
-                    {a.estimated_minutes && <span className="text-xs text-(--color-text-tertiary)">{a.estimated_minutes}m</span>}
+              )}
+
+              {/* Mobile: governance queue preview with SwipeAction */}
+              {queueItems.length > 0 && (
+                <>
+                  <div className="sticky z-10 bg-(--color-page) py-2 -mx-4 px-4" style={{ top: "calc(48px + var(--safe-top))" }}>
+                    <SectionHeader title="Approval Queue" actionHref="/governance/queue" action={`View all (${pendingReviews})`} />
                   </div>
-                ))}
+                  <div className="space-y-2 mb-6">
+                    {queueItems.map((item) => (
+                      <SwipeAction key={item.activity_id}
+                        onSwipeRight={() => handleQueueApprove(item)}
+                        onSwipeLeft={() => handleQueueReject(item)}
+                        leftLabel="Approve" rightLabel="Reject"
+                        leftColor="var(--color-success)" rightColor="var(--color-danger)">
+                        <div className="p-3 bg-(--color-surface) border border-(--color-border) rounded-xl">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[13px] font-bold text-(--color-text)">{item.child_name}</span>
+                            <StatusBadge status={item.activity_type} />
+                          </div>
+                          <div className="text-sm text-(--color-text)">{item.title}</div>
+                          {item.ai_rationale && <div className="text-xs text-(--color-text-tertiary) mt-1 line-clamp-1 italic">{item.ai_rationale}</div>}
+                        </div>
+                      </SwipeAction>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {/* Mobile: alerts */}
+              {alerts.length > 0 && (
+                <>
+                  <div className="sticky z-10 bg-(--color-page) py-2 -mx-4 px-4" style={{ top: "calc(48px + var(--safe-top))" }}>
+                    <SectionHeader title="Attention Needed" />
+                  </div>
+                  <div className="space-y-2 mb-6">
+                    {alerts.map((a, i) => (
+                      <div key={i} className="flex items-start gap-2 p-3 bg-(--color-surface) border border-(--color-border) rounded-xl">
+                        <span className={cn("mt-1 w-2 h-2 rounded-full shrink-0",
+                          a.severity === "action_required" ? "bg-(--color-danger)" : a.severity === "warning" ? "bg-(--color-warning)" : "bg-(--color-accent)"
+                        )} />
+                        <div>
+                          <div className="text-[13px] font-medium text-(--color-text)">{a.title}</div>
+                          <div className="text-xs text-(--color-text-tertiary) line-clamp-2">{a.message}</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+            </>
+          ) : (
+            /* Desktop: unchanged grid layout */
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+              <div className="lg:col-span-2">
+                <Card padding="p-0">
+                  <div className="px-5 py-3 border-b border-(--color-border)">
+                    <SectionHeader title={`${selectedChild.first_name}'s Activities Today`} />
+                  </div>
+                  {todayActivities.length === 0 ? (
+                    <div className="px-5 py-8 text-center text-sm text-(--color-text-tertiary)">No activities scheduled for today. Generate a weekly plan or build a curriculum to get started.</div>
+                  ) : todayActivities.map((a) => (
+                    <div key={a.id} className="flex items-center justify-between px-5 py-3 border-b border-(--color-border)/50 last:border-0">
+                      <div className="flex items-center gap-3">
+                        <span className={cn("w-1.5 h-1.5 rounded-full shrink-0",
+                          a.status === "completed" ? "bg-(--color-success)" : a.status === "in_progress" ? "bg-(--color-accent)" : "bg-(--color-border-strong)"
+                        )} />
+                        <span className="text-sm text-(--color-text)">{a.title}</span>
+                        <StatusBadge status={a.activity_type} />
+                      </div>
+                      {a.estimated_minutes && <span className="text-xs text-(--color-text-tertiary)">{a.estimated_minutes}m</span>}
+                    </div>
+                  ))}
+                </Card>
+              </div>
+              <Card padding="p-0">
+                <div className="px-4 py-3 border-b border-(--color-border)">
+                  <SectionHeader title="Attention Needed" />
+                </div>
+                <div className="p-4">
+                  {alerts.length === 0 ? (
+                    <div className="text-center py-4">
+                      <div className="text-(--color-success) text-lg mb-1">&#10003;</div>
+                      <div className="text-xs text-(--color-text-tertiary)">All on track</div>
+                    </div>
+                  ) : alerts.map((a, i) => (
+                    <div key={i} className="flex items-start gap-2 mb-3 last:mb-0">
+                      <span className={cn("mt-0.5 w-1.5 h-1.5 rounded-full shrink-0",
+                        a.severity === "action_required" ? "bg-(--color-danger)" : a.severity === "warning" ? "bg-(--color-warning)" : "bg-(--color-accent)"
+                      )} />
+                      <div>
+                        <div className="text-xs font-medium text-(--color-text)">{a.title}</div>
+                        <div className="text-[11px] text-(--color-text-tertiary) line-clamp-2">{a.message}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </Card>
             </div>
-            <Card padding="p-0">
-              <div className="px-4 py-3 border-b border-(--color-border)">
-                <SectionHeader title="Attention Needed" />
-              </div>
-              <div className="p-4">
-                {alerts.length === 0 ? (
-                  <div className="text-center py-4">
-                    <div className="text-(--color-success) text-lg mb-1">&#10003;</div>
-                    <div className="text-xs text-(--color-text-tertiary)">All on track</div>
-                  </div>
-                ) : alerts.map((a, i) => (
-                  <div key={i} className="flex items-start gap-2 mb-3 last:mb-0">
-                    <span className={cn("mt-0.5 w-1.5 h-1.5 rounded-full shrink-0",
-                      a.severity === "action_required" ? "bg-(--color-danger)" : a.severity === "warning" ? "bg-(--color-warning)" : "bg-(--color-accent)"
-                    )} />
-                    <div>
-                      <div className="text-xs font-medium text-(--color-text)">{a.title}</div>
-                      <div className="text-[11px] text-(--color-text-tertiary) line-clamp-2">{a.message}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          </div>
+          )}
 
           {/* ── Subject Mastery Rings ── */}
           {subjectMastery.length > 0 && (
