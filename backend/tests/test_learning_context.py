@@ -27,16 +27,23 @@ from app.services.learning_context import get_activity_learning_context
 
 
 class TestLearningContext:
-
     @pytest.mark.asyncio
     async def test_learn_returns_lesson_content(
-        self, db_session, household, child, user, subject, learning_map,
+        self,
+        db_session,
+        household,
+        child,
+        user,
+        subject,
+        learning_map,
     ):
         """Call learning context for an activity with enriched node, verify content returned."""
         # Create an enriched node
         node = LearningNode(
-            learning_map_id=learning_map.id, household_id=household.id,
-            node_type=NodeType.skill, title="Double-Digit Addition",
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Double-Digit Addition",
             content={
                 "learning_objectives": ["Add two-digit numbers", "Carry over tens"],
                 "teaching_guidance": {
@@ -61,29 +68,41 @@ class TestLearningContext:
 
         # Create plan/week/activity linked to node
         plan = Plan(
-            household_id=household.id, child_id=child.id,
-            created_by=user.id, name="Math", status=PlanStatus.active,
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Math",
+            status=PlanStatus.active,
         )
         db_session.add(plan)
         await db_session.flush()
         week = PlanWeek(
-            plan_id=plan.id, household_id=household.id,
-            week_number=1, start_date=date(2026, 9, 1), end_date=date(2026, 9, 5),
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
         )
         db_session.add(week)
         await db_session.flush()
         activity = Activity(
-            plan_week_id=week.id, household_id=household.id,
-            node_id=node.id, activity_type=ActivityType.lesson,
+            plan_week_id=week.id,
+            household_id=household.id,
+            node_id=node.id,
+            activity_type=ActivityType.lesson,
             title="Double-Digit Addition Lesson",
-            status=ActivityStatus.scheduled, governance_approved=True,
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
         )
         db_session.add(activity)
         await db_session.flush()
 
         # Get learning context
         ctx = await get_activity_learning_context(
-            db_session, activity.id, household.id, child.id,
+            db_session,
+            activity.id,
+            household.id,
+            child.id,
         )
 
         assert ctx["activity"]["title"] == "Double-Digit Addition Lesson"
@@ -105,40 +124,60 @@ class TestLearningContext:
 
     @pytest.mark.asyncio
     async def test_learn_with_unenriched_node(
-        self, db_session, household, child, user, subject, learning_map,
+        self,
+        db_session,
+        household,
+        child,
+        user,
+        subject,
+        learning_map,
     ):
         """Activity with unenriched node still returns basic structure."""
         node = LearningNode(
-            learning_map_id=learning_map.id, household_id=household.id,
-            node_type=NodeType.skill, title="Fractions",
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Fractions",
             content={},  # Not enriched
         )
         db_session.add(node)
         await db_session.flush()
 
         plan = Plan(
-            household_id=household.id, child_id=child.id,
-            created_by=user.id, name="Math", status=PlanStatus.active,
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Math",
+            status=PlanStatus.active,
         )
         db_session.add(plan)
         await db_session.flush()
         week = PlanWeek(
-            plan_id=plan.id, household_id=household.id,
-            week_number=1, start_date=date(2026, 9, 1), end_date=date(2026, 9, 5),
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
         )
         db_session.add(week)
         await db_session.flush()
         activity = Activity(
-            plan_week_id=week.id, household_id=household.id,
-            node_id=node.id, activity_type=ActivityType.practice,
+            plan_week_id=week.id,
+            household_id=household.id,
+            node_id=node.id,
+            activity_type=ActivityType.practice,
             title="Fractions Practice",
-            status=ActivityStatus.scheduled, governance_approved=True,
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
         )
         db_session.add(activity)
         await db_session.flush()
 
         ctx = await get_activity_learning_context(
-            db_session, activity.id, household.id, child.id,
+            db_session,
+            activity.id,
+            household.id,
+            child.id,
         )
 
         # Content comes from enrichment (mock AI) or fallback from node title
@@ -151,105 +190,162 @@ class TestLearningContext:
 
     @pytest.mark.asyncio
     async def test_learn_no_tutor_for_assessment(
-        self, db_session, household, child, user, subject, learning_map,
+        self,
+        db_session,
+        household,
+        child,
+        user,
+        subject,
+        learning_map,
     ):
         """Assessment activities should not have tutor available."""
         plan = Plan(
-            household_id=household.id, child_id=child.id,
-            created_by=user.id, name="Math", status=PlanStatus.active,
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Math",
+            status=PlanStatus.active,
         )
         db_session.add(plan)
         await db_session.flush()
         week = PlanWeek(
-            plan_id=plan.id, household_id=household.id,
-            week_number=1, start_date=date(2026, 9, 1), end_date=date(2026, 9, 5),
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
         )
         db_session.add(week)
         await db_session.flush()
         activity = Activity(
-            plan_week_id=week.id, household_id=household.id,
+            plan_week_id=week.id,
+            household_id=household.id,
             activity_type=ActivityType.assessment,
             title="Weekly Assessment",
-            status=ActivityStatus.scheduled, governance_approved=True,
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
         )
         db_session.add(activity)
         await db_session.flush()
 
         ctx = await get_activity_learning_context(
-            db_session, activity.id, household.id, child.id,
+            db_session,
+            activity.id,
+            household.id,
+            child.id,
         )
         assert ctx["tutor_available"] is False
 
     @pytest.mark.asyncio
     async def test_previous_attempts_returned(
-        self, db_session, household, child, user, subject, learning_map,
+        self,
+        db_session,
+        household,
+        child,
+        user,
+        subject,
+        learning_map,
     ):
         """Previous attempts for the same activity are returned."""
         plan = Plan(
-            household_id=household.id, child_id=child.id,
-            created_by=user.id, name="Math", status=PlanStatus.active,
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Math",
+            status=PlanStatus.active,
         )
         db_session.add(plan)
         await db_session.flush()
         week = PlanWeek(
-            plan_id=plan.id, household_id=household.id,
-            week_number=1, start_date=date(2026, 9, 1), end_date=date(2026, 9, 5),
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
         )
         db_session.add(week)
         await db_session.flush()
         activity = Activity(
-            plan_week_id=week.id, household_id=household.id,
-            activity_type=ActivityType.lesson, title="Test",
-            status=ActivityStatus.scheduled, governance_approved=True,
+            plan_week_id=week.id,
+            household_id=household.id,
+            activity_type=ActivityType.lesson,
+            title="Test",
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
         )
         db_session.add(activity)
         await db_session.flush()
 
         # Add a previous attempt
-        db_session.add(Attempt(
-            activity_id=activity.id, household_id=household.id,
-            child_id=child.id, status=AttemptStatus.completed,
-            completed_at=datetime.now(UTC), duration_minutes=20, score=0.8,
-        ))
+        db_session.add(
+            Attempt(
+                activity_id=activity.id,
+                household_id=household.id,
+                child_id=child.id,
+                status=AttemptStatus.completed,
+                completed_at=datetime.now(UTC),
+                duration_minutes=20,
+                score=0.8,
+            )
+        )
         await db_session.flush()
 
         ctx = await get_activity_learning_context(
-            db_session, activity.id, household.id, child.id,
+            db_session,
+            activity.id,
+            household.id,
+            child.id,
         )
         assert len(ctx["previous_attempts"]) == 1
         assert ctx["previous_attempts"][0]["duration_minutes"] == 20
 
 
 class TestAttemptFeedback:
-
     @pytest.mark.asyncio
     async def test_attempt_stores_responses_in_feedback(
-        self, db_session, household, child, user, subject, learning_map,
+        self,
+        db_session,
+        household,
+        child,
+        user,
+        subject,
+        learning_map,
     ):
         """Submit attempt with responses and self_reflection, verify stored in feedback."""
         plan = Plan(
-            household_id=household.id, child_id=child.id,
-            created_by=user.id, name="Math", status=PlanStatus.active,
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Math",
+            status=PlanStatus.active,
         )
         db_session.add(plan)
         await db_session.flush()
         week = PlanWeek(
-            plan_id=plan.id, household_id=household.id,
-            week_number=1, start_date=date(2026, 9, 1), end_date=date(2026, 9, 5),
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
         )
         db_session.add(week)
         await db_session.flush()
         activity = Activity(
-            plan_week_id=week.id, household_id=household.id,
-            activity_type=ActivityType.lesson, title="Test",
-            status=ActivityStatus.scheduled, governance_approved=True,
+            plan_week_id=week.id,
+            household_id=household.id,
+            activity_type=ActivityType.lesson,
+            title="Test",
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
         )
         db_session.add(activity)
         await db_session.flush()
 
         attempt = Attempt(
-            activity_id=activity.id, household_id=household.id,
-            child_id=child.id, status=AttemptStatus.started,
+            activity_id=activity.id,
+            household_id=household.id,
+            child_id=child.id,
+            status=AttemptStatus.started,
             feedback={
                 "responses": [
                     {"prompt": "What is 3+4?", "response": "7"},
@@ -262,9 +358,7 @@ class TestAttemptFeedback:
         await db_session.flush()
 
         # Verify feedback stored
-        result = await db_session.execute(
-            select(Attempt).where(Attempt.id == attempt.id)
-        )
+        result = await db_session.execute(select(Attempt).where(Attempt.id == attempt.id))
         saved = result.scalar_one()
         assert len(saved.feedback["responses"]) == 2
         assert saved.feedback["responses"][0]["prompt"] == "What is 3+4?"
@@ -273,26 +367,34 @@ class TestAttemptFeedback:
 
 
 class TestLearningContextAPI:
-
     @pytest.mark.asyncio
     async def test_learn_endpoint(self, auth_client, db_session, household, child, user, subject, learning_map):
         """Test the /activities/{id}/learn API endpoint."""
         plan = Plan(
-            household_id=household.id, child_id=child.id,
-            created_by=user.id, name="Math", status=PlanStatus.active,
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Math",
+            status=PlanStatus.active,
         )
         db_session.add(plan)
         await db_session.flush()
         week = PlanWeek(
-            plan_id=plan.id, household_id=household.id,
-            week_number=1, start_date=date(2026, 9, 1), end_date=date(2026, 9, 5),
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
         )
         db_session.add(week)
         await db_session.flush()
         activity = Activity(
-            plan_week_id=week.id, household_id=household.id,
-            activity_type=ActivityType.lesson, title="API Test Lesson",
-            status=ActivityStatus.scheduled, governance_approved=True,
+            plan_week_id=week.id,
+            household_id=household.id,
+            activity_type=ActivityType.lesson,
+            title="API Test Lesson",
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
         )
         db_session.add(activity)
         await db_session.flush()
@@ -308,26 +410,34 @@ class TestLearningContextAPI:
 
 
 class TestTutorConversationHistory:
-
     @pytest.mark.asyncio
     async def test_tutor_with_history(self, auth_client, db_session, household, child, user, subject, learning_map):
         """Send a tutor message with conversation history, verify it's accepted."""
         plan = Plan(
-            household_id=household.id, child_id=child.id,
-            created_by=user.id, name="Math", status=PlanStatus.active,
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Math",
+            status=PlanStatus.active,
         )
         db_session.add(plan)
         await db_session.flush()
         week = PlanWeek(
-            plan_id=plan.id, household_id=household.id,
-            week_number=1, start_date=date(2026, 9, 1), end_date=date(2026, 9, 5),
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
         )
         db_session.add(week)
         await db_session.flush()
         activity = Activity(
-            plan_week_id=week.id, household_id=household.id,
-            activity_type=ActivityType.lesson, title="Addition",
-            status=ActivityStatus.scheduled, governance_approved=True,
+            plan_week_id=week.id,
+            household_id=household.id,
+            activity_type=ActivityType.lesson,
+            title="Addition",
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
         )
         db_session.add(activity)
         await db_session.flush()
@@ -351,21 +461,30 @@ class TestTutorConversationHistory:
     async def test_tutor_without_history(self, auth_client, db_session, household, child, user, subject, learning_map):
         """Send a tutor message without history (backward compatible)."""
         plan = Plan(
-            household_id=household.id, child_id=child.id,
-            created_by=user.id, name="Math", status=PlanStatus.active,
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Math",
+            status=PlanStatus.active,
         )
         db_session.add(plan)
         await db_session.flush()
         week = PlanWeek(
-            plan_id=plan.id, household_id=household.id,
-            week_number=1, start_date=date(2026, 9, 1), end_date=date(2026, 9, 5),
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
         )
         db_session.add(week)
         await db_session.flush()
         activity = Activity(
-            plan_week_id=week.id, household_id=household.id,
-            activity_type=ActivityType.lesson, title="Addition",
-            status=ActivityStatus.scheduled, governance_approved=True,
+            plan_week_id=week.id,
+            household_id=household.id,
+            activity_type=ActivityType.lesson,
+            title="Addition",
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
         )
         db_session.add(activity)
         await db_session.flush()

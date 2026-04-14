@@ -21,6 +21,7 @@ class TestDataExport:
         import zipfile
         import io
         from app.services.data_export import export_family_data
+
         result = await export_family_data(db_session, export_household.id)
         assert isinstance(result, bytes)
 
@@ -28,6 +29,7 @@ class TestDataExport:
         import zipfile
         import io
         from app.services.data_export import export_family_data
+
         result = await export_family_data(db_session, export_household.id)
         # result is a ZIP; verify it contains the expected top-level files
         with zipfile.ZipFile(io.BytesIO(result)) as zf:

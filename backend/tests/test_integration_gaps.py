@@ -4,7 +4,6 @@ import pytest
 
 
 class TestVocationalTemplates:
-
     @pytest.mark.asyncio
     async def test_seven_templates_registered(self, auth_client):
         """All 7 templates (3 academic + 4 vocational) in template list."""

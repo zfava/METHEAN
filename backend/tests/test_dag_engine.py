@@ -45,20 +45,29 @@ async def dag_chain(db_session, dag_household, dag_map):
     """Create A -> B -> C chain."""
     nodes = []
     for title in ["A", "B", "C"]:
-        n = LearningNode(learning_map_id=dag_map.id, household_id=dag_household.id,
-                         node_type=NodeType.concept, title=title)
+        n = LearningNode(
+            learning_map_id=dag_map.id, household_id=dag_household.id, node_type=NodeType.concept, title=title
+        )
         db_session.add(n)
         await db_session.flush()
         nodes.append(n)
     # A -> B
-    e1 = LearningEdge(learning_map_id=dag_map.id, household_id=dag_household.id,
-                       from_node_id=nodes[0].id, to_node_id=nodes[1].id,
-                       relation=EdgeRelation.prerequisite)
+    e1 = LearningEdge(
+        learning_map_id=dag_map.id,
+        household_id=dag_household.id,
+        from_node_id=nodes[0].id,
+        to_node_id=nodes[1].id,
+        relation=EdgeRelation.prerequisite,
+    )
     db_session.add(e1)
     # B -> C
-    e2 = LearningEdge(learning_map_id=dag_map.id, household_id=dag_household.id,
-                       from_node_id=nodes[1].id, to_node_id=nodes[2].id,
-                       relation=EdgeRelation.prerequisite)
+    e2 = LearningEdge(
+        learning_map_id=dag_map.id,
+        household_id=dag_household.id,
+        from_node_id=nodes[1].id,
+        to_node_id=nodes[2].id,
+        relation=EdgeRelation.prerequisite,
+    )
     db_session.add(e2)
     await db_session.flush()
     # Build closure
@@ -104,8 +113,11 @@ class TestPrerequisites:
         await db_session.flush()
         # Master A and B
         for n in dag_chain[:2]:
-            db_session.add(ChildNodeState(child_id=child.id, household_id=dag_household.id,
-                                           node_id=n.id, mastery_level=MasteryLevel.mastered))
+            db_session.add(
+                ChildNodeState(
+                    child_id=child.id, household_id=dag_household.id, node_id=n.id, mastery_level=MasteryLevel.mastered
+                )
+            )
         await db_session.flush()
         met = await check_prerequisites_met(db_session, child.id, dag_household.id, dag_map.id, dag_chain[2].id)
         assert met is True

@@ -59,6 +59,7 @@ def test_access_token_contains_expiry():
 # CSRF Protection Tests
 # ══════════════════════════════════════════════════
 
+
 @pytest.mark.asyncio
 async def test_csrf_rejects_without_header(db_session):
     """POST to a protected endpoint without X-CSRF-Token should return 403."""
@@ -94,7 +95,8 @@ async def test_csrf_allows_with_valid_header(db_session):
     transport = ASGITransport(app=app)
     token = "valid-csrf-token"
     async with AsyncClient(
-        transport=transport, base_url="http://test",
+        transport=transport,
+        base_url="http://test",
         headers={"X-CSRF-Token": token},
     ) as ac:
         ac.cookies.set("csrf_token", token)
@@ -150,6 +152,7 @@ async def test_csrf_skips_auth_endpoints(db_session):
 # RLS Tenant Isolation Tests
 # ══════════════════════════════════════════════════
 
+
 @pytest.mark.asyncio
 async def test_rls_isolates_households(db_session):
     """Verify that RLS policies prevent cross-household data access.
@@ -172,9 +175,7 @@ async def test_rls_isolates_households(db_session):
     # RLS bypass: superusers bypass all RLS. This test needs a non-superuser
     # role to verify policies. In CI we're already non-super. Locally the dev
     # user is typically superuser and ALTER ROLE can't be safely run here.
-    is_super_result = await conn.execute(text(
-        "SELECT rolsuper FROM pg_roles WHERE rolname = current_user"
-    ))
+    is_super_result = await conn.execute(text("SELECT rolsuper FROM pg_roles WHERE rolname = current_user"))
     if is_super_result.scalar():
         pytest.skip("RLS test requires non-superuser role; run in CI or as non-super user")
 
@@ -195,13 +196,13 @@ async def test_rls_isolates_households(db_session):
     await conn.execute(text("ALTER TABLE subjects FORCE ROW LEVEL SECURITY"))
 
     # Create policy with safe missing_ok=true parameter
-    await conn.execute(text(
-        "DROP POLICY IF EXISTS subjects_household_isolation ON subjects"
-    ))
-    await conn.execute(text(
-        "CREATE POLICY subjects_household_isolation ON subjects "
-        "USING (household_id = current_setting('app.current_household_id', true)::uuid)"
-    ))
+    await conn.execute(text("DROP POLICY IF EXISTS subjects_household_isolation ON subjects"))
+    await conn.execute(
+        text(
+            "CREATE POLICY subjects_household_isolation ON subjects "
+            "USING (household_id = current_setting('app.current_household_id', true)::uuid)"
+        )
+    )
 
     # Set tenant to household A
     await set_tenant(db_session, household_a.id)
@@ -238,8 +239,6 @@ async def test_set_tenant_scopes_user_lookup(db_session):
     await db_session.connection()
     await set_tenant(db_session, hid)
 
-    result = await db_session.execute(
-        text("SELECT current_setting('app.current_household_id')")
-    )
+    result = await db_session.execute(text("SELECT current_setting('app.current_household_id')"))
     value = result.scalar()
     assert value == str(hid)

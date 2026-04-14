@@ -53,11 +53,16 @@ async def task_child(db_session: AsyncSession, task_household: Household) -> Chi
 @pytest.mark.asyncio
 @patch("app.services.notifications._is_quiet_hours", return_value=False)
 @patch("app.services.email.send_email", new_callable=AsyncMock, return_value=True)
-async def test_notification_sends_email_for_high_priority(mock_email, mock_quiet, db_session, task_household, task_user):
+async def test_notification_sends_email_for_high_priority(
+    mock_email, mock_quiet, db_session, task_household, task_user
+):
     """High-priority notifications trigger email delivery."""
     from app.services.notifications import send_notification
+
     await send_notification(
-        db_session, task_household.id, task_user.id,
+        db_session,
+        task_household.id,
+        task_user.id,
         event_type="node_mastered",
         title="Emma mastered Fractions",
         body="Celebration!",
@@ -76,8 +81,11 @@ async def test_notification_respects_preferences(mock_email, mock_quiet, db_sess
     await db_session.flush()
 
     from app.services.notifications import send_notification
+
     await send_notification(
-        db_session, task_household.id, task_user.id,
+        db_session,
+        task_household.id,
+        task_user.id,
         event_type="node_mastered",
         title="Emma mastered something",
         body="Body",
@@ -92,8 +100,11 @@ async def test_notification_respects_preferences(mock_email, mock_quiet, db_sess
 async def test_notification_governance_alert_sends_email(mock_email, mock_quiet, db_session, task_household, task_user):
     """Governance alerts trigger email."""
     from app.services.notifications import send_notification
+
     await send_notification(
-        db_session, task_household.id, task_user.id,
+        db_session,
+        task_household.id,
+        task_user.id,
         event_type="review_needed",
         title="Review needed",
         body="An activity needs your review.",
@@ -108,8 +119,11 @@ async def test_notification_governance_alert_sends_email(mock_email, mock_quiet,
 async def test_notification_low_priority_no_email(mock_email, mock_quiet, db_session, task_household, task_user):
     """Low-priority notifications don't trigger email."""
     from app.services.notifications import send_notification
+
     await send_notification(
-        db_session, task_household.id, task_user.id,
+        db_session,
+        task_household.id,
+        task_user.id,
         event_type="plan_ready",
         title="Plan ready",
         body="Your plan is ready.",

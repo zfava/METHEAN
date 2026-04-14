@@ -435,7 +435,7 @@ async def detect_environmental_correlation(
     insight = FamilyInsight(
         household_id=household_id,
         pattern_type=FamilyPatternType.environmental_correlation,
-        affected_children=[str(cid) for cid in child_stats.keys()],
+        affected_children=[str(cid) for cid in child_stats],
         affected_nodes=[],
         affected_subjects=[],
         evidence_json={"dip_days": dip_days, "window_days": 30},
@@ -511,7 +511,7 @@ async def detect_material_effectiveness(
         insight = FamilyInsight(
             household_id=household_id,
             pattern_type=FamilyPatternType.material_effectiveness,
-            affected_children=[str(cid) for cid in qualified.keys()],
+            affected_children=[str(cid) for cid in qualified],
             affected_nodes=[node_id_str],
             affected_subjects=[subject],
             evidence_json={

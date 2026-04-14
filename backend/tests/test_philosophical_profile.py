@@ -19,91 +19,112 @@ from app.models.operational import AIRun
 # build_philosophical_constraints unit tests
 # ══════════════════════════════════════════════════
 
-class TestBuildConstraints:
 
+class TestBuildConstraints:
     def test_empty_profile_returns_empty(self):
         assert build_philosophical_constraints(None) == ""
         assert build_philosophical_constraints({}) == ""
 
     def test_educational_philosophy(self):
-        result = build_philosophical_constraints({
-            "educational_philosophy": "classical",
-            "philosophy_description": "We follow the trivium",
-        })
+        result = build_philosophical_constraints(
+            {
+                "educational_philosophy": "classical",
+                "philosophy_description": "We follow the trivium",
+            }
+        )
         assert "Classical education" in result
         assert "trivium" in result.lower()
 
     def test_content_exclusion(self):
-        result = build_philosophical_constraints({
-            "content_boundaries": [
-                {"topic": "astrology", "stance": "exclude", "notes": "Not evidence-based"},
-            ],
-        })
+        result = build_philosophical_constraints(
+            {
+                "content_boundaries": [
+                    {"topic": "astrology", "stance": "exclude", "notes": "Not evidence-based"},
+                ],
+            }
+        )
         assert "CONTENT EXCLUSION" in result
         assert "astrology" in result
         assert "Not evidence-based" in result
 
     def test_present_alternative(self):
-        result = build_philosophical_constraints({
-            "content_boundaries": [
-                {"topic": "evolution", "stance": "present_alternative",
-                 "notes": "Present young-earth creationism alongside"},
-            ],
-        })
+        result = build_philosophical_constraints(
+            {
+                "content_boundaries": [
+                    {
+                        "topic": "evolution",
+                        "stance": "present_alternative",
+                        "notes": "Present young-earth creationism alongside",
+                    },
+                ],
+            }
+        )
         assert "ALTERNATIVE PERSPECTIVES" in result
         assert "evolution" in result
         assert "multiple perspectives" in result.lower()
 
     def test_parent_led_topic(self):
-        result = build_philosophical_constraints({
-            "content_boundaries": [
-                {"topic": "sexuality_education", "stance": "parent_led_only", "notes": ""},
-            ],
-        })
+        result = build_philosophical_constraints(
+            {
+                "content_boundaries": [
+                    {"topic": "sexuality_education", "stance": "parent_led_only", "notes": ""},
+                ],
+            }
+        )
         assert "PARENT-LED TOPIC" in result
 
     def test_autonomy_preview_all(self):
-        result = build_philosophical_constraints({
-            "ai_autonomy_level": "preview_all",
-        })
+        result = build_philosophical_constraints(
+            {
+                "ai_autonomy_level": "preview_all",
+            }
+        )
         assert "FLAG EVERY" in result
 
     def test_pedagogical_preferences(self):
-        result = build_philosophical_constraints({
-            "pedagogical_preferences": {
-                "socratic_method": True,
-                "memorization_valued": True,
-                "standardized_testing": False,
-                "competitive_grading": False,
-            },
-        })
+        result = build_philosophical_constraints(
+            {
+                "pedagogical_preferences": {
+                    "socratic_method": True,
+                    "memorization_valued": True,
+                    "standardized_testing": False,
+                    "competitive_grading": False,
+                },
+            }
+        )
         assert "Socratic" in result
         assert "memorization" in result.lower()
         assert "standardized test" in result.lower()
         assert "competitive grading" in result.lower()
 
     def test_custom_constraints(self):
-        result = build_philosophical_constraints({
-            "custom_constraints": [
-                "All history content should include primary sources",
-                "Latin roots in vocabulary across all subjects",
-            ],
-        })
+        result = build_philosophical_constraints(
+            {
+                "custom_constraints": [
+                    "All history content should include primary sources",
+                    "Latin roots in vocabulary across all subjects",
+                ],
+            }
+        )
         assert "primary sources" in result
         assert "Latin roots" in result
 
     def test_religious_framework(self):
-        result = build_philosophical_constraints({
-            "religious_framework": "christian",
-            "religious_notes": "Reformed Protestant tradition",
-        })
+        result = build_philosophical_constraints(
+            {
+                "religious_framework": "christian",
+                "religious_notes": "Reformed Protestant tradition",
+            }
+        )
         assert "christian" in result
         assert "Reformed Protestant" in result
 
     def test_secular_framework_omitted(self):
-        result = build_philosophical_constraints({
-            "religious_framework": "secular",
-        })
+        result = build_philosophical_constraints(
+            {
+                "religious_framework": "secular",
+            }
+        )
         # Secular should not add religious constraint lines
         assert "Religious framework" not in result
 
@@ -112,8 +133,8 @@ class TestBuildConstraints:
 # API CRUD Tests
 # ══════════════════════════════════════════════════
 
-class TestPhilosophicalProfileAPI:
 
+class TestPhilosophicalProfileAPI:
     @pytest.mark.asyncio
     async def test_set_and_get_profile(self, auth_client, db_session, household, user):
         profile = {
@@ -140,49 +161,66 @@ class TestPhilosophicalProfileAPI:
 
     @pytest.mark.asyncio
     async def test_update_profile(self, auth_client, db_session, household, user):
-        await auth_client.put("/api/v1/household/philosophy", json={
-            "educational_philosophy": "montessori",
-        })
-        resp = await auth_client.put("/api/v1/household/philosophy", json={
-            "educational_philosophy": "charlotte_mason",
-            "ai_autonomy_level": "preview_all",
-        })
+        await auth_client.put(
+            "/api/v1/household/philosophy",
+            json={
+                "educational_philosophy": "montessori",
+            },
+        )
+        resp = await auth_client.put(
+            "/api/v1/household/philosophy",
+            json={
+                "educational_philosophy": "charlotte_mason",
+                "ai_autonomy_level": "preview_all",
+            },
+        )
         assert resp.status_code == 200
         assert resp.json()["educational_philosophy"] == "charlotte_mason"
 
     @pytest.mark.asyncio
     async def test_invalid_philosophy_rejected(self, auth_client, db_session, household, user):
-        resp = await auth_client.put("/api/v1/household/philosophy", json={
-            "educational_philosophy": "not_a_real_philosophy",
-        })
+        resp = await auth_client.put(
+            "/api/v1/household/philosophy",
+            json={
+                "educational_philosophy": "not_a_real_philosophy",
+            },
+        )
         assert resp.status_code == 422
 
     @pytest.mark.asyncio
     async def test_invalid_stance_rejected(self, auth_client, db_session, household, user):
-        resp = await auth_client.put("/api/v1/household/philosophy", json={
-            "content_boundaries": [
-                {"topic": "math", "stance": "invalid_stance", "notes": ""},
-            ],
-        })
+        resp = await auth_client.put(
+            "/api/v1/household/philosophy",
+            json={
+                "content_boundaries": [
+                    {"topic": "math", "stance": "invalid_stance", "notes": ""},
+                ],
+            },
+        )
         assert resp.status_code == 422
 
     @pytest.mark.asyncio
     async def test_invalid_autonomy_rejected(self, auth_client, db_session, household, user):
-        resp = await auth_client.put("/api/v1/household/philosophy", json={
-            "ai_autonomy_level": "not_a_level",
-        })
+        resp = await auth_client.put(
+            "/api/v1/household/philosophy",
+            json={
+                "ai_autonomy_level": "not_a_level",
+            },
+        )
         assert resp.status_code == 422
 
     @pytest.mark.asyncio
     async def test_governance_event_logged(self, auth_client, db_session, household, user):
         from app.models.governance import GovernanceEvent
-        await auth_client.put("/api/v1/household/philosophy", json={
-            "educational_philosophy": "eclectic",
-        })
+
+        await auth_client.put(
+            "/api/v1/household/philosophy",
+            json={
+                "educational_philosophy": "eclectic",
+            },
+        )
         result = await db_session.execute(
-            select(GovernanceEvent).where(
-                GovernanceEvent.target_type == "philosophical_profile"
-            )
+            select(GovernanceEvent).where(GovernanceEvent.target_type == "philosophical_profile")
         )
         event = result.scalar_one()
         assert event.reason == "Philosophical profile updated"
@@ -192,41 +230,58 @@ class TestPhilosophicalProfileAPI:
 # AI Prompt Injection Tests
 # ══════════════════════════════════════════════════
 
-class TestPhilosophyInAIPrompts:
 
+class TestPhilosophyInAIPrompts:
     @pytest.mark.asyncio
     async def test_profile_injected_into_planner(
-        self, auth_client, db_session, household, subject, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        subject,
+        child,
+        user,
     ):
         """Set a profile, generate a plan, verify constraints in AI run input."""
         from app.models.curriculum import ChildMapEnrollment, LearningMap
 
         # Set philosophical profile
-        await auth_client.put("/api/v1/household/philosophy", json={
-            "educational_philosophy": "classical",
-            "content_boundaries": [
-                {"topic": "astrology", "stance": "exclude", "notes": "Not evidence-based"},
-            ],
-            "custom_constraints": ["Always include primary sources"],
-        })
+        await auth_client.put(
+            "/api/v1/household/philosophy",
+            json={
+                "educational_philosophy": "classical",
+                "content_boundaries": [
+                    {"topic": "astrology", "stance": "exclude", "notes": "Not evidence-based"},
+                ],
+                "custom_constraints": ["Always include primary sources"],
+            },
+        )
 
         # Create a map and enroll child so planner has context
         lmap = LearningMap(
-            household_id=household.id, subject_id=subject.id, name="Philosophy Test Map",
+            household_id=household.id,
+            subject_id=subject.id,
+            name="Philosophy Test Map",
         )
         db_session.add(lmap)
         await db_session.flush()
-        db_session.add(ChildMapEnrollment(
-            child_id=child.id, household_id=household.id, learning_map_id=lmap.id,
-        ))
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=child.id,
+                household_id=household.id,
+                learning_map_id=lmap.id,
+            )
+        )
         await db_session.flush()
 
         # Initialize governance rules
         from app.services.governance import create_default_rules
+
         await create_default_rules(db_session, household.id, user.id)
 
         # Generate a plan (triggers AI call with profile)
         from datetime import date
+
         resp = await auth_client.post(
             f"/api/v1/children/{child.id}/plans/generate",
             json={"week_start": date.today().isoformat()},
@@ -237,9 +292,7 @@ class TestPhilosophyInAIPrompts:
 
         # Check that the AI run's system_prompt contains the constraints
         if ai_run_id:
-            run_result = await db_session.execute(
-                select(AIRun).where(AIRun.id == ai_run_id)
-            )
+            run_result = await db_session.execute(select(AIRun).where(AIRun.id == ai_run_id))
             ai_run = run_result.scalar_one_or_none()
             if ai_run and ai_run.input_data:
                 system_prompt = ai_run.input_data.get("system_prompt", "")
@@ -272,9 +325,7 @@ class TestPhilosophyInAIPrompts:
         )
 
         # Check the AI run recorded the augmented prompt
-        run_result = await db_session.execute(
-            select(AIRun).where(AIRun.id == result["ai_run_id"])
-        )
+        run_result = await db_session.execute(select(AIRun).where(AIRun.id == result["ai_run_id"]))
         ai_run = run_result.scalar_one()
         system_prompt = ai_run.input_data.get("system_prompt", "")
         assert "CONTENT EXCLUSION" in system_prompt

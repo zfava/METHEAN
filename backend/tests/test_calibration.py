@@ -79,13 +79,21 @@ async def cal_node(db_session: AsyncSession, cal_household: Household, cal_map: 
 
 @pytest_asyncio.fixture
 async def cal_attempt(
-    db_session: AsyncSession, cal_household: Household, cal_child: Child, cal_node: LearningNode,
+    db_session: AsyncSession,
+    cal_household: Household,
+    cal_child: Child,
+    cal_node: LearningNode,
 ) -> Attempt:
     plan = Plan(household_id=cal_household.id, child_id=cal_child.id, name="Cal Plan")
     db_session.add(plan)
     await db_session.flush()
-    week = PlanWeek(plan_id=plan.id, household_id=cal_household.id, week_number=1,
-                    start_date=date(2026, 1, 5), end_date=date(2026, 1, 11))
+    week = PlanWeek(
+        plan_id=plan.id,
+        household_id=cal_household.id,
+        week_number=1,
+        start_date=date(2026, 1, 5),
+        end_date=date(2026, 1, 11),
+    )
     db_session.add(week)
     await db_session.flush()
 
@@ -109,8 +117,9 @@ async def cal_attempt(
     return att
 
 
-async def _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt,
-                               count, predicted_rating, actual_rating, conf=None):
+async def _create_predictions(
+    db_session, cal_household, cal_child, cal_node, cal_attempt, count, predicted_rating, actual_rating, conf=None
+):
     """Helper: create N reconciled predictions."""
     for i in range(count):
         att = Attempt(
@@ -122,13 +131,24 @@ async def _create_predictions(db_session, cal_household, cal_child, cal_node, ca
         await db_session.flush()
 
         if conf is None:
-            c = 0.85 if predicted_rating == 4 else 0.65 if predicted_rating == 3 else 0.4 if predicted_rating == 2 else 0.15
+            c = (
+                0.85
+                if predicted_rating == 4
+                else 0.65
+                if predicted_rating == 3
+                else 0.4
+                if predicted_rating == 2
+                else 0.15
+            )
         else:
             c = conf
         pred = EvaluatorPrediction(
-            household_id=cal_household.id, child_id=cal_child.id,
-            node_id=cal_node.id, attempt_id=att.id,
-            predicted_confidence=c, predicted_fsrs_rating=predicted_rating,
+            household_id=cal_household.id,
+            child_id=cal_child.id,
+            node_id=cal_node.id,
+            attempt_id=att.id,
+            predicted_confidence=c,
+            predicted_fsrs_rating=predicted_rating,
             actual_outcome=actual_rating,
             drift_score=abs(predicted_rating - actual_rating),
             outcome_recorded_at=datetime.now(UTC),
@@ -146,9 +166,13 @@ async def _create_predictions(db_session, cal_household, cal_child, cal_node, ca
 class TestRecordPrediction:
     async def test_creates_prediction(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
         pred = await record_prediction(
-            db_session, child_id=cal_child.id, household_id=cal_household.id,
-            node_id=cal_node.id, attempt_id=cal_attempt.id,
-            evaluator_confidence=0.75, fsrs_rating=3,
+            db_session,
+            child_id=cal_child.id,
+            household_id=cal_household.id,
+            node_id=cal_node.id,
+            attempt_id=cal_attempt.id,
+            evaluator_confidence=0.75,
+            fsrs_rating=3,
         )
         assert pred.id is not None
         assert pred.predicted_confidence == 0.75
@@ -158,9 +182,14 @@ class TestRecordPrediction:
 
     async def test_records_offset_applied(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
         pred = await record_prediction(
-            db_session, child_id=cal_child.id, household_id=cal_household.id,
-            node_id=cal_node.id, attempt_id=cal_attempt.id,
-            evaluator_confidence=0.75, fsrs_rating=3, calibration_offset_applied=0.05,
+            db_session,
+            child_id=cal_child.id,
+            household_id=cal_household.id,
+            node_id=cal_node.id,
+            attempt_id=cal_attempt.id,
+            evaluator_confidence=0.75,
+            fsrs_rating=3,
+            calibration_offset_applied=0.05,
         )
         assert pred.calibration_offset_applied == 0.05
 
@@ -192,14 +221,18 @@ class TestReconcileOutcome:
         assert len(alerts) == 1
         assert alerts[0].severity.value == "warning"
 
-    async def test_extreme_drift_creates_critical_alert(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+    async def test_extreme_drift_creates_critical_alert(
+        self, db_session, cal_child, cal_household, cal_node, cal_attempt
+    ):
         await record_prediction(db_session, cal_child.id, cal_household.id, cal_node.id, cal_attempt.id, 0.85, 4)
         await reconcile_outcome(db_session, cal_child.id, cal_household.id, cal_node.id, 1)
         alerts = (await db_session.execute(select(Alert).where(Alert.source == "calibration_drift"))).scalars().all()
         assert len(alerts) == 1
         assert alerts[0].severity.value == "action_required"
 
-    async def test_concurrent_reconciliation_only_first_succeeds(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+    async def test_concurrent_reconciliation_only_first_succeeds(
+        self, db_session, cal_child, cal_household, cal_node, cal_attempt
+    ):
         """Two reconcile calls for same prediction: only the first should match."""
         await record_prediction(db_session, cal_child.id, cal_household.id, cal_node.id, cal_attempt.id, 0.7, 3)
         r1 = await reconcile_outcome(db_session, cal_child.id, cal_household.id, cal_node.id, 3)
@@ -215,31 +248,55 @@ class TestApplyCalibrationOffset:
         assert result == 0.65
 
     async def test_active_offset(self, db_session, cal_child, cal_household):
-        db_session.add(CalibrationProfile(child_id=cal_child.id, household_id=cal_household.id, recalibration_offset=-0.10, offset_active=True))
+        db_session.add(
+            CalibrationProfile(
+                child_id=cal_child.id, household_id=cal_household.id, recalibration_offset=-0.10, offset_active=True
+            )
+        )
         await db_session.flush()
         result = await apply_calibration_offset(db_session, 0.65, cal_child.id)
         assert abs(result - 0.55) < 0.001
 
     async def test_inactive_offset_returns_raw(self, db_session, cal_child, cal_household):
-        db_session.add(CalibrationProfile(child_id=cal_child.id, household_id=cal_household.id, recalibration_offset=-0.10, offset_active=False))
+        db_session.add(
+            CalibrationProfile(
+                child_id=cal_child.id, household_id=cal_household.id, recalibration_offset=-0.10, offset_active=False
+            )
+        )
         await db_session.flush()
         result = await apply_calibration_offset(db_session, 0.65, cal_child.id)
         assert result == 0.65
 
     async def test_parent_override_takes_precedence(self, db_session, cal_child, cal_household):
-        db_session.add(CalibrationProfile(child_id=cal_child.id, household_id=cal_household.id, recalibration_offset=-0.10, parent_override_offset=0.05, offset_active=True))
+        db_session.add(
+            CalibrationProfile(
+                child_id=cal_child.id,
+                household_id=cal_household.id,
+                recalibration_offset=-0.10,
+                parent_override_offset=0.05,
+                offset_active=True,
+            )
+        )
         await db_session.flush()
         result = await apply_calibration_offset(db_session, 0.65, cal_child.id)
         assert abs(result - 0.70) < 0.001
 
     async def test_clamping_to_upper_bound(self, db_session, cal_child, cal_household):
-        db_session.add(CalibrationProfile(child_id=cal_child.id, household_id=cal_household.id, recalibration_offset=0.15, offset_active=True))
+        db_session.add(
+            CalibrationProfile(
+                child_id=cal_child.id, household_id=cal_household.id, recalibration_offset=0.15, offset_active=True
+            )
+        )
         await db_session.flush()
         result = await apply_calibration_offset(db_session, 0.95, cal_child.id)
         assert result == 1.0
 
     async def test_clamping_to_lower_bound(self, db_session, cal_child, cal_household):
-        db_session.add(CalibrationProfile(child_id=cal_child.id, household_id=cal_household.id, recalibration_offset=-0.15, offset_active=True))
+        db_session.add(
+            CalibrationProfile(
+                child_id=cal_child.id, household_id=cal_household.id, recalibration_offset=-0.15, offset_active=True
+            )
+        )
         await db_session.flush()
         result = await apply_calibration_offset(db_session, 0.05, cal_child.id)
         assert result == 0.0
@@ -321,9 +378,11 @@ class TestCalibrationSnapshot:
         await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 55, 3, 3)
         await recompute_profile(db_session, cal_child.id, cal_household.id)
 
-        snaps = (await db_session.execute(
-            select(CalibrationSnapshot).where(CalibrationSnapshot.child_id == cal_child.id)
-        )).scalars().all()
+        snaps = (
+            (await db_session.execute(select(CalibrationSnapshot).where(CalibrationSnapshot.child_id == cal_child.id)))
+            .scalars()
+            .all()
+        )
         assert len(snaps) == 1
         assert snaps[0].reconciled_count == 55
 
@@ -334,15 +393,19 @@ class TestCalibrationSnapshot:
         await recompute_profile(db_session, cal_child.id, cal_household.id)
         await recompute_profile(db_session, cal_child.id, cal_household.id)
 
-        snaps = (await db_session.execute(
-            select(CalibrationSnapshot).where(CalibrationSnapshot.child_id == cal_child.id)
-        )).scalars().all()
+        snaps = (
+            (await db_session.execute(select(CalibrationSnapshot).where(CalibrationSnapshot.child_id == cal_child.id)))
+            .scalars()
+            .all()
+        )
         assert len(snaps) == 3
 
 
 @pytest.mark.asyncio
 class TestRateLimiterInRecompute:
-    async def test_rate_limiter_activates_on_large_jump(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+    async def test_rate_limiter_activates_on_large_jump(
+        self, db_session, cal_child, cal_household, cal_node, cal_attempt
+    ):
         """First recompute from 0.0 should be clamped by rate limiter."""
         await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 55, 4, 1)
         profile = await recompute_profile(db_session, cal_child.id, cal_household.id)
@@ -364,7 +427,9 @@ class TestHealthCheck:
         result = await run_calibration_health_check(db_session)
         assert result["alerts_created"] == 0
 
-    async def test_critical_drift_child_creates_alert(self, db_session, cal_child, cal_household, cal_node, cal_attempt):
+    async def test_critical_drift_child_creates_alert(
+        self, db_session, cal_child, cal_household, cal_node, cal_attempt
+    ):
         """Child with drift > 2.0 and 100+ predictions triggers critical alert."""
         await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 110, 4, 1)
         profile = await recompute_profile(db_session, cal_child.id, cal_household.id)
@@ -374,9 +439,9 @@ class TestHealthCheck:
         result = await run_calibration_health_check(db_session)
         assert result["alerts_created"] >= 1
 
-        alerts = (await db_session.execute(
-            select(Alert).where(Alert.source == "calibration_health_check")
-        )).scalars().all()
+        alerts = (
+            (await db_session.execute(select(Alert).where(Alert.source == "calibration_health_check"))).scalars().all()
+        )
         assert any(a.title == "Critical Calibration Drift" for a in alerts)
 
 
@@ -421,11 +486,16 @@ class TestConfidenceDistribution:
             att = Attempt(activity_id=cal_attempt.activity_id, household_id=cal_household.id, child_id=cal_child.id)
             db_session.add(att)
             await db_session.flush()
-            db_session.add(EvaluatorPrediction(
-                household_id=cal_household.id, child_id=cal_child.id,
-                node_id=cal_node.id, attempt_id=att.id,
-                predicted_confidence=conf, predicted_fsrs_rating=3,
-            ))
+            db_session.add(
+                EvaluatorPrediction(
+                    household_id=cal_household.id,
+                    child_id=cal_child.id,
+                    node_id=cal_node.id,
+                    attempt_id=att.id,
+                    predicted_confidence=conf,
+                    predicted_fsrs_rating=3,
+                )
+            )
         await db_session.flush()
 
         result = await compute_confidence_distribution(db_session, cal_child.id, cal_household.id)
@@ -440,12 +510,16 @@ class TestConfidenceDistribution:
             att = Attempt(activity_id=cal_attempt.activity_id, household_id=cal_household.id, child_id=cal_child.id)
             db_session.add(att)
             await db_session.flush()
-            db_session.add(EvaluatorPrediction(
-                household_id=cal_household.id, child_id=cal_child.id,
-                node_id=cal_node.id, attempt_id=att.id,
-                predicted_confidence=0.70 + (i * 0.002),  # Very narrow range
-                predicted_fsrs_rating=3,
-            ))
+            db_session.add(
+                EvaluatorPrediction(
+                    household_id=cal_household.id,
+                    child_id=cal_child.id,
+                    node_id=cal_node.id,
+                    attempt_id=att.id,
+                    predicted_confidence=0.70 + (i * 0.002),  # Very narrow range
+                    predicted_fsrs_rating=3,
+                )
+            )
         await db_session.flush()
 
         result = await compute_confidence_distribution(db_session, cal_child.id, cal_household.id)
@@ -490,9 +564,15 @@ class TestGovernanceEvents:
         await _create_predictions(db_session, cal_household, cal_child, cal_node, cal_attempt, 55, 3, 3)
         await recompute_profile(db_session, cal_child.id, cal_household.id)
 
-        events = (await db_session.execute(
-            select(GovernanceEvent).where(GovernanceEvent.target_type == "calibration_profile")
-        )).scalars().all()
+        events = (
+            (
+                await db_session.execute(
+                    select(GovernanceEvent).where(GovernanceEvent.target_type == "calibration_profile")
+                )
+            )
+            .scalars()
+            .all()
+        )
         assert len(events) >= 1
         assert "recomputed" in events[0].reason.lower()
 

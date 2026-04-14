@@ -39,6 +39,7 @@ async def reset_user(db_session: AsyncSession, reset_household: Household) -> Us
 async def test_generate_reset_token_sends_email(mock_email, db_session, reset_user):
     """Reset token generation sends an email."""
     from app.services.password_reset import generate_reset_token
+
     result = await generate_reset_token(db_session, reset_user.email)
     assert result is True
     mock_email.assert_called_once()
@@ -51,6 +52,7 @@ async def test_generate_reset_token_sends_email(mock_email, db_session, reset_us
 async def test_generate_reset_token_nonexistent_email(db_session):
     """Non-existent email doesn't raise (security: don't reveal email existence)."""
     from app.services.password_reset import generate_reset_token
+
     result = await generate_reset_token(db_session, "nobody@nowhere.com")
     assert result is True  # Always returns True
 
@@ -60,6 +62,7 @@ async def test_generate_reset_token_nonexistent_email(db_session):
 async def test_verify_reset_token_valid(mock_email, db_session, reset_user):
     """Valid token returns user_id."""
     from app.services.password_reset import generate_reset_token, verify_reset_token, _reset_tokens
+
     await generate_reset_token(db_session, reset_user.email)
     token = list(_reset_tokens.keys())[-1]
     user_id = verify_reset_token(token)
@@ -70,6 +73,7 @@ async def test_verify_reset_token_valid(mock_email, db_session, reset_user):
 async def test_verify_reset_token_invalid():
     """Invalid token returns None."""
     from app.services.password_reset import verify_reset_token
+
     assert verify_reset_token("totally-bogus-token") is None
 
 
@@ -79,6 +83,7 @@ async def test_verify_reset_token_expired(mock_email, db_session, reset_user):
     """Expired token returns None."""
     from app.services.password_reset import generate_reset_token, verify_reset_token, _reset_tokens
     from datetime import datetime, timezone
+
     await generate_reset_token(db_session, reset_user.email)
     token = list(_reset_tokens.keys())[-1]
     _reset_tokens[token]["expires_at"] = datetime(2020, 1, 1, tzinfo=timezone.utc)
@@ -90,6 +95,7 @@ async def test_verify_reset_token_expired(mock_email, db_session, reset_user):
 async def test_reset_password_success(mock_email, db_session, reset_user):
     """Successful password reset changes the hash."""
     from app.services.password_reset import generate_reset_token, reset_password, _reset_tokens
+
     await generate_reset_token(db_session, reset_user.email)
     token = list(_reset_tokens.keys())[-1]
     result = await reset_password(db_session, token, "newpassword456")
@@ -102,6 +108,7 @@ async def test_reset_password_success(mock_email, db_session, reset_user):
 async def test_reset_password_token_consumed(mock_email, db_session, reset_user):
     """Used token can't be reused."""
     from app.services.password_reset import generate_reset_token, reset_password, _reset_tokens
+
     await generate_reset_token(db_session, reset_user.email)
     token = list(_reset_tokens.keys())[-1]
     assert await reset_password(db_session, token, "newpassword456") is True

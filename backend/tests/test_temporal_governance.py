@@ -31,7 +31,6 @@ from app.services.governance import evaluate_activity
 
 
 class TestAgeThresholdTrigger:
-
     @pytest.mark.asyncio
     async def test_age_triggers_rule_activation(self, db_session, household, user):
         """Rule with age_threshold trigger fires when child reaches the age."""
@@ -48,8 +47,10 @@ class TestAgeThresholdTrigger:
 
         # Rule starts inactive, trigger should activate it
         rule = GovernanceRule(
-            household_id=household.id, created_by=user.id,
-            rule_type=RuleType.ai_boundary, scope=RuleScope.household,
+            household_id=household.id,
+            created_by=user.id,
+            rule_type=RuleType.ai_boundary,
+            scope=RuleScope.household,
             name="Increase autonomy at 8",
             parameters={"ai_autonomy_level": "approve_difficult"},
             is_active=False,
@@ -64,6 +65,7 @@ class TestAgeThresholdTrigger:
         await db_session.commit()
 
         from app.core.config import settings as cfg
+
         test_url = cfg.DATABASE_URL.rsplit("/", 1)[0] + "/methean_test"
         eng = create_async_engine(test_url, poolclass=NullPool)
         sf = async_sessionmaker(eng, class_=AsyncSession, expire_on_commit=False)
@@ -92,7 +94,6 @@ class TestAgeThresholdTrigger:
 
 
 class TestMasteryMilestoneTrigger:
-
     @pytest.mark.asyncio
     async def test_mastery_triggers_rule(self, db_session, household, user, subject, learning_map):
         """Rule fires when child reaches 100% mastery on a map."""
@@ -105,22 +106,31 @@ class TestMasteryMilestoneTrigger:
         # Create 2 nodes in the map
         for title in ["Node A", "Node B"]:
             node = LearningNode(
-                learning_map_id=learning_map.id, household_id=household.id,
-                node_type=NodeType.skill, title=title,
+                learning_map_id=learning_map.id,
+                household_id=household.id,
+                node_type=NodeType.skill,
+                title=title,
             )
             db_session.add(node)
             await db_session.flush()
             # Master both
-            db_session.add(ChildNodeState(
-                child_id=child.id, household_id=household.id,
-                node_id=node.id, mastery_level=MasteryLevel.mastered,
-            ))
+            db_session.add(
+                ChildNodeState(
+                    child_id=child.id,
+                    household_id=household.id,
+                    node_id=node.id,
+                    mastery_level=MasteryLevel.mastered,
+                )
+            )
 
         rule = GovernanceRule(
-            household_id=household.id, created_by=user.id,
-            rule_type=RuleType.approval_required, scope=RuleScope.household,
+            household_id=household.id,
+            created_by=user.id,
+            rule_type=RuleType.approval_required,
+            scope=RuleScope.household,
             name="Unlock next level",
-            parameters={}, is_active=False,
+            parameters={},
+            is_active=False,
             trigger_conditions={
                 "type": "mastery_milestone",
                 "child_id": str(child.id),
@@ -133,6 +143,7 @@ class TestMasteryMilestoneTrigger:
         await db_session.commit()
 
         from app.core.config import settings as cfg
+
         test_url = cfg.DATABASE_URL.rsplit("/", 1)[0] + "/methean_test"
         eng = create_async_engine(test_url, poolclass=NullPool)
         sf = async_sessionmaker(eng, class_=AsyncSession, expire_on_commit=False)
@@ -148,14 +159,15 @@ class TestMasteryMilestoneTrigger:
 
 
 class TestEffectiveDateWindow:
-
     @pytest.mark.asyncio
     async def test_future_rule_not_enforced(self, db_session, household, user):
         """A rule with effective_from=tomorrow should not be applied today."""
         tomorrow = date.today() + timedelta(days=1)
         rule = GovernanceRule(
-            household_id=household.id, created_by=user.id,
-            rule_type=RuleType.approval_required, scope=RuleScope.household,
+            household_id=household.id,
+            created_by=user.id,
+            rule_type=RuleType.approval_required,
+            scope=RuleScope.household,
             name="Future rule",
             parameters={"min_difficulty": 1, "action": "block"},
             priority=1,
@@ -174,8 +186,10 @@ class TestEffectiveDateWindow:
         """A rule with effective_until=yesterday should not be applied."""
         yesterday = date.today() - timedelta(days=1)
         rule = GovernanceRule(
-            household_id=household.id, created_by=user.id,
-            rule_type=RuleType.approval_required, scope=RuleScope.household,
+            household_id=household.id,
+            created_by=user.id,
+            rule_type=RuleType.approval_required,
+            scope=RuleScope.household,
             name="Expired rule",
             parameters={"min_difficulty": 1, "action": "block"},
             priority=1,
@@ -189,17 +203,19 @@ class TestEffectiveDateWindow:
 
 
 class TestTriggerIdempotency:
-
     @pytest.mark.asyncio
     async def test_trigger_fires_only_once(self, db_session, household, user):
         """Running the temporal task twice should only create one event."""
         from app.tasks.temporal_rules import evaluate_temporal_triggers
 
         rule = GovernanceRule(
-            household_id=household.id, created_by=user.id,
-            rule_type=RuleType.ai_boundary, scope=RuleScope.household,
+            household_id=household.id,
+            created_by=user.id,
+            rule_type=RuleType.ai_boundary,
+            scope=RuleScope.household,
             name="Idempotent trigger",
-            parameters={}, is_active=False,
+            parameters={},
+            is_active=False,
             trigger_conditions={
                 "type": "date_scheduled",
                 "date": date.today().isoformat(),
@@ -210,6 +226,7 @@ class TestTriggerIdempotency:
         await db_session.commit()
 
         from app.core.config import settings as cfg
+
         test_url = cfg.DATABASE_URL.rsplit("/", 1)[0] + "/methean_test"
         eng = create_async_engine(test_url, poolclass=NullPool)
         sf = async_sessionmaker(eng, class_=AsyncSession, expire_on_commit=False)

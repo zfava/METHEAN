@@ -38,8 +38,8 @@ from app.services.plan_lifecycle import (
 # State Machine Unit Tests
 # ══════════════════════════════════════════════════
 
-class TestPlanLifecycleTransitions:
 
+class TestPlanLifecycleTransitions:
     def test_valid_plan_transitions(self):
         """Walk through the full happy path: draft -> proposed -> approved -> active -> completed."""
         status = "draft"
@@ -101,53 +101,78 @@ class TestPlanLifecycleTransitions:
 # API Integration Tests
 # ══════════════════════════════════════════════════
 
-class TestCannotLockWithUnapprovedActivities:
 
+class TestCannotLockWithUnapprovedActivities:
     @pytest.mark.asyncio
     async def test_lock_blocked_by_unapproved(
-        self, auth_client, db_session, household, subject, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        subject,
+        child,
+        user,
     ):
         """Locking a plan must fail if any non-cancelled activity is not governance-approved."""
         lmap = LearningMap(
-            household_id=household.id, subject_id=subject.id, name="Lock Test Map",
+            household_id=household.id,
+            subject_id=subject.id,
+            name="Lock Test Map",
         )
         db_session.add(lmap)
         await db_session.flush()
 
-        db_session.add(ChildMapEnrollment(
-            child_id=child.id, household_id=household.id,
-            learning_map_id=lmap.id,
-        ))
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=child.id,
+                household_id=household.id,
+                learning_map_id=lmap.id,
+            )
+        )
         await db_session.flush()
 
         # Create a plan with one unapproved activity
         plan = Plan(
-            household_id=household.id, child_id=child.id,
-            created_by=user.id, name="Unapproved Test",
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Unapproved Test",
             status=PlanStatus.draft,
         )
         db_session.add(plan)
         await db_session.flush()
 
         week = PlanWeek(
-            plan_id=plan.id, household_id=household.id,
-            week_number=1, start_date=date.today(),
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date.today(),
             end_date=date.today() + timedelta(days=4),
         )
         db_session.add(week)
         await db_session.flush()
 
         # One approved, one not
-        db_session.add(Activity(
-            plan_week_id=week.id, household_id=household.id,
-            activity_type="lesson", title="Approved Activity",
-            status=ActivityStatus.scheduled, governance_approved=True,
-        ))
-        db_session.add(Activity(
-            plan_week_id=week.id, household_id=household.id,
-            activity_type="lesson", title="Unapproved Activity",
-            status=ActivityStatus.scheduled, governance_approved=False,
-        ))
+        db_session.add(
+            Activity(
+                plan_week_id=week.id,
+                household_id=household.id,
+                activity_type="lesson",
+                title="Approved Activity",
+                status=ActivityStatus.scheduled,
+                governance_approved=True,
+            )
+        )
+        db_session.add(
+            Activity(
+                plan_week_id=week.id,
+                household_id=household.id,
+                activity_type="lesson",
+                title="Unapproved Activity",
+                status=ActivityStatus.scheduled,
+                governance_approved=False,
+            )
+        )
         await db_session.flush()
 
         # Attempt to lock — should fail
@@ -159,36 +184,56 @@ class TestCannotLockWithUnapprovedActivities:
 
     @pytest.mark.asyncio
     async def test_lock_succeeds_when_all_approved(
-        self, auth_client, db_session, household, subject, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        subject,
+        child,
+        user,
     ):
         """Locking succeeds when every non-cancelled activity is governance-approved."""
         plan = Plan(
-            household_id=household.id, child_id=child.id,
-            created_by=user.id, name="All Approved",
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="All Approved",
             status=PlanStatus.draft,
         )
         db_session.add(plan)
         await db_session.flush()
 
         week = PlanWeek(
-            plan_id=plan.id, household_id=household.id,
-            week_number=1, start_date=date.today(),
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date.today(),
             end_date=date.today() + timedelta(days=4),
         )
         db_session.add(week)
         await db_session.flush()
 
-        db_session.add(Activity(
-            plan_week_id=week.id, household_id=household.id,
-            activity_type="lesson", title="Good Activity",
-            status=ActivityStatus.scheduled, governance_approved=True,
-        ))
+        db_session.add(
+            Activity(
+                plan_week_id=week.id,
+                household_id=household.id,
+                activity_type="lesson",
+                title="Good Activity",
+                status=ActivityStatus.scheduled,
+                governance_approved=True,
+            )
+        )
         # Cancelled activities don't block locking
-        db_session.add(Activity(
-            plan_week_id=week.id, household_id=household.id,
-            activity_type="lesson", title="Rejected Activity",
-            status=ActivityStatus.cancelled, governance_approved=False,
-        ))
+        db_session.add(
+            Activity(
+                plan_week_id=week.id,
+                household_id=household.id,
+                activity_type="lesson",
+                title="Rejected Activity",
+                status=ActivityStatus.cancelled,
+                governance_approved=False,
+            )
+        )
         await db_session.flush()
 
         resp = await auth_client.put(f"/api/v1/plans/{plan.id}/lock")
@@ -197,44 +242,51 @@ class TestCannotLockWithUnapprovedActivities:
 
 
 class TestGovernanceFieldsOnApproveReject:
-
     @pytest.mark.asyncio
     async def test_approve_sets_governance_fields(
-        self, auth_client, db_session, household, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        child,
+        user,
     ):
         plan = Plan(
-            household_id=household.id, child_id=child.id,
-            created_by=user.id, name="Approve Fields",
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Approve Fields",
             status=PlanStatus.draft,
         )
         db_session.add(plan)
         await db_session.flush()
 
         week = PlanWeek(
-            plan_id=plan.id, household_id=household.id,
-            week_number=1, start_date=date.today(),
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date.today(),
             end_date=date.today() + timedelta(days=4),
         )
         db_session.add(week)
         await db_session.flush()
 
         activity = Activity(
-            plan_week_id=week.id, household_id=household.id,
-            activity_type="lesson", title="Pending",
-            status=ActivityStatus.scheduled, governance_approved=False,
+            plan_week_id=week.id,
+            household_id=household.id,
+            activity_type="lesson",
+            title="Pending",
+            status=ActivityStatus.scheduled,
+            governance_approved=False,
         )
         db_session.add(activity)
         await db_session.flush()
 
-        resp = await auth_client.put(
-            f"/api/v1/plans/{plan.id}/activities/{activity.id}/approve"
-        )
+        resp = await auth_client.put(f"/api/v1/plans/{plan.id}/activities/{activity.id}/approve")
         assert resp.status_code == 200
 
         # Verify DB fields
-        result = await db_session.execute(
-            select(Activity).where(Activity.id == activity.id)
-        )
+        result = await db_session.execute(select(Activity).where(Activity.id == activity.id))
         updated = result.scalar_one()
         assert updated.governance_approved is True
         assert updated.governance_reviewed_by == user.id
@@ -242,28 +294,40 @@ class TestGovernanceFieldsOnApproveReject:
 
     @pytest.mark.asyncio
     async def test_reject_sets_governance_fields(
-        self, auth_client, db_session, household, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        child,
+        user,
     ):
         plan = Plan(
-            household_id=household.id, child_id=child.id,
-            created_by=user.id, name="Reject Fields",
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Reject Fields",
             status=PlanStatus.draft,
         )
         db_session.add(plan)
         await db_session.flush()
 
         week = PlanWeek(
-            plan_id=plan.id, household_id=household.id,
-            week_number=1, start_date=date.today(),
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date.today(),
             end_date=date.today() + timedelta(days=4),
         )
         db_session.add(week)
         await db_session.flush()
 
         activity = Activity(
-            plan_week_id=week.id, household_id=household.id,
-            activity_type="lesson", title="To Reject",
-            status=ActivityStatus.scheduled, governance_approved=False,
+            plan_week_id=week.id,
+            household_id=household.id,
+            activity_type="lesson",
+            title="To Reject",
+            status=ActivityStatus.scheduled,
+            governance_approved=False,
         )
         db_session.add(activity)
         await db_session.flush()
@@ -274,9 +338,7 @@ class TestGovernanceFieldsOnApproveReject:
         )
         assert resp.status_code == 200
 
-        result = await db_session.execute(
-            select(Activity).where(Activity.id == activity.id)
-        )
+        result = await db_session.execute(select(Activity).where(Activity.id == activity.id))
         updated = result.scalar_one()
         assert updated.status == ActivityStatus.cancelled
         assert updated.governance_reviewed_by == user.id
@@ -284,38 +346,58 @@ class TestGovernanceFieldsOnApproveReject:
 
 
 class TestBlockedActivityNotCreated:
-
     @pytest.mark.asyncio
     async def test_blocked_activities_skipped_in_plan(
-        self, auth_client, db_session, household, subject, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        subject,
+        child,
+        user,
     ):
         """When governance evaluates 'block', the activity should not be created."""
         lmap = LearningMap(
-            household_id=household.id, subject_id=subject.id, name="Block Test",
+            household_id=household.id,
+            subject_id=subject.id,
+            name="Block Test",
         )
         db_session.add(lmap)
         await db_session.flush()
 
-        db_session.add(ChildMapEnrollment(
-            child_id=child.id, household_id=household.id,
-            learning_map_id=lmap.id,
-        ))
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=child.id,
+                household_id=household.id,
+                learning_map_id=lmap.id,
+            )
+        )
         await db_session.flush()
 
         # Create a "block" governance rule for difficulty >= 5
-        db_session.add(GovernanceRule(
-            household_id=household.id, created_by=user.id,
-            rule_type=RuleType.approval_required, scope=RuleScope.household,
-            name="Block very hard", parameters={"min_difficulty": 5, "action": "block"},
-            priority=1,
-        ))
+        db_session.add(
+            GovernanceRule(
+                household_id=household.id,
+                created_by=user.id,
+                rule_type=RuleType.approval_required,
+                scope=RuleScope.household,
+                name="Block very hard",
+                parameters={"min_difficulty": 5, "action": "block"},
+                priority=1,
+            )
+        )
         # Also add default auto-approve for everything else
-        db_session.add(GovernanceRule(
-            household_id=household.id, created_by=user.id,
-            rule_type=RuleType.approval_required, scope=RuleScope.household,
-            name="Auto-approve rest", parameters={"max_difficulty": 5, "action": "auto_approve"},
-            priority=10,
-        ))
+        db_session.add(
+            GovernanceRule(
+                household_id=household.id,
+                created_by=user.id,
+                rule_type=RuleType.approval_required,
+                scope=RuleScope.household,
+                name="Auto-approve rest",
+                parameters={"max_difficulty": 5, "action": "auto_approve"},
+                priority=10,
+            )
+        )
         await db_session.flush()
 
         # Generate a plan — mock AI returns activities with various difficulties

@@ -40,21 +40,23 @@ def _make_scope_sequence(num_weeks: int = 36) -> dict:
     """Build a minimal valid scope_sequence for testing."""
     weeks = []
     for w in range(1, num_weeks + 1):
-        weeks.append({
-            "week_number": w,
-            "title": f"Week {w}: Topic {w}",
-            "focus_nodes": [],
-            "objectives": [f"Objective {w}.1", f"Objective {w}.2"],
-            "suggested_activities": [
-                {"title": f"Lesson {w}", "type": "lesson", "minutes": 25, "day": "Monday"},
-                {"title": f"Practice {w}", "type": "practice", "minutes": 20, "day": "Tuesday"},
-                {"title": f"Review {w}", "type": "review", "minutes": 15, "day": "Wednesday"},
-                {"title": f"Project {w}", "type": "project", "minutes": 30, "day": "Thursday"},
-                {"title": f"Assessment {w}", "type": "assessment", "minutes": 15, "day": "Friday"},
-            ],
-            "assessment_focus": f"Can the child demonstrate skill {w}?",
-            "parent_notes_placeholder": "",
-        })
+        weeks.append(
+            {
+                "week_number": w,
+                "title": f"Week {w}: Topic {w}",
+                "focus_nodes": [],
+                "objectives": [f"Objective {w}.1", f"Objective {w}.2"],
+                "suggested_activities": [
+                    {"title": f"Lesson {w}", "type": "lesson", "minutes": 25, "day": "Monday"},
+                    {"title": f"Practice {w}", "type": "practice", "minutes": 20, "day": "Tuesday"},
+                    {"title": f"Review {w}", "type": "review", "minutes": 15, "day": "Wednesday"},
+                    {"title": f"Project {w}", "type": "project", "minutes": 30, "day": "Thursday"},
+                    {"title": f"Assessment {w}", "type": "assessment", "minutes": 15, "day": "Friday"},
+                ],
+                "assessment_focus": f"Can the child demonstrate skill {w}?",
+                "parent_notes_placeholder": "",
+            }
+        )
     return {
         "overview": "Test curriculum overview",
         "philosophy_alignment": "Test alignment",
@@ -64,7 +66,6 @@ def _make_scope_sequence(num_weeks: int = 36) -> dict:
 
 
 class TestAnnualCurriculumModel:
-
     @pytest.mark.asyncio
     async def test_create_draft_curriculum(self, db_session, household, child, user):
         """Create a curriculum and verify it's stored as draft."""
@@ -86,9 +87,7 @@ class TestAnnualCurriculumModel:
         db_session.add(c)
         await db_session.flush()
 
-        result = await db_session.execute(
-            select(AnnualCurriculum).where(AnnualCurriculum.id == c.id)
-        )
+        result = await db_session.execute(select(AnnualCurriculum).where(AnnualCurriculum.id == c.id))
         saved = result.scalar_one()
         assert saved.subject_name == "Mathematics"
         assert saved.status == "draft"
@@ -105,17 +104,22 @@ class TestAnnualCurriculumModel:
 
 
 class TestMaterialization:
-
     @pytest.mark.asyncio
     async def test_approve_materializes_full_year(self, db_session, household, child, user):
         """Approve curriculum, verify ALL 36 weeks of activities created."""
         c = AnnualCurriculum(
-            household_id=household.id, child_id=child.id, created_by=user.id,
-            subject_name="Math", academic_year="2026-2027",
-            total_weeks=36, hours_per_week=4.0,
-            start_date=date(2026, 9, 1), end_date=date(2027, 5, 15),
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            subject_name="Math",
+            academic_year="2026-2027",
+            total_weeks=36,
+            hours_per_week=4.0,
+            start_date=date(2026, 9, 1),
+            end_date=date(2027, 5, 15),
             scope_sequence=_make_scope_sequence(36),
-            status="draft", actual_record={"weeks": {}},
+            status="draft",
+            actual_record={"weeks": {}},
         )
         db_session.add(c)
         await db_session.flush()
@@ -126,26 +130,20 @@ class TestMaterialization:
         assert c.approved_at is not None
 
         # Verify Plan created
-        plan_result = await db_session.execute(
-            select(Plan).where(Plan.annual_curriculum_id == c.id)
-        )
+        plan_result = await db_session.execute(select(Plan).where(Plan.annual_curriculum_id == c.id))
         plan = plan_result.scalar_one()
         assert plan.status == PlanStatus.active
         assert plan.annual_curriculum_id == c.id
 
         # Verify all 36 weeks created
-        weeks_result = await db_session.execute(
-            select(PlanWeek).where(PlanWeek.plan_id == plan.id)
-        )
+        weeks_result = await db_session.execute(select(PlanWeek).where(PlanWeek.plan_id == plan.id))
         weeks = weeks_result.scalars().all()
         assert len(weeks) == 36
 
         # Verify activities per week (5 each = 180 total)
         total_acts = 0
         for w in weeks:
-            acts_result = await db_session.execute(
-                select(Activity).where(Activity.plan_week_id == w.id)
-            )
+            acts_result = await db_session.execute(select(Activity).where(Activity.plan_week_id == w.id))
             acts = acts_result.scalars().all()
             assert len(acts) == 5
             total_acts += len(acts)
@@ -155,21 +153,24 @@ class TestMaterialization:
     async def test_near_weeks_auto_approved(self, db_session, household, child, user):
         """Activities in the next 4 weeks are governance-approved on materialization."""
         c = AnnualCurriculum(
-            household_id=household.id, child_id=child.id, created_by=user.id,
-            subject_name="Reading", academic_year="2026-2027",
-            total_weeks=6, hours_per_week=3.0,
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            subject_name="Reading",
+            academic_year="2026-2027",
+            total_weeks=6,
+            hours_per_week=3.0,
             start_date=date.today(),  # Start today
             end_date=date.today() + timedelta(weeks=6),
             scope_sequence=_make_scope_sequence(6),
-            status="draft", actual_record={"weeks": {}},
+            status="draft",
+            actual_record={"weeks": {}},
         )
         db_session.add(c)
         await db_session.flush()
         await approve_annual_curriculum(db_session, c.id, user.id, household.id)
 
-        plan_result = await db_session.execute(
-            select(Plan).where(Plan.annual_curriculum_id == c.id)
-        )
+        plan_result = await db_session.execute(select(Plan).where(Plan.annual_curriculum_id == c.id))
         plan = plan_result.scalar_one()
 
         # Weeks whose start_date <= today + 4 weeks are approved.
@@ -181,9 +182,7 @@ class TestMaterialization:
                 select(PlanWeek).where(PlanWeek.plan_id == plan.id, PlanWeek.week_number == wn)
             )
             wk = wk_result.scalar_one()
-            acts_result = await db_session.execute(
-                select(Activity).where(Activity.plan_week_id == wk.id)
-            )
+            acts_result = await db_session.execute(select(Activity).where(Activity.plan_week_id == wk.id))
             acts = acts_result.scalars().all()
             if wn <= 5:
                 assert all(a.governance_approved for a in acts), f"Week {wn} should be approved"
@@ -192,44 +191,50 @@ class TestMaterialization:
 
 
 class TestWeekCompletion:
-
     @pytest.mark.asyncio
     async def test_week_completion_records_history(self, db_session, household, child, user):
         """Complete a week and verify actual_record updated."""
         c = AnnualCurriculum(
-            household_id=household.id, child_id=child.id, created_by=user.id,
-            subject_name="Science", academic_year="2026-2027",
-            total_weeks=4, hours_per_week=3.0,
-            start_date=date(2026, 9, 1), end_date=date(2026, 10, 1),
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            subject_name="Science",
+            academic_year="2026-2027",
+            total_weeks=4,
+            hours_per_week=3.0,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 10, 1),
             scope_sequence=_make_scope_sequence(4),
-            status="draft", actual_record={"weeks": {}},
+            status="draft",
+            actual_record={"weeks": {}},
         )
         db_session.add(c)
         await db_session.flush()
         await approve_annual_curriculum(db_session, c.id, user.id, household.id)
 
         # Complete some activities in week 1
-        plan_result = await db_session.execute(
-            select(Plan).where(Plan.annual_curriculum_id == c.id)
-        )
+        plan_result = await db_session.execute(select(Plan).where(Plan.annual_curriculum_id == c.id))
         plan = plan_result.scalar_one()
         wk_result = await db_session.execute(
             select(PlanWeek).where(PlanWeek.plan_id == plan.id, PlanWeek.week_number == 1)
         )
         wk = wk_result.scalar_one()
-        acts_result = await db_session.execute(
-            select(Activity).where(Activity.plan_week_id == wk.id)
-        )
+        acts_result = await db_session.execute(select(Activity).where(Activity.plan_week_id == wk.id))
         acts = acts_result.scalars().all()
 
         # Mark 3 of 5 as completed
         for i, act in enumerate(acts[:3]):
             act.status = ActivityStatus.completed
-            db_session.add(Attempt(
-                activity_id=act.id, household_id=household.id,
-                child_id=child.id, status=AttemptStatus.completed,
-                completed_at=datetime.now(UTC), duration_minutes=25,
-            ))
+            db_session.add(
+                Attempt(
+                    activity_id=act.id,
+                    household_id=household.id,
+                    child_id=child.id,
+                    status=AttemptStatus.completed,
+                    completed_at=datetime.now(UTC),
+                    duration_minutes=25,
+                )
+            )
         acts[3].status = ActivityStatus.skipped
         await db_session.flush()
 
@@ -251,10 +256,15 @@ class TestWeekCompletion:
     async def test_parent_notes_persisted(self, db_session, household, child, user):
         """Add parent notes to a future week, verify persistence."""
         c = AnnualCurriculum(
-            household_id=household.id, child_id=child.id, created_by=user.id,
-            subject_name="History", academic_year="2026-2027",
-            total_weeks=4, hours_per_week=3.0,
-            start_date=date(2026, 9, 1), end_date=date(2026, 10, 1),
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            subject_name="History",
+            academic_year="2026-2027",
+            total_weeks=4,
+            hours_per_week=3.0,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 10, 1),
             scope_sequence=_make_scope_sequence(4),
             status="active",
             actual_record={"weeks": {"3": {"parent_notes": "Planning a field trip!"}}},
@@ -268,33 +278,34 @@ class TestWeekCompletion:
 
 
 class TestActivityCRUD:
-
     @pytest.mark.asyncio
     async def test_remove_activity_soft_delete(self, db_session, household, child, user):
         """Remove activity sets status to cancelled, not hard delete."""
         c = AnnualCurriculum(
-            household_id=household.id, child_id=child.id, created_by=user.id,
-            subject_name="Art", academic_year="2026-2027",
-            total_weeks=2, hours_per_week=2.0,
-            start_date=date(2026, 9, 1), end_date=date(2026, 9, 15),
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            subject_name="Art",
+            academic_year="2026-2027",
+            total_weeks=2,
+            hours_per_week=2.0,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 15),
             scope_sequence=_make_scope_sequence(2),
-            status="draft", actual_record={"weeks": {}},
+            status="draft",
+            actual_record={"weeks": {}},
         )
         db_session.add(c)
         await db_session.flush()
         await approve_annual_curriculum(db_session, c.id, user.id, household.id)
 
-        plan_result = await db_session.execute(
-            select(Plan).where(Plan.annual_curriculum_id == c.id)
-        )
+        plan_result = await db_session.execute(select(Plan).where(Plan.annual_curriculum_id == c.id))
         plan = plan_result.scalar_one()
         wk_result = await db_session.execute(
             select(PlanWeek).where(PlanWeek.plan_id == plan.id, PlanWeek.week_number == 1)
         )
         wk = wk_result.scalar_one()
-        acts_result = await db_session.execute(
-            select(Activity).where(Activity.plan_week_id == wk.id)
-        )
+        acts_result = await db_session.execute(select(Activity).where(Activity.plan_week_id == wk.id))
         act = acts_result.scalars().first()
 
         # Soft delete
@@ -310,20 +321,24 @@ class TestActivityCRUD:
     async def test_move_activity_between_weeks(self, db_session, household, child, user):
         """Move an activity from week 1 to week 2."""
         c = AnnualCurriculum(
-            household_id=household.id, child_id=child.id, created_by=user.id,
-            subject_name="Music", academic_year="2026-2027",
-            total_weeks=3, hours_per_week=2.0,
-            start_date=date(2026, 9, 1), end_date=date(2026, 9, 22),
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            subject_name="Music",
+            academic_year="2026-2027",
+            total_weeks=3,
+            hours_per_week=2.0,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 22),
             scope_sequence=_make_scope_sequence(3),
-            status="draft", actual_record={"weeks": {}},
+            status="draft",
+            actual_record={"weeks": {}},
         )
         db_session.add(c)
         await db_session.flush()
         await approve_annual_curriculum(db_session, c.id, user.id, household.id)
 
-        plan_result = await db_session.execute(
-            select(Plan).where(Plan.annual_curriculum_id == c.id)
-        )
+        plan_result = await db_session.execute(select(Plan).where(Plan.annual_curriculum_id == c.id))
         plan = plan_result.scalar_one()
 
         # Get week 1 and week 2
@@ -337,9 +352,7 @@ class TestActivityCRUD:
         wk2 = wk2_result.scalar_one()
 
         # Get first activity from week 1
-        acts_result = await db_session.execute(
-            select(Activity).where(Activity.plan_week_id == wk1.id)
-        )
+        acts_result = await db_session.execute(select(Activity).where(Activity.plan_week_id == wk1.id))
         act = acts_result.scalars().first()
         act_id = act.id
 
@@ -354,15 +367,19 @@ class TestActivityCRUD:
 
 
 class TestHistory:
-
     @pytest.mark.asyncio
     async def test_curriculum_history_returns_planned_and_actual(self, db_session, household, child, user):
         """Get history for a curriculum with both planned and actual data."""
         c = AnnualCurriculum(
-            household_id=household.id, child_id=child.id, created_by=user.id,
-            subject_name="Math", academic_year="2026-2027",
-            total_weeks=4, hours_per_week=3.0,
-            start_date=date(2026, 9, 1), end_date=date(2026, 10, 1),
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            subject_name="Math",
+            academic_year="2026-2027",
+            total_weeks=4,
+            hours_per_week=3.0,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 10, 1),
             scope_sequence=_make_scope_sequence(4),
             status="active",
             actual_record={"weeks": {"1": {"completed_activities": 4, "parent_notes": "Good week"}}},
@@ -382,15 +399,22 @@ class TestHistory:
         """Create curricula across multiple years, verify history returns all."""
         for year in ["2025-2026", "2026-2027"]:
             for subject in ["Math", "Reading"]:
-                db_session.add(AnnualCurriculum(
-                    household_id=household.id, child_id=child.id, created_by=user.id,
-                    subject_name=subject, academic_year=year,
-                    total_weeks=36, hours_per_week=4.0,
-                    start_date=date(int(year[:4]), 9, 1),
-                    end_date=date(int(year[:4]) + 1, 5, 15),
-                    scope_sequence=_make_scope_sequence(2),
-                    status="active", actual_record={"weeks": {}},
-                ))
+                db_session.add(
+                    AnnualCurriculum(
+                        household_id=household.id,
+                        child_id=child.id,
+                        created_by=user.id,
+                        subject_name=subject,
+                        academic_year=year,
+                        total_weeks=36,
+                        hours_per_week=4.0,
+                        start_date=date(int(year[:4]), 9, 1),
+                        end_date=date(int(year[:4]) + 1, 5, 15),
+                        scope_sequence=_make_scope_sequence(2),
+                        status="active",
+                        actual_record={"weeks": {}},
+                    )
+                )
         await db_session.flush()
 
         # Query all curricula for this child
@@ -411,27 +435,29 @@ class TestHistory:
 
 
 class TestApproachingWeeksEval:
-
     @pytest.mark.asyncio
     async def test_evaluate_approaching_weeks(self, db_session, household, child, user):
         """Verify activities in approaching weeks get governance-approved."""
         c = AnnualCurriculum(
-            household_id=household.id, child_id=child.id, created_by=user.id,
-            subject_name="Science", academic_year="2026-2027",
-            total_weeks=8, hours_per_week=3.0,
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            subject_name="Science",
+            academic_year="2026-2027",
+            total_weeks=8,
+            hours_per_week=3.0,
             start_date=date.today(),
             end_date=date.today() + timedelta(weeks=8),
             scope_sequence=_make_scope_sequence(8),
-            status="draft", actual_record={"weeks": {}},
+            status="draft",
+            actual_record={"weeks": {}},
         )
         db_session.add(c)
         await db_session.flush()
         await approve_annual_curriculum(db_session, c.id, user.id, household.id)
 
         # Weeks 5-8 should be unapproved
-        plan_result = await db_session.execute(
-            select(Plan).where(Plan.annual_curriculum_id == c.id)
-        )
+        plan_result = await db_session.execute(select(Plan).where(Plan.annual_curriculum_id == c.id))
         plan = plan_result.scalar_one()
 
         # Run evaluation for next 6 weeks (should catch weeks 5-6)
@@ -443,8 +469,6 @@ class TestApproachingWeeksEval:
                 select(PlanWeek).where(PlanWeek.plan_id == plan.id, PlanWeek.week_number == wn)
             )
             wk = wk_result.scalar_one()
-            acts_result = await db_session.execute(
-                select(Activity).where(Activity.plan_week_id == wk.id)
-            )
+            acts_result = await db_session.execute(select(Activity).where(Activity.plan_week_id == wk.id))
             acts = acts_result.scalars().all()
             assert all(a.governance_approved for a in acts), f"Week {wn} should be approved after eval"

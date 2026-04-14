@@ -211,7 +211,7 @@ async def process_review(
     weights = child_obj.fsrs_weights if child_obj else None
     scheduler = _get_scheduler(weights)
     fsrs_card = _db_card_to_fsrs(db_card)
-    updated_card, review_log_entry = scheduler.review_card(fsrs_card, rating, now)
+    updated_card, _review_log_entry = scheduler.review_card(fsrs_card, rating, now)
 
     # 3. Update DB card
     _fsrs_card_to_db(updated_card, db_card)

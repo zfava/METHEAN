@@ -56,9 +56,7 @@ async def sv_child(db_session: AsyncSession, sv_household: Household) -> Child:
 
 def _build_rich_intelligence(child_id: uuid.UUID, household_id: uuid.UUID) -> LearnerIntelligence:
     """Build a LearnerIntelligence with enough data to activate all dimensions."""
-    durations = [20, 22, 25, 18, 30, 28, 15, 20, 25, 22,
-                 18, 20, 24, 26, 19, 21, 23, 27, 20, 22,
-                 25, 18, 20, 24, 22]
+    durations = [20, 22, 25, 18, 30, 28, 15, 20, 25, 22, 18, 20, 24, 26, 19, 21, 23, 27, 20, 22, 25, 18, 20, 24, 22]
 
     sessions = []
     for i in range(25):
@@ -97,9 +95,27 @@ def _build_rich_intelligence(child_id: uuid.UUID, household_id: uuid.UUID) -> Le
     transitions = []
     for i in range(30):
         if i % 3 == 0:
-            transitions.append({"subject": "math", "node": f"N{i}", "from": "developing", "to": "emerging", "direction": "down", "at": "2026-01-01"})
+            transitions.append(
+                {
+                    "subject": "math",
+                    "node": f"N{i}",
+                    "from": "developing",
+                    "to": "emerging",
+                    "direction": "down",
+                    "at": "2026-01-01",
+                }
+            )
         else:
-            transitions.append({"subject": "math", "node": f"N{i}", "from": "emerging", "to": "developing", "direction": "up", "at": "2026-01-01"})
+            transitions.append(
+                {
+                    "subject": "math",
+                    "node": f"N{i}",
+                    "from": "emerging",
+                    "to": "developing",
+                    "direction": "up",
+                    "at": "2026-01-01",
+                }
+            )
 
     return LearnerIntelligence(
         child_id=child_id,
@@ -191,7 +207,9 @@ class TestOptimalSessionFromDurations:
 
 class TestSocraticFromTutorSessions:
     def test_computes_from_sessions(self):
-        sessions = [{"hints": 5, "messages": 10, "self_corrections": 4}] * 12 + [{"hints": 0, "messages": 8, "self_corrections": 1}] * 13
+        sessions = [{"hints": 5, "messages": 10, "self_corrections": 4}] * 12 + [
+            {"hints": 0, "messages": 8, "self_corrections": 1}
+        ] * 13
         result = _compute_socratic_responsiveness({"sessions": sessions})
         assert result is not None
         assert 0.0 <= result <= 1.0
@@ -259,12 +277,14 @@ class TestSubjectAffinityComputation:
 
 class TestModalityFromActivityTypes:
     def test_computes_modality(self):
-        eng = {"activity_type_stats": {
-            "lesson": {"completed": 8, "total": 10},
-            "practice": {"completed": 12, "total": 15},
-            "review": {"completed": 5, "total": 5},
-            "assessment": {"completed": 4, "total": 5},
-        }}
+        eng = {
+            "activity_type_stats": {
+                "lesson": {"completed": 8, "total": 10},
+                "practice": {"completed": 12, "total": 15},
+                "review": {"completed": 5, "total": 5},
+                "assessment": {"completed": 4, "total": 5},
+            }
+        }
         result = _compute_modality_preference(eng)
         assert result in ("visual", "auditory", "kinesthetic", "reading_writing", "mixed")
 
@@ -310,8 +330,7 @@ class TestAttentionSustained:
 
 class TestAttentionVariable:
     def test_variable_high_variance(self):
-        durations = [10, 50, 15, 45, 12, 48, 10, 55, 14, 42,
-                     10, 50, 15, 45, 12, 48, 10, 55, 14, 42, 35]
+        durations = [10, 50, 15, 45, 12, 48, 10, 55, 14, 42, 10, 50, 15, 45, 12, 48, 10, 55, 14, 42, 35]
         result = _compute_attention_pattern({"recent_durations": durations})
         assert result == "variable"
 
@@ -328,7 +347,8 @@ class TestParentGovernance:
         db_session.add(intel)
         await db_session.flush()
         vector = LearnerStyleVector(
-            child_id=sv_child.id, household_id=sv_household.id,
+            child_id=sv_child.id,
+            household_id=sv_household.id,
             parent_overrides={"optimal_session_minutes": {"value": 25, "locked": True}},
         )
         db_session.add(vector)
@@ -341,7 +361,8 @@ class TestParentGovernance:
         db_session.add(intel)
         await db_session.flush()
         vector = LearnerStyleVector(
-            child_id=sv_child.id, household_id=sv_household.id,
+            child_id=sv_child.id,
+            household_id=sv_household.id,
             parent_overrides={"optimal_session_minutes": {"value": 45, "locked": False}},
         )
         db_session.add(vector)
@@ -355,7 +376,8 @@ class TestParentGovernance:
         db_session.add(intel)
         await db_session.flush()
         vector = LearnerStyleVector(
-            child_id=sv_child.id, household_id=sv_household.id,
+            child_id=sv_child.id,
+            household_id=sv_household.id,
             parent_bounds={"optimal_session_minutes": {"min": 15, "max": 18}},
         )
         db_session.add(vector)
@@ -373,9 +395,17 @@ class TestDimensionsActiveCount:
         await db_session.flush()
         vector = await compute_style_vector(db_session, sv_child.id, sv_household.id)
         # Count manually
-        fields = ["optimal_session_minutes", "socratic_responsiveness", "frustration_threshold",
-                   "recovery_rate", "time_of_day_peak", "modality_preference",
-                   "pacing_preference", "independence_level", "attention_pattern"]
+        fields = [
+            "optimal_session_minutes",
+            "socratic_responsiveness",
+            "frustration_threshold",
+            "recovery_rate",
+            "time_of_day_peak",
+            "modality_preference",
+            "pacing_preference",
+            "independence_level",
+            "attention_pattern",
+        ]
         manual = sum(1 for f in fields if getattr(vector, f) is not None)
         if vector.subject_affinity_map:
             manual += 1
@@ -397,9 +427,11 @@ class TestUpsert:
         id1 = v1.id
         v2 = await compute_style_vector(db_session, sv_child.id, sv_household.id)
         assert v2.id == id1
-        count = (await db_session.execute(
-            select(LearnerStyleVector).where(LearnerStyleVector.child_id == sv_child.id)
-        )).scalars().all()
+        count = (
+            (await db_session.execute(select(LearnerStyleVector).where(LearnerStyleVector.child_id == sv_child.id)))
+            .scalars()
+            .all()
+        )
         assert len(count) == 1
 
 
@@ -416,14 +448,17 @@ class TestBuildStyleContext:
 
     async def test_partial_vector(self, db_session, sv_child, sv_household):
         intel = LearnerIntelligence(
-            child_id=sv_child.id, household_id=sv_household.id,
+            child_id=sv_child.id,
+            household_id=sv_household.id,
             observation_count=25,
             engagement_patterns={
                 "recent_durations": list(range(15, 36)),
                 "time_of_day_counts": {"morning": 15, "afternoon": 5, "evening": 2},
                 "activity_type_stats": {},
             },
-            subject_patterns={}, tutor_interaction_analysis={}, pace_trends={},
+            subject_patterns={},
+            tutor_interaction_analysis={},
+            pace_trends={},
         )
         db_session.add(intel)
         await db_session.flush()

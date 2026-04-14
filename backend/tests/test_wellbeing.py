@@ -27,6 +27,8 @@ class _MockConfig:
         self.sensitivity_level = sensitivity_level
         self.custom_thresholds = custom_thresholds or {}
         self.threshold_adjustments = threshold_adjustments or {}
+
+
 from app.services.wellbeing_detection import (
     _detect_broad_disengagement,
     _detect_frustration_spike,
@@ -75,41 +77,58 @@ async def wb_nodes(db_session, wb_household, wb_subjects) -> dict[str, LearningN
         m = LearningMap(household_id=wb_household.id, subject_id=subj.id, name=f"{subj_name} Map")
         db_session.add(m)
         await db_session.flush()
-        n = LearningNode(learning_map_id=m.id, household_id=wb_household.id,
-                         node_type=NodeType.concept, title=f"{subj_name} Node")
+        n = LearningNode(
+            learning_map_id=m.id, household_id=wb_household.id, node_type=NodeType.concept, title=f"{subj_name} Node"
+        )
         db_session.add(n)
         await db_session.flush()
         nodes[subj_name] = n
     return nodes
 
 
-async def _seed_attempts(db_session, wb_household, wb_child, nodes,
-                          days_start, days_end, status="completed", duration=25, count=8):
+async def _seed_attempts(
+    db_session, wb_household, wb_child, nodes, days_start, days_end, status="completed", duration=25, count=8
+):
     """Seed attempts across all subjects in a date range."""
     now = datetime.now(UTC)
     # Create a Plan+PlanWeek scaffold for the activities
     plan = Plan(household_id=wb_household.id, child_id=wb_child.id, name="WB Seed Plan")
     db_session.add(plan)
     await db_session.flush()
-    week = PlanWeek(plan_id=plan.id, household_id=wb_household.id, week_number=1,
-                    start_date=date(2026, 1, 5), end_date=date(2026, 1, 11))
+    week = PlanWeek(
+        plan_id=plan.id,
+        household_id=wb_household.id,
+        week_number=1,
+        start_date=date(2026, 1, 5),
+        end_date=date(2026, 1, 11),
+    )
     db_session.add(week)
     await db_session.flush()
     for subj_name, node in nodes.items():
         for i in range(count):
             day = days_start - (i * max(1, (days_start - days_end) // max(count - 1, 1)))
-            act = Activity(plan_week_id=week.id, household_id=wb_household.id,
-                           title=f"{subj_name} {i}",
-                           activity_type="practice", node_id=node.id, estimated_minutes=30,
-                           scheduled_date=(now - timedelta(days=day)).date())
+            act = Activity(
+                plan_week_id=week.id,
+                household_id=wb_household.id,
+                title=f"{subj_name} {i}",
+                activity_type="practice",
+                node_id=node.id,
+                estimated_minutes=30,
+                scheduled_date=(now - timedelta(days=day)).date(),
+            )
             db_session.add(act)
             await db_session.flush()
-            db_session.add(Attempt(
-                activity_id=act.id, household_id=wb_household.id, child_id=wb_child.id,
-                status=status, duration_minutes=duration,
-                created_at=now - timedelta(days=day),
-                completed_at=now - timedelta(days=day) if status == "completed" else None,
-            ))
+            db_session.add(
+                Attempt(
+                    activity_id=act.id,
+                    household_id=wb_household.id,
+                    child_id=wb_child.id,
+                    status=status,
+                    duration_minutes=duration,
+                    created_at=now - timedelta(days=day),
+                    completed_at=now - timedelta(days=day) if status == "completed" else None,
+                )
+            )
     await db_session.flush()
 
 
@@ -142,20 +161,40 @@ class TestThresholds:
 
 class TestBroadDisengagement:
     def _make_baselines(self, subjects, mean=0.8, std=0.1):
-        return {"subjects": {s: {
-            "effort_quality_mean": mean, "effort_quality_std": std,
-            "frustration_frequency": 0.1, "frustration_std": 0.1,
-            "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1,
-            "session_completion_rate": 0.9, "completion_std": 0.1, "data_points": 30,
-        } for s in subjects}}
+        return {
+            "subjects": {
+                s: {
+                    "effort_quality_mean": mean,
+                    "effort_quality_std": std,
+                    "frustration_frequency": 0.1,
+                    "frustration_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                    "data_points": 30,
+                }
+                for s in subjects
+            }
+        }
 
     def _make_recent(self, subjects, effort=0.8):
-        return {"subjects": {s: {
-            "effort_quality_mean": effort, "effort_quality_std": 0.1,
-            "frustration_frequency": 0.1, "frustration_std": 0.1,
-            "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1,
-            "session_completion_rate": 0.9, "completion_std": 0.1, "data_points": 10,
-        } for s in subjects}}
+        return {
+            "subjects": {
+                s: {
+                    "effort_quality_mean": effort,
+                    "effort_quality_std": 0.1,
+                    "frustration_frequency": 0.1,
+                    "frustration_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                    "data_points": 10,
+                }
+                for s in subjects
+            }
+        }
 
     def test_detected(self):
         bl = self._make_baselines(["Math", "Reading", "Science"])
@@ -206,55 +245,145 @@ class TestBroadDisengagement:
 
 class TestFrustrationSpike:
     def test_detected(self):
-        bl = {"subjects": {s: {
-            "frustration_frequency": 0.1, "frustration_std": 0.05,
-            "effort_quality_mean": 0.8, "effort_quality_std": 0.1,
-            "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1,
-            "session_completion_rate": 0.9, "completion_std": 0.1, "data_points": 30,
-        } for s in ["Math", "Reading"]}}
-        rc = {"subjects": {s: {
-            "frustration_frequency": 0.3, "frustration_std": 0.05,
-            "effort_quality_mean": 0.8, "effort_quality_std": 0.1,
-            "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1,
-            "session_completion_rate": 0.9, "completion_std": 0.1, "data_points": 10,
-        } for s in ["Math", "Reading"]}}
+        bl = {
+            "subjects": {
+                s: {
+                    "frustration_frequency": 0.1,
+                    "frustration_std": 0.05,
+                    "effort_quality_mean": 0.8,
+                    "effort_quality_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                    "data_points": 30,
+                }
+                for s in ["Math", "Reading"]
+            }
+        }
+        rc = {
+            "subjects": {
+                s: {
+                    "frustration_frequency": 0.3,
+                    "frustration_std": 0.05,
+                    "effort_quality_mean": 0.8,
+                    "effort_quality_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                    "data_points": 10,
+                }
+                for s in ["Math", "Reading"]
+            }
+        }
         result = _detect_frustration_spike(bl, rc, None, "Emma")
         assert result is not None
         assert result.anomaly_type == AnomalyType.frustration_spike
 
     def test_not_triggered_one_subject(self):
-        bl = {"subjects": {"Math": {"frustration_frequency": 0.1, "frustration_std": 0.05, "data_points": 30,
-                                     "effort_quality_mean": 0.8, "effort_quality_std": 0.1,
-                                     "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1,
-                                     "session_completion_rate": 0.9, "completion_std": 0.1}}}
-        rc = {"subjects": {"Math": {"frustration_frequency": 0.3, "frustration_std": 0.05, "data_points": 10,
-                                     "effort_quality_mean": 0.8, "effort_quality_std": 0.1,
-                                     "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1,
-                                     "session_completion_rate": 0.9, "completion_std": 0.1}}}
+        bl = {
+            "subjects": {
+                "Math": {
+                    "frustration_frequency": 0.1,
+                    "frustration_std": 0.05,
+                    "data_points": 30,
+                    "effort_quality_mean": 0.8,
+                    "effort_quality_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                }
+            }
+        }
+        rc = {
+            "subjects": {
+                "Math": {
+                    "frustration_frequency": 0.3,
+                    "frustration_std": 0.05,
+                    "data_points": 10,
+                    "effort_quality_mean": 0.8,
+                    "effort_quality_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                }
+            }
+        }
         result = _detect_frustration_spike(bl, rc, None, "Emma")
         assert result is None
 
     def test_not_triggered_slight_increase(self):
-        bl = {"subjects": {s: {"frustration_frequency": 0.2, "frustration_std": 0.05, "data_points": 30,
-                                "effort_quality_mean": 0.8, "effort_quality_std": 0.1,
-                                "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1,
-                                "session_completion_rate": 0.9, "completion_std": 0.1} for s in ["Math", "Reading"]}}
-        rc = {"subjects": {s: {"frustration_frequency": 0.25, "frustration_std": 0.05, "data_points": 10,
-                                "effort_quality_mean": 0.8, "effort_quality_std": 0.1,
-                                "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1,
-                                "session_completion_rate": 0.9, "completion_std": 0.1} for s in ["Math", "Reading"]}}
+        bl = {
+            "subjects": {
+                s: {
+                    "frustration_frequency": 0.2,
+                    "frustration_std": 0.05,
+                    "data_points": 30,
+                    "effort_quality_mean": 0.8,
+                    "effort_quality_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                }
+                for s in ["Math", "Reading"]
+            }
+        }
+        rc = {
+            "subjects": {
+                s: {
+                    "frustration_frequency": 0.25,
+                    "frustration_std": 0.05,
+                    "data_points": 10,
+                    "effort_quality_mean": 0.8,
+                    "effort_quality_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                }
+                for s in ["Math", "Reading"]
+            }
+        }
         result = _detect_frustration_spike(bl, rc, None, "Emma")
         assert result is None
 
     def test_message_tone(self):
-        bl = {"subjects": {s: {"frustration_frequency": 0.1, "frustration_std": 0.05, "data_points": 30,
-                                "effort_quality_mean": 0.8, "effort_quality_std": 0.1,
-                                "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1,
-                                "session_completion_rate": 0.9, "completion_std": 0.1} for s in ["Math", "Reading"]}}
-        rc = {"subjects": {s: {"frustration_frequency": 0.4, "frustration_std": 0.05, "data_points": 10,
-                                "effort_quality_mean": 0.8, "effort_quality_std": 0.1,
-                                "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1,
-                                "session_completion_rate": 0.9, "completion_std": 0.1} for s in ["Math", "Reading"]}}
+        bl = {
+            "subjects": {
+                s: {
+                    "frustration_frequency": 0.1,
+                    "frustration_std": 0.05,
+                    "data_points": 30,
+                    "effort_quality_mean": 0.8,
+                    "effort_quality_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                }
+                for s in ["Math", "Reading"]
+            }
+        }
+        rc = {
+            "subjects": {
+                s: {
+                    "frustration_frequency": 0.4,
+                    "frustration_std": 0.05,
+                    "data_points": 10,
+                    "effort_quality_mean": 0.8,
+                    "effort_quality_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                }
+                for s in ["Math", "Reading"]
+            }
+        }
         result = _detect_frustration_spike(bl, rc, None, "Emma")
         assert result is not None
         assert "Emma" in result.parent_message
@@ -269,24 +398,36 @@ class TestFrustrationSpike:
 @pytest.mark.asyncio
 class TestDeduplication:
     async def test_same_type_within_14_days(self, db_session, wb_child, wb_household):
-        db_session.add(WellbeingAnomaly(
-            household_id=wb_household.id, child_id=wb_child.id,
-            anomaly_type=AnomalyType.broad_disengagement, severity=2.0,
-            affected_subjects=["Math"], evidence_json={}, parent_message="Test",
-            sensitivity_level=SensitivityLevel.balanced,
-        ))
+        db_session.add(
+            WellbeingAnomaly(
+                household_id=wb_household.id,
+                child_id=wb_child.id,
+                anomaly_type=AnomalyType.broad_disengagement,
+                severity=2.0,
+                affected_subjects=["Math"],
+                evidence_json={},
+                parent_message="Test",
+                sensitivity_level=SensitivityLevel.balanced,
+            )
+        )
         await db_session.flush()
         result = await run_wellbeing_detection(db_session, wb_child.id, wb_household.id)
         bd = [a for a in result if a.anomaly_type == AnomalyType.broad_disengagement]
         assert len(bd) == 0
 
     async def test_allows_different_type(self, db_session, wb_child, wb_household):
-        db_session.add(WellbeingAnomaly(
-            household_id=wb_household.id, child_id=wb_child.id,
-            anomaly_type=AnomalyType.broad_disengagement, severity=2.0,
-            affected_subjects=["Math"], evidence_json={}, parent_message="Test",
-            sensitivity_level=SensitivityLevel.balanced,
-        ))
+        db_session.add(
+            WellbeingAnomaly(
+                household_id=wb_household.id,
+                child_id=wb_child.id,
+                anomaly_type=AnomalyType.broad_disengagement,
+                severity=2.0,
+                affected_subjects=["Math"],
+                evidence_json={},
+                parent_message="Test",
+                sensitivity_level=SensitivityLevel.balanced,
+            )
+        )
         await db_session.flush()
         # Frustration spike is different type — not blocked by existing disengagement
         result = await run_wellbeing_detection(db_session, wb_child.id, wb_household.id)
@@ -294,13 +435,19 @@ class TestDeduplication:
         assert isinstance(result, list)
 
     async def test_allows_after_14_days(self, db_session, wb_child, wb_household):
-        db_session.add(WellbeingAnomaly(
-            household_id=wb_household.id, child_id=wb_child.id,
-            anomaly_type=AnomalyType.broad_disengagement, severity=2.0,
-            affected_subjects=["Math"], evidence_json={}, parent_message="Test",
-            sensitivity_level=SensitivityLevel.balanced,
-            created_at=datetime.now(UTC) - timedelta(days=15),
-        ))
+        db_session.add(
+            WellbeingAnomaly(
+                household_id=wb_household.id,
+                child_id=wb_child.id,
+                anomaly_type=AnomalyType.broad_disengagement,
+                severity=2.0,
+                affected_subjects=["Math"],
+                evidence_json={},
+                parent_message="Test",
+                sensitivity_level=SensitivityLevel.balanced,
+                created_at=datetime.now(UTC) - timedelta(days=15),
+            )
+        )
         await db_session.flush()
         # 15 days old — outside the 14-day dedup window
         # Would allow a new one if detection triggers
@@ -315,20 +462,40 @@ class TestDeduplication:
 
 class TestSensitivity:
     def _bl(self, subjects):
-        return {"subjects": {s: {
-            "effort_quality_mean": 0.8, "effort_quality_std": 0.1,
-            "frustration_frequency": 0.1, "frustration_std": 0.1,
-            "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1,
-            "session_completion_rate": 0.9, "completion_std": 0.1, "data_points": 30,
-        } for s in subjects}}
+        return {
+            "subjects": {
+                s: {
+                    "effort_quality_mean": 0.8,
+                    "effort_quality_std": 0.1,
+                    "frustration_frequency": 0.1,
+                    "frustration_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                    "data_points": 30,
+                }
+                for s in subjects
+            }
+        }
 
     def _rc(self, subjects, effort):
-        return {"subjects": {s: {
-            "effort_quality_mean": effort, "effort_quality_std": 0.1,
-            "frustration_frequency": 0.1, "frustration_std": 0.1,
-            "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1,
-            "session_completion_rate": 0.9, "completion_std": 0.1, "data_points": 10,
-        } for s in subjects}}
+        return {
+            "subjects": {
+                s: {
+                    "effort_quality_mean": effort,
+                    "effort_quality_std": 0.1,
+                    "frustration_frequency": 0.1,
+                    "frustration_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                    "data_points": 10,
+                }
+                for s in subjects
+            }
+        }
 
     def _config(self, level):
         return _MockConfig(SensitivityLevel(level))
@@ -353,8 +520,7 @@ class TestSensitivity:
         assert result is not None
 
     def test_custom_threshold_overrides(self):
-        c = _MockConfig(SensitivityLevel.balanced,
-                        custom_thresholds={"broad_disengagement": {"sd_threshold": 3.0}})
+        c = _MockConfig(SensitivityLevel.balanced, custom_thresholds={"broad_disengagement": {"sd_threshold": 3.0}})
         bl = self._bl(["M", "R", "S"])
         rc = self._rc(["M", "R", "S"], effort=0.55)  # 2.5 SD < custom 3.0
         result = _detect_broad_disengagement(bl, rc, c, "E")
@@ -370,9 +536,13 @@ class TestSensitivity:
 class TestSelfCalibration:
     async def test_dismissal_increases_threshold(self, db_session, wb_child, wb_household):
         anomaly = WellbeingAnomaly(
-            household_id=wb_household.id, child_id=wb_child.id,
-            anomaly_type=AnomalyType.broad_disengagement, severity=2.0,
-            affected_subjects=["Math"], evidence_json={}, parent_message="Test",
+            household_id=wb_household.id,
+            child_id=wb_child.id,
+            anomaly_type=AnomalyType.broad_disengagement,
+            severity=2.0,
+            affected_subjects=["Math"],
+            evidence_json={},
+            parent_message="Test",
             sensitivity_level=SensitivityLevel.balanced,
         )
         db_session.add(anomaly)
@@ -385,16 +555,21 @@ class TestSelfCalibration:
 
     async def test_dismissal_capped(self, db_session, wb_child, wb_household):
         config = WellbeingConfig(
-            household_id=wb_household.id, child_id=wb_child.id,
+            household_id=wb_household.id,
+            child_id=wb_child.id,
             threshold_adjustments={"broad_disengagement": 0.95},
             total_false_positives=9,
         )
         db_session.add(config)
         await db_session.flush()
         anomaly = WellbeingAnomaly(
-            household_id=wb_household.id, child_id=wb_child.id,
-            anomaly_type=AnomalyType.broad_disengagement, severity=2.0,
-            affected_subjects=["Math"], evidence_json={}, parent_message="Test",
+            household_id=wb_household.id,
+            child_id=wb_child.id,
+            anomaly_type=AnomalyType.broad_disengagement,
+            severity=2.0,
+            affected_subjects=["Math"],
+            evidence_json={},
+            parent_message="Test",
             sensitivity_level=SensitivityLevel.balanced,
         )
         db_session.add(anomaly)
@@ -406,9 +581,13 @@ class TestSelfCalibration:
     async def test_false_positive_count_tracked(self, db_session, wb_child, wb_household):
         for i in range(3):
             a = WellbeingAnomaly(
-                household_id=wb_household.id, child_id=wb_child.id,
-                anomaly_type=AnomalyType.frustration_spike, severity=1.5,
-                affected_subjects=["Math"], evidence_json={}, parent_message="T",
+                household_id=wb_household.id,
+                child_id=wb_child.id,
+                anomaly_type=AnomalyType.frustration_spike,
+                severity=1.5,
+                affected_subjects=["Math"],
+                evidence_json={},
+                parent_message="T",
                 sensitivity_level=SensitivityLevel.balanced,
             )
             db_session.add(a)
@@ -431,10 +610,14 @@ class TestResolution:
         await _seed_attempts(db_session, wb_household, wb_child, wb_nodes, 90, 30, count=25)
         # Create anomaly
         anomaly = WellbeingAnomaly(
-            household_id=wb_household.id, child_id=wb_child.id,
-            anomaly_type=AnomalyType.broad_disengagement, severity=2.0,
-            affected_subjects=list(wb_nodes.keys()), evidence_json={},
-            parent_message="Test", sensitivity_level=SensitivityLevel.balanced,
+            household_id=wb_household.id,
+            child_id=wb_child.id,
+            anomaly_type=AnomalyType.broad_disengagement,
+            severity=2.0,
+            affected_subjects=list(wb_nodes.keys()),
+            evidence_json={},
+            parent_message="Test",
+            sensitivity_level=SensitivityLevel.balanced,
             status=AnomalyStatus.acknowledged,
         )
         db_session.add(anomaly)
@@ -453,19 +636,25 @@ class TestResolution:
     async def test_resolution_audit_log(self, db_session, wb_child, wb_household, wb_nodes):
         await _seed_attempts(db_session, wb_household, wb_child, wb_nodes, 90, 0, count=25)
         anomaly = WellbeingAnomaly(
-            household_id=wb_household.id, child_id=wb_child.id,
-            anomaly_type=AnomalyType.broad_disengagement, severity=0.3,
-            affected_subjects=list(wb_nodes.keys()), evidence_json={},
-            parent_message="Test", sensitivity_level=SensitivityLevel.balanced,
+            household_id=wb_household.id,
+            child_id=wb_child.id,
+            anomaly_type=AnomalyType.broad_disengagement,
+            severity=0.3,
+            affected_subjects=list(wb_nodes.keys()),
+            evidence_json={},
+            parent_message="Test",
+            sensitivity_level=SensitivityLevel.balanced,
             status=AnomalyStatus.detected,
         )
         db_session.add(anomaly)
         await db_session.flush()
         await check_for_resolution(db_session, wb_child.id, wb_household.id)
         # Check if AuditLog was created for any resolution
-        logs = (await db_session.execute(
-            select(AuditLog).where(AuditLog.resource_type == "wellbeing_anomaly")
-        )).scalars().all()
+        logs = (
+            (await db_session.execute(select(AuditLog).where(AuditLog.resource_type == "wellbeing_anomaly")))
+            .scalars()
+            .all()
+        )
         assert isinstance(logs, list)  # May or may not have entries depending on resolution
 
 
@@ -495,8 +684,10 @@ class TestInsufficientData:
 class TestSessionAvoidanceMessage:
     def test_empathetic_language(self):
         expected = "The curriculum can wait; your child's wellbeing cannot."
-        msg = ("Emma has been completing fewer sessions than usual across all subjects. "
-               "This is worth a conversation. The curriculum can wait; your child's wellbeing cannot.")
+        msg = (
+            "Emma has been completing fewer sessions than usual across all subjects. "
+            "This is worth a conversation. The curriculum can wait; your child's wellbeing cannot."
+        )
         assert "wellbeing cannot" in msg
         assert "Emma" in msg
 
@@ -522,9 +713,7 @@ class TestMainEntry:
 class TestChildUIIsolation:
     def test_child_page_has_no_wellbeing_references(self):
         """CRITICAL: Child page must have ZERO wellbeing references."""
-        child_page = os.path.join(
-            os.path.dirname(__file__), "..", "..", "frontend", "src", "app", "child", "page.tsx"
-        )
+        child_page = os.path.join(os.path.dirname(__file__), "..", "..", "frontend", "src", "app", "child", "page.tsx")
         if not os.path.exists(child_page):
             pytest.skip("Frontend child page not found at expected path")
         content = open(child_page).read().lower()

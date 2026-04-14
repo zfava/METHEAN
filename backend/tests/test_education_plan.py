@@ -20,10 +20,14 @@ from app.models.identity import Household
 
 
 class TestEducationPlanGeneration:
-
     @pytest.mark.asyncio
     async def test_generate_plan_creates_draft(
-        self, auth_client, db_session, household, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        child,
+        user,
     ):
         resp = await auth_client.post(
             f"/api/v1/children/{child.id}/education-plan/generate",
@@ -49,7 +53,12 @@ class TestEducationPlanGeneration:
 
     @pytest.mark.asyncio
     async def test_plan_uses_philosophy(
-        self, auth_client, db_session, household, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        child,
+        user,
     ):
         """Set a philosophy, generate a plan, verify AI run includes constraints."""
         # Set philosophy
@@ -68,9 +77,8 @@ class TestEducationPlanGeneration:
 
         if ai_run_id:
             from app.models.operational import AIRun
-            run = await db_session.execute(
-                select(AIRun).where(AIRun.id == uuid.UUID(ai_run_id))
-            )
+
+            run = await db_session.execute(select(AIRun).where(AIRun.id == uuid.UUID(ai_run_id)))
             ai_run = run.scalar_one_or_none()
             if ai_run and ai_run.input_data:
                 prompt = ai_run.input_data.get("system_prompt", "")
@@ -102,10 +110,14 @@ class TestEducationPlanGeneration:
 
 
 class TestEducationPlanApproval:
-
     @pytest.mark.asyncio
     async def test_approve_logs_governance_event(
-        self, auth_client, db_session, household, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        child,
+        user,
     ):
         gen = await auth_client.post(
             f"/api/v1/children/{child.id}/education-plan/generate",
@@ -113,9 +125,7 @@ class TestEducationPlanApproval:
         )
         plan_id = gen.json()["id"]
 
-        resp = await auth_client.post(
-            f"/api/v1/children/{child.id}/education-plan/approve"
-        )
+        resp = await auth_client.post(f"/api/v1/children/{child.id}/education-plan/approve")
         assert resp.status_code == 200
         assert resp.json()["status"] == "active"
         assert resp.json()["approved_at"] is not None
@@ -133,10 +143,14 @@ class TestEducationPlanApproval:
 
 
 class TestYearCurricula:
-
     @pytest.mark.asyncio
     async def test_generate_year_curricula(
-        self, auth_client, db_session, household, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        child,
+        user,
     ):
         await auth_client.post(
             f"/api/v1/children/{child.id}/education-plan/generate",
@@ -152,9 +166,7 @@ class TestYearCurricula:
         year_key = list(year_plans.keys())[0]
         expected_subjects = len(year_plans[year_key].get("subjects", []))
 
-        resp = await auth_client.post(
-            f"/api/v1/children/{child.id}/education-plan/years/{year_key}/generate-curricula"
-        )
+        resp = await auth_client.post(f"/api/v1/children/{child.id}/education-plan/years/{year_key}/generate-curricula")
         assert resp.status_code == 200
         data = resp.json()
         assert data["year_key"] == year_key
@@ -163,10 +175,14 @@ class TestYearCurricula:
 
 
 class TestBaselineAssessment:
-
     @pytest.mark.asyncio
     async def test_baseline_stored_on_plan(
-        self, auth_client, db_session, household, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        child,
+        user,
     ):
         baseline = {
             "reading_level": "above_grade",

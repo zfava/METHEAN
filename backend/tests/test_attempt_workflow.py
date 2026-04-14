@@ -52,12 +52,23 @@ async def aw_activity(db_session, aw_household, aw_node):
     plan = Plan(household_id=aw_household.id, child_id=c.id, name="Test Plan", status="active")
     db_session.add(plan)
     await db_session.flush()
-    week = PlanWeek(plan_id=plan.id, household_id=aw_household.id, week_number=1,
-                    start_date=date(2026, 1, 5), end_date=date(2026, 1, 11))
+    week = PlanWeek(
+        plan_id=plan.id,
+        household_id=aw_household.id,
+        week_number=1,
+        start_date=date(2026, 1, 5),
+        end_date=date(2026, 1, 11),
+    )
     db_session.add(week)
     await db_session.flush()
-    a = Activity(plan_week_id=week.id, household_id=aw_household.id, title="Practice",
-                 activity_type=ActivityType.practice, node_id=aw_node.id, estimated_minutes=20)
+    a = Activity(
+        plan_week_id=week.id,
+        household_id=aw_household.id,
+        title="Practice",
+        activity_type=ActivityType.practice,
+        node_id=aw_node.id,
+        estimated_minutes=20,
+    )
     db_session.add(a)
     await db_session.flush()
     return a
@@ -105,12 +116,22 @@ class TestSubmitAttempt:
         plan = Plan(household_id=aw_household.id, child_id=aw_child.id, name="P", status="active")
         db_session.add(plan)
         await db_session.flush()
-        week = PlanWeek(plan_id=plan.id, household_id=aw_household.id, week_number=1,
-                        start_date=date(2026, 1, 5), end_date=date(2026, 1, 11))
+        week = PlanWeek(
+            plan_id=plan.id,
+            household_id=aw_household.id,
+            week_number=1,
+            start_date=date(2026, 1, 5),
+            end_date=date(2026, 1, 11),
+        )
         db_session.add(week)
         await db_session.flush()
-        a = Activity(plan_week_id=week.id, household_id=aw_household.id, title="No Node",
-                     activity_type=ActivityType.lesson, node_id=None)
+        a = Activity(
+            plan_week_id=week.id,
+            household_id=aw_household.id,
+            title="No Node",
+            activity_type=ActivityType.lesson,
+            node_id=None,
+        )
         db_session.add(a)
         await db_session.flush()
         att = await start_attempt(db_session, a.id, aw_child.id, aw_household.id)

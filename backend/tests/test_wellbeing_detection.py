@@ -22,6 +22,8 @@ class _MockConfig:
         self.sensitivity_level = sensitivity_level
         self.custom_thresholds = custom_thresholds or {}
         self.threshold_adjustments = threshold_adjustments or {}
+
+
 from app.models.intelligence import LearnerIntelligence
 from app.models.state import ChildNodeState
 from app.models.wellbeing import WellbeingAnomaly, WellbeingConfig
@@ -69,8 +71,10 @@ async def wb_maps_and_nodes(db_session, wb_household, wb_subjects) -> dict[str, 
         db_session.add(m)
         await db_session.flush()
         n = LearningNode(
-            learning_map_id=m.id, household_id=wb_household.id,
-            node_type=NodeType.concept, title=f"{subj_name} Node",
+            learning_map_id=m.id,
+            household_id=wb_household.id,
+            node_type=NodeType.concept,
+            title=f"{subj_name} Node",
         )
         db_session.add(n)
         await db_session.flush()
@@ -78,15 +82,21 @@ async def wb_maps_and_nodes(db_session, wb_household, wb_subjects) -> dict[str, 
     return nodes
 
 
-async def _seed_attempts(db_session, wb_household, wb_child, nodes, days_ago_start, days_ago_end,
-                          effort_level="normal", count_per_subject=8):
+async def _seed_attempts(
+    db_session, wb_household, wb_child, nodes, days_ago_start, days_ago_end, effort_level="normal", count_per_subject=8
+):
     """Seed attempts across subjects for a date range."""
     now = datetime.now(UTC)
     plan = Plan(household_id=wb_household.id, child_id=wb_child.id, name="WBD Seed Plan")
     db_session.add(plan)
     await db_session.flush()
-    week = PlanWeek(plan_id=plan.id, household_id=wb_household.id, week_number=1,
-                    start_date=date(2026, 1, 5), end_date=date(2026, 1, 11))
+    week = PlanWeek(
+        plan_id=plan.id,
+        household_id=wb_household.id,
+        week_number=1,
+        start_date=date(2026, 1, 5),
+        end_date=date(2026, 1, 11),
+    )
     db_session.add(week)
     await db_session.flush()
     for subj_name, node in nodes.items():
@@ -94,8 +104,10 @@ async def _seed_attempts(db_session, wb_household, wb_child, nodes, days_ago_sta
             day_offset = days_ago_start - (i * (days_ago_start - days_ago_end) // max(count_per_subject - 1, 1))
             act = Activity(
                 plan_week_id=week.id,
-                household_id=wb_household.id, title=f"{subj_name} Activity {i}",
-                activity_type="practice", node_id=node.id,
+                household_id=wb_household.id,
+                title=f"{subj_name} Activity {i}",
+                activity_type="practice",
+                node_id=node.id,
                 estimated_minutes=30,
                 scheduled_date=(now - timedelta(days=day_offset)).date(),
             )
@@ -104,14 +116,19 @@ async def _seed_attempts(db_session, wb_household, wb_child, nodes, days_ago_sta
 
             if effort_level == "normal":
                 att = Attempt(
-                    activity_id=act.id, household_id=wb_household.id, child_id=wb_child.id,
-                    status="completed", duration_minutes=25,
+                    activity_id=act.id,
+                    household_id=wb_household.id,
+                    child_id=wb_child.id,
+                    status="completed",
+                    duration_minutes=25,
                     completed_at=now - timedelta(days=day_offset),
                     created_at=now - timedelta(days=day_offset),
                 )
             else:
                 att = Attempt(
-                    activity_id=act.id, household_id=wb_household.id, child_id=wb_child.id,
+                    activity_id=act.id,
+                    household_id=wb_household.id,
+                    child_id=wb_child.id,
                     status="abandoned" if i % 3 == 0 else "completed",
                     duration_minutes=5 if i % 2 == 0 else 10,
                     created_at=now - timedelta(days=day_offset),
@@ -120,15 +137,21 @@ async def _seed_attempts(db_session, wb_household, wb_child, nodes, days_ago_sta
     await db_session.flush()
 
 
-async def _seed_predictions(db_session, wb_household, wb_child, nodes, days_ago_start, days_ago_end,
-                              confidence=0.7, count_per_subject=8):
+async def _seed_predictions(
+    db_session, wb_household, wb_child, nodes, days_ago_start, days_ago_end, confidence=0.7, count_per_subject=8
+):
     """Seed evaluator predictions for a date range."""
     now = datetime.now(UTC)
     plan = Plan(household_id=wb_household.id, child_id=wb_child.id, name="WBD Pred Plan")
     db_session.add(plan)
     await db_session.flush()
-    week = PlanWeek(plan_id=plan.id, household_id=wb_household.id, week_number=1,
-                    start_date=date(2026, 1, 5), end_date=date(2026, 1, 11))
+    week = PlanWeek(
+        plan_id=plan.id,
+        household_id=wb_household.id,
+        week_number=1,
+        start_date=date(2026, 1, 5),
+        end_date=date(2026, 1, 11),
+    )
     db_session.add(week)
     await db_session.flush()
     for subj_name, node in nodes.items():
@@ -136,23 +159,32 @@ async def _seed_predictions(db_session, wb_household, wb_child, nodes, days_ago_
             day_offset = days_ago_start - (i * (days_ago_start - days_ago_end) // max(count_per_subject - 1, 1))
             act = Activity(
                 plan_week_id=week.id,
-                household_id=wb_household.id, title=f"Pred {subj_name} {i}",
-                activity_type="practice", node_id=node.id,
+                household_id=wb_household.id,
+                title=f"Pred {subj_name} {i}",
+                activity_type="practice",
+                node_id=node.id,
             )
             db_session.add(act)
             await db_session.flush()
             att = Attempt(
-                activity_id=act.id, household_id=wb_household.id, child_id=wb_child.id,
+                activity_id=act.id,
+                household_id=wb_household.id,
+                child_id=wb_child.id,
                 created_at=now - timedelta(days=day_offset),
             )
             db_session.add(att)
             await db_session.flush()
-            db_session.add(EvaluatorPrediction(
-                household_id=wb_household.id, child_id=wb_child.id,
-                node_id=node.id, attempt_id=att.id,
-                predicted_confidence=confidence, predicted_fsrs_rating=3,
-                created_at=now - timedelta(days=day_offset),
-            ))
+            db_session.add(
+                EvaluatorPrediction(
+                    household_id=wb_household.id,
+                    child_id=wb_child.id,
+                    node_id=node.id,
+                    attempt_id=att.id,
+                    predicted_confidence=confidence,
+                    predicted_fsrs_rating=3,
+                    created_at=now - timedelta(days=day_offset),
+                )
+            )
     await db_session.flush()
 
 
@@ -192,8 +224,15 @@ class TestInsufficientData:
 
     async def test_too_few_data_points(self, db_session, wb_child, wb_household, wb_maps_and_nodes):
         """Only 5 attempts per subject (< 20 threshold) → no anomalies."""
-        await _seed_attempts(db_session, wb_household, wb_child, wb_maps_and_nodes,
-                              days_ago_start=60, days_ago_end=30, count_per_subject=5)
+        await _seed_attempts(
+            db_session,
+            wb_household,
+            wb_child,
+            wb_maps_and_nodes,
+            days_ago_start=60,
+            days_ago_end=30,
+            count_per_subject=5,
+        )
         result = await run_wellbeing_detection(db_session, wb_child.id, wb_household.id)
         assert result == []
 
@@ -206,9 +245,13 @@ class TestInsufficientData:
 @pytest.mark.asyncio
 class TestConfigDisabled:
     async def test_disabled_returns_empty(self, db_session, wb_child, wb_household):
-        db_session.add(WellbeingConfig(
-            household_id=wb_household.id, child_id=wb_child.id, enabled=False,
-        ))
+        db_session.add(
+            WellbeingConfig(
+                household_id=wb_household.id,
+                child_id=wb_child.id,
+                enabled=False,
+            )
+        )
         await db_session.flush()
         result = await run_wellbeing_detection(db_session, wb_child.id, wb_household.id)
         assert result == []
@@ -224,11 +267,27 @@ class TestBroadDisengagement:
     async def test_detected_when_effort_drops(self, db_session, wb_child, wb_household, wb_maps_and_nodes):
         """Normal baseline + low recent effort across 4 subjects → detected."""
         # Baseline: 90-30 days ago, normal effort
-        await _seed_attempts(db_session, wb_household, wb_child, wb_maps_and_nodes,
-                              days_ago_start=90, days_ago_end=30, effort_level="normal", count_per_subject=25)
+        await _seed_attempts(
+            db_session,
+            wb_household,
+            wb_child,
+            wb_maps_and_nodes,
+            days_ago_start=90,
+            days_ago_end=30,
+            effort_level="normal",
+            count_per_subject=25,
+        )
         # Recent: last 14 days, low effort
-        await _seed_attempts(db_session, wb_household, wb_child, wb_maps_and_nodes,
-                              days_ago_start=14, days_ago_end=0, effort_level="low", count_per_subject=8)
+        await _seed_attempts(
+            db_session,
+            wb_household,
+            wb_child,
+            wb_maps_and_nodes,
+            days_ago_start=14,
+            days_ago_end=0,
+            effort_level="low",
+            count_per_subject=8,
+        )
 
         result = await run_wellbeing_detection(db_session, wb_child.id, wb_household.id)
         disengagement = [a for a in result if a.anomaly_type == AnomalyType.broad_disengagement]
@@ -237,8 +296,16 @@ class TestBroadDisengagement:
 
     async def test_not_triggered_normal_effort(self, db_session, wb_child, wb_household, wb_maps_and_nodes):
         """Consistent normal effort → no disengagement anomaly."""
-        await _seed_attempts(db_session, wb_household, wb_child, wb_maps_and_nodes,
-                              days_ago_start=90, days_ago_end=0, effort_level="normal", count_per_subject=25)
+        await _seed_attempts(
+            db_session,
+            wb_household,
+            wb_child,
+            wb_maps_and_nodes,
+            days_ago_start=90,
+            days_ago_end=0,
+            effort_level="normal",
+            count_per_subject=25,
+        )
         result = await run_wellbeing_detection(db_session, wb_child.id, wb_household.id)
         disengagement = [a for a in result if a.anomaly_type == AnomalyType.broad_disengagement]
         assert len(disengagement) == 0
@@ -253,22 +320,60 @@ class TestBroadDisengagement:
 class TestPerformanceCliff:
     async def test_detected_when_confidence_drops(self, db_session, wb_child, wb_household, wb_maps_and_nodes):
         """Normal baseline confidence + sharp recent drop → may detect cliff."""
-        await _seed_predictions(db_session, wb_household, wb_child, wb_maps_and_nodes,
-                                 days_ago_start=90, days_ago_end=30, confidence=0.75, count_per_subject=25)
-        await _seed_predictions(db_session, wb_household, wb_child, wb_maps_and_nodes,
-                                 days_ago_start=7, days_ago_end=0, confidence=0.25, count_per_subject=8)
+        await _seed_predictions(
+            db_session,
+            wb_household,
+            wb_child,
+            wb_maps_and_nodes,
+            days_ago_start=90,
+            days_ago_end=30,
+            confidence=0.75,
+            count_per_subject=25,
+        )
+        await _seed_predictions(
+            db_session,
+            wb_household,
+            wb_child,
+            wb_maps_and_nodes,
+            days_ago_start=7,
+            days_ago_end=0,
+            confidence=0.25,
+            count_per_subject=8,
+        )
         # Need attempts too for baseline computation
-        await _seed_attempts(db_session, wb_household, wb_child, wb_maps_and_nodes,
-                              days_ago_start=90, days_ago_end=0, count_per_subject=25)
+        await _seed_attempts(
+            db_session,
+            wb_household,
+            wb_child,
+            wb_maps_and_nodes,
+            days_ago_start=90,
+            days_ago_end=0,
+            count_per_subject=25,
+        )
         result = await run_wellbeing_detection(db_session, wb_child.id, wb_household.id)
         assert isinstance(result, list)
 
     async def test_not_triggered_stable_confidence(self, db_session, wb_child, wb_household, wb_maps_and_nodes):
         """Stable confidence → no cliff."""
-        await _seed_predictions(db_session, wb_household, wb_child, wb_maps_and_nodes,
-                                 days_ago_start=90, days_ago_end=0, confidence=0.7, count_per_subject=25)
-        await _seed_attempts(db_session, wb_household, wb_child, wb_maps_and_nodes,
-                              days_ago_start=90, days_ago_end=0, count_per_subject=25)
+        await _seed_predictions(
+            db_session,
+            wb_household,
+            wb_child,
+            wb_maps_and_nodes,
+            days_ago_start=90,
+            days_ago_end=0,
+            confidence=0.7,
+            count_per_subject=25,
+        )
+        await _seed_attempts(
+            db_session,
+            wb_household,
+            wb_child,
+            wb_maps_and_nodes,
+            days_ago_start=90,
+            days_ago_end=0,
+            count_per_subject=25,
+        )
         result = await run_wellbeing_detection(db_session, wb_child.id, wb_household.id)
         cliffs = [a for a in result if a.anomaly_type == AnomalyType.performance_cliff]
         assert len(cliffs) == 0
@@ -283,14 +388,19 @@ class TestPerformanceCliff:
 class TestDeduplication:
     async def test_no_duplicate_within_window(self, db_session, wb_child, wb_household):
         """Existing active anomaly within 14 days prevents duplicate."""
-        db_session.add(WellbeingAnomaly(
-            household_id=wb_household.id, child_id=wb_child.id,
-            anomaly_type=AnomalyType.broad_disengagement,
-            severity=2.0, affected_subjects=["Math"],
-            evidence_json={}, parent_message="Test",
-            sensitivity_level=SensitivityLevel.balanced,
-            status=AnomalyStatus.detected,
-        ))
+        db_session.add(
+            WellbeingAnomaly(
+                household_id=wb_household.id,
+                child_id=wb_child.id,
+                anomaly_type=AnomalyType.broad_disengagement,
+                severity=2.0,
+                affected_subjects=["Math"],
+                evidence_json={},
+                parent_message="Test",
+                sensitivity_level=SensitivityLevel.balanced,
+                status=AnomalyStatus.detected,
+            )
+        )
         await db_session.flush()
 
         # Even if detection would fire, dedup should prevent it
@@ -308,22 +418,81 @@ class TestParentMessages:
     def test_disengagement_message_gentle(self):
         """Verify disengagement message is gentle and non-blaming."""
         from app.services.wellbeing_detection import _detect_broad_disengagement
-        baselines = {"subjects": {
-            "Math": {"effort_quality_mean": 0.8, "effort_quality_std": 0.1, "frustration_frequency": 0.1, "frustration_std": 0.1,
-                     "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1, "session_completion_rate": 0.9, "completion_std": 0.1, "data_points": 30},
-            "Reading": {"effort_quality_mean": 0.8, "effort_quality_std": 0.1, "frustration_frequency": 0.1, "frustration_std": 0.1,
-                        "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1, "session_completion_rate": 0.9, "completion_std": 0.1, "data_points": 30},
-            "Science": {"effort_quality_mean": 0.8, "effort_quality_std": 0.1, "frustration_frequency": 0.1, "frustration_std": 0.1,
-                        "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1, "session_completion_rate": 0.9, "completion_std": 0.1, "data_points": 30},
-        }}
-        recent = {"subjects": {
-            "Math": {"effort_quality_mean": 0.3, "effort_quality_std": 0.1, "frustration_frequency": 0.1, "frustration_std": 0.1,
-                     "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1, "session_completion_rate": 0.9, "completion_std": 0.1, "data_points": 10},
-            "Reading": {"effort_quality_mean": 0.3, "effort_quality_std": 0.1, "frustration_frequency": 0.1, "frustration_std": 0.1,
-                        "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1, "session_completion_rate": 0.9, "completion_std": 0.1, "data_points": 10},
-            "Science": {"effort_quality_mean": 0.3, "effort_quality_std": 0.1, "frustration_frequency": 0.1, "frustration_std": 0.1,
-                        "evaluator_confidence_mean": 0.7, "evaluator_confidence_std": 0.1, "session_completion_rate": 0.9, "completion_std": 0.1, "data_points": 10},
-        }}
+
+        baselines = {
+            "subjects": {
+                "Math": {
+                    "effort_quality_mean": 0.8,
+                    "effort_quality_std": 0.1,
+                    "frustration_frequency": 0.1,
+                    "frustration_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                    "data_points": 30,
+                },
+                "Reading": {
+                    "effort_quality_mean": 0.8,
+                    "effort_quality_std": 0.1,
+                    "frustration_frequency": 0.1,
+                    "frustration_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                    "data_points": 30,
+                },
+                "Science": {
+                    "effort_quality_mean": 0.8,
+                    "effort_quality_std": 0.1,
+                    "frustration_frequency": 0.1,
+                    "frustration_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                    "data_points": 30,
+                },
+            }
+        }
+        recent = {
+            "subjects": {
+                "Math": {
+                    "effort_quality_mean": 0.3,
+                    "effort_quality_std": 0.1,
+                    "frustration_frequency": 0.1,
+                    "frustration_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                    "data_points": 10,
+                },
+                "Reading": {
+                    "effort_quality_mean": 0.3,
+                    "effort_quality_std": 0.1,
+                    "frustration_frequency": 0.1,
+                    "frustration_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                    "data_points": 10,
+                },
+                "Science": {
+                    "effort_quality_mean": 0.3,
+                    "effort_quality_std": 0.1,
+                    "frustration_frequency": 0.1,
+                    "frustration_std": 0.1,
+                    "evaluator_confidence_mean": 0.7,
+                    "evaluator_confidence_std": 0.1,
+                    "session_completion_rate": 0.9,
+                    "completion_std": 0.1,
+                    "data_points": 10,
+                },
+            }
+        }
         result = _detect_broad_disengagement(baselines, recent, None, "Emma")
         if result:
             assert "You know your child best" in result.parent_message
@@ -350,7 +519,14 @@ class TestParentMessages:
 class TestRunDetection:
     async def test_runs_without_error(self, db_session, wb_child, wb_household, wb_maps_and_nodes):
         """Main entry runs all detectors without crashing."""
-        await _seed_attempts(db_session, wb_household, wb_child, wb_maps_and_nodes,
-                              days_ago_start=90, days_ago_end=0, count_per_subject=25)
+        await _seed_attempts(
+            db_session,
+            wb_household,
+            wb_child,
+            wb_maps_and_nodes,
+            days_ago_start=90,
+            days_ago_end=0,
+            count_per_subject=25,
+        )
         result = await run_wellbeing_detection(db_session, wb_child.id, wb_household.id)
         assert isinstance(result, list)

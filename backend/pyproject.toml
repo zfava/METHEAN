@@ -1,15 +1,20 @@
 [tool.ruff]
 target-version = "py312"
 line-length = 120
+src = ["app"]
 
 [tool.ruff.lint]
 select = [
-    "E",   # pycodestyle errors
-    "W",   # pycodestyle warnings
-    "F",   # pyflakes
-    "I",   # isort
-    "B",   # flake8-bugbear
-    "UP",  # pyupgrade
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # pyflakes
+    "I",     # isort
+    "N",     # pep8-naming
+    "UP",    # pyupgrade
+    "B",     # flake8-bugbear
+    "SIM",   # flake8-simplify
+    "TCH",   # flake8-type-checking
+    "RUF",   # ruff-specific rules
 ]
 ignore = [
     "E501",   # line too long (handled by formatter)
@@ -18,11 +23,27 @@ ignore = [
     "B904",   # raise from in except (too noisy for advisory try/except blocks)
     "B905",   # zip strict (Python 3.10+, but we use manual patterns)
     "UP042",  # StrEnum suggestion - breaks SQLAlchemy/Alembic PostgreSQL enum handling
+    "N805",   # first argument of method should be self (pydantic validators)
+    "N806",   # variable in function should be lowercase (SessionLocal convention)
+    "SIM102", # nested if → combined (readability preference for validation chains)
+    "SIM105", # contextlib.suppress (explicit try/except is clearer)
+    "SIM108", # ternary operator (readability preference)
+    "RUF003", # ambiguous unicode in comments (intentional math symbols)
+    "RUF005", # list concatenation vs unpacking (readability preference)
+    "RUF012", # mutable class variable (SQLAlchemy models)
 ]
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101", "S106"]
-"app/main.py" = ["E402"]  # FastAPI router imports after app creation
+"tests/*" = ["S101", "S106", "N802"]
+"app/main.py" = ["E402"]
+"alembic/*" = ["N999", "UP"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
 
 [tool.bandit]
 exclude_dirs = ["tests"]

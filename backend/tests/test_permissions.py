@@ -95,27 +95,41 @@ async def test_scoped_permission_child_specific(db_session, household, user):
     await db_session.flush()
 
     # Grant tutor.interact scoped only to child A
-    db_session.add(UserPermission(
-        user_id=tutor_user.id,
-        household_id=household.id,
-        permission=PERM_TUTOR_INTERACT,
-        scope_type="child",
-        scope_id=child_a.id,
-        granted_by=user.id,
-    ))
+    db_session.add(
+        UserPermission(
+            user_id=tutor_user.id,
+            household_id=household.id,
+            permission=PERM_TUTOR_INTERACT,
+            scope_type="child",
+            scope_id=child_a.id,
+            granted_by=user.id,
+        )
+    )
     await db_session.flush()
 
     # Check scoped: allowed for child A
-    assert await check_permission(
-        db_session, tutor_user, PERM_TUTOR_INTERACT,
-        scope_type="child", scope_id=child_a.id,
-    ) is True
+    assert (
+        await check_permission(
+            db_session,
+            tutor_user,
+            PERM_TUTOR_INTERACT,
+            scope_type="child",
+            scope_id=child_a.id,
+        )
+        is True
+    )
 
     # Check scoped: denied for child B
-    assert await check_permission(
-        db_session, tutor_user, PERM_TUTOR_INTERACT,
-        scope_type="child", scope_id=child_b.id,
-    ) is False
+    assert (
+        await check_permission(
+            db_session,
+            tutor_user,
+            PERM_TUTOR_INTERACT,
+            scope_type="child",
+            scope_id=child_b.id,
+        )
+        is False
+    )
 
 
 @pytest.mark.asyncio
@@ -133,9 +147,12 @@ async def test_permission_grant_and_revoke_api(auth_client, db_session, househol
     await db_session.flush()
 
     # Grant
-    resp = await auth_client.post(f"/api/v1/users/{target.id}/permissions", json={
-        "permission": "view.progress",
-    })
+    resp = await auth_client.post(
+        f"/api/v1/users/{target.id}/permissions",
+        json={
+            "permission": "view.progress",
+        },
+    )
     assert resp.status_code == 201
     perm_id = resp.json()["id"]
 
@@ -158,12 +175,15 @@ async def test_permission_grant_and_revoke_api(auth_client, db_session, househol
 @pytest.mark.asyncio
 async def test_auto_grant_on_register(client):
     """Registration auto-grants owner permissions."""
-    resp = await client.post("/api/v1/auth/register", json={
-        "email": "permtest@test.com",
-        "password": "securepass123",
-        "display_name": "Perm Tester",
-        "household_name": "Perm Family",
-    })
+    resp = await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "permtest@test.com",
+            "password": "securepass123",
+            "display_name": "Perm Tester",
+            "household_name": "Perm Family",
+        },
+    )
     assert resp.status_code == 201
     # The user should now have permissions (verified via API)
     token = resp.json()["access_token"]

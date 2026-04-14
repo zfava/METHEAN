@@ -17,10 +17,14 @@ from app.models.state import ChildNodeState, FSRSCard
 
 
 class TestMapExistingCurriculum:
-
     @pytest.mark.asyncio
     async def test_map_existing_creates_proposal(
-        self, auth_client, db_session, household, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        child,
+        user,
     ):
         resp = await auth_client.post(
             f"/api/v1/children/{child.id}/curriculum/map-existing",
@@ -42,10 +46,14 @@ class TestMapExistingCurriculum:
 
 
 class TestApplyMapping:
-
     @pytest.mark.asyncio
     async def test_apply_sets_mastered_nodes(
-        self, auth_client, db_session, household, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        child,
+        user,
     ):
         """When applying a mapping, already-mastered nodes get ChildNodeState + FSRSCard."""
         from app.services.curriculum_mapper import apply_curriculum_mapping
@@ -70,7 +78,11 @@ class TestApplyMapping:
         }
 
         result = await apply_curriculum_mapping(
-            db_session, household.id, child.id, user.id, proposal,
+            db_session,
+            household.id,
+            child.id,
+            user.id,
+            proposal,
         )
 
         assert result["nodes_created"] == 4
@@ -88,14 +100,17 @@ class TestApplyMapping:
         assert len(mastered) == 2
 
         # Verify FSRS cards created for mastered nodes
-        cards = await db_session.execute(
-            select(FSRSCard).where(FSRSCard.child_id == child.id)
-        )
+        cards = await db_session.execute(select(FSRSCard).where(FSRSCard.child_id == child.id))
         assert len(cards.scalars().all()) == 2
 
     @pytest.mark.asyncio
     async def test_current_position_set_to_developing(
-        self, auth_client, db_session, household, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        child,
+        user,
     ):
         from app.services.curriculum_mapper import apply_curriculum_mapping
 
@@ -112,7 +127,11 @@ class TestApplyMapping:
         }
 
         result = await apply_curriculum_mapping(
-            db_session, household.id, child.id, user.id, proposal,
+            db_session,
+            household.id,
+            child.id,
+            user.id,
+            proposal,
         )
 
         # Current position node should be developing

@@ -18,22 +18,23 @@ from app.models.evidence import FamilyResource
 
 
 class TestResourceModel:
-
     @pytest.mark.asyncio
     async def test_create_resource(self, db_session, household, user):
         """Create a resource, verify it's stored."""
         r = FamilyResource(
-            household_id=household.id, created_by=user.id,
-            name="Saxon Math 5/4", resource_type="textbook",
-            subject_area="mathematics", publisher="Saxon",
-            grade_range="3-5", status="owned",
+            household_id=household.id,
+            created_by=user.id,
+            name="Saxon Math 5/4",
+            resource_type="textbook",
+            subject_area="mathematics",
+            publisher="Saxon",
+            grade_range="3-5",
+            status="owned",
         )
         db_session.add(r)
         await db_session.flush()
 
-        result = await db_session.execute(
-            select(FamilyResource).where(FamilyResource.id == r.id)
-        )
+        result = await db_session.execute(select(FamilyResource).where(FamilyResource.id == r.id))
         saved = result.scalar_one()
         assert saved.name == "Saxon Math 5/4"
         assert saved.resource_type == "textbook"
@@ -43,8 +44,10 @@ class TestResourceModel:
     async def test_link_unlink_node(self, db_session, household, user):
         """Link a node to a resource, then unlink it."""
         r = FamilyResource(
-            household_id=household.id, created_by=user.id,
-            name="Test Book", resource_type="textbook",
+            household_id=household.id,
+            created_by=user.id,
+            name="Test Book",
+            resource_type="textbook",
             linked_node_ids=[],
         )
         db_session.add(r)
@@ -53,6 +56,7 @@ class TestResourceModel:
         node_id = str(uuid.uuid4())
         r.linked_node_ids = [node_id]
         from sqlalchemy.orm.attributes import flag_modified
+
         flag_modified(r, "linked_node_ids")
         await db_session.flush()
         await db_session.refresh(r)
@@ -66,15 +70,17 @@ class TestResourceModel:
 
 
 class TestResourceAPI:
-
     @pytest.mark.asyncio
     async def test_create_resource_api(self, auth_client):
         """POST /resources returns 201."""
-        resp = await auth_client.post("/api/v1/resources", json={
-            "name": "Story of the World Vol 1",
-            "resource_type": "textbook",
-            "subject_area": "history",
-        })
+        resp = await auth_client.post(
+            "/api/v1/resources",
+            json={
+                "name": "Story of the World Vol 1",
+                "resource_type": "textbook",
+                "subject_area": "history",
+            },
+        )
         assert resp.status_code == 201
         data = resp.json()
         assert data["name"] == "Story of the World Vol 1"

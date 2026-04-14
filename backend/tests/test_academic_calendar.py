@@ -13,7 +13,6 @@ from app.services.academic_calendar import (
 
 
 class TestCalendarService:
-
     def test_default_is_traditional(self):
         """Default calendar is 36 weeks Mon-Fri."""
         assert DEFAULT_CALENDAR["total_instructional_weeks"] == 36
@@ -35,9 +34,12 @@ class TestCalendarService:
 
     def test_break_detection(self):
         """Break date detection."""
-        cal = {**DEFAULT_CALENDAR, "breaks": [
-            {"name": "Christmas", "start": "2026-12-20", "end": "2027-01-03"},
-        ]}
+        cal = {
+            **DEFAULT_CALENDAR,
+            "breaks": [
+                {"name": "Christmas", "start": "2026-12-20", "end": "2027-01-03"},
+            ],
+        }
         assert is_break_date(cal, date(2026, 12, 25)) is True
         assert is_break_date(cal, date(2026, 12, 15)) is False
         assert is_break_date(cal, date(2027, 1, 3)) is True
@@ -55,16 +57,18 @@ class TestCalendarService:
         """End date extends when breaks are included."""
         start = date(2026, 8, 17)
         cal_no_breaks = {**DEFAULT_CALENDAR, "breaks": []}
-        cal_with_breaks = {**DEFAULT_CALENDAR, "breaks": [
-            {"name": "Break", "start": "2026-10-12", "end": "2026-10-18"},  # 1 week break
-        ]}
+        cal_with_breaks = {
+            **DEFAULT_CALENDAR,
+            "breaks": [
+                {"name": "Break", "start": "2026-10-12", "end": "2026-10-18"},  # 1 week break
+            ],
+        }
         end_no = calculate_end_date(start, 36, cal_no_breaks)
         end_with = calculate_end_date(start, 36, cal_with_breaks)
         assert end_with > end_no
 
 
 class TestCalendarAPI:
-
     @pytest.mark.asyncio
     async def test_get_default_calendar(self, auth_client):
         """GET returns defaults for a new household."""
@@ -77,12 +81,15 @@ class TestCalendarAPI:
     @pytest.mark.asyncio
     async def test_update_calendar(self, auth_client):
         """PUT saves calendar preferences."""
-        resp = await auth_client.put("/api/v1/household/academic-calendar", json={
-            "schedule_type": "year_round",
-            "total_instructional_weeks": 42,
-            "instruction_days_per_week": 4,
-            "instruction_days": ["monday", "tuesday", "wednesday", "thursday"],
-        })
+        resp = await auth_client.put(
+            "/api/v1/household/academic-calendar",
+            json={
+                "schedule_type": "year_round",
+                "total_instructional_weeks": 42,
+                "instruction_days_per_week": 4,
+                "instruction_days": ["monday", "tuesday", "wednesday", "thursday"],
+            },
+        )
         assert resp.status_code == 200
         data = resp.json()
         assert data["total_instructional_weeks"] == 42
@@ -91,15 +98,21 @@ class TestCalendarAPI:
     @pytest.mark.asyncio
     async def test_validate_weeks_range(self, auth_client):
         """Reject weeks outside 1-52."""
-        resp = await auth_client.put("/api/v1/household/academic-calendar", json={
-            "total_instructional_weeks": 0,
-        })
+        resp = await auth_client.put(
+            "/api/v1/household/academic-calendar",
+            json={
+                "total_instructional_weeks": 0,
+            },
+        )
         assert resp.status_code == 400
 
     @pytest.mark.asyncio
     async def test_validate_invalid_day(self, auth_client):
         """Reject invalid day names."""
-        resp = await auth_client.put("/api/v1/household/academic-calendar", json={
-            "instruction_days": ["moonday"],
-        })
+        resp = await auth_client.put(
+            "/api/v1/household/academic-calendar",
+            json={
+                "instruction_days": ["moonday"],
+            },
+        )
         assert resp.status_code == 400

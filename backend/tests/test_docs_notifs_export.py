@@ -32,7 +32,6 @@ from app.services.data_export import export_family_data
 
 
 class TestDocumentGeneration:
-
     @pytest.mark.asyncio
     async def test_generate_ihip(self, db_session, household, child, user):
         """Generate IHIP PDF and verify it contains child name."""
@@ -57,8 +56,11 @@ class TestDocumentGeneration:
     async def test_attendance_record(self, db_session, household, child, user):
         """Generate attendance record."""
         pdf = await generate_attendance_record(
-            db_session, household.id, child.id,
-            date(2026, 9, 1), date(2027, 6, 30),
+            db_session,
+            household.id,
+            child.id,
+            date(2026, 9, 1),
+            date(2027, 6, 30),
         )
         assert len(pdf) > 0
 
@@ -70,12 +72,13 @@ class TestDocumentGeneration:
 
 
 class TestNotifications:
-
     @pytest.mark.asyncio
     async def test_notification_created(self, db_session, household, user):
         """Create a notification, verify it's stored."""
         notif = await send_notification(
-            db_session, household.id, user.id,
+            db_session,
+            household.id,
+            user.id,
             event_type="alert_triggered",
             title="Test Alert",
             body="Something needs attention.",
@@ -88,7 +91,9 @@ class TestNotifications:
         """Create notifications, list them."""
         for i in range(3):
             await send_notification(
-                db_session, household.id, user.id,
+                db_session,
+                household.id,
+                user.id,
                 event_type="alert_triggered",
                 title=f"Alert {i}",
                 body=f"Message {i}",
@@ -102,7 +107,9 @@ class TestNotifications:
     async def test_mark_read(self, db_session, household, user):
         """Mark a notification as read."""
         notif = await send_notification(
-            db_session, household.id, user.id,
+            db_session,
+            household.id,
+            user.id,
             event_type="alert_triggered",
             title="Read Me",
             body="Test",
@@ -120,7 +127,9 @@ class TestNotifications:
         """Mark all notifications as read."""
         for i in range(3):
             await send_notification(
-                db_session, household.id, user.id,
+                db_session,
+                household.id,
+                user.id,
                 event_type="alert_triggered",
                 title=f"Unread {i}",
                 body=f"Test {i}",
@@ -132,7 +141,6 @@ class TestNotifications:
 
 
 class TestDataExport:
-
     @pytest.mark.asyncio
     async def test_export_returns_zip(self, db_session, household, child, user):
         """Export family data, verify ZIP structure."""
@@ -178,12 +186,12 @@ class TestDataExport:
 
 
 class TestNotificationAPI:
-
     @pytest.mark.asyncio
     async def test_list_notifications(self, auth_client, db_session, household, user):
         """Test notification listing via API."""
-        await send_notification(db_session, household.id, user.id,
-            event_type="alert_triggered", title="API Test", body="Test body")
+        await send_notification(
+            db_session, household.id, user.id, event_type="alert_triggered", title="API Test", body="Test body"
+        )
         await db_session.commit()
 
         resp = await auth_client.get("/api/v1/notifications")
@@ -194,8 +202,9 @@ class TestNotificationAPI:
     @pytest.mark.asyncio
     async def test_mark_all_read_api(self, auth_client, db_session, household, user):
         """Test mark-all-read via API."""
-        await send_notification(db_session, household.id, user.id,
-            event_type="alert_triggered", title="To Read", body="Test")
+        await send_notification(
+            db_session, household.id, user.id, event_type="alert_triggered", title="To Read", body="Test"
+        )
         await db_session.commit()
 
         resp = await auth_client.put("/api/v1/notifications/read-all")

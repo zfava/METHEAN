@@ -130,7 +130,7 @@ async def get_usage_breakdown(
     household_id: uuid.UUID,
 ) -> dict:
     """Detailed usage breakdown by role and by day for current period."""
-    start, end = _current_period()
+    start, _end = _current_period()
 
     result = await db.execute(
         select(UsageEvent)
@@ -169,7 +169,7 @@ async def get_usage_breakdown(
     }
 
 
-class UsageLimitExceeded(Exception):
+class UsageLimitExceededError(Exception):
     """Raised when monthly AI token budget is exhausted."""
 
     pass

@@ -39,10 +39,11 @@ from app.services.governance import (
 # AI Gateway Unit Tests
 # ══════════════════════════════════════════════════
 
-class TestAIGateway:
 
+class TestAIGateway:
     def test_mock_planner_returns_valid_json(self):
         import json
+
         result = _call_mock(AIRole.planner, "test")
         data = json.loads(result["content"])
         assert "activities" in data
@@ -51,6 +52,7 @@ class TestAIGateway:
 
     def test_mock_evaluator_returns_valid_json(self):
         import json
+
         result = _call_mock(AIRole.evaluator, "test")
         data = json.loads(result["content"])
         assert "quality_rating" in data
@@ -59,12 +61,14 @@ class TestAIGateway:
 
     def test_mock_tutor_returns_valid_json(self):
         import json
+
         result = _call_mock(AIRole.tutor, "test")
         data = json.loads(result["content"])
         assert "message" in data
 
     def test_mock_advisor_returns_valid_json(self):
         import json
+
         result = _call_mock(AIRole.advisor, "test")
         data = json.loads(result["content"])
         assert "summary" in data
@@ -72,6 +76,7 @@ class TestAIGateway:
 
     def test_mock_cartographer_returns_valid_json(self):
         import json
+
         result = _call_mock(AIRole.cartographer, "test")
         data = json.loads(result["content"])
         assert "estimated_weeks" in data
@@ -93,14 +98,12 @@ class TestAIGateway:
         assert result["ai_run_id"] is not None
 
         # Verify AIRun was logged
-        run_result = await db_session.execute(
-            select(AIRun).where(AIRun.id == result["ai_run_id"])
-        )
+        run_result = await db_session.execute(select(AIRun).where(AIRun.id == result["ai_run_id"]))
         ai_run = run_result.scalar_one()
         assert ai_run.run_type == "planner"
         assert ai_run.model_used == "mock"
         assert ai_run.output_data is not None
-        assert ai_run.status.value == "completed" if hasattr(ai_run.status, 'value') else ai_run.status == "completed"
+        assert ai_run.status.value == "completed" if hasattr(ai_run.status, "value") else ai_run.status == "completed"
 
     @pytest.mark.asyncio
     async def test_gateway_all_roles(self, db_session, household, user):
@@ -108,9 +111,12 @@ class TestAIGateway:
 
         for role in AIRole:
             result = await call_ai(
-                db_session, role=role,
-                system_prompt="test", user_prompt="test",
-                household_id=household.id, triggered_by=user.id,
+                db_session,
+                role=role,
+                system_prompt="test",
+                user_prompt="test",
+                household_id=household.id,
+                triggered_by=user.id,
             )
             assert result["is_mock"] is True
             assert result["output"] is not None
@@ -120,8 +126,8 @@ class TestAIGateway:
 # Governance Rules Engine Tests
 # ══════════════════════════════════════════════════
 
-class TestGovernanceRules:
 
+class TestGovernanceRules:
     @pytest.mark.asyncio
     async def test_create_default_rules(self, db_session, household, user):
         rules = await create_default_rules(db_session, household.id, user.id)
@@ -137,7 +143,9 @@ class TestGovernanceRules:
         await create_default_rules(db_session, household.id, user.id)
 
         decision = await evaluate_activity(
-            db_session, household.id, difficulty=2,
+            db_session,
+            household.id,
+            difficulty=2,
         )
         assert decision.action == "auto_approve"
 
@@ -146,7 +154,9 @@ class TestGovernanceRules:
         await create_default_rules(db_session, household.id, user.id)
 
         decision = await evaluate_activity(
-            db_session, household.id, difficulty=4,
+            db_session,
+            household.id,
+            difficulty=4,
         )
         assert decision.action == "require_review"
 
@@ -158,8 +168,12 @@ class TestGovernanceRules:
     @pytest.mark.asyncio
     async def test_governance_event_logged(self, db_session, household, user):
         event = await log_governance_event(
-            db_session, household.id, user.id,
-            GovernanceAction.approve, "test_target", uuid.uuid4(),
+            db_session,
+            household.id,
+            user.id,
+            GovernanceAction.approve,
+            "test_target",
+            uuid.uuid4(),
             reason="Test reason",
         )
         assert event.id is not None
@@ -170,31 +184,36 @@ class TestGovernanceRules:
 # Plan Generation API Tests
 # ══════════════════════════════════════════════════
 
-class TestPlanGeneration:
 
+class TestPlanGeneration:
     @pytest.mark.asyncio
     async def test_generate_plan(self, auth_client, db_session, household, subject, child, user):
         from app.models.curriculum import ChildMapEnrollment, LearningMap, LearningNode
         from app.models.enums import NodeType
 
         # Create map with nodes and enroll child
-        lmap = LearningMap(
-            household_id=household.id, subject_id=subject.id, name="Plan Test Map"
-        )
+        lmap = LearningMap(household_id=household.id, subject_id=subject.id, name="Plan Test Map")
         db_session.add(lmap)
         await db_session.flush()
 
         for title in ["Concept A", "Concept B", "Concept C"]:
-            db_session.add(LearningNode(
-                learning_map_id=lmap.id, household_id=household.id,
-                node_type=NodeType.concept, title=title,
-            ))
+            db_session.add(
+                LearningNode(
+                    learning_map_id=lmap.id,
+                    household_id=household.id,
+                    node_type=NodeType.concept,
+                    title=title,
+                )
+            )
         await db_session.flush()
 
-        db_session.add(ChildMapEnrollment(
-            child_id=child.id, household_id=household.id,
-            learning_map_id=lmap.id,
-        ))
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=child.id,
+                household_id=household.id,
+                learning_map_id=lmap.id,
+            )
+        )
         await db_session.flush()
 
         # Create default governance rules
@@ -224,16 +243,17 @@ class TestPlanGeneration:
     async def test_list_plans(self, auth_client, db_session, household, subject, child, user):
         from app.models.curriculum import ChildMapEnrollment, LearningMap
 
-        lmap = LearningMap(
-            household_id=household.id, subject_id=subject.id, name="List Plans Map"
-        )
+        lmap = LearningMap(household_id=household.id, subject_id=subject.id, name="List Plans Map")
         db_session.add(lmap)
         await db_session.flush()
 
-        db_session.add(ChildMapEnrollment(
-            child_id=child.id, household_id=household.id,
-            learning_map_id=lmap.id,
-        ))
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=child.id,
+                household_id=household.id,
+                learning_map_id=lmap.id,
+            )
+        )
         await db_session.flush()
 
         await create_default_rules(db_session, household.id, user.id)
@@ -249,23 +269,29 @@ class TestPlanGeneration:
 
 
 class TestPlanManagement:
-
     @pytest.mark.asyncio
     async def test_approve_and_reject_activities(
-        self, auth_client, db_session, household, subject, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        subject,
+        child,
+        user,
     ):
         from app.models.curriculum import ChildMapEnrollment, LearningMap
 
-        lmap = LearningMap(
-            household_id=household.id, subject_id=subject.id, name="Approve Map"
-        )
+        lmap = LearningMap(household_id=household.id, subject_id=subject.id, name="Approve Map")
         db_session.add(lmap)
         await db_session.flush()
 
-        db_session.add(ChildMapEnrollment(
-            child_id=child.id, household_id=household.id,
-            learning_map_id=lmap.id,
-        ))
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=child.id,
+                household_id=household.id,
+                learning_map_id=lmap.id,
+            )
+        )
         await db_session.flush()
 
         await create_default_rules(db_session, household.id, user.id)
@@ -300,20 +326,27 @@ class TestPlanManagement:
 
     @pytest.mark.asyncio
     async def test_lock_and_unlock_plan(
-        self, auth_client, db_session, household, subject, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        subject,
+        child,
+        user,
     ):
         from app.models.curriculum import ChildMapEnrollment, LearningMap
 
-        lmap = LearningMap(
-            household_id=household.id, subject_id=subject.id, name="Lock Map"
-        )
+        lmap = LearningMap(household_id=household.id, subject_id=subject.id, name="Lock Map")
         db_session.add(lmap)
         await db_session.flush()
 
-        db_session.add(ChildMapEnrollment(
-            child_id=child.id, household_id=household.id,
-            learning_map_id=lmap.id,
-        ))
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=child.id,
+                household_id=household.id,
+                learning_map_id=lmap.id,
+            )
+        )
         await db_session.flush()
 
         await create_default_rules(db_session, household.id, user.id)
@@ -327,9 +360,7 @@ class TestPlanManagement:
         # Approve all activities first (required before lock)
         detail = await auth_client.get(f"/api/v1/plans/{plan_id}")
         for act in detail.json()["activities"]:
-            await auth_client.put(
-                f"/api/v1/plans/{plan_id}/activities/{act['id']}/approve"
-            )
+            await auth_client.put(f"/api/v1/plans/{plan_id}/activities/{act['id']}/approve")
 
         # Lock
         lock_resp = await auth_client.put(f"/api/v1/plans/{plan_id}/lock")
@@ -346,47 +377,60 @@ class TestPlanManagement:
 # Tutor Tests
 # ══════════════════════════════════════════════════
 
-class TestTutor:
 
+class TestTutor:
     @pytest.mark.asyncio
     async def test_tutor_message(
-        self, auth_client, db_session, household, subject, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        subject,
+        child,
+        user,
     ):
         from app.models.curriculum import LearningMap, LearningNode
         from app.models.enums import ActivityType, NodeType, PlanStatus
         from datetime import date
 
-        lmap = LearningMap(
-            household_id=household.id, subject_id=subject.id, name="Tutor Map"
-        )
+        lmap = LearningMap(household_id=household.id, subject_id=subject.id, name="Tutor Map")
         db_session.add(lmap)
         await db_session.flush()
 
         node = LearningNode(
-            learning_map_id=lmap.id, household_id=household.id,
-            node_type=NodeType.skill, title="Addition",
+            learning_map_id=lmap.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Addition",
         )
         db_session.add(node)
         await db_session.flush()
 
         plan = Plan(
-            household_id=household.id, child_id=child.id,
-            created_by=user.id, name="Tutor Plan", status=PlanStatus.active,
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Tutor Plan",
+            status=PlanStatus.active,
         )
         db_session.add(plan)
         await db_session.flush()
 
         week = PlanWeek(
-            plan_id=plan.id, household_id=household.id,
-            week_number=1, start_date=date.today(),
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date.today(),
             end_date=date.today() + timedelta(days=4),
         )
         db_session.add(week)
         await db_session.flush()
 
         activity = Activity(
-            plan_week_id=week.id, household_id=household.id,
-            node_id=node.id, activity_type=ActivityType.lesson,
+            plan_week_id=week.id,
+            household_id=household.id,
+            node_id=node.id,
+            activity_type=ActivityType.lesson,
             title="Learn Addition",
         )
         db_session.add(activity)
@@ -406,17 +450,20 @@ class TestTutor:
 # Governance Rules API Tests
 # ══════════════════════════════════════════════════
 
-class TestGovernanceRulesAPI:
 
+class TestGovernanceRulesAPI:
     @pytest.mark.asyncio
     async def test_create_and_list_rules(self, auth_client, db_session, household, user):
-        resp = await auth_client.post("/api/v1/governance-rules", json={
-            "rule_type": "approval_required",
-            "scope": "household",
-            "name": "Test Rule",
-            "parameters": {"max_difficulty": 4, "action": "require_review"},
-            "priority": 5,
-        })
+        resp = await auth_client.post(
+            "/api/v1/governance-rules",
+            json={
+                "rule_type": "approval_required",
+                "scope": "household",
+                "name": "Test Rule",
+                "parameters": {"max_difficulty": 4, "action": "require_review"},
+                "priority": 5,
+            },
+        )
         assert resp.status_code == 201
         assert resp.json()["name"] == "Test Rule"
 
@@ -426,17 +473,23 @@ class TestGovernanceRulesAPI:
 
     @pytest.mark.asyncio
     async def test_update_rule(self, auth_client, db_session, household, user):
-        create_resp = await auth_client.post("/api/v1/governance-rules", json={
-            "rule_type": "pace_limit",
-            "name": "Old Name",
-            "parameters": {},
-        })
+        create_resp = await auth_client.post(
+            "/api/v1/governance-rules",
+            json={
+                "rule_type": "pace_limit",
+                "name": "Old Name",
+                "parameters": {},
+            },
+        )
         rule_id = create_resp.json()["id"]
 
-        update_resp = await auth_client.put(f"/api/v1/governance-rules/{rule_id}", json={
-            "name": "New Name",
-            "is_active": False,
-        })
+        update_resp = await auth_client.put(
+            f"/api/v1/governance-rules/{rule_id}",
+            json={
+                "name": "New Name",
+                "is_active": False,
+            },
+        )
         assert update_resp.status_code == 200
         assert update_resp.json()["name"] == "New Name"
         assert update_resp.json()["is_active"] is False
@@ -452,17 +505,15 @@ class TestGovernanceRulesAPI:
 # AI Inspection Tests
 # ══════════════════════════════════════════════════
 
-class TestAIInspection:
 
+class TestAIInspection:
     @pytest.mark.asyncio
     async def test_list_ai_runs(self, auth_client, db_session, household, user):
         from app.ai.gateway import call_ai
 
         # Create some AI runs
-        await call_ai(db_session, AIRole.planner, "test", "test",
-                       household.id, user.id)
-        await call_ai(db_session, AIRole.evaluator, "test", "test",
-                       household.id, user.id)
+        await call_ai(db_session, AIRole.planner, "test", "test", household.id, user.id)
+        await call_ai(db_session, AIRole.evaluator, "test", "test", household.id, user.id)
 
         resp = await auth_client.get("/api/v1/ai-runs")
         assert resp.status_code == 200
@@ -473,8 +524,7 @@ class TestAIInspection:
     async def test_get_ai_run_detail(self, auth_client, db_session, household, user):
         from app.ai.gateway import call_ai
 
-        result = await call_ai(db_session, AIRole.planner, "test", "test",
-                                household.id, user.id)
+        result = await call_ai(db_session, AIRole.planner, "test", "test", household.id, user.id)
 
         resp = await auth_client.get(f"/api/v1/ai-runs/{result['ai_run_id']}")
         assert resp.status_code == 200
@@ -487,8 +537,7 @@ class TestAIInspection:
     async def test_filter_ai_runs_by_role(self, auth_client, db_session, household, user):
         from app.ai.gateway import call_ai
 
-        await call_ai(db_session, AIRole.tutor, "test", "test",
-                       household.id, user.id)
+        await call_ai(db_session, AIRole.tutor, "test", "test", household.id, user.id)
 
         resp = await auth_client.get("/api/v1/ai-runs?role=tutor")
         assert resp.status_code == 200
@@ -498,8 +547,12 @@ class TestAIInspection:
     @pytest.mark.asyncio
     async def test_governance_events_log(self, auth_client, db_session, household, user):
         await log_governance_event(
-            db_session, household.id, user.id,
-            GovernanceAction.approve, "test", uuid.uuid4(),
+            db_session,
+            household.id,
+            user.id,
+            GovernanceAction.approve,
+            "test",
+            uuid.uuid4(),
             reason="Test event",
         )
 
@@ -510,20 +563,27 @@ class TestAIInspection:
 
     @pytest.mark.asyncio
     async def test_decision_trace(
-        self, auth_client, db_session, household, subject, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        subject,
+        child,
+        user,
     ):
         from app.models.curriculum import ChildMapEnrollment, LearningMap
 
-        lmap = LearningMap(
-            household_id=household.id, subject_id=subject.id, name="Trace Map"
-        )
+        lmap = LearningMap(household_id=household.id, subject_id=subject.id, name="Trace Map")
         db_session.add(lmap)
         await db_session.flush()
 
-        db_session.add(ChildMapEnrollment(
-            child_id=child.id, household_id=household.id,
-            learning_map_id=lmap.id,
-        ))
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=child.id,
+                household_id=household.id,
+                learning_map_id=lmap.id,
+            )
+        )
         await db_session.flush()
 
         await create_default_rules(db_session, household.id, user.id)
@@ -549,15 +609,18 @@ class TestAIInspection:
 # Advisor Reports Tests
 # ══════════════════════════════════════════════════
 
-class TestAdvisorReports:
 
+class TestAdvisorReports:
     @pytest.mark.asyncio
     async def test_generate_and_list_advisor_reports(
-        self, auth_client, db_session, household, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        child,
+        user,
     ):
-        resp = await auth_client.post(
-            f"/api/v1/children/{child.id}/advisor-reports/generate"
-        )
+        resp = await auth_client.post(f"/api/v1/children/{child.id}/advisor-reports/generate")
         assert resp.status_code == 201
         data = resp.json()
         assert data["report_type"] == "weekly"
@@ -565,9 +628,7 @@ class TestAdvisorReports:
         report_id = data["id"]
 
         # List
-        list_resp = await auth_client.get(
-            f"/api/v1/children/{child.id}/advisor-reports"
-        )
+        list_resp = await auth_client.get(f"/api/v1/children/{child.id}/advisor-reports")
         assert list_resp.status_code == 200
         assert len(list_resp.json()["items"]) >= 1
 
@@ -580,26 +641,34 @@ class TestAdvisorReports:
 # Cartographer Tests
 # ══════════════════════════════════════════════════
 
-class TestCartographer:
 
+class TestCartographer:
     @pytest.mark.asyncio
     async def test_cartographer_calibrate(
-        self, auth_client, db_session, household, subject, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        subject,
+        child,
+        user,
     ):
         from app.models.curriculum import LearningMap, LearningNode
         from app.models.enums import NodeType
 
-        lmap = LearningMap(
-            household_id=household.id, subject_id=subject.id, name="Carto Map"
-        )
+        lmap = LearningMap(household_id=household.id, subject_id=subject.id, name="Carto Map")
         db_session.add(lmap)
         await db_session.flush()
 
         for title in ["Node X", "Node Y"]:
-            db_session.add(LearningNode(
-                learning_map_id=lmap.id, household_id=household.id,
-                node_type=NodeType.concept, title=title,
-            ))
+            db_session.add(
+                LearningNode(
+                    learning_map_id=lmap.id,
+                    household_id=household.id,
+                    node_type=NodeType.concept,
+                    title=title,
+                )
+            )
         await db_session.flush()
 
         resp = await auth_client.post(

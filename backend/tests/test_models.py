@@ -135,9 +135,7 @@ async def test_curriculum_dag(db_session, household):
     db_session.add(edge)
     await db_session.flush()
 
-    result = await db_session.execute(
-        select(LearningEdge).where(LearningEdge.learning_map_id == lmap.id)
-    )
+    result = await db_session.execute(select(LearningEdge).where(LearningEdge.learning_map_id == lmap.id))
     loaded_edge = result.scalar_one()
     assert loaded_edge.from_node_id == node_a.id
     assert loaded_edge.to_node_id == node_b.id
@@ -154,9 +152,7 @@ async def test_state_events_append_only(db_session, household):
     db_session.add(subject)
     await db_session.flush()
 
-    lmap = LearningMap(
-        household_id=household.id, subject_id=subject.id, name="Biology"
-    )
+    lmap = LearningMap(household_id=household.id, subject_id=subject.id, name="Biology")
     db_session.add(lmap)
     await db_session.flush()
 
@@ -182,9 +178,7 @@ async def test_state_events_append_only(db_session, household):
     db_session.add(event)
     await db_session.flush()
 
-    result = await db_session.execute(
-        select(StateEvent).where(StateEvent.child_id == child.id)
-    )
+    result = await db_session.execute(select(StateEvent).where(StateEvent.child_id == child.id))
     loaded = result.scalar_one()
     assert loaded.event_type == StateEventType.mastery_change
     assert loaded.to_state == "emerging"
@@ -203,9 +197,7 @@ async def test_governance_rule(db_session, household, user):
     db_session.add(rule)
     await db_session.flush()
 
-    result = await db_session.execute(
-        select(GovernanceRule).where(GovernanceRule.household_id == household.id)
-    )
+    result = await db_session.execute(select(GovernanceRule).where(GovernanceRule.household_id == household.id))
     loaded = result.scalar_one()
     assert loaded.rule_type == RuleType.pace_limit
     assert loaded.parameters["max_daily_minutes"] == 240
@@ -250,9 +242,7 @@ async def test_plan_with_activities(db_session, household, user):
     db_session.add(activity)
     await db_session.flush()
 
-    result = await db_session.execute(
-        select(Activity).where(Activity.plan_week_id == week.id)
-    )
+    result = await db_session.execute(select(Activity).where(Activity.plan_week_id == week.id))
     loaded = result.scalar_one()
     assert loaded.title == "Intro to Fractions"
     assert loaded.activity_type == ActivityType.lesson
@@ -270,8 +260,6 @@ async def test_audit_log(db_session, household, user):
     db_session.add(log)
     await db_session.flush()
 
-    result = await db_session.execute(
-        select(AuditLog).where(AuditLog.user_id == user.id)
-    )
+    result = await db_session.execute(select(AuditLog).where(AuditLog.user_id == user.id))
     loaded = result.scalar_one()
     assert loaded.action == AuditAction.login

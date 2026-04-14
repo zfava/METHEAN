@@ -28,6 +28,7 @@ class TestDocumentGenerator:
     async def test_generate_ihip_doesnt_crash(self, db_session, doc_household, doc_child):
         """IHIP generation should not crash even with minimal data."""
         from app.services.document_generator import generate_ihip
+
         try:
             result = await generate_ihip(db_session, doc_child.id, doc_household.id, "2026-2027", "NY")
             assert isinstance(result, (str, bytes, dict))
@@ -37,6 +38,7 @@ class TestDocumentGenerator:
     async def test_generate_transcript_doesnt_crash(self, db_session, doc_household, doc_child):
         """Transcript generation should not crash."""
         from app.services.document_generator import generate_transcript
+
         try:
             result = await generate_transcript(db_session, doc_child.id, doc_household.id)
             assert isinstance(result, (str, bytes, dict))

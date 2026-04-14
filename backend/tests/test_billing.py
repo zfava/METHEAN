@@ -25,6 +25,7 @@ async def billing_household(db_session: AsyncSession) -> Household:
 async def test_get_subscription_status_trial(db_session, billing_household):
     """Trial household returns trial status."""
     from app.services.billing import get_subscription_status
+
     status = await get_subscription_status(db_session, billing_household.id)
     assert status["status"] == "trial"
     assert status["trial_ends_at"] is not None
@@ -38,6 +39,7 @@ async def test_get_subscription_status_active(db_session, billing_household):
     await db_session.flush()
 
     from app.services.billing import get_subscription_status
+
     status = await get_subscription_status(db_session, billing_household.id)
     assert status["status"] == "active"
     assert status["subscription_ends_at"] is not None
@@ -47,6 +49,7 @@ async def test_get_subscription_status_active(db_session, billing_household):
 async def test_get_subscription_status_unknown_household(db_session):
     """Unknown household returns unknown status."""
     from app.services.billing import get_subscription_status
+
     status = await get_subscription_status(db_session, uuid.uuid4())
     assert status["status"] == "unknown"
 
@@ -57,6 +60,7 @@ async def test_create_customer_no_stripe_key(mock_settings, db_session, billing_
     """No Stripe key returns None gracefully."""
     mock_settings.STRIPE_SECRET_KEY = ""
     from app.services.billing import create_customer
+
     result = await create_customer(db_session, billing_household.id, "test@test.com")
     assert result is None
 
@@ -68,6 +72,7 @@ async def test_create_checkout_no_stripe_key(mock_settings, db_session, billing_
     mock_settings.STRIPE_SECRET_KEY = ""
     mock_settings.STRIPE_PRICE_ID = ""
     from app.services.billing import create_checkout_session
+
     result = await create_checkout_session(db_session, billing_household.id, "test@test.com")
     assert result is None
 
@@ -78,6 +83,7 @@ async def test_cancel_no_stripe_key(mock_settings, db_session, billing_household
     """No Stripe key returns False for cancel."""
     mock_settings.STRIPE_SECRET_KEY = ""
     from app.services.billing import cancel_subscription
+
     result = await cancel_subscription(db_session, billing_household.id)
     assert result is False
 
@@ -88,6 +94,7 @@ async def test_handle_webhook_no_secret(mock_settings):
     """No webhook secret returns False."""
     mock_settings.STRIPE_WEBHOOK_SECRET = ""
     from app.services.billing import handle_webhook
+
     result = await handle_webhook(b"payload", "sig")
     assert result is False
 

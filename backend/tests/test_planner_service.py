@@ -34,10 +34,15 @@ async def plan_map(db_session, plan_household):
     db_session.add(m)
     await db_session.flush()
     for i in range(5):
-        db_session.add(LearningNode(
-            learning_map_id=m.id, household_id=plan_household.id,
-            node_type=NodeType.concept, title=f"Node {i}", sort_order=i,
-        ))
+        db_session.add(
+            LearningNode(
+                learning_map_id=m.id,
+                household_id=plan_household.id,
+                node_type=NodeType.concept,
+                title=f"Node {i}",
+                sort_order=i,
+            )
+        )
     await db_session.flush()
     return m
 
@@ -47,12 +52,17 @@ class TestPlannerContext:
     async def test_build_context_returns_dict(self, db_session, plan_child, plan_household, plan_map):
         """_build_planner_context should return a dict."""
         # Enroll child
-        db_session.add(ChildMapEnrollment(
-            child_id=plan_child.id, household_id=plan_household.id,
-            learning_map_id=plan_map.id, is_active=True,
-        ))
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=plan_child.id,
+                household_id=plan_household.id,
+                learning_map_id=plan_map.id,
+                is_active=True,
+            )
+        )
         await db_session.flush()
         from app.services.planner import _build_planner_context
+
         ctx = await _build_planner_context(db_session, plan_child.id, plan_household.id, 120)
         assert isinstance(ctx, dict)
         assert "daily_minutes" in ctx
@@ -61,10 +71,12 @@ class TestPlannerContext:
     async def test_empty_enrollment_returns_empty_nodes(self, db_session, plan_child, plan_household):
         """No enrollments → empty nodes list."""
         from app.services.planner import _build_planner_context
+
         ctx = await _build_planner_context(db_session, plan_child.id, plan_household.id, 120)
         assert ctx["nodes"] == []
 
     async def test_context_includes_daily_minutes(self, db_session, plan_child, plan_household):
         from app.services.planner import _build_planner_context
+
         ctx = await _build_planner_context(db_session, plan_child.id, plan_household.id, 90)
         assert ctx["daily_minutes"] == 90

@@ -53,10 +53,7 @@ def _validate_value(dimension: str, value: Any) -> None:
     if spec["type"] == "str":
         if value not in spec["values"]:
             raise HTTPException(status_code=400, detail=f"Value must be one of: {spec['values']}")
-    elif spec["type"] == "int":
-        if not isinstance(value, (int, float)) or value < spec["min"] or value > spec["max"]:
-            raise HTTPException(status_code=400, detail=f"Value must be {spec['min']}-{spec['max']}")
-    elif spec["type"] == "float":
+    elif spec["type"] == "int" or spec["type"] == "float":
         if not isinstance(value, (int, float)) or value < spec["min"] or value > spec["max"]:
             raise HTTPException(status_code=400, detail=f"Value must be {spec['min']}-{spec['max']}")
 

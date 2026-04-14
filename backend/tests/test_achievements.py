@@ -32,8 +32,11 @@ async def ach_household(db_session: AsyncSession) -> Household:
 @pytest_asyncio.fixture
 async def ach_user(db_session: AsyncSession, ach_household: Household) -> User:
     u = User(
-        household_id=ach_household.id, email="ach@test.com",
-        password_hash=hash_password("test"), display_name="Test", role="owner",
+        household_id=ach_household.id,
+        email="ach@test.com",
+        password_hash=hash_password("test"),
+        display_name="Test",
+        role="owner",
     )
     db_session.add(u)
     await db_session.flush()
@@ -60,15 +63,22 @@ async def ach_child_b(db_session: AsyncSession, ach_household: Household) -> Chi
 async def ach_plan_week(db_session, ach_household, ach_child, ach_user):
     """Create Plan + PlanWeek for Activity creation."""
     plan = Plan(
-        household_id=ach_household.id, child_id=ach_child.id,
-        created_by=ach_user.id, name="Test Plan", status=PlanStatus.active,
-        start_date=date.today(), end_date=date.today(),
+        household_id=ach_household.id,
+        child_id=ach_child.id,
+        created_by=ach_user.id,
+        name="Test Plan",
+        status=PlanStatus.active,
+        start_date=date.today(),
+        end_date=date.today(),
     )
     db_session.add(plan)
     await db_session.flush()
     week = PlanWeek(
-        plan_id=plan.id, household_id=ach_household.id,
-        week_number=1, start_date=date.today(), end_date=date.today(),
+        plan_id=plan.id,
+        household_id=ach_household.id,
+        week_number=1,
+        start_date=date.today(),
+        end_date=date.today(),
     )
     db_session.add(week)
     await db_session.flush()
@@ -166,7 +176,10 @@ async def test_subject_star_earned_on_first_mastery(db_session, ach_child, ach_h
     """Mastering first node in a subject earns Subject Star."""
     await _create_completed_attempt(db_session, ach_child, ach_household, ach_plan_week)
     earned = await check_achievements(
-        db_session, ach_child.id, ach_household.id, "mastery_change",
+        db_session,
+        ach_child.id,
+        ach_household.id,
+        "mastery_change",
         context={"new_level": "mastered", "old_level": "developing", "subject": "Math"},
     )
     titles = [a.title for a in earned]
@@ -237,7 +250,10 @@ async def test_comeback_kid_earned(db_session, ach_child, ach_household, ach_pla
     """Re-mastering after decay earns Comeback Kid."""
     await _create_completed_attempt(db_session, ach_child, ach_household, ach_plan_week)
     earned = await check_achievements(
-        db_session, ach_child.id, ach_household.id, "mastery_change",
+        db_session,
+        ach_child.id,
+        ach_household.id,
+        "mastery_change",
         context={"new_level": "mastered", "old_level": "emerging", "subject": "math"},
     )
     titles = [a.title for a in earned]

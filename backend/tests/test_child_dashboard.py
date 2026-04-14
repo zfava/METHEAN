@@ -57,8 +57,13 @@ async def cd_map(db_session, cd_household, cd_subject) -> LearningMap:
 async def cd_nodes(db_session, cd_household, cd_map) -> list[LearningNode]:
     nodes = []
     for i, title in enumerate(["Addition", "Subtraction", "Multiplication"]):
-        n = LearningNode(learning_map_id=cd_map.id, household_id=cd_household.id,
-                         node_type=NodeType.concept, title=title, sort_order=i)
+        n = LearningNode(
+            learning_map_id=cd_map.id,
+            household_id=cd_household.id,
+            node_type=NodeType.concept,
+            title=title,
+            sort_order=i,
+        )
         db_session.add(n)
         await db_session.flush()
         nodes.append(n)
@@ -67,8 +72,9 @@ async def cd_nodes(db_session, cd_household, cd_map) -> list[LearningNode]:
 
 @pytest_asyncio.fixture
 async def cd_enrolled(db_session, cd_child, cd_household, cd_map) -> ChildMapEnrollment:
-    e = ChildMapEnrollment(child_id=cd_child.id, household_id=cd_household.id,
-                            learning_map_id=cd_map.id, is_active=True)
+    e = ChildMapEnrollment(
+        child_id=cd_child.id, household_id=cd_household.id, learning_map_id=cd_map.id, is_active=True
+    )
     db_session.add(e)
     await db_session.flush()
     return e
@@ -76,21 +82,35 @@ async def cd_enrolled(db_session, cd_child, cd_household, cd_map) -> ChildMapEnr
 
 async def _seed_today_activities(db_session, cd_household, cd_child, cd_nodes):
     """Seed scheduled activities for today."""
-    plan = Plan(household_id=cd_household.id, child_id=cd_child.id, name="Test Plan",
-                status="active", start_date=date.today(), end_date=date.today())
+    plan = Plan(
+        household_id=cd_household.id,
+        child_id=cd_child.id,
+        name="Test Plan",
+        status="active",
+        start_date=date.today(),
+        end_date=date.today(),
+    )
     db_session.add(plan)
     await db_session.flush()
-    week = PlanWeek(plan_id=plan.id, household_id=cd_household.id, week_number=1,
-                     start_date=date.today(), end_date=date.today())
+    week = PlanWeek(
+        plan_id=plan.id, household_id=cd_household.id, week_number=1, start_date=date.today(), end_date=date.today()
+    )
     db_session.add(week)
     await db_session.flush()
 
     acts = []
     for i, node in enumerate(cd_nodes):
-        a = Activity(plan_week_id=week.id, household_id=cd_household.id,
-                     title=f"{node.title} Practice", activity_type=ActivityType.practice,
-                     node_id=node.id, estimated_minutes=20, sort_order=i,
-                     scheduled_date=date.today(), status=ActivityStatus.scheduled)
+        a = Activity(
+            plan_week_id=week.id,
+            household_id=cd_household.id,
+            title=f"{node.title} Practice",
+            activity_type=ActivityType.practice,
+            node_id=node.id,
+            estimated_minutes=20,
+            sort_order=i,
+            scheduled_date=date.today(),
+            status=ActivityStatus.scheduled,
+        )
         db_session.add(a)
         await db_session.flush()
         acts.append(a)
@@ -106,6 +126,7 @@ class TestGreetingGenerator:
     def test_varies_by_time(self):
         with patch("app.services.child_greeting.datetime") as mock_dt:
             from datetime import datetime as real_dt
+
             mock_dt.now.return_value = real_dt(2026, 4, 12, 9, 0, tzinfo=UTC)
             mock_dt.side_effect = lambda *a, **kw: real_dt(*a, **kw)
         # Direct test — greeting should differ between morning/afternoon
@@ -145,7 +166,17 @@ class TestEncouragementGenerator:
     def test_praises_effort(self):
         e = generate_encouragement(20, 300, 5, 12, 4)
         if e:
-            effort_words = ["dedication", "effort", "practice", "knowledge", "focus", "learning", "mastered", "stronger", "reviewed"]
+            effort_words = [
+                "dedication",
+                "effort",
+                "practice",
+                "knowledge",
+                "focus",
+                "learning",
+                "mastered",
+                "stronger",
+                "reviewed",
+            ]
             assert any(w in e.lower() for w in effort_words)
 
     def test_rotates(self):
@@ -179,6 +210,7 @@ class TestEncouragementGenerator:
 class TestDashboardAPI:
     async def test_returns_complete_response(self, db_session, cd_child, cd_household, cd_enrolled):
         from app.api.child_dashboard import get_child_dashboard
+
         # We can't call the endpoint directly without the full FastAPI setup,
         # but we can verify the greeting and encouragement generators work
         g = generate_greeting(cd_child.first_name, 0, 0)
@@ -205,14 +237,22 @@ class TestDashboardAPI:
 
     async def test_progress_computation_logic(self, db_session, cd_child, cd_household, cd_nodes, cd_enrolled):
         """Seed known mastery and verify computation."""
-        db_session.add(ChildNodeState(
-            child_id=cd_child.id, household_id=cd_household.id, node_id=cd_nodes[0].id,
-            mastery_level=MasteryLevel.mastered,
-        ))
-        db_session.add(ChildNodeState(
-            child_id=cd_child.id, household_id=cd_household.id, node_id=cd_nodes[1].id,
-            mastery_level=MasteryLevel.developing,
-        ))
+        db_session.add(
+            ChildNodeState(
+                child_id=cd_child.id,
+                household_id=cd_household.id,
+                node_id=cd_nodes[0].id,
+                mastery_level=MasteryLevel.mastered,
+            )
+        )
+        db_session.add(
+            ChildNodeState(
+                child_id=cd_child.id,
+                household_id=cd_household.id,
+                node_id=cd_nodes[1].id,
+                mastery_level=MasteryLevel.developing,
+            )
+        )
         await db_session.flush()
         # 1 mastered out of 3 total = 33%
         mastered = 1
@@ -222,10 +262,14 @@ class TestDashboardAPI:
 
     async def test_journey_map_structure(self, db_session, cd_child, cd_household, cd_nodes, cd_enrolled):
         """Verify journey map data with mastered/current/upcoming."""
-        db_session.add(ChildNodeState(
-            child_id=cd_child.id, household_id=cd_household.id, node_id=cd_nodes[0].id,
-            mastery_level=MasteryLevel.mastered,
-        ))
+        db_session.add(
+            ChildNodeState(
+                child_id=cd_child.id,
+                household_id=cd_household.id,
+                node_id=cd_nodes[0].id,
+                mastery_level=MasteryLevel.mastered,
+            )
+        )
         await db_session.flush()
         # Node 0 mastered, Node 1 would be current, Node 2 upcoming
         states = {cd_nodes[0].id: "mastered", cd_nodes[1].id: "not_started", cd_nodes[2].id: "not_started"}
@@ -241,6 +285,7 @@ class TestDashboardAPI:
     async def test_streak_data_structure(self, db_session, cd_child, cd_household):
         """Verify streak returns expected shape."""
         from app.services.achievements import get_streak
+
         streak = await get_streak(db_session, cd_child.id, cd_household.id)
         assert "current_streak" in streak
         assert "longest_streak" in streak
@@ -249,6 +294,7 @@ class TestDashboardAPI:
     async def test_achievements_structure(self, db_session, cd_child):
         """Verify achievements returns list."""
         from app.services.achievements import get_achievements
+
         achs = await get_achievements(db_session, cd_child.id)
         assert isinstance(achs, list)
 

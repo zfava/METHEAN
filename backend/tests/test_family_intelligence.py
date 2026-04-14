@@ -82,8 +82,10 @@ async def fi_map(db_session, fi_household, fi_subject) -> LearningMap:
 @pytest_asyncio.fixture
 async def fi_node(db_session, fi_household, fi_map) -> LearningNode:
     n = LearningNode(
-        learning_map_id=fi_map.id, household_id=fi_household.id,
-        node_type=NodeType.concept, title="Long Division",
+        learning_map_id=fi_map.id,
+        household_id=fi_household.id,
+        node_type=NodeType.concept,
+        title="Long Division",
     )
     db_session.add(n)
     await db_session.flush()
@@ -95,14 +97,19 @@ async def _make_attempt(db_session, fi_household, child, node) -> Attempt:
     db_session.add(plan)
     await db_session.flush()
     plan_week = PlanWeek(
-        plan_id=plan.id, household_id=fi_household.id, week_number=1,
-        start_date=date(2026, 1, 5), end_date=date(2026, 1, 11),
+        plan_id=plan.id,
+        household_id=fi_household.id,
+        week_number=1,
+        start_date=date(2026, 1, 5),
+        end_date=date(2026, 1, 11),
     )
     db_session.add(plan_week)
     await db_session.flush()
     act = Activity(
         plan_week_id=plan_week.id,
-        household_id=fi_household.id, title="Practice", activity_type="practice",
+        household_id=fi_household.id,
+        title="Practice",
+        activity_type="practice",
         node_id=node.id,
     )
     db_session.add(act)
@@ -134,11 +141,16 @@ class TestSharedStruggle:
         """2 children stuck on same node → insight with correct fields."""
         now = datetime.now(UTC)
         for child in [fi_child_a, fi_child_b]:
-            db_session.add(ChildNodeState(
-                child_id=child.id, household_id=fi_household.id, node_id=fi_node.id,
-                mastery_level=MasteryLevel.developing, attempts_count=5,
-                last_activity_at=now - timedelta(days=1),
-            ))
+            db_session.add(
+                ChildNodeState(
+                    child_id=child.id,
+                    household_id=fi_household.id,
+                    node_id=fi_node.id,
+                    mastery_level=MasteryLevel.developing,
+                    attempts_count=5,
+                    last_activity_at=now - timedelta(days=1),
+                )
+            )
         await db_session.flush()
 
         results = await detect_shared_struggles(db_session, fi_household.id, [fi_child_a, fi_child_b], None)
@@ -152,32 +164,51 @@ class TestSharedStruggle:
         assert "Alice" in ins.recommendation
         assert "Bob" in ins.recommendation
 
-    async def test_shared_struggle_not_triggered_single_child(self, db_session, fi_household, fi_child_a, fi_child_b, fi_node):
+    async def test_shared_struggle_not_triggered_single_child(
+        self, db_session, fi_household, fi_child_a, fi_child_b, fi_node
+    ):
         """Only 1 child struggling → no insight."""
         now = datetime.now(UTC)
-        db_session.add(ChildNodeState(
-            child_id=fi_child_a.id, household_id=fi_household.id, node_id=fi_node.id,
-            mastery_level=MasteryLevel.emerging, attempts_count=5,
-            last_activity_at=now - timedelta(days=1),
-        ))
-        db_session.add(ChildNodeState(
-            child_id=fi_child_b.id, household_id=fi_household.id, node_id=fi_node.id,
-            mastery_level=MasteryLevel.mastered, attempts_count=3,
-            last_activity_at=now - timedelta(days=1),
-        ))
+        db_session.add(
+            ChildNodeState(
+                child_id=fi_child_a.id,
+                household_id=fi_household.id,
+                node_id=fi_node.id,
+                mastery_level=MasteryLevel.emerging,
+                attempts_count=5,
+                last_activity_at=now - timedelta(days=1),
+            )
+        )
+        db_session.add(
+            ChildNodeState(
+                child_id=fi_child_b.id,
+                household_id=fi_household.id,
+                node_id=fi_node.id,
+                mastery_level=MasteryLevel.mastered,
+                attempts_count=3,
+                last_activity_at=now - timedelta(days=1),
+            )
+        )
         await db_session.flush()
         results = await detect_shared_struggles(db_session, fi_household.id, [fi_child_a, fi_child_b], None)
         assert len(results) == 0
 
-    async def test_shared_struggle_not_triggered_below_attempts(self, db_session, fi_household, fi_child_a, fi_child_b, fi_node):
+    async def test_shared_struggle_not_triggered_below_attempts(
+        self, db_session, fi_household, fi_child_a, fi_child_b, fi_node
+    ):
         """2 children but only 1 attempt each (not stuck) → no insight."""
         now = datetime.now(UTC)
         for child in [fi_child_a, fi_child_b]:
-            db_session.add(ChildNodeState(
-                child_id=child.id, household_id=fi_household.id, node_id=fi_node.id,
-                mastery_level=MasteryLevel.emerging, attempts_count=1,
-                last_activity_at=now - timedelta(days=1),
-            ))
+            db_session.add(
+                ChildNodeState(
+                    child_id=child.id,
+                    household_id=fi_household.id,
+                    node_id=fi_node.id,
+                    mastery_level=MasteryLevel.emerging,
+                    attempts_count=1,
+                    last_activity_at=now - timedelta(days=1),
+                )
+            )
         await db_session.flush()
         results = await detect_shared_struggles(db_session, fi_household.id, [fi_child_a, fi_child_b], None)
         assert len(results) == 0
@@ -186,11 +217,16 @@ class TestSharedStruggle:
         """Run detection twice → only 1 insight."""
         now = datetime.now(UTC)
         for child in [fi_child_a, fi_child_b]:
-            db_session.add(ChildNodeState(
-                child_id=child.id, household_id=fi_household.id, node_id=fi_node.id,
-                mastery_level=MasteryLevel.emerging, attempts_count=5,
-                last_activity_at=now - timedelta(days=1),
-            ))
+            db_session.add(
+                ChildNodeState(
+                    child_id=child.id,
+                    household_id=fi_household.id,
+                    node_id=fi_node.id,
+                    mastery_level=MasteryLevel.emerging,
+                    attempts_count=5,
+                    last_activity_at=now - timedelta(days=1),
+                )
+            )
         await db_session.flush()
         children = [fi_child_a, fi_child_b]
         r1 = await detect_shared_struggles(db_session, fi_household.id, children, None)
@@ -203,14 +239,20 @@ class TestSharedStruggle:
         """Disabled shared_struggle → no insights."""
         now = datetime.now(UTC)
         for child in [fi_child_a, fi_child_b]:
-            db_session.add(ChildNodeState(
-                child_id=child.id, household_id=fi_household.id, node_id=fi_node.id,
-                mastery_level=MasteryLevel.emerging, attempts_count=5,
-                last_activity_at=now - timedelta(days=1),
-            ))
+            db_session.add(
+                ChildNodeState(
+                    child_id=child.id,
+                    household_id=fi_household.id,
+                    node_id=fi_node.id,
+                    mastery_level=MasteryLevel.emerging,
+                    attempts_count=5,
+                    last_activity_at=now - timedelta(days=1),
+                )
+            )
         await db_session.flush()
         config = FamilyInsightConfig(
-            household_id=fi_household.id, enabled=True,
+            household_id=fi_household.id,
+            enabled=True,
             pattern_settings={**_all_disabled_settings(), "shared_struggle": {"enabled": False}},
         )
         db_session.add(config)
@@ -230,55 +272,86 @@ class TestCurriculumGap:
         """Both score < 0.5 on first attempt → gap detected."""
         for child in [fi_child_a, fi_child_b]:
             att = await _make_attempt(db_session, fi_household, child, fi_node)
-            db_session.add(EvaluatorPrediction(
-                household_id=fi_household.id, child_id=child.id,
-                node_id=fi_node.id, attempt_id=att.id,
-                predicted_confidence=0.3, predicted_fsrs_rating=1,
-            ))
+            db_session.add(
+                EvaluatorPrediction(
+                    household_id=fi_household.id,
+                    child_id=child.id,
+                    node_id=fi_node.id,
+                    attempt_id=att.id,
+                    predicted_confidence=0.3,
+                    predicted_fsrs_rating=1,
+                )
+            )
         await db_session.flush()
         results = await detect_curriculum_gaps(db_session, fi_household.id, [fi_child_a, fi_child_b], None)
         assert len(results) == 1
         assert results[0].pattern_type == FamilyPatternType.curriculum_gap
 
-    async def test_curriculum_gap_not_triggered_one_passes(self, db_session, fi_household, fi_child_a, fi_child_b, fi_node):
+    async def test_curriculum_gap_not_triggered_one_passes(
+        self, db_session, fi_household, fi_child_a, fi_child_b, fi_node
+    ):
         """One scores 0.7 → no gap."""
         att_a = await _make_attempt(db_session, fi_household, fi_child_a, fi_node)
-        db_session.add(EvaluatorPrediction(
-            household_id=fi_household.id, child_id=fi_child_a.id,
-            node_id=fi_node.id, attempt_id=att_a.id,
-            predicted_confidence=0.3, predicted_fsrs_rating=1,
-        ))
+        db_session.add(
+            EvaluatorPrediction(
+                household_id=fi_household.id,
+                child_id=fi_child_a.id,
+                node_id=fi_node.id,
+                attempt_id=att_a.id,
+                predicted_confidence=0.3,
+                predicted_fsrs_rating=1,
+            )
+        )
         att_b = await _make_attempt(db_session, fi_household, fi_child_b, fi_node)
-        db_session.add(EvaluatorPrediction(
-            household_id=fi_household.id, child_id=fi_child_b.id,
-            node_id=fi_node.id, attempt_id=att_b.id,
-            predicted_confidence=0.7, predicted_fsrs_rating=3,
-        ))
+        db_session.add(
+            EvaluatorPrediction(
+                household_id=fi_household.id,
+                child_id=fi_child_b.id,
+                node_id=fi_node.id,
+                attempt_id=att_b.id,
+                predicted_confidence=0.7,
+                predicted_fsrs_rating=3,
+            )
+        )
         await db_session.flush()
         results = await detect_curriculum_gaps(db_session, fi_household.id, [fi_child_a, fi_child_b], None)
         assert len(results) == 0
 
-    async def test_curriculum_gap_requires_two_children(self, db_session, fi_household, fi_child_a, fi_child_b, fi_node):
+    async def test_curriculum_gap_requires_two_children(
+        self, db_session, fi_household, fi_child_a, fi_child_b, fi_node
+    ):
         """Only 1 child attempted → no gap (need 2+)."""
         att = await _make_attempt(db_session, fi_household, fi_child_a, fi_node)
-        db_session.add(EvaluatorPrediction(
-            household_id=fi_household.id, child_id=fi_child_a.id,
-            node_id=fi_node.id, attempt_id=att.id,
-            predicted_confidence=0.2, predicted_fsrs_rating=1,
-        ))
+        db_session.add(
+            EvaluatorPrediction(
+                household_id=fi_household.id,
+                child_id=fi_child_a.id,
+                node_id=fi_node.id,
+                attempt_id=att.id,
+                predicted_confidence=0.2,
+                predicted_fsrs_rating=1,
+            )
+        )
         await db_session.flush()
         results = await detect_curriculum_gaps(db_session, fi_household.id, [fi_child_a, fi_child_b], None)
         assert len(results) == 0
 
-    async def test_curriculum_gap_recommendation_includes_node_title(self, db_session, fi_household, fi_child_a, fi_child_b, fi_node):
+    async def test_curriculum_gap_recommendation_includes_node_title(
+        self, db_session, fi_household, fi_child_a, fi_child_b, fi_node
+    ):
         """Verify recommendation contains node title."""
         for child in [fi_child_a, fi_child_b]:
             att = await _make_attempt(db_session, fi_household, child, fi_node)
-            db_session.add(EvaluatorPrediction(
-                household_id=fi_household.id, child_id=child.id,
-                node_id=fi_node.id, attempt_id=att.id,
-                predicted_confidence=0.25, predicted_fsrs_rating=1,
-            ))
+            db_session.add(
+                EvaluatorPrediction(
+                    household_id=fi_household.id,
+                    child_id=child.id,
+                    node_id=fi_node.id,
+                    attempt_id=att.id,
+                    predicted_confidence=0.25,
+                    predicted_fsrs_rating=1,
+                )
+            )
         await db_session.flush()
         results = await detect_curriculum_gaps(db_session, fi_household.id, [fi_child_a, fi_child_b], None)
         assert len(results) == 1
@@ -296,39 +369,62 @@ class TestPacingDivergence:
         """4 nodes/wk vs 1 node/wk = 4x → detected."""
         now = datetime.now(UTC)
         for i in range(8):
-            n = LearningNode(learning_map_id=fi_map.id, household_id=fi_household.id,
-                             node_type=NodeType.concept, title=f"Fast{i}")
+            n = LearningNode(
+                learning_map_id=fi_map.id, household_id=fi_household.id, node_type=NodeType.concept, title=f"Fast{i}"
+            )
             db_session.add(n)
             await db_session.flush()
-            db_session.add(ChildNodeState(
-                child_id=fi_child_a.id, household_id=fi_household.id, node_id=n.id,
-                mastery_level=MasteryLevel.mastered, last_activity_at=now - timedelta(days=i * 3),
-            ))
-        n2 = LearningNode(learning_map_id=fi_map.id, household_id=fi_household.id,
-                          node_type=NodeType.concept, title="Slow0")
+            db_session.add(
+                ChildNodeState(
+                    child_id=fi_child_a.id,
+                    household_id=fi_household.id,
+                    node_id=n.id,
+                    mastery_level=MasteryLevel.mastered,
+                    last_activity_at=now - timedelta(days=i * 3),
+                )
+            )
+        n2 = LearningNode(
+            learning_map_id=fi_map.id, household_id=fi_household.id, node_type=NodeType.concept, title="Slow0"
+        )
         db_session.add(n2)
         await db_session.flush()
-        db_session.add(ChildNodeState(
-            child_id=fi_child_b.id, household_id=fi_household.id, node_id=n2.id,
-            mastery_level=MasteryLevel.mastered, last_activity_at=now - timedelta(days=1),
-        ))
+        db_session.add(
+            ChildNodeState(
+                child_id=fi_child_b.id,
+                household_id=fi_household.id,
+                node_id=n2.id,
+                mastery_level=MasteryLevel.mastered,
+                last_activity_at=now - timedelta(days=1),
+            )
+        )
         await db_session.flush()
         results = await detect_pacing_divergence(db_session, fi_household.id, [fi_child_a, fi_child_b], None)
         assert len(results) == 1
 
-    async def test_pacing_divergence_not_triggered_within_range(self, db_session, fi_household, fi_child_a, fi_child_b, fi_map):
+    async def test_pacing_divergence_not_triggered_within_range(
+        self, db_session, fi_household, fi_child_a, fi_child_b, fi_map
+    ):
         """3 vs 2 nodes/wk = 1.5x < 2.0 → no insight."""
         now = datetime.now(UTC)
         for child, count in [(fi_child_a, 6), (fi_child_b, 4)]:
             for i in range(count):
-                n = LearningNode(learning_map_id=fi_map.id, household_id=fi_household.id,
-                                 node_type=NodeType.concept, title=f"N{child.first_name}{i}")
+                n = LearningNode(
+                    learning_map_id=fi_map.id,
+                    household_id=fi_household.id,
+                    node_type=NodeType.concept,
+                    title=f"N{child.first_name}{i}",
+                )
                 db_session.add(n)
                 await db_session.flush()
-                db_session.add(ChildNodeState(
-                    child_id=child.id, household_id=fi_household.id, node_id=n.id,
-                    mastery_level=MasteryLevel.mastered, last_activity_at=now - timedelta(days=i * 4),
-                ))
+                db_session.add(
+                    ChildNodeState(
+                        child_id=child.id,
+                        household_id=fi_household.id,
+                        node_id=n.id,
+                        mastery_level=MasteryLevel.mastered,
+                        last_activity_at=now - timedelta(days=i * 4),
+                    )
+                )
         await db_session.flush()
         results = await detect_pacing_divergence(db_session, fi_household.id, [fi_child_a, fi_child_b], None)
         assert len(results) == 0
@@ -337,26 +433,39 @@ class TestPacingDivergence:
         """Config factor=3.0, actual divergence ~2.7x → no insight."""
         now = datetime.now(UTC)
         for i in range(8):
-            n = LearningNode(learning_map_id=fi_map.id, household_id=fi_household.id,
-                             node_type=NodeType.concept, title=f"CustA{i}")
+            n = LearningNode(
+                learning_map_id=fi_map.id, household_id=fi_household.id, node_type=NodeType.concept, title=f"CustA{i}"
+            )
             db_session.add(n)
             await db_session.flush()
-            db_session.add(ChildNodeState(
-                child_id=fi_child_a.id, household_id=fi_household.id, node_id=n.id,
-                mastery_level=MasteryLevel.mastered, last_activity_at=now - timedelta(days=i * 3),
-            ))
+            db_session.add(
+                ChildNodeState(
+                    child_id=fi_child_a.id,
+                    household_id=fi_household.id,
+                    node_id=n.id,
+                    mastery_level=MasteryLevel.mastered,
+                    last_activity_at=now - timedelta(days=i * 3),
+                )
+            )
         for i in range(3):
-            n = LearningNode(learning_map_id=fi_map.id, household_id=fi_household.id,
-                             node_type=NodeType.concept, title=f"CustB{i}")
+            n = LearningNode(
+                learning_map_id=fi_map.id, household_id=fi_household.id, node_type=NodeType.concept, title=f"CustB{i}"
+            )
             db_session.add(n)
             await db_session.flush()
-            db_session.add(ChildNodeState(
-                child_id=fi_child_b.id, household_id=fi_household.id, node_id=n.id,
-                mastery_level=MasteryLevel.mastered, last_activity_at=now - timedelta(days=i * 7),
-            ))
+            db_session.add(
+                ChildNodeState(
+                    child_id=fi_child_b.id,
+                    household_id=fi_household.id,
+                    node_id=n.id,
+                    mastery_level=MasteryLevel.mastered,
+                    last_activity_at=now - timedelta(days=i * 7),
+                )
+            )
         await db_session.flush()
         config = FamilyInsightConfig(
-            household_id=fi_household.id, enabled=True,
+            household_id=fi_household.id,
+            enabled=True,
             pattern_settings={
                 **_all_disabled_settings(),
                 "pacing_divergence": {"enabled": True, "divergence_factor": 3.0},
@@ -382,56 +491,81 @@ class TestEnvironmentalCorrelation:
         for child in [fi_child_a, fi_child_b]:
             for day_offset in range(15):
                 att = await _make_attempt(db_session, fi_household, child, fi_node)
-                db_session.add(EvaluatorPrediction(
-                    household_id=fi_household.id, child_id=child.id,
-                    node_id=fi_node.id, attempt_id=att.id,
-                    predicted_confidence=0.75,
-                    predicted_fsrs_rating=3,
-                    created_at=now - timedelta(days=day_offset),
-                ))
+                db_session.add(
+                    EvaluatorPrediction(
+                        household_id=fi_household.id,
+                        child_id=child.id,
+                        node_id=fi_node.id,
+                        attempt_id=att.id,
+                        predicted_confidence=0.75,
+                        predicted_fsrs_rating=3,
+                        created_at=now - timedelta(days=day_offset),
+                    )
+                )
         # Add dip day for both
         for child in [fi_child_a, fi_child_b]:
             att = await _make_attempt(db_session, fi_household, child, fi_node)
-            db_session.add(EvaluatorPrediction(
-                household_id=fi_household.id, child_id=child.id,
-                node_id=fi_node.id, attempt_id=att.id,
-                predicted_confidence=0.2,
-                predicted_fsrs_rating=1,
-                created_at=now - timedelta(days=3),
-            ))
+            db_session.add(
+                EvaluatorPrediction(
+                    household_id=fi_household.id,
+                    child_id=child.id,
+                    node_id=fi_node.id,
+                    attempt_id=att.id,
+                    predicted_confidence=0.2,
+                    predicted_fsrs_rating=1,
+                    created_at=now - timedelta(days=3),
+                )
+            )
         await db_session.flush()
         results = await detect_environmental_correlation(db_session, fi_household.id, [fi_child_a, fi_child_b], None)
         # May or may not trigger depending on exact dip-vs-mean calculation
         # The important thing is it runs without error
         assert isinstance(results, list)
 
-    async def test_environmental_not_triggered_different_days(self, db_session, fi_household, fi_child_a, fi_child_b, fi_node):
+    async def test_environmental_not_triggered_different_days(
+        self, db_session, fi_household, fi_child_a, fi_child_b, fi_node
+    ):
         """Children dip on different days → no insight."""
         now = datetime.now(UTC)
         for child in [fi_child_a, fi_child_b]:
             for day_offset in range(10):
                 att = await _make_attempt(db_session, fi_household, child, fi_node)
-                db_session.add(EvaluatorPrediction(
-                    household_id=fi_household.id, child_id=child.id,
-                    node_id=fi_node.id, attempt_id=att.id,
-                    predicted_confidence=0.75, predicted_fsrs_rating=3,
-                    created_at=now - timedelta(days=day_offset),
-                ))
+                db_session.add(
+                    EvaluatorPrediction(
+                        household_id=fi_household.id,
+                        child_id=child.id,
+                        node_id=fi_node.id,
+                        attempt_id=att.id,
+                        predicted_confidence=0.75,
+                        predicted_fsrs_rating=3,
+                        created_at=now - timedelta(days=day_offset),
+                    )
+                )
         # Alice dips day 2, Bob dips day 8 — different days
         att_a = await _make_attempt(db_session, fi_household, fi_child_a, fi_node)
-        db_session.add(EvaluatorPrediction(
-            household_id=fi_household.id, child_id=fi_child_a.id,
-            node_id=fi_node.id, attempt_id=att_a.id,
-            predicted_confidence=0.15, predicted_fsrs_rating=1,
-            created_at=now - timedelta(days=2),
-        ))
+        db_session.add(
+            EvaluatorPrediction(
+                household_id=fi_household.id,
+                child_id=fi_child_a.id,
+                node_id=fi_node.id,
+                attempt_id=att_a.id,
+                predicted_confidence=0.15,
+                predicted_fsrs_rating=1,
+                created_at=now - timedelta(days=2),
+            )
+        )
         att_b = await _make_attempt(db_session, fi_household, fi_child_b, fi_node)
-        db_session.add(EvaluatorPrediction(
-            household_id=fi_household.id, child_id=fi_child_b.id,
-            node_id=fi_node.id, attempt_id=att_b.id,
-            predicted_confidence=0.15, predicted_fsrs_rating=1,
-            created_at=now - timedelta(days=8),
-        ))
+        db_session.add(
+            EvaluatorPrediction(
+                household_id=fi_household.id,
+                child_id=fi_child_b.id,
+                node_id=fi_node.id,
+                attempt_id=att_b.id,
+                predicted_confidence=0.15,
+                predicted_fsrs_rating=1,
+                created_at=now - timedelta(days=8),
+            )
+        )
         await db_session.flush()
         results = await detect_environmental_correlation(db_session, fi_household.id, [fi_child_a, fi_child_b], None)
         # Different dip days should not correlate
@@ -444,12 +578,17 @@ class TestEnvironmentalCorrelation:
             for day_offset in range(20):
                 att = await _make_attempt(db_session, fi_household, child, fi_node)
                 conf = 0.1 if day_offset == 5 else 0.8
-                db_session.add(EvaluatorPrediction(
-                    household_id=fi_household.id, child_id=child.id,
-                    node_id=fi_node.id, attempt_id=att.id,
-                    predicted_confidence=conf, predicted_fsrs_rating=1 if conf < 0.3 else 4,
-                    created_at=now - timedelta(days=day_offset),
-                ))
+                db_session.add(
+                    EvaluatorPrediction(
+                        household_id=fi_household.id,
+                        child_id=child.id,
+                        node_id=fi_node.id,
+                        attempt_id=att.id,
+                        predicted_confidence=conf,
+                        predicted_fsrs_rating=1 if conf < 0.3 else 4,
+                        created_at=now - timedelta(days=day_offset),
+                    )
+                )
         await db_session.flush()
         results = await detect_environmental_correlation(db_session, fi_household.id, [fi_child_a, fi_child_b], None)
         for r in results:
@@ -467,32 +606,49 @@ class TestMaterialEffectiveness:
         """Child A=0.85 avg, Child B=0.35 avg, gap >0.3 → detected."""
         for _ in range(6):
             att_a = await _make_attempt(db_session, fi_household, fi_child_a, fi_node)
-            db_session.add(EvaluatorPrediction(
-                household_id=fi_household.id, child_id=fi_child_a.id,
-                node_id=fi_node.id, attempt_id=att_a.id,
-                predicted_confidence=0.85, predicted_fsrs_rating=4,
-            ))
+            db_session.add(
+                EvaluatorPrediction(
+                    household_id=fi_household.id,
+                    child_id=fi_child_a.id,
+                    node_id=fi_node.id,
+                    attempt_id=att_a.id,
+                    predicted_confidence=0.85,
+                    predicted_fsrs_rating=4,
+                )
+            )
             att_b = await _make_attempt(db_session, fi_household, fi_child_b, fi_node)
-            db_session.add(EvaluatorPrediction(
-                household_id=fi_household.id, child_id=fi_child_b.id,
-                node_id=fi_node.id, attempt_id=att_b.id,
-                predicted_confidence=0.35, predicted_fsrs_rating=2,
-            ))
+            db_session.add(
+                EvaluatorPrediction(
+                    household_id=fi_household.id,
+                    child_id=fi_child_b.id,
+                    node_id=fi_node.id,
+                    attempt_id=att_b.id,
+                    predicted_confidence=0.35,
+                    predicted_fsrs_rating=2,
+                )
+            )
         await db_session.flush()
         results = await detect_material_effectiveness(db_session, fi_household.id, [fi_child_a, fi_child_b], None)
         assert len(results) == 1
         assert "Alice" in results[0].recommendation
 
-    async def test_material_not_triggered_similar_scores(self, db_session, fi_household, fi_child_a, fi_child_b, fi_node):
+    async def test_material_not_triggered_similar_scores(
+        self, db_session, fi_household, fi_child_a, fi_child_b, fi_node
+    ):
         """Both ~0.7 → no insight."""
         for _ in range(6):
             for child in [fi_child_a, fi_child_b]:
                 att = await _make_attempt(db_session, fi_household, child, fi_node)
-                db_session.add(EvaluatorPrediction(
-                    household_id=fi_household.id, child_id=child.id,
-                    node_id=fi_node.id, attempt_id=att.id,
-                    predicted_confidence=0.7, predicted_fsrs_rating=3,
-                ))
+                db_session.add(
+                    EvaluatorPrediction(
+                        household_id=fi_household.id,
+                        child_id=child.id,
+                        node_id=fi_node.id,
+                        attempt_id=att.id,
+                        predicted_confidence=0.7,
+                        predicted_fsrs_rating=3,
+                    )
+                )
         await db_session.flush()
         results = await detect_material_effectiveness(db_session, fi_household.id, [fi_child_a, fi_child_b], None)
         assert len(results) == 0
@@ -501,11 +657,16 @@ class TestMaterialEffectiveness:
         """Only 1 attempt each → no insight (needs 5)."""
         for child, conf in [(fi_child_a, 0.9), (fi_child_b, 0.2)]:
             att = await _make_attempt(db_session, fi_household, child, fi_node)
-            db_session.add(EvaluatorPrediction(
-                household_id=fi_household.id, child_id=child.id,
-                node_id=fi_node.id, attempt_id=att.id,
-                predicted_confidence=conf, predicted_fsrs_rating=4 if conf > 0.5 else 1,
-            ))
+            db_session.add(
+                EvaluatorPrediction(
+                    household_id=fi_household.id,
+                    child_id=child.id,
+                    node_id=fi_node.id,
+                    attempt_id=att.id,
+                    predicted_confidence=conf,
+                    predicted_fsrs_rating=4 if conf > 0.5 else 1,
+                )
+            )
         await db_session.flush()
         results = await detect_material_effectiveness(db_session, fi_household.id, [fi_child_a, fi_child_b], None)
         assert len(results) == 0
@@ -518,24 +679,36 @@ class TestMaterialEffectiveness:
 
 @pytest.mark.asyncio
 class TestPredictiveScaffolding:
-    async def test_predictive_insight_created(self, db_session, fi_household, fi_child_a, fi_child_b, fi_child_c, fi_map, fi_node):
+    async def test_predictive_insight_created(
+        self, db_session, fi_household, fi_child_a, fi_child_b, fi_child_c, fi_map, fi_node
+    ):
         """Older siblings struggle at node; younger sibling approaching → predictive insight."""
         # Create a prerequisite node that Clara has mastered
-        prereq = LearningNode(learning_map_id=fi_map.id, household_id=fi_household.id,
-                              node_type=NodeType.concept, title="Basic Division")
+        prereq = LearningNode(
+            learning_map_id=fi_map.id, household_id=fi_household.id, node_type=NodeType.concept, title="Basic Division"
+        )
         db_session.add(prereq)
         await db_session.flush()
 
         # Edge: prereq → fi_node
-        db_session.add(LearningEdge(
-            learning_map_id=fi_map.id, household_id=fi_household.id,
-            from_node_id=prereq.id, to_node_id=fi_node.id,
-            relation=EdgeRelation.prerequisite,
-        ))
+        db_session.add(
+            LearningEdge(
+                learning_map_id=fi_map.id,
+                household_id=fi_household.id,
+                from_node_id=prereq.id,
+                to_node_id=fi_node.id,
+                relation=EdgeRelation.prerequisite,
+            )
+        )
         # Closure entry: prereq is ancestor of fi_node at depth 1
-        db_session.add(LearningMapClosure(
-            learning_map_id=fi_map.id, ancestor_id=prereq.id, descendant_id=fi_node.id, depth=1,
-        ))
+        db_session.add(
+            LearningMapClosure(
+                learning_map_id=fi_map.id,
+                ancestor_id=prereq.id,
+                descendant_id=fi_node.id,
+                depth=1,
+            )
+        )
         await db_session.flush()
 
         # Alice and Bob struggled at fi_node
@@ -553,10 +726,15 @@ class TestPredictiveScaffolding:
         db_session.add(insight)
 
         # Clara has mastered prereq (approaching fi_node) but NOT fi_node
-        db_session.add(ChildNodeState(
-            child_id=fi_child_c.id, household_id=fi_household.id, node_id=prereq.id,
-            mastery_level=MasteryLevel.mastered, attempts_count=3,
-        ))
+        db_session.add(
+            ChildNodeState(
+                child_id=fi_child_c.id,
+                household_id=fi_household.id,
+                node_id=prereq.id,
+                mastery_level=MasteryLevel.mastered,
+                attempts_count=3,
+            )
+        )
         await db_session.flush()
 
         results = await generate_predictive_scaffolding(db_session, fi_household.id)
@@ -566,80 +744,136 @@ class TestPredictiveScaffolding:
         assert pred.predictive_node_id == fi_node.id
         assert "Clara" in pred.recommendation
 
-    async def test_predictive_not_created_already_attempted(self, db_session, fi_household, fi_child_a, fi_child_b, fi_child_c, fi_map, fi_node):
+    async def test_predictive_not_created_already_attempted(
+        self, db_session, fi_household, fi_child_a, fi_child_b, fi_child_c, fi_map, fi_node
+    ):
         """Younger sibling already attempted node → no predictive insight."""
-        prereq = LearningNode(learning_map_id=fi_map.id, household_id=fi_household.id,
-                              node_type=NodeType.concept, title="Prereq")
+        prereq = LearningNode(
+            learning_map_id=fi_map.id, household_id=fi_household.id, node_type=NodeType.concept, title="Prereq"
+        )
         db_session.add(prereq)
         await db_session.flush()
-        db_session.add(LearningMapClosure(
-            learning_map_id=fi_map.id, ancestor_id=prereq.id, descendant_id=fi_node.id, depth=1,
-        ))
+        db_session.add(
+            LearningMapClosure(
+                learning_map_id=fi_map.id,
+                ancestor_id=prereq.id,
+                descendant_id=fi_node.id,
+                depth=1,
+            )
+        )
         insight = FamilyInsight(
-            household_id=fi_household.id, pattern_type=FamilyPatternType.shared_struggle,
+            household_id=fi_household.id,
+            pattern_type=FamilyPatternType.shared_struggle,
             affected_children=[str(fi_child_a.id), str(fi_child_b.id)],
-            affected_nodes=[str(fi_node.id)], affected_subjects=["Math"],
-            evidence_json={}, confidence=0.9, recommendation="Test",
+            affected_nodes=[str(fi_node.id)],
+            affected_subjects=["Math"],
+            evidence_json={},
+            confidence=0.9,
+            recommendation="Test",
         )
         db_session.add(insight)
         # Clara already attempted fi_node
-        db_session.add(ChildNodeState(
-            child_id=fi_child_c.id, household_id=fi_household.id, node_id=fi_node.id,
-            mastery_level=MasteryLevel.developing, attempts_count=2,
-        ))
-        db_session.add(ChildNodeState(
-            child_id=fi_child_c.id, household_id=fi_household.id, node_id=prereq.id,
-            mastery_level=MasteryLevel.mastered, attempts_count=3,
-        ))
+        db_session.add(
+            ChildNodeState(
+                child_id=fi_child_c.id,
+                household_id=fi_household.id,
+                node_id=fi_node.id,
+                mastery_level=MasteryLevel.developing,
+                attempts_count=2,
+            )
+        )
+        db_session.add(
+            ChildNodeState(
+                child_id=fi_child_c.id,
+                household_id=fi_household.id,
+                node_id=prereq.id,
+                mastery_level=MasteryLevel.mastered,
+                attempts_count=3,
+            )
+        )
         await db_session.flush()
         results = await generate_predictive_scaffolding(db_session, fi_household.id)
         assert len(results) == 0
 
-    async def test_predictive_not_created_far_in_dag(self, db_session, fi_household, fi_child_a, fi_child_b, fi_child_c, fi_map, fi_node):
+    async def test_predictive_not_created_far_in_dag(
+        self, db_session, fi_household, fi_child_a, fi_child_b, fi_child_c, fi_map, fi_node
+    ):
         """Node is > 2 hops away → no predictive insight."""
-        far_node = LearningNode(learning_map_id=fi_map.id, household_id=fi_household.id,
-                                node_type=NodeType.concept, title="Far Node")
+        far_node = LearningNode(
+            learning_map_id=fi_map.id, household_id=fi_household.id, node_type=NodeType.concept, title="Far Node"
+        )
         db_session.add(far_node)
         await db_session.flush()
         # Closure at depth 4 (too far)
-        db_session.add(LearningMapClosure(
-            learning_map_id=fi_map.id, ancestor_id=far_node.id, descendant_id=fi_node.id, depth=4,
-        ))
+        db_session.add(
+            LearningMapClosure(
+                learning_map_id=fi_map.id,
+                ancestor_id=far_node.id,
+                descendant_id=fi_node.id,
+                depth=4,
+            )
+        )
         insight = FamilyInsight(
-            household_id=fi_household.id, pattern_type=FamilyPatternType.shared_struggle,
+            household_id=fi_household.id,
+            pattern_type=FamilyPatternType.shared_struggle,
             affected_children=[str(fi_child_a.id), str(fi_child_b.id)],
-            affected_nodes=[str(fi_node.id)], affected_subjects=["Math"],
-            evidence_json={}, confidence=0.9, recommendation="Test",
+            affected_nodes=[str(fi_node.id)],
+            affected_subjects=["Math"],
+            evidence_json={},
+            confidence=0.9,
+            recommendation="Test",
         )
         db_session.add(insight)
-        db_session.add(ChildNodeState(
-            child_id=fi_child_c.id, household_id=fi_household.id, node_id=far_node.id,
-            mastery_level=MasteryLevel.mastered, attempts_count=3,
-        ))
+        db_session.add(
+            ChildNodeState(
+                child_id=fi_child_c.id,
+                household_id=fi_household.id,
+                node_id=far_node.id,
+                mastery_level=MasteryLevel.mastered,
+                attempts_count=3,
+            )
+        )
         await db_session.flush()
         results = await generate_predictive_scaffolding(db_session, fi_household.id)
         assert len(results) == 0
 
-    async def test_predictive_confidence_reduced(self, db_session, fi_household, fi_child_a, fi_child_b, fi_child_c, fi_map, fi_node):
+    async def test_predictive_confidence_reduced(
+        self, db_session, fi_household, fi_child_a, fi_child_b, fi_child_c, fi_map, fi_node
+    ):
         """Predictive confidence = original * 0.8."""
-        prereq = LearningNode(learning_map_id=fi_map.id, household_id=fi_household.id,
-                              node_type=NodeType.concept, title="Pre")
+        prereq = LearningNode(
+            learning_map_id=fi_map.id, household_id=fi_household.id, node_type=NodeType.concept, title="Pre"
+        )
         db_session.add(prereq)
         await db_session.flush()
-        db_session.add(LearningMapClosure(
-            learning_map_id=fi_map.id, ancestor_id=prereq.id, descendant_id=fi_node.id, depth=1,
-        ))
+        db_session.add(
+            LearningMapClosure(
+                learning_map_id=fi_map.id,
+                ancestor_id=prereq.id,
+                descendant_id=fi_node.id,
+                depth=1,
+            )
+        )
         insight = FamilyInsight(
-            household_id=fi_household.id, pattern_type=FamilyPatternType.shared_struggle,
+            household_id=fi_household.id,
+            pattern_type=FamilyPatternType.shared_struggle,
             affected_children=[str(fi_child_a.id), str(fi_child_b.id)],
-            affected_nodes=[str(fi_node.id)], affected_subjects=["Math"],
-            evidence_json={}, confidence=0.90, recommendation="Test",
+            affected_nodes=[str(fi_node.id)],
+            affected_subjects=["Math"],
+            evidence_json={},
+            confidence=0.90,
+            recommendation="Test",
         )
         db_session.add(insight)
-        db_session.add(ChildNodeState(
-            child_id=fi_child_c.id, household_id=fi_household.id, node_id=prereq.id,
-            mastery_level=MasteryLevel.mastered, attempts_count=3,
-        ))
+        db_session.add(
+            ChildNodeState(
+                child_id=fi_child_c.id,
+                household_id=fi_household.id,
+                node_id=prereq.id,
+                mastery_level=MasteryLevel.mastered,
+                attempts_count=3,
+            )
+        )
         await db_session.flush()
         results = await generate_predictive_scaffolding(db_session, fi_household.id)
         assert len(results) >= 1
@@ -668,11 +902,16 @@ class TestBatch:
         """Run twice → same count (dedup prevents doubles)."""
         now = datetime.now(UTC)
         for child in [fi_child_a, fi_child_b]:
-            db_session.add(ChildNodeState(
-                child_id=child.id, household_id=fi_household.id, node_id=fi_node.id,
-                mastery_level=MasteryLevel.emerging, attempts_count=5,
-                last_activity_at=now - timedelta(days=1),
-            ))
+            db_session.add(
+                ChildNodeState(
+                    child_id=child.id,
+                    household_id=fi_household.id,
+                    node_id=fi_node.id,
+                    mastery_level=MasteryLevel.emerging,
+                    attempts_count=5,
+                    last_activity_at=now - timedelta(days=1),
+                )
+            )
         await db_session.flush()
         r1 = await run_family_intelligence(db_session, fi_household.id)
         await db_session.flush()
@@ -697,9 +936,13 @@ class TestContextBuilders:
     async def test_build_family_context_with_insights(self, db_session, fi_household, fi_child_a, fi_child_b, fi_node):
         """Active insights → formatted context text."""
         insight = FamilyInsight(
-            household_id=fi_household.id, pattern_type=FamilyPatternType.shared_struggle,
-            affected_children=[str(fi_child_a.id)], affected_nodes=[str(fi_node.id)],
-            affected_subjects=["Math"], evidence_json={}, confidence=0.85,
+            household_id=fi_household.id,
+            pattern_type=FamilyPatternType.shared_struggle,
+            affected_children=[str(fi_child_a.id)],
+            affected_nodes=[str(fi_node.id)],
+            affected_subjects=["Math"],
+            evidence_json={},
+            confidence=0.85,
             recommendation="Both children found Long Division challenging.",
             status=InsightStatus.detected,
         )
@@ -718,11 +961,16 @@ class TestContextBuilders:
     async def test_build_planner_scaffolding_context(self, db_session, fi_household, fi_child_c, fi_node):
         """Predictive insight for child → formatted warning."""
         insight = FamilyInsight(
-            household_id=fi_household.id, pattern_type=FamilyPatternType.shared_struggle,
-            affected_children=[str(fi_child_c.id)], affected_nodes=[str(fi_node.id)],
-            affected_subjects=["Math"], evidence_json={"node_title": "Long Division"},
-            confidence=0.7, recommendation="Test",
-            predictive_child_id=fi_child_c.id, predictive_node_id=fi_node.id,
+            household_id=fi_household.id,
+            pattern_type=FamilyPatternType.shared_struggle,
+            affected_children=[str(fi_child_c.id)],
+            affected_nodes=[str(fi_node.id)],
+            affected_subjects=["Math"],
+            evidence_json={"node_title": "Long Division"},
+            confidence=0.7,
+            recommendation="Test",
+            predictive_child_id=fi_child_c.id,
+            predictive_node_id=fi_node.id,
             status=InsightStatus.detected,
         )
         db_session.add(insight)
@@ -755,13 +1003,19 @@ class TestEdgeCases:
         """All patterns disabled → zero insights."""
         now = datetime.now(UTC)
         for child in [fi_child_a, fi_child_b]:
-            db_session.add(ChildNodeState(
-                child_id=child.id, household_id=fi_household.id, node_id=fi_node.id,
-                mastery_level=MasteryLevel.emerging, attempts_count=5,
-                last_activity_at=now - timedelta(days=1),
-            ))
+            db_session.add(
+                ChildNodeState(
+                    child_id=child.id,
+                    household_id=fi_household.id,
+                    node_id=fi_node.id,
+                    mastery_level=MasteryLevel.emerging,
+                    attempts_count=5,
+                    last_activity_at=now - timedelta(days=1),
+                )
+            )
         config = FamilyInsightConfig(
-            household_id=fi_household.id, enabled=True,
+            household_id=fi_household.id,
+            enabled=True,
             pattern_settings=_all_disabled_settings(),
         )
         db_session.add(config)
@@ -780,11 +1034,16 @@ class TestAPISerialization:
     async def test_serialize_insight_resolves_names(self, db_session, fi_household, fi_child_a, fi_child_b, fi_node):
         """_serialize_insight resolves child names and node titles."""
         from app.api.family_intelligence import _serialize_insight
+
         insight = FamilyInsight(
-            household_id=fi_household.id, pattern_type=FamilyPatternType.shared_struggle,
+            household_id=fi_household.id,
+            pattern_type=FamilyPatternType.shared_struggle,
             affected_children=[str(fi_child_a.id), str(fi_child_b.id)],
-            affected_nodes=[str(fi_node.id)], affected_subjects=["Mathematics"],
-            evidence_json={}, confidence=0.8, recommendation="Test rec",
+            affected_nodes=[str(fi_node.id)],
+            affected_subjects=["Mathematics"],
+            evidence_json={},
+            confidence=0.8,
+            recommendation="Test rec",
         )
         db_session.add(insight)
         await db_session.flush()
@@ -799,12 +1058,18 @@ class TestAPISerialization:
     async def test_serialize_predictive_insight(self, db_session, fi_household, fi_child_a, fi_child_c, fi_node):
         """Predictive insight serializes with predictive_child name."""
         from app.api.family_intelligence import _serialize_insight
+
         insight = FamilyInsight(
-            household_id=fi_household.id, pattern_type=FamilyPatternType.shared_struggle,
+            household_id=fi_household.id,
+            pattern_type=FamilyPatternType.shared_struggle,
             affected_children=[str(fi_child_a.id)],
-            affected_nodes=[str(fi_node.id)], affected_subjects=["Math"],
-            evidence_json={}, confidence=0.7, recommendation="Predictive test",
-            predictive_child_id=fi_child_c.id, predictive_node_id=fi_node.id,
+            affected_nodes=[str(fi_node.id)],
+            affected_subjects=["Math"],
+            evidence_json={},
+            confidence=0.7,
+            recommendation="Predictive test",
+            predictive_child_id=fi_child_c.id,
+            predictive_node_id=fi_node.id,
         )
         db_session.add(insight)
         await db_session.flush()
@@ -816,34 +1081,51 @@ class TestAPISerialization:
     async def test_status_update_creates_governance_event(self, db_session, fi_household, fi_child_a, fi_node):
         """Status change creates GovernanceEvent."""
         insight = FamilyInsight(
-            household_id=fi_household.id, pattern_type=FamilyPatternType.curriculum_gap,
-            affected_children=[str(fi_child_a.id)], affected_nodes=[str(fi_node.id)],
-            affected_subjects=["Math"], evidence_json={}, confidence=0.6,
-            recommendation="Gap", status=InsightStatus.detected,
+            household_id=fi_household.id,
+            pattern_type=FamilyPatternType.curriculum_gap,
+            affected_children=[str(fi_child_a.id)],
+            affected_nodes=[str(fi_node.id)],
+            affected_subjects=["Math"],
+            evidence_json={},
+            confidence=0.6,
+            recommendation="Gap",
+            status=InsightStatus.detected,
         )
         db_session.add(insight)
         await db_session.flush()
 
         insight.status = InsightStatus.acknowledged
-        db_session.add(GovernanceEvent(
-            household_id=fi_household.id, user_id=None,
-            action="modify", target_type="family_insight", target_id=insight.id,
-            reason="family_insight_acknowledged",
-        ))
+        db_session.add(
+            GovernanceEvent(
+                household_id=fi_household.id,
+                user_id=None,
+                action="modify",
+                target_type="family_insight",
+                target_id=insight.id,
+                reason="family_insight_acknowledged",
+            )
+        )
         await db_session.flush()
 
-        events = (await db_session.execute(
-            select(GovernanceEvent).where(GovernanceEvent.target_type == "family_insight")
-        )).scalars().all()
+        events = (
+            (await db_session.execute(select(GovernanceEvent).where(GovernanceEvent.target_type == "family_insight")))
+            .scalars()
+            .all()
+        )
         assert len(events) >= 1
 
     async def test_dismiss_sets_false_positive(self, db_session, fi_household, fi_child_a, fi_node):
         """Dismissed insight has false_positive=True."""
         insight = FamilyInsight(
-            household_id=fi_household.id, pattern_type=FamilyPatternType.shared_struggle,
-            affected_children=[str(fi_child_a.id)], affected_nodes=[str(fi_node.id)],
-            affected_subjects=["Math"], evidence_json={}, confidence=0.5,
-            recommendation="Test", status=InsightStatus.detected,
+            household_id=fi_household.id,
+            pattern_type=FamilyPatternType.shared_struggle,
+            affected_children=[str(fi_child_a.id)],
+            affected_nodes=[str(fi_node.id)],
+            affected_subjects=["Math"],
+            evidence_json={},
+            confidence=0.5,
+            recommendation="Test",
+            status=InsightStatus.detected,
         )
         db_session.add(insight)
         await db_session.flush()
@@ -860,6 +1142,7 @@ class TestAPISerialization:
     async def test_config_defaults_when_none(self, db_session, fi_household):
         """No config → defaults returned."""
         from app.services.family_intelligence import _get_setting, DEFAULT_CONFIG
+
         setting = _get_setting(None, "shared_struggle")
         assert setting == DEFAULT_CONFIG["shared_struggle"]
         assert setting["enabled"] is True
@@ -868,7 +1151,8 @@ class TestAPISerialization:
     async def test_config_merge_preserves_other_settings(self, db_session, fi_household):
         """Updating one pattern doesn't overwrite others."""
         config = FamilyInsightConfig(
-            household_id=fi_household.id, enabled=True,
+            household_id=fi_household.id,
+            enabled=True,
             pattern_settings={
                 "shared_struggle": {"enabled": True, "min_children": 2, "drift_threshold": 1.5},
                 "curriculum_gap": {"enabled": True, "confidence_threshold": 0.5},
@@ -896,10 +1180,15 @@ class TestAPISerialization:
     async def test_insight_with_parent_response(self, db_session, fi_household, fi_child_a, fi_node):
         """Parent response stored and retrievable."""
         insight = FamilyInsight(
-            household_id=fi_household.id, pattern_type=FamilyPatternType.shared_struggle,
-            affected_children=[str(fi_child_a.id)], affected_nodes=[str(fi_node.id)],
-            affected_subjects=["Math"], evidence_json={}, confidence=0.5,
-            recommendation="Test", status=InsightStatus.acted_on,
+            household_id=fi_household.id,
+            pattern_type=FamilyPatternType.shared_struggle,
+            affected_children=[str(fi_child_a.id)],
+            affected_nodes=[str(fi_node.id)],
+            affected_subjects=["Math"],
+            evidence_json={},
+            confidence=0.5,
+            recommendation="Test",
+            status=InsightStatus.acted_on,
             parent_response="We added extra practice worksheets.",
         )
         db_session.add(insight)

@@ -203,6 +203,4 @@ async def test_refresh_token_reuse_revokes_all_tokens(client: AsyncClient):
     client.cookies.delete("refresh_token")
     client.cookies.set("refresh_token", token_b)
     after_reuse = await client.post("/api/v1/auth/refresh")
-    assert after_reuse.status_code == 401, (
-        "After reuse detection, even the newest token must be revoked"
-    )
+    assert after_reuse.status_code == 401, "After reuse detection, even the newest token must be revoked"

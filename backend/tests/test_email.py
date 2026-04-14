@@ -19,6 +19,7 @@ async def test_send_email_no_api_key(mock_settings):
     """No API key returns False gracefully."""
     mock_settings.RESEND_API_KEY = ""
     from app.services.email import send_email
+
     result = await send_email("test@test.com", "Subject", "<p>Body</p>")
     assert result is False
 
@@ -40,6 +41,7 @@ async def test_send_email_success(mock_client_cls, mock_settings):
     mock_client_cls.return_value = mock_client
 
     from app.services.email import send_email
+
     result = await send_email("recipient@test.com", "Test Subject", "<p>Hello</p>")
     assert result is True
     mock_client.post.assert_called_once()
@@ -51,10 +53,16 @@ async def test_send_email_success(mock_client_cls, mock_settings):
 def test_email_templates_return_html():
     """All templates return valid HTML strings."""
     templates = [
-        daily_summary_email("Parent", [{"name": "Emma", "activity_count": 5, "total_minutes": 120}], 2, "Monday, Jan 1"),
+        daily_summary_email(
+            "Parent", [{"name": "Emma", "activity_count": 5, "total_minutes": 120}], 2, "Monday, Jan 1"
+        ),
         mastery_milestone_email("Parent", "Emma", "Long Division", "Math", "mastered"),
         governance_alert_email("Parent", "Assessment", "Content Filter", "Contains filtered topic"),
-        weekly_digest_email("Parent", {"activities_completed": 20, "nodes_mastered": 5, "total_minutes": 600}, {"approved": 15, "rejected": 2}),
+        weekly_digest_email(
+            "Parent",
+            {"activities_completed": 20, "nodes_mastered": 5, "total_minutes": 600},
+            {"approved": 15, "rejected": 2},
+        ),
         compliance_warning_email("Parent", "Emma", "NY", "Below required instruction hours"),
     ]
     for html in templates:

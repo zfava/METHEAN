@@ -77,8 +77,10 @@ async def ctx_map(db_session, ctx_household, ctx_subject) -> LearningMap:
 @pytest_asyncio.fixture
 async def ctx_node(db_session, ctx_household, ctx_map) -> LearningNode:
     n = LearningNode(
-        learning_map_id=ctx_map.id, household_id=ctx_household.id,
-        node_type=NodeType.concept, title="Fractions",
+        learning_map_id=ctx_map.id,
+        household_id=ctx_household.id,
+        node_type=NodeType.concept,
+        title="Fractions",
     )
     db_session.add(n)
     await db_session.flush()
@@ -212,11 +214,17 @@ class TestFetchers:
             assert result["text"] == ""
 
     async def test_fetch_calibration_context_formats(self, db_session, ctx_child, ctx_household):
-        db_session.add(CalibrationProfile(
-            child_id=ctx_child.id, household_id=ctx_household.id,
-            mean_drift=0.45, directional_bias=0.12, recalibration_offset=-0.03,
-            reconciled_predictions=75, last_computed_at=datetime.now(UTC),
-        ))
+        db_session.add(
+            CalibrationProfile(
+                child_id=ctx_child.id,
+                household_id=ctx_household.id,
+                mean_drift=0.45,
+                directional_bias=0.12,
+                recalibration_offset=-0.03,
+                reconciled_predictions=75,
+                last_computed_at=datetime.now(UTC),
+            )
+        )
         await db_session.flush()
         result = await fetch_calibration_context(db_session, ctx_child.id, ctx_household.id)
         assert "Calibration" in result["text"]
@@ -224,44 +232,67 @@ class TestFetchers:
         assert "0.45" in result["text"]
 
     async def test_fetch_governance_constraints_lists_rules(self, db_session, ctx_child, ctx_household):
-        db_session.add(GovernanceRule(
-            household_id=ctx_household.id, rule_type="pace_limit",
-            name="Max 5 new nodes/week", is_active=True, priority=1,
-        ))
+        db_session.add(
+            GovernanceRule(
+                household_id=ctx_household.id,
+                rule_type="pace_limit",
+                name="Max 5 new nodes/week",
+                is_active=True,
+                priority=1,
+            )
+        )
         await db_session.flush()
         result = await fetch_governance_constraints(db_session, ctx_child.id, ctx_household.id)
         assert "Max 5 new nodes/week" in result["text"]
 
     async def test_fetch_fsrs_snapshot_lists_nodes(self, db_session, ctx_child, ctx_household, ctx_node):
-        db_session.add(ChildNodeState(
-            child_id=ctx_child.id, household_id=ctx_household.id, node_id=ctx_node.id,
-            mastery_level=MasteryLevel.developing, attempts_count=3,
-        ))
-        db_session.add(FSRSCard(
-            child_id=ctx_child.id, household_id=ctx_household.id, node_id=ctx_node.id,
-            due=datetime.now(UTC) + timedelta(days=2),
-        ))
+        db_session.add(
+            ChildNodeState(
+                child_id=ctx_child.id,
+                household_id=ctx_household.id,
+                node_id=ctx_node.id,
+                mastery_level=MasteryLevel.developing,
+                attempts_count=3,
+            )
+        )
+        db_session.add(
+            FSRSCard(
+                child_id=ctx_child.id,
+                household_id=ctx_household.id,
+                node_id=ctx_node.id,
+                due=datetime.now(UTC) + timedelta(days=2),
+            )
+        )
         await db_session.flush()
         result = await fetch_fsrs_snapshot(db_session, ctx_child.id, ctx_household.id)
         assert "Fractions" in result["text"]
         assert "developing" in result["text"]
 
     async def test_fetch_retention_schedule_finds_due(self, db_session, ctx_child, ctx_household, ctx_node):
-        db_session.add(FSRSCard(
-            child_id=ctx_child.id, household_id=ctx_household.id, node_id=ctx_node.id,
-            due=datetime.now(UTC) + timedelta(days=1), stability=5.0,
-            last_review=datetime.now(UTC) - timedelta(days=3),
-        ))
+        db_session.add(
+            FSRSCard(
+                child_id=ctx_child.id,
+                household_id=ctx_household.id,
+                node_id=ctx_node.id,
+                due=datetime.now(UTC) + timedelta(days=1),
+                stability=5.0,
+                last_review=datetime.now(UTC) - timedelta(days=3),
+            )
+        )
         await db_session.flush()
         result = await fetch_retention_schedule(db_session, ctx_child.id, ctx_household.id)
         assert "Fractions" in result["text"]
 
     async def test_fetch_parent_observations_limits_to_five(self, db_session, ctx_child, ctx_household):
         obs = [{"observation": f"Note {i}"} for i in range(10)]
-        db_session.add(LearnerIntelligence(
-            child_id=ctx_child.id, household_id=ctx_household.id,
-            parent_observations=obs, observation_count=10,
-        ))
+        db_session.add(
+            LearnerIntelligence(
+                child_id=ctx_child.id,
+                household_id=ctx_household.id,
+                parent_observations=obs,
+                observation_count=10,
+            )
+        )
         await db_session.flush()
         result = await fetch_parent_observations(db_session, ctx_child.id, ctx_household.id)
         # Should contain last 5 observations (Note 5 through Note 9)
@@ -275,23 +306,32 @@ class TestFetchers:
         db_session.add(plan)
         await db_session.flush()
         plan_week = PlanWeek(
-            plan_id=plan.id, household_id=ctx_household.id, week_number=1,
-            start_date=date(2026, 1, 5), end_date=date(2026, 1, 11),
+            plan_id=plan.id,
+            household_id=ctx_household.id,
+            week_number=1,
+            start_date=date(2026, 1, 5),
+            end_date=date(2026, 1, 11),
         )
         db_session.add(plan_week)
         await db_session.flush()
         act = Activity(
             plan_week_id=plan_week.id,
-            household_id=ctx_household.id, title="Practice", activity_type="practice",
+            household_id=ctx_household.id,
+            title="Practice",
+            activity_type="practice",
             node_id=ctx_node.id,
         )
         db_session.add(act)
         await db_session.flush()
         for i in range(5):
-            db_session.add(Attempt(
-                activity_id=act.id, household_id=ctx_household.id, child_id=ctx_child.id,
-                score=0.5 + i * 0.1,
-            ))
+            db_session.add(
+                Attempt(
+                    activity_id=act.id,
+                    household_id=ctx_household.id,
+                    child_id=ctx_child.id,
+                    score=0.5 + i * 0.1,
+                )
+            )
         await db_session.flush()
         result = await fetch_recent_attempts_node(db_session, ctx_child.id, ctx_household.id, node_id=ctx_node.id)
         # Should have at most 3 attempts listed
@@ -303,12 +343,15 @@ class TestFetchers:
         assert "metadata" in result
 
     async def test_fetch_intelligence_summary_compresses(self, db_session, ctx_child, ctx_household):
-        db_session.add(LearnerIntelligence(
-            child_id=ctx_child.id, household_id=ctx_household.id,
-            observation_count=30,
-            engagement_patterns={"avg_focus_minutes": 22, "best_time_of_day": "morning"},
-            pace_trends={"overall_mastery_rate": 0.72},
-        ))
+        db_session.add(
+            LearnerIntelligence(
+                child_id=ctx_child.id,
+                household_id=ctx_household.id,
+                observation_count=30,
+                engagement_patterns={"avg_focus_minutes": 22, "best_time_of_day": "morning"},
+                pace_trends={"overall_mastery_rate": 0.72},
+            )
+        )
         await db_session.flush()
         result = await fetch_intelligence_summary(db_session, ctx_child.id, ctx_household.id)
         assert "22" in result["text"]
@@ -354,13 +397,21 @@ class TestAssemblyEngine:
     async def test_assembly_required_sources_always_included(self, db_session, ctx_child, ctx_household, ctx_node):
         """Required sources appear in sources_used even with tight budget."""
         # Seed governance rules so governance_constraints fetcher returns data
-        db_session.add(GovernanceRule(
-            household_id=ctx_household.id, rule_type="pace_limit",
-            name="Test Rule", is_active=True, priority=1,
-        ))
+        db_session.add(
+            GovernanceRule(
+                household_id=ctx_household.id,
+                rule_type="pace_limit",
+                name="Test Rule",
+                is_active=True,
+                priority=1,
+            )
+        )
         await db_session.flush()
         result = await assemble_context(
-            db_session, "tutor", ctx_child.id, ctx_household.id,
+            db_session,
+            "tutor",
+            ctx_child.id,
+            ctx_household.id,
             node_id=ctx_node.id,
         )
         # governance_constraints is required for tutor
@@ -388,8 +439,10 @@ class TestAssemblyEngine:
     async def test_assembly_fetcher_failure_skipped(self, db_session, ctx_child, ctx_household):
         """One fetcher raising doesn't crash the assembly."""
         original = FETCHER_MAP.get("fetch_style_context")
+
         async def _boom(*a, **kw):
             raise RuntimeError("Simulated failure")
+
         FETCHER_MAP["fetch_style_context"] = _boom
         try:
             result = await assemble_context(db_session, "tutor", ctx_child.id, ctx_household.id)
@@ -401,8 +454,10 @@ class TestAssemblyEngine:
     async def test_assembly_all_fetchers_fail_returns_empty(self, db_session, ctx_child, ctx_household):
         """All fetchers failing returns empty context, no crash."""
         saved = dict(FETCHER_MAP)
+
         async def _boom(*a, **kw):
             raise RuntimeError("fail")
+
         for key in list(FETCHER_MAP.keys()):
             FETCHER_MAP[key] = _boom
         try:
@@ -424,32 +479,58 @@ class TestAssemblyEngine:
 class TestIntegration:
     async def test_assembly_with_seeded_data(self, db_session, ctx_child, ctx_household, ctx_node):
         """Seed real data and verify assembly picks it up."""
-        db_session.add(ChildNodeState(
-            child_id=ctx_child.id, household_id=ctx_household.id, node_id=ctx_node.id,
-            mastery_level=MasteryLevel.developing, attempts_count=3,
-        ))
-        db_session.add(FSRSCard(
-            child_id=ctx_child.id, household_id=ctx_household.id, node_id=ctx_node.id,
-            due=datetime.now(UTC) + timedelta(days=1), stability=5.0,
-        ))
-        db_session.add(GovernanceRule(
-            household_id=ctx_household.id, rule_type="pace_limit",
-            name="Max 5/week", is_active=True, priority=1,
-        ))
-        db_session.add(CalibrationProfile(
-            child_id=ctx_child.id, household_id=ctx_household.id,
-            mean_drift=0.3, directional_bias=0.05, reconciled_predictions=60,
-            last_computed_at=datetime.now(UTC),
-        ))
-        db_session.add(LearnerIntelligence(
-            child_id=ctx_child.id, household_id=ctx_household.id,
-            observation_count=30,
-            engagement_patterns={"avg_focus_minutes": 20, "best_time_of_day": "morning"},
-        ))
+        db_session.add(
+            ChildNodeState(
+                child_id=ctx_child.id,
+                household_id=ctx_household.id,
+                node_id=ctx_node.id,
+                mastery_level=MasteryLevel.developing,
+                attempts_count=3,
+            )
+        )
+        db_session.add(
+            FSRSCard(
+                child_id=ctx_child.id,
+                household_id=ctx_household.id,
+                node_id=ctx_node.id,
+                due=datetime.now(UTC) + timedelta(days=1),
+                stability=5.0,
+            )
+        )
+        db_session.add(
+            GovernanceRule(
+                household_id=ctx_household.id,
+                rule_type="pace_limit",
+                name="Max 5/week",
+                is_active=True,
+                priority=1,
+            )
+        )
+        db_session.add(
+            CalibrationProfile(
+                child_id=ctx_child.id,
+                household_id=ctx_household.id,
+                mean_drift=0.3,
+                directional_bias=0.05,
+                reconciled_predictions=60,
+                last_computed_at=datetime.now(UTC),
+            )
+        )
+        db_session.add(
+            LearnerIntelligence(
+                child_id=ctx_child.id,
+                household_id=ctx_household.id,
+                observation_count=30,
+                engagement_patterns={"avg_focus_minutes": 20, "best_time_of_day": "morning"},
+            )
+        )
         await db_session.flush()
 
         result = await assemble_context(
-            db_session, "planner", ctx_child.id, ctx_household.id,
+            db_session,
+            "planner",
+            ctx_child.id,
+            ctx_household.id,
         )
         assert result["tokens_used"] > 0
         assert len(result["sources_used"]) >= 1
@@ -463,10 +544,15 @@ class TestIntegration:
 
     async def test_full_lifecycle_planner(self, db_session, ctx_child, ctx_household, ctx_node):
         """Seed data → assemble planner → verify structured result."""
-        db_session.add(ChildNodeState(
-            child_id=ctx_child.id, household_id=ctx_household.id, node_id=ctx_node.id,
-            mastery_level=MasteryLevel.proficient, attempts_count=8,
-        ))
+        db_session.add(
+            ChildNodeState(
+                child_id=ctx_child.id,
+                household_id=ctx_household.id,
+                node_id=ctx_node.id,
+                mastery_level=MasteryLevel.proficient,
+                attempts_count=8,
+            )
+        )
         await db_session.flush()
 
         result = await assemble_context(db_session, "planner", ctx_child.id, ctx_household.id)
@@ -479,7 +565,14 @@ class TestIntegration:
     async def test_context_detail_response_shape(self, db_session, ctx_child, ctx_household):
         """Verify assembly result has all expected keys."""
         result = await assemble_context(db_session, "advisor", ctx_child.id, ctx_household.id)
-        expected_keys = {"context_text", "sources_used", "tokens_used", "tokens_budget", "sources_truncated", "sources_failed"}
+        expected_keys = {
+            "context_text",
+            "sources_used",
+            "tokens_used",
+            "tokens_budget",
+            "sources_truncated",
+            "sources_failed",
+        }
         assert expected_keys.issubset(set(result.keys()))
 
 
@@ -520,12 +613,14 @@ class TestSignalStrength:
         assert signal_strength_score({}) == 0.5
 
     def test_high_impact(self):
-        score = signal_strength_score({
-            "drift_score": 2.0,
-            "signal_type": "frustration",
-            "is_mastery_transition": True,
-            "is_governance_override": True,
-        })
+        score = signal_strength_score(
+            {
+                "drift_score": 2.0,
+                "signal_type": "frustration",
+                "is_mastery_transition": True,
+                "is_governance_override": True,
+            }
+        )
         assert score == 1.0
 
     def test_composite_relevance(self):

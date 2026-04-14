@@ -389,7 +389,7 @@ async def get_child_dashboard(
         if sv and sv.dimensions_active > 0:
             style_hints = {
                 "optimal_session_minutes": sv.optimal_session_minutes,
-                "best_time_of_day": {9: "morning", 14: "afternoon", 19: "evening"}.get(sv.time_of_day_peak, None)
+                "best_time_of_day": {9: "morning", 14: "afternoon", 19: "evening"}.get(sv.time_of_day_peak)
                 if sv.time_of_day_peak
                 else None,
                 "attention_pattern": sv.attention_pattern,

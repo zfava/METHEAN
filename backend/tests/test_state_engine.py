@@ -53,6 +53,7 @@ from fsrs import Rating
 
 # ── Helpers ──
 
+
 async def _make_node(db, lmap, household, title, node_type=NodeType.skill):
     node = LearningNode(
         learning_map_id=lmap.id,
@@ -118,8 +119,8 @@ async def _make_activity_for_node(db, household, node, child, user):
 # Unit Tests: Confidence Mapping
 # ══════════════════════════════════════════════════
 
-class TestConfidenceMapping:
 
+class TestConfidenceMapping:
     def test_low_confidence_again(self):
         assert confidence_to_rating(0.1) == Rating.Again
         assert confidence_to_rating(0.0) == Rating.Again
@@ -149,14 +150,18 @@ class TestConfidenceMapping:
 # Unit Tests: State Transitions
 # ══════════════════════════════════════════════════
 
-class TestStateTransitions:
 
+class TestStateTransitions:
     @pytest.mark.asyncio
     async def test_not_started_to_emerging(self, db_session, household, learning_map, child):
         node = await _make_node(db_session, learning_map, household, "Node A")
         result = await process_review(
-            db_session, child.id, household.id, node.id,
-            confidence=0.3, duration_minutes=10,
+            db_session,
+            child.id,
+            household.id,
+            node.id,
+            confidence=0.3,
+            duration_minutes=10,
         )
         assert result["mastery_level"] == MasteryLevel.emerging
         assert result["previous_mastery"] == MasteryLevel.not_started
@@ -186,14 +191,16 @@ class TestStateTransitions:
 
     @pytest.mark.asyncio
     async def test_state_event_emitted_on_mastery_change(
-        self, db_session, household, learning_map, child,
+        self,
+        db_session,
+        household,
+        learning_map,
+        child,
     ):
         node = await _make_node(db_session, learning_map, household, "Event Node")
         result = await process_review(db_session, child.id, household.id, node.id, confidence=0.9)
 
-        event_result = await db_session.execute(
-            select(StateEvent).where(StateEvent.id == result["state_event_id"])
-        )
+        event_result = await db_session.execute(select(StateEvent).where(StateEvent.id == result["state_event_id"]))
         event = event_result.scalar_one()
         assert event.event_type == StateEventType.mastery_change
         assert event.from_state == "not_started"
@@ -205,11 +212,15 @@ class TestStateTransitions:
 # FSRS Integration Tests
 # ══════════════════════════════════════════════════
 
-class TestFSRSIntegration:
 
+class TestFSRSIntegration:
     @pytest.mark.asyncio
     async def test_fsrs_card_created_on_first_review(
-        self, db_session, household, learning_map, child,
+        self,
+        db_session,
+        household,
+        learning_map,
+        child,
     ):
         node = await _make_node(db_session, learning_map, household, "FSRS Node")
         result = await process_review(db_session, child.id, household.id, node.id, confidence=0.7)
@@ -236,15 +247,17 @@ class TestFSRSIntegration:
         node = await _make_node(db_session, learning_map, household, "Log Node")
         await process_review(db_session, child.id, household.id, node.id, confidence=0.7)
 
-        log_result = await db_session.execute(
-            select(ReviewLog).where(ReviewLog.child_id == child.id)
-        )
+        log_result = await db_session.execute(select(ReviewLog).where(ReviewLog.child_id == child.id))
         log = log_result.scalar_one()
         assert log.rating == Rating.Good.value  # 0.7 maps to Good
 
     @pytest.mark.asyncio
     async def test_multiple_reviews_increase_stability(
-        self, db_session, household, learning_map, child,
+        self,
+        db_session,
+        household,
+        learning_map,
+        child,
     ):
         node = await _make_node(db_session, learning_map, household, "Stability Node")
 
@@ -267,11 +280,15 @@ class TestFSRSIntegration:
 # Cascade Unblock Tests
 # ══════════════════════════════════════════════════
 
-class TestCascadeUnblock:
 
+class TestCascadeUnblock:
     @pytest.mark.asyncio
     async def test_mastering_prereq_unblocks_downstream(
-        self, db_session, household, learning_map, child,
+        self,
+        db_session,
+        household,
+        learning_map,
+        child,
     ):
         """A -> B: mastering A should unblock B."""
         a = await _make_node(db_session, learning_map, household, "Prereq A")
@@ -279,7 +296,11 @@ class TestCascadeUnblock:
         await _make_edge(db_session, learning_map, household, a, b)
 
         result = await process_review(
-            db_session, child.id, household.id, a.id, confidence=0.9,
+            db_session,
+            child.id,
+            household.id,
+            a.id,
+            confidence=0.9,
         )
         assert b.id in result["nodes_unblocked"]
 
@@ -296,7 +317,11 @@ class TestCascadeUnblock:
 
     @pytest.mark.asyncio
     async def test_partial_prereqs_dont_unblock(
-        self, db_session, household, learning_map, child,
+        self,
+        db_session,
+        household,
+        learning_map,
+        child,
     ):
         """A -> C and B -> C: mastering only A doesn't unblock C."""
         a = await _make_node(db_session, learning_map, household, "A")
@@ -306,13 +331,21 @@ class TestCascadeUnblock:
         await _make_edge(db_session, learning_map, household, b, c)
 
         result = await process_review(
-            db_session, child.id, household.id, a.id, confidence=0.9,
+            db_session,
+            child.id,
+            household.id,
+            a.id,
+            confidence=0.9,
         )
         assert c.id not in result["nodes_unblocked"]
 
     @pytest.mark.asyncio
     async def test_all_prereqs_met_unblocks(
-        self, db_session, household, learning_map, child,
+        self,
+        db_session,
+        household,
+        learning_map,
+        child,
     ):
         """A -> C and B -> C: mastering both A and B unblocks C."""
         a = await _make_node(db_session, learning_map, household, "A2")
@@ -323,7 +356,11 @@ class TestCascadeUnblock:
 
         await process_review(db_session, child.id, household.id, a.id, confidence=0.9)
         result = await process_review(
-            db_session, child.id, household.id, b.id, confidence=0.9,
+            db_session,
+            child.id,
+            household.id,
+            b.id,
+            confidence=0.9,
         )
         assert c.id in result["nodes_unblocked"]
 
@@ -332,8 +369,8 @@ class TestCascadeUnblock:
 # Decay Tests
 # ══════════════════════════════════════════════════
 
-class TestDecay:
 
+class TestDecay:
     @pytest.mark.asyncio
     async def test_retrievability_computation(self, db_session, household, learning_map, child):
         node = await _make_node(db_session, learning_map, household, "Decay Node")
@@ -482,11 +519,16 @@ class TestDecay:
 # Attempt Workflow Tests
 # ══════════════════════════════════════════════════
 
-class TestAttemptWorkflow:
 
+class TestAttemptWorkflow:
     @pytest.mark.asyncio
     async def test_start_and_submit_attempt(
-        self, db_session, household, learning_map, child, user,
+        self,
+        db_session,
+        household,
+        learning_map,
+        child,
+        user,
     ):
         from app.services.attempt_workflow import start_attempt, submit_attempt
 
@@ -499,8 +541,12 @@ class TestAttemptWorkflow:
 
         # Submit with Good confidence
         result = await submit_attempt(
-            db_session, attempt.id, household.id,
-            duration_minutes=15, score=0.7, confidence=0.7,
+            db_session,
+            attempt.id,
+            household.id,
+            duration_minutes=15,
+            score=0.7,
+            confidence=0.7,
             user_id=user.id,
         )
         assert result["attempt"].status == AttemptStatus.completed
@@ -510,7 +556,12 @@ class TestAttemptWorkflow:
 
     @pytest.mark.asyncio
     async def test_submit_mastered_triggers_cascade(
-        self, db_session, household, learning_map, child, user,
+        self,
+        db_session,
+        household,
+        learning_map,
+        child,
+        user,
     ):
         from app.services.attempt_workflow import start_attempt, submit_attempt
 
@@ -523,8 +574,11 @@ class TestAttemptWorkflow:
 
         # Submit with mastery confidence
         result = await submit_attempt(
-            db_session, attempt.id, household.id,
-            confidence=0.9, user_id=user.id,
+            db_session,
+            attempt.id,
+            household.id,
+            confidence=0.9,
+            user_id=user.id,
         )
         assert result["mastery_level"] == MasteryLevel.mastered
         assert b.id in result["nodes_unblocked"]
@@ -534,23 +588,27 @@ class TestAttemptWorkflow:
 # API Integration Tests
 # ══════════════════════════════════════════════════
 
-class TestStateAPI:
 
+class TestStateAPI:
     @pytest.mark.asyncio
     async def test_get_child_state(
-        self, auth_client, db_session, household, subject, child,
+        self,
+        auth_client,
+        db_session,
+        household,
+        subject,
+        child,
     ):
         # Create map with node, enroll child, process review
-        lmap = LearningMap(
-            household_id=household.id, subject_id=subject.id, name="State API Map"
-        )
+        lmap = LearningMap(household_id=household.id, subject_id=subject.id, name="State API Map")
         db_session.add(lmap)
         await db_session.flush()
 
         node = await _make_node(db_session, lmap, household, "API Node")
 
         enrollment = ChildMapEnrollment(
-            child_id=child.id, household_id=household.id,
+            child_id=child.id,
+            household_id=household.id,
             learning_map_id=lmap.id,
         )
         db_session.add(enrollment)
@@ -572,11 +630,14 @@ class TestStateAPI:
 
     @pytest.mark.asyncio
     async def test_get_node_history(
-        self, auth_client, db_session, household, subject, child,
+        self,
+        auth_client,
+        db_session,
+        household,
+        subject,
+        child,
     ):
-        lmap = LearningMap(
-            household_id=household.id, subject_id=subject.id, name="History Map"
-        )
+        lmap = LearningMap(household_id=household.id, subject_id=subject.id, name="History Map")
         db_session.add(lmap)
         await db_session.flush()
 
@@ -586,9 +647,7 @@ class TestStateAPI:
         await process_review(db_session, child.id, household.id, node.id, confidence=0.5)
         await process_review(db_session, child.id, household.id, node.id, confidence=0.9)
 
-        resp = await auth_client.get(
-            f"/api/v1/children/{child.id}/nodes/{node.id}/history"
-        )
+        resp = await auth_client.get(f"/api/v1/children/{child.id}/nodes/{node.id}/history")
         assert resp.status_code == 200
         events = resp.json()["items"]
         assert len(events) == 2
@@ -599,11 +658,14 @@ class TestStateAPI:
 
     @pytest.mark.asyncio
     async def test_get_retention_summary(
-        self, auth_client, db_session, household, subject, child,
+        self,
+        auth_client,
+        db_session,
+        household,
+        subject,
+        child,
     ):
-        lmap = LearningMap(
-            household_id=household.id, subject_id=subject.id, name="Retention Map"
-        )
+        lmap = LearningMap(household_id=household.id, subject_id=subject.id, name="Retention Map")
         db_session.add(lmap)
         await db_session.flush()
 
@@ -612,7 +674,8 @@ class TestStateAPI:
         node_c = await _make_node(db_session, lmap, household, "Not Started C")
 
         enrollment = ChildMapEnrollment(
-            child_id=child.id, household_id=household.id,
+            child_id=child.id,
+            household_id=household.id,
             learning_map_id=lmap.id,
         )
         db_session.add(enrollment)
@@ -623,9 +686,7 @@ class TestStateAPI:
         # In-progress B
         await process_review(db_session, child.id, household.id, node_b.id, confidence=0.5)
 
-        resp = await auth_client.get(
-            f"/api/v1/children/{child.id}/retention-summary"
-        )
+        resp = await auth_client.get(f"/api/v1/children/{child.id}/retention-summary")
         assert resp.status_code == 200
         data = resp.json()
         assert data["total_nodes"] == 3
@@ -635,14 +696,18 @@ class TestStateAPI:
 
     @pytest.mark.asyncio
     async def test_attempt_api_endpoints(
-        self, auth_client, db_session, household, subject, child, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        subject,
+        child,
+        user,
     ):
         """End-to-end test: create activity -> start attempt -> submit."""
         from datetime import date
 
-        lmap = LearningMap(
-            household_id=household.id, subject_id=subject.id, name="Attempt Map"
-        )
+        lmap = LearningMap(household_id=household.id, subject_id=subject.id, name="Attempt Map")
         db_session.add(lmap)
         await db_session.flush()
 
@@ -650,23 +715,30 @@ class TestStateAPI:
 
         # Need plan/week/activity structure
         plan = Plan(
-            household_id=household.id, child_id=child.id,
+            household_id=household.id,
+            child_id=child.id,
             created_by=user.id,
-            name="API Plan", status=PlanStatus.active,
+            name="API Plan",
+            status=PlanStatus.active,
         )
         db_session.add(plan)
         await db_session.flush()
 
         week = PlanWeek(
-            plan_id=plan.id, household_id=household.id,
-            week_number=1, start_date=date(2026, 1, 1), end_date=date(2026, 1, 7),
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 1, 1),
+            end_date=date(2026, 1, 7),
         )
         db_session.add(week)
         await db_session.flush()
 
         activity = Activity(
-            plan_week_id=week.id, household_id=household.id,
-            node_id=node.id, activity_type=ActivityType.lesson,
+            plan_week_id=week.id,
+            household_id=household.id,
+            node_id=node.id,
+            activity_type=ActivityType.lesson,
             title="API Test Activity",
         )
         db_session.add(activity)
@@ -701,11 +773,14 @@ class TestStateAPI:
 # FSRS Optimizer Tests
 # ══════════════════════════════════════════════════
 
-class TestFSRSOptimizer:
 
+class TestFSRSOptimizer:
     @pytest.mark.asyncio
     async def test_optimizer_produces_weights_from_review_data(
-        self, db_session, household, learning_map,
+        self,
+        db_session,
+        household,
+        learning_map,
     ):
         """Create 100+ review logs via the py-fsrs Scheduler (simulating real
         reviews), then run the optimizer and verify it stores weights on the
@@ -806,9 +881,7 @@ class TestFSRSOptimizer:
         assert total_reviews >= 100, f"Expected >= 100 reviews, got {total_reviews}"
 
         # Verify the child has no weights yet
-        child_before = await db_session.execute(
-            select(Child).where(Child.id == child.id)
-        )
+        child_before = await db_session.execute(select(Child).where(Child.id == child.id))
         assert child_before.scalar_one().fsrs_weights is None
 
         # Commit so the optimizer task (which opens its own session) can see the data
@@ -816,26 +889,21 @@ class TestFSRSOptimizer:
 
         # Run the optimizer
         from app.core.config import settings as cfg
+
         test_url = cfg.DATABASE_URL.rsplit("/", 1)[0] + "/methean_test"
         eng = create_async_engine(test_url, poolclass=NullPool)
         sf = async_sessionmaker(eng, class_=AsyncSession, expire_on_commit=False)
 
         result = await optimize_fsrs_weights(session_factory=sf)
 
-        assert result["children_optimized"] >= 1, (
-            f"Expected at least 1 child optimized, got {result}"
-        )
+        assert result["children_optimized"] >= 1, f"Expected at least 1 child optimized, got {result}"
 
         # Verify child now has weights stored
         async with sf() as check_db:
-            child_after = await check_db.execute(
-                select(Child).where(Child.id == child.id)
-            )
+            child_after = await check_db.execute(select(Child).where(Child.id == child.id))
             updated_child = child_after.scalar_one()
             assert updated_child.fsrs_weights is not None, "Weights should be stored"
-            assert len(updated_child.fsrs_weights) == 21, (
-                f"Expected 21 weights, got {len(updated_child.fsrs_weights)}"
-            )
+            assert len(updated_child.fsrs_weights) == 21, f"Expected 21 weights, got {len(updated_child.fsrs_weights)}"
 
             # The weights are derived from actual review data via the py-fsrs
             # Optimizer. They may equal defaults if the review patterns happen
@@ -847,7 +915,10 @@ class TestFSRSOptimizer:
 
     @pytest.mark.asyncio
     async def test_optimizer_skips_child_with_few_reviews(
-        self, db_session, household, learning_map,
+        self,
+        db_session,
+        household,
+        learning_map,
     ):
         """Children with < MIN_REVIEWS_FIRST reviews should be skipped."""
         from app.tasks.optimizer import optimize_fsrs_weights
@@ -879,17 +950,20 @@ class TestFSRSOptimizer:
         await db_session.flush()
 
         for i in range(10):
-            db_session.add(ReviewLog(
-                card_id=db_card.id,
-                child_id=child.id,
-                household_id=household.id,
-                rating=3,
-                scheduled_days=1,
-                elapsed_days=1,
-            ))
+            db_session.add(
+                ReviewLog(
+                    card_id=db_card.id,
+                    child_id=child.id,
+                    household_id=household.id,
+                    rating=3,
+                    scheduled_days=1,
+                    elapsed_days=1,
+                )
+            )
         await db_session.commit()
 
         from app.core.config import settings as cfg
+
         test_url = cfg.DATABASE_URL.rsplit("/", 1)[0] + "/methean_test"
         eng = create_async_engine(test_url, poolclass=NullPool)
         sf = async_sessionmaker(eng, class_=AsyncSession, expire_on_commit=False)
@@ -901,9 +975,7 @@ class TestFSRSOptimizer:
 
         # Verify child still has no weights
         async with sf() as check_db:
-            child_after = await check_db.execute(
-                select(Child).where(Child.id == child.id)
-            )
+            child_after = await check_db.execute(select(Child).where(Child.id == child.id))
             assert child_after.scalar_one().fsrs_weights is None
 
         await eng.dispose()

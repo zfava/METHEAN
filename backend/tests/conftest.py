@@ -27,9 +27,7 @@ TEST_DATABASE_URL = settings.DATABASE_URL.rsplit("/", 1)[0] + "/methean_test"
 
 # NullPool is required for async test isolation with asyncpg
 test_engine = create_async_engine(TEST_DATABASE_URL, echo=False, poolclass=NullPool)
-test_session_factory = async_sessionmaker(
-    test_engine, class_=AsyncSession, expire_on_commit=False
-)
+test_session_factory = async_sessionmaker(test_engine, class_=AsyncSession, expire_on_commit=False)
 
 # Fixed CSRF token for all test clients
 TEST_CSRF_TOKEN = "test-csrf-token-for-tests"
@@ -97,7 +95,9 @@ async def user(db_session: AsyncSession, household: Household) -> User:
 
 @pytest_asyncio.fixture
 async def auth_client(
-    client: AsyncClient, user: User, household: Household,
+    client: AsyncClient,
+    user: User,
+    household: Household,
 ) -> AsyncClient:
     """Client with access_token cookie set."""
     token = create_access_token(user.id, household.id, "owner")
@@ -127,7 +127,9 @@ async def subject(db_session: AsyncSession, household: Household) -> Subject:
 
 @pytest_asyncio.fixture
 async def learning_map(
-    db_session: AsyncSession, household: Household, subject: Subject,
+    db_session: AsyncSession,
+    household: Household,
+    subject: Subject,
 ) -> LearningMap:
     lm = LearningMap(
         household_id=household.id,

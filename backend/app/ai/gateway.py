@@ -67,7 +67,7 @@ async def call_ai(
 
     # Budget check before calling any provider
     try:
-        from app.services.usage import UsageLimitExceeded, check_budget
+        from app.services.usage import UsageLimitExceededError, check_budget
 
         budget = await check_budget(db, household_id)
         if not budget["allowed"]:
@@ -82,8 +82,8 @@ async def call_ai(
             )
             db.add(ai_run_stub)
             await db.flush()
-            raise UsageLimitExceeded("Monthly AI token budget exhausted. Resets on your next billing period.")
-    except UsageLimitExceeded:
+            raise UsageLimitExceededError("Monthly AI token budget exhausted. Resets on your next billing period.")
+    except UsageLimitExceededError:
         raise
     except Exception:
         pass  # Budget check failure should not block AI calls
@@ -156,7 +156,7 @@ async def call_ai(
                 break
 
         except Exception as e:
-            error_msg = f"{provider.value}: {str(e)}"
+            error_msg = f"{provider.value}: {e!s}"
             continue
 
     if output is None:

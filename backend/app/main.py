@@ -142,7 +142,7 @@ async def health_ready() -> dict:
             await conn.execute(text("SELECT 1"))
         checks["database"] = "ok"
     except Exception as e:
-        checks["database"] = f"error: {str(e)}"
+        checks["database"] = f"error: {e!s}"
 
     # Check Redis
     try:
@@ -150,7 +150,7 @@ async def health_ready() -> dict:
         await redis.ping()
         checks["redis"] = "ok"
     except Exception as e:
-        checks["redis"] = f"error: {str(e)}"
+        checks["redis"] = f"error: {e!s}"
 
     # Check Celery (non-blocking — Celery down = degraded, not unready)
     try:

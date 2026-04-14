@@ -14,7 +14,10 @@ import pytest
 from sqlalchemy import select
 
 from app.models.enums import (
-    ActivityStatus, ActivityType, GovernanceAction, PlanStatus,
+    ActivityStatus,
+    ActivityType,
+    GovernanceAction,
+    PlanStatus,
 )
 from app.models.evidence import ReadingLogEntry
 from app.models.governance import Activity, GovernanceEvent, Plan, PlanWeek
@@ -22,21 +25,30 @@ from app.services.compliance_engine import get_hours_breakdown
 
 
 class TestReadingLogHoursInCompliance:
-
     @pytest.mark.asyncio
     async def test_reading_minutes_in_total(self, db_session, household, child, user):
         """Reading log minutes_spent should be included in total_hours."""
         # Add reading entries
-        db_session.add(ReadingLogEntry(
-            household_id=household.id, child_id=child.id, created_by=user.id,
-            book_title="Charlotte's Web", status="completed",
-            minutes_spent=120,  # 2 hours
-        ))
-        db_session.add(ReadingLogEntry(
-            household_id=household.id, child_id=child.id, created_by=user.id,
-            book_title="The Lion, the Witch and the Wardrobe", status="reading",
-            minutes_spent=90,  # 1.5 hours
-        ))
+        db_session.add(
+            ReadingLogEntry(
+                household_id=household.id,
+                child_id=child.id,
+                created_by=user.id,
+                book_title="Charlotte's Web",
+                status="completed",
+                minutes_spent=120,  # 2 hours
+            )
+        )
+        db_session.add(
+            ReadingLogEntry(
+                household_id=household.id,
+                child_id=child.id,
+                created_by=user.id,
+                book_title="The Lion, the Witch and the Wardrobe",
+                status="reading",
+                minutes_spent=90,  # 1.5 hours
+            )
+        )
         await db_session.flush()
 
         hours = await get_hours_breakdown(db_session, household.id, child.id)
@@ -46,10 +58,16 @@ class TestReadingLogHoursInCompliance:
     @pytest.mark.asyncio
     async def test_reading_subject_in_breakdown(self, db_session, household, child, user):
         """'Reading (books)' should appear in by_subject."""
-        db_session.add(ReadingLogEntry(
-            household_id=household.id, child_id=child.id, created_by=user.id,
-            book_title="Test Book", status="reading", minutes_spent=60,
-        ))
+        db_session.add(
+            ReadingLogEntry(
+                household_id=household.id,
+                child_id=child.id,
+                created_by=user.id,
+                book_title="Test Book",
+                status="reading",
+                minutes_spent=60,
+            )
+        )
         await db_session.flush()
 
         hours = await get_hours_breakdown(db_session, household.id, child.id)
@@ -65,21 +83,33 @@ class TestReadingLogHoursInCompliance:
 
         # Add node with activity time
         node = LearningNode(
-            learning_map_id=learning_map.id, household_id=household.id,
-            node_type=NodeType.skill, title="Math",
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Math",
         )
         db_session.add(node)
         await db_session.flush()
-        db_session.add(ChildNodeState(
-            child_id=child.id, household_id=household.id,
-            node_id=node.id, time_spent_minutes=60,
-        ))
+        db_session.add(
+            ChildNodeState(
+                child_id=child.id,
+                household_id=household.id,
+                node_id=node.id,
+                time_spent_minutes=60,
+            )
+        )
 
         # Add reading time
-        db_session.add(ReadingLogEntry(
-            household_id=household.id, child_id=child.id, created_by=user.id,
-            book_title="History Book", status="reading", minutes_spent=60,
-        ))
+        db_session.add(
+            ReadingLogEntry(
+                household_id=household.id,
+                child_id=child.id,
+                created_by=user.id,
+                book_title="History Book",
+                status="reading",
+                minutes_spent=60,
+            )
+        )
         await db_session.flush()
 
         hours = await get_hours_breakdown(db_session, household.id, child.id)
@@ -88,26 +118,34 @@ class TestReadingLogHoursInCompliance:
 
 
 class TestRescheduleActivity:
-
     @pytest.mark.asyncio
     async def test_reschedule_logs_governance_event(self, auth_client, db_session, household, child, user):
         """Reschedule activity creates a governance event."""
         plan = Plan(
-            household_id=household.id, child_id=child.id,
-            created_by=user.id, name="T", status=PlanStatus.active,
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="T",
+            status=PlanStatus.active,
         )
         db_session.add(plan)
         await db_session.flush()
         week = PlanWeek(
-            plan_id=plan.id, household_id=household.id,
-            week_number=1, start_date=date(2026, 9, 1), end_date=date(2026, 9, 5),
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
         )
         db_session.add(week)
         await db_session.flush()
         activity = Activity(
-            plan_week_id=week.id, household_id=household.id,
-            activity_type=ActivityType.lesson, title="Math Lesson",
-            status=ActivityStatus.scheduled, governance_approved=True,
+            plan_week_id=week.id,
+            household_id=household.id,
+            activity_type=ActivityType.lesson,
+            title="Math Lesson",
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
             scheduled_date=date(2026, 9, 1),
         )
         db_session.add(activity)
@@ -134,19 +172,24 @@ class TestRescheduleActivity:
 
 
 class TestCurriculumNotesAPI:
-
     @pytest.mark.asyncio
     async def test_notes_persist_via_api(self, auth_client, db_session, household, child, user):
         """PUT notes on a week, GET the week, verify notes returned."""
         from app.models.annual_curriculum import AnnualCurriculum
 
         c = AnnualCurriculum(
-            household_id=household.id, child_id=child.id, created_by=user.id,
-            subject_name="Math", academic_year="2026-2027",
-            total_weeks=4, hours_per_week=3.0,
-            start_date=date(2026, 9, 1), end_date=date(2026, 10, 1),
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            subject_name="Math",
+            academic_year="2026-2027",
+            total_weeks=4,
+            hours_per_week=3.0,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 10, 1),
             scope_sequence={"weeks": [{"week_number": 1, "title": "W1", "objectives": [], "suggested_activities": []}]},
-            status="active", actual_record={"weeks": {}},
+            status="active",
+            actual_record={"weeks": {}},
         )
         db_session.add(c)
         await db_session.flush()
