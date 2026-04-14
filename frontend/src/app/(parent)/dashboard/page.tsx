@@ -17,6 +17,7 @@ import { cn } from "@/lib/cn";
 import EmptyState from "@/components/ui/EmptyState";
 import { useStagger } from "@/lib/useStagger";
 import { useMobile } from "@/lib/useMobile";
+import PullToRefresh from "@/components/PullToRefresh";
 import SwipeAction from "@/components/SwipeAction";
 
 interface TodayActivity { id: string; title: string; activity_type: string; status: string; estimated_minutes: number | null; }
@@ -202,6 +203,11 @@ export default function DashboardPage() {
     }
   }
 
+  async function reload() {
+    await init();
+    if (selectedChild) await loadChildDetail();
+  }
+
   const isMobile = useMobile();
   const cardVisibility = useStagger(children.length, 60);
 
@@ -217,7 +223,7 @@ export default function DashboardPage() {
   ] : [];
   const masteryTotal = masterySegments.reduce((s, m) => s + m.count, 0);
 
-  return (
+  const content = (
     <div className="max-w-5xl">
       <PageHeader title="Dashboard" subtitle={today}
         actions={
@@ -263,15 +269,15 @@ export default function DashboardPage() {
       {isMobile ? (
         /* Mobile: horizontal snap-scroll carousel */
         <div className="mb-6">
-          <div className="snap-carousel gap-3 px-0">
-            {children.map((c, idx) => {
+          <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-3 -mx-4 px-4 scroll-fade-right">
+            {children.map((c) => {
               const s = summaries[c.id];
               const pct = s && s.total > 0 ? Math.round((s.mastered / s.total) * 100) : 0;
               const isSelected = selectedChild?.id === c.id;
               const circ = 2 * Math.PI * 20;
               return (
-                <div key={c.id} style={{ width: "calc(100vw - 32px)", minWidth: "calc(100vw - 32px)" }}>
-                  <Card onClick={() => setSelectedChild(c)} selected={isSelected} padding="p-4">
+                <div key={c.id} className="snap-center shrink-0 w-[85vw] max-w-[340px]">
+                  <Card onClick={() => setSelectedChild(c)} selected={isSelected} padding="p-4" className="press-scale">
                     <div className="flex items-center gap-3">
                       <div className="relative w-12 h-12 shrink-0">
                         <svg className="w-12 h-12 -rotate-90" viewBox="0 0 48 48">
@@ -281,11 +287,11 @@ export default function DashboardPage() {
                         </svg>
                         <div className="absolute inset-0 flex items-center justify-center text-xs font-medium text-(--color-text)">{pct}%</div>
                       </div>
-                      <div className="flex-1">
-                        <div className="text-sm font-medium text-(--color-text)">{c.first_name}</div>
-                        <div className="text-xs text-(--color-text-secondary)">{c.grade_level || ""}</div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[15px] font-medium text-(--color-text)">{c.first_name}</div>
+                        <div className="text-[13px] text-(--color-text-secondary)">{c.grade_level || ""}</div>
                         <div className="text-[13px] text-(--color-text-tertiary) mt-0.5">
-                          {s ? (s.todayCount > 0 ? `${s.todayCount} activities today` : "No activities today") : "..."}
+                          {s ? `${s.mastered}/${s.total} mastered · ${s.todayCount} today` : "..."}
                         </div>
                       </div>
                     </div>
@@ -297,7 +303,7 @@ export default function DashboardPage() {
           {children.length > 1 && (
             <div className="flex justify-center gap-1.5 mt-2">
               {children.map((c) => (
-                <span key={c.id} className={cn("w-1.5 h-1.5 rounded-full transition-colors", selectedChild?.id === c.id ? "bg-(--color-accent)" : "bg-(--color-border-strong)")} />
+                <span key={c.id} className={cn("w-2 h-2 rounded-full transition-colors", selectedChild?.id === c.id ? "bg-(--color-accent)" : "bg-(--color-border-strong)")} />
               ))}
             </div>
           )}
@@ -453,13 +459,24 @@ export default function DashboardPage() {
           <WellbeingIndicator childId={selectedChild?.id} />
 
           {/* ── Weekly Summary ── */}
-          <div className="flex items-center gap-4 text-xs text-(--color-text-tertiary) mb-6">
-            <span>Today: {weeklyStats.completed} completed</span>
-            <span>{weeklyStats.minutes}m planned</span>
-            <span>{weeklyStats.mastered} nodes mastered</span>
-          </div>
+          {isMobile ? (
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              <MetricCard label="Completed" value={weeklyStats.completed} className="p-3" />
+              <MetricCard label="Minutes" value={`${weeklyStats.minutes}m`} className="p-3" />
+              <MetricCard label="Mastered" value={weeklyStats.mastered} color="text-(--color-success)" className="p-3" />
+              <MetricCard label="Pending" value={pendingReviews} color={pendingReviews > 0 ? "text-(--color-warning)" : "text-(--color-success)"} className="p-3" />
+            </div>
+          ) : (
+            <div className="flex items-center gap-4 text-xs text-(--color-text-tertiary) mb-6">
+              <span>Today: {weeklyStats.completed} completed</span>
+              <span>{weeklyStats.minutes}m planned</span>
+              <span>{weeklyStats.mastered} nodes mastered</span>
+            </div>
+          )}
         </>
       )}
     </div>
   );
+
+  return isMobile ? <PullToRefresh onRefresh={reload}>{content}</PullToRefresh> : content;
 }
