@@ -51,6 +51,15 @@ const typeLabels: Record<string, { label: string; icon: string }> = {
   field_trip: { label: "Field Trip", icon: "\uD83E\uDDED" },
 };
 
+const typeColors: Record<string, string> = {
+  lesson: "rgba(59,130,246,0.1)",
+  practice: "rgba(34,197,94,0.1)",
+  review: "rgba(234,179,8,0.1)",
+  assessment: "rgba(168,85,247,0.1)",
+  project: "rgba(20,184,166,0.1)",
+  field_trip: "rgba(249,115,22,0.1)",
+};
+
 // ── Progress Ring ──
 
 function ProgressRing({ completed, total, minutesRemaining, large }: {
@@ -450,6 +459,12 @@ export default function ChildPage() {
             <p className="text-sm text-(--color-text-tertiary) mb-2">
               {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
             </p>
+            {dash.child.streak.current > 1 && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium mb-3"
+                style={{ background: "rgba(198,162,78,0.15)", color: "var(--color-brand-gold)" }}>
+                🔥 {dash.child.streak.current} day streak
+              </span>
+            )}
             <h1 className="text-xl font-medium text-(--color-text) leading-snug mb-4">
               {allDone ? `You finished everything today!` : dash.greeting}
             </h1>
@@ -505,24 +520,28 @@ export default function ChildPage() {
             {activities.filter(a => a.status !== "completed").map((act, idx) => {
               const tl = typeLabels[act.type] || { label: act.type, icon: "\uD83D\uDCC4" };
               const isNext = idx === 0;
+              const isInProgress = act.status === "in_progress";
               return (
                 <button key={act.id} onClick={() => startActivity(act)}
-                  className={`w-full text-left bg-(--color-surface) rounded-2xl border p-5 transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-(--color-accent)/30 min-h-[72px] ${
-                    isNext ? "border-(--color-accent)/30 shadow-sm" : "border-(--color-border)"
+                  className={`w-full text-left bg-(--color-surface) rounded-2xl border p-4 transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-(--color-accent)/30 press-scale ${
+                    isInProgress ? "border-l-3 border-(--color-brand-gold) shadow-sm" : isNext ? "border-(--color-accent)/30 shadow-sm" : "border-(--color-border)"
                   }`}
-                  style={{ borderLeftWidth: 4, borderLeftColor: act.subject_color }}
+                  style={{ minHeight: 64 }}
                   aria-label={`Start ${act.title}`}>
-                  <div className="flex items-center gap-4">
-                    <span className="text-xl shrink-0" aria-hidden="true">{tl.icon}</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0"
+                      style={{ background: typeColors[act.type] || "var(--color-accent-light)" }}>
+                      {tl.icon}
+                    </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm font-medium text-(--color-text) truncate">{act.title}</h3>
+                      <h3 className="text-[15px] font-medium text-(--color-text) truncate">{act.title}</h3>
                       <div className="flex items-center gap-2 mt-0.5">
-                        <span className="text-xs text-(--color-text-secondary)">{tl.label}</span>
-                        {act.estimated_minutes && <span className="text-xs text-(--color-text-tertiary)">{act.estimated_minutes} min</span>}
-                        {act.subject && <span className="text-xs text-(--color-text-tertiary)">{act.subject}</span>}
+                        <span className="text-[13px] text-(--color-text-secondary)">{tl.label}</span>
+                        {act.estimated_minutes && <span className="text-[13px] text-(--color-text-tertiary)">· {act.estimated_minutes} min</span>}
+                        {act.subject && <span className="text-[13px] text-(--color-text-tertiary)">· {act.subject}</span>}
                       </div>
                     </div>
-                    {isNext && (
+                    {isNext && !isInProgress && (
                       <span className="text-xs font-medium text-(--color-accent) shrink-0">Next</span>
                     )}
                   </div>
@@ -534,13 +553,16 @@ export default function ChildPage() {
             {activities.filter(a => a.status === "completed").map(act => {
               const tl = typeLabels[act.type] || { label: act.type, icon: "\uD83D\uDCC4" };
               return (
-                <div key={act.id} className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-5 opacity-50"
-                  style={{ borderLeftWidth: 4, borderLeftColor: act.subject_color }}>
-                  <div className="flex items-center gap-4">
-                    <span className="text-xl shrink-0" aria-hidden="true">{tl.icon}</span>
+                <div key={act.id} className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-4 opacity-50"
+                  style={{ minHeight: 64 }}>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0"
+                      style={{ background: typeColors[act.type] || "var(--color-accent-light)" }}>
+                      {tl.icon}
+                    </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="text-sm text-(--color-text-tertiary) line-through truncate">{act.title}</h3>
-                      <span className="text-xs text-(--color-text-tertiary)">{tl.label}</span>
+                      <h3 className="text-[15px] text-(--color-text-tertiary) line-through truncate">{act.title}</h3>
+                      <span className="text-[13px] text-(--color-text-tertiary)">{tl.label}</span>
                     </div>
                     <span className="w-7 h-7 rounded-full bg-(--color-success-light) flex items-center justify-center shrink-0" aria-label="Completed">
                       <svg className="w-4 h-4 text-(--color-success)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
