@@ -14,6 +14,7 @@ import EvaluationChain from "@/components/EvaluationChain";
 import { cn } from "@/lib/cn";
 import { shortDate } from "@/lib/format";
 import { useMobile } from "@/lib/useMobile";
+import PullToRefresh from "@/components/PullToRefresh";
 import SwipeAction from "@/components/SwipeAction";
 
 interface QueueItem {
@@ -165,7 +166,7 @@ export default function QueuePage() {
     );
   }
 
-  return (
+  const content = (
     <div className="max-w-3xl">
       <PageHeader
         title="Approval Queue"
@@ -482,4 +483,6 @@ export default function QueuePage() {
       )}
     </div>
   );
+
+  return isMobile ? <PullToRefresh onRefresh={loadQueue}>{content}</PullToRefresh> : content;
 }
