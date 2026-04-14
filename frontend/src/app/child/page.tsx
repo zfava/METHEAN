@@ -130,6 +130,8 @@ export default function ChildPage() {
   const [showJourney, setShowJourney] = useState(false);
   const isMobile = useMobile();
   const [showCelebration, setShowCelebration] = useState(false);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // ── Init ──
 
@@ -170,6 +172,20 @@ export default function ChildPage() {
       setError("Couldn't load your learning page. Try again in a moment.");
     }
   }
+
+  // ── Timer ──
+
+  useEffect(() => {
+    if (activeActivity) {
+      setElapsedSeconds(0);
+      timerRef.current = setInterval(() => setElapsedSeconds((s) => s + 1), 1000);
+    } else {
+      if (timerRef.current) clearInterval(timerRef.current);
+    }
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [activeActivity?.id]);
+
+  const formatTimer = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, "0")}`;
 
   // ── Activity Lifecycle ──
 
@@ -302,26 +318,28 @@ export default function ChildPage() {
   if (activeActivity && learningContext) {
     const t = activeActivity.type;
     return (
-      <div className={`min-h-screen ${fontSizeClass}`} style={bg}>
-        <header className="bg-(--color-surface)/80 backdrop-blur border-b border-(--color-border)/50 px-8 py-3">
-          <div className="max-w-2xl mx-auto flex items-center justify-between">
-            <button onClick={goNext} className="text-sm text-(--color-text-tertiary) hover:text-(--color-text-secondary) min-h-[44px] min-w-[44px] flex items-center" aria-label="Back to activities">
-              &larr; Back
-            </button>
-            <div className="text-center">
-              <span className="text-sm font-medium text-(--color-text)">{activeActivity.title}</span>
-              {activeActivity.subject && <span className="text-xs text-(--color-text-tertiary) ml-2">{activeActivity.subject}</span>}
-            </div>
-            <div className="w-11" />
+      <div className={`fixed inset-0 z-50 flex flex-col ${fontSizeClass}`} style={{ ...bg, paddingTop: "var(--safe-top)" }}>
+        {/* Top bar */}
+        <div className="flex items-center h-12 px-4 shrink-0 bg-(--color-surface)/80 backdrop-blur border-b border-(--color-border)/50">
+          <button onClick={goNext} className="w-11 h-11 flex items-center justify-center press-scale" aria-label="Back">
+            <svg className="w-5 h-5 text-(--color-text-secondary)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <div className="flex-1 text-center text-sm font-medium text-(--color-text) truncate px-2">{activeActivity.title}</div>
+          <span className="text-xs text-(--color-text-tertiary) w-11 text-right">{formatTimer(elapsedSeconds)}</span>
+        </div>
+
+        {/* Activity content */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="max-w-2xl mx-auto px-4 md:px-8 py-6">
+            {t === "lesson" && <LessonView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
+            {t === "practice" && <PracticeView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
+            {t === "review" && <ReviewView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
+            {t === "assessment" && <AssessmentView context={learningContext} onComplete={handleComplete} />}
+            {t === "project" && <ProjectView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
+            {t === "field_trip" && <FieldTripView context={learningContext} onComplete={handleComplete} />}
           </div>
-        </header>
-        <div className="max-w-2xl mx-auto px-8 py-10">
-          {t === "lesson" && <LessonView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
-          {t === "practice" && <PracticeView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
-          {t === "review" && <ReviewView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
-          {t === "assessment" && <AssessmentView context={learningContext} onComplete={handleComplete} />}
-          {t === "project" && <ProjectView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
-          {t === "field_trip" && <FieldTripView context={learningContext} onComplete={handleComplete} />}
         </div>
       </div>
     );
@@ -631,13 +649,20 @@ export default function ChildPage() {
 
       {/* Celebration animation */}
       {showCelebration && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20">
-          <div className="w-24 h-24 rounded-full bg-(--color-success) flex items-center justify-center"
-            style={{ animation: "celebration-pop 0.4s cubic-bezier(0.32, 0.72, 0, 1) both" }}>
-            <svg className="w-12 h-12 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
+        <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center"
+          style={{ background: "rgba(250,250,248,0.95)" }}
+          onClick={() => { setShowCelebration(false); setCompleted(true); }}>
+          <div style={{ animation: "celebration-pop 0.4s cubic-bezier(0.32, 0.72, 0, 1) both" }}>
+            <div className="w-24 h-24 rounded-full flex items-center justify-center mb-4"
+              style={{ background: "rgba(45,106,79,0.1)" }}>
+              <svg className="w-14 h-14 text-(--color-success)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
           </div>
+          <p className="text-xl font-bold text-(--color-text) animate-fade-up" style={{ animationDelay: "200ms" }}>
+            Great work!
+          </p>
         </div>
       )}
 
