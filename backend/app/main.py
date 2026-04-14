@@ -25,7 +25,7 @@ from app.api.state import router as state_router
 from app.core.config import settings
 from app.core.database import engine
 from app.core.logging import setup_logging
-from app.core.middleware import CSRFMiddleware, ErrorHandlerMiddleware, RateLimitMiddleware
+from app.core.middleware import CSRFMiddleware, ErrorHandlerMiddleware, RateLimitMiddleware, SecurityHeadersMiddleware
 
 logger = structlog.get_logger()
 
@@ -57,6 +57,7 @@ app = FastAPI(
 
 # Middleware (order matters: outermost first)
 app.add_middleware(ErrorHandlerMiddleware)
+app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(CSRFMiddleware)
 app.add_middleware(RateLimitMiddleware, requests_per_minute=120)
 app.add_middleware(

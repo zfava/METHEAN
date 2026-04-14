@@ -116,6 +116,12 @@ jobs:
         working-directory: backend
         run: bandit -r app/ -c pyproject.toml --severity-level high
 
+      - name: Dependency audit
+        working-directory: backend
+        run: |
+          pip install pip-audit
+          pip-audit -r requirements.txt --desc on --fix --dry-run || true
+
   # ─── Frontend Checks ───
   frontend-checks:
     name: Frontend Checks

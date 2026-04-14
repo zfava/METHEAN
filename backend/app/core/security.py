@@ -58,8 +58,12 @@ def create_refresh_token(
 
 
 def decode_token(token: str) -> dict:
-    return jwt.decode(
-        token,
-        settings.JWT_SECRET,
-        algorithms=[settings.JWT_ALGORITHM],
-    )
+    """Verify JWT, trying current key first, then previous key for rotation."""
+    for secret in [settings.JWT_SECRET, settings.PREVIOUS_JWT_SECRET]:
+        if not secret:
+            continue
+        try:
+            return jwt.decode(token, secret, algorithms=[settings.JWT_ALGORITHM])
+        except jwt.InvalidTokenError:
+            continue
+    raise jwt.InvalidTokenError("Token verification failed with all available keys")
