@@ -17,6 +17,10 @@ node_modules/
 out/
 *.tsbuildinfo
 
+# Playwright
+test-results/
+playwright-report/
+
 # IDE
 .vscode/
 .idea/

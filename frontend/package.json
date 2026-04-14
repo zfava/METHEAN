@@ -14,7 +14,9 @@
     "build:ios": "npm run cap:export && npx cap sync ios",
     "build:android": "npm run cap:export && npx cap sync android",
     "build:android:release": "npm run cap:export && npx cap sync android && cd android && ./gradlew bundleRelease",
-    "version:bump": "node scripts/bump-version.js"
+    "version:bump": "node scripts/bump-version.js",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@capacitor/app": "^6.0.0",
@@ -23,8 +25,8 @@
     "@capacitor/keyboard": "^6.0.0",
     "@capacitor/network": "^6.0.0",
     "@capacitor/push-notifications": "^6.0.0",
-    "@capacitor/splash-screen": "^6.0.0",
     "@capacitor/share": "^6.0.0",
+    "@capacitor/splash-screen": "^6.0.0",
     "@capacitor/status-bar": "^6.0.0",
     "@capawesome/capacitor-badge": "^6.0.0",
     "capacitor-native-biometric": "^4.2.2",
@@ -35,13 +37,14 @@
   "devDependencies": {
     "@capacitor/assets": "^3.0.0",
     "@capacitor/cli": "^6.0.0",
+    "@playwright/test": "^1.59.1",
+    "@tailwindcss/postcss": "^4.0.0",
     "@types/node": "^22.10.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "eslint": "^9.16.0",
     "eslint-config-next": "^15.1.0",
     "tailwindcss": "^4.0.0",
-    "@tailwindcss/postcss": "^4.0.0",
     "typescript": "^5.7.0"
   }
 }
