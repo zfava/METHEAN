@@ -22,6 +22,7 @@ class Household(Base):
     philosophical_profile: Mapped[dict | None] = mapped_column(JSONB, default=dict)
     # Billing
     stripe_customer_id: Mapped[str | None] = mapped_column(Text, nullable=True)
+    stripe_subscription_id: Mapped[str | None] = mapped_column(Text, nullable=True)
     subscription_status: Mapped[str] = mapped_column(String(50), default="trial")
     trial_ends_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     subscription_ends_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

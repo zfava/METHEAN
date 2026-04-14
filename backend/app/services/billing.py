@@ -34,7 +34,7 @@ async def create_customer(db: AsyncSession, household_id: uuid.UUID, email: str)
     if not hh:
         raise ValueError("Household not found")
 
-    if hasattr(hh, "stripe_customer_id") and hh.stripe_customer_id:
+    if hh.stripe_customer_id:
         return hh.stripe_customer_id
 
     customer = stripe.Customer.create(
@@ -50,8 +50,10 @@ async def create_checkout_session(
     db: AsyncSession,
     household_id: uuid.UUID,
     email: str,
+    success_url: str | None = None,
+    cancel_url: str | None = None,
 ) -> str | None:
-    """Create a Stripe checkout session with 30-day trial. Returns session URL."""
+    """Create a Stripe checkout session. Returns session URL."""
     _init_stripe()
     if not settings.STRIPE_SECRET_KEY or not settings.STRIPE_PRICE_ID:
         return None
@@ -64,9 +66,10 @@ async def create_checkout_session(
         customer=customer_id,
         mode="subscription",
         line_items=[{"price": settings.STRIPE_PRICE_ID, "quantity": 1}],
-        subscription_data={"trial_period_days": 30},
-        success_url=f"{settings.APP_URL}/billing?success=true",
-        cancel_url=f"{settings.APP_URL}/billing?canceled=true",
+        subscription_data={"trial_period_days": settings.STRIPE_TRIAL_DAYS},
+        success_url=success_url or f"{settings.APP_URL}/billing?success=true",
+        cancel_url=cancel_url or f"{settings.APP_URL}/billing?canceled=true",
+        metadata={"household_id": str(household_id)},
     )
     return session.url
 
@@ -74,6 +77,7 @@ async def create_checkout_session(
 async def create_portal_session(
     db: AsyncSession,
     household_id: uuid.UUID,
+    return_url: str | None = None,
 ) -> str | None:
     """Create a Stripe customer portal session. Returns portal URL."""
     _init_stripe()
@@ -82,12 +86,12 @@ async def create_portal_session(
 
     result = await db.execute(select(Household).where(Household.id == household_id))
     hh = result.scalar_one_or_none()
-    if not hh or not getattr(hh, "stripe_customer_id", None):
+    if not hh or not hh.stripe_customer_id:
         return None
 
     session = stripe.billing_portal.Session.create(
         customer=hh.stripe_customer_id,
-        return_url=f"{settings.APP_URL}/billing",
+        return_url=return_url or f"{settings.APP_URL}/billing",
     )
     return session.url
 
@@ -100,7 +104,7 @@ async def cancel_subscription(db: AsyncSession, household_id: uuid.UUID) -> bool
 
     result = await db.execute(select(Household).where(Household.id == household_id))
     hh = result.scalar_one_or_none()
-    if not hh or not getattr(hh, "stripe_customer_id", None):
+    if not hh or not hh.stripe_customer_id:
         return False
 
     subscriptions = stripe.Subscription.list(customer=hh.stripe_customer_id, limit=1)
@@ -117,68 +121,81 @@ async def get_subscription_status(db: AsyncSession, household_id: uuid.UUID) -> 
     if not hh:
         return {"status": "unknown"}
 
-    status_val = getattr(hh, "subscription_status", "trial") or "trial"
-    trial_end = getattr(hh, "trial_ends_at", None)
-    sub_end = getattr(hh, "subscription_ends_at", None)
-
     return {
-        "status": status_val,
-        "trial_ends_at": trial_end.isoformat() if trial_end else None,
-        "subscription_ends_at": sub_end.isoformat() if sub_end else None,
+        "status": hh.subscription_status or "trial",
+        "trial_ends_at": hh.trial_ends_at.isoformat() if hh.trial_ends_at else None,
+        "subscription_ends_at": hh.subscription_ends_at.isoformat() if hh.subscription_ends_at else None,
+        "stripe_customer_id": hh.stripe_customer_id,
+        "stripe_subscription_id": hh.stripe_subscription_id,
         "stripe_configured": bool(settings.STRIPE_SECRET_KEY),
     }
 
 
-async def handle_webhook(payload: bytes, signature: str) -> bool:
-    """Process Stripe webhook events."""
+async def handle_webhook(payload: bytes, signature: str, db: AsyncSession) -> dict:
+    """Process Stripe webhook events. Returns event type and status."""
     _init_stripe()
     if not settings.STRIPE_WEBHOOK_SECRET:
-        return False
+        raise ValueError("Webhook secret not configured")
 
     try:
         event = stripe.Webhook.construct_event(payload, signature, settings.STRIPE_WEBHOOK_SECRET)
     except Exception:
-        return False
+        raise ValueError("Invalid webhook signature")
 
-    # Import here to avoid circular imports
-    from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+    if event.type == "checkout.session.completed":
+        session = event.data.object
+        hid = session.metadata.get("household_id")
+        if hid:
+            await _update_subscription_status(db, uuid.UUID(hid), "active", session.subscription)
 
-    engine = create_async_engine(settings.DATABASE_URL)
-    SessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+    elif event.type == "customer.subscription.created":
+        sub = event.data.object
+        status = "trialing" if sub.status == "trialing" else "active"
+        await _sync_by_customer(db, sub.customer, status, sub.id, sub)
 
-    async with SessionLocal() as db:
-        if event.type == "customer.subscription.created":
-            await _update_subscription(db, event.data.object, "active")
-        elif event.type == "customer.subscription.updated":
-            sub = event.data.object
-            status = "active" if sub.status == "active" else "trialing" if sub.status == "trialing" else sub.status
-            await _update_subscription(db, sub, status)
-        elif event.type == "customer.subscription.deleted":
-            await _update_subscription(db, event.data.object, "canceled")
-        elif event.type == "customer.subscription.trial_will_end":
-            pass  # Could send warning email
-        await db.commit()
+    elif event.type == "customer.subscription.updated":
+        sub = event.data.object
+        await _sync_by_customer(db, sub.customer, sub.status, sub.id, sub)
 
-    await engine.dispose()
-    return True
+    elif event.type == "customer.subscription.deleted":
+        sub = event.data.object
+        await _sync_by_customer(db, sub.customer, "canceled", sub.id, sub)
+
+    elif event.type == "invoice.payment_failed":
+        invoice = event.data.object
+        await _sync_by_customer(db, invoice.customer, "past_due", None, None)
+
+    return {"event_type": event.type, "processed": True}
 
 
-async def _update_subscription(db: AsyncSession, subscription: object, status: str) -> None:
-    """Update household subscription status from Stripe data."""
-    customer_id = getattr(subscription, "customer", None)
-    if not customer_id:
-        return
+async def _update_subscription_status(
+    db: AsyncSession, household_id: uuid.UUID, status: str, subscription_id: str | None
+) -> None:
+    result = await db.execute(select(Household).where(Household.id == household_id))
+    hh = result.scalar_one_or_none()
+    if hh:
+        hh.subscription_status = status
+        if subscription_id:
+            hh.stripe_subscription_id = subscription_id
+        await db.flush()
 
+
+async def _sync_by_customer(
+    db: AsyncSession, customer_id: str, status: str, subscription_id: str | None, sub_obj: object | None
+) -> None:
     result = await db.execute(select(Household).where(Household.stripe_customer_id == str(customer_id)))
     hh = result.scalar_one_or_none()
     if not hh:
         return
 
     hh.subscription_status = status
-    trial_end = getattr(subscription, "trial_end", None)
-    if trial_end:
-        hh.trial_ends_at = datetime.fromtimestamp(trial_end, tz=UTC)
-    period_end = getattr(subscription, "current_period_end", None)
-    if period_end:
-        hh.subscription_ends_at = datetime.fromtimestamp(period_end, tz=UTC)
+    if subscription_id:
+        hh.stripe_subscription_id = subscription_id
+    if sub_obj:
+        trial_end = getattr(sub_obj, "trial_end", None)
+        if trial_end:
+            hh.trial_ends_at = datetime.fromtimestamp(trial_end, tz=UTC)
+        period_end = getattr(sub_obj, "current_period_end", None)
+        if period_end:
+            hh.subscription_ends_at = datetime.fromtimestamp(period_end, tz=UTC)
     await db.flush()

@@ -54,6 +54,7 @@ class Settings(BaseSettings):
     STRIPE_SECRET_KEY: str = ""
     STRIPE_WEBHOOK_SECRET: str = ""
     STRIPE_PRICE_ID: str = ""
+    STRIPE_TRIAL_DAYS: int = 14
     APP_URL: str = "http://localhost:3000"
 
     # Push Notifications (FCM)

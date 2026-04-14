@@ -35,6 +35,9 @@ pyyaml==6.0.2
 # Storage
 boto3==1.36.2
 
+# Billing
+stripe==8.0.0
+
 # AI
 anthropic==0.42.0
 openai==1.59.3

@@ -120,6 +120,7 @@ _CSRF_EXEMPT_PATHS = {
     "/health/ready",
     "/api/v1/auth/register",
     "/api/v1/auth/login",
+    "/api/v1/billing/webhook",
 }
 
 _STATE_CHANGING_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
