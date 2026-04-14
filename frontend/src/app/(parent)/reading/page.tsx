@@ -254,7 +254,7 @@ export default function ReadingPage() {
       {stats && stats.total_books > 0 && (
         <Card className="mt-6">
           <h3 className="text-xs font-bold text-(--color-text-secondary) uppercase tracking-wider mb-3">Reading Stats</h3>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <div className="text-2xl font-bold text-(--color-text)">{stats.total_books}</div>
               <div className="text-[10px] text-(--color-text-tertiary) truncate">Total books</div>

@@ -230,7 +230,7 @@ export default function AssessmentPage() {
                   <h2 className="text-sm font-bold text-(--color-text) uppercase">Unofficial Transcript</h2>
                   <button onClick={() => setTranscript(null)} className="text-xs text-(--color-text-secondary)">Close</button>
                 </div>
-                <table className="w-full text-sm mb-4">
+                <div className="overflow-x-auto"><table className="w-full text-sm mb-4">
                   <thead><tr className="border-b text-xs text-(--color-text-secondary)">
                     <th className="text-left py-2">Subject</th><th>Grade</th><th>Mastered</th><th>Hours</th>
                   </tr></thead>
@@ -244,7 +244,7 @@ export default function AssessmentPage() {
                       </tr>
                     ))}
                   </tbody>
-                </table>
+                </table></div>
                 <div className="text-xs text-(--color-text-secondary)">GPA: {(transcript as any).gpa}</div>
                 <button onClick={() => window.print()} className="mt-3 text-xs text-(--color-accent)">Print</button>
               </Card>

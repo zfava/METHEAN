@@ -280,7 +280,7 @@ export default function SettingsPage() {
           </div>
         )}
 
-        <div className="flex gap-2">
+        <div className="flex flex-col sm:flex-row gap-2">
           <input value={inviteEmail} onChange={(e) => setInviteEmail(e.target.value)} placeholder="Email address"
             className="flex-1 px-3 py-2 text-sm border border-(--color-border-strong) rounded-[10px]" />
           <select value={inviteRole} onChange={(e) => setInviteRole(e.target.value)}

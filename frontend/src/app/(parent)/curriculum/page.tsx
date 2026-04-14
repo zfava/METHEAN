@@ -281,7 +281,7 @@ export default function CurriculumPage() {
           {Object.keys(subjectLevels).length > 0 && (
             <div className="mt-4">
               <p className="text-xs text-(--color-text-secondary) mb-2">Now select which subject to build:</p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                 {subjects.map((subj) => (
                   <Card key={subj.s} onClick={() => setSelectedSubject(subj)} padding="p-3" className="text-left">
                     <div className="text-sm font-medium">{subj.s}</div>

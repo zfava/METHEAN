@@ -330,7 +330,7 @@ function EditorPageContent() {
                 className="w-full px-2 py-1.5 text-xs border border-(--color-border) rounded-[10px] h-16 resize-none" />
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div>
                 <label className="block text-[10px] text-(--color-text-secondary) mb-0.5">Minutes</label>
                 <input type="number" value={selectedNode.estimated_minutes || ""}

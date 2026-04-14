@@ -358,7 +358,7 @@ export default function InspectionPage() {
     return (
       <div className="max-w-4xl">
         <PageHeader title="AI Inspection" subtitle="Every AI interaction, fully transparent." />
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           {[1, 2, 3, 4].map((i) => <LoadingSkeleton key={i} variant="card" count={1} />)}
         </div>
         <LoadingSkeleton variant="card" count={4} />
@@ -380,7 +380,7 @@ export default function InspectionPage() {
       )}
 
       {/* ── Metrics ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         <MetricCard label="Total AI Calls" value={metrics.total} />
         <MetricCard label="Success Rate" value={`${metrics.successRate}%`} color={metrics.successRate >= 90 ? "text-(--color-success)" : "text-(--color-warning)"} />
         <MetricCard label="Avg Response Time" value={metrics.avgDuration} />

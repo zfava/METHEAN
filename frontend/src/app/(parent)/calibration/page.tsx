@@ -681,7 +681,7 @@ export default function CalibrationPage() {
         <div>
           <SectionHeader title="Confidence Band Accuracy" />
           <Card>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {bandEntries.map(([band, data]) => (
                 <div key={band} className="text-center p-3 rounded-[10px] bg-(--color-page) border border-(--color-border)">
                   <div className="text-[10px] font-medium text-(--color-text-secondary) mb-1">{band}</div>
