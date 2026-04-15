@@ -1,7 +1,7 @@
 import { Page, expect } from "@playwright/test";
 
 export async function registerAndLogin(page: Page) {
-  const email = `test-${Date.now()}@methean.test`;
+  const email = `test-${Date.now()}@example.com`;
   const password = "TestPass123!";
 
   await page.goto("/auth");

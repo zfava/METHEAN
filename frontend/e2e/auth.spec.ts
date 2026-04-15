@@ -22,7 +22,7 @@ test("invalid login shows error or stays on auth", async ({ page }) => {
   // Ensure Sign In mode
   await page.getByRole("button", { name: /sign in/i }).first().click();
 
-  await page.getByPlaceholder("Email").fill("nobody@test.com");
+  await page.getByPlaceholder("Email").fill("nobody@example.com");
   await page.getByPlaceholder("Password").fill("wrongpass123");
 
   // Submit and wait for the API response
