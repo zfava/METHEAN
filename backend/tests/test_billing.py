@@ -1,8 +1,8 @@
 """Tests for Stripe billing integration."""
 
 import uuid
-from datetime import datetime, timezone, timedelta
-from unittest.mock import AsyncMock, MagicMock, patch
+from datetime import UTC, datetime, timedelta
+from unittest.mock import patch
 
 import pytest
 import pytest_asyncio
@@ -15,7 +15,7 @@ from app.models.identity import Household
 async def billing_household(db_session: AsyncSession) -> Household:
     h = Household(name="Billing Test Family")
     h.subscription_status = "trial"
-    h.trial_ends_at = datetime.now(timezone.utc) + timedelta(days=30)
+    h.trial_ends_at = datetime.now(UTC) + timedelta(days=30)
     db_session.add(h)
     await db_session.flush()
     return h
@@ -35,7 +35,7 @@ async def test_get_subscription_status_trial(db_session, billing_household):
 async def test_get_subscription_status_active(db_session, billing_household):
     """Active subscription returns active status."""
     billing_household.subscription_status = "active"
-    billing_household.subscription_ends_at = datetime.now(timezone.utc) + timedelta(days=30)
+    billing_household.subscription_ends_at = datetime.now(UTC) + timedelta(days=30)
     await db_session.flush()
 
     from app.services.billing import get_subscription_status
@@ -91,12 +91,12 @@ async def test_cancel_no_stripe_key(mock_settings, db_session, billing_household
 @pytest.mark.asyncio
 @patch("app.services.billing.settings")
 async def test_handle_webhook_no_secret(mock_settings):
-    """No webhook secret returns False."""
+    """No webhook secret raises ValueError."""
     mock_settings.STRIPE_WEBHOOK_SECRET = ""
     from app.services.billing import handle_webhook
 
-    result = await handle_webhook(b"payload", "sig")
-    assert result is False
+    with pytest.raises(ValueError, match="not configured"):
+        await handle_webhook(b"payload", "sig", None)
 
 
 @pytest.mark.asyncio
