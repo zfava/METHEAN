@@ -114,3 +114,26 @@ def require_permission(permission: str, scope_type: str | None = None):
         return user
 
     return checker
+
+
+async def require_active_subscription(
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> User:
+    """Gate: require active or trialing subscription."""
+    from datetime import UTC, datetime
+
+    from app.models.identity import Household
+
+    result = await db.execute(select(Household).where(Household.id == user.household_id))
+    hh = result.scalar_one_or_none()
+    if not hh:
+        raise HTTPException(status_code=402, detail="Your subscription is inactive. Visit /billing to resubscribe.")
+
+    if hh.subscription_status in ("active", "trialing"):
+        return user
+
+    if hh.trial_ends_at and hh.trial_ends_at > datetime.now(UTC):
+        return user
+
+    raise HTTPException(status_code=402, detail="Your subscription is inactive. Visit /billing to resubscribe.")

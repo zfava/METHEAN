@@ -3,6 +3,7 @@
 Graceful degradation: no STRIPE_SECRET_KEY = billing features disabled.
 """
 
+import logging
 import uuid
 from datetime import UTC, datetime
 
@@ -16,6 +17,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.models.identity import Household
+
+logger = logging.getLogger(__name__)
 
 
 def _init_stripe():
@@ -147,23 +150,39 @@ async def handle_webhook(payload: bytes, signature: str, db: AsyncSession) -> di
         hid = session.metadata.get("household_id")
         if hid:
             await _update_subscription_status(db, uuid.UUID(hid), "active", session.subscription)
-
-    elif event.type == "customer.subscription.created":
-        sub = event.data.object
-        status = "trialing" if sub.status == "trialing" else "active"
-        await _sync_by_customer(db, sub.customer, status, sub.id, sub)
+            # Clear trial — they paid
+            result = await db.execute(select(Household).where(Household.id == uuid.UUID(hid)))
+            hh = result.scalar_one_or_none()
+            if hh:
+                hh.trial_ends_at = None
+                await db.flush()
+            logger.info("Subscription activated for household %s", hid)
 
     elif event.type == "customer.subscription.updated":
         sub = event.data.object
-        await _sync_by_customer(db, sub.customer, sub.status, sub.id, sub)
+        status_map = {
+            "active": "active",
+            "past_due": "past_due",
+            "canceled": "canceled",
+            "trialing": "trialing",
+            "unpaid": "past_due",
+        }
+        mapped = status_map.get(sub.status, sub.status)
+        await _sync_by_customer(db, sub.customer, mapped, sub.id, sub)
+        logger.info("Subscription updated to %s for customer %s", mapped, sub.customer)
 
     elif event.type == "customer.subscription.deleted":
         sub = event.data.object
         await _sync_by_customer(db, sub.customer, "canceled", sub.id, sub)
+        logger.info("Subscription canceled for customer %s", sub.customer)
 
     elif event.type == "invoice.payment_failed":
         invoice = event.data.object
         await _sync_by_customer(db, invoice.customer, "past_due", None, None)
+        logger.warning("Payment failed for customer %s", invoice.customer)
+
+    else:
+        logger.debug("Unhandled webhook event: %s", event.type)
 
     return {"event_type": event.type, "processed": True}
 
@@ -186,6 +205,7 @@ async def _sync_by_customer(
     result = await db.execute(select(Household).where(Household.stripe_customer_id == str(customer_id)))
     hh = result.scalar_one_or_none()
     if not hh:
+        logger.warning("Webhook: no household found for customer %s", customer_id)
         return
 
     hh.subscription_status = status
