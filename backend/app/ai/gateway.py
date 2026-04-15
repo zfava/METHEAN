@@ -12,6 +12,7 @@ through parent governance.
 """
 
 import json
+import logging
 import time
 import uuid
 from datetime import UTC, datetime
@@ -22,6 +23,62 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import settings
 from app.models.enums import AIRunStatus
 from app.models.operational import AIRun
+
+logger = logging.getLogger("methean.ai.gateway")
+
+
+class CircuitBreaker:
+    """Per-provider circuit breaker. States: closed (normal), open (skip), half_open (testing)."""
+
+    def __init__(self, failure_threshold: int = 3, recovery_timeout: int = 60, window: int = 300):
+        self.failure_threshold = failure_threshold
+        self.recovery_timeout = recovery_timeout
+        self.window = window
+        self.failures: list[float] = []
+        self.state: str = "closed"
+        self.opened_at: float = 0.0
+
+    def _prune(self) -> None:
+        cutoff = time.monotonic() - self.window
+        self.failures = [t for t in self.failures if t > cutoff]
+
+    def record_failure(self) -> None:
+        now = time.monotonic()
+        self.failures.append(now)
+        self._prune()
+        if len(self.failures) >= self.failure_threshold and self.state == "closed":
+            self.state = "open"
+            self.opened_at = now
+            logger.warning("Circuit OPEN: %d failures in %ds window", len(self.failures), self.window)
+
+    def record_success(self) -> None:
+        if self.state == "half_open":
+            self.state = "closed"
+            self.failures.clear()
+            logger.info("Circuit CLOSED: recovery confirmed")
+        elif self.state == "closed":
+            self._prune()
+
+    def should_allow(self) -> bool:
+        if self.state == "closed":
+            return True
+        if self.state == "open":
+            if time.monotonic() - self.opened_at >= self.recovery_timeout:
+                self.state = "half_open"
+                logger.info("Circuit HALF-OPEN: testing with single request")
+                return True
+            return False
+        # half_open: allow one test request
+        return True
+
+    @property
+    def status(self) -> dict:
+        self._prune()
+        return {"state": self.state, "failures_in_window": len(self.failures)}
+
+
+_claude_circuit = CircuitBreaker()
+_openai_circuit = CircuitBreaker()
 
 
 class AIRole(str, Enum):
@@ -130,7 +187,11 @@ async def call_ai(
     for provider in providers:
         try:
             if provider == AIProvider.claude and settings.AI_API_KEY:
+                if not _claude_circuit.should_allow():
+                    logger.debug("Circuit open for Claude, skipping")
+                    continue
                 result = await _call_claude(system_prompt, user_prompt, max_tokens)
+                _claude_circuit.record_success()
                 output = result["content"]
                 model_used = result["model"]
                 input_tokens = result.get("input_tokens", 0)
@@ -139,7 +200,11 @@ async def call_ai(
                 break
 
             elif provider == AIProvider.openai and settings.AI_FALLBACK_API_KEY:
+                if not _openai_circuit.should_allow():
+                    logger.debug("Circuit open for OpenAI, skipping")
+                    continue
                 result = await _call_openai(system_prompt, user_prompt, max_tokens)
+                _openai_circuit.record_success()
                 output = result["content"]
                 model_used = result["model"]
                 input_tokens = result.get("input_tokens", 0)
@@ -157,6 +222,25 @@ async def call_ai(
 
         except Exception as e:
             error_msg = f"{provider.value}: {e!s}"
+            if provider == AIProvider.claude:
+                _claude_circuit.record_failure()
+            elif provider == AIProvider.openai:
+                _openai_circuit.record_failure()
+            next_p = (
+                providers[providers.index(provider) + 1].value
+                if providers.index(provider) + 1 < len(providers)
+                else "none"
+            )
+            logger.warning(
+                "AI provider failed",
+                extra={
+                    "provider": provider.value,
+                    "role": role.value,
+                    "error_type": _classify_error(e),
+                    "household_id": str(household_id),
+                    "will_fallback_to": next_p,
+                },
+            )
             continue
 
     if output is None:
@@ -265,6 +349,24 @@ async def stream_claude(
             )
     except Exception as e:
         yield ("error", str(e))
+
+
+def _classify_error(e: Exception) -> str:
+    """Classify an AI provider error for logging."""
+    import httpx
+
+    if isinstance(e, (TimeoutError, httpx.TimeoutException)):
+        return "timeout"
+    err_str = str(e).lower()
+    if "429" in err_str or "rate" in err_str:
+        return "rate_limit"
+    if "401" in err_str or "403" in err_str or "auth" in err_str:
+        return "auth_error"
+    if "500" in err_str or "502" in err_str or "503" in err_str:
+        return "server_error"
+    if isinstance(e, (json.JSONDecodeError, ValueError, KeyError)):
+        return "parse_error"
+    return "unknown"
 
 
 def _get_provider_chain() -> list[AIProvider]:
