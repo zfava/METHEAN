@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { children as childrenApi, household } from "@/lib/api";
+import { useMobile } from "@/lib/useMobile";
 import { useToast } from "@/components/Toast";
 import { useChild } from "@/lib/ChildContext";
 import PageHeader from "@/components/ui/PageHeader";
@@ -44,6 +45,7 @@ export default function FamilyPage() {
 
   const { children, loading: childrenLoading } = useChild();
   const [childData, setChildData] = useState<Record<string, ChildDayData>>({});
+  const isMobile = useMobile();
   const [expanded, setExpanded] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [showAddChild, setShowAddChild] = useState(false);
@@ -369,7 +371,7 @@ export default function FamilyPage() {
             <input value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="Child's first name"
               className="flex-1 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
             <input value={newGrade} onChange={(e) => setNewGrade(e.target.value)} placeholder="Grade (K, 1st, etc.)"
-              className="w-32 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
+              className="w-full sm:w-32 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
             <Button variant="primary" size="sm" onClick={addChild} disabled={!newName.trim()}>Add</Button>
             <Button variant="ghost" size="sm" onClick={() => setShowAddChild(false)}>Cancel</Button>
           </div>

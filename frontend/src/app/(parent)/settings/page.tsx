@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { auth, account, academicCalendar, household, familyInvites, dataExport, type User } from "@/lib/api";
+import { useMobile } from "@/lib/useMobile";
 import { useToast } from "@/components/Toast";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
@@ -16,6 +17,7 @@ export default function SettingsPage() {
   const { toast } = useToast();
 
   const [user, setUser] = useState<User | null>(null);
+  const isMobile = useMobile();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 

@@ -8,6 +8,7 @@ import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
+import { useMobile } from "@/lib/useMobile";
 import { cn } from "@/lib/cn";
 
 export default function BillingPage() {
@@ -15,6 +16,7 @@ export default function BillingPage() {
 
   const { toast } = useToast();
   const [status, setStatus] = useState<any>(null);
+  const isMobile = useMobile();
   const [usageData, setUsageData] = useState<any>(null);
   const [breakdown, setBreakdown] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -109,16 +111,16 @@ export default function BillingPage() {
           </div>
         )}
 
-        <div className="flex gap-2">
+        <div className={isMobile ? "flex flex-col gap-2" : "flex gap-2"}>
           {!isActive && (
-            <Button variant="gold" size="lg" onClick={handleSubscribe} disabled={!status?.stripe_configured}>
+            <Button variant="gold" size="lg" className={isMobile ? "w-full" : ""} onClick={handleSubscribe} disabled={!status?.stripe_configured}>
               {isTrial ? "Upgrade Now — $99/month" : "Subscribe — $99/month"}
             </Button>
           )}
           {isActive && (
             <>
-              <Button variant="secondary" size="md" onClick={handlePortal}>Manage Subscription</Button>
-              <Button variant="ghost" size="sm" onClick={handleCancel}>Cancel</Button>
+              <Button variant="secondary" size="md" className={isMobile ? "w-full" : ""} onClick={handlePortal}>Manage Subscription</Button>
+              <Button variant="ghost" size="sm" className={isMobile ? "w-full" : ""} onClick={handleCancel}>Cancel</Button>
             </>
           )}
         </div>
