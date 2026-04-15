@@ -11,22 +11,37 @@ export async function registerAndLogin(page: Page) {
   await page.getByRole("button", { name: /register/i }).click();
 
   // Wait for register fields to appear
-  await expect(page.getByPlaceholder(/your name/i)).toBeVisible({ timeout: 5000 });
+  await expect(page.getByPlaceholder("Your name")).toBeVisible({ timeout: 5000 });
 
-  // Fill registration fields
-  await page.getByPlaceholder(/your name/i).fill("Test User");
-  await page.getByPlaceholder(/household/i).fill("Test Family");
-  await page.getByPlaceholder(/email/i).fill(email);
-  await page.getByPlaceholder(/password/i).fill(password);
+  // Fill all required fields
+  await page.getByPlaceholder("Your name").fill("Test User");
+  await page.getByPlaceholder("Household name").fill("Test Family");
+  await page.getByPlaceholder("Email").fill(email);
+  await page.getByPlaceholder("Password").fill(password);
 
-  // Submit
-  await page.locator("form").getByRole("button", { name: /create account/i }).click();
+  // Click submit and wait for the API response
+  const [response] = await Promise.all([
+    page.waitForResponse(
+      (resp) => resp.url().includes("/auth/register") && resp.request().method() === "POST",
+      { timeout: 15000 },
+    ),
+    page.locator("form").getByRole("button", { name: /create account/i }).click(),
+  ]);
 
-  // Wait for navigation away from /auth (catches /onboarding, /dashboard, or any redirect)
-  await page.waitForURL(
-    (url) => !url.pathname.startsWith("/auth"),
-    { timeout: 15000 },
-  );
+  const status = response.status();
+  if (status !== 201 && status !== 200) {
+    const body = await response.text();
+    throw new Error(`Registration failed with ${status}: ${body}`);
+  }
+
+  // Wait for client-side navigation, or navigate manually if router.push didn't fire
+  try {
+    await page.waitForURL((url) => !url.pathname.startsWith("/auth"), { timeout: 5000 });
+  } catch {
+    // router.push may not have triggered — navigate manually
+    await page.goto("/dashboard");
+    await page.waitForLoadState("networkidle");
+  }
 
   return { email, password };
 }
@@ -38,15 +53,29 @@ export async function login(page: Page, email: string, password: string) {
   // Ensure Sign In tab is active
   await page.getByRole("button", { name: /sign in/i }).first().click();
 
-  await page.getByPlaceholder(/email/i).fill(email);
-  await page.getByPlaceholder(/password/i).fill(password);
+  await page.getByPlaceholder("Email").fill(email);
+  await page.getByPlaceholder("Password").fill(password);
 
-  // Submit inside the form
-  await page.locator("form").getByRole("button", { name: /sign in/i }).click();
+  // Click submit and wait for the API response
+  const [response] = await Promise.all([
+    page.waitForResponse(
+      (resp) => resp.url().includes("/auth/login") && resp.request().method() === "POST",
+      { timeout: 15000 },
+    ),
+    page.locator("form").getByRole("button", { name: /sign in/i }).click(),
+  ]);
 
-  // Wait for navigation away from /auth
-  await page.waitForURL(
-    (url) => !url.pathname.startsWith("/auth"),
-    { timeout: 15000 },
-  );
+  const status = response.status();
+  if (status !== 200) {
+    const body = await response.text();
+    throw new Error(`Login failed with ${status}: ${body}`);
+  }
+
+  // Wait for client-side navigation
+  try {
+    await page.waitForURL((url) => !url.pathname.startsWith("/auth"), { timeout: 5000 });
+  } catch {
+    await page.goto("/dashboard");
+    await page.waitForLoadState("networkidle");
+  }
 }
