@@ -339,6 +339,34 @@ export default function SettingsPage() {
           ))}
         </div>
       </Card>
+
+      {/* ── Data Export ── */}
+      <Card className="mb-6">
+        <SectionHeader title="Your Data" />
+        <p className="text-xs text-(--color-text-secondary) mb-3">
+          You own your data. Export everything METHEAN knows about your family at any time.
+        </p>
+        <Button
+          variant="secondary"
+          size="sm"
+          className={isMobile ? "w-full" : ""}
+          onClick={async () => {
+            try {
+              const link = document.createElement("a");
+              link.href = "/api/v1/household/export";
+              link.download = `methean-export-${new Date().toISOString().split("T")[0]}.zip`;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              toast("Export started. Check your downloads.", "success");
+            } catch {
+              toast("Export failed. Try again.", "error");
+            }
+          }}
+        >
+          Export All Data
+        </Button>
+      </Card>
     </div>
   );
 }
