@@ -34,6 +34,19 @@ logger = structlog.get_logger()
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     setup_logging()
 
+    # Initialize Sentry (no-op if DSN is empty)
+    if settings.SENTRY_DSN:
+        import sentry_sdk
+
+        sentry_sdk.init(
+            dsn=settings.SENTRY_DSN,
+            traces_sample_rate=0.1,
+            profiles_sample_rate=0.1,
+            environment=settings.APP_ENV,
+            release=f"methean@{app.version}",
+        )
+        logger.info("sentry_initialized")
+
     # Initialize Redis
     redis = aioredis.from_url(settings.REDIS_URL, decode_responses=True)
     app.state.redis = redis
@@ -59,6 +72,11 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
 )
+
+# Prometheus auto-instrumentation (request count, latency, size)
+from prometheus_fastapi_instrumentator import Instrumentator
+
+Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 
 # Middleware (order matters: outermost first)
 app.add_middleware(ErrorHandlerMiddleware)
@@ -168,6 +186,10 @@ async def health_ready() -> dict:
             checks["celery"] = "error: no workers"
     except Exception:
         checks["celery"] = "error: no workers"
+
+    # Sentry
+    if settings.SENTRY_DSN:
+        checks["sentry"] = "configured"
 
     # Only DB and Redis failures make the service degraded.
     # Celery being down is informational — the API can still serve requests.

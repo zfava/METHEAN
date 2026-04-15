@@ -210,6 +210,16 @@ async def call_ai(
     except Exception:
         pass  # Usage recording should not break AI response
 
+    # Record metrics
+    try:
+        from app.core.metrics import ai_calls_total, ai_latency
+
+        provider_label = provider_used.value if provider_used else "none"
+        ai_calls_total.labels(role=role.value, provider=provider_label, status="ok").inc()
+        ai_latency.labels(role=role.value).observe(elapsed_ms / 1000)
+    except Exception:
+        pass
+
     return {
         "ai_run_id": ai_run.id,
         "output": parsed_output,

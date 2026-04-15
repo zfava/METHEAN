@@ -57,6 +57,9 @@ class Settings(BaseSettings):
     STRIPE_TRIAL_DAYS: int = 14
     APP_URL: str = "http://localhost:3000"
 
+    # Monitoring
+    SENTRY_DSN: str = ""  # Empty = disabled
+
     # Push Notifications (FCM)
     FCM_PROJECT_ID: str = ""
     FCM_SERVICE_ACCOUNT_JSON: str = ""  # Path or inline JSON for service account

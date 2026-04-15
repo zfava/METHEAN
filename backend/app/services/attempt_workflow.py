@@ -249,6 +249,14 @@ async def submit_attempt(
     except Exception:
         pass  # Achievement checking is non-blocking
 
+    # Record metrics
+    try:
+        from app.core.metrics import attempts_completed
+
+        attempts_completed.inc()
+    except Exception:
+        pass
+
     # Invalidate cached child state
     await cache_delete(f"child_state:{household_id}:{attempt.child_id}")
 
