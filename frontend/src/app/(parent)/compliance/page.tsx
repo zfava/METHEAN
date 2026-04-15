@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { compliance, documents } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
+import { useMobile } from "@/lib/useMobile";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
 import Button from "@/components/ui/Button";
@@ -14,6 +15,7 @@ export default function CompliancePage() {
   useEffect(() => { document.title = "Compliance | METHEAN"; }, []);
 
   const { selectedChild } = useChild();
+  const isMobile = useMobile();
   const [states, setStates] = useState<{ code: string; name: string; strictness: string }[]>([]);
   const [selectedState, setSelectedState] = useState("");
   const [result, setResult] = useState<any>(null);

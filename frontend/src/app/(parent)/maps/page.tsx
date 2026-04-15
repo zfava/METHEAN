@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { children as childrenApi, curriculum, type MapState, type MapNodeState } from "@/lib/api";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
+import { useMobile } from "@/lib/useMobile";
 import { useChild } from "@/lib/ChildContext";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
@@ -71,6 +72,7 @@ export default function MapsPage() {
   useEffect(() => { document.title = "Maps | METHEAN"; }, []);
 
   const { selectedChild } = useChild();
+  const isMobile = useMobile();
   const [mapStates, setMapStates] = useState<MapState[]>([]);
   const [selectedMap, setSelectedMap] = useState<MapState | null>(null);
   const [loading, setLoading] = useState(true);
@@ -126,7 +128,7 @@ export default function MapsPage() {
 
       {/* ── Map selector ── */}
       {mapStates.length > 1 && (
-        <div className="flex gap-3 mb-6">
+        <div className="flex gap-3 mb-6 overflow-x-auto">
           {mapStates.map((ms) => (
             <button key={ms.learning_map_id} onClick={() => setSelectedMap(ms)}
               className={cn(

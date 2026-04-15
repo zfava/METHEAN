@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { governance, type GovernanceEvent } from "@/lib/api";
+import { useMobile } from "@/lib/useMobile";
 import StatusBadge from "@/components/StatusBadge";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
@@ -11,6 +12,7 @@ import EmptyState from "@/components/ui/EmptyState";
 export default function OverridesPage() {
   useEffect(() => { document.title = "Overrides | METHEAN"; }, []);
 
+  const isMobile = useMobile();
   const [overrides, setOverrides] = useState<GovernanceEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

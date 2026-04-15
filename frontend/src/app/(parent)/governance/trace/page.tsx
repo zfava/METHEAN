@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { governance, type GovernanceEvent } from "@/lib/api";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
+import { useMobile } from "@/lib/useMobile";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 import EmptyState from "@/components/ui/EmptyState";
@@ -22,6 +23,7 @@ const dotColor: Record<string, string> = {
 export default function TracePage() {
   useEffect(() => { document.title = "Decision Trace | METHEAN"; }, []);
 
+  const isMobile = useMobile();
   const [events, setEvents] = useState<GovernanceEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -129,7 +131,7 @@ export default function TracePage() {
                   {/* Expanded detail */}
                   {isOpen && (
                     <div className="mt-2 p-3 bg-(--color-page) rounded-[10px] text-xs text-(--color-text-secondary)">
-                      <div className="grid grid-cols-2 gap-2">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         <div><span className="text-(--color-text-tertiary)">Time:</span> {new Date(evt.created_at).toLocaleString()}</div>
                         <div><span className="text-(--color-text-tertiary)">Target ID:</span> <span className="font-mono">{evt.target_id.slice(0, 12)}...</span></div>
                         {evt.user_id && <div><span className="text-(--color-text-tertiary)">Actor:</span> <span className="font-mono">{evt.user_id.slice(0, 8)}...</span></div>}
