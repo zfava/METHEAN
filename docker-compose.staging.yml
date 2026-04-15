@@ -1,0 +1,98 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: methean_staging
+      POSTGRES_PASSWORD: methean_staging
+      POSTGRES_DB: methean_staging
+    ports:
+      - "5532:5432"
+    volumes:
+      - pgdata_staging:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U methean_staging"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6479:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8100:8000"
+    environment:
+      APP_ENV: staging
+      DATABASE_URL: postgresql+asyncpg://methean_staging:methean_staging@postgres:5432/methean_staging
+      DATABASE_URL_SYNC: postgresql://methean_staging:methean_staging@postgres:5432/methean_staging
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      AI_MOCK_ENABLED: "true"
+    env_file:
+      - .env.staging
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    command: >
+      gunicorn app.main:app
+      --worker-class uvicorn.workers.UvicornWorker
+      --workers 1
+      --bind 0.0.0.0:8000
+
+  celery-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      APP_ENV: staging
+      DATABASE_URL: postgresql+asyncpg://methean_staging:methean_staging@postgres:5432/methean_staging
+      DATABASE_URL_SYNC: postgresql://methean_staging:methean_staging@postgres:5432/methean_staging
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+      AI_MOCK_ENABLED: "true"
+    env_file:
+      - .env.staging
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    command: celery -A app.tasks.worker worker --loglevel=info --concurrency=1
+
+  celery-beat:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      APP_ENV: staging
+      CELERY_BROKER_URL: redis://redis:6379/1
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+    env_file:
+      - .env.staging
+    depends_on:
+      redis: { condition: service_healthy }
+    command: celery -A app.tasks.worker beat --loglevel=info
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3100:3000"
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8100/api/v1
+    depends_on:
+      - backend
+
+volumes:
+  pgdata_staging:
