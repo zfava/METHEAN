@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { wellbeing, type WellbeingAnomalyItem, type WellbeingAnomalyDetail, type WellbeingSummary, type WellbeingConfigData } from "@/lib/api";
 import { useToast } from "@/components/Toast";
+import { useMobile } from "@/lib/useMobile";
 import { useChild } from "@/lib/ChildContext";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
@@ -122,9 +123,9 @@ function AnomalyCard({ anomaly, childId, onUpdate }: {
 
         {/* Note input */}
         {showNote && (
-          <div className="flex gap-2 items-center">
+          <div className="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
             <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="What are you doing about it? (optional)"
-              className="flex-1 px-3 py-1.5 text-xs border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
+              className="flex-1 w-full px-3 py-1.5 text-xs border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
             <button onClick={() => { handleStatus("acknowledged", note); setShowNote(false); }}
               className="px-3 py-1.5 text-xs font-medium bg-(--color-accent) text-white rounded-[10px]">Save</button>
           </div>
@@ -273,6 +274,7 @@ export default function WellbeingPage() {
 
   const { selectedChild } = useChild();
   const { toast } = useToast();
+  const isMobile = useMobile();
   const [anomalies, setAnomalies] = useState<WellbeingAnomalyItem[]>([]);
   const [summary, setSummary] = useState<WellbeingSummary | null>(null);
   const [config, setConfig] = useState<WellbeingConfigData | null>(null);

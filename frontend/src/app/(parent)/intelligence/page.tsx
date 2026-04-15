@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { intelligence } from "@/lib/api";
 import { useToast } from "@/components/Toast";
+import { useMobile } from "@/lib/useMobile";
 import { useChild } from "@/lib/ChildContext";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
@@ -18,6 +19,7 @@ export default function IntelligencePage() {
 
   const { selectedChild } = useChild();
   const { toast } = useToast();
+  const isMobile = useMobile();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

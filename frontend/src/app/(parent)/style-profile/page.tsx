@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { styleVector, type StyleVectorData } from "@/lib/api";
 import { useToast } from "@/components/Toast";
+import { useMobile } from "@/lib/useMobile";
 import { useChild } from "@/lib/ChildContext";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
@@ -259,6 +260,7 @@ export default function StyleProfilePage() {
 
   const { selectedChild } = useChild();
   const { toast } = useToast();
+  const isMobile = useMobile();
   const [vector, setVector] = useState<StyleVectorData | null>(null);
   const [obsCount, setObsCount] = useState(0);
   const [message, setMessage] = useState("");
