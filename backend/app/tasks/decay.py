@@ -124,6 +124,12 @@ async def run_decay_batch(
                         },
                     )
                     cards_decayed += 1
+                    try:
+                        from app.core.metrics import fsrs_decays
+
+                        fsrs_decays.inc()
+                    except Exception:
+                        pass
 
             offset += batch_size
             await db.flush()

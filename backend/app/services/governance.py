@@ -375,6 +375,12 @@ async def evaluate_activity(
     # Any "require_review" sends to queue
     reviews = [e for e in blocking if e.action == "require_review"]
     if reviews:
+        try:
+            from app.core.metrics import governance_decisions
+
+            governance_decisions.labels(action="require_review").inc()
+        except Exception:
+            pass
         return GovernanceDecision(
             action="require_review",
             reason=reviews[0].reason,
@@ -397,6 +403,12 @@ async def evaluate_activity(
         )
 
     # All clear
+    try:
+        from app.core.metrics import governance_decisions
+
+        governance_decisions.labels(action="auto_approve").inc()
+    except Exception:
+        pass
     return GovernanceDecision(
         action="auto_approve",
         reason="All rules passed",
