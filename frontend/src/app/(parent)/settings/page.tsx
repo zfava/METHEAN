@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { auth, account, academicCalendar, household, familyInvites, dataExport, type User } from "@/lib/api";
+import { auth, account, academicCalendar, household, familyInvites, dataExport, compliance, type User } from "@/lib/api";
 import { useMobile } from "@/lib/useMobile";
 import { useToast } from "@/components/Toast";
 import PageHeader from "@/components/ui/PageHeader";
@@ -41,7 +41,9 @@ export default function SettingsPage() {
   // Household
   const [hhName, setHhName] = useState("");
   const [hhTimezone, setHhTimezone] = useState("America/New_York");
+  const [hhState, setHhState] = useState("");
   const [hhSaved, setHhSaved] = useState(false);
+  const [statesList, setStatesList] = useState<{code: string; name: string}[]>([]);
 
   // Password
   const [currentPw, setCurrentPw] = useState("");
@@ -54,8 +56,9 @@ export default function SettingsPage() {
     Promise.all([
       auth.me().then(setUser),
       household.get()
-        .then((d) => { if (d.name) setHhName(d.name); if (d.timezone) setHhTimezone(d.timezone); })
+        .then((d) => { if (d.name) setHhName(d.name); if (d.timezone) setHhTimezone(d.timezone); if (d.home_state) setHhState(d.home_state); })
         .catch(() => {}),
+      compliance.states().then((s: any[]) => setStatesList(s.map((x: any) => ({ code: x.code, name: x.name })))).catch(() => {}),
       academicCalendar.get().then((c) => {
         if (c.schedule_type) setCalType(c.schedule_type);
         if (c.total_instructional_weeks) setCalWeeks(c.total_instructional_weeks);
@@ -69,7 +72,7 @@ export default function SettingsPage() {
   }, []);
 
   async function saveHousehold() {
-    await household.update({ name: hhName, timezone: hhTimezone });
+    await household.update({ name: hhName, timezone: hhTimezone, home_state: hhState || null });
     setHhSaved(true);
     toast("Settings saved", "success");
     setTimeout(() => setHhSaved(false), 2000);
@@ -191,6 +194,16 @@ export default function SettingsPage() {
               className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)">
               {["America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles", "America/Anchorage", "Pacific/Honolulu", "UTC"].map((tz) => (
                 <option key={tz} value={tz}>{tz}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="text-xs font-medium text-(--color-text-secondary) block mb-1">Home State</label>
+            <select value={hhState} onChange={(e) => setHhState(e.target.value)}
+              className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)">
+              <option value="">Not set</option>
+              {statesList.map((s) => (
+                <option key={s.code} value={s.code}>{s.name} ({s.code})</option>
               ))}
             </select>
           </div>

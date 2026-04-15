@@ -18,6 +18,7 @@ class Household(Base):
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     timezone: Mapped[str] = mapped_column(String(50), default="America/New_York")
+    home_state: Mapped[str | None] = mapped_column(String(2), nullable=True)
     settings: Mapped[dict | None] = mapped_column(JSONB, default=dict)
     philosophical_profile: Mapped[dict | None] = mapped_column(JSONB, default=dict)
     # Billing

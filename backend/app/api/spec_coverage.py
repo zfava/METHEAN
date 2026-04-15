@@ -41,6 +41,7 @@ router = APIRouter(tags=["spec-coverage"])
 class HouseholdSettingsUpdate(BaseModel):
     name: str | None = Field(default=None, min_length=1, max_length=255)
     timezone: str | None = Field(default=None, max_length=50)
+    home_state: str | None = Field(default=None, max_length=2)
 
 
 class ChildUpdate(BaseModel):
@@ -104,6 +105,23 @@ async def _get_child_or_404(db: AsyncSession, child_id: uuid.UUID, household_id:
 # ══════════════════════════════════════════════════
 
 
+@router.get("/household/settings")
+async def get_household_settings(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    result = await db.execute(select(Household).where(Household.id == user.household_id))
+    household = result.scalar_one()
+    return {
+        "id": str(household.id),
+        "name": household.name,
+        "timezone": household.timezone,
+        "home_state": household.home_state,
+        "philosophical_profile": household.philosophical_profile or {},
+        "settings": household.settings or {},
+    }
+
+
 @router.put("/household/settings")
 async def update_household_settings(
     body: HouseholdSettingsUpdate,
@@ -116,8 +134,22 @@ async def update_household_settings(
         household.name = body.name
     if body.timezone is not None:
         household.timezone = body.timezone
+    if body.home_state is not None:
+        # Validate state code
+        from app.services.compliance_engine import STATE_REQUIREMENTS
+
+        if body.home_state and body.home_state not in STATE_REQUIREMENTS:
+            from fastapi import HTTPException
+
+            raise HTTPException(status_code=422, detail=f"Invalid state code: {body.home_state}")
+        household.home_state = body.home_state or None
     await db.flush()
-    return {"id": str(household.id), "name": household.name, "timezone": household.timezone}
+    return {
+        "id": str(household.id),
+        "name": household.name,
+        "timezone": household.timezone,
+        "home_state": household.home_state,
+    }
 
 
 VALID_PHILOSOPHIES = {"classical", "charlotte_mason", "unschooling", "eclectic", "montessori", "traditional", "custom"}
