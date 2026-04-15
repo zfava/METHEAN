@@ -16,6 +16,27 @@ const features = [
   { icon: "🧒", title: "Child Learning Space", desc: "Personalized themes, Socratic tutor." },
 ];
 
+const steps = [
+  { num: "01", title: "Set Your Rules.", body: "Choose your educational philosophy. Define content boundaries. Set how much authority you give the AI. The system creates constitutional governance rules that AI cannot override." },
+  { num: "02", title: "AI Builds, You Approve.", body: "METHEAN generates curriculum, weekly plans, and teaching guidance tailored to your family. Everything routes through your governance rules before reaching your child. Nothing happens without your authorization." },
+  { num: "03", title: "Watch Mastery Grow.", body: "Spaced repetition tracks what your child actually knows, not just what they completed. Five intelligence engines learn your child's patterns. A family at month three gets a qualitatively different experience than day one." },
+];
+
+const testimonials = [
+  { quote: "We tried three other platforms before METHEAN. This is the first one that actually understands that I am the teacher and AI is the assistant, not the other way around.", who: "Classical homeschool family, 4 children" },
+  { quote: "The compliance dashboard alone is worth the subscription. I used to spend hours every quarter pulling records together. Now it is just there.", who: "Charlotte Mason family, Utah" },
+  { quote: "My kids actually ask to do their learning time. The child experience is thoughtful in a way that respects them without dumbing things down.", who: "Eclectic homeschool, 3 children" },
+];
+
+const comparisons = [
+  ["Track completion", "Track mastery with spaced repetition"],
+  ["AI decides", "AI recommends, you decide"],
+  ["Generic curriculum", "Philosophy-driven, tailored to your family"],
+  ["No compliance help", "51-state compliance with document generation"],
+  ["No audit trail", "Full governance trail, every decision logged"],
+  ["Same experience forever", "Intelligence compounds over time"],
+];
+
 export default function LandingPage() {
   const router = useRouter();
   const [checking, setChecking] = useState(true);
@@ -61,6 +82,114 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── How It Works ── */}
+      <section className="py-24 px-6 bg-(--color-page)">
+        <div className="max-w-[1100px] mx-auto">
+          <p className="text-[13px] uppercase tracking-[0.1em] text-(--color-text-tertiary) text-center mb-3">How It Works</p>
+          <p className="text-[22px] font-medium text-(--color-text) text-center mb-12 tracking-tight">Three steps to sovereign education.</p>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {steps.map((s) => (
+              <div key={s.num} className="bg-(--color-surface) rounded-[16px] p-7 border border-(--color-border)">
+                <div className="relative w-14 h-14 mb-4">
+                  <div className="absolute inset-0 rounded-full" style={{ background: "rgba(74,111,165,0.08)" }} />
+                  <span className="absolute inset-0 flex items-center justify-center text-[28px] font-bold text-(--color-accent)">{s.num}</span>
+                </div>
+                <h3 className="text-[17px] font-semibold text-(--color-text) mb-2">{s.title}</h3>
+                <p className="text-[14px] text-(--color-text-secondary) leading-relaxed">{s.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Social Proof ── */}
+      <section className="py-20 px-6" style={{ background: "#F5F1E8" }}>
+        <div className="max-w-[1100px] mx-auto">
+          <p className="text-[22px] font-medium text-(--color-text) text-center mb-10 tracking-tight">Built for families like yours.</p>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            {/* REPLACE WITH REAL TESTIMONIALS FROM LOI FAMILIES */}
+            {testimonials.map((t, i) => (
+              <div key={i} className="bg-(--color-surface) rounded-[16px] p-6 border border-(--color-border)">
+                <p className="text-[14px] italic text-(--color-text-secondary) leading-relaxed">&ldquo;{t.quote}&rdquo;</p>
+                <div className="w-10 h-px bg-(--color-brand-gold) my-4" />
+                <p className="text-[13px] font-medium" style={{ color: "#C6A24E" }}>{t.who}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── See It In Action ── */}
+      <section className="px-6 py-24" style={{ background: "#0F1B2D" }}>
+        <div className="max-w-[1100px] mx-auto">
+          <p className="text-[13px] uppercase tracking-[0.1em] text-white/40 text-center mb-3">See It In Action</p>
+          <p className="text-[22px] font-medium text-white text-center mb-12 tracking-tight">Three experiences. One platform.</p>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+            {/* Parent Dashboard mockup */}
+            <div className="bg-[#1A2740] rounded-[16px] overflow-hidden border border-white/[0.05]">
+              <div className="h-[200px] bg-[#0F1B2D] p-4 relative">
+                <div className="h-2 w-full bg-[#1A2740] rounded mb-4" />
+                <div className="flex gap-2 justify-center mb-4">
+                  {[1,2,3].map(n => (
+                    <div key={n} className="w-[60px] h-[40px] bg-[#1A2740] rounded-lg flex items-center justify-center">
+                      <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="rgba(74,111,165,0.4)" strokeWidth="2" /><circle cx="10" cy="10" r="8" fill="none" stroke="rgba(74,111,165,0.8)" strokeWidth="2" strokeDasharray={`${n*12} 50`} /></svg>
+                    </div>
+                  ))}
+                </div>
+                <div className="space-y-2 px-2">
+                  <div className="h-2 w-[80%] bg-white/5 rounded" />
+                  <div className="h-2 w-[60%] bg-white/5 rounded" />
+                  <div className="h-2 w-[70%] bg-white/5 rounded" />
+                </div>
+                <div className="absolute top-3 right-3 w-2 h-2 rounded-full" style={{ background: "#C6A24E" }} />
+              </div>
+              <div className="p-5">
+                <p className="text-[15px] text-white font-medium mb-1">Parent Dashboard</p>
+                <p className="text-[13px] text-white/40 leading-relaxed">See every child&apos;s progress, pending approvals, alerts, and mastery trends. One screen. Complete control.</p>
+              </div>
+            </div>
+            {/* Child Learning Space mockup */}
+            <div className="bg-[#1A2740] rounded-[16px] overflow-hidden border border-white/[0.05]">
+              <div className="h-[200px] p-4 relative" style={{ background: "linear-gradient(180deg, #E8F5E9 0%, #C8E6C9 100%)" }}>
+                <div className="flex justify-center mb-3">
+                  <div className="w-8 h-8 rounded-full bg-white/30 flex items-center justify-center text-sm">🦉</div>
+                </div>
+                <div className="flex justify-center mb-4">
+                  <svg width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="none" stroke="rgba(0,0,0,0.1)" strokeWidth="3" /><circle cx="20" cy="20" r="16" fill="none" stroke="rgba(45,106,79,0.5)" strokeWidth="3" strokeDasharray="60 100" transform="rotate(-90 20 20)" /></svg>
+                </div>
+                <div className="space-y-2 px-4">
+                  {[1,2,3].map(n => (
+                    <div key={n} className="h-8 bg-white/15 rounded-lg" />
+                  ))}
+                </div>
+              </div>
+              <div className="p-5">
+                <p className="text-[15px] text-white font-medium mb-1">Child&apos;s Learning Space</p>
+                <p className="text-[13px] text-white/40 leading-relaxed">Themed backgrounds, guided lessons, Socratic tutoring, and celebration on completion. Designed for children, not adults.</p>
+              </div>
+            </div>
+            {/* Governance Trail mockup */}
+            <div className="bg-[#1A2740] rounded-[16px] overflow-hidden border border-white/[0.05]">
+              <div className="h-[200px] bg-[#0F1B2D] p-4">
+                <div className="space-y-4 pt-4">
+                  {[["#2D6A4F","80%"],["#C6A24E","65%"],["#A63D40","55%"]].map(([color,w],i) => (
+                    <div key={i} className="flex items-center gap-3 px-2">
+                      <div className="w-[6px] h-[6px] rounded-full shrink-0" style={{ background: color }} />
+                      <div className="h-2 rounded" style={{ width: w, background: "rgba(255,255,255,0.08)" }} />
+                      <span className="text-[8px] text-white/20 shrink-0">2:14pm</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="p-5">
+                <p className="text-[15px] text-white font-medium mb-1">Governance Trail</p>
+                <p className="text-[13px] text-white/40 leading-relaxed">Every AI decision logged. Every override recorded. Every rule enforcement visible. Your proof of sovereignty.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Features (dark bento) ── */}
       <section id="features" className="px-6 py-24" style={{ background: "#0F1B2D" }}>
         <div className="max-w-[1100px] mx-auto">
@@ -83,6 +212,32 @@ export default function LandingPage() {
                 <div className="text-xl mb-2">{f.icon}</div>
                 <div className="text-white font-medium text-[15px] mb-1">{f.title}</div>
                 <div className="text-white/40 text-[13px] leading-relaxed">{f.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Built Different ── */}
+      <section className="py-20 px-6 bg-(--color-page)">
+        <div className="max-w-[900px] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-(--color-border) rounded-[16px] overflow-hidden bg-(--color-surface)">
+            {/* Headers */}
+            <div className="px-6 py-4 border-b border-(--color-border) bg-(--color-page)">
+              <p className="text-[15px] font-medium text-(--color-text-secondary)">Other platforms</p>
+            </div>
+            <div className="px-6 py-4 border-b border-(--color-border) bg-(--color-page)">
+              <p className="text-[15px] font-medium" style={{ color: "#C6A24E" }}>METHEAN</p>
+            </div>
+            {/* Rows */}
+            {comparisons.map(([left, right], i) => (
+              <div key={i} className="contents">
+                <div className={`px-6 py-3.5 flex items-center gap-2 text-[14px] text-(--color-text-secondary) ${i < comparisons.length - 1 ? "border-b border-(--color-border)" : ""}`}>
+                  <span className="text-(--color-text-tertiary)">✗</span> {left}
+                </div>
+                <div className={`px-6 py-3.5 flex items-center gap-2 text-[14px] text-(--color-text) ${i < comparisons.length - 1 ? "border-b border-(--color-border)" : ""}`}>
+                  <span style={{ color: "#C6A24E" }}>✓</span> {right}
+                </div>
               </div>
             ))}
           </div>
