@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { tutor } from "@/lib/api";
+import { streamTutorMessage } from "@/lib/api";
 
 interface TutorChatProps {
   activityId: string;
@@ -37,6 +37,7 @@ export default function TutorChat({
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
   const [revealedHints, setRevealedHints] = useState<Set<number>>(new Set());
   const [userScrolled, setUserScrolled] = useState(false);
   const [sendTimes, setSendTimes] = useState<number[]>([]);
@@ -100,19 +101,57 @@ export default function TutorChat({
     setMessages(updated);
     setLoading(true);
 
+    setIsStreaming(true);
+    setMessages(prev => [...prev, { role: "tutor", text: "", ts: Date.now() }]);
+
     try {
       const history = updated.map(m => ({ role: m.role, text: m.text }));
-      const resp = await tutor.message(activityId, childId, msg, history);
-      setMessages(prev => [...prev, {
-        role: "tutor", text: resp.message, hints: resp.hints || [], ts: Date.now(),
-      }]);
+      let accumulatedText = "";
+
+      await streamTutorMessage(
+        activityId, childId, msg, history,
+        (token) => {
+          accumulatedText += token;
+          setMessages(prev => {
+            const copy = [...prev];
+            const last = copy[copy.length - 1];
+            if (last?.role === "tutor") copy[copy.length - 1] = { ...last, text: accumulatedText };
+            return copy;
+          });
+        },
+        (hints) => {
+          setMessages(prev => {
+            const copy = [...prev];
+            const last = copy[copy.length - 1];
+            if (last?.role === "tutor") {
+              let cleanText = last.text;
+              if (cleanText.includes("HINT:")) cleanText = cleanText.split("HINT:")[0].trim();
+              copy[copy.length - 1] = { ...last, text: cleanText, hints };
+            }
+            return copy;
+          });
+          setIsStreaming(false);
+          setLoading(false);
+        },
+        (errorMsg) => {
+          setMessages(prev => {
+            const copy = [...prev];
+            const last = copy[copy.length - 1];
+            if (last?.role === "tutor") copy[copy.length - 1] = { ...last, text: errorMsg };
+            return copy;
+          });
+          setIsStreaming(false);
+          setLoading(false);
+        },
+      );
     } catch {
-      setMessages(prev => [...prev, {
-        role: "tutor",
-        text: "I'm having trouble thinking right now. Try asking again in a moment.",
-        ts: Date.now(),
-      }]);
-    } finally {
+      setMessages(prev => {
+        const copy = [...prev];
+        const last = copy[copy.length - 1];
+        if (last?.role === "tutor") copy[copy.length - 1] = { ...last, text: "I'm having trouble thinking right now. Try asking again in a moment." };
+        return copy;
+      });
+      setIsStreaming(false);
       setLoading(false);
     }
   }
@@ -209,6 +248,10 @@ export default function TutorChat({
                   <div className={`max-w-[85%] md:max-w-[60%] ${grouped ? "mt-0.5" : "mt-3"}`} role="status">
                     <div className="bg-[#F5F0E6] text-(--color-text) rounded-2xl rounded-bl-md px-4 py-3 text-[15px] leading-relaxed">
                       {msg.text}
+                      {isStreaming && i === messages.length - 1 && (
+                        <span className="inline-block w-0.5 h-4 bg-(--color-text) ml-0.5 align-text-bottom"
+                              style={{ animation: "cursor-blink 0.8s step-end infinite" }} />
+                      )}
                     </div>
 
                     {/* Hint blocks */}
@@ -237,8 +280,8 @@ export default function TutorChat({
             );
           })}
 
-          {/* Typing indicator */}
-          {loading && (
+          {/* Typing indicator (hidden during streaming — live text replaces it) */}
+          {loading && !isStreaming && (
             <div className="max-w-[85%] mt-3">
               <div className="bg-[#F5F0E6] rounded-2xl rounded-bl-md px-4 py-3 flex items-center gap-1.5 w-16">
                 {[0, 150, 300].map(d => (
@@ -301,8 +344,13 @@ export default function TutorChat({
             0%, 60%, 100% { opacity: 0.3; }
             30% { opacity: 1; }
           }
+          @keyframes cursor-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+          }
           @media (prefers-reduced-motion: reduce) {
             @keyframes typing-pulse { from, to { opacity: 0.6; } }
+            @keyframes cursor-blink { from, to { opacity: 1; } }
           }
         `}</style>
       </div>

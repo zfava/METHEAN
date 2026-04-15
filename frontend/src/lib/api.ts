@@ -217,6 +217,57 @@ export const tutor = {
     }),
 };
 
+export async function streamTutorMessage(
+  activityId: string,
+  childId: string,
+  message: string,
+  conversationHistory: Array<{ role: string; text: string }>,
+  onToken: (text: string) => void,
+  onDone: (hints: string[], aiRunId: string) => void,
+  onError: (message: string) => void,
+): Promise<void> {
+  const url = `${API_BASE}/tutor/${activityId}/stream`;
+  const csrfToken = getCookie("csrf_token");
+
+  const response = await fetch(url, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      ...(csrfToken ? { "X-CSRF-Token": csrfToken } : {}),
+    },
+    body: JSON.stringify({ child_id: childId, message, conversation_history: conversationHistory }),
+  });
+
+  if (!response.ok) {
+    onError("I had trouble connecting. Try again in a moment.");
+    return;
+  }
+
+  const reader = response.body?.getReader();
+  if (!reader) { onError("Streaming not supported."); return; }
+
+  const decoder = new TextDecoder();
+  let buffer = "";
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    const lines = buffer.split("\n");
+    buffer = lines.pop() || "";
+    for (const line of lines) {
+      if (!line.startsWith("data: ")) continue;
+      try {
+        const event = JSON.parse(line.slice(6));
+        if (event.type === "token") onToken(event.text);
+        else if (event.type === "done") onDone(event.hints || [], event.ai_run_id || "");
+        else if (event.type === "error") onError(event.message || "Something went wrong.");
+      } catch { /* ignore malformed SSE */ }
+    }
+  }
+}
+
 // Attempts
 export const attempts = {
   start: (activityId: string, childId: string) =>

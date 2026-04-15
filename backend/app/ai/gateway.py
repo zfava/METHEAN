@@ -230,6 +230,43 @@ async def call_ai(
     }
 
 
+async def stream_claude(
+    system_prompt: str,
+    user_prompt: str,
+    max_tokens: int,
+):
+    """Stream tokens from Claude. Yields (event_type, data) tuples.
+
+    Event types: "token" (text chunk), "done" (usage stats), "error" (message).
+    """
+    import anthropic
+
+    client = anthropic.AsyncAnthropic(api_key=settings.AI_API_KEY)
+
+    try:
+        async with client.messages.stream(
+            model=settings.AI_PRIMARY_MODEL,
+            max_tokens=max_tokens,
+            temperature=settings.AI_TEMPERATURE,
+            system=system_prompt,
+            messages=[{"role": "user", "content": user_prompt}],
+        ) as stream:
+            async for text in stream.text_stream:
+                yield ("token", text)
+
+            final = await stream.get_final_message()
+            yield (
+                "done",
+                {
+                    "model": final.model,
+                    "input_tokens": final.usage.input_tokens,
+                    "output_tokens": final.usage.output_tokens,
+                },
+            )
+    except Exception as e:
+        yield ("error", str(e))
+
+
 def _get_provider_chain() -> list[AIProvider]:
     """Get ordered list of providers to try."""
     chain = []

@@ -21,10 +21,12 @@ from app.ai.prompts import (
     TUTOR_SYSTEM,
 )
 from app.api.deps import PaginationParams, get_current_user, get_db, require_permission, require_role
+from app.core.config import settings
 from app.models.curriculum import LearningMap, LearningNode
 from app.models.enums import (
     ActivityStatus,
     ActivityType,
+    AIRunStatus,
     GovernanceAction,
     MasteryLevel,
     PlanStatus,
@@ -1016,6 +1018,179 @@ Continue the Socratic dialogue. Reference what was discussed earlier if relevant
         hints=output.get("hints", []),
         encouragement=output.get("encouragement", True),
         ai_run_id=result["ai_run_id"],
+    )
+
+
+@router.post("/tutor/{activity_id}/stream")
+async def tutor_stream(
+    activity_id: uuid.UUID,
+    body: TutorMessageRequest,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    """Stream tutor response token-by-token via Server-Sent Events."""
+    import asyncio
+
+    from starlette.responses import StreamingResponse
+
+    from app.ai.gateway import stream_claude
+    from app.ai.prompts import build_philosophical_constraints
+
+    # Verify activity
+    act_result = await db.execute(
+        select(Activity).where(Activity.id == activity_id, Activity.household_id == user.household_id)
+    )
+    activity = act_result.scalar_one_or_none()
+    if not activity:
+        raise HTTPException(status_code=404, detail="Activity not found")
+
+    # Build context (same as non-streaming)
+    node_title = "General"
+    content_guidance = ""
+    if activity.node_id:
+        node_result = await db.execute(select(LearningNode).where(LearningNode.id == activity.node_id))
+        node = node_result.scalar_one_or_none()
+        if node:
+            node_title = node.title
+            if node.content and node.content.get("teaching_guidance"):
+                tg = node.content["teaching_guidance"]
+                parts = []
+                if tg.get("socratic_questions"):
+                    parts.append(f"Key questions to ask: {', '.join(tg['socratic_questions'][:3])}")
+                if tg.get("common_misconceptions"):
+                    parts.append(f"Watch for misconceptions: {', '.join(tg['common_misconceptions'][:2])}")
+                if tg.get("scaffolding_sequence"):
+                    parts.append(f"Scaffolding: {' -> '.join(tg['scaffolding_sequence'][:3])}")
+                if parts:
+                    content_guidance = "\n\nTEACHING GUIDANCE:\n" + "\n".join(f"- {p}" for p in parts)
+
+    conversation_context = ""
+    if body.conversation_history:
+        recent = body.conversation_history[-10:]
+        lines = []
+        for msg in recent:
+            role_label = "Child" if msg.get("role") == "child" else "Tutor"
+            lines.append(f"{role_label}: {msg.get('text', '')}")
+        conversation_context = "\n\nCONVERSATION SO FAR:\n" + "\n".join(lines)
+
+    user_prompt = f"""Activity: {activity.title}
+Learning Topic: {node_title}
+{content_guidance}
+{conversation_context}
+
+Child's latest message: {body.message}
+
+Respond in plain text as the Socratic tutor. Do NOT use JSON. Just speak naturally to the child. If you want to include a hint, put it on its own line starting with "HINT:" at the very end of your response."""
+
+    # Assemble context (advisory)
+    try:
+        from app.services.context_assembly import assemble_context
+
+        if body.child_id:
+            assembled = await assemble_context(
+                db,
+                role="tutor",
+                child_id=body.child_id,
+                household_id=user.household_id,
+                activity_id=activity_id,
+                node_id=activity.node_id,
+            )
+            if assembled.get("context_text"):
+                user_prompt += f"\n\n{assembled['context_text']}"
+    except Exception:
+        pass
+
+    phil = await _get_philosophical_profile(db, user.household_id)
+    system = TUTOR_SYSTEM
+    constraints = build_philosophical_constraints(phil)
+    if constraints:
+        system = system + "\n" + constraints
+
+    # Mock fallback
+    if not settings.AI_API_KEY or settings.AI_MOCK_ENABLED:
+        mock_text = (
+            "That's a great start! Can you tell me more about how you arrived at that answer? What steps did you take?"
+        )
+
+        async def mock_stream():
+            words = mock_text.split(" ")
+            for i, word in enumerate(words):
+                chunk = word if i == 0 else " " + word
+                yield f"data: {json.dumps({'type': 'token', 'text': chunk})}\n\n"
+                await asyncio.sleep(0.05)
+            yield f"data: {json.dumps({'type': 'done', 'hints': ['Think about the relationship between the parts'], 'ai_run_id': str(uuid.uuid4())})}\n\n"
+
+        return StreamingResponse(
+            mock_stream(),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+                "X-Accel-Buffering": "no",
+            },
+        )
+
+    # Log AIRun
+    ai_run = AIRun(
+        household_id=user.household_id,
+        triggered_by=user.id,
+        run_type="tutor",
+        status=AIRunStatus.completed,
+        started_at=datetime.now(UTC),
+        input_log={"system_prompt": system[:500], "user_prompt": user_prompt[:500]},
+    )
+    db.add(ai_run)
+    await db.flush()
+    run_id = ai_run.id
+    full_text: list[str] = []
+
+    async def event_generator():
+        async for event_type, data in stream_claude(system, user_prompt, settings.AI_MAX_TOKENS):
+            if event_type == "token":
+                full_text.append(data)
+                yield f"data: {json.dumps({'type': 'token', 'text': data})}\n\n"
+            elif event_type == "done":
+                accumulated = "".join(full_text)
+                hints: list[str] = []
+                if "HINT:" in accumulated:
+                    parts = accumulated.rsplit("HINT:", 1)
+                    hints = [parts[1].strip()]
+                yield f"data: {json.dumps({'type': 'done', 'hints': hints, 'ai_run_id': str(run_id)})}\n\n"
+                try:
+                    ai_run.output_log = {"message": accumulated[:1000], "hints": hints}
+                    ai_run.completed_at = datetime.now(UTC)
+                    ai_run.model_used = data.get("model", "")
+                    ai_run.input_tokens = data.get("input_tokens", 0)
+                    ai_run.output_tokens = data.get("output_tokens", 0)
+                    await db.commit()
+                except Exception:
+                    pass
+                try:
+                    from app.services.intelligence import record_tutor_interaction
+
+                    if body.child_id:
+                        await record_tutor_interaction(
+                            db,
+                            body.child_id,
+                            user.household_id,
+                            subject=node_title or activity.title or "general",
+                            messages_count=len(body.conversation_history or []) + 1,
+                            hints_used=len(hints),
+                            self_corrections=0,
+                        )
+                except Exception:
+                    pass
+            elif event_type == "error":
+                yield f"data: {json.dumps({'type': 'error', 'message': 'I had trouble thinking. Try again in a moment.'})}\n\n"
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
     )
 
 
