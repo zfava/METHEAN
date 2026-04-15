@@ -585,6 +585,11 @@ async def approve_activity(
         metadata={"source": "manual"},
     )
 
+    # Invalidate governance queue cache
+    from app.core.cache import cache_delete_pattern
+
+    await cache_delete_pattern(f"gov_queue:{user.household_id}:*")
+
     return {"activity_id": str(activity_id), "status": "approved"}
 
 
@@ -625,6 +630,10 @@ async def reject_activity(
         reason=body.reason or "Parent rejected",
         metadata={"source": "manual"},
     )
+
+    from app.core.cache import cache_delete_pattern
+
+    await cache_delete_pattern(f"gov_queue:{user.household_id}:*")
 
     return {"activity_id": str(activity_id), "status": "rejected"}
 
@@ -1448,7 +1457,13 @@ async def governance_queue(
     pagination: PaginationParams = Depends(),
 ) -> dict:
     """All activities pending governance approval across all children."""
+    from app.core.cache import cache_get, cache_set
     from app.models.identity import Child
+
+    cache_key = f"gov_queue:{user.household_id}:{pagination.skip}:{pagination.limit}"
+    cached = await cache_get(cache_key)
+    if cached:
+        return cached
 
     base = select(Activity).where(
         Activity.household_id == user.household_id,
@@ -1529,9 +1544,11 @@ async def governance_queue(
             }
         )
 
-    return {
+    response = {
         "items": items,
         "total": total,
         "skip": pagination.skip,
         "limit": pagination.limit,
     }
+    await cache_set(cache_key, response, ttl_seconds=15)
+    return response

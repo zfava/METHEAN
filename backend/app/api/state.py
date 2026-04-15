@@ -11,6 +11,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import PaginationParams, get_current_user, get_db
+from app.core.cache import cache_get, cache_set
 from app.models.curriculum import (
     ChildMapEnrollment,
     LearningEdge,
@@ -73,6 +74,12 @@ async def get_child_state(
     user: User = Depends(get_current_user),
 ) -> ChildStateResponse:
     """Full state across all enrolled maps: every node with mastery, FSRS data."""
+    # Check cache first (30s TTL)
+    cache_key = f"child_state:{user.household_id}:{child_id}"
+    cached = await cache_get(cache_key)
+    if cached:
+        return ChildStateResponse(**cached)
+
     await _get_child_or_404(db, child_id, user.household_id)
 
     # Get all enrolled maps
@@ -171,7 +178,7 @@ async def get_child_state(
         else:
             not_started += 1
 
-    return ChildStateResponse(
+    response = ChildStateResponse(
         child_id=child_id,
         nodes=node_responses,
         total_nodes=len(nodes),
@@ -179,6 +186,8 @@ async def get_child_state(
         in_progress_count=in_progress,
         not_started_count=not_started,
     )
+    await cache_set(cache_key, response.model_dump(), ttl_seconds=30)
+    return response
 
 
 @router.get(

@@ -10,6 +10,7 @@ from datetime import UTC, datetime
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.cache import cache_delete
 from app.models.enums import ActivityStatus, AttemptStatus
 from app.models.governance import Activity, Attempt
 from app.services import achievements as achievements_svc
@@ -247,6 +248,9 @@ async def submit_attempt(
         )
     except Exception:
         pass  # Achievement checking is non-blocking
+
+    # Invalidate cached child state
+    await cache_delete(f"child_state:{household_id}:{attempt.child_id}")
 
     return {
         "attempt": attempt,

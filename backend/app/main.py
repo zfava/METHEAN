@@ -39,6 +39,11 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.redis = redis
     logger.info("redis_connected", url=settings.REDIS_URL)
 
+    # Initialize cache
+    from app.core.cache import init_cache
+
+    init_cache(redis)
+
     logger.info("app_started", env=settings.APP_ENV)
     yield
 
