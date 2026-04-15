@@ -185,3 +185,38 @@ def compliance_warning_email(
         <a href="https://methean.app/compliance" style="display:inline-block;background:#A63D40;color:white;padding:10px 24px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;">Check Compliance</a>
     </div>"""
     return _base(f"Compliance warning — {child_name}", body)
+
+
+def welcome_email(parent_name: str) -> str:
+    """Welcome email for new registrations."""
+    body = f"""
+    <h2 style="font-size:20px;color:#0F1B2D;margin:0 0 8px;">Welcome to METHEAN, {parent_name}!</h2>
+    <p style="font-size:14px;color:#6B6B6B;line-height:1.6;margin:0 0 16px;">
+        You've taken the first step toward governing your children's education with precision and confidence.
+    </p>
+    <p style="font-size:14px;color:#1A1A1A;font-weight:600;margin:0 0 8px;">Here's how to get started:</p>
+    <ol style="font-size:14px;color:#6B6B6B;line-height:1.8;margin:0 0 20px;padding-left:20px;">
+        <li>Set your family's educational philosophy</li>
+        <li>Add your children</li>
+        <li>Generate your first curriculum</li>
+    </ol>
+    <div style="text-align:center;">
+        <a href="https://methean.app/dashboard" style="display:inline-block;background:#4A6FA5;color:white;padding:12px 28px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">Go to Dashboard</a>
+    </div>"""
+    return _base("Welcome to METHEAN", body)
+
+
+def password_reset_email(reset_url: str) -> str:
+    """Password reset email with secure link."""
+    body = f"""
+    <h2 style="font-size:20px;color:#0F1B2D;margin:0 0 8px;">Reset your password</h2>
+    <p style="font-size:14px;color:#6B6B6B;line-height:1.6;margin:0 0 20px;">
+        Click the button below to set a new password. This link expires in 1 hour.
+    </p>
+    <div style="text-align:center;margin:0 0 20px;">
+        <a href="{reset_url}" style="display:inline-block;background:#4A6FA5;color:white;padding:14px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">Reset Password</a>
+    </div>
+    <p style="font-size:12px;color:#9A9A9A;margin:0;">
+        If you didn't request this, you can safely ignore this email. Your password won't change.
+    </p>"""
+    return _base("Reset your METHEAN password", body)

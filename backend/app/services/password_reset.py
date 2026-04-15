@@ -30,14 +30,10 @@ async def generate_reset_token(db: AsyncSession, email: str) -> bool:
     }
 
     reset_url = f"{settings.APP_URL}/auth/reset?token={token}"
-    html = f"""
-    <div style="font-family:-apple-system,sans-serif;max-width:480px;margin:0 auto;padding:20px;">
-        <h2 style="color:#0F1B2D;">Reset your METHEAN password</h2>
-        <p style="color:#6B6B6B;">Click below to set a new password. This link expires in 1 hour.</p>
-        <a href="{reset_url}" style="display:inline-block;background:#4A6FA5;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;">Reset Password</a>
-        <p style="color:#9A9A9A;font-size:12px;margin-top:16px;">If you didn't request this, ignore this email.</p>
-    </div>"""
 
+    from app.services.email_templates import password_reset_email
+
+    html = password_reset_email(reset_url)
     await send_email(user.email, "Reset your METHEAN password", html)
     return True
 

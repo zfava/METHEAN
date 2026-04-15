@@ -1,15 +1,15 @@
 """Tests for email service and templates."""
 
-from unittest.mock import AsyncMock, patch, MagicMock
+from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
 from app.services.email_templates import (
-    daily_summary_email,
-    mastery_milestone_email,
-    governance_alert_email,
-    weekly_digest_email,
     compliance_warning_email,
+    daily_summary_email,
+    governance_alert_email,
+    mastery_milestone_email,
+    weekly_digest_email,
 )
 
 
@@ -81,3 +81,69 @@ def test_email_templates_include_brand():
 
     html = weekly_digest_email("Test", {}, {})
     assert "METHEAN" in html
+
+
+def test_welcome_email_template():
+    """Welcome email contains name and getting started steps."""
+    from app.services.email_templates import welcome_email
+
+    html = welcome_email("Zack")
+    assert "Zack" in html
+    assert "METHEAN" in html
+    assert "philosophy" in html.lower()
+    assert "<html" in html.lower()
+
+
+def test_password_reset_email_template():
+    """Password reset email contains the reset link."""
+    from app.services.email_templates import password_reset_email
+
+    url = "https://methean.app/auth/reset?token=abc123"
+    html = password_reset_email(url)
+    assert url in html
+    assert "expires" in html.lower()
+    assert "METHEAN" in html
+
+
+@pytest.mark.asyncio
+@patch("app.services.email.settings")
+@patch("app.services.email.httpx.AsyncClient")
+async def test_send_email_handles_api_error(mock_client_cls, mock_settings):
+    """Email returns False on Resend API error, doesn't crash."""
+    mock_settings.RESEND_API_KEY = "test-key"
+    mock_settings.EMAIL_FROM = "METHEAN <test@methean.app>"
+
+    mock_response = MagicMock()
+    mock_response.status_code = 422
+    mock_client = AsyncMock()
+    mock_client.post.return_value = mock_response
+    mock_client.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client.__aexit__ = AsyncMock(return_value=False)
+    mock_client_cls.return_value = mock_client
+
+    from app.services.email import send_email
+
+    result = await send_email("bad@test.com", "Subject", "<p>Body</p>")
+    assert result is False
+
+
+@pytest.mark.asyncio
+@patch("app.services.email.settings")
+@patch("app.services.email.httpx.AsyncClient")
+async def test_send_email_handles_timeout(mock_client_cls, mock_settings):
+    """Email returns False on timeout, doesn't crash."""
+    import httpx as real_httpx
+
+    mock_settings.RESEND_API_KEY = "test-key"
+    mock_settings.EMAIL_FROM = "METHEAN <test@methean.app>"
+
+    mock_client = AsyncMock()
+    mock_client.post.side_effect = real_httpx.TimeoutException("timeout")
+    mock_client.__aenter__ = AsyncMock(return_value=mock_client)
+    mock_client.__aexit__ = AsyncMock(return_value=False)
+    mock_client_cls.return_value = mock_client
+
+    from app.services.email import send_email
+
+    result = await send_email("timeout@test.com", "Subject", "<p>Body</p>")
+    assert result is False
