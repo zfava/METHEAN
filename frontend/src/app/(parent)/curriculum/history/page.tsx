@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { annualCurriculum } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
+import { useMobile } from "@/lib/useMobile";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
@@ -14,6 +15,7 @@ export default function CurriculumHistoryPage() {
   useEffect(() => { document.title = "History | METHEAN"; }, []);
 
   const { selectedChild } = useChild();
+  const isMobile = useMobile();
   const [history, setHistory] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");

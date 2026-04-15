@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { useMobile } from "@/lib/useMobile";
 import { curriculum, educationPlan, type MapNodeState } from "@/lib/api";
 import { useToast } from "@/components/Toast";
 import { useChild } from "@/lib/ChildContext";
@@ -34,6 +35,7 @@ function CurriculumMapperPageContent() {
   useEffect(() => { document.title = "Map Curriculum | METHEAN"; }, []);
 
   const params = useSearchParams();
+  const isMobile = useMobile();
   const paramSubject = params.get("subject") || "";
   const paramYear = params.get("year") || "";
   const paramChildId = params.get("child") || "";
@@ -262,7 +264,7 @@ function CurriculumMapperPageContent() {
               {EXAMPLE_TOC}
             </pre>
           )}
-          <div className="flex gap-2 mt-4">
+          <div className="flex flex-col sm:flex-row gap-2 mt-4">
             <Button variant="ghost" size="md" onClick={() => setStep(1)}>Back</Button>
             <Button
               variant="primary" size="lg" className="flex-1"
@@ -289,7 +291,7 @@ function CurriculumMapperPageContent() {
             className="w-full px-3 py-2.5 text-sm border border-(--color-border-strong) rounded-[10px]"
           />
           <p className="text-[10px] text-(--color-text-tertiary) mt-1.5">Leave blank if you&apos;re starting from the beginning.</p>
-          <div className="flex gap-2 mt-5">
+          <div className="flex flex-col sm:flex-row gap-2 mt-5">
             <Button variant="ghost" size="md" onClick={() => setStep(2)}>Back</Button>
             <Button variant="gold" size="lg" className="flex-1" onClick={runMapping}>
               Map It
@@ -399,7 +401,7 @@ function CurriculumMapperPageContent() {
             </div>
           </Card>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <Button variant="ghost" size="md" onClick={reset}>Start Over</Button>
             <Button
               variant="primary" size="lg" className="flex-1"

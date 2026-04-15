@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
+import { useMobile } from "@/lib/useMobile";
 import { annualCurriculum } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
@@ -29,6 +30,7 @@ function YearViewPageContent() {
   useEffect(() => { document.title = "Year Plan | METHEAN"; }, []);
 
   const params = useSearchParams();
+  const isMobile = useMobile();
   const curriculumId = params.get("id") || "";
   const { selectedChild } = useChild();
 
