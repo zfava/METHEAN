@@ -44,7 +44,7 @@ async def send_daily_summary_for_household(
     if not users or not children:
         return 0
 
-    today = date.today().isoformat()
+    today = date.today()
     children_data = []
     for child in children:
         # Filter activities for THIS child specifically
