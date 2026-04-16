@@ -46,7 +46,11 @@ class CircuitBreaker:
         now = time.monotonic()
         self.failures.append(now)
         self._prune()
-        if len(self.failures) >= self.failure_threshold and self.state == "closed":
+        if self.state == "half_open":
+            self.state = "open"
+            self.opened_at = now
+            logger.warning("Circuit OPEN: half-open test failed, reopening")
+        elif len(self.failures) >= self.failure_threshold and self.state == "closed":
             self.state = "open"
             self.opened_at = now
             logger.warning("Circuit OPEN: %d failures in %ds window", len(self.failures), self.window)
