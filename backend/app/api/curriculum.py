@@ -233,6 +233,13 @@ async def copy_template(
                 node.content = MATH_FOUNDATIONAL_CONTENT[tnode.ref]
         except ImportError:
             pass
+        try:
+            from app.content.reading_foundational_content import READING_FOUNDATIONAL_CONTENT
+
+            if template.template_id == "reading-foundational" and tnode.ref in READING_FOUNDATIONAL_CONTENT:
+                node.content = READING_FOUNDATIONAL_CONTENT[tnode.ref]
+        except ImportError:
+            pass
 
     # Create edges
     edge_count = 0
