@@ -60,7 +60,11 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "Describes using only sight",
                 "Uses vague language ('it's nice') rather than specific observations",
             ],
-            "assessment_methods": ["multi-sense observation exercise", "science notebook review", "observation comparison"],
+            "assessment_methods": [
+                "multi-sense observation exercise",
+                "science notebook review",
+                "observation comparison",
+            ],
             "sample_assessment_prompts": [
                 "Describe this object using as many senses as you can. Be as specific as possible.",
                 "Show me your science notebook. Point to an observation where you used 3 or more senses.",
@@ -108,7 +112,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Pick any natural object near you (a leaf, rock, flower, or piece of fruit). Draw it in your science notebook and describe it using at least 3 different senses. Be as specific as possible.",
                 "expected_type": "text",
-                "hints": ["Look at it carefully: color, shape, size. Feel it: texture, weight, temperature. Smell it. Describe each observation with precise words."],
+                "hints": [
+                    "Look at it carefully: color, shape, size. Feel it: texture, weight, temperature. Smell it. Describe each observation with precise words."
+                ],
                 "explanation": "A strong observation includes specific details for each sense used. Example for a leaf: 'SIGHT: oval shape, dark green on top, lighter underneath, veins branching from the center. TOUCH: smooth and waxy on top, slightly fuzzy underneath, thin and flexible. SMELL: faintly earthy, fresh.' This level of detail is real scientific observation.",
             },
         ],
@@ -127,7 +133,10 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["science notebook (blank or lined)", "natural objects for observation (rocks, leaves, shells)"],
+            "required": [
+                "science notebook (blank or lined)",
+                "natural objects for observation (rocks, leaves, shells)",
+            ],
             "recommended": ["magnifying glass", "collection of objects with interesting textures and smells"],
             "philosophy_specific": {
                 "classical": "Structured observation with scientific vocabulary: classify observations by sense, record systematically, memorize the five senses and their functions.",
@@ -241,7 +250,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "prompt": "True or false: Fire is alive because it grows and moves.",
                 "expected_type": "true_false",
                 "correct_answer": "false",
-                "hints": ["Does fire reproduce? Does it eat food? Does it respond to its environment the way a living thing does?"],
+                "hints": [
+                    "Does fire reproduce? Does it eat food? Does it respond to its environment the way a living thing does?"
+                ],
                 "explanation": "False. Fire grows and moves, but it does NOT reproduce, does not need food in the biological sense, and is not made of cells. It only meets 1-2 characteristics of life, not all of them. It is a chemical reaction, not a living thing.",
             },
             {
@@ -249,7 +260,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Go on a scavenger hunt in your home. Find and list 3 living things and 3 nonliving things. Explain how you know which is which.",
                 "expected_type": "text",
-                "hints": ["Living: people, pets, houseplants. Nonliving: furniture, toys, dishes. What makes each category different?"],
+                "hints": [
+                    "Living: people, pets, houseplants. Nonliving: furniture, toys, dishes. What makes each category different?"
+                ],
                 "explanation": "Living things in a home: people, pets (dog, cat, fish), houseplants. Nonliving: tables, chairs, books, cups. Living things grow, need food/water, and respond to the environment. Nonliving things do none of these.",
             },
             {
@@ -257,7 +270,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "A seed is sitting on a shelf. It is not growing or doing anything. Is it alive? Explain your reasoning using the characteristics of life.",
                 "expected_type": "text",
-                "hints": ["A seed looks inactive. But what happens when you plant it and add water? Does it have the POTENTIAL for life characteristics?"],
+                "hints": [
+                    "A seed looks inactive. But what happens when you plant it and add water? Does it have the POTENTIAL for life characteristics?"
+                ],
                 "explanation": "Yes, a seed IS alive — it is a dormant living thing. It contains a tiny plant embryo that will grow, reproduce, and respond to its environment once it has water and warmth. It has the potential for all characteristics of life, even though it appears inactive. This is a great tricky case!",
             },
         ],
@@ -378,7 +393,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                     "Only sunlight",
                 ],
                 "correct_answer": "Sunlight, water, soil, and air",
-                "hints": ["Plants need several things, not just one. Think about what you give your plant every day, plus what nature provides."],
+                "hints": [
+                    "Plants need several things, not just one. Think about what you give your plant every day, plus what nature provides."
+                ],
                 "explanation": "Plants need sunlight (for making food through photosynthesis), water (for transport and growth), soil (for minerals and support), and air (for carbon dioxide). Remove any one and the plant will struggle or die.",
             },
             {
@@ -395,7 +412,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Plant a bean seed in a clear cup against the glass. Check it every day for a week. Draw what you see each day in your science notebook.",
                 "expected_type": "text",
-                "hints": ["Day 1: the seed is dry. Day 2-3: it swells with water. Day 3-5: a root appears. Day 5-7: a stem pushes up. Draw what YOU see — everyone's timing is slightly different."],
+                "hints": [
+                    "Day 1: the seed is dry. Day 2-3: it swells with water. Day 3-5: a root appears. Day 5-7: a stem pushes up. Draw what YOU see — everyone's timing is slightly different."
+                ],
                 "explanation": "Over about a week, you should observe: the seed absorbs water and swells, the seed coat splits, a root emerges and grows downward, then a stem pushes upward. Drawing each day creates a visual record of germination — real science in action.",
             },
             {
@@ -411,7 +430,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Design an experiment to find out whether plants need sunlight to grow. What would you do? What would you compare?",
                 "expected_type": "text",
-                "hints": ["You need TWO plants that are the same in every way EXCEPT for sunlight. One gets sun, one doesn't. Everything else stays the same."],
+                "hints": [
+                    "You need TWO plants that are the same in every way EXCEPT for sunlight. One gets sun, one doesn't. Everything else stays the same."
+                ],
                 "explanation": "A good experiment: plant two identical seeds in identical cups with the same soil and water. Place one in sunlight and one in a dark closet. Give both the same amount of water. Observe and measure them each week. The difference in growth is caused by the sunlight (the only thing that's different). This is a controlled experiment — a fundamental concept in science.",
             },
         ],
@@ -431,7 +452,11 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["bean seeds", "clear plastic cups", "soil", "water", "science notebook"],
-            "recommended": ["magnifying glass for seed examination", "ruler for measuring growth", "fast-growing flower seeds (sunflower, marigold)"],
+            "recommended": [
+                "magnifying glass for seed examination",
+                "ruler for measuring growth",
+                "fast-growing flower seeds (sunflower, marigold)",
+            ],
             "philosophy_specific": {
                 "classical": "Plant life cycle memorized as a sequence. Vocabulary drilled: germination, photosynthesis, dispersal. Structured observation logs.",
                 "charlotte_mason": "The child plants seeds, tends them daily, draws what they see in their nature notebook. Direct observation is primary — textbooks are secondary. The garden IS the classroom.",
@@ -527,7 +552,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "expected_type": "multiple_choice",
                 "options": ["Ocean", "Desert", "Polar", "Wetland"],
                 "correct_answer": "Desert",
-                "hints": ["Camels have humps that store fat for energy. They can go days without water. What habitat is dry and hot?"],
+                "hints": [
+                    "Camels have humps that store fat for energy. They can go days without water. What habitat is dry and hot?"
+                ],
                 "explanation": "Camels live in the desert. They are adapted to dry, hot conditions: their humps store fat for energy, they can close their nostrils during sandstorms, and they can survive long periods without water.",
             },
             {
@@ -535,7 +562,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "What four things does every animal need from its habitat?",
                 "expected_type": "text",
-                "hints": ["Think about what YOU need to survive: something to eat, something to drink, somewhere to live, and room to move."],
+                "hints": [
+                    "Think about what YOU need to survive: something to eat, something to drink, somewhere to live, and room to move."
+                ],
                 "explanation": "Every animal needs: (1) food, (2) water, (3) shelter (a safe place to live and rest), and (4) space (room to move, hunt, and find mates). A habitat provides all four.",
             },
             {
@@ -552,7 +581,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Pick one animal you know well. Describe its habitat and one adaptation that helps it survive there.",
                 "expected_type": "text",
-                "hints": ["Choose any animal: a bird, a pet, a zoo animal. Where does it live in the wild? What feature of its body helps it survive there?"],
+                "hints": [
+                    "Choose any animal: a bird, a pet, a zoo animal. Where does it live in the wild? What feature of its body helps it survive there?"
+                ],
                 "explanation": "Example: 'A duck lives near ponds and lakes (wetland habitat). Its webbed feet are an adaptation that helps it swim efficiently through water. Its waterproof feathers keep it dry even when diving.' A good answer names the habitat, the adaptation, and explains HOW the adaptation helps.",
             },
             {
@@ -560,7 +591,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Build a habitat diorama in a shoebox. Choose a habitat, create the environment using household materials, and add at least 3 animals that live there. Describe why each animal belongs in this habitat.",
                 "expected_type": "text",
-                "hints": ["Pick: forest, desert, ocean, grassland, wetland, or polar. Build the environment. Add animals that actually live there. Explain their adaptations."],
+                "hints": [
+                    "Pick: forest, desert, ocean, grassland, wetland, or polar. Build the environment. Add animals that actually live there. Explain their adaptations."
+                ],
                 "explanation": "A strong diorama shows the habitat's features (trees for forest, sand for desert, water for ocean) AND includes animals that actually live there with correct adaptations explained. Example for coral reef: blue paper for water, clay coral, drawn fish, sea turtle, and octopus — each with a note about how they're adapted to reef life.",
             },
         ],
@@ -693,7 +726,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Do the heart rate experiment: count your heartbeats for 15 seconds while sitting still. Then do 20 jumping jacks and count again for 15 seconds. What happened? Why?",
                 "expected_type": "text",
-                "hints": ["Your heart rate should be higher after exercise. Why would your heart need to beat faster when you move?"],
+                "hints": [
+                    "Your heart rate should be higher after exercise. Why would your heart need to beat faster when you move?"
+                ],
                 "explanation": "After exercise, your heart rate increases because your muscles need more oxygen and energy. The heart pumps faster to deliver more blood (carrying oxygen) to the working muscles. This is why exercise makes your heart stronger — it's a muscle getting a workout!",
             },
             {
@@ -709,7 +744,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Lie on a large piece of paper and have someone trace your outline. Then draw and label these organs inside: brain, heart, lungs, stomach, and skeleton (draw a few bones). Explain what each one does.",
                 "expected_type": "text",
-                "hints": ["Brain: top of the head. Heart: center of the chest. Lungs: both sides of the chest. Stomach: upper left belly. Skeleton: ribs, spine, arm and leg bones."],
+                "hints": [
+                    "Brain: top of the head. Heart: center of the chest. Lungs: both sides of the chest. Stomach: upper left belly. Skeleton: ribs, spine, arm and leg bones."
+                ],
                 "explanation": "The body map should show: brain in the skull (controls everything), heart in center chest (pumps blood), lungs on both sides of the chest (breathe), stomach in upper abdomen (digests food), and skeleton bones throughout (support and protection). Each label should include a brief function.",
             },
         ],
@@ -825,7 +862,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "expected_type": "multiple_choice",
                 "options": ["Cumulus", "Stratus", "Cirrus"],
                 "correct_answer": "Cumulus",
-                "hints": ["These clouds look like big fluffy pillows in the sky and usually appear on fair-weather days."],
+                "hints": [
+                    "These clouds look like big fluffy pillows in the sky and usually appear on fair-weather days."
+                ],
                 "explanation": "Cumulus clouds are big, puffy, and white — they look like cotton balls or piles of whipped cream. They usually appear on fair-weather days. Stratus are flat and gray. Cirrus are thin and wispy.",
             },
             {
@@ -842,7 +881,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Go outside right now. Record today's weather in your science notebook: temperature (if you have a thermometer), cloud type, wind (none, light, strong), and precipitation (none, rain, snow). Draw what the sky looks like.",
                 "expected_type": "text",
-                "hints": ["Use your senses: What do you SEE in the sky? What do you FEEL (temperature, wind)? Is it dry or wet?"],
+                "hints": [
+                    "Use your senses: What do you SEE in the sky? What do you FEEL (temperature, wind)? Is it dry or wet?"
+                ],
                 "explanation": "A complete weather observation includes: temperature (or warm/cool/cold if no thermometer), cloud description with type name, wind assessment, and precipitation status. Drawing the sky adds visual detail. This daily practice IS being a scientist.",
             },
             {
@@ -850,7 +891,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "You've recorded weather for one week. The temperatures were: 65, 62, 58, 55, 60, 63, 67. Did the temperature go up or down during the week?",
                 "expected_type": "text",
-                "hints": ["Look at the numbers in order. Did they mostly decrease, then increase? What pattern do you see?"],
+                "hints": [
+                    "Look at the numbers in order. Did they mostly decrease, then increase? What pattern do you see?"
+                ],
                 "explanation": "The temperature dropped from 65 to 55 over the first 4 days, then rose back to 67 over the last 3 days. The pattern shows a cool spell in the middle of the week followed by warming. Identifying patterns in data is a core science skill.",
             },
             {
@@ -858,7 +901,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Build a simple rain gauge using a straight-sided jar and a ruler. Place it outside. Check it after the next rainstorm. How much rain fell? Record the measurement in your weather journal.",
                 "expected_type": "text",
-                "hints": ["Use a clear jar with straight sides (not tapered). Tape a ruler to the outside with 0 at the bottom. Place in an open area. After rain, read the water level."],
+                "hints": [
+                    "Use a clear jar with straight sides (not tapered). Tape a ruler to the outside with 0 at the bottom. Place in an open area. After rain, read the water level."
+                ],
                 "explanation": "A rain gauge measures precipitation in inches or centimeters. After a rainstorm, read the water level against the ruler. Light rain might be 0.1 inches; a heavy storm might be 1+ inches. Record the measurement and date. Over time, you'll know how much rain falls in your area each month — real meteorological data!",
             },
         ],
@@ -878,7 +923,10 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["science notebook for weather journal", "outdoor thermometer"],
-            "recommended": ["materials for homemade weather station (jar for rain gauge, straw/pencil for wind vane)", "cloud identification chart"],
+            "recommended": [
+                "materials for homemade weather station (jar for rain gauge, straw/pencil for wind vane)",
+                "cloud identification chart",
+            ],
             "philosophy_specific": {
                 "classical": "Systematic daily recording. Memorize cloud types and weather vocabulary. Structured observation logs with correct terminology.",
                 "charlotte_mason": "Daily weather observation is a cornerstone of Charlotte Mason nature study. The child records weather in their nature notebook alongside seasonal observations. Weather calendar posted in the learning space.",
@@ -991,7 +1039,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Name one animal behavior that changes with the seasons and explain why it changes.",
                 "expected_type": "text",
-                "hints": ["Think about: bears hibernating, birds migrating, squirrels storing acorns, dogs growing thicker fur."],
+                "hints": [
+                    "Think about: bears hibernating, birds migrating, squirrels storing acorns, dogs growing thicker fur."
+                ],
                 "explanation": "Example: Bears hibernate in winter because food is scarce. They eat heavily in fall to build up fat reserves, then sleep through the cold months using that stored energy. Their body temperature drops and their heart rate slows to conserve energy until spring brings food again.",
             },
             {
@@ -999,7 +1049,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Go outside and list 3 observations that tell you what season it currently is.",
                 "expected_type": "text",
-                "hints": ["Look at: temperature, what plants look like, how much daylight there is, what animals are doing, what people are wearing."],
+                "hints": [
+                    "Look at: temperature, what plants look like, how much daylight there is, what animals are doing, what people are wearing."
+                ],
                 "explanation": "A good answer uses current direct observations. Spring example: 'Flowers are blooming. Birds are building nests. The days are getting longer and warmer.' Fall example: 'Leaves are turning yellow and red. Squirrels are collecting acorns. The air is cool in the morning.' Real observations show understanding of seasonal indicators.",
             },
             {
@@ -1007,7 +1059,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Use a globe and a flashlight in a dark room. Hold the globe tilted and slowly orbit it around the flashlight. Explain what you observe about which part of the globe gets the most direct light and how that creates seasons.",
                 "expected_type": "text",
-                "hints": ["Notice: when the top of the globe tilts TOWARD the flashlight, the northern half gets more direct light. When it tilts AWAY, the northern half gets less. What seasons would those create?"],
+                "hints": [
+                    "Notice: when the top of the globe tilts TOWARD the flashlight, the northern half gets more direct light. When it tilts AWAY, the northern half gets less. What seasons would those create?"
+                ],
                 "explanation": "When the Northern Hemisphere tilts toward the sun (flashlight), it receives more direct light and heat — that's summer. Six months later in the orbit, the Northern Hemisphere tilts away, receiving less direct light — that's winter. Spring and fall are transitions between these extremes. The Southern Hemisphere experiences opposite seasons for the same reason.",
             },
         ],
@@ -1026,7 +1080,10 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["globe (or ball) and flashlight for demonstration", "science notebook for seasonal observations"],
+            "required": [
+                "globe (or ball) and flashlight for demonstration",
+                "science notebook for seasonal observations",
+            ],
             "recommended": ["seasonal nature photographs", "calendar for tracking daylight hours"],
             "philosophy_specific": {
                 "classical": "Memorize seasonal characteristics and the Earth's tilt explanation. Vocabulary: equinox, solstice, hemisphere, axis. Structured seasonal observation records.",
@@ -1140,7 +1197,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Put water in a sealed zip-lock bag and tape it to a sunny window. Check it after 2 hours. Describe what you see and explain what happened using water cycle vocabulary.",
                 "expected_type": "text",
-                "hints": ["You should see: water droplets forming on the INSIDE of the bag near the top. That's condensation. Where did those droplets come from?"],
+                "hints": [
+                    "You should see: water droplets forming on the INSIDE of the bag near the top. That's condensation. Where did those droplets come from?"
+                ],
                 "explanation": "The sun heats the water in the bag (evaporation). Water vapor rises and hits the cooler plastic at the top. The vapor cools and turns back into droplets (condensation). If enough collects, it drips back down (precipitation). You've created a miniature water cycle!",
             },
             {
@@ -1149,7 +1208,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "prompt": "Put the 3 stages of the water cycle in order: precipitation, evaporation, condensation.",
                 "expected_type": "text",
                 "correct_answer": "evaporation, condensation, precipitation",
-                "hints": ["First, water goes UP (becomes vapor). Then it forms clouds (water vapor → droplets). Then it falls back down (rain/snow)."],
+                "hints": [
+                    "First, water goes UP (becomes vapor). Then it forms clouds (water vapor → droplets). Then it falls back down (rain/snow)."
+                ],
                 "explanation": "Correct order: (1) Evaporation — sun heats water, it becomes vapor and rises. (2) Condensation — water vapor cools and forms cloud droplets. (3) Precipitation — water droplets in clouds get heavy and fall as rain, snow, sleet, or hail. Then the cycle repeats!",
             },
             {
@@ -1157,7 +1218,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Draw and label the complete water cycle. Include: the sun, evaporation, condensation, clouds, precipitation, and a body of water. Add arrows showing the direction water moves.",
                 "expected_type": "text",
-                "hints": ["Start with water at the bottom (ocean/lake). Arrows going UP = evaporation. Cloud in the middle = condensation. Arrows coming DOWN = precipitation. Arrows flowing back to the water = collection."],
+                "hints": [
+                    "Start with water at the bottom (ocean/lake). Arrows going UP = evaporation. Cloud in the middle = condensation. Arrows coming DOWN = precipitation. Arrows flowing back to the water = collection."
+                ],
                 "explanation": "A complete water cycle diagram shows: a body of water at the bottom, the sun providing energy, upward arrows labeled 'evaporation,' a cloud labeled 'condensation,' downward arrows labeled 'precipitation,' and water collecting and flowing back (rivers to oceans). Arrows should form a circular pattern showing the cycle never ends.",
             },
         ],
@@ -1176,7 +1239,11 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["zip-lock bags for water cycle experiment", "glass for condensation observation", "science notebook"],
+            "required": [
+                "zip-lock bags for water cycle experiment",
+                "glass for condensation observation",
+                "science notebook",
+            ],
             "recommended": ["chalk for puddle marking", "kettle or pot for demonstrating steam (parent-supervised)"],
             "philosophy_specific": {
                 "classical": "Water cycle memorized as a three-stage process. Vocabulary drilled: evaporation, condensation, precipitation. Diagram drawn and labeled from memory.",
@@ -1290,7 +1357,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Collect 5 rocks from outside. For each one, describe its color, texture (rough or smooth), and relative hardness (can you scratch it with your fingernail?). Record your observations in your science notebook.",
                 "expected_type": "text",
-                "hints": ["For each rock: look at it (color, pattern), feel it (rough, smooth, bumpy), and test it (scratch with fingernail — if it scratches, it's soft; if not, it's hard)."],
+                "hints": [
+                    "For each rock: look at it (color, pattern), feel it (rough, smooth, bumpy), and test it (scratch with fingernail — if it scratches, it's soft; if not, it's hard)."
+                ],
                 "explanation": "A good collection record describes each rock specifically: 'Rock 1: Gray with white speckles, rough texture, cannot scratch with fingernail (hard). Rock 2: Reddish-brown, smooth, crumbles slightly when scratched (soft).' Specific observations are the foundation of rock classification.",
             },
             {
@@ -1300,7 +1369,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "expected_type": "multiple_choice",
                 "options": ["Igneous", "Sedimentary", "Metamorphic"],
                 "correct_answer": "Sedimentary",
-                "hints": ["Layers form when material settles in layers over time — like sand at the bottom of a lake building up year after year."],
+                "hints": [
+                    "Layers form when material settles in layers over time — like sand at the bottom of a lake building up year after year."
+                ],
                 "explanation": "Sedimentary rock forms from layers of sediment (sand, mud, shells) that are pressed together over millions of years. The visible layers are the key identifying feature. Sandstone, limestone, and shale are common sedimentary rocks.",
             },
             {
@@ -1308,7 +1379,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Take a spoonful of soil and examine it with a magnifying glass. Draw what you see and describe at least 3 different materials you can identify in the soil.",
                 "expected_type": "text",
-                "hints": ["Look for: tiny rock pieces, sand grains, bits of dead leaves or roots, clay, small insects, and possibly tiny worms. Soil is a MIXTURE."],
+                "hints": [
+                    "Look for: tiny rock pieces, sand grains, bits of dead leaves or roots, clay, small insects, and possibly tiny worms. Soil is a MIXTURE."
+                ],
                 "explanation": "Through a magnifying glass, soil reveals its complexity: tiny rock fragments (sand and gravel), fine clay particles, pieces of decomposed leaves and roots (organic matter), possibly small organisms (insects, worms), and air pockets. This shows that soil is not 'just dirt' — it's a rich, complex mixture that supports life.",
             },
         ],
@@ -1441,7 +1514,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Test 10 items in your house with a magnet. Record which ones are attracted and which are not. What pattern do you notice?",
                 "expected_type": "text",
-                "hints": ["Test things like: spoons, coins, foil, cans, scissors, toys, doorknobs, screws. Record each result. What do the attracted items have in common?"],
+                "hints": [
+                    "Test things like: spoons, coins, foil, cans, scissors, toys, doorknobs, screws. Record each result. What do the attracted items have in common?"
+                ],
                 "explanation": "The pattern: attracted items are made of iron or steel (paperclips, some cans, nails, screws, refrigerator door). Non-attracted items are wood, plastic, glass, aluminum, copper, paper, and fabric. The key insight is that magnetism depends on the MATERIAL, specifically iron content.",
             },
             {
@@ -1449,7 +1524,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Hold two magnets near each other. What happens? Now flip one magnet and try again. What changes? Why?",
                 "expected_type": "text",
-                "hints": ["One way they snap together (attract). The other way they push apart (repel). This has to do with the magnet's POLES."],
+                "hints": [
+                    "One way they snap together (attract). The other way they push apart (repel). This has to do with the magnet's POLES."
+                ],
                 "explanation": "When opposite poles (north-south) face each other, magnets attract — they pull together. When same poles (north-north or south-south) face each other, magnets repel — they push apart. This is the fundamental rule of magnetism: opposites attract, likes repel.",
             },
             {
@@ -1457,7 +1534,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Design your own magnet experiment. Write a question, a prediction, what you did, and what happened. Example question: 'Can a magnet attract a paperclip through water?'",
                 "expected_type": "text",
-                "hints": ["Steps: (1) Ask a question. (2) Predict the answer. (3) Test it. (4) Record what happened. (5) Was your prediction right?"],
+                "hints": [
+                    "Steps: (1) Ask a question. (2) Predict the answer. (3) Test it. (4) Record what happened. (5) Was your prediction right?"
+                ],
                 "explanation": "A well-designed experiment has: a clear question (Can a magnet work through water?), a prediction (I think yes/no because...), a test procedure (put a paperclip in water, hold a magnet against the glass), observed results (the paperclip moved toward the magnet!), and a conclusion (magnetism DOES work through water). This is the scientific method at its simplest and most powerful.",
             },
         ],
@@ -1476,8 +1555,14 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["bar magnets (at least 2)", "collection of items to test (paperclips, coins, foil, wood, plastic)"],
-            "recommended": ["iron filings for visualizing magnetic fields", "compass for demonstrating Earth's magnetism"],
+            "required": [
+                "bar magnets (at least 2)",
+                "collection of items to test (paperclips, coins, foil, wood, plastic)",
+            ],
+            "recommended": [
+                "iron filings for visualizing magnetic fields",
+                "compass for demonstrating Earth's magnetism",
+            ],
             "philosophy_specific": {
                 "classical": "Magnetism as the child's first encounter with invisible forces. Vocabulary: attract, repel, poles, magnetic field. Systematic testing and recording.",
                 "charlotte_mason": "Hands-on discovery: the child experiments freely with magnets before formal instruction. Wonder first, terminology second. Record discoveries in the science notebook.",
@@ -1590,7 +1675,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Go outside and trace your shadow with chalk at three different times today (morning, midday, and afternoon). Describe how your shadow changed.",
                 "expected_type": "text",
-                "hints": ["Look at: the LENGTH of your shadow and the DIRECTION it points. How does the sun's position affect both?"],
+                "hints": [
+                    "Look at: the LENGTH of your shadow and the DIRECTION it points. How does the sun's position affect both?"
+                ],
                 "explanation": "In the morning (sun low in east), your shadow is long and points west. At midday (sun high overhead), your shadow is short and points north (in the Northern Hemisphere). In the afternoon (sun low in west), your shadow is long and points east. The sun's position directly determines shadow length and direction.",
             },
             {
@@ -1598,7 +1685,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "You move a flashlight closer to a toy and the shadow on the wall gets bigger. Why?",
                 "expected_type": "text",
-                "hints": ["Think about the light spreading out from the flashlight. When the flashlight is close, does the toy block more or less of that spreading light?"],
+                "hints": [
+                    "Think about the light spreading out from the flashlight. When the flashlight is close, does the toy block more or less of that spreading light?"
+                ],
                 "explanation": "When the flashlight is close, the light rays spread at a wider angle around the toy, making the shadow larger. When the flashlight is far away, the rays are more parallel and the shadow is closer to the toy's actual size. Distance between light and object affects shadow size.",
             },
             {
@@ -1606,7 +1695,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Test 5 items with a flashlight: hold each one between the flashlight and a wall. Sort them into opaque (blocks all light), translucent (lets some through), and transparent (lets all through). Record your results.",
                 "expected_type": "text",
-                "hints": ["Try: cardboard, wax paper, clear glass, your hand, a thin cloth. What happens to the light with each one?"],
+                "hints": [
+                    "Try: cardboard, wax paper, clear glass, your hand, a thin cloth. What happens to the light with each one?"
+                ],
                 "explanation": "Example results: Cardboard = opaque (blocks all light, dark shadow). Wax paper = translucent (dim light passes through, soft shadow). Clear glass = transparent (light passes through, almost no shadow). Your hand = opaque. Thin white cloth = translucent. Classifying materials by light transmission is a fundamental physics skill.",
             },
         ],
@@ -1626,7 +1717,10 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["flashlight", "various objects for shadow experiments", "chalk for outdoor shadow tracing"],
-            "recommended": ["materials for opacity testing (cardboard, wax paper, clear plastic)", "shadow puppet supplies"],
+            "recommended": [
+                "materials for opacity testing (cardboard, wax paper, clear plastic)",
+                "shadow puppet supplies",
+            ],
             "philosophy_specific": {
                 "classical": "Light properties memorized: straight-line travel, reflection, shadow formation. Vocabulary: opaque, translucent, transparent, source, shadow. Structured experiments.",
                 "charlotte_mason": "Shadow play and sundials: the child discovers light behavior through outdoor observation. Drawing shadows in the nature notebook. Shadow puppets as art meets science.",
@@ -1739,7 +1833,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Stretch a rubber band between two pencils. Pluck it while it's loose. Then stretch it tight and pluck again. What changed about the sound? Why?",
                 "expected_type": "text",
-                "hints": ["Listen to the pitch: is the tight rubber band higher or lower? Think about how tightness affects vibration speed."],
+                "hints": [
+                    "Listen to the pitch: is the tight rubber band higher or lower? Think about how tightness affects vibration speed."
+                ],
                 "explanation": "The tight rubber band produces a HIGHER pitch because it vibrates faster. The loose rubber band produces a LOWER pitch because it vibrates slower. Tension affects vibration speed, which determines pitch. This is exactly how guitar players tune their strings — tightening raises the pitch.",
             },
             {
@@ -1747,7 +1843,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Fill 4 glasses with different amounts of water. Tap each with a spoon. Which has the highest pitch? Which has the lowest?",
                 "expected_type": "text",
-                "hints": ["The glass with LESS water should have a different pitch than the one with MORE water. Try it and listen!"],
+                "hints": [
+                    "The glass with LESS water should have a different pitch than the one with MORE water. Try it and listen!"
+                ],
                 "explanation": "The glass with the LEAST water produces the HIGHEST pitch because the glass vibrates faster with less water dampening it. The glass with the MOST water produces the LOWEST pitch. This is why a water glass xylophone works — you 'tune' each glass by adding or removing water.",
             },
             {
@@ -1755,7 +1853,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Build a simple string telephone with two cups and a string. Test it: can you hear someone talking through the string? Explain how the sound travels from one cup to the other.",
                 "expected_type": "text",
-                "hints": ["The sound vibrations travel from the speaker's voice → cup → string → other cup → listener's ear. The string must be TIGHT for it to work."],
+                "hints": [
+                    "The sound vibrations travel from the speaker's voice → cup → string → other cup → listener's ear. The string must be TIGHT for it to work."
+                ],
                 "explanation": "The string telephone works because: (1) Your voice makes air vibrate inside the cup. (2) The cup vibrates and transfers the vibration to the string. (3) The vibration travels along the tight string. (4) The other cup receives the vibration and converts it back to sound waves. The string must be tight because loose string doesn't transmit vibrations well. You built a sound transmission device!",
             },
         ],
@@ -1775,7 +1875,10 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["rubber bands", "cups and string for telephone", "glasses and water for xylophone"],
-            "recommended": ["tuning fork for visualizing vibration in water", "variety of materials for sound experiments"],
+            "recommended": [
+                "tuning fork for visualizing vibration in water",
+                "variety of materials for sound experiments",
+            ],
             "philosophy_specific": {
                 "classical": "Sound properties memorized: vibration, pitch, volume, medium. Vocabulary drill. Structured experiment recording.",
                 "charlotte_mason": "Hands-on sound experiments: the child discovers vibration, pitch, and volume through building and playing instruments. Nature sounds during outdoor time. Drawing instruments in the science notebook.",
@@ -1871,7 +1974,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "expected_type": "multiple_choice",
                 "options": ["A computer", "A lever", "A battery", "A light bulb"],
                 "correct_answer": "A lever",
-                "hints": ["Simple machines are basic devices: lever, wheel and axle, pulley, inclined plane, wedge, screw. Which is on this list?"],
+                "hints": [
+                    "Simple machines are basic devices: lever, wheel and axle, pulley, inclined plane, wedge, screw. Which is on this list?"
+                ],
                 "explanation": "A lever is one of the 6 simple machines. Computers, batteries, and light bulbs are complex devices or components, not simple machines.",
             },
             {
@@ -1880,7 +1985,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "prompt": "True or false: A knife blade is a type of simple machine called a wedge.",
                 "expected_type": "true_false",
                 "correct_answer": "true",
-                "hints": ["A wedge is a triangular shape that splits things apart or pushes things aside. Look at a knife blade's shape."],
+                "hints": [
+                    "A wedge is a triangular shape that splits things apart or pushes things aside. Look at a knife blade's shape."
+                ],
                 "explanation": "True. A knife blade is a wedge — a simple machine with a triangular shape that splits material apart. The sharp edge concentrates force into a thin line, making it easy to cut through food.",
             },
             {
@@ -1888,7 +1995,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Find 3 simple machines in your house. For each one, name the type and explain how it makes work easier.",
                 "expected_type": "text",
-                "hints": ["Look in the kitchen, at doors, in the garage, on bikes. Levers, wheels, screws, wedges, ramps, and pulleys are everywhere!"],
+                "hints": [
+                    "Look in the kitchen, at doors, in the garage, on bikes. Levers, wheels, screws, wedges, ramps, and pulleys are everywhere!"
+                ],
                 "explanation": "Examples: (1) Door handle = lever — it amplifies the small turning force of your hand into enough force to pull back the latch. (2) Wheelchair ramp = inclined plane — it lets you go UP without lifting straight up, trading distance for reduced force. (3) Jar lid = screw — turning the lid converts rotational force into the linear force that seals the jar.",
             },
             {
@@ -1896,7 +2005,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Set up a ramp with a board and books. Roll a toy car down at a gentle slope, then make it steeper. What happens? Why?",
                 "expected_type": "text",
-                "hints": ["Compare: the car's speed and the distance it travels after leaving the ramp. What changed when you made the ramp steeper?"],
+                "hints": [
+                    "Compare: the car's speed and the distance it travels after leaving the ramp. What changed when you made the ramp steeper?"
+                ],
                 "explanation": "The steeper ramp makes the car go faster and travel farther. A steeper ramp converts more gravitational potential energy into kinetic energy (speed). The gentle ramp provides less acceleration. This demonstrates how inclined planes trade slope angle for force — a gentle ramp requires less effort to push something up, but a steep ramp accelerates things coming down.",
             },
             {
@@ -1904,7 +2015,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "The ancient Egyptians moved massive stone blocks using ramps, levers, and rollers. Explain how each of these simple machines helped them move blocks that weighed several tons.",
                 "expected_type": "text",
-                "hints": ["Ramp: instead of lifting straight up, slide up a gentle slope. Lever: pry under the block to lift one edge. Rollers (wheel and axle): reduce friction so the block slides more easily."],
+                "hints": [
+                    "Ramp: instead of lifting straight up, slide up a gentle slope. Lever: pry under the block to lift one edge. Rollers (wheel and axle): reduce friction so the block slides more easily."
+                ],
                 "explanation": "Ramps (inclined planes) let workers push blocks upward along a gentle slope instead of lifting them straight up — trading distance for reduced force. Levers (long poles placed under the block edge) multiplied the workers' force to lift block edges. Rollers (logs placed under the block) reduced friction, making it easier to slide the block along the ground. Together, these simple machines made it possible for human labor to move stones weighing 2-70 tons — no modern machinery needed!",
             },
         ],
@@ -1923,8 +2036,15 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["ruler and pencil for lever", "board and books for ramp", "household items for scavenger hunt"],
-            "recommended": ["simple pulley setup", "collection of simple machine examples (bottle opener, jar, screws)"],
+            "required": [
+                "ruler and pencil for lever",
+                "board and books for ramp",
+                "household items for scavenger hunt",
+            ],
+            "recommended": [
+                "simple pulley setup",
+                "collection of simple machine examples (bottle opener, jar, screws)",
+            ],
             "philosophy_specific": {
                 "classical": "Memorize all 6 simple machines and their definitions. Identify in daily life systematically. Vocabulary: fulcrum, force, load, effort, mechanical advantage.",
                 "charlotte_mason": "Finding simple machines everywhere: the child sees physics in the playground, kitchen, and workshop. Drawing simple machines in the science notebook with labels.",
@@ -2019,7 +2139,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "prompt": "Put the scientific method steps in order: Test, Observe, Predict, Ask a Question, Describe Results.",
                 "expected_type": "text",
                 "correct_answer": "Observe, Ask a Question, Predict, Test, Describe Results",
-                "hints": ["Start with noticing something. Then wonder about it. Then guess. Then try. Then tell what happened."],
+                "hints": [
+                    "Start with noticing something. Then wonder about it. Then guess. Then try. Then tell what happened."
+                ],
                 "explanation": "Correct order: (1) Observe — notice something interesting. (2) Ask a question — 'I wonder why...' (3) Predict — 'I think... because...' (4) Test — try it out. (5) Describe results — what actually happened? Compare to prediction.",
             },
             {
@@ -2036,7 +2158,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Pick a question you can test at home. Write your question, your prediction, how you would test it, and what you would look for.",
                 "expected_type": "text",
-                "hints": ["Example questions: Which paper towel brand absorbs the most water? Does hot water freeze faster than cold? Which type of soil do plants grow best in?"],
+                "hints": [
+                    "Example questions: Which paper towel brand absorbs the most water? Does hot water freeze faster than cold? Which type of soil do plants grow best in?"
+                ],
                 "explanation": "A good experiment plan includes: (1) A specific, testable question. (2) A clear prediction with reasoning. (3) A fair test (change only ONE thing, keep everything else the same). (4) What you will observe or measure. Example: Question: 'Which brand of paper towel absorbs the most water?' Prediction: 'I think Brand A because it's thicker.' Test: 'Pour the same amount of water on each. See which absorbs most.' Measure: 'Count how many drops each absorbs.'",
             },
             {
@@ -2052,7 +2176,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Conduct a complete mini-experiment: (1) Pick a question. (2) Write your prediction. (3) Test it 3 times. (4) Record what happened. (5) Was your prediction right? What did you learn?",
                 "expected_type": "text",
-                "hints": ["Choose something simple you can test right now: which object falls fastest? Which paper airplane design flies farthest? Does ice melt faster in the sun or shade?"],
+                "hints": [
+                    "Choose something simple you can test right now: which object falls fastest? Which paper airplane design flies farthest? Does ice melt faster in the sun or shade?"
+                ],
                 "explanation": "A complete experiment report includes all 5 steps. Example: Question: 'Does ice melt faster in sunlight or shade?' Prediction: 'I think sunlight because it's warmer.' Test: 'Put identical ice cubes in sun and shade. Check every 5 minutes.' Results: 'Sun cube melted in 20 minutes. Shade cube took 45 minutes.' Conclusion: 'My prediction was right — sunlight melts ice faster because it provides heat energy.' Testing 3 times and recording data are the hallmarks of careful science.",
             },
         ],
@@ -2153,7 +2279,11 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "Journal has few entries",
                 "Drawings are from memory, not from life",
             ],
-            "assessment_methods": ["journal review over time", "drawing detail comparison", "observation language quality"],
+            "assessment_methods": [
+                "journal review over time",
+                "drawing detail comparison",
+                "observation language quality",
+            ],
             "sample_assessment_prompts": [
                 "Show me your nature journal. What's your favorite entry?",
                 "Compare your first drawing to your most recent. What improved?",
@@ -2166,7 +2296,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "Go outside and find something interesting to observe. Draw it in your science notebook from LIFE (looking at the real thing while you draw). Add the date and today's weather.",
                 "expected_type": "text",
-                "hints": ["Find a plant, insect, rock, cloud, or anything natural. Sit near it. Look carefully. Draw what you SEE, not what you think it should look like."],
+                "hints": [
+                    "Find a plant, insect, rock, cloud, or anything natural. Sit near it. Look carefully. Draw what you SEE, not what you think it should look like."
+                ],
                 "explanation": "A good nature journal entry includes: a drawing from direct observation (not memory), the date, weather conditions, and at least a few labels or descriptive words. This is the core practice of nature journaling — it gets better with every entry.",
             },
             {
@@ -2181,7 +2313,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                     "There's no difference",
                 ],
                 "correct_answer": "Because looking at the real thing helps you notice details you would miss from memory",
-                "hints": ["When you draw from life, you keep looking back at the object. Each time you look, you notice something new."],
+                "hints": [
+                    "When you draw from life, you keep looking back at the object. Each time you look, you notice something new."
+                ],
                 "explanation": "Drawing from life forces you to OBSERVE carefully. Each time you look at the real object, you notice new details: the number of petals, the pattern of veins, the exact shape of a leaf. Memory fills in generalities; direct observation reveals specifics.",
             },
             {
@@ -2189,7 +2323,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Look at your nature journal entries from the past few weeks. What has changed in nature since your first entry? Write 2 sentences about the changes you've observed.",
                 "expected_type": "text",
-                "hints": ["Look at: plants (growing? blooming? losing leaves?), animals (new ones appearing? old ones gone?), weather (warmer? cooler? more rain?)."],
+                "hints": [
+                    "Look at: plants (growing? blooming? losing leaves?), animals (new ones appearing? old ones gone?), weather (warmer? cooler? more rain?)."
+                ],
                 "explanation": "Tracking changes over time IS science. Example: 'When I started, the trees were bare. Now they have small green buds and a few flowers are blooming.' Seasonal observation builds long-term thinking and data collection skills.",
             },
             {
@@ -2206,7 +2342,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Visit a spot outdoors. Draw what you see AND write: (1) the date and weather, (2) what you observe using at least 3 senses, and (3) one question that your observation makes you wonder about.",
                 "expected_type": "text",
-                "hints": ["Draw carefully from life. Write specific observations: 'The bark is rough and gray with green moss on the north side.' End with a genuine wonder: 'I wonder why the moss only grows on one side.'"],
+                "hints": [
+                    "Draw carefully from life. Write specific observations: 'The bark is rough and gray with green moss on the north side.' End with a genuine wonder: 'I wonder why the moss only grows on one side.'"
+                ],
                 "explanation": "A complete nature journal entry combines: visual record (drawing), data (date and weather), multi-sense observations (written), and scientific curiosity (a question). This entry shows the child IS a scientist: observing carefully, recording precisely, and asking questions about what they see.",
             },
         ],
@@ -2320,7 +2458,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "You have 10 leaves. Name two different ways you could sort them into groups.",
                 "expected_type": "text",
-                "hints": ["Think about what you can OBSERVE: color, shape, size, texture, number of points, smooth vs jagged edges..."],
+                "hints": [
+                    "Think about what you can OBSERVE: color, shape, size, texture, number of points, smooth vs jagged edges..."
+                ],
                 "explanation": "Two ways: (1) By color — green leaves in one group, brown in another, yellow in a third. (2) By shape — round leaves together, long narrow leaves together, lobed (oak-shaped) together. Same leaves, different groups, both valid!",
             },
             {
@@ -2335,7 +2475,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                     "Classification is not important in science",
                 ],
                 "correct_answer": "To organize the millions of species into a system that helps us understand and study them",
-                "hints": ["There are millions of different living things. How would you study them all without a system?"],
+                "hints": [
+                    "There are millions of different living things. How would you study them all without a system?"
+                ],
                 "explanation": "Scientists classify to ORGANIZE knowledge. With millions of species, classification creates a system where related organisms are grouped together, making it possible to study, compare, and understand the natural world.",
             },
             {
@@ -2344,7 +2486,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "prompt": "True or false: A whale should be classified as a fish because it lives in the ocean and has fins.",
                 "expected_type": "true_false",
                 "correct_answer": "false",
-                "hints": ["Classification is based on body characteristics, not just where an animal lives. Is a whale warm-blooded? Does it nurse its young?"],
+                "hints": [
+                    "Classification is based on body characteristics, not just where an animal lives. Is a whale warm-blooded? Does it nurse its young?"
+                ],
                 "explanation": "False. Despite living in water and having fins, a whale is a MAMMAL: it's warm-blooded, breathes air with lungs, gives live birth, and nurses its young with milk. Classification uses internal characteristics, not just appearance or habitat.",
             },
             {
@@ -2352,7 +2496,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Collect 10 objects from your house. Sort them into groups using a rule YOU choose. Then re-sort them using a DIFFERENT rule. Describe both sorting systems.",
                 "expected_type": "text",
-                "hints": ["First sort: maybe by material (wood, metal, plastic). Second sort: maybe by size (big, medium, small). Same objects, different groups!"],
+                "hints": [
+                    "First sort: maybe by material (wood, metal, plastic). Second sort: maybe by size (big, medium, small). Same objects, different groups!"
+                ],
                 "explanation": "Good answers show two distinct classification systems for the same objects and explain the criteria. Example: '10 kitchen items. Sort 1: by material — 3 metal, 4 plastic, 3 wood. Sort 2: by function — 5 for cooking, 3 for eating, 2 for storing.' The child demonstrates that classification depends on the criteria chosen.",
             },
             {
@@ -2360,7 +2506,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Create a classification key for 6 animals: dog, eagle, goldfish, frog, snake, and butterfly. Write yes/no questions that sort them into the correct group.",
                 "expected_type": "text",
-                "hints": ["Start with: 'Does it have a backbone?' Then: 'Does it have feathers? Fur? Scales? Wings?' Each question narrows the options."],
+                "hints": [
+                    "Start with: 'Does it have a backbone?' Then: 'Does it have feathers? Fur? Scales? Wings?' Each question narrows the options."
+                ],
                 "explanation": "Example key: 'Has backbone? No → butterfly (invertebrate/insect). Yes → Has feathers? Yes → eagle (bird). No → Has fur? Yes → dog (mammal). No → Lives in water as adult? Yes → goldfish (fish). No → Has moist skin? Yes → frog (amphibian). No → snake (reptile).' This dichotomous key uses observable characteristics to classify step by step.",
             },
         ],
@@ -2379,7 +2527,10 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["collection of natural objects or pictures for sorting", "paper for creating classification charts"],
+            "required": [
+                "collection of natural objects or pictures for sorting",
+                "paper for creating classification charts",
+            ],
             "recommended": ["animal picture cards", "button collection for sorting practice"],
             "philosophy_specific": {
                 "classical": "Classification as the foundational scientific thinking skill. Memorize major taxonomic groups. Systematic sorting with proper terminology. Linnaeus as the father of classification.",
@@ -2494,7 +2645,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "prompt": "Put the butterfly metamorphosis stages in correct order: adult butterfly, chrysalis (pupa), caterpillar (larva), egg.",
                 "expected_type": "text",
                 "correct_answer": "egg, caterpillar (larva), chrysalis (pupa), adult butterfly",
-                "hints": ["Start with the smallest stage. What comes out of the egg? What does the caterpillar become?"],
+                "hints": [
+                    "Start with the smallest stage. What comes out of the egg? What does the caterpillar become?"
+                ],
                 "explanation": "Correct order: (1) Egg — laid on a plant. (2) Caterpillar (larva) — hatches and eats constantly. (3) Chrysalis (pupa) — caterpillar forms a protective case and transforms inside. (4) Adult butterfly — emerges and flies. This is complete metamorphosis: four totally different forms!",
             },
             {
@@ -2502,7 +2655,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Go outside with a magnifying glass. Find an insect. Draw it in your science notebook and label: head, thorax, abdomen, and legs. How many legs did you count?",
                 "expected_type": "text",
-                "hints": ["Look under rocks, on plants, near flowers, or on the ground. Any creature with 6 legs and 3 body sections is an insect."],
+                "hints": [
+                    "Look under rocks, on plants, near flowers, or on the ground. Any creature with 6 legs and 3 body sections is an insect."
+                ],
                 "explanation": "A good entry includes a drawing from life with labeled body parts: head (with eyes and antennae), thorax (middle section where 6 legs and wings attach), and abdomen (largest back section). Counting exactly 6 legs confirms it is an insect.",
             },
             {
@@ -2624,9 +2779,16 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "Which of these is a characteristic that ALL birds share?",
                 "expected_type": "multiple_choice",
-                "options": ["They can all fly", "They all have feathers", "They all eat seeds", "They all live in trees"],
+                "options": [
+                    "They can all fly",
+                    "They all have feathers",
+                    "They all eat seeds",
+                    "They all live in trees",
+                ],
                 "correct_answer": "They all have feathers",
-                "hints": ["Not all birds fly (penguins, ostriches). Not all eat seeds. Not all live in trees. But one feature is universal..."],
+                "hints": [
+                    "Not all birds fly (penguins, ostriches). Not all eat seeds. Not all live in trees. But one feature is universal..."
+                ],
                 "explanation": "ALL birds have feathers — it is the defining characteristic of birds. Not all birds fly (penguins, ostriches), not all eat seeds, and not all live in trees. But every bird, from hummingbird to ostrich, has feathers.",
             },
             {
@@ -2644,7 +2806,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Set up a bird observation station (near a window looking at a feeder or yard). Watch for 15 minutes. Record: how many birds you see, what species (if you know), and what they are doing.",
                 "expected_type": "text",
-                "hints": ["Note: the species (or describe it: 'small brown bird with a red chest'), the number, and the behavior (eating, singing, hopping, flying, chasing)."],
+                "hints": [
+                    "Note: the species (or describe it: 'small brown bird with a red chest'), the number, and the behavior (eating, singing, hopping, flying, chasing)."
+                ],
                 "explanation": "A good observation record includes: date, time, weather, number of birds, species identification (or description), and behavior notes. Example: 'April 16, 9am, sunny. 3 cardinals eating seeds. 2 blue jays chasing each other. 1 robin pulling a worm from the lawn.' Over days and weeks, patterns emerge.",
             },
             {
@@ -2661,7 +2825,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Choose a bird you see regularly. Draw it from life in your science notebook. Label: beak shape, wing shape, tail shape, and feet. Based on its features, describe what it eats and where it lives.",
                 "expected_type": "text",
-                "hints": ["Observe carefully before drawing. What beak shape? (thick=seeds, thin=insects, hooked=meat). What feet? (perching=songbird, webbed=swimmer, talons=predator)."],
+                "hints": [
+                    "Observe carefully before drawing. What beak shape? (thick=seeds, thin=insects, hooked=meat). What feet? (perching=songbird, webbed=swimmer, talons=predator)."
+                ],
                 "explanation": "A complete bird study includes: accurate drawing from observation, labeled body parts, and inferences about diet and habitat based on those features. Example: 'Robin: medium bird, orange breast, thin pointed beak (eats worms and insects), perching feet (lives in trees and on lawns), short rounded wings (doesn't migrate far).' The child connects form to function — anatomy reveals lifestyle.",
             },
         ],
@@ -2680,7 +2846,10 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["bird feeder or birdbath (even a plate of seeds works)", "science notebook for bird observations"],
+            "required": [
+                "bird feeder or birdbath (even a plate of seeds works)",
+                "science notebook for bird observations",
+            ],
             "recommended": ["bird field guide for your region", "binoculars for distance observation"],
             "philosophy_specific": {
                 "classical": "Bird classification and anatomy memorized. 10 local species identified by name and features. Vocabulary: ornithology, plumage, migration, adaptation, fledgling.",
@@ -2794,7 +2963,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "A dolphin lives in the ocean, swims with fins, and looks like a fish. Give 3 reasons why it is classified as a mammal, not a fish.",
                 "expected_type": "text",
-                "hints": ["Think about: how it breathes, how its babies are born, and whether it's warm or cold-blooded."],
+                "hints": [
+                    "Think about: how it breathes, how its babies are born, and whether it's warm or cold-blooded."
+                ],
                 "explanation": "Three reasons: (1) Dolphins breathe air with lungs — they must come to the surface to breathe (fish breathe water with gills). (2) Dolphins give live birth and nurse their calves with milk (fish lay eggs). (3) Dolphins are warm-blooded — their body temperature stays constant (fish are cold-blooded). Despite living in water and having flippers, dolphins are mammals.",
             },
             {
@@ -2802,7 +2973,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Pick a mammal you know well (a pet, a zoo animal, or a wild animal). Describe its habitat and 2 ways its body is adapted to survive there.",
                 "expected_type": "text",
-                "hints": ["Think about: fur thickness, body size, feet/paws, speed, diet, and behaviors. How does each help the animal survive in its specific habitat?"],
+                "hints": [
+                    "Think about: fur thickness, body size, feet/paws, speed, diet, and behaviors. How does each help the animal survive in its specific habitat?"
+                ],
                 "explanation": "Example for a rabbit: 'Rabbits live in meadows and fields (grassland habitat). Adaptation 1: long ears that can rotate to hear predators from far away. Adaptation 2: powerful back legs for running and jumping to escape. Both adaptations help them survive in open areas where predators can see them.'",
             },
             {
@@ -2810,7 +2983,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Compare three mammals from three different habitats: a polar bear (Arctic), a camel (desert), and a monkey (rainforest). For each, describe one adaptation to their habitat. What characteristic do ALL three share that makes them mammals?",
                 "expected_type": "text",
-                "hints": ["Each animal's body is adapted to its specific environment. But despite living in completely different places, all three share mammalian characteristics."],
+                "hints": [
+                    "Each animal's body is adapted to its specific environment. But despite living in completely different places, all three share mammalian characteristics."
+                ],
                 "explanation": "Polar bear: thick white fur for warmth and camouflage in snow. Camel: hump stores fat for energy during long desert journeys without food. Monkey: grasping hands and a prehensile tail for swinging through tree canopy. Despite these different adaptations, ALL three are warm-blooded, have fur/hair, give live birth, and nurse their young — the defining characteristics of mammals.",
             },
         ],
@@ -2932,7 +3107,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "Name one thing you learned from EACH area of science this year: (1) something about living things, (2) something about Earth, (3) something about how things work (physics).",
                 "expected_type": "text",
-                "hints": ["Living things: plants, animals, insects, human body. Earth: weather, water cycle, rocks, seasons. Physics: magnets, light, sound, simple machines."],
+                "hints": [
+                    "Living things: plants, animals, insects, human body. Earth: weather, water cycle, rocks, seasons. Physics: magnets, light, sound, simple machines."
+                ],
                 "explanation": "Example: (1) Living things: plants need sunlight, water, and soil to grow. (2) Earth: the water cycle has 3 stages — evaporation, condensation, precipitation. (3) Physics: magnets attract objects made of iron but not all metals. Each answer shows knowledge across the three main branches of foundational science.",
             },
             {
@@ -2955,7 +3132,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Look through your nature journal. Compare your first entry to your most recent. What improved? What do you notice differently now than you did at the beginning?",
                 "expected_type": "text",
-                "hints": ["Compare: drawing detail, written observations, types of things observed, vocabulary used, questions asked."],
+                "hints": [
+                    "Compare: drawing detail, written observations, types of things observed, vocabulary used, questions asked."
+                ],
                 "explanation": "A reflective answer identifies specific improvements: 'My drawings have more detail now — I draw individual leaves instead of just a green blob. I write longer observations. I notice things I wouldn't have seen before, like the veins on a leaf or the way ants follow a trail.' This metacognition — thinking about your own learning — is a sign of scientific maturity.",
             },
             {
@@ -2972,7 +3151,9 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Perform your favorite experiment from this year for your family. Explain: What was your question? What did you predict? What did you do? What happened? What did you learn?",
                 "expected_type": "text",
-                "hints": ["Choose an experiment you enjoyed and remember well. Walk through ALL 5 scientific method steps. Show your family what you discovered."],
+                "hints": [
+                    "Choose an experiment you enjoyed and remember well. Walk through ALL 5 scientific method steps. Show your family what you discovered."
+                ],
                 "explanation": "A complete experiment presentation includes all scientific method steps: (1) Question (what I wanted to find out), (2) Prediction (what I thought would happen and why), (3) Procedure (what I did to test it), (4) Results (what actually happened), (5) Conclusion (what I learned). Presenting to family makes it a real scientific communication — sharing discoveries is what scientists do.",
             },
         ],

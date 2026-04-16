@@ -73,7 +73,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "Practice writing the uppercase letter A five times on lined paper. Make each one the same size.",
                 "expected_type": "text",
-                "hints": ["Start at the top line. Two slanted lines that meet at the top, then a horizontal line across the middle."],
+                "hints": [
+                    "Start at the top line. Two slanted lines that meet at the top, then a horizontal line across the middle."
+                ],
                 "explanation": "The letter A is formed with two diagonal strokes meeting at the top and a horizontal bar across the middle. All five should be the same height, touching the top line and sitting on the baseline.",
             },
             {
@@ -96,7 +98,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Write your full first name on lined paper. Check: Does every letter sit on the baseline? Are tall letters taller than short letters?",
                 "expected_type": "text",
-                "hints": ["Tall letters (b, d, f, h, k, l, t) reach the top line. Short letters (a, c, e, m, n) fill only the middle space."],
+                "hints": [
+                    "Tall letters (b, d, f, h, k, l, t) reach the top line. Short letters (a, c, e, m, n) fill only the middle space."
+                ],
                 "explanation": "A well-written name has consistent letter sizing: tall letters reach the top line, short letters fill the middle space, and tail letters (g, j, p, q, y) drop below the baseline. All letters sit on the baseline.",
             },
             {
@@ -137,8 +141,14 @@ WRITING_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["pencils (short pencils or golf pencils for small hands)", "lined paper appropriate to the child's level"],
-            "recommended": ["chalkboard or whiteboard for large letter practice", "sandpaper letters or textured letter cards"],
+            "required": [
+                "pencils (short pencils or golf pencils for small hands)",
+                "lined paper appropriate to the child's level",
+            ],
+            "recommended": [
+                "chalkboard or whiteboard for large letter practice",
+                "sandpaper letters or textured letter cards",
+            ],
             "philosophy_specific": {
                 "classical": "Systematic handwriting instruction: one letter group per week. Daily practice with correct formation as non-negotiable. Handwriting as the physical foundation of all written work.",
                 "charlotte_mason": "Careful, beautiful handwriting from the very first lesson. Never allow sloppy formation — better to write one perfect letter than ten rushed ones. Short daily lessons (5-10 minutes).",
@@ -255,7 +265,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Study this sentence for 30 seconds, then close your eyes (or cover it) and write it from memory: 'The dog ran fast.'",
                 "expected_type": "text",
-                "hints": ["Look at every word carefully. Notice the capital T, the period at the end, and the spelling of each word."],
+                "hints": [
+                    "Look at every word carefully. Notice the capital T, the period at the end, and the spelling of each word."
+                ],
                 "explanation": "Writing from memory after studying is called 'studied dictation.' It trains visual memory for spelling and builds the habit of careful observation. Check your work against the original afterward.",
             },
             {
@@ -263,7 +275,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "You copied a sentence and wrote 'the Cat sat on the mat.' What errors do you see?",
                 "expected_type": "text",
-                "hints": ["Check the capitalization. Should 'the' be lowercase at the start? Should 'Cat' be capitalized in the middle?"],
+                "hints": [
+                    "Check the capitalization. Should 'the' be lowercase at the start? Should 'Cat' be capitalized in the middle?"
+                ],
                 "explanation": "Two errors: 'the' should be capitalized at the beginning of the sentence (The), and 'Cat' should NOT be capitalized in the middle of the sentence (cat). Correct version: 'The cat sat on the mat.'",
             },
             {
@@ -271,7 +285,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Copy this 2-sentence passage perfectly: 'The sun was warm. Birds sang in the tall oak tree.'",
                 "expected_type": "text",
-                "hints": ["Two sentences means two capital letters and two periods. Check every word's spelling carefully."],
+                "hints": [
+                    "Two sentences means two capital letters and two periods. Check every word's spelling carefully."
+                ],
                 "explanation": "Perfect copy includes: two capital letters (The, Birds), two periods, correct spelling of every word including 'sang' and 'oak,' proper spacing between words, and neat handwriting. Self-check by comparing to the original word by word.",
             },
         ],
@@ -419,7 +435,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "prompt": "Your parent says the word 'cake.' Write it. Be careful — there's a tricky part!",
                 "expected_type": "text",
                 "correct_answer": "cake",
-                "hints": ["You hear /k/ /ā/ /k/. But the long a means there's a silent e at the end. Remember the CVCe pattern!"],
+                "hints": [
+                    "You hear /k/ /ā/ /k/. But the long a means there's a silent e at the end. Remember the CVCe pattern!"
+                ],
                 "explanation": "Cake has three sounds (/k/ /ā/ /k/) but four letters: c-a-k-e. The silent e makes the a say its name. When you hear a long vowel in a short word, think about the silent-e pattern.",
             },
             {
@@ -427,7 +445,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Write these 5 words from dictation (have your parent say them): cat, stop, bike, tree, jump. Then check your answers.",
                 "expected_type": "text",
-                "hints": ["Listen carefully to each word. Use your phonics patterns: CVC, blends, silent e, vowel teams."],
+                "hints": [
+                    "Listen carefully to each word. Use your phonics patterns: CVC, blends, silent e, vowel teams."
+                ],
                 "explanation": "Correct spellings: cat (CVC), stop (blend + CVC), bike (CVCe with silent e), tree (vowel team ee), jump (blend + CVC). Each word uses a different phonics pattern you've learned in reading.",
             },
         ],
@@ -528,7 +548,11 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "Cannot distinguish a sentence from a fragment consistently",
                 "Written 'sentences' are often fragments",
             ],
-            "assessment_methods": ["sentence/fragment identification", "subject/predicate naming", "original sentence writing"],
+            "assessment_methods": [
+                "sentence/fragment identification",
+                "subject/predicate naming",
+                "original sentence writing",
+            ],
             "sample_assessment_prompts": [
                 "Is this a sentence or a fragment: 'The happy little girl'?",
                 "In the sentence 'My cat sleeps on the bed,' who is the subject and what is the predicate?",
@@ -578,7 +602,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Write 3 complete sentences about what you did today. Make sure each one has a subject and a verb.",
                 "expected_type": "text",
-                "hints": ["Each sentence needs: a WHO part (you or someone else), a WHAT part (what happened), a capital letter at the start, and a period at the end."],
+                "hints": [
+                    "Each sentence needs: a WHO part (you or someone else), a WHAT part (what happened), a capital letter at the start, and a period at the end."
+                ],
                 "explanation": "Good sentences are complete thoughts. Example: 'I ate pancakes for breakfast. My mom read a book to me. We went for a walk in the park.' Each has a clear subject and predicate with correct capitalization and punctuation.",
             },
         ],
@@ -730,7 +756,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Write a sentence that correctly uses at least 3 capitalization rules: sentence beginning, a proper noun, and the pronoun I.",
                 "expected_type": "text",
-                "hints": ["Include your name or a friend's name, mention yourself with I, and start with a capital letter."],
+                "hints": [
+                    "Include your name or a friend's name, mention yourself with I, and start with a capital letter."
+                ],
                 "explanation": "Example: 'My friend Jake and I played at Riverside Park on Saturday.' This uses: sentence beginning (My), proper nouns (Jake, Riverside Park, Saturday), and the pronoun I. All five capitalizations follow the rules.",
             },
         ],
@@ -874,7 +902,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "prompt": "True or false: Every sentence should end with an exclamation point to make writing more exciting.",
                 "expected_type": "true_false",
                 "correct_answer": "false",
-                "hints": ["If everything is exciting, is anything really exciting? What about calm statements and questions?"],
+                "hints": [
+                    "If everything is exciting, is anything really exciting? What about calm statements and questions?"
+                ],
                 "explanation": "False. Exclamation points are for genuinely strong feelings or urgent warnings. Most sentences are statements (period) or questions (question mark). Overusing exclamation points makes writing feel like shouting.",
             },
             {
@@ -882,7 +912,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Write three sentences about the weather today: one statement (.), one question (?), and one exclamation (!). Use the correct punctuation for each.",
                 "expected_type": "text",
-                "hints": ["Statement: tell something about the weather. Question: ask something about it. Exclamation: express excitement or surprise."],
+                "hints": [
+                    "Statement: tell something about the weather. Question: ask something about it. Exclamation: express excitement or surprise."
+                ],
                 "explanation": "Example: 'It is sunny today.' (statement) 'Will it rain tomorrow?' (question) 'The sunset is beautiful!' (exclamation). Each sentence has the correct end mark matching its type.",
             },
         ],
@@ -983,7 +1015,11 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "Can identify obvious action verbs but misses being verbs and abstract nouns",
                 "Confuses nouns with other parts of speech",
             ],
-            "assessment_methods": ["word identification in sentences", "word sorting", "writing with specific word choice"],
+            "assessment_methods": [
+                "word identification in sentences",
+                "word sorting",
+                "writing with specific word choice",
+            ],
             "sample_assessment_prompts": [
                 "Find the noun and verb in: 'The bird sang a song.'",
                 "Sort these words: cat, run, happy, jump, tree, is, love, swim.",
@@ -998,7 +1034,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "expected_type": "multiple_choice",
                 "options": ["running", "happy", "dog"],
                 "correct_answer": "dog",
-                "hints": ["A noun names a person, place, thing, or idea. Which word names something you can see or touch?"],
+                "hints": [
+                    "A noun names a person, place, thing, or idea. Which word names something you can see or touch?"
+                ],
                 "explanation": "Dog is a noun — it names a thing (an animal). Running is a verb (an action). Happy is an adjective (it describes how something feels).",
             },
             {
@@ -1033,7 +1071,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Rewrite this sentence using a more specific noun and a stronger verb: 'The animal moved across the yard.'",
                 "expected_type": "text",
-                "hints": ["What KIND of animal? How exactly did it move? 'The squirrel darted across the yard' paints a clearer picture."],
+                "hints": [
+                    "What KIND of animal? How exactly did it move? 'The squirrel darted across the yard' paints a clearer picture."
+                ],
                 "explanation": "Strong revision might be: 'The squirrel darted across the yard' or 'The deer leaped across the meadow.' Specific nouns (squirrel instead of animal) and strong verbs (darted instead of moved) make writing vivid and interesting.",
             },
         ],
@@ -1147,7 +1187,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "Write a sentence about a cat. Make sure it has a subject, a verb, a capital letter, and a period.",
                 "expected_type": "text",
-                "hints": ["Subject = the cat (or a cat, my cat). Verb = what the cat does. Capital at the start. Period at the end."],
+                "hints": [
+                    "Subject = the cat (or a cat, my cat). Verb = what the cat does. Capital at the start. Period at the end."
+                ],
                 "explanation": "Example: 'The cat sleeps on the chair.' This has a subject (The cat), a verb (sleeps), a capital letter (The), and a period. Any complete sentence about a cat with these elements is correct.",
             },
             {
@@ -1173,7 +1215,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "These sentences all start with 'I': 'I went to the store. I bought milk. I came home.' Rewrite ONE of them with a different beginning.",
                 "expected_type": "text",
-                "hints": ["Try starting with WHEN or WHERE instead of 'I.' Example: 'After breakfast, I went to the store.'"],
+                "hints": [
+                    "Try starting with WHEN or WHERE instead of 'I.' Example: 'After breakfast, I went to the store.'"
+                ],
                 "explanation": "Varying sentence beginnings makes writing more interesting. Options: 'After breakfast, I went to the store.' 'At the store, I bought milk.' 'Later that afternoon, I came home.' Each revision starts differently and sounds more sophisticated.",
             },
             {
@@ -1181,7 +1225,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Write 3 sentences about what you see outside the nearest window. Each sentence should start differently and include at least one detail about where, when, or how.",
                 "expected_type": "text",
-                "hints": ["Look outside. Describe what you see. Start each sentence with a different word. Add details!"],
+                "hints": [
+                    "Look outside. Describe what you see. Start each sentence with a different word. Add details!"
+                ],
                 "explanation": "Example: 'A tall oak tree stands in the front yard. Underneath it, two squirrels chase each other around the trunk. The sky above is bright blue with fluffy white clouds.' Each sentence starts differently (A, Underneath, The) and includes descriptive details.",
             },
         ],
@@ -1310,7 +1356,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                     "Writing is always better than speaking",
                 ],
                 "correct_answer": "Talking is easier than writing, so you can organize your ideas without worrying about spelling and handwriting",
-                "hints": ["When you talk, you don't have to worry about how to spell words or form letters. What can you focus on instead?"],
+                "hints": [
+                    "When you talk, you don't have to worry about how to spell words or form letters. What can you focus on instead?"
+                ],
                 "explanation": "Oral composition lets you focus on organizing your IDEAS without the extra challenge of handwriting and spelling. You can think about what happened, what order to tell it in, and what details to include — then write it down later.",
             },
             {
@@ -1327,7 +1375,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "prompt": "True or false: Oral composition is only for young children who can't write yet.",
                 "expected_type": "true_false",
                 "correct_answer": "false",
-                "hints": ["Do adults ever talk through their ideas before writing? Do professional writers discuss their plans?"],
+                "hints": [
+                    "Do adults ever talk through their ideas before writing? Do professional writers discuss their plans?"
+                ],
                 "explanation": "False. Oral composition is valuable at EVERY age. Professional writers discuss ideas before writing. Students talk through essay plans. Scientists present findings verbally before publishing. Organizing ideas aloud is a lifelong skill.",
             },
             {
@@ -1335,7 +1385,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Describe your favorite room in your home in 5 complete sentences so that someone who has never been there can picture it. Include details about what you see, hear, and feel in that room.",
                 "expected_type": "text",
-                "hints": ["Start with what the room looks like. Then add specific details: furniture, colors, sounds, how it feels to be there. Use complete sentences."],
+                "hints": [
+                    "Start with what the room looks like. Then add specific details: furniture, colors, sounds, how it feels to be there. Use complete sentences."
+                ],
                 "explanation": "A rich description might be: 'My favorite room is the kitchen. It has big windows that let in morning sunlight. The counters are covered with jars of flour and sugar because Mom bakes a lot. It always smells like something good cooking. I feel warm and happy when I sit at the table with my family.' Five complete sentences with sensory details (sight, smell, feeling) paint a vivid picture.",
             },
         ],
@@ -1355,7 +1407,10 @@ WRITING_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["no materials needed — oral composition requires only a speaker and a listener"],
-            "recommended": ["story starter cards", "sequence word reference card (first, then, next, after that, finally)"],
+            "recommended": [
+                "story starter cards",
+                "sequence word reference card (first, then, next, after that, finally)",
+            ],
             "philosophy_specific": {
                 "classical": "Oral composition (oratory) is the classical foundation for all written composition. The child learns to speak in organized, complete thoughts before writing them. Rhetoric begins here.",
                 "charlotte_mason": "Narration IS oral composition: the child retells what they know in their own words. Daily narration across all subjects builds composition skills without formal writing assignments.",
@@ -1393,7 +1448,7 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "The parent transcribes the child's narration EXACTLY as spoken — word for word, including any grammar quirks",
                 "Read the transcription back to the child: 'Listen to your own words!' The child hears their narration read back.",
                 "The child copies the transcription carefully onto their own paper — this is meaningful copywork because the words are THEIRS",
-                "Over time, gently discuss improvements: 'You said \"Me and him went.\" In writing we say \"He and I went.\" Let's fix that in the copy.'",
+                'Over time, gently discuss improvements: \'You said "Me and him went." In writing we say "He and I went." Let\'s fix that in the copy.\'',
                 "Gradually increase passage length: from one paragraph to a full page to a chapter",
                 "Eventually the child begins writing their own narrations directly, having internalized the oral-to-written connection",
             ],
@@ -1436,7 +1491,11 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "Narrates only 1-2 sentences or recalls only scattered details",
                 "Struggles to copy the transcription accurately",
             ],
-            "assessment_methods": ["narration quality observation", "transcription copy accuracy", "growth over time comparison"],
+            "assessment_methods": [
+                "narration quality observation",
+                "transcription copy accuracy",
+                "growth over time comparison",
+            ],
             "sample_assessment_prompts": [
                 "Listen to this passage. Now tell me everything that happened, in your own words.",
                 "Here is what you said, written down. Copy it onto your paper as neatly as you can.",
@@ -1464,7 +1523,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                     "You take a test about the story",
                 ],
                 "correct_answer": "Your parent writes down what you said, and then you copy it onto your own paper",
-                "hints": ["The narration-to-dictation method has steps: listen, narrate, parent writes it down, then you..."],
+                "hints": [
+                    "The narration-to-dictation method has steps: listen, narrate, parent writes it down, then you..."
+                ],
                 "explanation": "After narrating, the parent transcribes your words exactly. Then you copy the transcription onto your own paper. This lets you see YOUR OWN thoughts as written text, and the copying practice builds your handwriting skills with meaningful content.",
             },
             {
@@ -1472,7 +1533,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Your narration included this sentence: 'The boy runned to the store real fast.' Your parent wrote it down exactly as you said it. Now, can you fix it to sound better in writing?",
                 "expected_type": "text",
-                "hints": ["'Runned' isn't a standard English word — what's the correct past tense? 'Real fast' can be improved too."],
+                "hints": [
+                    "'Runned' isn't a standard English word — what's the correct past tense? 'Real fast' can be improved too."
+                ],
                 "explanation": "Corrected: 'The boy ran to the store very quickly.' (or 'really fast'). 'Ran' is the correct past tense of 'run.' 'Very quickly' is more formal than 'real fast.' Noticing these differences between spoken and written language is part of the learning process.",
             },
             {
@@ -1489,7 +1552,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "After hearing a chapter of a book read aloud, narrate the most important events in 5 sentences. Use sequence words and descriptive details. Then have your parent write it down and copy it onto your paper.",
                 "expected_type": "text",
-                "hints": ["Narrate the KEY events, not every detail. Use: first, then, next, finally. Add details that help the reader picture what happened."],
+                "hints": [
+                    "Narrate the KEY events, not every detail. Use: first, then, next, finally. Add details that help the reader picture what happened."
+                ],
                 "explanation": "A mature narration of a chapter might be: 'First, the family arrived at the old house in the country. The children explored the garden and found a hidden gate. Then they opened the gate and discovered a secret garden full of overgrown roses. The youngest child wanted to fix the garden, so they began pulling weeds. Finally, they decided to come back every day to bring the garden back to life.' This shows sequence, detail, and comprehension — all composed orally and then transcribed.",
             },
         ],
@@ -1645,7 +1710,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Spell these 5 words from different word families: map, sit, hop, bed, fun. Then check your spelling against the answers.",
                 "expected_type": "text",
-                "hints": ["Each word has 3 sounds. Listen to each sound and write the matching letter. The vowel in the middle is the trickiest part."],
+                "hints": [
+                    "Each word has 3 sounds. Listen to each sound and write the matching letter. The vowel in the middle is the trickiest part."
+                ],
                 "explanation": "Correct: map (m-a-p), sit (s-i-t), hop (h-o-p), bed (b-e-d), fun (f-u-n). Each uses a different short vowel: a, i, o, e, u. Being able to spell words from ALL five vowel families shows CVC mastery.",
             },
         ],
@@ -1746,7 +1813,11 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "Spells fewer than 35 correctly",
                 "Frequently misspells common words without noticing",
             ],
-            "assessment_methods": ["dictation of high-frequency words", "writing sample review", "self-correction observation"],
+            "assessment_methods": [
+                "dictation of high-frequency words",
+                "writing sample review",
+                "self-correction observation",
+            ],
             "sample_assessment_prompts": [
                 "Spell these words: the, said, they, could, because, were, would, there, have, friend.",
                 "Write a sentence using the words 'they,' 'said,' and 'because.'",
@@ -1778,7 +1849,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Write a sentence that uses ALL of these high-frequency words: the, is, and, my.",
                 "expected_type": "text",
-                "hints": ["Create any sentence that naturally includes all four words. Example starter: 'The dog is...'"],
+                "hints": [
+                    "Create any sentence that naturally includes all four words. Example starter: 'The dog is...'"
+                ],
                 "explanation": "Example: 'The cat is small and my dog is big.' Any grammatically correct sentence using all four words shows fluent command of high-frequency spelling.",
             },
             {
@@ -1910,7 +1983,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "Draw a picture of your favorite animal and label it with its name.",
                 "expected_type": "text",
-                "hints": ["Draw the animal first. Then write its name underneath or next to it. Sound out the letters."],
+                "hints": [
+                    "Draw the animal first. Then write its name underneath or next to it. Sound out the letters."
+                ],
                 "explanation": "The child draws the animal and writes a label: 'cat,' 'dog,' 'horse,' etc. The label connects the drawing to a written word. This is the first step in journal writing.",
             },
             {
@@ -1933,7 +2008,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Draw a picture of something you did today. Write a caption (a short phrase) describing your drawing.",
                 "expected_type": "text",
-                "hints": ["A caption is a short phrase that describes the picture: 'playing at the park,' 'my breakfast,' 'reading with Mom.'"],
+                "hints": [
+                    "A caption is a short phrase that describes the picture: 'playing at the park,' 'my breakfast,' 'reading with Mom.'"
+                ],
                 "explanation": "A caption is a step beyond a label — it's a phrase (2-4 words) that describes the drawing. Example: drawing of swings with caption 'fun at the park.' Captions bridge labels and sentences.",
             },
             {
@@ -1941,7 +2018,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Draw a nature observation (something you see outside) and write one complete sentence about it.",
                 "expected_type": "text",
-                "hints": ["Look outside. What do you see? Draw it. Then write one sentence: 'I see a...' or 'The... is...'"],
+                "hints": [
+                    "Look outside. What do you see? Draw it. Then write one sentence: 'I see a...' or 'The... is...'"
+                ],
                 "explanation": "Example: drawing of a cloud with the sentence 'The cloud looks like a rabbit.' This combines observation (science), drawing (art), and writing — all in one journal entry.",
             },
             {
@@ -1949,7 +2028,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Create a journal entry with a drawing and 3 sentences about your favorite memory from this week.",
                 "expected_type": "text",
-                "hints": ["Draw the scene first. Then write: What happened? Where were you? How did you feel? Use complete sentences."],
+                "hints": [
+                    "Draw the scene first. Then write: What happened? Where were you? How did you feel? Use complete sentences."
+                ],
                 "explanation": "A mature journal entry combines a detailed drawing with multiple connected sentences. Example: 'On Saturday we went to the lake. I caught a fish with Dad. It was the best day ever!' The drawing and writing tell the same story from different angles.",
             },
         ],
@@ -2098,7 +2179,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Write a complete thank-you letter to someone who gave you a gift or did something kind for you. Include all 5 parts. Make it real — you could actually mail this!",
                 "expected_type": "text",
-                "hints": ["Date at the top. Dear ___. In the body: thank them, tell them what the gift/kindness meant to you, share some news. Closing: Love, or Sincerely. Your name."],
+                "hints": [
+                    "Date at the top. Dear ___. In the body: thank them, tell them what the gift/kindness meant to you, share some news. Closing: Love, or Sincerely. Your name."
+                ],
                 "explanation": "A complete thank-you letter: 'April 16, 2026 / Dear Aunt Lisa, / Thank you so much for the books you sent me for my birthday. I already finished the one about dinosaurs! My favorite part was learning about the T-Rex. I hope I can visit you this summer. / Love, / [Name]' All 5 parts present, heartfelt body with 4 sentences, addressed to a real person.",
             },
         ],
@@ -2199,7 +2282,11 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "Cannot consistently identify where commas belong in a list",
                 "Omits commas from lists in own writing",
             ],
-            "assessment_methods": ["comma placement in given sentences", "original list sentence writing", "rule explanation"],
+            "assessment_methods": [
+                "comma placement in given sentences",
+                "original list sentence writing",
+                "rule explanation",
+            ],
             "sample_assessment_prompts": [
                 "Add commas to this sentence: 'I see a dog a cat and a bird.'",
                 "Write a sentence listing 4 things in your backpack. Use commas.",
@@ -2248,7 +2335,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Why is this sentence confusing without commas: 'My favorite meals are peanut butter and jelly macaroni and cheese and pizza'? Add commas to fix it.",
                 "expected_type": "text",
-                "hints": ["Some items in this list are TWO words long. The commas show where one item ends and the next begins."],
+                "hints": [
+                    "Some items in this list are TWO words long. The commas show where one item ends and the next begins."
+                ],
                 "explanation": "Fixed: 'My favorite meals are peanut butter and jelly, macaroni and cheese, and pizza.' Without commas, the reader can't tell where 'peanut butter and jelly' ends and 'macaroni and cheese' begins. Commas make the three items clear.",
             },
         ],
@@ -2372,7 +2461,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "Add an adjective to make this sentence more interesting: 'I saw a dog.'",
                 "expected_type": "text",
-                "hints": ["What kind of dog? Big? Small? Fluffy? Spotted? Friendly? Choose a word that helps the reader picture the dog."],
+                "hints": [
+                    "What kind of dog? Big? Small? Fluffy? Spotted? Friendly? Choose a word that helps the reader picture the dog."
+                ],
                 "explanation": "Any descriptive word about the dog works: 'I saw a fluffy dog,' 'I saw a huge dog,' 'I saw a spotted dog.' The adjective helps the reader picture the specific dog you saw.",
             },
             {
@@ -2389,7 +2480,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "prompt": "True or false: Adjectives can only describe colors and sizes.",
                 "expected_type": "true_false",
                 "correct_answer": "false",
-                "hints": ["Think about all the ways you can describe something: texture, temperature, shape, age, feeling..."],
+                "hints": [
+                    "Think about all the ways you can describe something: texture, temperature, shape, age, feeling..."
+                ],
                 "explanation": "False. Adjectives describe many qualities: color (red), size (tiny), shape (round), texture (smooth), temperature (cold), age (old), feeling (happy), quantity (three), and many more. Color and size are just the most obvious categories.",
             },
             {
@@ -2397,7 +2490,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Describe your favorite food using at least 5 adjectives. Appeal to the senses: what does it look like, smell like, taste like, and feel like in your mouth?",
                 "expected_type": "text",
-                "hints": ["Think about: color, size, shape, texture, temperature, smell, taste. Use specific adjectives, not just 'good' or 'nice.'"],
+                "hints": [
+                    "Think about: color, size, shape, texture, temperature, smell, taste. Use specific adjectives, not just 'good' or 'nice.'"
+                ],
                 "explanation": "Example for pizza: 'Hot, cheesy pizza with a crispy golden crust, tangy red sauce, and melted mozzarella. The cheese is stretchy and gooey, and the crust is crunchy and warm.' Multiple adjectives appealing to sight (golden), touch (crispy, stretchy), taste (tangy), and temperature (hot, warm).",
             },
         ],
@@ -2538,7 +2633,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Your friend wrote: 'Then I put on my shoes. First I tied my laces. Finally I put on my socks.' What's wrong with this sequence?",
                 "expected_type": "text",
-                "hints": ["Think about what order these steps should happen in real life. Can you tie laces before putting on shoes?"],
+                "hints": [
+                    "Think about what order these steps should happen in real life. Can you tie laces before putting on shoes?"
+                ],
                 "explanation": "The steps are out of order! Correct sequence: First, I put on my socks. Then I put on my shoes. Finally, I tied my laces. You must put on socks before shoes, and shoes before laces. Sequence writing must follow LOGICAL order.",
             },
             {
@@ -2546,7 +2643,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Write a 5-step how-to paragraph explaining how to do something you know well (make a snack, feed a pet, plant a seed). Use a different transition word for each step.",
                 "expected_type": "text",
-                "hints": ["Use: first, next, then, after that, finally. Each step should be one sentence. Include all the details someone would need to follow your instructions."],
+                "hints": [
+                    "Use: first, next, then, after that, finally. Each step should be one sentence. Include all the details someone would need to follow your instructions."
+                ],
                 "explanation": "A strong how-to paragraph has 5 steps in logical order, each with a different transition word, and enough detail that someone unfamiliar could follow the instructions. Example for planting a seed: 'First, fill a small pot with soil. Next, poke a hole in the soil with your finger about one inch deep. Then, drop a seed into the hole and cover it with soil. After that, water the soil gently until it is damp but not soaked. Finally, place the pot in a sunny window and water it every few days.'",
             },
         ],
@@ -2660,7 +2759,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "Write today's date in standard format: Month Day, Year.",
                 "expected_type": "text",
-                "hints": ["Full month name (not a number), then the day number, a comma, then the year. Example: January 5, 2026"],
+                "hints": [
+                    "Full month name (not a number), then the day number, a comma, then the year. Example: January 5, 2026"
+                ],
                 "explanation": "Standard date format: the full month name capitalized, then the day number, a comma, then the four-digit year. Example: April 16, 2026. Practice this daily until it's automatic.",
             },
             {
@@ -2826,7 +2927,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Copy this sentence three times as neatly as you can: 'The quick brown fox jumps over the lazy dog.' Time yourself. How long did it take?",
                 "expected_type": "text",
-                "hints": ["Focus on consistent letter size, spacing, and baseline alignment. Try to keep quality the same for all three copies."],
+                "hints": [
+                    "Focus on consistent letter size, spacing, and baseline alignment. Try to keep quality the same for all three copies."
+                ],
                 "explanation": "This sentence contains every letter of the alphabet, making it a complete handwriting exercise. Timing yourself and tracking your speed over days/weeks shows improvement. Quality should be consistent across all three copies.",
             },
             {
@@ -2834,7 +2937,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "You wrote for 10 minutes. Your first sentence is neat and clear, but your last sentence is messy and hard to read. What happened?",
                 "expected_type": "text",
-                "hints": ["Think about what your hand felt like at the end. What does your body need to write for longer?"],
+                "hints": [
+                    "Think about what your hand felt like at the end. What does your body need to write for longer?"
+                ],
                 "explanation": "Your hand got tired (fatigue), and quality dropped. Solutions: hand warm-ups before writing, correct pencil grip (reduces strain), gradually building endurance over weeks, and taking a 30-second hand-shake break every 5 minutes during long writing sessions.",
             },
             {
@@ -2842,7 +2947,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Write about anything you want for 5 minutes without stopping. When the timer goes off, count your words. Compare the neatness of your first line to your last line. Are they the same quality?",
                 "expected_type": "text",
-                "hints": ["Keep your pencil moving the whole time. Write about your day, a story, anything. The goal is sustained writing with consistent quality."],
+                "hints": [
+                    "Keep your pencil moving the whole time. Write about your day, a story, anything. The goal is sustained writing with consistent quality."
+                ],
                 "explanation": "A fluent writer produces 30-50+ words in 5 minutes (depending on age) with consistent quality throughout. If the first line is neat but the last line is messy, the child needs more stamina practice. If quality is consistent, the child has handwriting fluency at their current speed.",
             },
         ],
@@ -2981,7 +3088,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                     "A title, a date, and a signature",
                 ],
                 "correct_answer": "A capital letter at the start, a subject and verb, and end punctuation",
-                "hints": ["Think about the sentence rules you learned: how does every sentence begin? What must it contain? How does it end?"],
+                "hints": [
+                    "Think about the sentence rules you learned: how does every sentence begin? What must it contain? How does it end?"
+                ],
                 "explanation": "Every sentence needs: (1) a capital letter at the beginning, (2) a subject and verb (making it a complete thought), and (3) end punctuation (period, question mark, or exclamation point).",
             },
             {
@@ -2990,7 +3099,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "prompt": "Find and fix the errors in this sentence: 'the dog runned to the park yesterday'",
                 "expected_type": "text",
                 "correct_answer": "The dog ran to the park yesterday.",
-                "hints": ["Look for: a missing capital letter, a word that doesn't sound right, and missing end punctuation."],
+                "hints": [
+                    "Look for: a missing capital letter, a word that doesn't sound right, and missing end punctuation."
+                ],
                 "explanation": "Three errors: (1) 'the' should be 'The' (capital at sentence start), (2) 'runned' should be 'ran' (past tense of run), (3) missing period at the end. Correct: 'The dog ran to the park yesterday.'",
             },
             {
@@ -3006,7 +3117,9 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Write a short story with a beginning (who and where), middle (what happened), and end (how it turned out). At least 5 sentences. Use correct capitals, punctuation, and at least 2 adjectives.",
                 "expected_type": "text",
-                "hints": ["Beginning: introduce a character and setting. Middle: something happens (a problem or adventure). End: the problem is solved or the adventure concludes. Check your conventions!"],
+                "hints": [
+                    "Beginning: introduce a character and setting. Middle: something happens (a problem or adventure). End: the problem is solved or the adventure concludes. Check your conventions!"
+                ],
                 "explanation": "A complete mini-story might be: 'Once there was a brave little mouse who lived under a big oak tree. One morning, he found a shiny golden coin in the grass. He wanted to show his friends, but a hungry crow spotted the coin too. The mouse hid behind a smooth gray stone and waited. When the crow flew away, the mouse grabbed the coin and raced home to share his treasure.' This has characters, setting, problem, resolution, adjectives, correct conventions, and 5+ sentences.",
             },
         ],
@@ -3037,7 +3150,11 @@ WRITING_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["writing samples from throughout the year", "copywork passage for assessment", "editing passage with intentional errors"],
+            "required": [
+                "writing samples from throughout the year",
+                "copywork passage for assessment",
+                "editing passage with intentional errors",
+            ],
             "recommended": ["writing portfolio folder", "celebration supplies for author's reading"],
             "philosophy_specific": {
                 "classical": "Comprehensive skills demonstration: handwriting, copywork, dictation, grammar identification, and original composition. Clear criteria for advancement. The child proves readiness through performance.",

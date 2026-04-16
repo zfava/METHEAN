@@ -111,7 +111,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Name 5 events from your own life and put them in chronological order (from first to most recent).",
                 "expected_type": "text",
-                "hints": ["Start with when you were very little. What are some big events that happened as you grew up?"],
+                "hints": [
+                    "Start with when you were very little. What are some big events that happened as you grew up?"
+                ],
                 "explanation": "A good answer includes 5 real events in correct time order. Example: I was born, I learned to walk, my sister was born, I lost my first tooth, I started reading. Each event should come after the one before it in real time.",
             },
         ],
@@ -248,7 +250,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "expected_type": "multiple_choice",
                 "options": ["Government", "Writing", "Stable food supply", "Having pets"],
                 "correct_answer": "Having pets",
-                "hints": ["Think about the 5 key characteristics: food, government, social structure, religion/culture, arts/technology/writing."],
+                "hints": [
+                    "Think about the 5 key characteristics: food, government, social structure, religion/culture, arts/technology/writing."
+                ],
                 "explanation": "The 5 characteristics of civilization are: stable food supply, social structure, government, religion/culture, and arts/technology/writing. Having pets is not one of the defining characteristics.",
             },
             {
@@ -273,7 +277,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Pick two ancient civilizations and compare them. How were they alike? How were they different?",
                 "expected_type": "text",
-                "hints": ["Choose two (Egypt, Mesopotamia, China, India). Think about their rivers, buildings, writing, and government."],
+                "hints": [
+                    "Choose two (Egypt, Mesopotamia, China, India). Think about their rivers, buildings, writing, and government."
+                ],
                 "explanation": "A good comparison might note: Egypt and Mesopotamia both grew near rivers and developed writing. But Egypt had hieroglyphics while Mesopotamia had cuneiform. Egypt built pyramids; Mesopotamia built ziggurats. Egypt had pharaohs; Mesopotamia had city-state kings.",
             },
         ],
@@ -299,7 +305,10 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["world map or globe", "paper for drawing maps"],
-            "recommended": ["timeline cards for ancient civilizations", "picture books or living books about ancient civilizations"],
+            "recommended": [
+                "timeline cards for ancient civilizations",
+                "picture books or living books about ancient civilizations",
+            ],
             "philosophy_specific": {
                 "classical": "Memorize the 5 characteristics of civilization. Chant the four river valley civilizations and their locations. Wall map with labels.",
                 "charlotte_mason": "Living geography: the child draws the world map from memory, adding river valleys. Living books about each civilization read aloud with narration.",
@@ -410,7 +419,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "expected_type": "multiple_choice",
                 "options": ["Homes for families", "Tombs for pharaohs", "Schools", "Grain storage"],
                 "correct_answer": "Tombs for pharaohs",
-                "hints": ["Pharaohs were buried with treasure for the afterlife. Where did they put all that treasure?"],
+                "hints": [
+                    "Pharaohs were buried with treasure for the afterlife. Where did they put all that treasure?"
+                ],
                 "explanation": "The pyramids were massive tombs built for pharaohs. Egyptians believed pharaohs needed their bodies and treasures preserved for the afterlife.",
             },
             {
@@ -436,7 +447,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "In your own words, tell the story of ancient Egypt. Include the Nile, pharaohs, pyramids, and what daily life was like.",
                 "expected_type": "text",
-                "hints": ["Start with the Nile and farming. Then talk about who ruled, what they built, and how ordinary people lived."],
+                "hints": [
+                    "Start with the Nile and farming. Then talk about who ruled, what they built, and how ordinary people lived."
+                ],
                 "explanation": "A good narration covers: the Nile's floods creating farmland, pharaohs ruling as god-kings, pyramids built as tombs, hieroglyphics as writing, and daily life for farmers, scribes, and craftspeople. It should sound like telling a story, not listing facts.",
             },
         ],
@@ -560,7 +573,12 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "What was cuneiform?",
                 "expected_type": "multiple_choice",
-                "options": ["A type of food", "A weapon", "A writing system using wedge-shaped marks", "A kind of building"],
+                "options": [
+                    "A type of food",
+                    "A weapon",
+                    "A writing system using wedge-shaped marks",
+                    "A kind of building",
+                ],
                 "correct_answer": "A writing system using wedge-shaped marks",
                 "hints": ["It was pressed into clay tablets. It was used to record things."],
                 "explanation": "Cuneiform was the world's first writing system. Scribes pressed wedge-shaped marks into wet clay tablets to record laws, stories, and business transactions.",
@@ -738,7 +756,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Pick one of China's four great inventions and explain how it changed the world.",
                 "expected_type": "text",
-                "hints": ["Choose paper, printing, compass, or gunpowder. Think about what the world was like BEFORE this invention."],
+                "hints": [
+                    "Choose paper, printing, compass, or gunpowder. Think about what the world was like BEFORE this invention."
+                ],
                 "explanation": "Example for paper: Before paper, people wrote on clay tablets, animal skins, or bamboo strips — all heavy and expensive. Paper made writing cheap and portable, which meant more people could learn to read and write, and knowledge could spread faster.",
             },
         ],
@@ -1039,7 +1059,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Retell a Greek myth you have learned. Include the main characters, what happened, and what lesson the myth teaches.",
                 "expected_type": "text",
-                "hints": ["Pick a myth: Icarus, Odysseus, Theseus, Persephone, or another you know. Who is in it? What happens? What is the message?"],
+                "hints": [
+                    "Pick a myth: Icarus, Odysseus, Theseus, Persephone, or another you know. Who is in it? What happens? What is the message?"
+                ],
                 "explanation": "A good retelling includes characters, key events in order, and the lesson. Example for Icarus: Daedalus made wings of feathers and wax for himself and his son Icarus. He warned Icarus not to fly too close to the sun. Icarus was thrilled and flew higher and higher. The sun melted the wax and Icarus fell into the sea. The lesson: listen to wise advice and don't let excitement overrule caution.",
             },
         ],
@@ -1065,7 +1087,10 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["map of Greece and the Mediterranean", "collection of Greek myths for children"],
-            "recommended": ["living books about ancient Greece", "pictures of the Parthenon, Greek pottery, and Olympic events"],
+            "recommended": [
+                "living books about ancient Greece",
+                "pictures of the Parthenon, Greek pottery, and Olympic events",
+            ],
             "philosophy_specific": {
                 "classical": "Greek history IS classical education's home territory. Memorize myth names, city-states, and key figures. Timeline cards. Begin Socratic questioning as a method.",
                 "charlotte_mason": "Living books: D'Aulaire's Greek Myths, children's Iliad and Odyssey retellings. Narration after each myth. Map of Greece drawn from memory.",
@@ -1166,7 +1191,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                     "There is no difference",
                 ],
                 "correct_answer": "A republic has elected leaders; an empire has one ruler with total power",
-                "hints": ["In a republic, citizens choose their leaders. In an empire, one person rules over everyone."],
+                "hints": [
+                    "In a republic, citizens choose their leaders. In an empire, one person rules over everyone."
+                ],
                 "explanation": "In a republic, leaders are elected by citizens (like the Roman Senate and consuls). In an empire, one person (the emperor) holds supreme power. Rome started as a republic and became an empire.",
             },
             {
@@ -1201,7 +1228,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "In your own words, tell the story of Rome from its beginning to its fall. Include the founding, the Republic, the Empire, and why it fell.",
                 "expected_type": "text",
-                "hints": ["Start with Romulus. Then the Republic with the Senate. Then Julius and Augustus Caesar and the Empire. Then the fall."],
+                "hints": [
+                    "Start with Romulus. Then the Republic with the Senate. Then Julius and Augustus Caesar and the Empire. Then the fall."
+                ],
                 "explanation": "A complete narration covers: founding by Romulus (753 BC), the Republic with elected consuls and Senate, Julius Caesar's rise and assassination, Augustus as first emperor, the Empire's expansion around the Mediterranean, Roman achievements (roads, aqueducts, law), and the gradual fall (too large, invasions, 476 AD).",
             },
         ],
@@ -1317,7 +1346,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "expected_type": "multiple_choice",
                 "options": ["Abraham Lincoln", "George Washington", "Benjamin Franklin", "Thomas Jefferson"],
                 "correct_answer": "George Washington",
-                "hints": ["He was the leader of the army during the Revolution and then became the country's first leader."],
+                "hints": [
+                    "He was the leader of the army during the Revolution and then became the country's first leader."
+                ],
                 "explanation": "George Washington was the first president. He led the Continental Army during the American Revolution and was unanimously elected as the nation's first president in 1789.",
             },
             {
@@ -1358,7 +1389,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Choose one American historical figure and tell their story. Include what challenges they faced, what they accomplished, and why they are remembered.",
                 "expected_type": "text",
-                "hints": ["Pick someone: Washington, Franklin, Lincoln, Tubman, or another figure you've learned about. Tell their story like you're telling it to a friend."],
+                "hints": [
+                    "Pick someone: Washington, Franklin, Lincoln, Tubman, or another figure you've learned about. Tell their story like you're telling it to a friend."
+                ],
                 "explanation": "A good response tells a story with details: who they were, what they faced, what they did, and why it mattered. Example for Lincoln: Abraham Lincoln grew up poor in a log cabin. He taught himself to read. He became president during the worst crisis in American history — the Civil War. He freed the enslaved people with the Emancipation Proclamation and held the nation together, but was assassinated before he could see peace.",
             },
         ],
@@ -1378,7 +1411,10 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["map of North America", "timeline paper or wall timeline"],
-            "recommended": ["living biographies of American historical figures", "pictures of historical events and figures"],
+            "recommended": [
+                "living biographies of American historical figures",
+                "pictures of historical events and figures",
+            ],
             "philosophy_specific": {
                 "classical": "Patriotic narrative and biographical virtue. Memorize key dates and figures. Timeline drill. Primary source excerpts read aloud (Declaration of Independence opening).",
                 "charlotte_mason": "Living biographies: tell each figure's story as a compelling narrative. Narration after each biography. Timeline entries and map work for every event.",
@@ -1472,7 +1508,12 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "Which of these is a community?",
                 "expected_type": "multiple_choice",
-                "options": ["A rock", "A neighborhood where people live and help each other", "A single tree", "A cloud"],
+                "options": [
+                    "A rock",
+                    "A neighborhood where people live and help each other",
+                    "A single tree",
+                    "A cloud",
+                ],
                 "correct_answer": "A neighborhood where people live and help each other",
                 "hints": ["A community is a group of PEOPLE who live together and share rules and responsibilities."],
                 "explanation": "A community is a group of people who live near each other, share rules, and help each other. A neighborhood is a community. So is a family, a town, and a country.",
@@ -1497,7 +1538,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Name three ways you can be a good citizen in your community.",
                 "expected_type": "text",
-                "hints": ["Think about: following rules, helping others, taking care of shared spaces, being kind and respectful."],
+                "hints": [
+                    "Think about: following rules, helping others, taking care of shared spaces, being kind and respectful."
+                ],
                 "explanation": "Examples: follow the rules (including family rules and laws), help neighbors (carry groceries, share tools), take care of shared spaces (don't litter, help clean up), vote when you're old enough, treat everyone with respect, volunteer for community service.",
             },
             {
@@ -1514,7 +1557,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Think about your family as a small community. What rules does your family have? Why does each rule exist? Are the rules fair? Would you add or change any?",
                 "expected_type": "text",
-                "hints": ["Family rules might include: bedtime, chores, screen time, how to treat siblings. Think about WHY each rule exists."],
+                "hints": [
+                    "Family rules might include: bedtime, chores, screen time, how to treat siblings. Think about WHY each rule exists."
+                ],
                 "explanation": "A thoughtful answer lists specific family rules, explains their purpose (safety, fairness, health, respect), and evaluates whether they are fair. This exercise connects the abstract concept of 'laws' to the child's lived experience. If the child suggests changes, discuss them — this is democratic participation!",
             },
         ],
@@ -1540,7 +1585,10 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["paper for community map drawing", "discussion time with the family"],
-            "recommended": ["books about community helpers and citizenship", "visit to a local government building or fire station"],
+            "recommended": [
+                "books about community helpers and citizenship",
+                "visit to a local government building or fire station",
+            ],
             "philosophy_specific": {
                 "classical": "Citizenship as civic virtue. Memorize key terms: community, law, citizen, government, service. Connect to Roman civic ideals and Greek democracy.",
                 "charlotte_mason": "Citizenship as daily habit: service, respect, responsibility practiced at home and in the neighborhood. Living books about community and leadership.",
@@ -1635,7 +1683,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "prompt": "How many continents are there?",
                 "expected_type": "number",
                 "correct_answer": "7",
-                "hints": ["Can you name them? North America, South America, Europe, Asia, Africa, Australia, Antarctica."],
+                "hints": [
+                    "Can you name them? North America, South America, Europe, Asia, Africa, Australia, Antarctica."
+                ],
                 "explanation": "There are 7 continents: North America, South America, Europe, Asia, Africa, Australia (Oceania), and Antarctica.",
             },
             {
@@ -1663,7 +1713,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "What is a map key used for?",
                 "expected_type": "text",
-                "hints": ["A map uses small pictures or symbols instead of words. How does the reader know what they mean?"],
+                "hints": [
+                    "A map uses small pictures or symbols instead of words. How does the reader know what they mean?"
+                ],
                 "explanation": "A map key (or legend) explains what the symbols on the map mean. For example, a small blue line might mean a river, a black dot might mean a city, and a green area might mean a forest. Without the key, you cannot read the map correctly.",
             },
             {
@@ -1671,7 +1723,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Draw a simple map of your house or yard. Include a compass rose showing north and a key with at least 3 symbols.",
                 "expected_type": "text",
-                "hints": ["First decide what symbols you'll use (square = room, circle = tree, wavy line = path). Then draw the map. Add the compass rose and key."],
+                "hints": [
+                    "First decide what symbols you'll use (square = room, circle = tree, wavy line = path). Then draw the map. Add the compass rose and key."
+                ],
                 "explanation": "A good map includes: a bird's-eye view of the area, a compass rose showing at least N/S/E/W, and a key explaining at least 3 symbols used. This demonstrates understanding of all three core map skills.",
             },
         ],
@@ -1785,7 +1839,12 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "What does 'biography' mean?",
                 "expected_type": "multiple_choice",
-                "options": ["A made-up story", "The story of a real person's life", "A map of the world", "A list of dates"],
+                "options": [
+                    "A made-up story",
+                    "The story of a real person's life",
+                    "A map of the world",
+                    "A list of dates",
+                ],
                 "correct_answer": "The story of a real person's life",
                 "hints": ["Bio means 'life' and graph means 'writing.' A biography is..."],
                 "explanation": "A biography is the story of a real person's life. It tells who they were, what they did, and why they are remembered.",
@@ -1805,7 +1864,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Choose a historical figure you have studied. Name one character trait they showed and give evidence from their life.",
                 "expected_type": "text",
-                "hints": ["Pick someone: Washington, Lincoln, Tubman, Confucius, Cleopatra. What trait defined them? What did they DO that shows that trait?"],
+                "hints": [
+                    "Pick someone: Washington, Lincoln, Tubman, Confucius, Cleopatra. What trait defined them? What did they DO that shows that trait?"
+                ],
                 "explanation": "A good answer names the person, states a trait, and gives specific evidence. Example: Harriet Tubman showed courage because she returned to the South 13 times to free enslaved people, risking her own freedom and life each time.",
             },
             {
@@ -1822,7 +1883,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Pick two historical figures from different time periods. How were they similar? How were they different? What trait did they share?",
                 "expected_type": "text",
-                "hints": ["Compare someone ancient (like a pharaoh or Greek hero) with someone more recent (like Lincoln or Tubman). What do they have in common despite living thousands of years apart?"],
+                "hints": [
+                    "Compare someone ancient (like a pharaoh or Greek hero) with someone more recent (like Lincoln or Tubman). What do they have in common despite living thousands of years apart?"
+                ],
                 "explanation": "A strong comparison finds both similarities and differences. Example: Hatshepsut (Egyptian pharaoh) and Harriet Tubman both showed extraordinary courage as women in male-dominated worlds. But Hatshepsut ruled a kingdom while Tubman fought against a kingdom of slavery. Both changed history through their determination.",
             },
         ],
@@ -1841,8 +1904,14 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["biographies of historical figures (picture book or read-aloud level)", "timeline for placing figures"],
-            "recommended": ["costume props for living biography presentations", "portrait prints of historical figures"],
+            "required": [
+                "biographies of historical figures (picture book or read-aloud level)",
+                "timeline for placing figures",
+            ],
+            "recommended": [
+                "costume props for living biography presentations",
+                "portrait prints of historical figures",
+            ],
             "philosophy_specific": {
                 "classical": "Biography as moral instruction: study virtues and vices in historical lives. Memorize key facts about each figure. Character study as formal exercise.",
                 "charlotte_mason": "Living biographies are the BEST way to teach history to young children. Read compelling life stories and narrate. The child connects to real people, not abstract events.",
@@ -1923,7 +1992,11 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "Knows when holidays occur but not why",
                 "Cannot explain the historical origin of holidays",
             ],
-            "assessment_methods": ["oral explanation of origins", "holiday timeline", "connection to historical events"],
+            "assessment_methods": [
+                "oral explanation of origins",
+                "holiday timeline",
+                "connection to historical events",
+            ],
             "sample_assessment_prompts": [
                 "Why do we celebrate the Fourth of July? What happened on that day?",
                 "Which holiday remembers soldiers who died serving their country?",
@@ -1977,7 +2050,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "If you could create a new holiday, what would it celebrate? Why? What traditions would it have?",
                 "expected_type": "text",
-                "hints": ["Think about something important that deserves to be remembered. What event, person, or value would your holiday honor?"],
+                "hints": [
+                    "Think about something important that deserves to be remembered. What event, person, or value would your holiday honor?"
+                ],
                 "explanation": "A thoughtful answer names something meaningful (a family event, a historical figure, a value like kindness), explains why it deserves a holiday, and describes how it would be celebrated. This demonstrates understanding that holidays are created to preserve what a community values most.",
             },
         ],
@@ -2091,7 +2166,12 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "Which of these is something ALL cultures share?",
                 "expected_type": "multiple_choice",
-                "options": ["Everyone eats pizza", "Every culture has food traditions", "Everyone speaks English", "All houses look the same"],
+                "options": [
+                    "Everyone eats pizza",
+                    "Every culture has food traditions",
+                    "Everyone speaks English",
+                    "All houses look the same",
+                ],
                 "correct_answer": "Every culture has food traditions",
                 "hints": ["Every group of people needs to eat. But do they all eat the same things?"],
                 "explanation": "Every culture has food traditions — ways of growing, preparing, and sharing food. But the specific foods vary enormously: rice in Asia, tortillas in Mexico, bread in Europe, injera in Ethiopia.",
@@ -2101,7 +2181,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "Why is it important to learn about other cultures?",
                 "expected_type": "text",
-                "hints": ["Think about: understanding, respect, learning new things, seeing the world through different eyes."],
+                "hints": [
+                    "Think about: understanding, respect, learning new things, seeing the world through different eyes."
+                ],
                 "explanation": "Learning about other cultures helps us understand that there are many good ways to live, builds respect for people who are different from us, and teaches us new ideas. It also shows us what all humans share despite our differences.",
             },
             {
@@ -2109,7 +2191,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Name one way your family's daily life is similar to a family in another country, and one way it is different.",
                 "expected_type": "text",
-                "hints": ["Think about meals, homes, school, play, celebrations. What do families everywhere do? What varies?"],
+                "hints": [
+                    "Think about meals, homes, school, play, celebrations. What do families everywhere do? What varies?"
+                ],
                 "explanation": "Good answers identify both a similarity (all families eat meals together, all children play) and a difference (foods differ, homes look different, celebrations vary). This shows understanding that cultures are both universal and unique.",
             },
             {
@@ -2118,7 +2202,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "prompt": "True or false: People in all countries live the same way.",
                 "expected_type": "true_false",
                 "correct_answer": "false",
-                "hints": ["Think about the different cultures you've learned about. Do they all eat the same food? Live in the same kind of homes?"],
+                "hints": [
+                    "Think about the different cultures you've learned about. Do they all eat the same food? Live in the same kind of homes?"
+                ],
                 "explanation": "False. People around the world have incredibly diverse ways of living: different foods, homes, clothing, languages, and traditions. But they all share basic human needs: food, shelter, family, community, and stories.",
             },
             {
@@ -2126,7 +2212,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Choose a culture from another part of the world. Describe what daily life is like for a child there: what they eat, where they live, what they do for fun, and one tradition their family has.",
                 "expected_type": "text",
-                "hints": ["Pick a culture you've studied or are curious about. Describe a typical day for a child living there."],
+                "hints": [
+                    "Pick a culture you've studied or are curious about. Describe a typical day for a child living there."
+                ],
                 "explanation": "A rich answer includes specific details, not generalizations. Example for Japan: 'A child in Japan might eat rice and miso soup for breakfast. They live in a home where they take off shoes at the door. After school, they might practice calligraphy or play with friends. Their family celebrates New Year by cleaning the house and eating special foods.' Specific details show real understanding.",
             },
         ],
@@ -2263,7 +2351,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Write 3 interview questions you would ask a grandparent about their childhood.",
                 "expected_type": "text",
-                "hints": ["Make them open-ended: 'Tell me about...' or 'What was it like when...' Avoid yes/no questions."],
+                "hints": [
+                    "Make them open-ended: 'Tell me about...' or 'What was it like when...' Avoid yes/no questions."
+                ],
                 "explanation": "Good questions: 'What was your favorite thing to do as a child?' 'Tell me about the house you grew up in.' 'What is the biggest change you've seen in the world since you were young?' These invite stories, not one-word answers.",
             },
             {
@@ -2272,7 +2362,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "prompt": "True or false: Oral history is less important than written history because people's memories can be wrong.",
                 "expected_type": "true_false",
                 "correct_answer": "false",
-                "hints": ["Written records can have mistakes too. What does oral history provide that written records don't?"],
+                "hints": [
+                    "Written records can have mistakes too. What does oral history provide that written records don't?"
+                ],
                 "explanation": "False. Oral history provides personal perspective, emotion, and details that written records often miss. Yes, memories can be imperfect, but they offer something unique: what it FELT like to live through an event, from the person who was there.",
             },
             {
@@ -2280,7 +2372,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "After interviewing a family member, retell one story they shared. Include who it was about, when it happened, what happened, and why it matters.",
                 "expected_type": "text",
-                "hints": ["Retell it as if you're telling a friend. Include the details that made the story interesting and meaningful."],
+                "hints": [
+                    "Retell it as if you're telling a friend. Include the details that made the story interesting and meaningful."
+                ],
                 "explanation": "A good retelling captures the essence of the person's story: the setting, the events, the feelings, and why this memory mattered to them. This is the core skill of oral history: listening, understanding, and passing the story on.",
             },
         ],
@@ -2299,8 +2393,14 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["paper and pencil for interview questions", "a willing interviewee (grandparent, neighbor, elder)"],
-            "recommended": ["audio recorder or phone for recording interviews", "family photo albums to prompt memories during interview"],
+            "required": [
+                "paper and pencil for interview questions",
+                "a willing interviewee (grandparent, neighbor, elder)",
+            ],
+            "recommended": [
+                "audio recorder or phone for recording interviews",
+                "family photo albums to prompt memories during interview",
+            ],
             "philosophy_specific": {
                 "classical": "Interview as historical method. The child practices being a historian. Retelling the interview story is oral composition.",
                 "charlotte_mason": "The child as historian: listening, recording, and retelling real stories from real people. This IS narration applied to primary sources.",
@@ -2401,7 +2501,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                     "A Wikipedia article about ancient Egypt",
                 ],
                 "correct_answer": "A letter written by a soldier during the Civil War",
-                "hints": ["A primary source comes directly from the time of the event. Which one was created DURING the historical event?"],
+                "hints": [
+                    "A primary source comes directly from the time of the event. Which one was created DURING the historical event?"
+                ],
                 "explanation": "The soldier's letter is a primary source because it was written during the Civil War by someone who was there. The other options were all written AFTER the events, making them secondary sources.",
             },
             {
@@ -2434,7 +2536,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Examine an object in your home as if you were a historian from the future finding it in 200 years. Describe it, explain what it was used for, and say what it reveals about life in our time.",
                 "expected_type": "text",
-                "hints": ["Choose any everyday object: a phone, a fork, a shoe, a book. Describe it as if you've never seen one before. What does it tell you about our civilization?"],
+                "hints": [
+                    "Choose any everyday object: a phone, a fork, a shoe, a book. Describe it as if you've never seen one before. What does it tell you about our civilization?"
+                ],
                 "explanation": "This exercise builds the analytical thinking at the heart of primary source study. A smartphone, for example, reveals: our civilization used advanced technology daily, we communicated electronically, we valued information access, and we carried powerful computers in our pockets. This is exactly how historians analyze artifacts from the past.",
             },
         ],
@@ -2453,7 +2557,10 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["old family photographs or historical photographs", "a physical object to examine as an 'artifact'"],
+            "required": [
+                "old family photographs or historical photographs",
+                "a physical object to examine as an 'artifact'",
+            ],
             "recommended": ["museum visit (in person or virtual)", "collection of reproduced primary source documents"],
             "philosophy_specific": {
                 "classical": "Direct encounter with historical evidence as foundation for analytical thinking. Systematic observation method taught explicitly.",
@@ -2535,7 +2642,11 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "Cannot distinguish historical fiction from other genres",
                 "Does not recognize which elements are historically accurate",
             ],
-            "assessment_methods": ["fact vs fiction analysis", "historical learning discussion", "genre identification"],
+            "assessment_methods": [
+                "fact vs fiction analysis",
+                "historical learning discussion",
+                "genre identification",
+            ],
             "sample_assessment_prompts": [
                 "What parts of this book were real history and what parts did the author make up?",
                 "What did you learn about life in that time period from this story?",
@@ -2573,7 +2684,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "After reading a historical fiction book, what is something you learned about the real time period it was set in?",
                 "expected_type": "text",
-                "hints": ["Think about the setting: what people wore, ate, did for work, how they traveled, what their homes looked like."],
+                "hints": [
+                    "Think about the setting: what people wore, ate, did for work, how they traveled, what their homes looked like."
+                ],
                 "explanation": "A good answer names specific historical details from the book's setting. Example: 'I learned that in colonial times, children had to help with farm work every day. They didn't have running water, so they carried it from a well. They made their own candles because there was no electricity.'",
             },
             {
@@ -2590,7 +2703,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Think of a historical fiction book you've read or heard. Make a chart with two columns: 'Real History' and 'Made Up by the Author.' List at least 2 items in each column.",
                 "expected_type": "text",
-                "hints": ["Real history: setting, clothing, technology, customs, real events mentioned. Made up: the main character, the specific plot, the dialogue."],
+                "hints": [
+                    "Real history: setting, clothing, technology, customs, real events mentioned. Made up: the main character, the specific plot, the dialogue."
+                ],
                 "explanation": "A strong chart clearly separates historical facts (the time period is real, the clothing is accurate, the events happened) from fiction (the main character is invented, the specific conversations are imagined, the plot is the author's creation). This demonstrates critical thinking about sources.",
             },
         ],
@@ -2705,7 +2820,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "prompt": "Put these in chronological order: Ancient Rome, Ancient Egypt, the American Revolution.",
                 "expected_type": "text",
                 "correct_answer": "Ancient Egypt, Ancient Rome, the American Revolution",
-                "hints": ["Egypt is the oldest (3000+ BC). Rome came next (750 BC - 476 AD). The American Revolution is the most recent (1776)."],
+                "hints": [
+                    "Egypt is the oldest (3000+ BC). Rome came next (750 BC - 476 AD). The American Revolution is the most recent (1776)."
+                ],
                 "explanation": "Ancient Egypt (3000+ BC) came first, then Ancient Rome (750 BC - 476 AD), then the American Revolution (1776). A timeline helps you see these relationships at a glance.",
             },
             {
@@ -2720,7 +2837,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                     "It is only useful for memorizing dates",
                 ],
                 "correct_answer": "It helps you see when events happened and how they connect to each other",
-                "hints": ["A timeline shows the ORDER of events and lets you see what was happening at the same time in different places."],
+                "hints": [
+                    "A timeline shows the ORDER of events and lets you see what was happening at the same time in different places."
+                ],
                 "explanation": "A timeline shows chronological order and reveals connections: events that happened at the same time, events that caused other events, and the flow of history from ancient to modern.",
             },
             {
@@ -2745,7 +2864,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Look at your timeline and find two events or civilizations that you think are connected. Explain the connection.",
                 "expected_type": "text",
-                "hints": ["Look for: one event that caused another, one civilization that influenced another, or two things that happened at the same time."],
+                "hints": [
+                    "Look for: one event that caused another, one civilization that influenced another, or two things that happened at the same time."
+                ],
                 "explanation": "A strong answer identifies a real historical connection. Example: 'Ancient Greece and Ancient Rome are connected because Rome admired Greek culture and copied many Greek ideas: their gods, their architecture, and their philosophy. You can see on the timeline that Rome came after Greece and was influenced by it.'",
             },
         ],
@@ -2764,7 +2885,10 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["wall space for timeline or a Book of Centuries notebook", "markers or colored pencils for illustrations"],
+            "required": [
+                "wall space for timeline or a Book of Centuries notebook",
+                "markers or colored pencils for illustrations",
+            ],
             "recommended": ["printed timeline figures to paste", "reference timeline for checking accuracy"],
             "philosophy_specific": {
                 "classical": "The timeline is THE master organizational tool of classical education. Daily additions. Weekly review. The child memorizes the sequence of events and eras.",
@@ -2846,7 +2970,11 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "Cannot explain why civilizations arose in certain locations",
                 "Does not connect geography to history",
             ],
-            "assessment_methods": ["map drawing with explanations", "geographic analysis of civilizations", "trade route mapping"],
+            "assessment_methods": [
+                "map drawing with explanations",
+                "geographic analysis of civilizations",
+                "trade route mapping",
+            ],
             "sample_assessment_prompts": [
                 "Why did ancient Egypt develop along the Nile River and not in the Sahara Desert?",
                 "Draw a trade route and explain why it follows the geographic path it does.",
@@ -2901,7 +3029,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Choose a civilization you've studied. Explain how at least 2 geographic features shaped its history. What would be different if the geography were different?",
                 "expected_type": "text",
-                "hints": ["Pick Egypt, Greece, Rome, China, or another. Think about rivers, mountains, seas, deserts, and climate."],
+                "hints": [
+                    "Pick Egypt, Greece, Rome, China, or another. Think about rivers, mountains, seas, deserts, and climate."
+                ],
                 "explanation": "Example for Greece: (1) Mountains divided Greece into independent city-states because travel between valleys was difficult — this is why Greece was never one unified country like Egypt. (2) The long coastline with many harbors made Greece a seafaring culture — Greeks became traders and colonizers across the Mediterranean. If Greece were flat like Egypt, it might have been one unified kingdom instead of many competing city-states.",
             },
         ],
@@ -2920,7 +3050,10 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["world map with physical features (mountains, rivers, deserts visible)", "paper for drawing maps"],
+            "required": [
+                "world map with physical features (mountains, rivers, deserts visible)",
+                "paper for drawing maps",
+            ],
             "recommended": ["physical/topographic globe", "atlas showing trade routes"],
             "philosophy_specific": {
                 "classical": "Geography as the indispensable companion to history. Every history lesson begins with 'where on the map?' Memorize key geographic features and their historical significance.",
@@ -3042,7 +3175,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Pick two civilizations we studied. How were they similar? How were they different?",
                 "expected_type": "text",
-                "hints": ["Choose any two: Egypt, Mesopotamia, China, India, Greece, Rome. Compare: rivers, government, writing, buildings, contributions."],
+                "hints": [
+                    "Choose any two: Egypt, Mesopotamia, China, India, Greece, Rome. Compare: rivers, government, writing, buildings, contributions."
+                ],
                 "explanation": "A strong comparison finds both similarities and differences. Example: Egypt and Mesopotamia were both river valley civilizations that invented writing, but Egypt had hieroglyphics while Mesopotamia had cuneiform. Egypt was unified under pharaohs; Mesopotamia had competing city-states. Egypt built pyramids (tombs); Mesopotamia built ziggurats (temples).",
             },
             {
@@ -3059,7 +3194,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "If you could travel back in time to any civilization we studied, which one would you visit? Why? What would daily life be like for you there?",
                 "expected_type": "text",
-                "hints": ["Pick a civilization, explain why it interests you, and describe what you know about daily life there. Use what you've learned!"],
+                "hints": [
+                    "Pick a civilization, explain why it interests you, and describe what you know about daily life there. Use what you've learned!"
+                ],
                 "explanation": "A thoughtful answer shows real historical knowledge applied creatively. The child should name specific details about daily life in their chosen civilization: what they would eat, where they would live, what work they might do, and what they would find most interesting or challenging. This demonstrates comprehension beyond fact recall.",
             },
         ],
@@ -3091,7 +3228,10 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["completed timeline from the year's study", "world map", "comfortable assessment environment"],
-            "recommended": ["the child's Book of Centuries or history notebook for reference during review", "drawing supplies for map work"],
+            "recommended": [
+                "the child's Book of Centuries or history notebook for reference during review",
+                "drawing supplies for map work",
+            ],
             "philosophy_specific": {
                 "classical": "Comprehensive assessment through narration, timeline review, map drill, and comparison. The child demonstrates command of the chronological framework and key facts.",
                 "charlotte_mason": "Examination by narration: the child tells everything they know, in their own words, without prompting. No multiple-choice tests. The quality of narration IS the assessment.",

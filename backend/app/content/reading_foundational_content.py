@@ -1399,7 +1399,11 @@ READING_FOUNDATIONAL_CONTENT = {
                 "Reads 30-60 sight words, attempts to sound out the rest",
                 "Recognizes sight words in flash card drill but not always in text",
             ],
-            "assessment_methods": ["flash card timed recognition", "sight word reading in context", "spelling dictation"],
+            "assessment_methods": [
+                "flash card timed recognition",
+                "sight word reading in context",
+                "spelling dictation",
+            ],
             "sample_assessment_prompts": [
                 "Read these words as fast as you can: the, was, said, have, they, could, there, from, were, would",
                 "Spell these words: said, the, was, they, have",
@@ -1559,7 +1563,11 @@ READING_FOUNDATIONAL_CONTENT = {
                 "Reads word-by-word at fewer than 30 words per minute",
                 "Rarely self-corrects; reads in a flat monotone",
             ],
-            "assessment_methods": ["timed oral reading (one minute)", "running record for accuracy", "expression rubric"],
+            "assessment_methods": [
+                "timed oral reading (one minute)",
+                "running record for accuracy",
+                "expression rubric",
+            ],
             "sample_assessment_prompts": [
                 "Read this passage aloud for one minute while I count the words (grade-level decodable text)",
                 "Read this sentence with expression: 'Oh no!' said the cat. 'The fish got away!'",
@@ -1639,7 +1647,10 @@ READING_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["decodable readers at the child's level", "a timer or clock for one-minute reads"],
-            "recommended": ["poetry collections for performance reading", "audiobooks of familiar stories for modeling fluency"],
+            "recommended": [
+                "poetry collections for performance reading",
+                "audiobooks of familiar stories for modeling fluency",
+            ],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -1744,7 +1755,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "expected_type": "multiple_choice",
                 "options": ["main idea", "detail"],
                 "correct_answer": "detail",
-                "hints": ["A main idea tells what the WHOLE passage is about. A detail gives one specific piece of information."],
+                "hints": [
+                    "A main idea tells what the WHOLE passage is about. A detail gives one specific piece of information."
+                ],
                 "explanation": "The color of the cat is one specific piece of information — a detail, not the main idea of a passage.",
             },
             {
@@ -1762,7 +1775,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "prompt": "True or false: The main idea is always the first sentence of a passage.",
                 "expected_type": "true_false",
                 "correct_answer": "false",
-                "hints": ["Think about whether the main idea could be somewhere else, or even not directly stated at all."],
+                "hints": [
+                    "Think about whether the main idea could be somewhere else, or even not directly stated at all."
+                ],
                 "explanation": "False. The main idea can be anywhere in a passage, or it might not be directly stated — you have to figure it out from the details.",
             },
             {
@@ -1795,8 +1810,14 @@ READING_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["short reading passages at the child's level (fiction and nonfiction)", "paper for writing main idea sentences"],
-            "recommended": ["main idea graphic organizer (hand or umbrella template)", "leveled reading books with comprehension questions"],
+            "required": [
+                "short reading passages at the child's level (fiction and nonfiction)",
+                "paper for writing main idea sentences",
+            ],
+            "recommended": [
+                "main idea graphic organizer (hand or umbrella template)",
+                "leveled reading books with comprehension questions",
+            ],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -1911,7 +1932,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "prompt": "Read this: 'First, the caterpillar ate many leaves. Then, it made a cocoon. Next, it rested inside the cocoon for a long time. Finally, a butterfly came out.' How many signal words can you find?",
                 "expected_type": "number",
                 "correct_answer": "4",
-                "hints": ["Signal words tell the ORDER of events. Look for words like 'first,' 'then,' 'next,' 'finally.'"],
+                "hints": [
+                    "Signal words tell the ORDER of events. Look for words like 'first,' 'then,' 'next,' 'finally.'"
+                ],
                 "explanation": "Four signal words: first, then, next, finally. These tell us the order of events.",
             },
             {
@@ -2068,7 +2091,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Read this: 'Maya wanted to climb the tall tree, but her hands were shaking. She took a deep breath and grabbed the first branch. Step by step, she made it to the top.' What character trait does Maya show?",
                 "expected_type": "text",
-                "hints": ["Maya was afraid but she did it anyway. What do we call someone who does something even though they are scared?"],
+                "hints": [
+                    "Maya was afraid but she did it anyway. What do we call someone who does something even though they are scared?"
+                ],
                 "explanation": "Maya is brave (or courageous). She was scared (her hands were shaking) but she climbed the tree anyway. Bravery is doing something even when you're afraid.",
             },
             {
@@ -2077,7 +2102,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "prompt": "True or false: A character who does one bad thing is always a bad character.",
                 "expected_type": "true_false",
                 "correct_answer": "false",
-                "hints": ["Think about real people. If your friend makes one mistake, does that make them a bad person?"],
+                "hints": [
+                    "Think about real people. If your friend makes one mistake, does that make them a bad person?"
+                ],
                 "explanation": "False. Characters, like real people, are complex. A character can make a mistake and still be a good character overall. We look at everything they do, not just one action.",
             },
             {
@@ -2085,7 +2112,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Read this: 'At the beginning of the story, Jack was angry and wouldn't talk to anyone. By the end, he was laughing and playing with his friends.' How did Jack's feelings change? Why do you think they changed?",
                 "expected_type": "text",
-                "hints": ["Compare the beginning to the end. What was different? Think about what might have happened in the middle."],
+                "hints": [
+                    "Compare the beginning to the end. What was different? Think about what might have happened in the middle."
+                ],
                 "explanation": "Jack changed from angry to happy. Something in the middle of the story caused his feelings to change — maybe his friends helped him, or he solved a problem. Characters' feelings often change as the story progresses.",
             },
         ],
@@ -2111,7 +2140,10 @@ READING_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["story books with well-developed characters", "paper for character portraits"],
-            "recommended": ["character trait word list (brave, kind, curious, stubborn, shy, etc.)", "character comparison graphic organizer"],
+            "recommended": [
+                "character trait word list (brave, kind, curious, stubborn, shy, etc.)",
+                "character comparison graphic organizer",
+            ],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -2193,7 +2225,11 @@ READING_FOUNDATIONAL_CONTENT = {
                 "Recalls only one or two details and needs multiple prompts",
                 "Retells events out of order or mixes up characters",
             ],
-            "assessment_methods": ["oral narration after read-aloud", "narration with increasing passage length", "unprompted retelling"],
+            "assessment_methods": [
+                "oral narration after read-aloud",
+                "narration with increasing passage length",
+                "unprompted retelling",
+            ],
             "sample_assessment_prompts": [
                 "I'm going to read this passage once. Then you tell me everything that happened, in your own words.",
                 "Tell me about the story we just read. Start at the beginning.",
@@ -2206,7 +2242,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "Listen to this short story: 'A little frog sat on a lily pad. A big fish jumped out of the water. The frog hopped away quickly.' Now retell it in your own words.",
                 "expected_type": "text",
-                "hints": ["Start with what was happening at the beginning. Then tell what happened. Then tell how it ended."],
+                "hints": [
+                    "Start with what was happening at the beginning. Then tell what happened. Then tell how it ended."
+                ],
                 "explanation": "A good narration includes: the frog sitting on the lily pad (beginning), the fish jumping (event), and the frog hopping away (ending). The child should use their own words, not memorize the exact sentences.",
             },
             {
@@ -2246,7 +2284,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Listen to a longer story about a boy who lost his dog, searched the whole town, and finally found the dog at the fire station. Narrate this story, but tell it from the DOG'S perspective.",
                 "expected_type": "text",
-                "hints": ["Instead of 'the boy searched,' think about what the DOG was doing and feeling during the story."],
+                "hints": [
+                    "Instead of 'the boy searched,' think about what the DOG was doing and feeling during the story."
+                ],
                 "explanation": "Narrating from a different perspective is an advanced skill. The dog might have wandered off exploring, ended up at the fire station, and then been happy when the boy arrived. This exercises both comprehension and creative thinking.",
             },
         ],
@@ -2272,7 +2312,10 @@ READING_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["quality read-aloud books at or slightly above the child's level", "a patient listener"],
-            "recommended": ["narration journal for drawing scenes after narrating", "timer for building listening stamina"],
+            "recommended": [
+                "narration journal for drawing scenes after narrating",
+                "timer for building listening stamina",
+            ],
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 10},
         "accommodations": {
@@ -2381,7 +2424,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "Why do parents read books aloud that you could read yourself?",
                 "expected_type": "text",
-                "hints": ["Think about the difference between what you CAN read alone and what you can UNDERSTAND when someone reads to you."],
+                "hints": [
+                    "Think about the difference between what you CAN read alone and what you can UNDERSTAND when someone reads to you."
+                ],
                 "explanation": "Read-alouds let you hear stories that are above your reading level. You can understand and enjoy harder books when someone reads them to you, and this builds your vocabulary and comprehension for when you read those books on your own later.",
             },
             {
@@ -2438,7 +2483,10 @@ READING_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["quality picture books or chapter books for read-aloud", "drawing supplies for response"],
-            "recommended": ["read-aloud response journal (notebook for drawings and sentences)", "comfortable reading spot"],
+            "recommended": [
+                "read-aloud response journal (notebook for drawings and sentences)",
+                "comfortable reading spot",
+            ],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 5},
         "accommodations": {
@@ -2520,7 +2568,11 @@ READING_FOUNDATIONAL_CONTENT = {
                 "Can recite a few lines with significant prompting",
                 "Enjoys hearing poems but cannot yet identify rhyme or rhythm",
             ],
-            "assessment_methods": ["poem recitation performance", "rhyme and rhythm identification", "poetry preference discussion"],
+            "assessment_methods": [
+                "poem recitation performance",
+                "rhyme and rhythm identification",
+                "poetry preference discussion",
+            ],
             "sample_assessment_prompts": [
                 "Recite the poem you memorized. Use your best expression!",
                 "Listen to this poem. Which words rhyme?",
@@ -2551,7 +2603,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Read this poem aloud: 'The fog comes / on little cat feet. / It sits looking / over harbor and city / on silent haunches / and then moves on.' Does this poem rhyme? What makes it a poem even without rhyme?",
                 "expected_type": "text",
-                "hints": ["Even without rhyme, poems use imagery (pictures in words) and rhythm. What picture does this poem create?"],
+                "hints": [
+                    "Even without rhyme, poems use imagery (pictures in words) and rhythm. What picture does this poem create?"
+                ],
                 "explanation": "This poem (by Carl Sandburg) does not rhyme, but it creates a vivid image: fog behaving like a quiet cat. Poetry uses imagery, rhythm, and creative comparisons — not just rhyme.",
             },
             {
@@ -2574,7 +2628,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Choose a short poem (4-8 lines) that you know. Recite it from memory with expression. Then explain why you chose this poem.",
                 "expected_type": "text",
-                "hints": ["Pick a poem you genuinely enjoy. Practice it a few times before performing. Think about why this poem matters to you."],
+                "hints": [
+                    "Pick a poem you genuinely enjoy. Practice it a few times before performing. Think about why this poem matters to you."
+                ],
                 "explanation": "A good recitation includes: all words from memory, appropriate rhythm (following the poem's natural beat), expression (louder and softer, faster and slower to match the meaning), and a personal connection to why this poem was chosen.",
             },
         ],
@@ -2599,7 +2655,10 @@ READING_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["anthology of children's poetry or individual poem collections", "space for recitation performance"],
+            "required": [
+                "anthology of children's poetry or individual poem collections",
+                "space for recitation performance",
+            ],
             "recommended": ["poetry notebook for copying favorite poems", "audio recordings of poems read by poets"],
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 10},
@@ -2704,7 +2763,12 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "Which two words rhyme in this line: 'Humpty Dumpty sat on a wall'?",
                 "expected_type": "multiple_choice",
-                "options": ["Humpty and Dumpty", "sat and wall", "Dumpty and wall", "None of these — the rhyme is in the next line"],
+                "options": [
+                    "Humpty and Dumpty",
+                    "sat and wall",
+                    "Dumpty and wall",
+                    "None of these — the rhyme is in the next line",
+                ],
                 "correct_answer": "None of these — the rhyme is in the next line",
                 "hints": ["The rhyming word for 'wall' comes in the next line: 'Humpty Dumpty had a great ___'"],
                 "explanation": "'Wall' rhymes with 'fall' in the next line: 'Humpty Dumpty had a great fall.' Rhymes often pair the last words of two different lines.",
@@ -2757,8 +2821,14 @@ READING_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["collection of nursery rhymes (book or printed)", "no special materials — just voice and hands"],
-            "recommended": ["nursery rhyme picture books with illustrations", "recordings of nursery rhymes set to music"],
+            "required": [
+                "collection of nursery rhymes (book or printed)",
+                "no special materials — just voice and hands",
+            ],
+            "recommended": [
+                "nursery rhyme picture books with illustrations",
+                "recordings of nursery rhymes set to music",
+            ],
         },
         "time_estimates": {"first_exposure": 10, "practice_session": 5, "assessment": 10},
         "accommodations": {
@@ -2840,7 +2910,11 @@ READING_FOUNDATIONAL_CONTENT = {
                 "Attempts to use context clues but often guesses incorrectly",
                 "Recognizes recently taught words but does not use them independently",
             ],
-            "assessment_methods": ["context clue tasks", "vocabulary usage in conversation", "word sorting and categorization"],
+            "assessment_methods": [
+                "context clue tasks",
+                "vocabulary usage in conversation",
+                "word sorting and categorization",
+            ],
             "sample_assessment_prompts": [
                 "Read this sentence: 'The dog was famished after missing two meals.' What do you think famished means?",
                 "Use the word 'enormous' in a sentence about something real.",
@@ -2891,7 +2965,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Read this: 'The old house was dilapidated. The roof sagged, the paint peeled, and the windows were broken.' Use the clues in the sentences to explain what dilapidated means.",
                 "expected_type": "text",
-                "hints": ["Look at the details after the word: sagging roof, peeling paint, broken windows. What kind of condition is the house in?"],
+                "hints": [
+                    "Look at the details after the word: sagging roof, peeling paint, broken windows. What kind of condition is the house in?"
+                ],
                 "explanation": "Dilapidated means falling apart or in very bad condition. The context clues (sagging roof, peeling paint, broken windows) all describe a house that is old and deteriorating. Using surrounding details to figure out a hard word is the heart of the context clue strategy.",
             },
         ],
@@ -2916,7 +2992,10 @@ READING_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["books at and slightly above the child's reading level", "index cards or notebook for word journal"],
+            "required": [
+                "books at and slightly above the child's reading level",
+                "index cards or notebook for word journal",
+            ],
             "recommended": ["thesaurus (child-friendly)", "word-of-the-day calendar or list"],
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 10},
@@ -2999,7 +3078,11 @@ READING_FOUNDATIONAL_CONTENT = {
                 "Needs reminding to start on the left side of the page",
                 "Cannot yet distinguish title from other text on the cover",
             ],
-            "assessment_methods": ["book handling observation", "word pointing during shared reading", "cover identification"],
+            "assessment_methods": [
+                "book handling observation",
+                "word pointing during shared reading",
+                "cover identification",
+            ],
             "sample_assessment_prompts": [
                 "Show me where I should start reading on this page.",
                 "Point to the title of this book. Who wrote it?",
@@ -3156,7 +3239,11 @@ READING_FOUNDATIONAL_CONTENT = {
                 "Has difficulty sustaining attention for more than 5 minutes",
                 "Cannot answer questions about what was just read aloud",
             ],
-            "assessment_methods": ["comprehension questions after read-aloud", "observation of listening behavior", "question generation"],
+            "assessment_methods": [
+                "comprehension questions after read-aloud",
+                "observation of listening behavior",
+                "question generation",
+            ],
             "sample_assessment_prompts": [
                 "What happened in the story we just read?",
                 "Where did the story take place? How do you know?",
@@ -3217,7 +3304,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "After hearing a story about animals in winter, come up with two questions you could ask about what you heard. Your questions should show you were thinking about the story.",
                 "expected_type": "text",
-                "hints": ["Good questions start with why, how, what if. Think about something the story made you wonder about."],
+                "hints": [
+                    "Good questions start with why, how, what if. Think about something the story made you wonder about."
+                ],
                 "explanation": "Good questions might be: 'Why do some animals sleep all winter but others don't?' or 'How do birds know when to fly south?' These show active thinking about the text, not just passive hearing.",
             },
         ],
@@ -3325,7 +3414,11 @@ READING_FOUNDATIONAL_CONTENT = {
                 "Retells only one or two events, often the ending",
                 "Needs significant prompting to include story elements",
             ],
-            "assessment_methods": ["oral retelling after reading", "retelling with picture prompts", "retelling to a new listener"],
+            "assessment_methods": [
+                "oral retelling after reading",
+                "retelling with picture prompts",
+                "retelling to a new listener",
+            ],
             "sample_assessment_prompts": [
                 "Tell me the story of 'The Three Bears' from beginning to end.",
                 "Who was in the story? Where did it happen? What was the problem?",
@@ -3353,7 +3446,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "Retell the story of 'The Three Little Pigs' in three sentences: one for the beginning, one for the middle, and one for the end.",
                 "expected_type": "text",
-                "hints": ["Beginning: What did the pigs build? Middle: What did the wolf do? End: What happened at the third house?"],
+                "hints": [
+                    "Beginning: What did the pigs build? Middle: What did the wolf do? End: What happened at the third house?"
+                ],
                 "explanation": "Example: Beginning — Three pigs each built a house: one of straw, one of sticks, one of bricks. Middle — A wolf blew down the straw house and the stick house. End — The wolf could not blow down the brick house, and the pigs were safe.",
             },
             {
@@ -3361,7 +3456,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 2,
                 "prompt": "You are retelling a story about a girl who found a puppy. You said: 'She named the puppy Max. The end.' What is missing from your retelling?",
                 "expected_type": "text",
-                "hints": ["Think about what happened BEFORE she named the puppy. Where did she find it? Why was it lost?"],
+                "hints": [
+                    "Think about what happened BEFORE she named the puppy. Where did she find it? Why was it lost?"
+                ],
                 "explanation": "The retelling is missing the beginning (how the girl found the puppy) and the middle (what happened before she decided to keep it). A good retelling includes events in order from the start of the story, not just the ending.",
             },
             {
@@ -3378,7 +3475,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Think of a book you know well. Retell it to someone who has never heard it before. Include the characters, setting, and the beginning, middle, and end.",
                 "expected_type": "text",
-                "hints": ["Start by naming the characters and where the story takes place. Then tell what happened in order: first, then, finally."],
+                "hints": [
+                    "Start by naming the characters and where the story takes place. Then tell what happened in order: first, then, finally."
+                ],
                 "explanation": "A complete retelling includes: who (characters), where (setting), and what happened (beginning, middle, end). A good test: could someone who never read the book understand the story from your retelling?",
             },
         ],
@@ -3486,7 +3585,11 @@ READING_FOUNDATIONAL_CONTENT = {
                 "Makes random guesses rather than evidence-based predictions",
                 "Does not check or revise predictions after reading further",
             ],
-            "assessment_methods": ["prediction before reading", "mid-story prediction", "prediction-check after reading"],
+            "assessment_methods": [
+                "prediction before reading",
+                "mid-story prediction",
+                "prediction-check after reading",
+            ],
             "sample_assessment_prompts": [
                 "Look at this cover. What do you predict the book is about? What clues are you using?",
                 "We just read that the character is packing a suitcase. What do you predict will happen next?",
@@ -3545,7 +3648,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Read this: 'Emma looked at the empty cookie jar. She noticed crumbs on her brother's shirt. His face turned red when she asked about it.' What can you predict happened? What clues tell you that?",
                 "expected_type": "text",
-                "hints": ["Put the clues together: empty jar + crumbs on shirt + blushing face. What does this evidence suggest?"],
+                "hints": [
+                    "Put the clues together: empty jar + crumbs on shirt + blushing face. What does this evidence suggest?"
+                ],
                 "explanation": "Prediction: Emma's brother ate the cookies. The clues: the empty jar (cookies are gone), crumbs on his shirt (he was eating), and his red face (he feels guilty). This prediction uses multiple text clues combined with prior knowledge about how people behave when caught.",
             },
         ],
@@ -3570,8 +3675,14 @@ READING_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["books with engaging covers and clear plot progressions", "sticky notes for marking prediction points"],
-            "recommended": ["prediction journal or reading log", "books with cliffhanger chapter endings (for chapter book predictions)"],
+            "required": [
+                "books with engaging covers and clear plot progressions",
+                "sticky notes for marking prediction points",
+            ],
+            "recommended": [
+                "prediction journal or reading log",
+                "books with cliffhanger chapter endings (for chapter book predictions)",
+            ],
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 5},
         "accommodations": {
@@ -3653,7 +3764,11 @@ READING_FOUNDATIONAL_CONTENT = {
                 "Cannot make connections without significant prompting",
                 "Connections are unrelated to the text's meaning or themes",
             ],
-            "assessment_methods": ["oral connection sharing", "connection journal review", "prompted connection during reading"],
+            "assessment_methods": [
+                "oral connection sharing",
+                "connection journal review",
+                "prompted connection during reading",
+            ],
             "sample_assessment_prompts": [
                 "Does anything in this story remind you of something in your own life? Tell me about it.",
                 "The character felt nervous. Have you ever felt that way? When?",
@@ -3666,7 +3781,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "A story is about a girl who is nervous on her first day at a new activity. Have you ever felt nervous about something new? What happened?",
                 "expected_type": "text",
-                "hints": ["Think about a time you tried something for the first time — a new sport, a new class, a visit to a new place."],
+                "hints": [
+                    "Think about a time you tried something for the first time — a new sport, a new class, a visit to a new place."
+                ],
                 "explanation": "A good connection shares a specific personal experience that relates to the character's feelings. For example: 'I felt nervous when I went to my first swimming lesson. My stomach hurt.' This connection helps you understand HOW the character feels.",
             },
             {
@@ -3696,7 +3813,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "prompt": "True or false: Text-to-self connections only work with fiction stories, not nonfiction.",
                 "expected_type": "true_false",
                 "correct_answer": "false",
-                "hints": ["Think about whether a book about animals or weather could remind you of your own experiences."],
+                "hints": [
+                    "Think about whether a book about animals or weather could remind you of your own experiences."
+                ],
                 "explanation": "False. You can connect to nonfiction too. A book about hibernation might remind you of how sleepy you feel in winter. A book about volcanoes might connect to a trip where you saw mountains.",
             },
             {
@@ -3704,7 +3823,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "A character in a story must choose between helping a friend and doing something fun. You've never faced that exact situation. Can you still make a connection? How?",
                 "expected_type": "text",
-                "hints": ["You don't need the EXACT same experience. Think about any time you had to choose between two things when both seemed important."],
+                "hints": [
+                    "You don't need the EXACT same experience. Think about any time you had to choose between two things when both seemed important."
+                ],
                 "explanation": "Yes! You don't need identical experiences. Any time you've had to make a hard choice between two important things is a valid connection. 'I had to choose between going to the park and finishing my building project. It was hard to decide.' The FEELING of having to choose is what connects.",
             },
         ],
@@ -3730,7 +3851,10 @@ READING_FOUNDATIONAL_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["books with relatable characters and situations", "connection journal or notebook"],
-            "recommended": ["sticky notes for marking connection points during reading", "books chosen to match the child's current life experiences"],
+            "recommended": [
+                "sticky notes for marking connection points during reading",
+                "books chosen to match the child's current life experiences",
+            ],
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 5},
         "accommodations": {
@@ -3835,7 +3959,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 1,
                 "prompt": "Read these words that cover all the phonics patterns you've learned: cat, cake, rain, ship, frog, green. How many can you read correctly?",
                 "expected_type": "text",
-                "hints": ["Use your phonics skills: CVC (cat), silent-e (cake), vowel team (rain), digraph (ship), blend (frog, green)."],
+                "hints": [
+                    "Use your phonics skills: CVC (cat), silent-e (cake), vowel team (rain), digraph (ship), blend (frog, green)."
+                ],
                 "explanation": "These six words test six different phonics patterns: CVC (cat), CVCe (cake), vowel team (rain), digraph (ship), initial blend (frog), and consonant blend (green). Reading all six shows mastery of foundational phonics.",
             },
             {
@@ -3874,7 +4000,9 @@ READING_FOUNDATIONAL_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Set a reading goal for yourself. What do you want to be able to do as a reader in the next few months? Why is that goal important to you?",
                 "expected_type": "text",
-                "hints": ["Think about books you want to read, skills you want to improve, or how you want reading to help you."],
+                "hints": [
+                    "Think about books you want to read, skills you want to improve, or how you want reading to help you."
+                ],
                 "explanation": "Goal-setting builds ownership of learning. Examples: 'I want to read a chapter book by myself,' 'I want to read faster so I can finish more books,' 'I want to read science books about space.' The goal should be personal and motivating.",
             },
         ],
@@ -3905,7 +4033,11 @@ READING_FOUNDATIONAL_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["grade-level reading passages for assessment", "sight word flash cards (first 100)", "phonics pattern word list"],
+            "required": [
+                "grade-level reading passages for assessment",
+                "sight word flash cards (first 100)",
+                "phonics pattern word list",
+            ],
             "recommended": ["reading assessment recording form", "stopwatch or timer for fluency check"],
         },
         "time_estimates": {"first_exposure": 30, "practice_session": 20, "assessment": 30},
