@@ -73,7 +73,7 @@ class TestPasswordChange:
     async def test_change_password_success(self, auth_client, db_session, user):
         """PUT /auth/password with correct current password succeeds."""
         resp = await auth_client.put(
-            "/api/v1/auth/auth/password",
+            "/api/v1/auth/password",
             json={
                 "current_password": "testpass123",
                 "new_password": "newpassword123",
@@ -86,7 +86,7 @@ class TestPasswordChange:
     async def test_change_password_wrong_current(self, auth_client, db_session, user):
         """PUT /auth/password with wrong current password returns 400."""
         resp = await auth_client.put(
-            "/api/v1/auth/auth/password",
+            "/api/v1/auth/password",
             json={
                 "current_password": "wrongpassword",
                 "new_password": "newpassword123",

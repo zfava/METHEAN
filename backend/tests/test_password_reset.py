@@ -118,6 +118,6 @@ async def test_reset_password_token_consumed(mock_email, db_session, reset_user)
 @pytest.mark.asyncio
 async def test_forgot_password_api_returns_200(client):
     """POST /auth/forgot-password always returns 200."""
-    resp = await client.post("/api/v1/auth/auth/forgot-password", json={"email": "whatever@test.com"})
+    resp = await client.post("/api/v1/auth/forgot-password", json={"email": "whatever@test.com"})
     assert resp.status_code == 200
     assert "message" in resp.json()

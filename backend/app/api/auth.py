@@ -305,7 +305,7 @@ class ChangePasswordRequest(BaseModel):
     new_password: str = Field(min_length=8)
 
 
-@router.put("/auth/password")
+@router.put("/password")
 async def change_password(
     body: ChangePasswordRequest,
     db: AsyncSession = Depends(get_db),
@@ -319,7 +319,7 @@ async def change_password(
     return {"success": True}
 
 
-@router.get("/auth/me/notification-preferences")
+@router.get("/me/notification-preferences")
 async def get_notification_preferences(
     user: User = Depends(get_current_user),
 ) -> dict:
@@ -333,7 +333,7 @@ async def get_notification_preferences(
     }
 
 
-@router.put("/auth/me/notification-preferences")
+@router.put("/me/notification-preferences")
 async def update_notification_preferences(
     body: dict,
     db: AsyncSession = Depends(get_db),
@@ -368,7 +368,7 @@ class ResetPasswordRequest(BaseModel):
     new_password: str = Field(min_length=8)
 
 
-@router.post("/auth/forgot-password")
+@router.post("/forgot-password")
 async def forgot_password(
     body: ForgotPasswordRequest,
     db: AsyncSession = Depends(get_db),
@@ -380,7 +380,7 @@ async def forgot_password(
     return {"message": "If that email exists, a reset link has been sent."}
 
 
-@router.post("/auth/reset-password")
+@router.post("/reset-password")
 async def reset_password_endpoint(
     body: ResetPasswordRequest,
     db: AsyncSession = Depends(get_db),
@@ -398,7 +398,7 @@ async def reset_password_endpoint(
 # ── Email Verification ──
 
 
-@router.post("/auth/verify-email")
+@router.post("/verify-email")
 async def verify_email(
     body: dict,
     db: AsyncSession = Depends(get_db),
@@ -416,7 +416,7 @@ async def verify_email(
     return {"verified": True}
 
 
-@router.post("/auth/resend-verification")
+@router.post("/resend-verification")
 async def resend_verification(
     user: User = Depends(get_current_user),
 ) -> dict:
@@ -526,7 +526,7 @@ async def revoke_invite(
     return {"revoked": True}
 
 
-@router.post("/auth/accept-invite")
+@router.post("/accept-invite")
 async def accept_invite(
     body: AcceptInviteRequest,
     response: Response,
