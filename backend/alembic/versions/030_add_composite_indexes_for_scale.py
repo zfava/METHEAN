@@ -3,6 +3,9 @@
 Revision ID: 030
 Revises: 029
 Create Date: 2026-04-16
+
+Note: ix_child_node_states_child_node already exists from migration 001
+(line 514) and is intentionally omitted here to avoid a DuplicateTableError.
 """
 
 from typing import Sequence, Union
@@ -16,11 +19,6 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.create_index(
-        "ix_child_node_states_child_node",
-        "child_node_states",
-        ["child_id", "node_id"],
-    )
     op.create_index(
         "ix_governance_events_household_created",
         "governance_events",
@@ -48,4 +46,3 @@ def downgrade() -> None:
     op.drop_index("ix_state_events_child_node")
     op.drop_index("ix_ai_runs_household_started")
     op.drop_index("ix_governance_events_household_created")
-    op.drop_index("ix_child_node_states_child_node")
