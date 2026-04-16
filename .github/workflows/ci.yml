@@ -136,7 +136,10 @@ jobs:
 
       - name: Install dependencies
         working-directory: frontend
-        run: npm install
+        # --no-optional skips @capacitor/assets, whose transitive sharp@0.32
+        # tries to download libvips from GitHub Releases at install time
+        # and frequently times out in CI. Asset generation is a local-only task.
+        run: npm install --no-optional
 
       - name: TypeScript compilation check
         working-directory: frontend
@@ -280,7 +283,8 @@ jobs:
 
       - name: Install frontend
         working-directory: frontend
-        run: npm ci
+        # Skip @capacitor/assets (see note above); not needed for E2E tests
+        run: npm ci --no-optional
 
       - name: Install Playwright
         working-directory: frontend
