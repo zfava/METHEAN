@@ -247,6 +247,13 @@ async def copy_template(
                 node.content = HISTORY_FOUNDATIONAL_CONTENT[tnode.ref]
         except ImportError:
             pass
+        try:
+            from app.content.writing_foundational_content import WRITING_FOUNDATIONAL_CONTENT
+
+            if template.template_id == "writing-foundational" and tnode.ref in WRITING_FOUNDATIONAL_CONTENT:
+                node.content = WRITING_FOUNDATIONAL_CONTENT[tnode.ref]
+        except ImportError:
+            pass
 
     # Create edges
     edge_count = 0
