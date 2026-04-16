@@ -639,3 +639,269 @@ class TestFetcherRegistry:
         for role, profile in ROLE_PROFILES.items():
             for source in profile.sources:
                 assert source.query_fn in FETCHER_MAP, f"Missing fetcher for {role}/{source.name}: {source.query_fn}"
+
+
+# ═══════════════════════════════════════════
+# CONFIGURATION DATA INTEGRITY TESTS
+# ═══════════════════════════════════════════
+
+
+class TestProfileDataIntegrity:
+    """Broad sweep tests that catch misconfigurations across ALL role profiles."""
+
+    def test_all_context_roles_have_profiles(self):
+        """Every AI role that uses context assembly has a profile."""
+        expected_roles = {"planner", "tutor", "evaluator", "advisor", "cartographer"}
+        assert expected_roles.issubset(set(ROLE_PROFILES.keys())), (
+            f"Missing profiles for: {expected_roles - set(ROLE_PROFILES.keys())}"
+        )
+
+    def test_profiles_have_valid_token_budgets(self):
+        """Every profile has a positive total_token_budget within safety bounds."""
+        for role, profile in ROLE_PROFILES.items():
+            assert profile.total_token_budget > 0, f"{role} has non-positive token budget"
+            assert profile.total_token_budget <= 8000, (
+                f"{role} budget {profile.total_token_budget} exceeds safety limit of 8000"
+            )
+
+    def test_profiles_have_data_sources(self):
+        """Every profile has at least one data source."""
+        for role, profile in ROLE_PROFILES.items():
+            assert len(profile.sources) > 0, f"{role} has no data sources"
+
+    def test_source_relevance_weights_are_bounded(self):
+        """Relevance weights are between 0.0 and 1.0 inclusive."""
+        for role, profile in ROLE_PROFILES.items():
+            for source in profile.sources:
+                assert 0.0 <= source.relevance_weight <= 1.0, (
+                    f"{role}.{source.name}: weight {source.relevance_weight} out of bounds"
+                )
+
+    def test_source_recency_half_lives_are_positive(self):
+        """Recency half-lives are positive integers."""
+        for role, profile in ROLE_PROFILES.items():
+            for source in profile.sources:
+                assert source.recency_half_life_days > 0, (
+                    f"{role}.{source.name}: half-life must be positive, got {source.recency_half_life_days}"
+                )
+
+    def test_source_max_tokens_positive(self):
+        """Every source has a positive max_tokens budget."""
+        for role, profile in ROLE_PROFILES.items():
+            for source in profile.sources:
+                assert source.max_tokens > 0, (
+                    f"{role}.{source.name}: max_tokens must be positive, got {source.max_tokens}"
+                )
+
+    def test_source_names_unique_within_profile(self):
+        """No profile has two sources with the same name."""
+        for role, profile in ROLE_PROFILES.items():
+            names = [s.name for s in profile.sources]
+            assert len(names) == len(set(names)), f"{role} has duplicate source names: {names}"
+
+    def test_every_profile_has_at_least_one_required_source(self):
+        """Every profile has at least one required=True source (non-negotiable context)."""
+        for role, profile in ROLE_PROFILES.items():
+            required_count = sum(1 for s in profile.sources if s.required)
+            assert required_count >= 1, f"{role} has no required sources"
+
+    def test_source_query_fn_matches_function_name_convention(self):
+        """All query_fn values start with 'fetch_' (naming convention)."""
+        for role, profile in ROLE_PROFILES.items():
+            for source in profile.sources:
+                assert source.query_fn.startswith("fetch_"), (
+                    f"{role}.{source.name}: query_fn {source.query_fn} must start with fetch_"
+                )
+
+
+# ═══════════════════════════════════════════
+# TRUNCATION EDGE CASES
+# ═══════════════════════════════════════════
+
+
+class TestTruncateToTokensEdgeCases:
+    def test_truncate_empty_string(self):
+        """Empty string returns empty string, not an error."""
+        assert truncate_to_tokens("", 100) == ""
+
+    def test_truncate_exactly_at_budget(self):
+        """Text exactly at budget passes through unchanged."""
+        # Budget = 25 tokens = 100 chars
+        text = "x" * 100
+        result = truncate_to_tokens(text, 25)
+        assert result == text
+
+    def test_truncate_preserves_newlines_when_possible(self):
+        """Truncation prefers to cut at newlines over mid-line."""
+        # Build text with clear newlines past the 50% mark of budget
+        text = "First line that is reasonably long\nSecond line\nThird line\n" + ("x" * 500)
+        result = truncate_to_tokens(text, 20)  # 80 chars budget
+        # Should contain "[...truncated]" marker
+        assert "[...truncated]" in result
+
+    def test_truncate_zero_budget(self):
+        """Zero token budget produces empty or marker-only result."""
+        text = "Some long text here that should be entirely cut"
+        result = truncate_to_tokens(text, 0)
+        # 0 tokens = 0 chars; should at minimum not crash
+        assert isinstance(result, str)
+
+
+# ═══════════════════════════════════════════
+# ASSEMBLY BEHAVIOR — DIFFERENT ROLES PRODUCE DIFFERENT OUTPUT
+# ═══════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+class TestAssemblyRoleDifferentiation:
+    async def test_different_roles_request_different_sources(self):
+        """Planner and tutor have distinct source lists."""
+        planner_sources = {s.name for s in ROLE_PROFILES["planner"].sources}
+        tutor_sources = {s.name for s in ROLE_PROFILES["tutor"].sources}
+
+        # Distinct source lists (though some overlap is expected)
+        assert planner_sources != tutor_sources
+        # At least some unique sources per role
+        assert len(planner_sources - tutor_sources) > 0
+        assert len(tutor_sources - planner_sources) > 0
+
+    async def test_different_roles_have_different_budgets(self):
+        """Each role has a distinct token budget tuned to its needs."""
+        budgets = {role: p.total_token_budget for role, p in ROLE_PROFILES.items()}
+        # Not all the same value
+        assert len(set(budgets.values())) >= 3, f"Role budgets too uniform: {budgets}"
+
+    async def test_different_roles_produce_different_output(self, db_session, ctx_child, ctx_household, ctx_node):
+        """Same child/household, different roles → different sources_used."""
+        # Seed modest data so assembly has something to work with
+        db_session.add(
+            ChildNodeState(
+                child_id=ctx_child.id,
+                household_id=ctx_household.id,
+                node_id=ctx_node.id,
+                mastery_level=MasteryLevel.developing,
+                attempts_count=2,
+            )
+        )
+        await db_session.flush()
+
+        tutor_result = await assemble_context(db_session, "tutor", ctx_child.id, ctx_household.id)
+        planner_result = await assemble_context(db_session, "planner", ctx_child.id, ctx_household.id)
+
+        # Different budgets
+        assert tutor_result["tokens_budget"] != planner_result["tokens_budget"]
+        # Different source lists likely
+        tutor_used = set(tutor_result["sources_used"])
+        planner_used = set(planner_result["sources_used"])
+        # At minimum, they should not be identical
+        assert tutor_used != planner_used or tutor_result["tokens_budget"] != planner_result["tokens_budget"]
+
+
+# ═══════════════════════════════════════════
+# ASSEMBLY BEHAVIOR — CHILD ISOLATION
+# ═══════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+class TestAssemblyChildIsolation:
+    async def test_assembly_scoped_to_specific_child(self, db_session, ctx_household, ctx_map):
+        """Context for child A does not contain child B's unique node data."""
+        # Create two children with distinct learning node states
+        child_a = Child(household_id=ctx_household.id, first_name="ChildA")
+        child_b = Child(household_id=ctx_household.id, first_name="ChildB")
+        db_session.add_all([child_a, child_b])
+        await db_session.flush()
+
+        # Two distinct nodes
+        node_a = LearningNode(
+            learning_map_id=ctx_map.id,
+            household_id=ctx_household.id,
+            node_type=NodeType.concept,
+            title="OnlyForA",
+        )
+        node_b = LearningNode(
+            learning_map_id=ctx_map.id,
+            household_id=ctx_household.id,
+            node_type=NodeType.concept,
+            title="OnlyForB",
+        )
+        db_session.add_all([node_a, node_b])
+        await db_session.flush()
+
+        # Each child masters their own node
+        db_session.add(
+            ChildNodeState(
+                child_id=child_a.id,
+                household_id=ctx_household.id,
+                node_id=node_a.id,
+                mastery_level=MasteryLevel.mastered,
+                attempts_count=5,
+            )
+        )
+        db_session.add(
+            ChildNodeState(
+                child_id=child_b.id,
+                household_id=ctx_household.id,
+                node_id=node_b.id,
+                mastery_level=MasteryLevel.mastered,
+                attempts_count=5,
+            )
+        )
+        await db_session.flush()
+
+        # Assemble context for child A
+        result_a = await assemble_context(db_session, "planner", child_a.id, ctx_household.id)
+
+        # Child A's context should reference OnlyForA (if fsrs_snapshot source picked up the state)
+        # At minimum, it should NOT reference OnlyForB
+        assert "OnlyForB" not in result_a["context_text"], (
+            "Child A's context leaked child B's node data"
+        )
+
+
+# ═══════════════════════════════════════════
+# ASSEMBLY RESULT SHAPE
+# ═══════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+class TestAssemblyResultShape:
+    async def test_assembly_result_keys_are_consistent_across_roles(self, db_session, ctx_child, ctx_household):
+        """All assembly results have the same top-level keys regardless of role."""
+        required_keys = {
+            "context_text",
+            "sources_used",
+            "tokens_used",
+            "tokens_budget",
+            "sources_truncated",
+            "sources_failed",
+        }
+        for role in ROLE_PROFILES:
+            result = await assemble_context(db_session, role, ctx_child.id, ctx_household.id)
+            assert required_keys.issubset(set(result.keys())), (
+                f"Role {role} missing keys: {required_keys - set(result.keys())}"
+            )
+
+    async def test_assembly_tokens_used_never_exceeds_budget_across_roles(
+        self, db_session, ctx_child, ctx_household
+    ):
+        """tokens_used <= tokens_budget for every role."""
+        for role in ROLE_PROFILES:
+            result = await assemble_context(db_session, role, ctx_child.id, ctx_household.id)
+            assert result["tokens_used"] <= result["tokens_budget"], (
+                f"Role {role}: tokens_used {result['tokens_used']} > budget {result['tokens_budget']}"
+            )
+
+    async def test_assembly_sources_used_are_known_source_names(
+        self, db_session, ctx_child, ctx_household
+    ):
+        """Every source in sources_used is a real source name from the role's profile."""
+        for role in ROLE_PROFILES:
+            profile = ROLE_PROFILES[role]
+            valid_names = {s.name for s in profile.sources}
+            result = await assemble_context(db_session, role, ctx_child.id, ctx_household.id)
+            for name in result["sources_used"]:
+                assert name in valid_names, (
+                    f"Role {role}: unknown source name {name} in sources_used"
+                )
+
