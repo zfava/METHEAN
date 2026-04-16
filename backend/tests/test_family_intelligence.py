@@ -1197,3 +1197,269 @@ class TestAPISerialization:
         result = await db_session.execute(select(FamilyInsight).where(FamilyInsight.id == insight.id))
         saved = result.scalar_one()
         assert saved.parent_response == "We added extra practice worksheets."
+
+
+# ═══════════════════════════════════════════
+# PATTERN TYPE DATA INTEGRITY (2 tests)
+# ═══════════════════════════════════════════
+
+
+class TestPatternTypeIntegrity:
+    def test_all_five_pattern_types_defined(self):
+        """FamilyPatternType enum covers all five detection algorithms."""
+        expected = {"shared_struggle", "curriculum_gap", "pacing_divergence", "environmental_correlation", "material_effectiveness"}
+        actual = {t.value for t in FamilyPatternType}
+        assert expected.issubset(actual), f"Missing patterns: {expected - actual}"
+
+    def test_insight_status_lifecycle_complete(self):
+        """InsightStatus has all lifecycle states."""
+        expected = {"detected", "acknowledged", "acted_on", "dismissed", "notified"}
+        actual = {s.value for s in InsightStatus}
+        assert expected.issubset(actual), f"Missing statuses: {expected - actual}"
+
+
+# ═══════════════════════════════════════════
+# HOUSEHOLD ISOLATION (2 tests)
+# ═══════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+class TestHouseholdIsolation:
+    async def test_insights_scoped_to_household(self, db_session, fi_household, fi_child_a, fi_child_b, fi_node):
+        """Family intelligence only sees children within its own household."""
+        # Create a second household with two children
+        other_hh = Household(name="Other Family")
+        db_session.add(other_hh)
+        await db_session.flush()
+        other_a = Child(household_id=other_hh.id, first_name="OtherA")
+        other_b = Child(household_id=other_hh.id, first_name="OtherB")
+        db_session.add_all([other_a, other_b])
+        await db_session.flush()
+
+        # Seed data in household A that triggers a shared struggle
+        now = datetime.now(UTC)
+        for child in [fi_child_a, fi_child_b]:
+            db_session.add(
+                ChildNodeState(
+                    child_id=child.id,
+                    household_id=fi_household.id,
+                    node_id=fi_node.id,
+                    mastery_level=MasteryLevel.emerging,
+                    attempts_count=5,
+                    last_activity_at=now - timedelta(days=1),
+                )
+            )
+        await db_session.flush()
+
+        # Run for household A
+        result_a = await run_family_intelligence(db_session, fi_household.id)
+
+        # Run for other household (no data → skips or 0 insights)
+        result_other = await run_family_intelligence(db_session, other_hh.id)
+
+        # Household A may have insights; other household should not
+        assert result_other["insights_created"] == 0 or result_other.get("skipped") is True
+
+    async def test_insights_reference_only_own_children(
+        self, db_session, fi_household, fi_child_a, fi_child_b, fi_node
+    ):
+        """Generated insights only reference children from the household."""
+        now = datetime.now(UTC)
+        for child in [fi_child_a, fi_child_b]:
+            db_session.add(
+                ChildNodeState(
+                    child_id=child.id,
+                    household_id=fi_household.id,
+                    node_id=fi_node.id,
+                    mastery_level=MasteryLevel.emerging,
+                    attempts_count=5,
+                    last_activity_at=now - timedelta(days=1),
+                )
+            )
+        await db_session.flush()
+
+        result = await run_family_intelligence(db_session, fi_household.id)
+
+        # Any created insights should only reference fi_household children
+        insights = (
+            await db_session.execute(
+                select(FamilyInsight).where(FamilyInsight.household_id == fi_household.id)
+            )
+        ).scalars().all()
+
+        household_child_ids = {str(fi_child_a.id), str(fi_child_b.id)}
+        for insight in insights:
+            for child_id in insight.affected_children:
+                assert child_id in household_child_ids, (
+                    f"Insight references child {child_id} not in household"
+                )
+
+
+# ═══════════════════════════════════════════
+# THREE-CHILD SPECIFICITY (2 tests)
+# ═══════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+class TestThreeChildSpecificity:
+    async def test_shared_struggle_excludes_unaffected_child(
+        self, db_session, fi_household, fi_child_a, fi_child_b, fi_child_c, fi_node
+    ):
+        """When 2 of 3 children struggle, the third is NOT in affected_children."""
+        now = datetime.now(UTC)
+        # A and B struggle
+        for child in [fi_child_a, fi_child_b]:
+            db_session.add(
+                ChildNodeState(
+                    child_id=child.id,
+                    household_id=fi_household.id,
+                    node_id=fi_node.id,
+                    mastery_level=MasteryLevel.emerging,
+                    attempts_count=6,
+                    last_activity_at=now - timedelta(days=1),
+                )
+            )
+        # C masters the same node
+        db_session.add(
+            ChildNodeState(
+                child_id=fi_child_c.id,
+                household_id=fi_household.id,
+                node_id=fi_node.id,
+                mastery_level=MasteryLevel.mastered,
+                attempts_count=3,
+                last_activity_at=now - timedelta(days=1),
+            )
+        )
+        await db_session.flush()
+
+        results = await detect_shared_struggles(
+            db_session, fi_household.id, [fi_child_a, fi_child_b, fi_child_c], None
+        )
+        assert len(results) == 1
+        affected = results[0].affected_children
+        assert str(fi_child_a.id) in affected
+        assert str(fi_child_b.id) in affected
+        assert str(fi_child_c.id) not in affected
+
+    async def test_three_children_all_struggling_full_confidence(
+        self, db_session, fi_household, fi_child_a, fi_child_b, fi_child_c, fi_node
+    ):
+        """When all 3 children struggle, confidence is 1.0 (3/3 affected)."""
+        now = datetime.now(UTC)
+        for child in [fi_child_a, fi_child_b, fi_child_c]:
+            db_session.add(
+                ChildNodeState(
+                    child_id=child.id,
+                    household_id=fi_household.id,
+                    node_id=fi_node.id,
+                    mastery_level=MasteryLevel.emerging,
+                    attempts_count=5,
+                    last_activity_at=now - timedelta(days=1),
+                )
+            )
+        await db_session.flush()
+
+        results = await detect_shared_struggles(
+            db_session, fi_household.id, [fi_child_a, fi_child_b, fi_child_c], None
+        )
+        assert len(results) == 1
+        assert results[0].confidence == 1.0  # 3/3 = 100%
+        assert len(results[0].affected_children) == 3
+
+
+# ═══════════════════════════════════════════
+# RECOMMENDATION QUALITY (2 tests)
+# ═══════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+class TestRecommendationQuality:
+    async def test_all_insights_have_non_empty_recommendations(
+        self, db_session, fi_household, fi_child_a, fi_child_b, fi_node
+    ):
+        """Every generated insight has a non-empty recommendation."""
+        now = datetime.now(UTC)
+        for child in [fi_child_a, fi_child_b]:
+            db_session.add(
+                ChildNodeState(
+                    child_id=child.id,
+                    household_id=fi_household.id,
+                    node_id=fi_node.id,
+                    mastery_level=MasteryLevel.emerging,
+                    attempts_count=5,
+                    last_activity_at=now - timedelta(days=1),
+                )
+            )
+        await db_session.flush()
+
+        result = await run_family_intelligence(db_session, fi_household.id)
+
+        insights = (
+            await db_session.execute(
+                select(FamilyInsight).where(FamilyInsight.household_id == fi_household.id)
+            )
+        ).scalars().all()
+
+        for insight in insights:
+            assert insight.recommendation is not None
+            assert len(insight.recommendation.strip()) > 0, (
+                f"Insight {insight.id} ({insight.pattern_type}) has empty recommendation"
+            )
+
+    async def test_shared_struggle_recommendation_names_children(
+        self, db_session, fi_household, fi_child_a, fi_child_b, fi_node
+    ):
+        """Shared struggle recommendation includes affected children's names."""
+        now = datetime.now(UTC)
+        for child in [fi_child_a, fi_child_b]:
+            db_session.add(
+                ChildNodeState(
+                    child_id=child.id,
+                    household_id=fi_household.id,
+                    node_id=fi_node.id,
+                    mastery_level=MasteryLevel.developing,
+                    attempts_count=5,
+                    last_activity_at=now - timedelta(days=1),
+                )
+            )
+        await db_session.flush()
+
+        results = await detect_shared_struggles(
+            db_session, fi_household.id, [fi_child_a, fi_child_b], None
+        )
+        assert len(results) == 1
+        rec = results[0].recommendation
+        assert "Alice" in rec
+        assert "Bob" in rec
+
+
+# ═══════════════════════════════════════════
+# CONFIG FULLY DISABLED (1 test)
+# ═══════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+class TestConfigFullyDisabled:
+    async def test_globally_disabled_config(self, db_session, fi_household, fi_child_a, fi_child_b, fi_node):
+        """When FamilyInsightConfig.enabled=False, no insights even with triggering data."""
+        now = datetime.now(UTC)
+        for child in [fi_child_a, fi_child_b]:
+            db_session.add(
+                ChildNodeState(
+                    child_id=child.id,
+                    household_id=fi_household.id,
+                    node_id=fi_node.id,
+                    mastery_level=MasteryLevel.emerging,
+                    attempts_count=5,
+                    last_activity_at=now - timedelta(days=1),
+                )
+            )
+        config = FamilyInsightConfig(
+            household_id=fi_household.id,
+            enabled=False,
+        )
+        db_session.add(config)
+        await db_session.flush()
+
+        result = await run_family_intelligence(db_session, fi_household.id)
+        assert result["insights_created"] == 0
