@@ -22,10 +22,7 @@ jobs:
           java-version: "17"
       - name: Install dependencies
         working-directory: frontend
-        # @capacitor/assets is optional (see frontend/package.json) because
-        # its transitive sharp@0.32 times out fetching libvips from GitHub.
-        # cap:export + cap sync don't need it.
-        run: npm ci --no-optional
+        run: npm ci
       - name: Export and sync
         working-directory: frontend
         run: |
@@ -52,10 +49,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - name: Install dependencies
         working-directory: frontend
-        # @capacitor/assets is optional (see frontend/package.json) because
-        # its transitive sharp@0.32 times out fetching libvips from GitHub.
-        # cap:export + cap sync don't need it.
-        run: npm ci --no-optional
+        run: npm ci
       - name: Export and sync
         working-directory: frontend
         run: |
