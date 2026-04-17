@@ -1,5 +1,7 @@
 # Load Test Baseline
 
+> Last verified: 2026-04-15. Regenerate with: `cd backend && locust -f scripts/locustfile.py --headless -u 50 -r 5 --run-time 60s`
+
 ## Configuration
 - Tool: Locust
 - Target: Local Docker Compose (single backend instance)
