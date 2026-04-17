@@ -241,17 +241,37 @@ async def test_rls_isolates_households(db_session):
         await conn.execute(text("SET ROLE methean_rls_test"))
         role_created = True
 
+    # conftest's db_session fixture uses Base.metadata.create_all, which does
+    # not run Alembic migrations — so the subjects RLS policy declared in
+    # migrations 001 and 027 is absent on the test DB. Apply it here using
+    # the same idempotent pattern as 027_harden_rls_safe_settings. FORCE is
+    # required because the connection role owns the tables and would
+    # otherwise bypass RLS.
+    await conn.execute(text("DROP POLICY IF EXISTS subjects_household_isolation ON subjects"))
+    await conn.execute(text("ALTER TABLE subjects ENABLE ROW LEVEL SECURITY"))
+    await conn.execute(text("ALTER TABLE subjects FORCE ROW LEVEL SECURITY"))
+    await conn.execute(text(
+        "CREATE POLICY subjects_household_isolation ON subjects "
+        "USING (household_id = current_setting('app.current_household_id', true)::uuid)"
+    ))
+
     try:
-        # Create two households
+        # Create two households (households table has no RLS)
         household_a = Household(name="Family A")
         household_b = Household(name="Family B")
         db_session.add_all([household_a, household_b])
         await db_session.flush()
 
-        # Create subjects in each household
+        # Create subjects in each household. Tenant must match household_id
+        # so each INSERT RETURNING passes the SELECT USING visibility check.
+        await set_tenant(db_session, household_a.id)
         subj_a = Subject(household_id=household_a.id, name="Math A")
+        db_session.add(subj_a)
+        await db_session.flush()
+
+        await set_tenant(db_session, household_b.id)
         subj_b = Subject(household_id=household_b.id, name="Math B")
-        db_session.add_all([subj_a, subj_b])
+        db_session.add(subj_b)
         await db_session.flush()
 
         # Set tenant to household A
