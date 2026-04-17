@@ -28,8 +28,8 @@ async def _get_child_or_404(db: AsyncSession, child_id: uuid.UUID, household_id:
 
 
 @router.get("/compliance/states")
-async def list_states(user: User = Depends(get_current_user)) -> list[dict]:
-    """List all supported states with summary."""
+async def list_states() -> list[dict]:
+    """List all supported states with summary. Public endpoint — no auth required."""
     return [
         {
             "code": s["code"],
