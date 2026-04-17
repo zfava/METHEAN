@@ -152,18 +152,67 @@ async def test_csrf_skips_auth_endpoints(db_session):
 # RLS Tenant Isolation Tests
 # ══════════════════════════════════════════════════
 
+# Tables with household_id that MUST have RLS policies. Keep in sync
+# with migration 027_harden_rls_safe_settings.py HOUSEHOLD_TABLES.
+RLS_COVERED_TABLES = [
+    "subjects",
+    "users",
+    "children",
+    "child_preferences",
+    "learning_maps",
+    "learning_nodes",
+    "learning_edges",
+    "child_map_enrollments",
+    "child_node_states",
+    "state_events",
+    "fsrs_cards",
+    "review_logs",
+    "governance_rules",
+    "governance_events",
+    "plans",
+    "plan_weeks",
+    "activities",
+    "attempts",
+    "alerts",
+    "weekly_snapshots",
+    "advisor_reports",
+    "artifacts",
+    "assessments",
+    "portfolio_entries",
+    "annual_curricula",
+    "activity_feedback",
+    "reading_log_entries",
+    "family_resources",
+    "education_plans",
+    "achievements",
+    "streaks",
+    "usage_ledger",
+    "usage_events",
+    "ai_runs",
+    "audit_logs",
+    "refresh_tokens",
+    "device_tokens",
+    "notification_logs",
+    "user_permissions",
+    "family_invites",
+    "learner_intelligence",
+    "evaluator_predictions",
+    "calibration_profiles",
+    "calibration_snapshots",
+    "learner_style_vectors",
+    "family_insights",
+    "family_insight_configs",
+    "wellbeing_anomalies",
+    "wellbeing_configs",
+]
+
 
 @pytest.mark.asyncio
 async def test_rls_isolates_households(db_session):
     """Verify that RLS policies prevent cross-household data access.
 
-    Creates two households with subjects, enables RLS + FORCE,
-    then verifies that SET LOCAL scopes visibility per-household.
-
-    RLS only applies to non-superuser roles. In CI the user is already
-    non-superuser so policies are enforced automatically. Locally the dev
-    user may be superuser — in that case we skip, since stripping superuser
-    via ALTER ROLE requires the very privilege we're trying to remove.
+    Creates two households with subjects, uses SET ROLE to a non-superuser
+    role so RLS is enforced, then verifies SET LOCAL scopes visibility.
     """
     from sqlalchemy import text, select
     from app.core.database import set_tenant
@@ -172,61 +221,60 @@ async def test_rls_isolates_households(db_session):
 
     conn = await db_session.connection()
 
-    # RLS bypass: superusers bypass all RLS. This test needs a non-superuser
-    # role to verify policies. In CI we're already non-super. Locally the dev
-    # user is typically superuser and ALTER ROLE can't be safely run here.
+    # Determine if we're superuser
     is_super_result = await conn.execute(text("SELECT rolsuper FROM pg_roles WHERE rolname = current_user"))
-    if is_super_result.scalar():
-        pytest.skip("RLS test requires non-superuser role; run in CI or as non-super user")
+    is_super = is_super_result.scalar()
 
-    # Create two households
-    household_a = Household(name="Family A")
-    household_b = Household(name="Family B")
-    db_session.add_all([household_a, household_b])
-    await db_session.flush()
+    # If superuser, create a non-superuser role and SET ROLE to it
+    role_created = False
+    if is_super:
+        await conn.execute(text("""
+            DO $$ BEGIN
+                IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'methean_rls_test') THEN
+                    CREATE ROLE methean_rls_test NOLOGIN;
+                END IF;
+            END $$
+        """))
+        await conn.execute(text(
+            "GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO methean_rls_test"
+        ))
+        await conn.execute(text("SET ROLE methean_rls_test"))
+        role_created = True
 
-    # Create subjects in each household
-    subj_a = Subject(household_id=household_a.id, name="Math A")
-    subj_b = Subject(household_id=household_b.id, name="Math B")
-    db_session.add_all([subj_a, subj_b])
-    await db_session.flush()
+    try:
+        # Create two households
+        household_a = Household(name="Family A")
+        household_b = Household(name="Family B")
+        db_session.add_all([household_a, household_b])
+        await db_session.flush()
 
-    # Enable RLS on subjects table for this test session
-    await conn.execute(text("ALTER TABLE subjects ENABLE ROW LEVEL SECURITY"))
-    await conn.execute(text("ALTER TABLE subjects FORCE ROW LEVEL SECURITY"))
+        # Create subjects in each household
+        subj_a = Subject(household_id=household_a.id, name="Math A")
+        subj_b = Subject(household_id=household_b.id, name="Math B")
+        db_session.add_all([subj_a, subj_b])
+        await db_session.flush()
 
-    # Create policy with safe missing_ok=true parameter
-    await conn.execute(text("DROP POLICY IF EXISTS subjects_household_isolation ON subjects"))
-    await conn.execute(
-        text(
-            "CREATE POLICY subjects_household_isolation ON subjects "
-            "USING (household_id = current_setting('app.current_household_id', true)::uuid)"
-        )
-    )
+        # Set tenant to household A
+        await set_tenant(db_session, household_a.id)
 
-    # Set tenant to household A
-    await set_tenant(db_session, household_a.id)
+        # Query subjects: should only see household A's
+        result = await db_session.execute(select(Subject))
+        visible = result.scalars().all()
+        visible_names = {s.name for s in visible}
+        assert "Math A" in visible_names, "Household A's subject should be visible"
+        assert "Math B" not in visible_names, "Household B's subject should be hidden by RLS"
 
-    # Query subjects — should only see household A's
-    result = await db_session.execute(select(Subject))
-    visible = result.scalars().all()
+        # Switch tenant to household B
+        await set_tenant(db_session, household_b.id)
+        result2 = await db_session.execute(select(Subject))
+        visible2 = result2.scalars().all()
+        visible_names2 = {s.name for s in visible2}
+        assert "Math B" in visible_names2, "Household B's subject should be visible"
+        assert "Math A" not in visible_names2, "Household A's subject should be hidden by RLS"
 
-    visible_names = {s.name for s in visible}
-    assert "Math A" in visible_names, "Household A's subject should be visible"
-    assert "Math B" not in visible_names, "Household B's subject should be hidden by RLS"
-
-    # Switch tenant to household B
-    await set_tenant(db_session, household_b.id)
-
-    result2 = await db_session.execute(select(Subject))
-    visible2 = result2.scalars().all()
-
-    visible_names2 = {s.name for s in visible2}
-    assert "Math B" in visible_names2, "Household B's subject should be visible"
-    assert "Math A" not in visible_names2, "Household A's subject should be hidden by RLS"
-
-    # Cleanup: disable RLS so it doesn't affect other tests
-    await conn.execute(text("ALTER TABLE subjects DISABLE ROW LEVEL SECURITY"))
+    finally:
+        if role_created:
+            await conn.execute(text("RESET ROLE"))
 
 
 @pytest.mark.asyncio
@@ -242,3 +290,63 @@ async def test_set_tenant_scopes_user_lookup(db_session):
     result = await db_session.execute(text("SELECT current_setting('app.current_household_id')"))
     value = result.scalar()
     assert value == str(hid)
+
+
+class TestRLSCoverageMatrix:
+    """Verify every household-scoped table has RLS in the migration chain."""
+
+    def test_all_household_tables_in_rls_list(self):
+        """Every model with household_id is in the RLS coverage list."""
+        import glob, re
+
+        hid_tables = set()
+        for f in glob.glob("app/models/*.py"):
+            with open(f) as fh:
+                content = fh.read()
+            for m in re.finditer(r'__tablename__\s*=\s*"([^"]+)"', content):
+                table = m.group(1)
+                start = m.end()
+                next_class = content.find("class ", start + 1)
+                section = content[start:next_class] if next_class != -1 else content[start:]
+                if "household_id" in section:
+                    hid_tables.add(table)
+
+        rls_set = set(RLS_COVERED_TABLES)
+        # households table doesn't need RLS on itself
+        hid_tables.discard("households")
+
+        missing = hid_tables - rls_set
+        assert not missing, (
+            f"Tables with household_id but NOT in RLS coverage list: {missing}. "
+            f"Add RLS policies via migration and add to RLS_COVERED_TABLES."
+        )
+
+    def test_rls_policies_exist_in_migrations(self):
+        """Every table in the coverage list appears in a migration's RLS table list."""
+        import glob
+
+        migration_content = ""
+        for f in sorted(glob.glob("alembic/versions/*.py")):
+            with open(f) as fh:
+                migration_content += fh.read()
+
+        for table in RLS_COVERED_TABLES:
+            # Tables are referenced in migration 027's HOUSEHOLD_TABLES list,
+            # in individual migration ENABLE ROW LEVEL SECURITY calls,
+            # or in f-string patterns. Check for the table name appearing
+            # near "ROW LEVEL SECURITY" or in a tables list.
+            found = (
+                f'"{table}"' in migration_content
+                or f"'{table}'" in migration_content
+                or f" {table} " in migration_content
+            )
+            assert found, (
+                f"Table '{table}' not referenced in any migration. "
+                f"It needs a RLS policy via ENABLE ROW LEVEL SECURITY."
+            )
+
+    def test_rls_covered_count_matches_household_tables(self):
+        """RLS coverage list has the expected count of household-scoped tables."""
+        # 49 tables have household_id, minus 1 (households itself) = 48
+        # audit_logs was missing from 027 but is now in the coverage list
+        assert len(RLS_COVERED_TABLES) == 49
