@@ -18,7 +18,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
 
 from app.core.database import Base
-from app.models.enums import AlertSeverity, AlertStatus, ArtifactType
+from app.models.enums import AlertSeverity, AlertStatus, ArtifactType, BetaFeedbackStatus, BetaFeedbackType
 
 
 class Artifact(Base):
@@ -165,6 +165,31 @@ class ReadingLogEntry(Base):
         UUID(as_uuid=True), ForeignKey("activities.id", ondelete="SET NULL")
     )
     child_rating: Mapped[int | None] = mapped_column(Integer)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class BetaFeedback(Base):
+    """Beta user feedback submitted from the parent dashboard."""
+
+    __tablename__ = "beta_feedback"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    household_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("households.id", ondelete="CASCADE"), nullable=False
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    feedback_type: Mapped[str] = mapped_column(String(30), nullable=False, default=BetaFeedbackType.general.value)
+    page_context: Mapped[str | None] = mapped_column(String(255))
+    rating: Mapped[int | None] = mapped_column(Integer)
+    message: Mapped[str] = mapped_column(Text, nullable=False)
+    screenshot_url: Mapped[str | None] = mapped_column(Text)
+    status: Mapped[str] = mapped_column(String(30), nullable=False, default=BetaFeedbackStatus.new.value)
+    admin_notes: Mapped[str | None] = mapped_column(Text)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()

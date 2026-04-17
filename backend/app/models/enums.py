@@ -184,3 +184,19 @@ class SensitivityLevel(str, enum.Enum):
     conservative = "conservative"
     balanced = "balanced"
     sensitive = "sensitive"
+
+
+class BetaFeedbackType(str, enum.Enum):
+    bug = "bug"
+    feature_request = "feature_request"
+    usability = "usability"
+    content = "content"
+    general = "general"
+
+
+class BetaFeedbackStatus(str, enum.Enum):
+    new = "new"
+    reviewed = "reviewed"
+    in_progress = "in_progress"
+    resolved = "resolved"
+    wont_fix = "wont_fix"

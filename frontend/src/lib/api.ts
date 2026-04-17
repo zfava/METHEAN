@@ -773,6 +773,33 @@ export const feedback = {
   recent: (childId: string, limit = 10) => request<any[]>(`/children/${childId}/feedback/recent?limit=${limit}`),
 };
 
+// ── Beta Feedback (parent-to-METHEAN) ──
+export interface BetaFeedbackItem {
+  id: string;
+  feedback_type: "bug" | "feature_request" | "usability" | "content" | "general";
+  page_context: string | null;
+  rating: number | null;
+  message: string;
+  screenshot_url: string | null;
+  status: "new" | "reviewed" | "in_progress" | "resolved" | "wont_fix";
+  admin_notes: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+export const betaFeedback = {
+  submit: (data: {
+    feedback_type: BetaFeedbackItem["feedback_type"];
+    page_context?: string;
+    rating?: number;
+    message: string;
+    screenshot_url?: string;
+  }) =>
+    request<BetaFeedbackItem>(`/feedback`, { method: "POST", body: JSON.stringify(data) }),
+  list: (limit = 50) => request<BetaFeedbackItem[]>(`/feedback?limit=${limit}`),
+  get: (id: string) => request<BetaFeedbackItem>(`/feedback/${id}`),
+};
+
 // ── Reading Log ──
 export const readingLog = {
   create: (childId: string, data: object) =>

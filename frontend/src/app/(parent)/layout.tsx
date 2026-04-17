@@ -10,6 +10,7 @@ import { useMobile } from "@/lib/useMobile";
 import MobileHeader from "@/components/MobileHeader";
 import BottomTabBar from "@/components/BottomTabBar";
 import MobileNavSheet from "@/components/MobileNavSheet";
+import BetaFeedbackButton from "@/components/BetaFeedbackButton";
 
 function ParentLayoutInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -75,6 +76,7 @@ function ParentLayoutInner({ children }: { children: React.ReactNode }) {
         <PageTransition>{children}</PageTransition>
       </main>
 
+      <BetaFeedbackButton />
       <KeyboardShortcuts />
     </div>
   );

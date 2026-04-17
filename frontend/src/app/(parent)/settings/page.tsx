@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { auth, account, academicCalendar, household, familyInvites, dataExport, compliance, type User } from "@/lib/api";
+import { auth, account, academicCalendar, household, familyInvites, dataExport, compliance, betaFeedback, type BetaFeedbackItem, type User } from "@/lib/api";
 import { useMobile } from "@/lib/useMobile";
 import { useToast } from "@/components/Toast";
 import PageHeader from "@/components/ui/PageHeader";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import SectionHeader from "@/components/ui/SectionHeader";
+import StatusBadge from "@/components/StatusBadge";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 
@@ -45,6 +46,9 @@ export default function SettingsPage() {
   const [hhSaved, setHhSaved] = useState(false);
   const [statesList, setStatesList] = useState<{code: string; name: string}[]>([]);
 
+  // Beta feedback submissions
+  const [myFeedback, setMyFeedback] = useState<BetaFeedbackItem[]>([]);
+
   // Password
   const [currentPw, setCurrentPw] = useState("");
   const [newPw, setNewPw] = useState("");
@@ -68,6 +72,7 @@ export default function SettingsPage() {
       }).catch(() => {}),
       account.getNotificationPreferences().then(setNotifPrefs).catch(() => {}),
       familyInvites.list().then(setInvites).catch(() => {}),
+      betaFeedback.list().then(setMyFeedback).catch(() => {}),
     ]).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
@@ -260,6 +265,51 @@ export default function SettingsPage() {
             Export All Data (ZIP)
           </a>
         </div>
+      </Card>
+
+      {/* My Feedback */}
+      <Card className="mb-6">
+        <SectionHeader title="My Feedback" />
+        <p className="text-xs text-(--color-text-secondary) mt-1 mb-3">
+          Beta feedback you've sent us. Status updates as we review each item.
+        </p>
+        {myFeedback.length === 0 ? (
+          <p className="text-xs text-(--color-text-tertiary)">
+            You haven't submitted any feedback yet. Use the feedback button in the bottom-right corner of any page.
+          </p>
+        ) : (
+          <div className="space-y-2">
+            {myFeedback.map((fb) => (
+              <div
+                key={fb.id}
+                className="px-3 py-2.5 bg-(--color-page) rounded-[10px] border border-(--color-border)"
+              >
+                <div className="flex items-start justify-between gap-3 mb-1">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="text-[11px] text-(--color-text-tertiary) capitalize">
+                      {fb.feedback_type.replace("_", " ")}
+                    </span>
+                    {fb.rating !== null && (
+                      <span className="text-[11px] text-(--color-text-tertiary)">
+                        {"★".repeat(fb.rating)}
+                      </span>
+                    )}
+                  </div>
+                  <StatusBadge status={fb.status} />
+                </div>
+                <p className="text-sm text-(--color-text) whitespace-pre-wrap break-words">
+                  {fb.message}
+                </p>
+                <div className="flex items-center justify-between gap-2 mt-1.5 text-[10px] text-(--color-text-tertiary)">
+                  <span className="truncate">{fb.page_context || ""}</span>
+                  <span className="shrink-0">
+                    {fb.created_at ? new Date(fb.created_at).toLocaleDateString() : ""}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </Card>
 
       {/* About */}
