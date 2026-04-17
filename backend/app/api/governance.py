@@ -9,12 +9,10 @@ import json
 import uuid
 from datetime import UTC, date, datetime, timedelta
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
-from fastapi.responses import StreamingResponse
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 
 from app.ai.gateway import AIRole, call_ai
 from app.ai.prompts import (
@@ -23,7 +21,7 @@ from app.ai.prompts import (
     TUTOR_SYSTEM,
 )
 from app.api.deps import PaginationParams, get_current_user, get_db, require_permission, require_role
-from app.models.curriculum import ChildMapEnrollment, LearningMap, LearningNode
+from app.models.curriculum import LearningMap, LearningNode
 from app.models.enums import (
     ActivityStatus,
     GovernanceAction,
@@ -401,7 +399,7 @@ async def generate_plan_endpoint(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("plans.generate")),
 ) -> PlanResponse:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     result = await generate_plan(
         db, child_id, user.household_id, user.id,
@@ -421,7 +419,7 @@ async def list_plans(
     user: User = Depends(get_current_user),
     pagination: PaginationParams = Depends(),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     base = select(Plan).where(Plan.child_id == child_id, Plan.household_id == user.household_id)
     total_result = await db.execute(select(func.count()).select_from(base.subquery()))
     total = total_result.scalar() or 0
@@ -813,7 +811,7 @@ async def list_advisor_reports(
     user: User = Depends(get_current_user),
     pagination: PaginationParams = Depends(),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     base = select(AdvisorReport).where(
         AdvisorReport.child_id == child_id, AdvisorReport.household_id == user.household_id,
     )

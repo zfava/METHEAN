@@ -8,15 +8,14 @@ decision during the period.
 import uuid
 from datetime import UTC, date, datetime, timedelta
 
-from sqlalchemy import and_, func, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.enums import GovernanceAction, MasteryLevel
-from app.models.evidence import WeeklySnapshot
-from app.models.governance import GovernanceEvent, GovernanceRule
+from app.models.governance import GovernanceEvent
 from app.models.identity import Child, Household
 from app.models.operational import AIRun
-from app.models.state import ChildNodeState, StateEvent
+from app.models.state import ChildNodeState
 
 
 async def generate_governance_report(
@@ -52,7 +51,6 @@ async def generate_governance_report(
     # Categorize events
     approvals = [e for e in events if e.action == GovernanceAction.approve]
     rejections = [e for e in events if e.action == GovernanceAction.reject]
-    modifications = [e for e in events if e.action == GovernanceAction.modify]
     deferrals = [e for e in events if e.action == GovernanceAction.defer]
     overrides = [e for e in events if e.target_type == "child_node_state"]
     constitutional_changes = [e for e in events if e.target_type == "constitutional_rule_change"]
@@ -96,16 +94,6 @@ async def generate_governance_report(
             "total_hours": round(total_minutes / 60, 1),
             "total_attempts": total_attempts,
         })
-
-    # ── Snapshots for progress trends ──
-    snapshots_result = await db.execute(
-        select(WeeklySnapshot).where(
-            WeeklySnapshot.household_id == household_id,
-            WeeklySnapshot.week_start >= period_start,
-            WeeklySnapshot.week_end <= period_end,
-        ).order_by(WeeklySnapshot.week_start.asc())
-    )
-    snapshots = snapshots_result.scalars().all()
 
     # ── AI acceptance rate ──
     total_ai_decisions = len(approvals) + len(rejections)

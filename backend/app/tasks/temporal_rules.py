@@ -20,7 +20,7 @@ from app.core.config import settings
 from app.models.enums import GovernanceAction
 from app.models.governance import GovernanceEvent, GovernanceRule
 from app.models.identity import Child
-from app.models.curriculum import ChildMapEnrollment, LearningNode
+from app.models.curriculum import LearningNode
 from app.models.state import ChildNodeState
 from app.models.enums import MasteryLevel
 

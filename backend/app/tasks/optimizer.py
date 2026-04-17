@@ -14,7 +14,6 @@ worker — the child is simply skipped and the issue is logged.
 
 import asyncio
 import time
-from datetime import UTC, datetime
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine

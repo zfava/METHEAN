@@ -351,7 +351,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response List Subjects Api V1 Subjects Get"
                 }
               }
@@ -597,7 +596,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response List Learning Maps Api V1 Learning Maps Get"
                 }
               }
@@ -1501,7 +1499,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Get Node History Api V1 Children  Child Id  Nodes  Node Id  History Get"
                 }
               }
@@ -1839,7 +1836,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response List Governance Rules Api V1 Governance Rules Get"
                 }
               }
@@ -2024,7 +2020,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Delete Governance Rule Api V1 Governance Rules  Rule Id  Delete"
                 }
               }
@@ -2086,7 +2081,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Generate Report Api V1 Governance Report Post"
                 }
               }
@@ -2148,7 +2142,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Attest Report Api V1 Governance Report Attest Post"
                 }
               }
@@ -2201,8 +2194,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "additionalProperties": true
+                    "type": "object"
                   },
                   "title": "Response Upcoming Triggers Api V1 Governance Rules Upcoming Get"
                 }
@@ -2413,7 +2405,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response List Plans Api V1 Children  Child Id  Plans Get"
                 }
               }
@@ -2560,7 +2551,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Approve Activity Api V1 Plans  Plan Id  Activities  Activity Id  Approve Put"
                 }
               }
@@ -2641,7 +2631,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Reject Activity Api V1 Plans  Plan Id  Activities  Activity Id  Reject Put"
                 }
               }
@@ -2702,7 +2691,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Lock Plan Api V1 Plans  Plan Id  Lock Put"
                 }
               }
@@ -2763,7 +2751,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Unlock Plan Api V1 Plans  Plan Id  Unlock Put"
                 }
               }
@@ -3049,7 +3036,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response List Advisor Reports Api V1 Children  Child Id  Advisor Reports Get"
                 }
               }
@@ -3219,7 +3205,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response List Ai Runs Api V1 Ai Runs Get"
                 }
               }
@@ -3340,7 +3325,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Get Decision Trace Api V1 Plans  Plan Id  Decision Trace Get"
                 }
               }
@@ -3418,7 +3402,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response List Governance Events Api V1 Governance Events Get"
                 }
               }
@@ -3497,7 +3480,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Governance Queue Api V1 Governance Queue Get"
                 }
               }
@@ -3601,7 +3583,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response List Alerts Api V1 Children  Child Id  Alerts Get"
                 }
               }
@@ -3662,7 +3643,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Acknowledge Alert Api V1 Alerts  Alert Id  Acknowledge Put"
                 }
               }
@@ -3739,7 +3719,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Dismiss Alert Api V1 Alerts  Alert Id  Dismiss Put"
                 }
               }
@@ -3817,7 +3796,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response List Notifications Api V1 Notifications Get"
                 }
               }
@@ -3869,7 +3847,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Send Test Notification Api V1 Notifications Test Post"
                 }
               }
@@ -3957,7 +3934,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response List Snapshots Api V1 Children  Child Id  Snapshots Get"
                 }
               }
@@ -4038,7 +4014,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Compare Snapshots Api V1 Children  Child Id  Snapshots Compare Get"
                 }
               }
@@ -4120,7 +4095,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Compliance Report Api V1 Children  Child Id  Compliance Report Get"
                 }
               }
@@ -4209,7 +4183,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Upload Artifact Endpoint Api V1 Children  Child Id  Artifacts Post"
                 }
               }
@@ -4296,7 +4269,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response List Artifacts Api V1 Children  Child Id  Artifacts Get"
                 }
               }
@@ -4415,7 +4387,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Update Household Settings Api V1 Household Settings Put"
                 }
               }
@@ -4477,7 +4448,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Update Philosophy Api V1 Household Philosophy Put"
                 }
               }
@@ -4526,7 +4496,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Get Philosophy Api V1 Household Philosophy Get"
                 }
               }
@@ -4579,8 +4548,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "additionalProperties": true
+                    "type": "object"
                   },
                   "title": "Response List Children Api V1 Children Get"
                 }
@@ -4640,7 +4608,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Create Child Api V1 Children Post"
                 }
               }
@@ -4711,7 +4678,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Update Child Api V1 Children  Child Id  Patch"
                 }
               }
@@ -4782,7 +4748,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Update Child Preferences Api V1 Children  Child Id  Preferences Put"
                 }
               }
@@ -4862,8 +4827,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "additionalProperties": true
+                    "type": "object"
                   },
                   "title": "Response Get Today Api V1 Children  Child Id  Today Get"
                 }
@@ -4926,8 +4890,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "additionalProperties": true
+                    "type": "object"
                   },
                   "title": "Response List User Permissions Api V1 Users  User Id  Permissions Get"
                 }
@@ -4997,7 +4960,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Grant Permission Api V1 Users  User Id  Permissions Post"
                 }
               }
@@ -5068,7 +5030,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Revoke Permission Api V1 Users  User Id  Permissions  Permission Id  Delete"
                 }
               }
@@ -5130,7 +5091,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Validate Map Api V1 Learning Maps  Map Id  Validate Post"
                 }
               }
@@ -5210,7 +5170,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Map Diff Api V1 Learning Maps  Map Id  Diff Get"
                 }
               }
@@ -5272,7 +5231,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Get Pace Api V1 Children  Child Id  Pace Get"
                 }
               }
@@ -5344,7 +5302,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Counterfactual Api V1 Children  Child Id  Counterfactual Post"
                 }
               }
@@ -5406,7 +5363,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Sync Events Api V1 Sync Post"
                 }
               }
@@ -5467,7 +5423,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Get Lock Status Api V1 Activities  Activity Id  Lock Status Get"
                 }
               }
@@ -5538,7 +5493,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Lock Activity Api V1 Activities  Activity Id  Lock Post"
                 }
               }
@@ -5597,7 +5551,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Unlock Activity Api V1 Activities  Activity Id  Lock Delete"
                 }
               }
@@ -5658,7 +5611,6 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "additionalProperties": true,
                   "title": "Response Register Device Api V1 Devices Register Post"
                 }
               }
@@ -5737,8 +5689,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "additionalProperties": true
+                    "type": "object"
                   },
                   "title": "Response Notification Log Api V1 Notifications Log Get"
                 }
@@ -5792,7 +5743,6 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
                   "type": "object",
                   "title": "Response Health Health Get"
                 }
@@ -5813,7 +5763,6 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "additionalProperties": true,
                   "type": "object",
                   "title": "Response Health Ready Health Ready Get"
                 }
@@ -5882,7 +5831,6 @@
           "input_data": {
             "anyOf": [
               {
-                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -5894,7 +5842,6 @@
           "output_data": {
             "anyOf": [
               {
-                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -6090,7 +6037,6 @@
             "title": "Period End"
           },
           "content": {
-            "additionalProperties": true,
             "type": "object",
             "title": "Content"
           },
@@ -6198,7 +6144,6 @@
           "feedback": {
             "anyOf": [
               {
-                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -6280,7 +6225,6 @@
           "feedback": {
             "anyOf": [
               {
-                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -6372,7 +6316,7 @@
         "properties": {
           "file": {
             "type": "string",
-            "contentMediaType": "application/octet-stream",
+            "format": "binary",
             "title": "File"
           }
         },
@@ -6415,7 +6359,6 @@
           },
           "difficulty_adjustments": {
             "items": {
-              "additionalProperties": true,
               "type": "object"
             },
             "type": "array",
@@ -6423,7 +6366,6 @@
           },
           "suggested_additions": {
             "items": {
-              "additionalProperties": true,
               "type": "object"
             },
             "type": "array",
@@ -6431,7 +6373,6 @@
           },
           "suggested_removals": {
             "items": {
-              "additionalProperties": true,
               "type": "object"
             },
             "type": "array",
@@ -6567,7 +6508,6 @@
           "learning_style": {
             "anyOf": [
               {
-                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -6591,7 +6531,6 @@
           "preferred_schedule": {
             "anyOf": [
               {
-                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -6703,7 +6642,6 @@
       "CounterfactualRequest": {
         "properties": {
           "changes": {
-            "additionalProperties": true,
             "type": "object",
             "title": "Changes"
           }
@@ -6939,7 +6877,6 @@
             "title": "Description"
           },
           "parameters": {
-            "additionalProperties": true,
             "type": "object",
             "title": "Parameters"
           },
@@ -6980,7 +6917,6 @@
           "trigger_conditions": {
             "anyOf": [
               {
-                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -7046,7 +6982,6 @@
             "title": "Description"
           },
           "parameters": {
-            "additionalProperties": true,
             "type": "object",
             "title": "Parameters"
           },
@@ -7085,7 +7020,6 @@
           "trigger_conditions": {
             "anyOf": [
               {
-                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -7149,7 +7083,6 @@
           "parameters": {
             "anyOf": [
               {
-                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -7531,7 +7464,6 @@
           "content": {
             "anyOf": [
               {
-                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -7603,7 +7535,6 @@
           "content": {
             "anyOf": [
               {
-                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -7862,7 +7793,6 @@
           "content": {
             "anyOf": [
               {
-                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -8042,7 +7972,6 @@
             "anyOf": [
               {
                 "items": {
-                  "additionalProperties": true,
                   "type": "object"
                 },
                 "type": "array"
@@ -8067,7 +7996,6 @@
           "pedagogical_preferences": {
             "anyOf": [
               {
-                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -8665,7 +8593,6 @@
             "title": "Event Type"
           },
           "payload": {
-            "additionalProperties": true,
             "type": "object",
             "title": "Payload"
           },
@@ -8912,13 +8839,6 @@
           "type": {
             "type": "string",
             "title": "Error Type"
-          },
-          "input": {
-            "title": "Input"
-          },
-          "ctx": {
-            "type": "object",
-            "title": "Context"
           }
         },
         "type": "object",

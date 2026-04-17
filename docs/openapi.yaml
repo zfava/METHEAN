@@ -214,7 +214,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response List Subjects Api V1 Subjects Get
         '422':
           description: Validation Error
@@ -363,7 +362,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response List Learning Maps Api V1 Learning Maps Get
         '422':
           description: Validation Error
@@ -916,7 +914,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Get Node History Api V1 Children  Child Id  Nodes  Node
                   Id  History Get
         '422':
@@ -1124,7 +1121,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response List Governance Rules Api V1 Governance Rules Get
         '422':
           description: Validation Error
@@ -1234,7 +1230,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Delete Governance Rule Api V1 Governance Rules  Rule
                   Id  Delete
         '422':
@@ -1272,7 +1267,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Generate Report Api V1 Governance Report Post
         '422':
           description: Validation Error
@@ -1314,7 +1308,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Attest Report Api V1 Governance Report Attest Post
         '422':
           description: Validation Error
@@ -1347,7 +1340,6 @@ paths:
                 type: array
                 items:
                   type: object
-                  additionalProperties: true
                 title: Response Upcoming Triggers Api V1 Governance Rules Upcoming
                   Get
         '422':
@@ -1479,7 +1471,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response List Plans Api V1 Children  Child Id  Plans Get
         '422':
           description: Validation Error
@@ -1566,7 +1557,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Approve Activity Api V1 Plans  Plan Id  Activities  Activity
                   Id  Approve Put
         '422':
@@ -1617,7 +1607,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Reject Activity Api V1 Plans  Plan Id  Activities  Activity
                   Id  Reject Put
         '422':
@@ -1655,7 +1644,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Lock Plan Api V1 Plans  Plan Id  Lock Put
         '422':
           description: Validation Error
@@ -1692,7 +1680,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Unlock Plan Api V1 Plans  Plan Id  Unlock Put
         '422':
           description: Validation Error
@@ -1868,7 +1855,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response List Advisor Reports Api V1 Children  Child Id  Advisor
                   Reports Get
         '422':
@@ -1972,7 +1958,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response List Ai Runs Api V1 Ai Runs Get
         '422':
           description: Validation Error
@@ -2046,7 +2031,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Get Decision Trace Api V1 Plans  Plan Id  Decision
                   Trace Get
         '422':
@@ -2098,7 +2082,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response List Governance Events Api V1 Governance Events Get
         '422':
           description: Validation Error
@@ -2150,7 +2133,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Governance Queue Api V1 Governance Queue Get
         '422':
           description: Validation Error
@@ -2216,7 +2198,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response List Alerts Api V1 Children  Child Id  Alerts Get
         '422':
           description: Validation Error
@@ -2253,7 +2234,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Acknowledge Alert Api V1 Alerts  Alert Id  Acknowledge
                   Put
         '422':
@@ -2299,7 +2279,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Dismiss Alert Api V1 Alerts  Alert Id  Dismiss Put
         '422':
           description: Validation Error
@@ -2350,7 +2329,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response List Notifications Api V1 Notifications Get
         '422':
           description: Validation Error
@@ -2381,7 +2359,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Send Test Notification Api V1 Notifications Test Post
         '422':
           description: Validation Error
@@ -2439,7 +2416,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response List Snapshots Api V1 Children  Child Id  Snapshots
                   Get
         '422':
@@ -2491,7 +2467,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Compare Snapshots Api V1 Children  Child Id  Snapshots
                   Compare Get
         '422':
@@ -2544,7 +2519,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Compliance Report Api V1 Children  Child Id  Compliance
                   Report Get
         '422':
@@ -2598,7 +2572,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Upload Artifact Endpoint Api V1 Children  Child Id  Artifacts
                   Post
         '422':
@@ -2657,7 +2630,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response List Artifacts Api V1 Children  Child Id  Artifacts
                   Get
         '422':
@@ -2729,7 +2701,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Update Household Settings Api V1 Household Settings
                   Put
         '422':
@@ -2767,7 +2738,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Update Philosophy Api V1 Household Philosophy Put
         '422':
           description: Validation Error
@@ -2796,7 +2766,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Get Philosophy Api V1 Household Philosophy Get
         '422':
           description: Validation Error
@@ -2829,7 +2798,6 @@ paths:
                 type: array
                 items:
                   type: object
-                  additionalProperties: true
                 title: Response List Children Api V1 Children Get
         '422':
           description: Validation Error
@@ -2864,7 +2832,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Create Child Api V1 Children Post
         '422':
           description: Validation Error
@@ -2907,7 +2874,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Update Child Api V1 Children  Child Id  Patch
         '422':
           description: Validation Error
@@ -2950,7 +2916,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Update Child Preferences Api V1 Children  Child Id  Preferences
                   Put
         '422':
@@ -3000,7 +2965,6 @@ paths:
                 type: array
                 items:
                   type: object
-                  additionalProperties: true
                 title: Response Get Today Api V1 Children  Child Id  Today Get
         '422':
           description: Validation Error
@@ -3039,7 +3003,6 @@ paths:
                 type: array
                 items:
                   type: object
-                  additionalProperties: true
                 title: Response List User Permissions Api V1 Users  User Id  Permissions
                   Get
         '422':
@@ -3082,7 +3045,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Grant Permission Api V1 Users  User Id  Permissions
                   Post
         '422':
@@ -3127,7 +3089,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Revoke Permission Api V1 Users  User Id  Permissions  Permission
                   Id  Delete
         '422':
@@ -3166,7 +3127,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Validate Map Api V1 Learning Maps  Map Id  Validate
                   Post
         '422':
@@ -3217,7 +3177,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Map Diff Api V1 Learning Maps  Map Id  Diff Get
         '422':
           description: Validation Error
@@ -3255,7 +3214,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Get Pace Api V1 Children  Child Id  Pace Get
         '422':
           description: Validation Error
@@ -3299,7 +3257,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Counterfactual Api V1 Children  Child Id  Counterfactual
                   Post
         '422':
@@ -3337,7 +3294,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Sync Events Api V1 Sync Post
         '422':
           description: Validation Error
@@ -3374,7 +3330,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Get Lock Status Api V1 Activities  Activity Id  Lock
                   Status Get
         '422':
@@ -3419,7 +3374,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Lock Activity Api V1 Activities  Activity Id  Lock
                   Post
         '422':
@@ -3456,7 +3410,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Unlock Activity Api V1 Activities  Activity Id  Lock
                   Delete
         '422':
@@ -3493,7 +3446,6 @@ paths:
             application/json:
               schema:
                 type: object
-                additionalProperties: true
                 title: Response Register Device Api V1 Devices Register Post
         '422':
           description: Validation Error
@@ -3541,7 +3493,6 @@ paths:
                 type: array
                 items:
                   type: object
-                  additionalProperties: true
                 title: Response Notification Log Api V1 Notifications Log Get
         '422':
           description: Validation Error
@@ -3575,7 +3526,6 @@ paths:
           content:
             application/json:
               schema:
-                additionalProperties: true
                 type: object
                 title: Response Health Health Get
   /health/ready:
@@ -3589,7 +3539,6 @@ paths:
           content:
             application/json:
               schema:
-                additionalProperties: true
                 type: object
                 title: Response Health Ready Health Ready Get
 components:
@@ -3627,14 +3576,12 @@ components:
           title: Output Tokens
         input_data:
           anyOf:
-          - additionalProperties: true
-            type: object
+          - type: object
           - type: 'null'
           title: Input Data
         output_data:
           anyOf:
-          - additionalProperties: true
-            type: object
+          - type: object
           - type: 'null'
           title: Output Data
         error_message:
@@ -3757,7 +3704,6 @@ components:
           format: date
           title: Period End
         content:
-          additionalProperties: true
           type: object
           title: Content
         recommendations:
@@ -3828,8 +3774,7 @@ components:
           title: Score
         feedback:
           anyOf:
-          - additionalProperties: true
-            type: object
+          - type: object
           - type: 'null'
           title: Feedback
         created_at:
@@ -3883,8 +3828,7 @@ components:
           description: Evaluator confidence 0-1
         feedback:
           anyOf:
-          - additionalProperties: true
-            type: object
+          - type: object
           - type: 'null'
           title: Feedback
       type: object
@@ -3946,7 +3890,7 @@ components:
       properties:
         file:
           type: string
-          contentMediaType: application/octet-stream
+          format: binary
           title: File
       type: object
       required:
@@ -3978,19 +3922,16 @@ components:
           title: Ai Run Id
         difficulty_adjustments:
           items:
-            additionalProperties: true
             type: object
           type: array
           title: Difficulty Adjustments
         suggested_additions:
           items:
-            additionalProperties: true
             type: object
           type: array
           title: Suggested Additions
         suggested_removals:
           items:
-            additionalProperties: true
             type: object
           type: array
           title: Suggested Removals
@@ -4080,8 +4021,7 @@ components:
           title: Daily Duration Minutes
         learning_style:
           anyOf:
-          - additionalProperties: true
-            type: object
+          - type: object
           - type: 'null'
           title: Learning Style
         interests:
@@ -4092,8 +4032,7 @@ components:
           title: Interests
         preferred_schedule:
           anyOf:
-          - additionalProperties: true
-            type: object
+          - type: object
           - type: 'null'
           title: Preferred Schedule
       type: object
@@ -4161,7 +4100,6 @@ components:
     CounterfactualRequest:
       properties:
         changes:
-          additionalProperties: true
           type: object
           title: Changes
       type: object
@@ -4332,7 +4270,6 @@ components:
           - type: 'null'
           title: Description
         parameters:
-          additionalProperties: true
           type: object
           title: Parameters
         priority:
@@ -4357,8 +4294,7 @@ components:
           title: Effective Until
         trigger_conditions:
           anyOf:
-          - additionalProperties: true
-            type: object
+          - type: object
           - type: 'null'
           title: Trigger Conditions
       type: object
@@ -4397,7 +4333,6 @@ components:
           - type: 'null'
           title: Description
         parameters:
-          additionalProperties: true
           type: object
           title: Parameters
         is_active:
@@ -4420,8 +4355,7 @@ components:
           title: Effective Until
         trigger_conditions:
           anyOf:
-          - additionalProperties: true
-            type: object
+          - type: object
           - type: 'null'
           title: Trigger Conditions
         created_at:
@@ -4462,8 +4396,7 @@ components:
           title: Description
         parameters:
           anyOf:
-          - additionalProperties: true
-            type: object
+          - type: object
           - type: 'null'
           title: Parameters
         priority:
@@ -4711,8 +4644,7 @@ components:
           title: Description
         content:
           anyOf:
-          - additionalProperties: true
-            type: object
+          - type: object
           - type: 'null'
           title: Content
         estimated_minutes:
@@ -4756,8 +4688,7 @@ components:
           title: Description
         content:
           anyOf:
-          - additionalProperties: true
-            type: object
+          - type: object
           - type: 'null'
           title: Content
         estimated_minutes:
@@ -4924,8 +4855,7 @@ components:
           title: Description
         content:
           anyOf:
-          - additionalProperties: true
-            type: object
+          - type: object
           - type: 'null'
           title: Content
         estimated_minutes:
@@ -5027,7 +4957,6 @@ components:
         content_boundaries:
           anyOf:
           - items:
-              additionalProperties: true
               type: object
             type: array
           - type: 'null'
@@ -5039,8 +4968,7 @@ components:
           title: Ai Autonomy Level
         pedagogical_preferences:
           anyOf:
-          - additionalProperties: true
-            type: object
+          - type: object
           - type: 'null'
           title: Pedagogical Preferences
         custom_constraints:
@@ -5447,7 +5375,6 @@ components:
           type: string
           title: Event Type
         payload:
-          additionalProperties: true
           type: object
           title: Payload
         client_timestamp:
@@ -5631,11 +5558,6 @@ components:
         type:
           type: string
           title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
       type: object
       required:
       - loc

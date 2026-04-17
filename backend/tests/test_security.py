@@ -156,6 +156,11 @@ async def test_rls_isolates_households(db_session):
 
     Creates two households with subjects, enables RLS on the subjects table,
     then verifies that setting the tenant to household A hides household B's data.
+
+    Postgres superusers and users with BYPASSRLS always bypass row-level
+    security. To make this test reliable regardless of the connecting role's
+    privileges (docker-compose provisions POSTGRES_USER as superuser), we
+    SET LOCAL ROLE to a non-privileged role for the duration of the test.
     """
     from sqlalchemy import text
     from app.core.database import set_tenant
@@ -188,6 +193,18 @@ async def test_rls_isolates_households(db_session):
         "USING (household_id = current_setting('app.current_household_id')::uuid)"
     ))
 
+    # Create a non-privileged role so RLS is enforced even when the connecting
+    # role is a superuser (as in docker-compose). CREATE ROLE IF NOT EXISTS is
+    # not supported, so use a DO block.
+    await conn.execute(text(
+        "DO $$ BEGIN "
+        "IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'rls_test_role') THEN "
+        "CREATE ROLE rls_test_role NOLOGIN NOBYPASSRLS; "
+        "END IF; END $$;"
+    ))
+    await conn.execute(text("GRANT SELECT ON subjects TO rls_test_role"))
+    await conn.execute(text("SET LOCAL ROLE rls_test_role"))
+
     # Set tenant to household A
     await set_tenant(db_session, household_a.id)
 
@@ -210,7 +227,8 @@ async def test_rls_isolates_households(db_session):
     assert "Math B" in visible_names2, "Household B's subject should be visible"
     assert "Math A" not in visible_names2, "Household A's subject should be hidden by RLS"
 
-    # Cleanup: disable RLS so it doesn't affect other tests
+    # Cleanup: reset role and disable RLS so it doesn't affect other tests
+    await conn.execute(text("RESET ROLE"))
     await conn.execute(text("ALTER TABLE subjects DISABLE ROW LEVEL SECURITY"))
 
 

@@ -8,7 +8,7 @@ from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy.dialects.postgresql import ENUM, UUID, JSONB
 
 revision: str = "001"
 down_revision: Union[str, None] = None
@@ -42,7 +42,7 @@ ENUM_DEFINITIONS = {
 def upgrade() -> None:
     # ── Create all PostgreSQL enums ──
     for name, values in ENUM_DEFINITIONS.items():
-        sa.Enum(*values, name=name).create(op.get_bind())
+        ENUM(*values, name=name).create(op.get_bind())
 
     # ── Section 3.1: Identity & Tenancy ──
 
@@ -63,7 +63,7 @@ def upgrade() -> None:
         sa.Column("email", sa.String(320), unique=True, nullable=False),
         sa.Column("password_hash", sa.String(255), nullable=False),
         sa.Column("display_name", sa.String(100), nullable=False),
-        sa.Column("role", sa.Enum("owner", "co_parent", "observer", name="userrole", create_type=False), nullable=False),
+        sa.Column("role", ENUM("owner", "co_parent", "observer", name="userrole", create_type=False), nullable=False),
         sa.Column("is_active", sa.Boolean, server_default="true"),
         sa.Column("last_login_at", sa.DateTime(timezone=True)),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
@@ -133,7 +133,7 @@ def upgrade() -> None:
         sa.Column("id", UUID(as_uuid=True), primary_key=True),
         sa.Column("learning_map_id", UUID(as_uuid=True), sa.ForeignKey("learning_maps.id", ondelete="CASCADE"), nullable=False),
         sa.Column("household_id", UUID(as_uuid=True), sa.ForeignKey("households.id", ondelete="CASCADE"), nullable=False),
-        sa.Column("node_type", sa.Enum("root", "milestone", "concept", "skill", name="nodetype", create_type=False), nullable=False),
+        sa.Column("node_type", ENUM("root", "milestone", "concept", "skill", name="nodetype", create_type=False), nullable=False),
         sa.Column("title", sa.String(255), nullable=False),
         sa.Column("description", sa.Text),
         sa.Column("content", JSONB, server_default="{}"),
@@ -151,7 +151,7 @@ def upgrade() -> None:
         sa.Column("household_id", UUID(as_uuid=True), sa.ForeignKey("households.id", ondelete="CASCADE"), nullable=False),
         sa.Column("from_node_id", UUID(as_uuid=True), sa.ForeignKey("learning_nodes.id", ondelete="CASCADE"), nullable=False),
         sa.Column("to_node_id", UUID(as_uuid=True), sa.ForeignKey("learning_nodes.id", ondelete="CASCADE"), nullable=False),
-        sa.Column("relation", sa.Enum("prerequisite", "corequisite", "recommended", name="edgerelation", create_type=False), nullable=False),
+        sa.Column("relation", ENUM("prerequisite", "corequisite", "recommended", name="edgerelation", create_type=False), nullable=False),
         sa.Column("weight", sa.Float, server_default="1.0"),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
         sa.UniqueConstraint("learning_map_id", "from_node_id", "to_node_id", name="uq_edge"),
@@ -188,7 +188,7 @@ def upgrade() -> None:
         sa.Column("child_id", UUID(as_uuid=True), sa.ForeignKey("children.id", ondelete="CASCADE"), nullable=False),
         sa.Column("household_id", UUID(as_uuid=True), sa.ForeignKey("households.id", ondelete="CASCADE"), nullable=False),
         sa.Column("node_id", UUID(as_uuid=True), sa.ForeignKey("learning_nodes.id", ondelete="CASCADE"), nullable=False),
-        sa.Column("mastery_level", sa.Enum("not_started", "emerging", "developing", "proficient", "mastered", name="masterylevel", create_type=False), nullable=False, server_default="not_started"),
+        sa.Column("mastery_level", ENUM("not_started", "emerging", "developing", "proficient", "mastered", name="masterylevel", create_type=False), nullable=False, server_default="not_started"),
         sa.Column("is_unlocked", sa.Boolean, server_default="false"),
         sa.Column("attempts_count", sa.Integer, server_default="0"),
         sa.Column("time_spent_minutes", sa.Integer, server_default="0"),
@@ -203,7 +203,7 @@ def upgrade() -> None:
         sa.Column("child_id", UUID(as_uuid=True), sa.ForeignKey("children.id", ondelete="CASCADE"), nullable=False),
         sa.Column("household_id", UUID(as_uuid=True), sa.ForeignKey("households.id", ondelete="CASCADE"), nullable=False),
         sa.Column("node_id", UUID(as_uuid=True), sa.ForeignKey("learning_nodes.id", ondelete="CASCADE"), nullable=False),
-        sa.Column("event_type", sa.Enum("mastery_change", "review_completed", "node_unlocked", "node_skipped", "override", name="stateeventtype", create_type=False), nullable=False),
+        sa.Column("event_type", ENUM("mastery_change", "review_completed", "node_unlocked", "node_skipped", "override", name="stateeventtype", create_type=False), nullable=False),
         sa.Column("from_state", sa.Text),
         sa.Column("to_state", sa.Text),
         sa.Column("trigger", sa.Text),
@@ -237,7 +237,7 @@ def upgrade() -> None:
         sa.Column("card_id", UUID(as_uuid=True), sa.ForeignKey("fsrs_cards.id", ondelete="CASCADE"), nullable=False),
         sa.Column("child_id", UUID(as_uuid=True), sa.ForeignKey("children.id", ondelete="CASCADE"), nullable=False),
         sa.Column("household_id", UUID(as_uuid=True), sa.ForeignKey("households.id", ondelete="CASCADE"), nullable=False),
-        sa.Column("rating", sa.Enum("1", "2", "3", "4", name="fsrsrating", create_type=False), nullable=False),
+        sa.Column("rating", ENUM("1", "2", "3", "4", name="fsrsrating", create_type=False), nullable=False),
         sa.Column("scheduled_days", sa.Integer, nullable=False),
         sa.Column("elapsed_days", sa.Integer, nullable=False),
         sa.Column("review_duration_ms", sa.Integer),
@@ -252,8 +252,8 @@ def upgrade() -> None:
         sa.Column("id", UUID(as_uuid=True), primary_key=True),
         sa.Column("household_id", UUID(as_uuid=True), sa.ForeignKey("households.id", ondelete="CASCADE"), nullable=False),
         sa.Column("created_by", UUID(as_uuid=True), sa.ForeignKey("users.id", ondelete="SET NULL")),
-        sa.Column("rule_type", sa.Enum("pace_limit", "content_filter", "schedule_constraint", "ai_boundary", "approval_required", name="ruletype", create_type=False), nullable=False),
-        sa.Column("scope", sa.Enum("household", "child", "subject", "map", name="rulescope", create_type=False), nullable=False),
+        sa.Column("rule_type", ENUM("pace_limit", "content_filter", "schedule_constraint", "ai_boundary", "approval_required", name="ruletype", create_type=False), nullable=False),
+        sa.Column("scope", ENUM("household", "child", "subject", "map", name="rulescope", create_type=False), nullable=False),
         sa.Column("scope_id", UUID(as_uuid=True)),
         sa.Column("name", sa.String(255), nullable=False),
         sa.Column("description", sa.Text),
@@ -269,7 +269,7 @@ def upgrade() -> None:
         sa.Column("id", UUID(as_uuid=True), primary_key=True),
         sa.Column("household_id", UUID(as_uuid=True), sa.ForeignKey("households.id", ondelete="CASCADE"), nullable=False),
         sa.Column("user_id", UUID(as_uuid=True), sa.ForeignKey("users.id", ondelete="SET NULL")),
-        sa.Column("action", sa.Enum("approve", "reject", "modify", "defer", name="governanceaction", create_type=False), nullable=False),
+        sa.Column("action", ENUM("approve", "reject", "modify", "defer", name="governanceaction", create_type=False), nullable=False),
         sa.Column("target_type", sa.String(100), nullable=False),
         sa.Column("target_id", UUID(as_uuid=True), nullable=False),
         sa.Column("reason", sa.Text),
@@ -285,7 +285,7 @@ def upgrade() -> None:
         sa.Column("created_by", UUID(as_uuid=True), sa.ForeignKey("users.id", ondelete="SET NULL")),
         sa.Column("name", sa.String(255), nullable=False),
         sa.Column("description", sa.Text),
-        sa.Column("status", sa.Enum("draft", "proposed", "approved", "active", "completed", "archived", name="planstatus", create_type=False), nullable=False, server_default="draft"),
+        sa.Column("status", ENUM("draft", "proposed", "approved", "active", "completed", "archived", name="planstatus", create_type=False), nullable=False, server_default="draft"),
         sa.Column("start_date", sa.Date),
         sa.Column("end_date", sa.Date),
         sa.Column("ai_generated", sa.Boolean, server_default="false"),
@@ -312,12 +312,12 @@ def upgrade() -> None:
         sa.Column("plan_week_id", UUID(as_uuid=True), sa.ForeignKey("plan_weeks.id", ondelete="CASCADE"), nullable=False),
         sa.Column("household_id", UUID(as_uuid=True), sa.ForeignKey("households.id", ondelete="CASCADE"), nullable=False),
         sa.Column("node_id", UUID(as_uuid=True), sa.ForeignKey("learning_nodes.id", ondelete="SET NULL")),
-        sa.Column("activity_type", sa.Enum("lesson", "practice", "assessment", "review", "project", "field_trip", name="activitytype", create_type=False), nullable=False),
+        sa.Column("activity_type", ENUM("lesson", "practice", "assessment", "review", "project", "field_trip", name="activitytype", create_type=False), nullable=False),
         sa.Column("title", sa.String(255), nullable=False),
         sa.Column("description", sa.Text),
         sa.Column("instructions", JSONB, server_default="{}"),
         sa.Column("estimated_minutes", sa.Integer),
-        sa.Column("status", sa.Enum("scheduled", "in_progress", "completed", "skipped", "cancelled", name="activitystatus", create_type=False), nullable=False, server_default="scheduled"),
+        sa.Column("status", ENUM("scheduled", "in_progress", "completed", "skipped", "cancelled", name="activitystatus", create_type=False), nullable=False, server_default="scheduled"),
         sa.Column("scheduled_date", sa.Date),
         sa.Column("sort_order", sa.Integer, server_default="0"),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
@@ -330,7 +330,7 @@ def upgrade() -> None:
         sa.Column("activity_id", UUID(as_uuid=True), sa.ForeignKey("activities.id", ondelete="CASCADE"), nullable=False),
         sa.Column("household_id", UUID(as_uuid=True), sa.ForeignKey("households.id", ondelete="CASCADE"), nullable=False),
         sa.Column("child_id", UUID(as_uuid=True), sa.ForeignKey("children.id", ondelete="CASCADE"), nullable=False),
-        sa.Column("status", sa.Enum("started", "completed", "abandoned", name="attemptstatus", create_type=False), nullable=False, server_default="started"),
+        sa.Column("status", ENUM("started", "completed", "abandoned", name="attemptstatus", create_type=False), nullable=False, server_default="started"),
         sa.Column("started_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
         sa.Column("completed_at", sa.DateTime(timezone=True)),
         sa.Column("duration_minutes", sa.Integer),
@@ -347,7 +347,7 @@ def upgrade() -> None:
         sa.Column("household_id", UUID(as_uuid=True), sa.ForeignKey("households.id", ondelete="CASCADE"), nullable=False),
         sa.Column("child_id", UUID(as_uuid=True), sa.ForeignKey("children.id", ondelete="CASCADE"), nullable=False),
         sa.Column("attempt_id", UUID(as_uuid=True), sa.ForeignKey("attempts.id", ondelete="SET NULL")),
-        sa.Column("artifact_type", sa.Enum("photo", "video", "document", "audio", "link", name="artifacttype", create_type=False), nullable=False),
+        sa.Column("artifact_type", ENUM("photo", "video", "document", "audio", "link", name="artifacttype", create_type=False), nullable=False),
         sa.Column("title", sa.String(255), nullable=False),
         sa.Column("description", sa.Text),
         sa.Column("s3_key", sa.Text),
@@ -363,8 +363,8 @@ def upgrade() -> None:
         sa.Column("id", UUID(as_uuid=True), primary_key=True),
         sa.Column("household_id", UUID(as_uuid=True), sa.ForeignKey("households.id", ondelete="CASCADE"), nullable=False),
         sa.Column("child_id", UUID(as_uuid=True), sa.ForeignKey("children.id", ondelete="SET NULL")),
-        sa.Column("severity", sa.Enum("info", "warning", "action_required", name="alertseverity", create_type=False), nullable=False),
-        sa.Column("status", sa.Enum("unread", "read", "dismissed", "acted_on", name="alertstatus", create_type=False), nullable=False, server_default="unread"),
+        sa.Column("severity", ENUM("info", "warning", "action_required", name="alertseverity", create_type=False), nullable=False),
+        sa.Column("status", ENUM("unread", "read", "dismissed", "acted_on", name="alertstatus", create_type=False), nullable=False, server_default="unread"),
         sa.Column("title", sa.String(255), nullable=False),
         sa.Column("message", sa.Text, nullable=False),
         sa.Column("source", sa.String(100), nullable=False),
@@ -400,7 +400,7 @@ def upgrade() -> None:
         sa.Column("household_id", UUID(as_uuid=True), sa.ForeignKey("households.id", ondelete="CASCADE"), nullable=False),
         sa.Column("triggered_by", UUID(as_uuid=True), sa.ForeignKey("users.id", ondelete="SET NULL")),
         sa.Column("run_type", sa.String(100), nullable=False),
-        sa.Column("status", sa.Enum("pending", "running", "completed", "failed", name="airunstatus", create_type=False), nullable=False, server_default="pending"),
+        sa.Column("status", ENUM("pending", "running", "completed", "failed", name="airunstatus", create_type=False), nullable=False, server_default="pending"),
         sa.Column("model_used", sa.String(100)),
         sa.Column("input_tokens", sa.Integer),
         sa.Column("output_tokens", sa.Integer),
@@ -434,7 +434,7 @@ def upgrade() -> None:
         sa.Column("id", UUID(as_uuid=True), primary_key=True),
         sa.Column("household_id", UUID(as_uuid=True), sa.ForeignKey("households.id", ondelete="SET NULL")),
         sa.Column("user_id", UUID(as_uuid=True), sa.ForeignKey("users.id", ondelete="SET NULL")),
-        sa.Column("action", sa.Enum("create", "read", "update", "delete", "login", "logout", "export", name="auditaction", create_type=False), nullable=False),
+        sa.Column("action", ENUM("create", "read", "update", "delete", "login", "logout", "export", name="auditaction", create_type=False), nullable=False),
         sa.Column("resource_type", sa.String(100), nullable=False),
         sa.Column("resource_id", UUID(as_uuid=True)),
         sa.Column("details", JSONB, server_default="{}"),
@@ -541,7 +541,7 @@ def upgrade() -> None:
     # Enable RLS on all household-scoped tables
     household_tables = [
         "users", "children", "child_preferences", "subjects", "learning_maps",
-        "learning_nodes", "learning_edges", "learning_map_closure",
+        "learning_nodes", "learning_edges",
         "child_map_enrollments", "child_node_states", "state_events",
         "fsrs_cards", "review_logs", "governance_rules", "governance_events",
         "plans", "plan_weeks", "activities", "attempts", "artifacts",
@@ -587,4 +587,4 @@ def downgrade() -> None:
 
     # Drop all enums
     for name in ENUM_DEFINITIONS:
-        sa.Enum(name=name).drop(op.get_bind())
+        ENUM(name=name).drop(op.get_bind())

@@ -6,13 +6,12 @@ notification log, metrics.
 """
 
 import json
-import time
 import uuid
 from datetime import UTC, date, datetime, timedelta
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request
 from pydantic import BaseModel, Field
-from sqlalchemy import func, or_, select
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.ai.gateway import AIRole, call_ai
@@ -27,14 +26,11 @@ from app.models.curriculum import (
 )
 from app.models.enums import (
     ActivityStatus,
-    EdgeRelation,
-    MasteryLevel,
-    NodeType,
 )
-from app.models.governance import Activity, Attempt, Plan, PlanWeek
+from app.models.governance import Activity
 from app.models.identity import Child, ChildPreferences, Household, User, UserPermission
 from app.models.operational import DeviceToken, NotificationLog
-from app.models.state import ChildNodeState, FSRSCard
+from app.models.state import ChildNodeState
 
 router = APIRouter(tags=["spec-coverage"])
 
@@ -283,7 +279,7 @@ async def update_child_preferences(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_role("owner")),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     result = await db.execute(
         select(ChildPreferences).where(ChildPreferences.child_id == child_id)
     )
@@ -318,7 +314,7 @@ async def get_today(
     user: User = Depends(get_current_user),
 ) -> list[dict]:
     """Return today's scheduled activities for a child."""
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     today = target_date or date.today()
 
     result = await db.execute(
@@ -553,7 +549,7 @@ async def get_pace(
     user: User = Depends(get_current_user),
 ) -> dict:
     """Return pace metrics per active node."""
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     # Get enrolled maps
     enroll_result = await db.execute(

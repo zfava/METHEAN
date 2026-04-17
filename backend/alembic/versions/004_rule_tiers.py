@@ -8,6 +8,7 @@ from typing import Sequence, Union
 
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy.dialects.postgresql import ENUM
 
 revision: str = "004"
 down_revision: Union[str, None] = "003"
@@ -16,10 +17,10 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    sa.Enum("constitutional", "policy", name="ruletier").create(op.get_bind())
+    ENUM("constitutional", "policy", name="ruletier").create(op.get_bind())
     op.add_column("governance_rules", sa.Column(
         "tier",
-        sa.Enum("constitutional", "policy", name="ruletier", create_type=False),
+        ENUM("constitutional", "policy", name="ruletier", create_type=False),
         server_default="policy",
         nullable=False,
     ))
@@ -27,4 +28,4 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     op.drop_column("governance_rules", "tier")
-    sa.Enum(name="ruletier").drop(op.get_bind())
+    ENUM(name="ruletier").drop(op.get_bind())

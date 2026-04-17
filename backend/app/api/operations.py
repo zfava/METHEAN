@@ -1,21 +1,21 @@
 """Operations API: Alerts, Notifications, Artifacts, Snapshots, Compliance, Health."""
 
 import uuid
-from datetime import UTC, date, datetime, timedelta
+from datetime import UTC, date, datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File
 from fastapi.responses import RedirectResponse
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import PaginationParams, get_current_user, get_db, require_role
-from app.models.enums import AlertSeverity, AlertStatus, ArtifactType, MasteryLevel
+from app.api.deps import PaginationParams, get_current_user, get_db
+from app.models.enums import AlertStatus, ArtifactType, MasteryLevel
 from app.models.evidence import Alert, Artifact, WeeklySnapshot
 from app.models.identity import Child, Household, User
 from app.models.operational import NotificationLog
 from app.models.state import ChildNodeState
-from app.models.curriculum import ChildMapEnrollment, LearningNode
-from app.services.notifications import get_unread_notifications, send_notification
+from app.models.curriculum import LearningNode
+from app.services.notifications import send_notification
 from app.services.storage import get_presigned_url, upload_artifact
 
 MAX_UPLOAD_BYTES = 50 * 1024 * 1024  # 50 MB
@@ -85,7 +85,7 @@ async def list_alerts(
     user: User = Depends(get_current_user),
     pagination: PaginationParams = Depends(),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     base = select(Alert).where(
         Alert.child_id == child_id,
         Alert.household_id == user.household_id,
@@ -227,7 +227,7 @@ async def list_snapshots(
     user: User = Depends(get_current_user),
     pagination: PaginationParams = Depends(),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     base = select(WeeklySnapshot).where(
         WeeklySnapshot.child_id == child_id,
         WeeklySnapshot.household_id == user.household_id,
@@ -267,7 +267,7 @@ async def compare_snapshots(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> dict:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     from_result = await db.execute(
         select(WeeklySnapshot).where(
@@ -365,7 +365,7 @@ async def upload_artifact_endpoint(
     user: User = Depends(get_current_user),
 ) -> dict:
     """Upload an artifact file for a child. Max 50 MB."""
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     contents = await file.read()
     if len(contents) > MAX_UPLOAD_BYTES:
@@ -424,7 +424,7 @@ async def list_artifacts(
     pagination: PaginationParams = Depends(),
 ) -> dict:
     """List artifacts for a child with pagination."""
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     base = select(Artifact).where(
         Artifact.child_id == child_id,

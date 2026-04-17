@@ -11,7 +11,6 @@ import uuid
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.enums import UserRole
 from app.models.identity import User, UserPermission
 
 # ── Permission constants ──

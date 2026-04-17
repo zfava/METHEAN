@@ -17,7 +17,6 @@ from app.models.enums import (
     ActivityStatus,
     ActivityType,
     GovernanceAction,
-    MasteryLevel,
     PlanStatus,
 )
 from app.models.governance import Activity, Plan, PlanWeek

@@ -6,7 +6,7 @@ child map state, enrollment, parent overrides, and template copying.
 
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
@@ -16,7 +16,6 @@ from app.models.curriculum import (
     ChildMapEnrollment,
     LearningEdge,
     LearningMap,
-    LearningMapClosure,
     LearningNode,
     Subject,
 )
@@ -47,7 +46,6 @@ from app.schemas.curriculum import (
 )
 from app.services.dag_engine import (
     add_closure_entries,
-    check_prerequisites_met,
     compute_map_state,
     increment_map_version,
     rebuild_closure_for_map,
@@ -469,11 +467,11 @@ async def create_edge(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> EdgeResponse:
-    lmap = await _get_map_or_404(db, map_id, user.household_id)
+    await _get_map_or_404(db, map_id, user.household_id)
 
     # Verify both nodes exist and belong to this map
-    from_node = await _get_node_or_404(db, map_id, body.from_node_id, user.household_id)
-    to_node = await _get_node_or_404(db, map_id, body.to_node_id, user.household_id)
+    await _get_node_or_404(db, map_id, body.from_node_id, user.household_id)
+    await _get_node_or_404(db, map_id, body.to_node_id, user.household_id)
 
     # Check for duplicate edge
     existing = await db.execute(
@@ -558,7 +556,7 @@ async def get_child_map_state(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> list[ChildMapStateResponse]:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     # Get all active enrollments for this child
     enrollments_result = await db.execute(
@@ -606,7 +604,7 @@ async def get_child_single_map_state(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> ChildMapStateResponse:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     lmap = await _get_map_or_404(db, map_id, user.household_id)
 
     # Check enrollment
@@ -645,7 +643,7 @@ async def enroll_child(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_role("owner", "co_parent")),
 ) -> EnrollmentResponse:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
     lmap = await _get_map_or_404(db, body.learning_map_id, user.household_id)
 
     # Check for existing enrollment
@@ -685,7 +683,7 @@ async def override_blocked_node(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("override.prerequisites")),
 ) -> OverrideResponse:
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     # Find the node
     node_result = await db.execute(
