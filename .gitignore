@@ -2,6 +2,9 @@
 .env
 .env.local
 
+# Sensitive documents (credentials, access inventory)
+docs/access-inventory.md
+
 # Python
 __pycache__/
 *.py[cod]
