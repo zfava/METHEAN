@@ -98,7 +98,7 @@ PROTECTED_ROUTES = [
     ("GET", "/api/v1/usage/current"),
     ("GET", "/api/v1/usage/breakdown"),
     # Data export
-    ("GET", "/api/v1/household/export"),
+    ("POST", "/api/v1/household/export"),
 ]
 
 
