@@ -6,7 +6,7 @@ change to a learning map flows through this engine to maintain DAG integrity.
 
 import uuid
 
-from sqlalchemy import and_, delete, select, text
+from sqlalchemy import delete, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.curriculum import (

@@ -6,25 +6,22 @@ State queries, retention summaries, attempt workflow, and state history.
 import uuid
 from datetime import UTC, datetime
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 from app.api.deps import PaginationParams
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db, require_role
+from app.api.deps import get_current_user, get_db
 from app.models.curriculum import (
     ChildMapEnrollment,
     LearningEdge,
-    LearningMap,
     LearningNode,
 )
 from app.models.enums import (
-    ActivityStatus,
-    AttemptStatus,
     EdgeRelation,
     MasteryLevel,
 )
-from app.models.governance import Activity, Attempt
+from app.models.governance import Attempt
 from app.models.identity import Child, User
 from app.models.state import ChildNodeState, FSRSCard, StateEvent
 from app.schemas.state import (
@@ -72,7 +69,7 @@ async def get_child_state(
     user: User = Depends(get_current_user),
 ) -> ChildStateResponse:
     """Full state across all enrolled maps: every node with mastery, FSRS data."""
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     # Get all enrolled maps
     enrollments = await db.execute(
@@ -181,7 +178,7 @@ async def get_node_history(
     pagination: PaginationParams = Depends(),
 ) -> dict:
     """StateEvent stream for one node, chronological."""
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     base = select(StateEvent).where(
         StateEvent.child_id == child_id,
@@ -211,7 +208,7 @@ async def get_retention_summary(
     user: User = Depends(get_current_user),
 ) -> RetentionSummaryResponse:
     """Aggregate retention summary: counts and average retrievability."""
-    child = await _get_child_or_404(db, child_id, user.household_id)
+    await _get_child_or_404(db, child_id, user.household_id)
 
     # Get all enrolled map IDs
     enrollments = await db.execute(

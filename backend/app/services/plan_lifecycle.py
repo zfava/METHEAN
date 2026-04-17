@@ -4,7 +4,6 @@ Defines valid state transitions and enforces them. Every status change
 must go through validate_transition() to ensure only legal moves happen.
 """
 
-from app.models.enums import ActivityStatus, PlanStatus
 
 # Plan lifecycle: (current_status, action) -> new_status
 PLAN_TRANSITIONS: dict[tuple[str, str], str] = {

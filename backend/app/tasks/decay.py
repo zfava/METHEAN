@@ -10,10 +10,9 @@ Must be idempotent (safe to run twice).
 
 import asyncio
 import time
-import uuid
 from datetime import UTC, datetime
 
-from sqlalchemy import and_, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import NullPool
 

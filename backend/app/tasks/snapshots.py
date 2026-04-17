@@ -2,14 +2,13 @@
 
 import asyncio
 import time
-from datetime import UTC, date, datetime, timedelta
+from datetime import date, timedelta
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
-from app.models.curriculum import ChildMapEnrollment, LearningNode
 from app.models.enums import MasteryLevel
 from app.models.evidence import WeeklySnapshot
 from app.models.identity import Child

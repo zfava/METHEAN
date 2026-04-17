@@ -7,14 +7,13 @@ Runs as daily Celery task + triggered inline on state changes.
 import uuid
 from datetime import UTC, datetime, timedelta
 
-from sqlalchemy import and_, func, select
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.enums import AlertSeverity, AlertStatus, MasteryLevel
 from app.models.evidence import Alert
-from app.models.state import ChildNodeState, FSRSCard, ReviewLog, StateEvent
-from app.models.curriculum import LearningEdge, LearningNode
-from app.models.enums import EdgeRelation
+from app.models.state import ChildNodeState, StateEvent
+from app.models.curriculum import LearningNode
 
 
 async def detect_stalls(
