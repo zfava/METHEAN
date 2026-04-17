@@ -41,17 +41,8 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
     )
 
-    op.create_index(
-        "ix_evalpred_child_node_created",
-        "evaluator_predictions",
-        ["child_id", "node_id", sa.text("created_at DESC")],
-    )
-    op.create_index(
-        "ix_evalpred_child_unreconciled",
-        "evaluator_predictions",
-        ["child_id"],
-        postgresql_where=sa.text("actual_outcome IS NULL"),
-    )
+    op.execute("CREATE INDEX IF NOT EXISTS ix_evalpred_child_node_created ON evaluator_predictions (child_id, node_id, created_at DESC)")
+    op.execute("CREATE INDEX IF NOT EXISTS ix_evalpred_child_unreconciled ON evaluator_predictions (child_id)")
 
     # CalibrationProfile table
     op.create_table(

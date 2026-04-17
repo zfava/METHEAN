@@ -19,30 +19,14 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.create_index(
-        "ix_governance_events_household_created",
-        "governance_events",
-        ["household_id", "created_at"],
-    )
-    op.create_index(
-        "ix_ai_runs_household_started",
-        "ai_runs",
-        ["household_id", "started_at"],
-    )
-    op.create_index(
-        "ix_state_events_child_node",
-        "state_events",
-        ["child_id", "node_id"],
-    )
-    op.create_index(
-        "ix_attempts_activity_child",
-        "attempts",
-        ["activity_id", "child_id"],
-    )
+    op.execute("CREATE INDEX IF NOT EXISTS ix_governance_events_household_created ON governance_events (household_id, created_at)")
+    op.execute("CREATE INDEX IF NOT EXISTS ix_ai_runs_household_started ON ai_runs (household_id, started_at)")
+    op.execute("CREATE INDEX IF NOT EXISTS ix_state_events_child_node ON state_events (child_id, node_id)")
+    op.execute("CREATE INDEX IF NOT EXISTS ix_attempts_activity_child ON attempts (activity_id, child_id)")
 
 
 def downgrade() -> None:
-    op.drop_index("ix_attempts_activity_child")
-    op.drop_index("ix_state_events_child_node")
-    op.drop_index("ix_ai_runs_household_started")
-    op.drop_index("ix_governance_events_household_created")
+    op.execute("DROP INDEX IF EXISTS ix_attempts_activity_child")
+    op.execute("DROP INDEX IF EXISTS ix_state_events_child_node")
+    op.execute("DROP INDEX IF EXISTS ix_ai_runs_household_started")
+    op.execute("DROP INDEX IF EXISTS ix_governance_events_household_created")

@@ -489,55 +489,55 @@ def upgrade() -> None:
     # ── Section 4.1: Indexes (25 indexes) ──
 
     # 1. Users by household
-    op.create_index("ix_users_household_id", "users", ["household_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_users_household_id ON users (household_id)")
     # 2. Users by email (already unique, but explicit)
-    op.create_index("ix_users_email", "users", ["email"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_users_email ON users (email)")
     # 3. Children by household
-    op.create_index("ix_children_household_id", "children", ["household_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_children_household_id ON children (household_id)")
     # 4. Subjects by household
-    op.create_index("ix_subjects_household_id", "subjects", ["household_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_subjects_household_id ON subjects (household_id)")
     # 5. Learning maps by household
-    op.create_index("ix_learning_maps_household_id", "learning_maps", ["household_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_learning_maps_household_id ON learning_maps (household_id)")
     # 6. Learning maps by subject
-    op.create_index("ix_learning_maps_subject_id", "learning_maps", ["subject_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_learning_maps_subject_id ON learning_maps (subject_id)")
     # 7. Learning nodes by map
-    op.create_index("ix_learning_nodes_map_id", "learning_nodes", ["learning_map_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_learning_nodes_map_id ON learning_nodes (learning_map_id)")
     # 8. Learning nodes by household
-    op.create_index("ix_learning_nodes_household_id", "learning_nodes", ["household_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_learning_nodes_household_id ON learning_nodes (household_id)")
     # 9. Learning edges by map
-    op.create_index("ix_learning_edges_map_id", "learning_edges", ["learning_map_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_learning_edges_map_id ON learning_edges (learning_map_id)")
     # 10. Closure table by map + ancestor
-    op.create_index("ix_closure_map_ancestor", "learning_map_closure", ["learning_map_id", "ancestor_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_closure_map_ancestor ON learning_map_closure (learning_map_id, ancestor_id)")
     # 11. Child map enrollments by child
-    op.create_index("ix_enrollments_child_id", "child_map_enrollments", ["child_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_enrollments_child_id ON child_map_enrollments (child_id)")
     # 12. Child node states: child + node (for fast lookup)
-    op.create_index("ix_child_node_states_child_node", "child_node_states", ["child_id", "node_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_child_node_states_child_node ON child_node_states (child_id, node_id)")
     # 13. Child node states by household
-    op.create_index("ix_child_node_states_household", "child_node_states", ["household_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_child_node_states_household ON child_node_states (household_id)")
     # 14. State events by child + node + created_at (event stream queries)
-    op.create_index("ix_state_events_child_node_time", "state_events", ["child_id", "node_id", "created_at"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_state_events_child_node_time ON state_events (child_id, node_id, created_at)")
     # 15. State events by household
-    op.create_index("ix_state_events_household", "state_events", ["household_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_state_events_household ON state_events (household_id)")
     # 16. FSRS cards by child + due (scheduling queries)
-    op.create_index("ix_fsrs_cards_child_due", "fsrs_cards", ["child_id", "due"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_fsrs_cards_child_due ON fsrs_cards (child_id, due)")
     # 17. Review logs by card
-    op.create_index("ix_review_logs_card_id", "review_logs", ["card_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_review_logs_card_id ON review_logs (card_id)")
     # 18. Governance rules by household + active
-    op.create_index("ix_governance_rules_household_active", "governance_rules", ["household_id", "is_active"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_governance_rules_household_active ON governance_rules (household_id, is_active)")
     # 19. Plans by household + child
-    op.create_index("ix_plans_household_child", "plans", ["household_id", "child_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_plans_household_child ON plans (household_id, child_id)")
     # 20. Activities by plan_week
-    op.create_index("ix_activities_plan_week", "activities", ["plan_week_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_activities_plan_week ON activities (plan_week_id)")
     # 21. Activities by scheduled_date (daily view)
-    op.create_index("ix_activities_scheduled_date", "activities", ["household_id", "scheduled_date"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_activities_scheduled_date ON activities (household_id, scheduled_date)")
     # 22. Attempts by activity
-    op.create_index("ix_attempts_activity_id", "attempts", ["activity_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_attempts_activity_id ON attempts (activity_id)")
     # 23. Alerts by household + status (unread alerts)
-    op.create_index("ix_alerts_household_status", "alerts", ["household_id", "status"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_alerts_household_status ON alerts (household_id, status)")
     # 24. Audit logs by household + created_at
-    op.create_index("ix_audit_logs_household_time", "audit_logs", ["household_id", "created_at"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_audit_logs_household_time ON audit_logs (household_id, created_at)")
     # 25. Refresh tokens by user + revoked (active token lookup)
-    op.create_index("ix_refresh_tokens_user_active", "refresh_tokens", ["user_id", "is_revoked"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_refresh_tokens_user_active ON refresh_tokens (user_id, is_revoked)")
 
     # ── Section 4.2: Row-Level Security Policies ──
 

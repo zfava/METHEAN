@@ -36,7 +36,7 @@ def upgrade() -> None:
         sa.Column("assessed_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
     )
-    op.create_index("ix_assessments_child_node", "assessments", ["child_id", "node_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_assessments_child_node ON assessments (child_id, node_id)")
 
     op.create_table(
         "portfolio_entries",

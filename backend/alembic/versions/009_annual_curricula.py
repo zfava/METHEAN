@@ -40,9 +40,9 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
         sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
     )
-    op.create_index("ix_annual_curricula_child", "annual_curricula", ["child_id"])
-    op.create_index("ix_annual_curricula_household", "annual_curricula", ["household_id"])
-    op.create_index("ix_annual_curricula_year", "annual_curricula", ["child_id", "academic_year"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_annual_curricula_child ON annual_curricula (child_id)")
+    op.execute("CREATE INDEX IF NOT EXISTS ix_annual_curricula_household ON annual_curricula (household_id)")
+    op.execute("CREATE INDEX IF NOT EXISTS ix_annual_curricula_year ON annual_curricula (child_id, academic_year)")
 
     # Link Plans to AnnualCurriculum
     op.add_column("plans", sa.Column("annual_curriculum_id", UUID(as_uuid=True), sa.ForeignKey("annual_curricula.id", ondelete="SET NULL")))
@@ -52,7 +52,7 @@ def upgrade() -> None:
 def downgrade() -> None:
     op.drop_column("plans", "curriculum_week_number")
     op.drop_column("plans", "annual_curriculum_id")
-    op.drop_index("ix_annual_curricula_year")
-    op.drop_index("ix_annual_curricula_household")
-    op.drop_index("ix_annual_curricula_child")
+    op.execute("DROP INDEX IF EXISTS ix_annual_curricula_year")
+    op.execute("DROP INDEX IF EXISTS ix_annual_curricula_household")
+    op.execute("DROP INDEX IF EXISTS ix_annual_curricula_child")
     op.drop_table("annual_curricula")

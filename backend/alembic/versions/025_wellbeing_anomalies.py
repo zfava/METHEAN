@@ -39,12 +39,9 @@ def upgrade() -> None:
         sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
     )
 
-    op.create_index("ix_wellbeing_child_status_created", "wellbeing_anomalies",
-                     ["child_id", "status", sa.text("created_at DESC")])
-    op.create_index("ix_wellbeing_household_status", "wellbeing_anomalies",
-                     ["household_id", "status"])
-    op.create_index("ix_wellbeing_child_type_created", "wellbeing_anomalies",
-                     ["child_id", "anomaly_type", sa.text("created_at DESC")])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_wellbeing_child_status_created ON wellbeing_anomalies (child_id, status, created_at DESC)")
+    op.execute("CREATE INDEX IF NOT EXISTS ix_wellbeing_household_status ON wellbeing_anomalies (household_id, status)")
+    op.execute("CREATE INDEX IF NOT EXISTS ix_wellbeing_child_type_created ON wellbeing_anomalies (child_id, anomaly_type, created_at DESC)")
 
     # WellbeingConfig table
     op.create_table(

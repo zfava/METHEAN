@@ -42,13 +42,9 @@ def upgrade() -> None:
         sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
     )
 
-    op.create_index("ix_faminsight_household_status_created", "family_insights",
-                     ["household_id", "status", sa.text("created_at DESC")])
-    op.create_index("ix_faminsight_household_pattern", "family_insights",
-                     ["household_id", "pattern_type"])
-    op.create_index("ix_faminsight_household_predictive", "family_insights",
-                     ["household_id", "predictive_child_id"],
-                     postgresql_where=sa.text("predictive_child_id IS NOT NULL"))
+    op.execute("CREATE INDEX IF NOT EXISTS ix_faminsight_household_status_created ON family_insights (household_id, status, created_at DESC)")
+    op.execute("CREATE INDEX IF NOT EXISTS ix_faminsight_household_pattern ON family_insights (household_id, pattern_type)")
+    op.execute("CREATE INDEX IF NOT EXISTS ix_faminsight_household_predictive ON family_insights (household_id, predictive_child_id)")
 
     # FamilyInsightConfig table
     default_settings = (

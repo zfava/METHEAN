@@ -33,9 +33,9 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
         sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
     )
-    op.create_index("ix_family_resources_household", "family_resources", ["household_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_family_resources_household ON family_resources (household_id)")
 
 
 def downgrade() -> None:
-    op.drop_index("ix_family_resources_household")
+    op.execute("DROP INDEX IF EXISTS ix_family_resources_household")
     op.drop_table("family_resources")

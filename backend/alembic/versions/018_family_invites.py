@@ -29,11 +29,11 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
         sa.Column("expires_at", sa.DateTime(timezone=True), nullable=True),
     )
-    op.create_index("ix_family_invites_household_id", "family_invites", ["household_id"])
-    op.create_index("ix_family_invites_token", "family_invites", ["token"], unique=True)
+    op.execute("CREATE INDEX IF NOT EXISTS ix_family_invites_household_id ON family_invites (household_id)")
+    op.execute("CREATE UNIQUE INDEX IF NOT EXISTS ix_family_invites_token ON family_invites (token)")
 
 
 def downgrade() -> None:
-    op.drop_index("ix_family_invites_token")
-    op.drop_index("ix_family_invites_household_id")
+    op.execute("DROP INDEX IF EXISTS ix_family_invites_token")
+    op.execute("DROP INDEX IF EXISTS ix_family_invites_household_id")
     op.drop_table("family_invites")

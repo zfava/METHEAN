@@ -32,11 +32,7 @@ def upgrade() -> None:
         sa.Column("granted_at", sa.DateTime(timezone=True),
                   server_default=sa.func.now()),
     )
-    op.create_index(
-        "ix_user_permissions_user_perm",
-        "user_permissions",
-        ["user_id", "permission"],
-    )
+    op.execute("CREATE INDEX IF NOT EXISTS ix_user_permissions_user_perm ON user_permissions (user_id, permission)")
 
     # Enable RLS
     conn = op.get_bind()

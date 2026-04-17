@@ -29,7 +29,7 @@ def upgrade() -> None:
         sa.Column("last_call_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
     )
-    op.create_index("ix_usage_ledger_household_period", "usage_ledger", ["household_id", "period_start"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_usage_ledger_household_period ON usage_ledger (household_id, period_start)")
 
     op.create_table(
         "usage_events",
@@ -44,11 +44,11 @@ def upgrade() -> None:
         sa.Column("cost_estimate_usd", sa.Float, server_default="0"),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
     )
-    op.create_index("ix_usage_events_household_id", "usage_events", ["household_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_usage_events_household_id ON usage_events (household_id)")
 
 
 def downgrade() -> None:
-    op.drop_index("ix_usage_events_household_id")
+    op.execute("DROP INDEX IF EXISTS ix_usage_events_household_id")
     op.drop_table("usage_events")
-    op.drop_index("ix_usage_ledger_household_period")
+    op.execute("DROP INDEX IF EXISTS ix_usage_ledger_household_period")
     op.drop_table("usage_ledger")

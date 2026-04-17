@@ -28,11 +28,11 @@ def upgrade() -> None:
         sa.Column("feedback_type", sa.String(50), server_default="comment"),
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
     )
-    op.create_index("ix_activity_feedback_activity", "activity_feedback", ["activity_id"])
-    op.create_index("ix_activity_feedback_child", "activity_feedback", ["child_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_activity_feedback_activity ON activity_feedback (activity_id)")
+    op.execute("CREATE INDEX IF NOT EXISTS ix_activity_feedback_child ON activity_feedback (child_id)")
 
 
 def downgrade() -> None:
-    op.drop_index("ix_activity_feedback_child")
-    op.drop_index("ix_activity_feedback_activity")
+    op.execute("DROP INDEX IF EXISTS ix_activity_feedback_child")
+    op.execute("DROP INDEX IF EXISTS ix_activity_feedback_activity")
     op.drop_table("activity_feedback")

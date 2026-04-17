@@ -34,8 +34,8 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
         sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
     )
-    op.create_index("ix_learner_intelligence_child_id", "learner_intelligence", ["child_id"])
-    op.create_index("ix_learner_intelligence_household_id", "learner_intelligence", ["household_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_learner_intelligence_child_id ON learner_intelligence (child_id)")
+    op.execute("CREATE INDEX IF NOT EXISTS ix_learner_intelligence_household_id ON learner_intelligence (household_id)")
 
     # RLS policy
     op.execute("ALTER TABLE learner_intelligence ENABLE ROW LEVEL SECURITY")
@@ -47,6 +47,6 @@ def upgrade() -> None:
 
 def downgrade() -> None:
     op.execute("DROP POLICY IF EXISTS learner_intelligence_household_isolation ON learner_intelligence")
-    op.drop_index("ix_learner_intelligence_household_id")
-    op.drop_index("ix_learner_intelligence_child_id")
+    op.execute("DROP INDEX IF EXISTS ix_learner_intelligence_household_id")
+    op.execute("DROP INDEX IF EXISTS ix_learner_intelligence_child_id")
     op.drop_table("learner_intelligence")

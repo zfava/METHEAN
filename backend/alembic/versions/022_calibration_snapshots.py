@@ -36,11 +36,7 @@ def upgrade() -> None:
         sa.Column("computed_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
     )
 
-    op.create_index(
-        "ix_calsnap_child_computed",
-        "calibration_snapshots",
-        ["child_id", sa.text("computed_at DESC")],
-    )
+    op.execute("CREATE INDEX IF NOT EXISTS ix_calsnap_child_computed ON calibration_snapshots (child_id, computed_at DESC)")
 
     op.execute("ALTER TABLE calibration_snapshots ENABLE ROW LEVEL SECURITY")
     op.execute("""

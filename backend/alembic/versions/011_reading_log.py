@@ -41,11 +41,11 @@ def upgrade() -> None:
         sa.Column("created_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
         sa.Column("updated_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
     )
-    op.create_index("ix_reading_log_child", "reading_log_entries", ["child_id"])
-    op.create_index("ix_reading_log_status", "reading_log_entries", ["child_id", "status"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_reading_log_child ON reading_log_entries (child_id)")
+    op.execute("CREATE INDEX IF NOT EXISTS ix_reading_log_status ON reading_log_entries (child_id, status)")
 
 
 def downgrade() -> None:
-    op.drop_index("ix_reading_log_status")
-    op.drop_index("ix_reading_log_child")
+    op.execute("DROP INDEX IF EXISTS ix_reading_log_status")
+    op.execute("DROP INDEX IF EXISTS ix_reading_log_child")
     op.drop_table("reading_log_entries")

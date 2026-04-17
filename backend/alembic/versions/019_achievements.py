@@ -29,7 +29,7 @@ def upgrade() -> None:
         sa.Column("earned_at", sa.DateTime(timezone=True), server_default=sa.func.now()),
         sa.Column("metadata", JSONB, server_default="{}"),
     )
-    op.create_index("ix_achievements_child_id", "achievements", ["child_id"])
+    op.execute("CREATE INDEX IF NOT EXISTS ix_achievements_child_id ON achievements (child_id)")
 
     op.create_table(
         "streaks",
@@ -41,11 +41,11 @@ def upgrade() -> None:
         sa.Column("last_activity_date", sa.Date, nullable=True),
         sa.Column("streak_type", sa.String(50), server_default="daily"),
     )
-    op.create_index("ix_streaks_child_id", "streaks", ["child_id"], unique=True)
+    op.execute("CREATE UNIQUE INDEX IF NOT EXISTS ix_streaks_child_id ON streaks (child_id)")
 
 
 def downgrade() -> None:
-    op.drop_index("ix_streaks_child_id")
+    op.execute("DROP INDEX IF EXISTS ix_streaks_child_id")
     op.drop_table("streaks")
-    op.drop_index("ix_achievements_child_id")
+    op.execute("DROP INDEX IF EXISTS ix_achievements_child_id")
     op.drop_table("achievements")
