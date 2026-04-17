@@ -10,9 +10,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.ai.cost_controls import (
     DEFAULT_DAILY_COST_LIMIT_CENTS,
     DEFAULT_DAILY_TOKEN_LIMIT,
-    DailyBudgetExceeded,
+    DailyBudgetExceededError,
     TutorSessionCounter,
-    TutorSessionLimitExceeded,
+    TutorSessionLimitError,
     check_budget,
     estimate_cost_cents,
     get_daily_usage,
@@ -73,11 +73,11 @@ class TestTutorSessionCounter:
         assert count == 50
 
     def test_increment_exceeds_limit_raises(self):
-        """Call 51 raises TutorSessionLimitExceeded."""
+        """Call 51 raises TutorSessionLimitError."""
         counter = TutorSessionCounter(max_calls=50)
         for i in range(50):
             counter.increment()
-        with pytest.raises(TutorSessionLimitExceeded):
+        with pytest.raises(TutorSessionLimitError):
             counter.increment()
 
     def test_reset_clears_count(self):
@@ -96,7 +96,7 @@ class TestTutorSessionCounter:
         counter.increment()
         counter.increment()
         counter.increment()
-        with pytest.raises(TutorSessionLimitExceeded):
+        with pytest.raises(TutorSessionLimitError):
             counter.increment()
 
     def test_exception_message_includes_limit(self):
@@ -104,7 +104,7 @@ class TestTutorSessionCounter:
         counter = TutorSessionCounter(max_calls=2)
         counter.increment()
         counter.increment()
-        with pytest.raises(TutorSessionLimitExceeded, match="exceeded 2 AI calls"):
+        with pytest.raises(TutorSessionLimitError, match="exceeded 2 AI calls"):
             counter.increment()
 
     def test_previous_session_does_not_affect_new(self):
@@ -116,7 +116,7 @@ class TestTutorSessionCounter:
         # Full new session should work
         for i in range(5):
             counter.increment()
-        with pytest.raises(TutorSessionLimitExceeded):
+        with pytest.raises(TutorSessionLimitError):
             counter.increment()
 
 

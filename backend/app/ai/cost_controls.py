@@ -6,7 +6,7 @@ budget is exceeded rather than blocking (configurable).
 """
 
 import logging
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -41,7 +41,7 @@ def estimate_cost_cents(model: str, input_tok: int, output_tok: int) -> int:
     """Estimate cost in integer cents for a single AI call."""
     rates = MODEL_COST_PER_MTOK.get(model, MODEL_COST_PER_MTOK.get("mock", {"input": 0, "output": 0}))
     cost_usd = (input_tok * rates["input"] / 1_000_000) + (output_tok * rates["output"] / 1_000_000)
-    return int(round(cost_usd * 100))
+    return round(cost_usd * 100)
 
 
 async def get_daily_usage(
@@ -159,13 +159,13 @@ async def check_budget(
     }
 
 
-class TutorSessionLimitExceeded(Exception):
+class TutorSessionLimitError(Exception):
     """Raised when a tutor session exceeds the loop-depth guard."""
 
     pass
 
 
-class DailyBudgetExceeded(Exception):
+class DailyBudgetExceededError(Exception):
     """Raised when a household exceeds its daily AI budget in block mode."""
 
     pass
@@ -192,7 +192,7 @@ class TutorSessionCounter:
                 self.call_count,
                 self.max_calls,
             )
-            raise TutorSessionLimitExceeded(
+            raise TutorSessionLimitError(
                 f"Tutor session exceeded {self.max_calls} AI calls. "
                 f"This session has been paused to protect your account. "
                 f"Start a new session to continue."
