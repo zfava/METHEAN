@@ -29,3 +29,9 @@
 **Context:** Most EdTech platforms overwrite state in place, losing history.
 **Rationale:** Enables time-travel queries, regression detection, and complete audit trails.
 **Consequences:** Higher storage. More complex current-state queries. Complete learning history.
+
+## ADR-006: AI Cost Controls
+**Decision:** Per-household daily token and cost budgets with degrade-to-mock as the default enforcement.
+**Context:** At $99/month pricing, a single household running the tutor agent continuously, or an agent loop that calls itself without termination, could consume more than $99 in Claude tokens in a day. The circuit breaker guards provider health, not cost.
+**Rationale:** Degrade is preferred over block because the educational experience must not stop. A child mid-lesson should still get a tutor response (from mock), even if the household has hit its daily AI budget. Block mode is available for adversarial detection (loop runaways). Per-household budgeting (not per-user) matches the subscription model: one subscription covers the whole family. Budget defaults: 200k tokens/day, $3/day cost ceiling, alert at 80%, degrade at 100%.
+**Consequences:** Households exceeding budgets get mock AI responses for the remainder of the day. Parents receive a governance alert at 80%. Cost is tracked per AIRun in integer cents. Tutor sessions have a 50-call loop guard to catch runaway agent loops.

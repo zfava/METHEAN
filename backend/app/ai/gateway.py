@@ -279,6 +279,16 @@ async def call_ai(
     ai_run.output_tokens = output_tokens
     ai_run.output_data = parsed_output if isinstance(parsed_output, dict) else {"result": parsed_output}
     ai_run.completed_at = datetime.now(UTC)
+
+    # Compute and store cost estimate
+    try:
+        from app.ai.cost_controls import estimate_cost_cents
+
+        cost_cents = estimate_cost_cents(model_used or "mock", input_tokens, output_tokens)
+        ai_run.cost_usd = cost_cents / 100.0
+    except Exception:
+        pass
+
     await db.flush()
 
     # Record usage for billing
