@@ -72,6 +72,14 @@ jobs:
         working-directory: backend
         run: alembic upgrade head
 
+      - name: Route contract check
+        working-directory: backend
+        run: pytest tests/test_route_contract.py -v
+
+      - name: Route auth contract check
+        working-directory: backend
+        run: pytest tests/test_unauthenticated_paths.py -v
+
       - name: Run tests with coverage
         working-directory: backend
         run: pytest --cov=app --cov-report=xml --cov-report=term-missing -x -v

@@ -182,3 +182,20 @@ docker compose exec postgres psql -U methean -c "SELECT tablename, rowsecurity F
 # Check current tenant variable
 docker compose exec postgres psql -U methean -c "SELECT current_setting('app.current_household_id', true);"
 ```
+
+## CI Gates and What Each Catches
+
+Five gates run on every push and PR. Each prevents a specific class of regression.
+
+| Gate | CI Step | What It Catches |
+|---|---|---|
+| **Migration round-trip** | `migration-check` job: upgrade head, downgrade base, re-upgrade | Migrations that work on an existing DB but fail on a fresh DB (duplicate indexes, missing tables, non-reversible DDL) |
+| **Route contract** | `Route contract check` in backend-tests: `pytest tests/test_route_contract.py` | Tests that reference routes by string that do not actually exist (wrong path, wrong method, stale route list). Catches 404/405 failures before they become auth-test false negatives. |
+| **Route auth contract** | `Route auth contract check` in backend-tests: `pytest tests/test_unauthenticated_paths.py` | Protected endpoints that accidentally lose auth (return 200 instead of 401), public endpoints that accidentally gain auth (return 401 instead of 200), and method mismatches on auth-tested routes. |
+| **Coverage floor** | `coverage report --fail-under=35` in backend-tests | Test coverage regressions below 35%. The floor is raised periodically as coverage improves. |
+| **E2E smoke** | `e2e-tests` job: Playwright against full stack | Integration failures between frontend and backend (broken API contracts, CORS, auth flow). |
+
+When a gate fails, check these first:
+- **Migration round-trip fails**: run `grep -rn "<index_name>" backend/alembic/versions/` to find duplicate definitions
+- **Route contract fails**: the error message names the missing route; check `app/api/` for the expected decorator
+- **Route auth contract fails**: check the HTTP status code in the error. 404 = route missing (route contract issue). 405 = wrong method. 401 on a public route = auth dependency added accidentally. 200 on a protected route = auth dependency removed accidentally.
