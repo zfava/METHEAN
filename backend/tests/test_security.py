@@ -173,6 +173,7 @@ RLS_COVERED_TABLES = [
     "plan_weeks",
     "activities",
     "attempts",
+    "beta_feedback",
     "alerts",
     "weekly_snapshots",
     "advisor_reports",
@@ -378,4 +379,5 @@ class TestRLSCoverageMatrix:
         """RLS coverage list has the expected count of household-scoped tables."""
         # 49 tables have household_id, minus 1 (households itself) = 48
         # audit_logs was missing from 027 but is now in the coverage list
-        assert len(RLS_COVERED_TABLES) == 49
+        # beta_feedback added in migration 032 / 033
+        assert len(RLS_COVERED_TABLES) == 50
