@@ -20,6 +20,7 @@ from app.api.documents import router as documents_router
 from app.api.education_plan import router as education_plan_router
 from app.api.family_intelligence import router as family_intelligence_router
 from app.api.feedback import router as feedback_router
+from app.api.feedback_beta import router as feedback_beta_router
 from app.api.governance import router as governance_router
 from app.api.intelligence import router as intelligence_router
 from app.api.notifications import router as notifications_router
@@ -111,6 +112,7 @@ app.include_router(assessment_router, prefix="/api/v1")
 app.include_router(compliance_router, prefix="/api/v1")
 app.include_router(annual_curriculum_router, prefix="/api/v1")
 app.include_router(feedback_router, prefix="/api/v1")
+app.include_router(feedback_beta_router, prefix="/api/v1")
 app.include_router(notifications_router, prefix="/api/v1")
 app.include_router(documents_router, prefix="/api/v1")
 app.include_router(resources_router, prefix="/api/v1")

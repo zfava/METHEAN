@@ -29,6 +29,10 @@ const styles: Record<string, string> = {
   warning: "bg-(--color-warning-light) text-(--color-warning)",
   action_required: "bg-(--color-danger-light) text-(--color-danger)",
   info: "bg-(--color-accent-light) text-(--color-accent)",
+  new: "bg-(--color-accent-light) text-(--color-accent)",
+  reviewed: "bg-(--color-warning-light) text-(--color-warning)",
+  resolved: "bg-(--color-success-light) text-(--color-success)",
+  wont_fix: "bg-(--color-page) text-(--color-text-tertiary)",
 };
 
 export default function StatusBadge({ status, className = "" }: { status: string; className?: string }) {
