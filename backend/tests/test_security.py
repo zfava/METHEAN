@@ -221,32 +221,20 @@ async def test_rls_isolates_households(db_session):
 
     conn = await db_session.connection()
 
-    # Determine if we're superuser
+    # Determine if we're superuser. ALTER TABLE / CREATE POLICY require
+    # ownership, so we must run them BEFORE any SET ROLE to the restricted
+    # test role. In CI, the service container user already owns the tables
+    # but isn't a superuser, which still works because owners can ALTER
+    # their own tables.
     is_super_result = await conn.execute(text("SELECT rolsuper FROM pg_roles WHERE rolname = current_user"))
     is_super = is_super_result.scalar()
 
-    # If superuser, create a non-superuser role and SET ROLE to it
-    role_created = False
-    if is_super:
-        await conn.execute(text("""
-            DO $$ BEGIN
-                IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'methean_rls_test') THEN
-                    CREATE ROLE methean_rls_test NOLOGIN;
-                END IF;
-            END $$
-        """))
-        await conn.execute(text(
-            "GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO methean_rls_test"
-        ))
-        await conn.execute(text("SET ROLE methean_rls_test"))
-        role_created = True
-
     # conftest's db_session fixture uses Base.metadata.create_all, which does
-    # not run Alembic migrations — so the subjects RLS policy declared in
+    # not run Alembic migrations, so the subjects RLS policy declared in
     # migrations 001 and 027 is absent on the test DB. Apply it here using
     # the same idempotent pattern as 027_harden_rls_safe_settings. FORCE is
     # required because the connection role owns the tables and would
-    # otherwise bypass RLS.
+    # otherwise bypass RLS once we drop to the restricted role.
     await conn.execute(text("DROP POLICY IF EXISTS subjects_household_isolation ON subjects"))
     await conn.execute(text("ALTER TABLE subjects ENABLE ROW LEVEL SECURITY"))
     await conn.execute(text("ALTER TABLE subjects FORCE ROW LEVEL SECURITY"))
@@ -255,25 +243,43 @@ async def test_rls_isolates_households(db_session):
         "USING (household_id = current_setting('app.current_household_id', true)::uuid)"
     ))
 
+    # Seed data while still the owner / superuser (RLS is bypassed for
+    # superusers, and for owners the tenant check would block inserts
+    # unless we set it, so do this before switching roles).
+    household_a = Household(name="Family A")
+    household_b = Household(name="Family B")
+    db_session.add_all([household_a, household_b])
+    await db_session.flush()
+
+    await set_tenant(db_session, household_a.id)
+    subj_a = Subject(household_id=household_a.id, name="Math A")
+    db_session.add(subj_a)
+    await db_session.flush()
+
+    await set_tenant(db_session, household_b.id)
+    subj_b = Subject(household_id=household_b.id, name="Math B")
+    db_session.add(subj_b)
+    await db_session.flush()
+
+    # Now switch to a non-superuser role so RLS actually applies. Only
+    # possible when the connection role is a superuser (local dev); in CI
+    # the connection role is already non-superuser and FORCE RLS is enough.
+    role_created = False
+    if is_super:
+        await conn.execute(text("""
+            DO $$ BEGIN
+                IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'methean_rls_test') THEN
+                    CREATE ROLE methean_rls_test NOLOGIN NOBYPASSRLS;
+                END IF;
+            END $$
+        """))
+        await conn.execute(text(
+            "GRANT SELECT, INSERT, UPDATE, DELETE ON subjects TO methean_rls_test"
+        ))
+        await conn.execute(text("SET ROLE methean_rls_test"))
+        role_created = True
+
     try:
-        # Create two households (households table has no RLS)
-        household_a = Household(name="Family A")
-        household_b = Household(name="Family B")
-        db_session.add_all([household_a, household_b])
-        await db_session.flush()
-
-        # Create subjects in each household. Tenant must match household_id
-        # so each INSERT RETURNING passes the SELECT USING visibility check.
-        await set_tenant(db_session, household_a.id)
-        subj_a = Subject(household_id=household_a.id, name="Math A")
-        db_session.add(subj_a)
-        await db_session.flush()
-
-        await set_tenant(db_session, household_b.id)
-        subj_b = Subject(household_id=household_b.id, name="Math B")
-        db_session.add(subj_b)
-        await db_session.flush()
-
         # Set tenant to household A
         await set_tenant(db_session, household_a.id)
 
@@ -295,6 +301,9 @@ async def test_rls_isolates_households(db_session):
     finally:
         if role_created:
             await conn.execute(text("RESET ROLE"))
+        # Back as owner; safe to disable so the test DB tear-down path isn't
+        # blocked by lingering RLS on a shared table.
+        await conn.execute(text("ALTER TABLE subjects DISABLE ROW LEVEL SECURITY"))
 
 
 @pytest.mark.asyncio
