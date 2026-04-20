@@ -323,9 +323,7 @@ async def invite_user(
     else:
         from app.core.permissions import grant_role_permissions
 
-        await grant_role_permissions(
-            db, new_user.id, current_user.household_id, household_role, current_user.id
-        )
+        await grant_role_permissions(db, new_user.id, current_user.household_id, household_role, current_user.id)
 
     return InviteResponse(
         id=new_user.id,

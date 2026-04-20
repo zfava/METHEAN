@@ -854,9 +854,7 @@ class TestAssemblyChildIsolation:
 
         # Child A's context should reference OnlyForA (if fsrs_snapshot source picked up the state)
         # At minimum, it should NOT reference OnlyForB
-        assert "OnlyForB" not in result_a["context_text"], (
-            "Child A's context leaked child B's node data"
-        )
+        assert "OnlyForB" not in result_a["context_text"], "Child A's context leaked child B's node data"
 
 
 # ═══════════════════════════════════════════
@@ -882,9 +880,7 @@ class TestAssemblyResultShape:
                 f"Role {role} missing keys: {required_keys - set(result.keys())}"
             )
 
-    async def test_assembly_tokens_used_never_exceeds_budget_across_roles(
-        self, db_session, ctx_child, ctx_household
-    ):
+    async def test_assembly_tokens_used_never_exceeds_budget_across_roles(self, db_session, ctx_child, ctx_household):
         """tokens_used <= tokens_budget for every role."""
         for role in ROLE_PROFILES:
             result = await assemble_context(db_session, role, ctx_child.id, ctx_household.id)
@@ -892,16 +888,11 @@ class TestAssemblyResultShape:
                 f"Role {role}: tokens_used {result['tokens_used']} > budget {result['tokens_budget']}"
             )
 
-    async def test_assembly_sources_used_are_known_source_names(
-        self, db_session, ctx_child, ctx_household
-    ):
+    async def test_assembly_sources_used_are_known_source_names(self, db_session, ctx_child, ctx_household):
         """Every source in sources_used is a real source name from the role's profile."""
         for role in ROLE_PROFILES:
             profile = ROLE_PROFILES[role]
             valid_names = {s.name for s in profile.sources}
             result = await assemble_context(db_session, role, ctx_child.id, ctx_household.id)
             for name in result["sources_used"]:
-                assert name in valid_names, (
-                    f"Role {role}: unknown source name {name} in sources_used"
-                )
-
+                assert name in valid_names, f"Role {role}: unknown source name {name} in sources_used"

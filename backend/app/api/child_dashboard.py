@@ -56,9 +56,7 @@ async def get_child_dashboard(
     return await _build_child_dashboard(db, child_id, user.household_id)
 
 
-async def _build_child_dashboard(
-    db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID
-) -> dict:
+async def _build_child_dashboard(db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID) -> dict:
     """Reusable child-dashboard builder so /me can merge it with a
     governance summary for self-directed learners.
     """
@@ -518,9 +516,7 @@ async def get_my_dashboard(
             "governance": governance_summary,
         }
 
-    children_q = await db.execute(
-        select(Child).where(Child.household_id == current_user.household_id)
-    )
+    children_q = await db.execute(select(Child).where(Child.household_id == current_user.household_id))
     child_list = children_q.scalars().all()
     return {
         "governance_mode": governance_mode,

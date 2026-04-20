@@ -623,8 +623,7 @@ class TestBroadDisengagementUnit:
         }
         recent = {
             "subjects": {
-                name: _make_subject_baseline(effort_quality_mean=0.3)
-                for name in ["Math", "Reading", "Science"]
+                name: _make_subject_baseline(effort_quality_mean=0.3) for name in ["Math", "Reading", "Science"]
             }
         }
 
@@ -654,8 +653,7 @@ class TestSensitivityConfiguration:
         }
         recent = {
             "subjects": {
-                name: _make_subject_baseline(effort_quality_mean=0.55)
-                for name in ["Math", "Reading", "Science"]
+                name: _make_subject_baseline(effort_quality_mean=0.55) for name in ["Math", "Reading", "Science"]
             }
         }
 
@@ -683,8 +681,7 @@ class TestSensitivityConfiguration:
         # Deviation of 1.8 SD — triggers at 1.5 threshold but not at 2.0
         recent = {
             "subjects": {
-                name: _make_subject_baseline(effort_quality_mean=0.62)
-                for name in ["Math", "Reading", "Science"]
+                name: _make_subject_baseline(effort_quality_mean=0.62) for name in ["Math", "Reading", "Science"]
             }
         }
 
@@ -723,9 +720,7 @@ class TestDismissal:
         assert result.false_positive is True
 
         # Check threshold was adjusted
-        config_result = await db_session.execute(
-            select(WellbeingConfig).where(WellbeingConfig.child_id == wb_child.id)
-        )
+        config_result = await db_session.execute(select(WellbeingConfig).where(WellbeingConfig.child_id == wb_child.id))
         config = config_result.scalar_one()
         assert config.threshold_adjustments.get("broad_disengagement") == 0.1
         assert config.total_false_positives == 1
@@ -848,8 +843,7 @@ class TestParentOnlySafety:
         }
         recent = {
             "subjects": {
-                name: _make_subject_baseline(effort_quality_mean=0.2)
-                for name in ["Math", "Reading", "Science"]
+                name: _make_subject_baseline(effort_quality_mean=0.2) for name in ["Math", "Reading", "Science"]
             }
         }
 

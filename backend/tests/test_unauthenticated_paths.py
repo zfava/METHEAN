@@ -128,8 +128,7 @@ async def test_protected_route_rejects_unauthenticated(client: AsyncClient, meth
         pytest.fail(f"Unknown method: {method}")
 
     assert resp.status_code in (401, 403, 422), (
-        f"{method} {path} returned {resp.status_code} without auth "
-        f"(expected 401/403/422). Body: {resp.text[:300]}"
+        f"{method} {path} returned {resp.status_code} without auth (expected 401/403/422). Body: {resp.text[:300]}"
     )
 
 
@@ -156,10 +155,7 @@ async def test_public_route_accessible(client: AsyncClient, method: str, path: s
     else:
         pytest.fail(f"Unknown method: {method}")
 
-    assert resp.status_code != 401, (
-        f"{method} {path} requires auth but should be public. "
-        f"Status: {resp.status_code}"
-    )
+    assert resp.status_code != 401, f"{method} {path} requires auth but should be public. Status: {resp.status_code}"
 
 
 # ─── Auth endpoints that accept unauthenticated POST (register/login) ───
@@ -194,9 +190,7 @@ async def test_login_does_not_require_auth(client: AsyncClient):
     # Should not return 401 for unauthenticated access — it IS the auth endpoint
     # Returns 401 for wrong credentials, but that's different from "no auth token"
     # The key check: it processes the request, not rejects it for missing auth
-    assert resp.status_code in (200, 401, 403, 422), (
-        f"Login returned unexpected {resp.status_code}"
-    )
+    assert resp.status_code in (200, 401, 403, 422), f"Login returned unexpected {resp.status_code}"
 
 
 # ─── Webhook must reject without valid Stripe signature ───
@@ -213,8 +207,7 @@ async def test_webhook_rejects_without_signature(client: AsyncClient):
     )
     # Should NOT return 200 — unsigned webhooks must be rejected
     assert resp.status_code != 200, (
-        f"Webhook accepted request without valid Stripe signature! "
-        f"Status: {resp.status_code}"
+        f"Webhook accepted request without valid Stripe signature! Status: {resp.status_code}"
     )
 
 
@@ -233,9 +226,7 @@ async def test_csrf_rejects_post_without_token(client: AsyncClient):
         headers={k: v for k, v in headers.items() if k != "X-CSRF-Token"},
     )
     # Without CSRF token, should get 403
-    assert resp.status_code in (401, 403), (
-        f"POST without CSRF token returned {resp.status_code}, expected 401/403"
-    )
+    assert resp.status_code in (401, 403), f"POST without CSRF token returned {resp.status_code}, expected 401/403"
 
 
 # ─── Security headers present on all responses ───

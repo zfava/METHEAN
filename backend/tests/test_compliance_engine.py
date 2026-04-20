@@ -71,11 +71,56 @@ class TestStateRequirementsDataIntegrity:
     def test_all_50_states_plus_dc_present(self):
         """STATE_REQUIREMENTS has entries for all 50 states + DC."""
         expected_codes = {
-            "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
-            "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
-            "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
-            "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
-            "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY",
+            "AL",
+            "AK",
+            "AZ",
+            "AR",
+            "CA",
+            "CO",
+            "CT",
+            "DE",
+            "FL",
+            "GA",
+            "HI",
+            "ID",
+            "IL",
+            "IN",
+            "IA",
+            "KS",
+            "KY",
+            "LA",
+            "ME",
+            "MD",
+            "MA",
+            "MI",
+            "MN",
+            "MS",
+            "MO",
+            "MT",
+            "NE",
+            "NV",
+            "NH",
+            "NJ",
+            "NM",
+            "NY",
+            "NC",
+            "ND",
+            "OH",
+            "OK",
+            "OR",
+            "PA",
+            "RI",
+            "SC",
+            "SD",
+            "TN",
+            "TX",
+            "UT",
+            "VT",
+            "VA",
+            "WA",
+            "WV",
+            "WI",
+            "WY",
             "DC",
         }
         present = set(STATE_REQUIREMENTS.keys())
@@ -94,9 +139,7 @@ class TestStateRequirementsDataIntegrity:
         """Every state's strictness is one of the expected categories."""
         valid = {"none", "low", "moderate", "high"}
         for code, data in STATE_REQUIREMENTS.items():
-            assert data.get("strictness") in valid, (
-                f"{code} has invalid strictness: {data.get('strictness')}"
-            )
+            assert data.get("strictness") in valid, f"{code} has invalid strictness: {data.get('strictness')}"
 
     def test_notification_structure_is_dict(self):
         """Every state's notification field is a dict with 'required' key."""
@@ -121,9 +164,7 @@ class TestStateRequirementsDataIntegrity:
             for grade_range, subj_list in subjects.items():
                 if isinstance(subj_list, list):
                     normalized = [s.lower() if isinstance(s, str) else s for s in subj_list]
-                    assert len(normalized) == len(set(normalized)), (
-                        f"{code}:{grade_range} has duplicate subjects"
-                    )
+                    assert len(normalized) == len(set(normalized)), f"{code}:{grade_range} has duplicate subjects"
 
     def test_every_state_has_special_notes(self):
         """Every state has a special_notes field explaining nuances."""
@@ -250,9 +291,7 @@ class TestComplianceCheckLogic:
         assert result["compliant"] is True
 
     @pytest.mark.asyncio
-    async def test_check_compliance_strict_state_flags_missing_subjects(
-        self, db_session, hh, kid
-    ):
+    async def test_check_compliance_strict_state_flags_missing_subjects(self, db_session, hh, kid):
         """Strict states flag missing required subjects."""
         from app.services.compliance_engine import check_compliance
 
@@ -287,9 +326,7 @@ class TestComplianceCheckLogic:
         assert len(hour_checks) > 0, f"Expected hour requirements for {state_with_hours}"
 
     @pytest.mark.asyncio
-    async def test_check_compliance_notification_check_present_when_required(
-        self, db_session, hh, kid
-    ):
+    async def test_check_compliance_notification_check_present_when_required(self, db_session, hh, kid):
         """When state requires notification, a notification check appears."""
         from app.services.compliance_engine import check_compliance
 
@@ -300,9 +337,7 @@ class TestComplianceCheckLogic:
         assert len(notif_checks) >= 1, "VA should have a notification check"
 
     @pytest.mark.asyncio
-    async def test_check_compliance_logged_subjects_credited(
-        self, db_session, hh, kid, math_map, math_node
-    ):
+    async def test_check_compliance_logged_subjects_credited(self, db_session, hh, kid, math_map, math_node):
         """Subjects with logged time are credited in the compliance check."""
         from app.services.compliance_engine import check_compliance
 
@@ -340,9 +375,7 @@ class TestHoursBreakdown:
         assert result["by_subject"] == {}
 
     @pytest.mark.asyncio
-    async def test_hours_breakdown_aggregates_by_subject(
-        self, db_session, hh, kid, math_map, math_node
-    ):
+    async def test_hours_breakdown_aggregates_by_subject(self, db_session, hh, kid, math_map, math_node):
         """Hours are correctly aggregated by subject."""
         from app.services.compliance_engine import get_hours_breakdown
 
@@ -364,9 +397,7 @@ class TestHoursBreakdown:
         assert result["by_subject"]["Mathematics"] == 2.0
 
     @pytest.mark.asyncio
-    async def test_hours_breakdown_multiple_sessions(
-        self, db_session, hh, kid, math_map, math_node
-    ):
+    async def test_hours_breakdown_multiple_sessions(self, db_session, hh, kid, math_map, math_node):
         """Multiple states/sessions sum correctly."""
         from app.services.compliance_engine import get_hours_breakdown
 
@@ -493,7 +524,6 @@ class TestComplianceEdgeCases:
             assert check["status"] in ("met", "not_met", "unknown", "at_risk", "on_track"), (
                 f"Invalid status: {check['status']}"
             )
-
 
 
 # ══════════════════════════════════════════════════

@@ -322,9 +322,7 @@ async def evaluate_activity(
     # ai_autonomy_level declared in its philosophical_profile.
     household_row = await db.get(Household, context.household_id) if context.household_id else None
     governance_mode = (
-        getattr(household_row, "governance_mode", "parent_governed")
-        if household_row is not None
-        else "parent_governed"
+        getattr(household_row, "governance_mode", "parent_governed") if household_row is not None else "parent_governed"
     )
     autonomy = "preview_all"
     if household_row is not None:
@@ -447,9 +445,7 @@ async def evaluate_activity(
         pass
     return GovernanceDecision(
         action="auto_approve",
-        reason=(
-            "Self-governed, trust within rules" if self_governed_trust else "All rules passed"
-        ),
+        reason=("Self-governed, trust within rules" if self_governed_trust else "All rules passed"),
         evaluations=evaluations,
         blocking_rules=[],
         passed_rules=passed,

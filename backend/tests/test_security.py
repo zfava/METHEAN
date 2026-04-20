@@ -239,10 +239,12 @@ async def test_rls_isolates_households(db_session):
     await conn.execute(text("DROP POLICY IF EXISTS subjects_household_isolation ON subjects"))
     await conn.execute(text("ALTER TABLE subjects ENABLE ROW LEVEL SECURITY"))
     await conn.execute(text("ALTER TABLE subjects FORCE ROW LEVEL SECURITY"))
-    await conn.execute(text(
-        "CREATE POLICY subjects_household_isolation ON subjects "
-        "USING (household_id = current_setting('app.current_household_id', true)::uuid)"
-    ))
+    await conn.execute(
+        text(
+            "CREATE POLICY subjects_household_isolation ON subjects "
+            "USING (household_id = current_setting('app.current_household_id', true)::uuid)"
+        )
+    )
 
     # Seed data while still the owner / superuser (RLS is bypassed for
     # superusers, and for owners the tenant check would block inserts
@@ -267,16 +269,16 @@ async def test_rls_isolates_households(db_session):
     # the connection role is already non-superuser and FORCE RLS is enough.
     role_created = False
     if is_super:
-        await conn.execute(text("""
+        await conn.execute(
+            text("""
             DO $$ BEGIN
                 IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'methean_rls_test') THEN
                     CREATE ROLE methean_rls_test NOLOGIN NOBYPASSRLS;
                 END IF;
             END $$
-        """))
-        await conn.execute(text(
-            "GRANT SELECT, INSERT, UPDATE, DELETE ON subjects TO methean_rls_test"
-        ))
+        """)
+        )
+        await conn.execute(text("GRANT SELECT, INSERT, UPDATE, DELETE ON subjects TO methean_rls_test"))
         await conn.execute(text("SET ROLE methean_rls_test"))
         role_created = True
 
@@ -371,8 +373,7 @@ class TestRLSCoverageMatrix:
                 or f" {table} " in migration_content
             )
             assert found, (
-                f"Table '{table}' not referenced in any migration. "
-                f"It needs a RLS policy via ENABLE ROW LEVEL SECURITY."
+                f"Table '{table}' not referenced in any migration. It needs a RLS policy via ENABLE ROW LEVEL SECURITY."
             )
 
     def test_rls_covered_count_matches_household_tables(self):

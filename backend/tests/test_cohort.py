@@ -59,11 +59,7 @@ async def test_cohort_stats_with_students(auth_client, db_session, household, su
         db_session.add(c)
         await db_session.flush()
         children.append(c)
-        db_session.add(
-            ChildMapEnrollment(
-                child_id=c.id, household_id=household.id, learning_map_id=_uuid.UUID(map_id)
-            )
-        )
+        db_session.add(ChildMapEnrollment(child_id=c.id, household_id=household.id, learning_map_id=_uuid.UUID(map_id)))
 
     # Child A: all 3 mastered
     # Child B: 2 proficient, 1 developing
@@ -78,11 +74,7 @@ async def test_cohort_stats_with_students(auth_client, db_session, household, su
         (children[2].id, node_ids[0], MasteryLevel.emerging),
     ]
     for cid, nid, lvl in levels:
-        db_session.add(
-            ChildNodeState(
-                child_id=cid, household_id=household.id, node_id=nid, mastery_level=lvl
-            )
-        )
+        db_session.add(ChildNodeState(child_id=cid, household_id=household.id, node_id=nid, mastery_level=lvl))
     await db_session.flush()
 
     resp = await auth_client.get(f"/api/v1/learning-maps/{map_id}/cohort")
@@ -127,11 +119,7 @@ async def test_cohort_completion_rate(auth_client, db_session, household, subjec
         db_session.add(c)
         await db_session.flush()
         children.append(c)
-        db_session.add(
-            ChildMapEnrollment(
-                child_id=c.id, household_id=household.id, learning_map_id=_uuid.UUID(map_id)
-            )
-        )
+        db_session.add(ChildMapEnrollment(child_id=c.id, household_id=household.id, learning_map_id=_uuid.UUID(map_id)))
 
     # Only child One masters all nodes
     for nid in node_ids:

@@ -1671,7 +1671,9 @@ async def check_domain_compliance(
             level = (
                 state.mastery_level.value
                 if state and hasattr(state.mastery_level, "value")
-                else str(state.mastery_level) if state else "not_started"
+                else str(state.mastery_level)
+                if state
+                else "not_started"
             )
             mastery_levels.append(level)
             credit_hours_list.append(hrs_val)

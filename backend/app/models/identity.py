@@ -29,16 +29,10 @@ class Household(Base):
     subscription_ends_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
     # Governance mode (additive, defaults preserve existing behavior)
-    governance_mode: Mapped[str] = mapped_column(
-        String(30), nullable=False, server_default="parent_governed"
-    )
-    organization_type: Mapped[str] = mapped_column(
-        String(50), nullable=False, server_default="homeschool"
-    )
+    governance_mode: Mapped[str] = mapped_column(String(30), nullable=False, server_default="parent_governed")
+    organization_type: Mapped[str] = mapped_column(String(50), nullable=False, server_default="homeschool")
     organization_metadata: Mapped[dict | None] = mapped_column(JSONB, default=dict)
-    learner_age_range: Mapped[str] = mapped_column(
-        String(20), nullable=False, server_default="k12"
-    )
+    learner_age_range: Mapped[str] = mapped_column(String(20), nullable=False, server_default="k12")
     credit_system: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
 
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

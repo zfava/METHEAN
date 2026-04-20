@@ -101,16 +101,10 @@ async def get_cohort_stats(
         if s.mastery_level in earned_levels:
             child_mastered_count[s.child_id] += 1
 
-    completed_children = [
-        cid for cid in child_ids if total_nodes > 0 and child_mastered_count[cid] == total_nodes
-    ]
+    completed_children = [cid for cid in child_ids if total_nodes > 0 and child_mastered_count[cid] == total_nodes]
     completion_rate = (len(completed_children) / len(child_ids)) * 100 if child_ids else 0.0
 
-    at_risk = [
-        str(cid)
-        for cid in child_ids
-        if total_nodes > 0 and child_mastered_count[cid] == 0
-    ]
+    at_risk = [str(cid) for cid in child_ids if total_nodes > 0 and child_mastered_count[cid] == 0]
 
     return {
         "total_enrolled": len(child_ids),

@@ -348,8 +348,12 @@ class TestWeeklyDigest:
             assert len(households) >= 1
 
             users = (
-                await db.execute(sa_select(U).where(U.household_id == hh.id, U.is_active == True))  # noqa: E712
-            ).scalars().all()
+                (
+                    await db.execute(sa_select(U).where(U.household_id == hh.id, U.is_active == True))  # noqa: E712
+                )
+                .scalars()
+                .all()
+            )
             assert len(users) >= 1
             assert users[0].notification_preferences.get("email_weekly_digest") is True
 

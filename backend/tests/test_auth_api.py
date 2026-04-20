@@ -322,8 +322,10 @@ async def test_invite_instructor(client: AsyncClient, db_session):
     from app.models.identity import UserPermission
 
     perms = (
-        await db_session.execute(select(UserPermission).where(UserPermission.user_id == instructor.id))
-    ).scalars().all()
+        (await db_session.execute(select(UserPermission).where(UserPermission.user_id == instructor.id)))
+        .scalars()
+        .all()
+    )
     perm_names = {p.permission for p in perms}
     assert "approve.activities" in perm_names
     assert "plans.generate" in perm_names
@@ -351,9 +353,7 @@ async def test_invite_student(client: AsyncClient, db_session):
     assert student.is_self_learner is True
     assert student.linked_child_id is not None
 
-    child_row = (
-        await db_session.execute(select(Child).where(Child.id == student.linked_child_id))
-    ).scalar_one()
+    child_row = (await db_session.execute(select(Child).where(Child.id == student.linked_child_id))).scalar_one()
     assert child_row.first_name == "Alice"
     assert child_row.household_id == student.household_id
 

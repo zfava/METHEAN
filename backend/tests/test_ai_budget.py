@@ -240,7 +240,8 @@ class TestCheckBudget:
         await db_session.flush()
 
         result = await check_budget(
-            db_session, budget_hh.id,
+            db_session,
+            budget_hh.id,
             hard_limit_behavior="block",
         )
         assert result["allowed"] is False
@@ -264,7 +265,8 @@ class TestCheckBudget:
 
         # With a tiny limit (10k tokens), 10k used = 100%
         result = await check_budget(
-            db_session, budget_hh.id,
+            db_session,
+            budget_hh.id,
             daily_token_limit=10_000,
         )
         assert result["pct_tokens"] >= 100

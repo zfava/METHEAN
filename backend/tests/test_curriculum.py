@@ -975,9 +975,7 @@ class TestCreditHourTracking:
         assert data["by_type"] == {}
 
     @pytest.mark.asyncio
-    async def test_credit_summary_with_earned(
-        self, auth_client, db_session, household, subject, child
-    ):
+    async def test_credit_summary_with_earned(self, auth_client, db_session, household, subject, child):
         from app.models.curriculum import ChildMapEnrollment
         from app.models.enums import MasteryLevel as ML
         from app.models.state import ChildNodeState
@@ -1023,9 +1021,7 @@ class TestCreditHourTracking:
             )
         await db_session.commit()
 
-        summary = await auth_client.get(
-            f"/api/v1/learning-maps/{map_id}/credit-summary?child_id={child.id}"
-        )
+        summary = await auth_client.get(f"/api/v1/learning-maps/{map_id}/credit-summary?child_id={child.id}")
         assert summary.status_code == 200, summary.text
         data = summary.json()
         assert data["total_credit_hours"] == 9.0

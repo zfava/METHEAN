@@ -78,7 +78,5 @@ def compute_gpa(mastery_levels: Sequence[str], credit_hours: Sequence[float]) ->
     if not mastery_levels or not credit_hours or sum(credit_hours) == 0:
         return 0.0
     four_point = DEFAULT_GRADING_SCALES["four_point"]
-    total_points = sum(
-        float(four_point.get(m, 0.0)) * c for m, c in zip(mastery_levels, credit_hours)
-    )
+    total_points = sum(float(four_point.get(m, 0.0)) * c for m, c in zip(mastery_levels, credit_hours))
     return round(total_points / sum(credit_hours), 2)

@@ -115,6 +115,7 @@ async def test_calibration_batch_no_eligible_children(db_session, hh, kid):
 
     # Monkey-patch the engine creation in the task to use our test factory
     import app.tasks.calibration_batch as cal_mod
+
     original = cal_mod._run_calibration_batch
 
     async def patched_batch():
@@ -163,6 +164,7 @@ async def test_calibration_batch_returns_stats(db_session, hh):
     factory = _get_factory()
 
     import time
+
     start = time.monotonic()
 
     # Simulate what the batch does with no eligible children

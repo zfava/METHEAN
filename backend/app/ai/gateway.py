@@ -157,9 +157,7 @@ async def call_ai(
 
     governance_mode = "parent_governed"
     if philosophical_profile:
-        household = (
-            await db.execute(select(Household).where(Household.id == household_id))
-        ).scalar_one_or_none()
+        household = (await db.execute(select(Household).where(Household.id == household_id))).scalar_one_or_none()
         if household is not None and hasattr(household, "governance_mode"):
             governance_mode = household.governance_mode or "parent_governed"
 

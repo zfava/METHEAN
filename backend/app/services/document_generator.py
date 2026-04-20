@@ -285,8 +285,7 @@ async def generate_transcript(
     curricula = curr_r.scalars().all()
 
     student_info = (
-        f"Name: {child_name}\nGrade: {child.grade_level or 'N/A'}\n"
-        f"Date of Birth: {child.date_of_birth or 'N/A'}"
+        f"Name: {child_name}\nGrade: {child.grade_level or 'N/A'}\nDate of Birth: {child.date_of_birth or 'N/A'}"
     )
     if grading_scale != "mastery":
         student_info += f"\nGrading Scale: {grading_scale}"

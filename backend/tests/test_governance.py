@@ -716,11 +716,7 @@ class TestSelfGovernedAutoApprove:
                 )
             )
         await db_session.flush()
-        db_session.add(
-            ChildMapEnrollment(
-                child_id=child.id, household_id=household.id, learning_map_id=lmap.id
-            )
-        )
+        db_session.add(ChildMapEnrollment(child_id=child.id, household_id=household.id, learning_map_id=lmap.id))
         await db_session.flush()
 
         # Even with a strict approval_required rule in place, full_autonomy
@@ -736,21 +732,25 @@ class TestSelfGovernedAutoApprove:
 
         # Every created activity should be governance_approved
         acts = (
-            await db_session.execute(
-                select(Activity).join(PlanWeek).where(PlanWeek.plan_id == uuid.UUID(plan_id))
-            )
-        ).scalars().all()
+            (await db_session.execute(select(Activity).join(PlanWeek).where(PlanWeek.plan_id == uuid.UUID(plan_id))))
+            .scalars()
+            .all()
+        )
         assert len(acts) > 0
         assert all(a.governance_approved is True for a in acts), [a.governance_approved for a in acts]
 
         # Governance events should be tagged with the self-governed source
         events = (
-            await db_session.execute(
-                select(GovernanceEvent)
-                .where(GovernanceEvent.household_id == household.id)
-                .where(GovernanceEvent.action == GovernanceAction.approve)
+            (
+                await db_session.execute(
+                    select(GovernanceEvent)
+                    .where(GovernanceEvent.household_id == household.id)
+                    .where(GovernanceEvent.action == GovernanceAction.approve)
+                )
             )
-        ).scalars().all()
+            .scalars()
+            .all()
+        )
         assert len(events) >= len(acts)
         tagged = [e for e in events if (e.metadata_ or {}).get("source") == "self_governed_autonomy"]
         assert len(tagged) == len(acts)
@@ -771,9 +771,7 @@ class TestSelfGovernedAutoApprove:
         assert decision.autonomy_level == "trust_within_rules"
 
     @pytest.mark.asyncio
-    async def test_self_governed_trust_within_rules_queues_violation(
-        self, household, subject, user, db_session
-    ):
+    async def test_self_governed_trust_within_rules_queues_violation(self, household, subject, user, db_session):
         """A content_filter violation routes to require_review even in self-governed mode.
 
         A clean context against the same ruleset still auto-approves under
@@ -797,9 +795,7 @@ class TestSelfGovernedAutoApprove:
         db_session.add(gambling_rule)
         await db_session.flush()
 
-        violating = ActivityContext(
-            household_id=household.id, content_topics=["gambling and card games"]
-        )
+        violating = ActivityContext(household_id=household.id, content_topics=["gambling and card games"])
         d1 = await evaluate_activity(db_session, context=violating)
         assert d1.action == "require_review"
         assert d1.self_governed_auto_approve is False
@@ -838,11 +834,7 @@ class TestSelfGovernedAutoApprove:
                 )
             )
         await db_session.flush()
-        db_session.add(
-            ChildMapEnrollment(
-                child_id=child.id, household_id=household.id, learning_map_id=lmap.id
-            )
-        )
+        db_session.add(ChildMapEnrollment(child_id=child.id, household_id=household.id, learning_map_id=lmap.id))
         await db_session.flush()
 
         await create_default_rules(db_session, household.id, user.id)
@@ -855,9 +847,9 @@ class TestSelfGovernedAutoApprove:
 
         # No event should carry the self-governed source tag
         events = (
-            await db_session.execute(
-                select(GovernanceEvent).where(GovernanceEvent.household_id == household.id)
-            )
-        ).scalars().all()
+            (await db_session.execute(select(GovernanceEvent).where(GovernanceEvent.household_id == household.id)))
+            .scalars()
+            .all()
+        )
         tagged = [e for e in events if (e.metadata_ or {}).get("source") == "self_governed_autonomy"]
         assert tagged == []

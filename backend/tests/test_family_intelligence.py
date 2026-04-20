@@ -1207,7 +1207,13 @@ class TestAPISerialization:
 class TestPatternTypeIntegrity:
     def test_all_five_pattern_types_defined(self):
         """FamilyPatternType enum covers all five detection algorithms."""
-        expected = {"shared_struggle", "curriculum_gap", "pacing_divergence", "environmental_correlation", "material_effectiveness"}
+        expected = {
+            "shared_struggle",
+            "curriculum_gap",
+            "pacing_divergence",
+            "environmental_correlation",
+            "material_effectiveness",
+        }
         actual = {t.value for t in FamilyPatternType}
         assert expected.issubset(actual), f"Missing patterns: {expected - actual}"
 
@@ -1282,17 +1288,15 @@ class TestHouseholdIsolation:
 
         # Any created insights should only reference fi_household children
         insights = (
-            await db_session.execute(
-                select(FamilyInsight).where(FamilyInsight.household_id == fi_household.id)
-            )
-        ).scalars().all()
+            (await db_session.execute(select(FamilyInsight).where(FamilyInsight.household_id == fi_household.id)))
+            .scalars()
+            .all()
+        )
 
         household_child_ids = {str(fi_child_a.id), str(fi_child_b.id)}
         for insight in insights:
             for child_id in insight.affected_children:
-                assert child_id in household_child_ids, (
-                    f"Insight references child {child_id} not in household"
-                )
+                assert child_id in household_child_ids, f"Insight references child {child_id} not in household"
 
 
 # ═══════════════════════════════════════════
@@ -1332,9 +1336,7 @@ class TestThreeChildSpecificity:
         )
         await db_session.flush()
 
-        results = await detect_shared_struggles(
-            db_session, fi_household.id, [fi_child_a, fi_child_b, fi_child_c], None
-        )
+        results = await detect_shared_struggles(db_session, fi_household.id, [fi_child_a, fi_child_b, fi_child_c], None)
         assert len(results) == 1
         affected = results[0].affected_children
         assert str(fi_child_a.id) in affected
@@ -1359,9 +1361,7 @@ class TestThreeChildSpecificity:
             )
         await db_session.flush()
 
-        results = await detect_shared_struggles(
-            db_session, fi_household.id, [fi_child_a, fi_child_b, fi_child_c], None
-        )
+        results = await detect_shared_struggles(db_session, fi_household.id, [fi_child_a, fi_child_b, fi_child_c], None)
         assert len(results) == 1
         assert results[0].confidence == 1.0  # 3/3 = 100%
         assert len(results[0].affected_children) == 3
@@ -1395,10 +1395,10 @@ class TestRecommendationQuality:
         result = await run_family_intelligence(db_session, fi_household.id)
 
         insights = (
-            await db_session.execute(
-                select(FamilyInsight).where(FamilyInsight.household_id == fi_household.id)
-            )
-        ).scalars().all()
+            (await db_session.execute(select(FamilyInsight).where(FamilyInsight.household_id == fi_household.id)))
+            .scalars()
+            .all()
+        )
 
         for insight in insights:
             assert insight.recommendation is not None
@@ -1424,9 +1424,7 @@ class TestRecommendationQuality:
             )
         await db_session.flush()
 
-        results = await detect_shared_struggles(
-            db_session, fi_household.id, [fi_child_a, fi_child_b], None
-        )
+        results = await detect_shared_struggles(db_session, fi_household.id, [fi_child_a, fi_child_b], None)
         assert len(results) == 1
         rec = results[0].recommendation
         assert "Alice" in rec
