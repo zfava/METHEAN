@@ -605,6 +605,33 @@ async def get_credit_summary(
     await increment_map_version(db, map_id)
 
 
+@router.get("/learning-maps/{map_id}/cohort")
+async def get_cohort_analytics(
+    map_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Cohort-wide mastery analytics for a learning map.
+
+    Available to department admins, instructors, and parent_governed
+    household owners (the last group has institutional_role=None).
+    Students and teaching assistants are rejected because the payload
+    includes peer data.
+    """
+    inst_role = user.institutional_role
+    if inst_role not in ("department_admin", "instructor", None):
+        raise HTTPException(
+            status_code=403,
+            detail="Cohort analytics are available to instructors and admins only",
+        )
+
+    await _get_map_or_404(db, map_id, user.household_id)
+
+    from app.services.cohort_analytics import get_cohort_stats
+
+    return await get_cohort_stats(map_id, user.household_id, db)
+
+
 # ── Edge endpoints ──
 
 
