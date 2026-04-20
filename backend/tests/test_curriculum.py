@@ -920,3 +920,147 @@ class TestSubjectAPI:
         assert resp2.status_code == 200
         # At least the one we created (might have more from other fixtures)
         assert any(s["name"] == "Science" for s in resp2.json()["items"])
+
+
+# ══════════════════════════════════════════════════
+# Credit-hour tracking
+# ══════════════════════════════════════════════════
+
+
+class TestCreditHourTracking:
+    @pytest.mark.asyncio
+    async def test_create_node_with_credit_hours(self, auth_client, subject):
+        resp = await auth_client.post(
+            "/api/v1/learning-maps",
+            json={"subject_id": str(subject.id), "name": "Credit Map 1"},
+        )
+        map_id = resp.json()["id"]
+
+        resp2 = await auth_client.post(
+            f"/api/v1/learning-maps/{map_id}/nodes",
+            json={
+                "node_type": "lecture",
+                "title": "Intro Lecture",
+                "credit_hours": 3.0,
+                "credit_type": "lecture",
+                "contact_hours_per_week": 3.0,
+            },
+        )
+        assert resp2.status_code == 201, resp2.text
+        node = resp2.json()
+        assert node["content"]["credit"]["hours"] == 3.0
+        assert node["content"]["credit"]["type"] == "lecture"
+        assert node["content"]["credit"]["contact_per_week"] == 3.0
+
+    @pytest.mark.asyncio
+    async def test_credit_summary_no_credits(self, auth_client, subject):
+        resp = await auth_client.post(
+            "/api/v1/learning-maps",
+            json={"subject_id": str(subject.id), "name": "No Credit Map"},
+        )
+        map_id = resp.json()["id"]
+
+        for title in ["N1", "N2", "N3"]:
+            await auth_client.post(
+                f"/api/v1/learning-maps/{map_id}/nodes",
+                json={"node_type": "concept", "title": title},
+            )
+
+        summary = await auth_client.get(f"/api/v1/learning-maps/{map_id}/credit-summary")
+        assert summary.status_code == 200, summary.text
+        data = summary.json()
+        assert data["total_credit_hours"] == 0
+        assert data["credits_earned"] == 0
+        assert data["credits_remaining"] == 0
+        assert data["by_type"] == {}
+
+    @pytest.mark.asyncio
+    async def test_credit_summary_with_earned(
+        self, auth_client, db_session, household, subject, child
+    ):
+        from app.models.curriculum import ChildMapEnrollment
+        from app.models.enums import MasteryLevel as ML
+        from app.models.state import ChildNodeState
+
+        resp = await auth_client.post(
+            "/api/v1/learning-maps",
+            json={"subject_id": str(subject.id), "name": "Earned Map"},
+        )
+        map_id = resp.json()["id"]
+
+        node_ids: list[str] = []
+        for title in ["C1", "C2", "C3"]:
+            n = await auth_client.post(
+                f"/api/v1/learning-maps/{map_id}/nodes",
+                json={
+                    "node_type": "lecture",
+                    "title": title,
+                    "credit_hours": 3.0,
+                    "credit_type": "lecture",
+                },
+            )
+            node_ids.append(n.json()["id"])
+
+        # Enroll + mastery for 2 of 3
+        import uuid as _uuid
+
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=child.id,
+                household_id=household.id,
+                learning_map_id=_uuid.UUID(map_id),
+            )
+        )
+        for i, nid in enumerate(node_ids):
+            level = ML.mastered if i < 2 else ML.emerging
+            db_session.add(
+                ChildNodeState(
+                    child_id=child.id,
+                    household_id=household.id,
+                    node_id=_uuid.UUID(nid),
+                    mastery_level=level,
+                )
+            )
+        await db_session.commit()
+
+        summary = await auth_client.get(
+            f"/api/v1/learning-maps/{map_id}/credit-summary?child_id={child.id}"
+        )
+        assert summary.status_code == 200, summary.text
+        data = summary.json()
+        assert data["total_credit_hours"] == 9.0
+        assert data["credits_earned"] == 6.0
+        assert data["credits_remaining"] == 3.0
+        assert data["by_type"] == {"lecture": 9.0}
+
+    @pytest.mark.asyncio
+    async def test_credit_summary_by_type(self, auth_client, subject):
+        resp = await auth_client.post(
+            "/api/v1/learning-maps",
+            json={"subject_id": str(subject.id), "name": "Mixed Credit Map"},
+        )
+        map_id = resp.json()["id"]
+
+        specs = [
+            ("Lecture A", "lecture", 3.0),
+            ("Lecture B", "lecture", 3.0),
+            ("Lab 1", "lab", 2.0),
+            ("Research I", "research", 1.0),
+        ]
+        for title, ctype, hrs in specs:
+            await auth_client.post(
+                f"/api/v1/learning-maps/{map_id}/nodes",
+                json={
+                    "node_type": ctype,
+                    "title": title,
+                    "credit_hours": hrs,
+                    "credit_type": ctype,
+                },
+            )
+
+        summary = await auth_client.get(f"/api/v1/learning-maps/{map_id}/credit-summary")
+        assert summary.status_code == 200, summary.text
+        data = summary.json()
+        assert data["total_credit_hours"] == 9.0
+        assert data["credits_earned"] == 0.0
+        assert data["by_type"] == {"lecture": 6.0, "lab": 2.0, "research": 1.0}

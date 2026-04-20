@@ -6,7 +6,7 @@ child map state, enrollment, parent overrides, and template copying.
 
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -435,6 +435,16 @@ async def create_node(
         estimated_minutes=body.estimated_minutes,
         sort_order=body.sort_order,
     )
+
+    if body.credit_hours is not None:
+        content = node.content or {}
+        content["credit"] = {
+            "hours": body.credit_hours,
+            "type": body.credit_type,
+            "contact_per_week": body.contact_hours_per_week,
+        }
+        node.content = content
+
     db.add(node)
     await db.flush()
 
@@ -469,6 +479,15 @@ async def update_node(
         node.sort_order = body.sort_order
     if body.node_type is not None:
         node.node_type = body.node_type
+
+    if body.credit_hours is not None:
+        content = dict(node.content or {})
+        content["credit"] = {
+            "hours": body.credit_hours,
+            "type": body.credit_type,
+            "contact_per_week": body.contact_hours_per_week,
+        }
+        node.content = content
 
     await db.flush()
     return NodeResponse.model_validate(node)
@@ -507,6 +526,80 @@ async def delete_node(
 
     # Rebuild closure after edge removal
     await rebuild_closure_for_map(db, map_id)
+
+
+@router.get("/learning-maps/{map_id}/credit-summary")
+async def get_credit_summary(
+    map_id: uuid.UUID,
+    child_id: uuid.UUID | None = Query(default=None),
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Aggregate credit hours across all active nodes in a map.
+
+    child_id: optional query parameter. If omitted, falls back to the
+    current user's linked_child_id (set during self-directed
+    registration). Credits are counted as "earned" when the child has
+    mastery_level of proficient or mastered on that node.
+    """
+    await _get_map_or_404(db, map_id, user.household_id)
+
+    effective_child_id = child_id or getattr(user, "linked_child_id", None)
+
+    nodes_q = await db.execute(
+        select(LearningNode).where(
+            LearningNode.learning_map_id == map_id,
+            LearningNode.household_id == user.household_id,
+            LearningNode.is_active == True,  # noqa: E712
+        )
+    )
+    nodes = nodes_q.scalars().all()
+
+    states_by_node: dict[uuid.UUID, ChildNodeState] = {}
+    if effective_child_id:
+        states_q = await db.execute(
+            select(ChildNodeState).where(
+                ChildNodeState.child_id == effective_child_id,
+                ChildNodeState.household_id == user.household_id,
+            )
+        )
+        states_by_node = {s.node_id: s for s in states_q.scalars().all()}
+
+    total_hours = 0.0
+    earned_hours = 0.0
+    by_type: dict[str, float] = {}
+
+    earned_levels = {MasteryLevel.proficient, MasteryLevel.mastered}
+
+    for node in nodes:
+        credit = (node.content or {}).get("credit") if node.content else None
+        if not credit:
+            continue
+        hours = credit.get("hours")
+        if hours is None:
+            continue
+        try:
+            hours_val = float(hours)
+        except (TypeError, ValueError):
+            continue
+
+        total_hours += hours_val
+        ctype = credit.get("type") or "unspecified"
+        by_type[ctype] = round(by_type.get(ctype, 0.0) + hours_val, 2)
+
+        state = states_by_node.get(node.id)
+        if state and state.mastery_level in earned_levels:
+            earned_hours += hours_val
+
+    total_hours = round(total_hours, 2)
+    earned_hours = round(earned_hours, 2)
+
+    return {
+        "total_credit_hours": total_hours,
+        "credits_earned": earned_hours,
+        "credits_remaining": round(total_hours - earned_hours, 2),
+        "by_type": by_type,
+    }
 
     # Structural change: increment version
     await increment_map_version(db, map_id)

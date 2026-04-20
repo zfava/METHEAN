@@ -76,6 +76,10 @@ class NodeCreate(BaseModel):
     content: dict | None = None
     estimated_minutes: int | None = Field(default=None, ge=0)
     sort_order: int = 0
+    # Credit-hour tracking (stored inside content.credit)
+    credit_hours: float | None = Field(default=None, ge=0)
+    credit_type: str | None = None
+    contact_hours_per_week: float | None = Field(default=None, ge=0)
 
 
 class NodeUpdate(BaseModel):
@@ -85,6 +89,9 @@ class NodeUpdate(BaseModel):
     estimated_minutes: int | None = Field(default=None, ge=0)
     sort_order: int | None = None
     node_type: NodeType | None = None
+    credit_hours: float | None = Field(default=None, ge=0)
+    credit_type: str | None = None
+    contact_hours_per_week: float | None = Field(default=None, ge=0)
 
 
 class NodeResponse(BaseModel):
