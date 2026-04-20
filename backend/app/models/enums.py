@@ -21,6 +21,15 @@ class NodeType(str, enum.Enum):
     technique = "technique"
     project = "project"
     certification_prep = "certification_prep"
+    # Higher Education
+    lecture = "lecture"
+    reading = "reading"
+    research = "research"
+    lab = "lab"
+    thesis_component = "thesis_component"
+    exam_prep = "exam_prep"
+    peer_review = "peer_review"
+    practicum = "practicum"
 
 
 class EdgeRelation(str, enum.Enum):
