@@ -18,6 +18,7 @@ import uuid
 from datetime import UTC, datetime
 from enum import Enum
 
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
@@ -149,10 +150,20 @@ async def call_ai(
     except Exception:
         pass  # Budget check failure should not block AI calls
 
-    # Inject philosophical constraints into the system prompt
+    # Inject philosophical constraints into the system prompt, substituting
+    # authority-referring language for the household's governance mode.
     from app.ai.prompts import build_philosophical_constraints
+    from app.models.identity import Household
 
-    constraints = build_philosophical_constraints(philosophical_profile)
+    governance_mode = "parent_governed"
+    if philosophical_profile:
+        household = (
+            await db.execute(select(Household).where(Household.id == household_id))
+        ).scalar_one_or_none()
+        if household is not None and hasattr(household, "governance_mode"):
+            governance_mode = household.governance_mode or "parent_governed"
+
+    constraints = build_philosophical_constraints(philosophical_profile, governance_mode=governance_mode)
     if constraints:
         system_prompt = system_prompt + "\n" + constraints
 

@@ -238,16 +238,73 @@ _AUTONOMY_INSTRUCTIONS = {
 }
 
 
-def build_philosophical_constraints(profile: dict | None) -> str:
+def get_autonomy_instruction(level: str, governance_mode: str = "parent_governed") -> str:
+    """Return the AI autonomy instruction line, substituted for the governing authority.
+
+    In parent_governed mode the instructions keep the word "parent" to match
+    historical snapshots; in every other mode we swap in "governor" so the
+    output addresses the correct authority.
+    """
+    authority = "parent" if governance_mode == "parent_governed" else "governor"
+    instructions = {
+        "preview_all": f"FLAG EVERY activity and recommendation for {authority} review, regardless of difficulty or content.",
+        "approve_difficult": f"Flag activities at difficulty 3+ for {authority} review. Auto-approve easy activities.",
+        "trust_within_rules": "Operate within the defined rules. Only flag items that violate a specific rule.",
+        "full_autonomy": "Operate freely within the defined curriculum. Only flag safety concerns.",
+    }
+    return instructions.get(level, "")
+
+
+# Mode-specific authority labels used when writing out the constraint block.
+# The _cap form is used at the start of a sentence ("Parent's description:"),
+# the plain form is used inline ("your mentor review"). parent_governed keeps
+# the existing "Parent's" capitalization to preserve prior output.
+_AUTHORITY_TERMS: dict[str, dict[str, str]] = {
+    "self_governed": {
+        "header": "LEARNING CONSTRAINTS (self-defined, these override all defaults):",
+        "authority": "you",
+        "possessive": "your",
+        "possessive_cap": "Your",
+        "topic_label": "GOVERNOR-LED TOPIC",
+    },
+    "institution_governed": {
+        "header": "INSTITUTIONAL CONSTRAINTS (set by administration, these override all defaults):",
+        "authority": "the institution",
+        "possessive": "the institution's",
+        "possessive_cap": "The institution's",
+        "topic_label": "GOVERNOR-LED TOPIC",
+    },
+    "mentor_governed": {
+        "header": "TRAINING CONSTRAINTS (set by mentor, these override all defaults):",
+        "authority": "your mentor",
+        "possessive": "your mentor's",
+        "possessive_cap": "Your mentor's",
+        "topic_label": "GOVERNOR-LED TOPIC",
+    },
+    "parent_governed": {
+        "header": "PHILOSOPHICAL CONSTRAINTS (set by parent, these override all defaults):",
+        "authority": "the parent",
+        "possessive": "the parent's",
+        "possessive_cap": "Parent's",
+        "topic_label": "PARENT-LED TOPIC",
+    },
+}
+
+
+def build_philosophical_constraints(profile: dict | None, governance_mode: str = "parent_governed") -> str:
     """Generate AI constraint text from a household's philosophical profile.
 
     Returns an empty string if no profile is set, so callers can safely
-    append without conditional checks.
+    append without conditional checks. When governance_mode is provided,
+    authority-referring language (header, "parent's description",
+    parent-led topic label, autonomy instruction) is substituted to match
+    that mode. Defaults to parent_governed to preserve existing callers.
     """
     if not profile:
         return ""
 
-    parts: list[str] = ["", "PHILOSOPHICAL CONSTRAINTS (set by parent — these override all defaults):"]
+    terms = _AUTHORITY_TERMS.get(governance_mode, _AUTHORITY_TERMS["parent_governed"])
+    parts: list[str] = ["", terms["header"]]
 
     # Educational philosophy
     philosophy = profile.get("educational_philosophy", "")
@@ -256,7 +313,7 @@ def build_philosophical_constraints(profile: dict | None) -> str:
         parts.append(f"- Educational approach: {label}")
         desc = profile.get("philosophy_description", "")
         if desc:
-            parts.append(f'  Parent\'s description: "{desc}"')
+            parts.append(f'  {terms["possessive_cap"]} description: "{desc}"')
 
     # Religious framework
     religion = profile.get("religious_framework", "")
@@ -282,14 +339,16 @@ def build_philosophical_constraints(profile: dict | None) -> str:
                 )
             elif stance == "parent_led_only":
                 parts.append(
-                    f"- PARENT-LED TOPIC: Do NOT teach '{topic}' directly. Only reference it "
-                    f"if the parent has explicitly assigned it. {notes}"
+                    f"- {terms['topic_label']}: Do NOT teach '{topic}' directly. Only reference it "
+                    f"if {terms['authority']} has explicitly assigned it. {notes}"
                 )
 
     # AI autonomy level
     autonomy = profile.get("ai_autonomy_level", "")
-    if autonomy and autonomy in _AUTONOMY_INSTRUCTIONS:
-        parts.append(f"- AI AUTONOMY: {_AUTONOMY_INSTRUCTIONS[autonomy]}")
+    if autonomy:
+        instruction = get_autonomy_instruction(autonomy, governance_mode)
+        if instruction:
+            parts.append(f"- AI AUTONOMY: {instruction}")
 
     # Pedagogical preferences
     prefs = profile.get("pedagogical_preferences", {})

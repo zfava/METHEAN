@@ -128,6 +128,76 @@ class TestBuildConstraints:
         # Secular should not add religious constraint lines
         assert "Religious framework" not in result
 
+    def test_self_governed_constraints_use_second_person(self):
+        """Self-governed mode uses self-defined language and drops parent wording."""
+        profile = {
+            "educational_philosophy": "classical",
+            "philosophy_description": "I want trivium-style depth",
+            "content_boundaries": [
+                {"topic": "gambling", "stance": "parent_led_only", "notes": ""},
+            ],
+            "ai_autonomy_level": "preview_all",
+        }
+        result = build_philosophical_constraints(profile, governance_mode="self_governed")
+        assert "self-defined" in result
+        assert "set by parent" not in result
+        # parent-led topic label must swap to governor-led in self mode
+        assert "GOVERNOR-LED TOPIC" in result
+        assert "PARENT-LED TOPIC" not in result
+        # The constraint text itself addresses the learner as "you"
+        assert "you has explicitly assigned" in result
+        # The AI autonomy line uses "governor" for any non-parent mode
+        assert "for governor review" in result
+        assert "for parent review" not in result
+
+    def test_parent_governed_constraints_unchanged(self):
+        """Default parent_governed mode matches existing behavior."""
+        profile = {
+            "educational_philosophy": "classical",
+            "content_boundaries": [
+                {"topic": "gambling", "stance": "parent_led_only", "notes": ""},
+            ],
+            "ai_autonomy_level": "preview_all",
+        }
+        # Explicit mode
+        result_explicit = build_philosophical_constraints(profile, governance_mode="parent_governed")
+        # Implicit default must produce the same string
+        result_default = build_philosophical_constraints(profile)
+        assert result_explicit == result_default
+        assert "set by parent" in result_explicit
+        assert "PARENT-LED TOPIC" in result_explicit
+        assert "for parent review" in result_explicit
+
+    def test_institution_governed_uses_institutional_language(self):
+        profile = {
+            "educational_philosophy": "traditional",
+            "content_boundaries": [
+                {"topic": "gambling", "stance": "parent_led_only", "notes": ""},
+            ],
+            "ai_autonomy_level": "approve_difficult",
+        }
+        result = build_philosophical_constraints(profile, governance_mode="institution_governed")
+        assert "set by administration" in result
+        assert "set by parent" not in result
+        assert "GOVERNOR-LED TOPIC" in result
+        assert "the institution has explicitly assigned" in result
+        assert "for governor review" in result
+
+    def test_mentor_governed_uses_mentor_language(self):
+        profile = {
+            "educational_philosophy": "traditional",
+            "content_boundaries": [
+                {"topic": "gambling", "stance": "parent_led_only", "notes": ""},
+            ],
+            "ai_autonomy_level": "approve_difficult",
+        }
+        result = build_philosophical_constraints(profile, governance_mode="mentor_governed")
+        assert "set by mentor" in result
+        assert "set by parent" not in result
+        assert "GOVERNOR-LED TOPIC" in result
+        assert "your mentor has explicitly assigned" in result
+        assert "for governor review" in result
+
 
 # ══════════════════════════════════════════════════
 # API CRUD Tests
