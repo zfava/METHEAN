@@ -14,6 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.enums import GovernanceAction, RuleScope, RuleTier, RuleType
 from app.models.governance import Attempt, GovernanceEvent, GovernanceRule
+from app.models.identity import Household
 from app.models.operational import AIRun
 
 # ══════════════════════════════════════════════════
@@ -61,6 +62,12 @@ class GovernanceDecision:
     blocking_rules: list[RuleEvaluation] = field(default_factory=list)
     passed_rules: list[RuleEvaluation] = field(default_factory=list)
     constitutional_violations: list[RuleEvaluation] = field(default_factory=list)
+    # When True, the auto_approve came from the self_governed fast path.
+    # Callers use this to tag the GovernanceEvent metadata with
+    # source="self_governed_autonomy" so the audit trail is distinguishable
+    # from parent approvals.
+    self_governed_auto_approve: bool = False
+    autonomy_level: str | None = None
 
     # Backward compatibility
     @property
@@ -311,6 +318,31 @@ async def evaluate_activity(
 
     today = date.today()
 
+    # Load the household so we can honor governance_mode and the
+    # ai_autonomy_level declared in its philosophical_profile.
+    household_row = await db.get(Household, context.household_id) if context.household_id else None
+    governance_mode = (
+        getattr(household_row, "governance_mode", "parent_governed")
+        if household_row is not None
+        else "parent_governed"
+    )
+    autonomy = "preview_all"
+    if household_row is not None:
+        autonomy = (household_row.philosophical_profile or {}).get("ai_autonomy_level", "preview_all")
+
+    # Self-governed fast path
+    if governance_mode == "self_governed":
+        if autonomy == "full_autonomy":
+            # Auto-approve outright. No rule evaluation, no queue.
+            return GovernanceDecision(
+                action="auto_approve",
+                reason="Self-governed, full autonomy",
+                self_governed_auto_approve=True,
+                autonomy_level=autonomy,
+            )
+        # trust_within_rules falls through to normal rule evaluation.
+        # approve_difficult and preview_all also fall through unchanged.
+
     # Get ALL active rules for household
     result = await db.execute(
         select(GovernanceRule)
@@ -331,10 +363,14 @@ async def evaluate_activity(
             continue
         active_rules.append(r)
 
+    self_governed_trust = governance_mode == "self_governed" and autonomy == "trust_within_rules"
+
     if not active_rules:
         return GovernanceDecision(
             action="auto_approve",
-            reason="No governance rules defined",
+            reason="Self-governed, trust within rules" if self_governed_trust else "No governance rules defined",
+            self_governed_auto_approve=self_governed_trust,
+            autonomy_level=autonomy if self_governed_trust else None,
         )
 
     # Evaluate every rule
@@ -411,11 +447,15 @@ async def evaluate_activity(
         pass
     return GovernanceDecision(
         action="auto_approve",
-        reason="All rules passed",
+        reason=(
+            "Self-governed, trust within rules" if self_governed_trust else "All rules passed"
+        ),
         evaluations=evaluations,
         blocking_rules=[],
         passed_rules=passed,
         constitutional_violations=[],
+        self_governed_auto_approve=self_governed_trust,
+        autonomy_level=autonomy if self_governed_trust else None,
     )
 
 

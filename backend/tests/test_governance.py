@@ -683,3 +683,181 @@ class TestCartographer:
         data = resp.json()
         assert "estimated_weeks" in data
         assert data["ai_run_id"] is not None
+
+
+# ══════════════════════════════════════════════════
+# Self-governed auto-approve
+# ══════════════════════════════════════════════════
+
+
+class TestSelfGovernedAutoApprove:
+    @pytest.mark.asyncio
+    async def test_self_governed_full_autonomy_auto_approves(
+        self, auth_client, db_session, household, subject, child, user
+    ):
+        """Full autonomy self-governed mode bypasses rule evaluation entirely."""
+        from app.models.curriculum import ChildMapEnrollment, LearningMap, LearningNode
+        from app.models.enums import NodeType
+
+        household.governance_mode = "self_governed"
+        household.philosophical_profile = {"ai_autonomy_level": "full_autonomy"}
+        await db_session.flush()
+
+        lmap = LearningMap(household_id=household.id, subject_id=subject.id, name="Solo Map")
+        db_session.add(lmap)
+        await db_session.flush()
+        for title in ["Node A", "Node B", "Node C"]:
+            db_session.add(
+                LearningNode(
+                    learning_map_id=lmap.id,
+                    household_id=household.id,
+                    node_type=NodeType.concept,
+                    title=title,
+                )
+            )
+        await db_session.flush()
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=child.id, household_id=household.id, learning_map_id=lmap.id
+            )
+        )
+        await db_session.flush()
+
+        # Even with a strict approval_required rule in place, full_autonomy
+        # should bypass it.
+        await create_default_rules(db_session, household.id, user.id)
+
+        resp = await auth_client.post(
+            f"/api/v1/children/{child.id}/plans/generate",
+            json={"week_start": date.today().isoformat(), "daily_minutes": 90},
+        )
+        assert resp.status_code == 201, resp.text
+        plan_id = resp.json()["id"]
+
+        # Every created activity should be governance_approved
+        acts = (
+            await db_session.execute(
+                select(Activity).join(PlanWeek).where(PlanWeek.plan_id == uuid.UUID(plan_id))
+            )
+        ).scalars().all()
+        assert len(acts) > 0
+        assert all(a.governance_approved is True for a in acts), [a.governance_approved for a in acts]
+
+        # Governance events should be tagged with the self-governed source
+        events = (
+            await db_session.execute(
+                select(GovernanceEvent)
+                .where(GovernanceEvent.household_id == household.id)
+                .where(GovernanceEvent.action == GovernanceAction.approve)
+            )
+        ).scalars().all()
+        assert len(events) >= len(acts)
+        tagged = [e for e in events if (e.metadata_ or {}).get("source") == "self_governed_autonomy"]
+        assert len(tagged) == len(acts)
+
+    @pytest.mark.asyncio
+    async def test_self_governed_trust_within_rules_approves_clean(self, household, db_session):
+        """trust_within_rules + no rule violations returns self-governed auto-approve."""
+        from app.services.governance import ActivityContext, evaluate_activity
+
+        household.governance_mode = "self_governed"
+        household.philosophical_profile = {"ai_autonomy_level": "trust_within_rules"}
+        await db_session.flush()
+
+        ctx = ActivityContext(household_id=household.id, difficulty=2, activity_type="lesson")
+        decision = await evaluate_activity(db_session, context=ctx)
+        assert decision.action == "auto_approve"
+        assert decision.self_governed_auto_approve is True
+        assert decision.autonomy_level == "trust_within_rules"
+
+    @pytest.mark.asyncio
+    async def test_self_governed_trust_within_rules_queues_violation(
+        self, household, subject, user, db_session
+    ):
+        """A content_filter violation routes to require_review even in self-governed mode.
+
+        A clean context against the same ruleset still auto-approves under
+        the self-governed fast path.
+        """
+        from app.services.governance import ActivityContext, evaluate_activity
+
+        household.governance_mode = "self_governed"
+        household.philosophical_profile = {"ai_autonomy_level": "trust_within_rules"}
+
+        # parent_led_only content filter maps to require_review
+        gambling_rule = GovernanceRule(
+            household_id=household.id,
+            created_by=user.id,
+            rule_type=RuleType.content_filter,
+            scope=RuleScope.household,
+            name="No gambling",
+            parameters={"topic": "gambling", "stance": "parent_led_only"},
+            priority=10,
+        )
+        db_session.add(gambling_rule)
+        await db_session.flush()
+
+        violating = ActivityContext(
+            household_id=household.id, content_topics=["gambling and card games"]
+        )
+        d1 = await evaluate_activity(db_session, context=violating)
+        assert d1.action == "require_review"
+        assert d1.self_governed_auto_approve is False
+
+        clean = ActivityContext(household_id=household.id, content_topics=["poetry"])
+        d2 = await evaluate_activity(db_session, context=clean)
+        assert d2.action == "auto_approve"
+        assert d2.self_governed_auto_approve is True
+
+    @pytest.mark.asyncio
+    async def test_parent_governed_ignores_self_governed_logic(
+        self, auth_client, db_session, household, subject, child, user
+    ):
+        """A parent_governed household with full_autonomy in profile still
+        runs rule evaluation. Some activities may still be auto-approved,
+        but the self-governed fast path does NOT tag them.
+        """
+        from app.models.curriculum import ChildMapEnrollment, LearningMap, LearningNode
+        from app.models.enums import NodeType
+
+        # Household stays parent_governed (default) even though autonomy is full
+        assert household.governance_mode == "parent_governed"
+        household.philosophical_profile = {"ai_autonomy_level": "full_autonomy"}
+        await db_session.flush()
+
+        lmap = LearningMap(household_id=household.id, subject_id=subject.id, name="Parent Map")
+        db_session.add(lmap)
+        await db_session.flush()
+        for title in ["Node A", "Node B"]:
+            db_session.add(
+                LearningNode(
+                    learning_map_id=lmap.id,
+                    household_id=household.id,
+                    node_type=NodeType.concept,
+                    title=title,
+                )
+            )
+        await db_session.flush()
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=child.id, household_id=household.id, learning_map_id=lmap.id
+            )
+        )
+        await db_session.flush()
+
+        await create_default_rules(db_session, household.id, user.id)
+
+        resp = await auth_client.post(
+            f"/api/v1/children/{child.id}/plans/generate",
+            json={"week_start": date.today().isoformat(), "daily_minutes": 90},
+        )
+        assert resp.status_code == 201, resp.text
+
+        # No event should carry the self-governed source tag
+        events = (
+            await db_session.execute(
+                select(GovernanceEvent).where(GovernanceEvent.household_id == household.id)
+            )
+        ).scalars().all()
+        tagged = [e for e in events if (e.metadata_ or {}).get("source") == "self_governed_autonomy"]
+        assert tagged == []

@@ -236,6 +236,19 @@ Prioritize nodes that are due for review, then available nodes."""
 
         gov_action = GovernanceAction.approve if decision.action == "auto_approve" else GovernanceAction.defer
 
+        gov_metadata: dict = {
+            "rule_id": str(decision.rule_id) if decision.rule_id else None,
+            "rule_name": decision.rule_name,
+            "difficulty": difficulty,
+            "is_auto": True,
+        }
+        if decision.self_governed_auto_approve:
+            # Tag the audit trail so self-governed auto approvals are
+            # distinguishable from parent approvals.
+            gov_metadata["source"] = "self_governed_autonomy"
+            gov_metadata["event_type"] = "activity_auto_approved"
+            gov_metadata["autonomy_level"] = decision.autonomy_level
+
         await log_governance_event(
             db,
             household_id,
@@ -244,12 +257,7 @@ Prioritize nodes that are due for review, then available nodes."""
             target_type="activity",
             target_id=activity.id,
             reason=decision.reason,
-            metadata={
-                "rule_id": str(decision.rule_id) if decision.rule_id else None,
-                "rule_name": decision.rule_name,
-                "difficulty": difficulty,
-                "is_auto": True,
-            },
+            metadata=gov_metadata,
         )
 
         governance_decisions.append(
