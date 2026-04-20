@@ -260,3 +260,171 @@ async def test_register_normal_user_still_works(client: AsyncClient, db_session)
     # No Child should have been auto-created
     children = (await db_session.execute(select(Child).where(Child.household_id == household.id))).scalars().all()
     assert children == []
+
+
+# ══════════════════════════════════════════════════
+# Institutional registration and invites
+# ══════════════════════════════════════════════════
+
+
+async def _register_inst_admin(client: AsyncClient) -> str:
+    resp = await client.post(
+        "/api/v1/auth/register-institution",
+        json={
+            "organization_name": "Test University",
+            "organization_type": "university",
+            "admin_email": "admin@uni.example.com",
+            "admin_password": "testpass123",
+            "admin_display_name": "Dean Smith",
+        },
+    )
+    assert resp.status_code == 201, resp.text
+    token = resp.cookies.get("access_token") or resp.json()["access_token"]
+    client.cookies.set("access_token", token)
+    return token
+
+
+@pytest.mark.asyncio
+async def test_register_institution(client: AsyncClient, db_session):
+    await _register_inst_admin(client)
+
+    admin = (await db_session.execute(select(User).where(User.email == "admin@uni.example.com"))).scalar_one()
+    household = (await db_session.execute(select(Household).where(Household.id == admin.household_id))).scalar_one()
+
+    assert household.governance_mode == "institution_governed"
+    assert household.organization_type == "university"
+    assert household.name == "Test University"
+    assert admin.institutional_role == "department_admin"
+    assert admin.role.value == "owner"
+
+
+@pytest.mark.asyncio
+async def test_invite_instructor(client: AsyncClient, db_session):
+    await _register_inst_admin(client)
+
+    resp = await client.post(
+        "/api/v1/auth/invite",
+        json={
+            "email": "prof@uni.example.com",
+            "display_name": "Prof Jones",
+            "institutional_role": "instructor",
+        },
+    )
+    assert resp.status_code == 201, resp.text
+    data = resp.json()
+    assert data["institutional_role"] == "instructor"
+
+    instructor = (await db_session.execute(select(User).where(User.email == "prof@uni.example.com"))).scalar_one()
+    assert instructor.institutional_role == "instructor"
+    assert instructor.role.value == "co_parent"
+
+    # Co-parent grants include approve.activities per CO_PARENT_PERMISSIONS
+    from app.models.identity import UserPermission
+
+    perms = (
+        await db_session.execute(select(UserPermission).where(UserPermission.user_id == instructor.id))
+    ).scalars().all()
+    perm_names = {p.permission for p in perms}
+    assert "approve.activities" in perm_names
+    assert "plans.generate" in perm_names
+
+
+@pytest.mark.asyncio
+async def test_invite_student(client: AsyncClient, db_session):
+    await _register_inst_admin(client)
+
+    resp = await client.post(
+        "/api/v1/auth/invite",
+        json={
+            "email": "alice@uni.example.com",
+            "display_name": "Alice",
+            "institutional_role": "student",
+            "learner_name": "Alice",
+        },
+    )
+    assert resp.status_code == 201, resp.text
+    data = resp.json()
+    assert data["institutional_role"] == "student"
+    assert data["linked_child_id"] is not None
+
+    student = (await db_session.execute(select(User).where(User.email == "alice@uni.example.com"))).scalar_one()
+    assert student.is_self_learner is True
+    assert student.linked_child_id is not None
+
+    child_row = (
+        await db_session.execute(select(Child).where(Child.id == student.linked_child_id))
+    ).scalar_one()
+    assert child_row.first_name == "Alice"
+    assert child_row.household_id == student.household_id
+
+
+@pytest.mark.asyncio
+async def test_non_admin_cannot_invite(client: AsyncClient, db_session):
+    """An instructor attempting to invite another user is rejected."""
+    from app.core.security import create_access_token
+
+    await _register_inst_admin(client)
+
+    # Admin creates an instructor
+    r1 = await client.post(
+        "/api/v1/auth/invite",
+        json={
+            "email": "inst@uni.example.com",
+            "display_name": "Instructor One",
+            "institutional_role": "instructor",
+        },
+    )
+    assert r1.status_code == 201
+    instructor = (await db_session.execute(select(User).where(User.email == "inst@uni.example.com"))).scalar_one()
+
+    # Switch to the instructor's token. Delete first so httpx does not
+    # keep the admin cookie alongside the new one.
+    inst_token = create_access_token(instructor.id, instructor.household_id, "co_parent")
+    client.cookies.delete("access_token")
+    client.cookies.set("access_token", inst_token)
+
+    r2 = await client.post(
+        "/api/v1/auth/invite",
+        json={
+            "email": "ta@uni.example.com",
+            "display_name": "TA",
+            "institutional_role": "teaching_assistant",
+        },
+    )
+    assert r2.status_code == 403, r2.text
+
+
+@pytest.mark.asyncio
+async def test_student_cannot_access_other_students(client: AsyncClient, db_session):
+    """Students get view_progress scoped to their own child only."""
+    from app.core.permissions import PERM_VIEW_PROGRESS, check_permission
+
+    await _register_inst_admin(client)
+
+    for email, learner in [("sa@uni.example.com", "StuA"), ("sb@uni.example.com", "StuB")]:
+        r = await client.post(
+            "/api/v1/auth/invite",
+            json={
+                "email": email,
+                "display_name": learner,
+                "institutional_role": "student",
+                "learner_name": learner,
+            },
+        )
+        assert r.status_code == 201
+
+    student_a = (await db_session.execute(select(User).where(User.email == "sa@uni.example.com"))).scalar_one()
+    student_b = (await db_session.execute(select(User).where(User.email == "sb@uni.example.com"))).scalar_one()
+    assert student_a.linked_child_id != student_b.linked_child_id
+
+    # Student A's view_progress is allowed against their own child
+    allowed_self = await check_permission(
+        db_session, student_a, PERM_VIEW_PROGRESS, scope_type="child", scope_id=student_a.linked_child_id
+    )
+    assert allowed_self is True
+
+    # Student A's view_progress is denied against student B's child
+    allowed_other = await check_permission(
+        db_session, student_a, PERM_VIEW_PROGRESS, scope_type="child", scope_id=student_b.linked_child_id
+    )
+    assert allowed_other is False

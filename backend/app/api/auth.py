@@ -22,6 +22,9 @@ from app.models.enums import UserRole
 from app.models.identity import Household, User
 from app.models.operational import RefreshToken
 from app.schemas.auth import (
+    InstitutionalRegisterRequest,
+    InviteRequest,
+    InviteResponse,
     LoginRequest,
     MessageResponse,
     RefreshResponse,
@@ -144,6 +147,192 @@ async def register(
         access_token=access_token,
         token_type="bearer",
         expires_in=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+    )
+
+
+@router.post(
+    "/register-institution",
+    response_model=RegisterResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+async def register_institution(
+    body: InstitutionalRegisterRequest,
+    response: Response,
+    db: AsyncSession = Depends(get_db),
+) -> RegisterResponse:
+    """Bootstrap an institution: creates the household, the admin user,
+    and returns auth tokens so the admin is immediately logged in.
+    """
+    existing = await db.execute(select(User).where(User.email == body.admin_email))
+    if existing.scalar_one_or_none():
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Email already registered",
+        )
+
+    household = Household(
+        name=body.organization_name,
+        governance_mode="institution_governed",
+        organization_type=body.organization_type,
+    )
+    db.add(household)
+    await db.flush()
+
+    user = User(
+        household_id=household.id,
+        email=body.admin_email,
+        password_hash=hash_password(body.admin_password),
+        display_name=body.admin_display_name,
+        role="owner",
+        institutional_role="department_admin",
+    )
+    db.add(user)
+    await db.flush()
+
+    from app.core.permissions import grant_role_permissions
+
+    await grant_role_permissions(db, user.id, household.id, "owner", user.id)
+
+    access_token = create_access_token(user.id, household.id, "owner")
+    refresh_token_str, token_id = create_refresh_token(user.id, household.id)
+
+    refresh_record = RefreshToken(
+        id=token_id,
+        user_id=user.id,
+        household_id=household.id,
+        token_hash=_hash_token(refresh_token_str),
+        expires_at=datetime.now(UTC) + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS),
+    )
+    db.add(refresh_record)
+
+    _set_cookie(response, "access_token", access_token, settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60)
+    _set_cookie(
+        response,
+        "refresh_token",
+        refresh_token_str,
+        settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400,
+    )
+
+    return RegisterResponse(
+        user=UserResponse.model_validate(user),
+        access_token=access_token,
+        token_type="bearer",
+        expires_in=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+    )
+
+
+_INSTITUTIONAL_ROLE_TO_HOUSEHOLD_ROLE = {
+    "instructor": "co_parent",
+    "teaching_assistant": "observer",
+    "student": "observer",
+}
+
+
+@router.post(
+    "/invite",
+    response_model=InviteResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+async def invite_user(
+    body: InviteRequest,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> InviteResponse:
+    """Invite a user into an institution-governed household.
+
+    Only department admins may invite. Instructors get co_parent-level
+    grants, TAs and students get observer. Students also receive a
+    Child record and a self-scoped view_progress grant so one student
+    cannot read another student's data.
+    """
+    household = await db.get(Household, current_user.household_id)
+    if not household or household.governance_mode != "institution_governed":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Institutional invites require an institution-governed household",
+        )
+    if current_user.institutional_role != "department_admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only department admins can invite users",
+        )
+    if body.institutional_role not in _INSTITUTIONAL_ROLE_TO_HOUSEHOLD_ROLE:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"Unknown institutional role: {body.institutional_role}",
+        )
+    if body.institutional_role == "student" and not body.learner_name:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="learner_name is required when inviting a student",
+        )
+
+    existing = await db.execute(select(User).where(User.email == body.email))
+    if existing.scalar_one_or_none():
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Email already registered",
+        )
+
+    household_role = _INSTITUTIONAL_ROLE_TO_HOUSEHOLD_ROLE[body.institutional_role]
+
+    # Invited users get a placeholder password hash; the production
+    # flow would email a set-password link. Tests set passwords directly.
+    placeholder_password = hash_password(f"invite-{body.email}")
+
+    new_user = User(
+        household_id=current_user.household_id,
+        email=body.email,
+        password_hash=placeholder_password,
+        display_name=body.display_name,
+        role=household_role,
+        institutional_role=body.institutional_role,
+    )
+    db.add(new_user)
+    await db.flush()
+
+    linked_child_id: uuid.UUID | None = None
+    if body.institutional_role == "student":
+        from app.core.permissions import OBSERVER_PERMISSIONS
+        from app.models.identity import Child, UserPermission
+
+        student_child = Child(
+            household_id=current_user.household_id,
+            first_name=body.learner_name,
+        )
+        db.add(student_child)
+        await db.flush()
+        new_user.is_self_learner = True
+        new_user.linked_child_id = student_child.id
+        linked_child_id = student_child.id
+
+        # Scope every observer permission to the student's own child so
+        # students cannot read each other's data at the permission layer.
+        for perm in OBSERVER_PERMISSIONS:
+            db.add(
+                UserPermission(
+                    user_id=new_user.id,
+                    household_id=current_user.household_id,
+                    permission=perm,
+                    scope_type="child",
+                    scope_id=student_child.id,
+                    granted_by=current_user.id,
+                )
+            )
+        await db.flush()
+    else:
+        from app.core.permissions import grant_role_permissions
+
+        await grant_role_permissions(
+            db, new_user.id, current_user.household_id, household_role, current_user.id
+        )
+
+    return InviteResponse(
+        id=new_user.id,
+        email=new_user.email,
+        display_name=new_user.display_name,
+        institutional_role=new_user.institutional_role,
+        linked_child_id=linked_child_id,
     )
 
 

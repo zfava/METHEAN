@@ -53,3 +53,28 @@ class RefreshResponse(BaseModel):
 
 class MessageResponse(BaseModel):
     message: str
+
+
+class InstitutionalRegisterRequest(BaseModel):
+    organization_name: str = Field(min_length=1, max_length=255)
+    organization_type: str = Field(default="university")  # university, bootcamp, corporate
+    admin_email: EmailStr
+    admin_password: str = Field(min_length=8, max_length=128)
+    admin_display_name: str = Field(min_length=1, max_length=100)
+
+
+class InviteRequest(BaseModel):
+    email: EmailStr
+    display_name: str = Field(min_length=1, max_length=100)
+    institutional_role: str  # instructor, teaching_assistant, student
+    learner_name: str | None = None  # required for students
+
+
+class InviteResponse(BaseModel):
+    model_config = {"from_attributes": True}
+
+    id: uuid.UUID
+    email: str
+    display_name: str
+    institutional_role: str
+    linked_child_id: uuid.UUID | None = None
