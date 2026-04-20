@@ -20,9 +20,9 @@ from app.models.curriculum import (
     LearningNode,
     Subject,
 )
-from app.models.enums import ActivityStatus
-from app.models.governance import Activity, Attempt
-from app.models.identity import Child, User
+from app.models.enums import ActivityStatus, PlanStatus
+from app.models.governance import Activity, Attempt, GovernanceEvent, GovernanceRule, Plan
+from app.models.identity import Child, Household, User
 from app.models.state import ChildNodeState, StateEvent
 
 router = APIRouter(tags=["child-dashboard"])
@@ -53,8 +53,16 @@ async def get_child_dashboard(
     user: User = Depends(get_current_user),
 ) -> dict:
     """Single endpoint: everything the child needs on load."""
-    child = await _get_child_or_404(db, child_id, user.household_id)
-    household_id = user.household_id
+    return await _build_child_dashboard(db, child_id, user.household_id)
+
+
+async def _build_child_dashboard(
+    db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID
+) -> dict:
+    """Reusable child-dashboard builder so /me can merge it with a
+    governance summary for self-directed learners.
+    """
+    child = await _get_child_or_404(db, child_id, household_id)
     today = date.today()
     datetime.now(UTC)
     week_start = today - timedelta(days=today.weekday())
@@ -433,4 +441,89 @@ async def get_child_dashboard(
         "journey_maps": journey_maps,
         "encouragement": encouragement,
         "style_hints": style_hints,
+    }
+
+
+async def _build_governance_summary(db: AsyncSession, household_id: uuid.UUID) -> dict:
+    """Compact governance snapshot for the unified dashboard.
+
+    PlanStatus has no "pending_review" member; the value closest in
+    meaning is PlanStatus.proposed (plan submitted, awaiting approval).
+    We count that here.
+    """
+    pending_q = await db.execute(
+        select(func.count()).where(
+            Plan.household_id == household_id,
+            Plan.status == PlanStatus.proposed,
+        )
+    )
+    pending_plans_count = int(pending_q.scalar() or 0)
+
+    active_rules_q = await db.execute(
+        select(func.count()).where(
+            GovernanceRule.household_id == household_id,
+            GovernanceRule.is_active == True,  # noqa: E712
+        )
+    )
+    active_rules_count = int(active_rules_q.scalar() or 0)
+
+    events_q = await db.execute(
+        select(GovernanceEvent)
+        .where(GovernanceEvent.household_id == household_id)
+        .order_by(GovernanceEvent.created_at.desc())
+        .limit(5)
+    )
+    events = events_q.scalars().all()
+    recent_governance_events = [
+        {
+            "id": str(e.id),
+            "action": e.action.value if hasattr(e.action, "value") else str(e.action),
+            "target_type": e.target_type,
+            "target_id": str(e.target_id),
+            "reason": e.reason,
+            "created_at": e.created_at.isoformat() if e.created_at else None,
+        }
+        for e in events
+    ]
+
+    return {
+        "pending_plans_count": pending_plans_count,
+        "recent_governance_events": recent_governance_events,
+        "active_rules_count": active_rules_count,
+    }
+
+
+@router.get("/dashboard/me")
+async def get_my_dashboard(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Unified dashboard.
+
+    Self-directed learners get their own learning view plus a governance
+    summary, so both hats are visible in one place. Parents get a light
+    household snapshot with the list of children they govern.
+    """
+    household = await db.get(Household, current_user.household_id)
+    governance_mode = household.governance_mode if household else "parent_governed"
+
+    if current_user.is_self_learner and current_user.linked_child_id:
+        child_id = current_user.linked_child_id
+        child_data = await _build_child_dashboard(db, child_id, current_user.household_id)
+        governance_summary = await _build_governance_summary(db, current_user.household_id)
+        return {
+            "governance_mode": governance_mode,
+            "dashboard_type": "self_directed",
+            "learning": child_data,
+            "governance": governance_summary,
+        }
+
+    children_q = await db.execute(
+        select(Child).where(Child.household_id == current_user.household_id)
+    )
+    child_list = children_q.scalars().all()
+    return {
+        "governance_mode": governance_mode,
+        "dashboard_type": "parent",
+        "children": [{"id": str(c.id), "first_name": c.first_name} for c in child_list],
     }

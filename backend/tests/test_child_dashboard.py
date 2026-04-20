@@ -325,3 +325,66 @@ class TestChildSessionFlow:
         e2 = generate_encouragement(3, 60, 1, 2, 1)
         # May or may not produce a message depending on thresholds
         assert isinstance(e2, str)
+
+
+# ══════════════════════════════════════════════════
+# /dashboard/me unified endpoint
+# ══════════════════════════════════════════════════
+
+
+class TestUnifiedMeDashboard:
+    @pytest.mark.asyncio
+    async def test_self_learner_gets_merged_dashboard(self, client, db_session):
+        """Self-directed registration plus GET /dashboard/me returns both learning and governance views."""
+        reg = await client.post(
+            "/api/v1/auth/register",
+            json={
+                "email": "solo@test.com",
+                "password": "testpass123",
+                "display_name": "Solo Learner",
+                "household_name": "Solo",
+                "is_self_learner": True,
+            },
+        )
+        assert reg.status_code == 201
+        client.cookies.set("access_token", reg.cookies.get("access_token") or reg.json()["access_token"])
+
+        resp = await client.get("/api/v1/dashboard/me")
+        assert resp.status_code == 200, resp.text
+        data = resp.json()
+        assert data["governance_mode"] == "self_governed"
+        assert data["dashboard_type"] == "self_directed"
+        assert "learning" in data
+        assert "governance" in data
+        # Governance summary shape
+        gov = data["governance"]
+        assert "pending_plans_count" in gov
+        assert "recent_governance_events" in gov
+        assert "active_rules_count" in gov
+
+    @pytest.mark.asyncio
+    async def test_normal_user_gets_parent_dashboard(self, client):
+        reg = await client.post(
+            "/api/v1/auth/register",
+            json={
+                "email": "parent-dash@test.com",
+                "password": "testpass123",
+                "display_name": "Parent",
+                "household_name": "Parents",
+            },
+        )
+        assert reg.status_code == 201
+        client.cookies.set("access_token", reg.cookies.get("access_token") or reg.json()["access_token"])
+
+        resp = await client.get("/api/v1/dashboard/me")
+        assert resp.status_code == 200, resp.text
+        data = resp.json()
+        assert data["governance_mode"] == "parent_governed"
+        assert data["dashboard_type"] == "parent"
+        assert "children" in data
+        assert isinstance(data["children"], list)
+
+    @pytest.mark.asyncio
+    async def test_dashboard_me_requires_auth(self, client):
+        resp = await client.get("/api/v1/dashboard/me")
+        assert resp.status_code == 401
