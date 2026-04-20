@@ -260,8 +260,17 @@ async def generate_transcript(
     db: AsyncSession,
     household_id: uuid.UUID,
     child_id: uuid.UUID,
+    grading_scale: str = "mastery",
 ) -> bytes:
-    """Generate a cumulative academic transcript."""
+    """Generate a cumulative academic transcript.
+
+    grading_scale controls how internal mastery levels are surfaced in
+    the PDF. The default "mastery" preserves the existing output
+    verbatim. Any other scale name is looked up in
+    app.services.grading.DEFAULT_GRADING_SCALES and each subject's
+    overall mastery (sourced from actual_record.overall_mastery) is
+    translated through it.
+    """
     child, hh = await _get_child_and_household(db, child_id, household_id)
     child_name = f"{child.first_name} {child.last_name or ''}"
 
@@ -275,23 +284,37 @@ async def generate_transcript(
     )
     curricula = curr_r.scalars().all()
 
-    sections = [
-        (
-            "Student Information",
-            f"Name: {child_name}\nGrade: {child.grade_level or 'N/A'}\nDate of Birth: {child.date_of_birth or 'N/A'}",
-        ),
-    ]
+    student_info = (
+        f"Name: {child_name}\nGrade: {child.grade_level or 'N/A'}\n"
+        f"Date of Birth: {child.date_of_birth or 'N/A'}"
+    )
+    if grading_scale != "mastery":
+        student_info += f"\nGrading Scale: {grading_scale}"
+
+    sections = [("Student Information", student_info)]
+
+    if grading_scale != "mastery":
+        from app.services.grading import get_grade
+    else:
+        get_grade = None  # type: ignore[assignment]
 
     for c in curricula:
         actual = c.actual_record or {}
         completed_weeks = len(actual.get("weeks", {}))
+        body = (
+            f"Grade Level: {c.grade_level or 'N/A'}\n"
+            f"Status: {c.status}\n"
+            f"Weeks completed: {completed_weeks}/{c.total_weeks}\n"
+            f"Hours/week: {c.hours_per_week or 'N/A'}"
+        )
+        overall_mastery = actual.get("overall_mastery")
+        if grading_scale != "mastery" and overall_mastery and get_grade is not None:
+            translated = get_grade(overall_mastery, grading_scale)
+            body += f"\nGrade: {translated}"
         sections.append(
             (
-                f"{c.academic_year} — {c.subject_name}",
-                f"Grade Level: {c.grade_level or 'N/A'}\n"
-                f"Status: {c.status}\n"
-                f"Weeks completed: {completed_weeks}/{c.total_weeks}\n"
-                f"Hours/week: {c.hours_per_week or 'N/A'}",
+                f"{c.academic_year}, {c.subject_name}",
+                body,
             )
         )
 
