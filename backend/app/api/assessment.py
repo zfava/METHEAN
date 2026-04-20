@@ -10,6 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import PaginationParams, get_current_user, get_db
 from app.models.assessment import Assessment, PortfolioEntry
+from app.models.enums import AssessmentType
 from app.models.identity import Child, User
 from app.services.assessment_engine import (
     generate_portfolio_export,
@@ -30,7 +31,8 @@ async def _get_child_or_404(db: AsyncSession, child_id: uuid.UUID, household_id:
 
 class AssessmentCreate(BaseModel):
     node_id: uuid.UUID | None = None
-    assessment_type: str = Field(min_length=1, max_length=50)
+    # Pydantic rejects values outside the enum with 422 automatically.
+    assessment_type: AssessmentType
     title: str = Field(min_length=1, max_length=255)
     description: str | None = None
     qualitative_notes: str | None = None

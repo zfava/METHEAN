@@ -216,3 +216,20 @@ class GovernanceMode(str, enum.Enum):
     self_governed = "self_governed"
     institution_governed = "institution_governed"
     mentor_governed = "mentor_governed"
+
+
+class AssessmentType(str, enum.Enum):
+    # Existing
+    observation = "observation"
+    narration = "narration"
+    written = "written"
+    demonstration = "demonstration"
+    project = "project"
+    # Higher Education
+    timed_exam = "timed_exam"
+    research_paper = "research_paper"
+    lab_report = "lab_report"
+    oral_defense = "oral_defense"
+    peer_assessment = "peer_assessment"
+    portfolio_review = "portfolio_review"
+    clinical_evaluation = "clinical_evaluation"

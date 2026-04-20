@@ -45,7 +45,7 @@ class TestParentAssessment:
             f"/api/v1/children/{child.id}/assessments",
             json={
                 "node_id": str(node.id),
-                "assessment_type": "oral_narration",
+                "assessment_type": "narration",
                 "title": "Chapter 5 Narration",
                 "qualitative_notes": "Excellent narration with all key events",
                 "mastery_judgment": "mastered",
@@ -138,7 +138,7 @@ class TestParentAssessment:
             f"/api/v1/children/{child.id}/assessments",
             json={
                 "node_id": str(node.id),
-                "assessment_type": "quiz",
+                "assessment_type": "written",
                 "title": "Chapter Quiz",
                 "confidence_override": 0.85,
             },
@@ -243,3 +243,51 @@ class TestPortfolio:
         data = resp.json()
         assert data["total_entries"] >= 1
         assert "General" in data["subjects"]
+
+
+# ══════════════════════════════════════════════════
+# Higher-education assessment types
+# ══════════════════════════════════════════════════
+
+
+class TestHigherEdAssessmentTypes:
+    async def _post_assessment(self, auth_client, child_id, atype: str):
+        return await auth_client.post(
+            f"/api/v1/children/{child_id}/assessments",
+            json={
+                "assessment_type": atype,
+                "title": f"{atype} test",
+                "qualitative_notes": "",
+            },
+        )
+
+    @pytest.mark.asyncio
+    async def test_create_timed_exam_assessment(self, auth_client, child):
+        resp = await self._post_assessment(auth_client, child.id, "timed_exam")
+        assert resp.status_code == 201, resp.text
+        data = resp.json()
+        assert data["assessment_type"] == "timed_exam"
+        assert data["title"] == "timed_exam test"
+
+    @pytest.mark.asyncio
+    async def test_create_research_paper_assessment(self, auth_client, child):
+        resp = await self._post_assessment(auth_client, child.id, "research_paper")
+        assert resp.status_code == 201, resp.text
+        assert resp.json()["assessment_type"] == "research_paper"
+
+    @pytest.mark.asyncio
+    async def test_create_clinical_evaluation(self, auth_client, child):
+        resp = await self._post_assessment(auth_client, child.id, "clinical_evaluation")
+        assert resp.status_code == 201, resp.text
+        assert resp.json()["assessment_type"] == "clinical_evaluation"
+
+    @pytest.mark.asyncio
+    async def test_existing_observation_still_works(self, auth_client, child):
+        resp = await self._post_assessment(auth_client, child.id, "observation")
+        assert resp.status_code == 201, resp.text
+        assert resp.json()["assessment_type"] == "observation"
+
+    @pytest.mark.asyncio
+    async def test_invalid_assessment_type_rejected(self, auth_client, child):
+        resp = await self._post_assessment(auth_client, child.id, "invalid_type")
+        assert resp.status_code == 422, resp.text
