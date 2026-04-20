@@ -2,6 +2,9 @@
 
 import pytest
 from httpx import AsyncClient
+from sqlalchemy import select
+
+from app.models.identity import Child, Household, User
 
 
 @pytest.mark.asyncio
@@ -204,3 +207,56 @@ async def test_refresh_token_reuse_revokes_all_tokens(client: AsyncClient):
     client.cookies.set("refresh_token", token_b)
     after_reuse = await client.post("/api/v1/auth/refresh")
     assert after_reuse.status_code == 401, "After reuse detection, even the newest token must be revoked"
+
+
+@pytest.mark.asyncio
+async def test_register_self_learner(client: AsyncClient, db_session):
+    """Self-directed registration creates a linked Child record and flips the household."""
+    response = await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "self@test.com",
+            "password": "testpass123",
+            "display_name": "Solo Learner",
+            "household_name": "My Learning",
+            "is_self_learner": True,
+        },
+    )
+    assert response.status_code == 201, response.text
+
+    user_row = (await db_session.execute(select(User).where(User.email == "self@test.com"))).scalar_one()
+    household = (await db_session.execute(select(Household).where(Household.id == user_row.household_id))).scalar_one()
+    child = (await db_session.execute(select(Child).where(Child.household_id == household.id))).scalar_one()
+
+    assert household.governance_mode == "self_governed"
+    assert household.organization_type == "self_directed"
+    assert user_row.is_self_learner is True
+    assert user_row.linked_child_id is not None
+    assert user_row.linked_child_id == child.id
+    assert child.first_name == "Solo"
+
+
+@pytest.mark.asyncio
+async def test_register_normal_user_still_works(client: AsyncClient, db_session):
+    """Omitting is_self_learner leaves the household in parent_governed mode."""
+    response = await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "parent@test.com",
+            "password": "testpass123",
+            "display_name": "Normal Parent",
+            "household_name": "Normal Family",
+        },
+    )
+    assert response.status_code == 201, response.text
+
+    user_row = (await db_session.execute(select(User).where(User.email == "parent@test.com"))).scalar_one()
+    household = (await db_session.execute(select(Household).where(Household.id == user_row.household_id))).scalar_one()
+
+    assert household.governance_mode == "parent_governed"
+    assert user_row.is_self_learner is False
+    assert user_row.linked_child_id is None
+
+    # No Child should have been auto-created
+    children = (await db_session.execute(select(Child).where(Child.household_id == household.id))).scalars().all()
+    assert children == []

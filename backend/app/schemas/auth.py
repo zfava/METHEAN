@@ -12,6 +12,7 @@ class RegisterRequest(BaseModel):
     display_name: str = Field(min_length=1, max_length=100)
     household_name: str = Field(min_length=1, max_length=255)
     timezone: str = Field(default="America/New_York", max_length=50)
+    is_self_learner: bool = False
 
 
 class LoginRequest(BaseModel):

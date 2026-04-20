@@ -85,6 +85,37 @@ async def register(
 
     await grant_role_permissions(db, user.id, household.id, "owner", user.id)
 
+    # Self-directed registration: the registering user is both governor
+    # and learner. Flip the household into self_governed mode and create
+    # a Child record that represents the user as a learner.
+    if body.is_self_learner:
+        household.governance_mode = "self_governed"
+        household.organization_type = "self_directed"
+        user.is_self_learner = True
+
+        from app.models.identity import Child, ChildPreferences
+
+        first_token = body.display_name.split()
+        self_child = Child(
+            household_id=household.id,
+            first_name=first_token[0] if first_token else body.display_name,
+        )
+        db.add(self_child)
+        await db.flush()
+
+        # Child.preferences is a relationship, so preferences are stored
+        # in their own row. 120 minutes matches the spec default.
+        db.add(
+            ChildPreferences(
+                child_id=self_child.id,
+                household_id=household.id,
+                daily_duration_minutes=120,
+            )
+        )
+
+        user.linked_child_id = self_child.id
+        await db.flush()
+
     # Generate tokens
     access_token = create_access_token(user.id, household.id, "owner")
     refresh_token_str, token_id = create_refresh_token(user.id, household.id)
