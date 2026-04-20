@@ -11,8 +11,10 @@ from app.api.deps import get_current_user, get_db
 from app.models.identity import Child, User
 from app.services.attendance import get_attendance_record
 from app.services.compliance_engine import (
+    COMPLIANCE_DOMAINS,
     STATE_REQUIREMENTS,
     check_compliance,
+    check_domain_compliance,
     get_hours_breakdown,
 )
 
@@ -82,3 +84,20 @@ async def get_hours(
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     return await get_hours_breakdown(db, user.household_id, child_id)
+
+
+@router.get("/compliance/domains")
+async def list_compliance_domains() -> list[dict]:
+    """List every configured compliance domain."""
+    return [{"domain": name, **cfg} for name, cfg in COMPLIANCE_DOMAINS.items()]
+
+
+@router.get("/compliance/domain/{domain}/check/{child_id}")
+async def check_domain_compliance_api(
+    domain: str,
+    child_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    await _get_child_or_404(db, child_id, user.household_id)
+    return await check_domain_compliance(user.household_id, child_id, domain, db)

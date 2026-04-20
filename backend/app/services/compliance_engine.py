@@ -1354,6 +1354,51 @@ STATE_REQUIREMENTS: dict[str, dict] = {
 }
 
 
+# ══════════════════════════════════════════════════
+# Multi-domain compliance framework
+# ══════════════════════════════════════════════════
+
+# Each entry describes a compliance domain the platform can evaluate.
+# k12_homeschool delegates to the full STATE_REQUIREMENTS pipeline; the
+# remaining domains are configured with the canonical policy inputs but
+# have lightweight implementations pending deeper data plumbing.
+COMPLIANCE_DOMAINS: dict[str, dict] = {
+    "k12_homeschool": {
+        "description": "K-12 homeschool state compliance",
+        "handler": "check_k12_compliance",
+    },
+    "undergraduate": {
+        "description": "Undergraduate degree progress",
+        "credit_hours_required": 120,
+        "gpa_minimum": 2.0,
+        "residency_credits": 30,
+    },
+    "graduate": {
+        "description": "Graduate program progress",
+        "credit_hours_required": 36,
+        "gpa_minimum": 3.0,
+        "thesis_required": True,
+        "comprehensive_exam": True,
+    },
+    "professional_cert": {
+        "description": "Professional certification tracking",
+        "ceu_tracking": True,
+        "renewal_period_months": 24,
+    },
+    "trade_apprentice": {
+        "description": "Trade apprenticeship (DOL format)",
+        "ojt_hours_required": 2000,
+        "related_instruction_hours": 144,
+        "competency_signoffs": True,
+    },
+    "corporate": {
+        "description": "Corporate training compliance",
+        "mandatory_completion": True,
+        "deadline_enforcement": True,
+    },
+}
+
+
 async def get_hours_breakdown(
     db: AsyncSession,
     household_id: uuid.UUID,
@@ -1561,4 +1606,103 @@ async def check_compliance(
         "total_hours": hours["total_hours"],
         "hours_by_subject": hours["by_subject"],
         "special_notes": reqs.get("special_notes", ""),
+    }
+
+
+async def check_domain_compliance(
+    household_id: uuid.UUID,
+    child_id: uuid.UUID,
+    domain: str,
+    db: AsyncSession,
+) -> dict:
+    """Route a compliance check to the right domain-specific logic.
+
+    k12_homeschool delegates to check_compliance with the household's
+    configured home_state (defaulting to TX if unset). Undergraduate
+    computes a real GPA and credit hour summary from the curriculum
+    nodes. Other domains currently return their configured requirements
+    as a stub pending richer data plumbing.
+    """
+    if domain not in COMPLIANCE_DOMAINS:
+        return {"status": "error", "message": f"Unknown compliance domain: {domain}"}
+
+    if domain == "k12_homeschool":
+        from app.models.identity import Household
+
+        household = await db.get(Household, household_id)
+        state_code = (household.home_state if household else None) or "TX"
+        return await check_compliance(db, household_id, child_id, state_code)
+
+    config = COMPLIANCE_DOMAINS[domain]
+
+    if domain == "undergraduate":
+        from app.services.grading import compute_gpa
+
+        # All nodes the child is enrolled in, regardless of map
+        nodes_q = await db.execute(
+            select(LearningNode).where(
+                LearningNode.household_id == household_id,
+                LearningNode.is_active.is_(True),
+            )
+        )
+        nodes = nodes_q.scalars().all()
+
+        states_q = await db.execute(
+            select(ChildNodeState).where(
+                ChildNodeState.child_id == child_id,
+                ChildNodeState.household_id == household_id,
+            )
+        )
+        states_by_node = {s.node_id: s for s in states_q.scalars().all()}
+
+        credit_earned = 0.0
+        mastery_levels: list[str] = []
+        credit_hours_list: list[float] = []
+        for n in nodes:
+            credit = (n.content or {}).get("credit") if n.content else None
+            if not credit:
+                continue
+            hrs = credit.get("hours")
+            try:
+                hrs_val = float(hrs) if hrs is not None else 0.0
+            except (TypeError, ValueError):
+                continue
+            state = states_by_node.get(n.id)
+            level = (
+                state.mastery_level.value
+                if state and hasattr(state.mastery_level, "value")
+                else str(state.mastery_level) if state else "not_started"
+            )
+            mastery_levels.append(level)
+            credit_hours_list.append(hrs_val)
+            if level in ("proficient", "mastered"):
+                credit_earned += hrs_val
+
+        credit_required = float(config["credit_hours_required"])
+        gpa_required = float(config["gpa_minimum"])
+        gpa_current = compute_gpa(mastery_levels, credit_hours_list)
+
+        return {
+            "domain": domain,
+            "status": "in_progress",
+            "requirements": {
+                "credit_hours": {
+                    "required": credit_required,
+                    "earned": round(credit_earned, 2),
+                    "met": credit_earned >= credit_required,
+                },
+                "gpa": {
+                    "required": gpa_required,
+                    "current": gpa_current,
+                    "met": gpa_current >= gpa_required,
+                },
+            },
+        }
+
+    # Generic response for the remaining domains
+    return {
+        "domain": domain,
+        "status": "configured",
+        "requirements": config,
+        "checks": [],
     }

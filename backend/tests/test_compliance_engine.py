@@ -494,3 +494,76 @@ class TestComplianceEdgeCases:
                 f"Invalid status: {check['status']}"
             )
 
+
+
+# ══════════════════════════════════════════════════
+# Multi-domain compliance framework
+# ══════════════════════════════════════════════════
+
+
+class TestComplianceDomains:
+    def test_all_domains_are_valid_strings(self):
+        from app.services.compliance_engine import COMPLIANCE_DOMAINS
+
+        expected = {
+            "k12_homeschool",
+            "undergraduate",
+            "graduate",
+            "professional_cert",
+            "trade_apprentice",
+            "corporate",
+        }
+        assert set(COMPLIANCE_DOMAINS.keys()) == expected
+        for name, cfg in COMPLIANCE_DOMAINS.items():
+            assert isinstance(name, str) and name
+            assert "description" in cfg and isinstance(cfg["description"], str)
+
+    def test_graduate_domain_has_thesis_requirement(self):
+        from app.services.compliance_engine import COMPLIANCE_DOMAINS
+
+        grad = COMPLIANCE_DOMAINS["graduate"]
+        assert grad["thesis_required"] is True
+        assert grad["comprehensive_exam"] is True
+        assert grad["credit_hours_required"] == 36
+        assert grad["gpa_minimum"] == 3.0
+
+    @pytest.mark.asyncio
+    async def test_unknown_domain_returns_error(self, db_session, household, child):
+        from app.services.compliance_engine import check_domain_compliance
+
+        result = await check_domain_compliance(household.id, child.id, "nonexistent", db_session)
+        assert result["status"] == "error"
+        assert "nonexistent" in result["message"]
+
+    @pytest.mark.asyncio
+    async def test_undergraduate_domain_returns_structure(self, db_session, household, child):
+        from app.services.compliance_engine import check_domain_compliance
+
+        result = await check_domain_compliance(household.id, child.id, "undergraduate", db_session)
+        assert result["domain"] == "undergraduate"
+        reqs = result["requirements"]
+        assert "credit_hours" in reqs
+        assert "gpa" in reqs
+        assert reqs["credit_hours"]["required"] == 120.0
+        assert reqs["gpa"]["required"] == 2.0
+        # Empty child has earned 0 and no GPA
+        assert reqs["credit_hours"]["earned"] == 0.0
+        assert reqs["credit_hours"]["met"] is False
+        assert reqs["gpa"]["met"] is False
+
+    @pytest.mark.asyncio
+    async def test_k12_domain_delegates_to_existing(self, db_session, household, child):
+        from app.services.compliance_engine import check_compliance, check_domain_compliance
+
+        household.home_state = "TX"
+        await db_session.flush()
+
+        direct = await check_compliance(db_session, household.id, child.id, "TX")
+        via_domain = await check_domain_compliance(household.id, child.id, "k12_homeschool", db_session)
+
+        # Both paths must produce the same core shape
+        assert "checks" in via_domain
+        assert "score" in via_domain
+        assert via_domain.get("state") == direct.get("state")
+        assert via_domain.get("score") == direct.get("score")
+        assert len(via_domain.get("checks", [])) == len(direct.get("checks", []))
