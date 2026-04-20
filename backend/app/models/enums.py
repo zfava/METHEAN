@@ -200,3 +200,10 @@ class BetaFeedbackStatus(str, enum.Enum):
     in_progress = "in_progress"
     resolved = "resolved"
     wont_fix = "wont_fix"
+
+
+class GovernanceMode(str, enum.Enum):
+    parent_governed = "parent_governed"
+    self_governed = "self_governed"
+    institution_governed = "institution_governed"
+    mentor_governed = "mentor_governed"

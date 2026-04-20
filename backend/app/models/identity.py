@@ -28,6 +28,19 @@ class Household(Base):
     trial_ends_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     subscription_ends_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
+    # Governance mode (additive, defaults preserve existing behavior)
+    governance_mode: Mapped[str] = mapped_column(
+        String(30), nullable=False, server_default="parent_governed"
+    )
+    organization_type: Mapped[str] = mapped_column(
+        String(50), nullable=False, server_default="homeschool"
+    )
+    organization_metadata: Mapped[dict | None] = mapped_column(JSONB, default=dict)
+    learner_age_range: Mapped[str] = mapped_column(
+        String(20), nullable=False, server_default="k12"
+    )
+    credit_system: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
@@ -62,6 +75,14 @@ class User(Base):
         },
     )
     last_login_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+    # Governance mode (additive, defaults preserve existing behavior)
+    is_self_learner: Mapped[bool] = mapped_column(Boolean, default=False, server_default="false")
+    linked_child_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("children.id", ondelete="SET NULL"), nullable=True
+    )
+    institutional_role: Mapped[str | None] = mapped_column(String(50), nullable=True)
+
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
