@@ -10,7 +10,7 @@ import uuid
 from datetime import UTC, date, datetime, timedelta
 
 from fastapi import APIRouter, Depends, Header, HTTPException, Query, Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -35,12 +35,41 @@ from app.models.state import ChildNodeState
 router = APIRouter(tags=["spec-coverage"])
 
 
+# 50 US states + DC. Kept local to avoid importing the big compliance
+# engine dict at module-import time.
+_US_STATE_CODES: frozenset[str] = frozenset(
+    {
+        "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
+        "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
+        "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
+        "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
+        "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY",
+        "DC",
+    }
+)
+
+
 # ── Schemas ──
 
 
 class HouseholdSettingsUpdate(BaseModel):
     name: str | None = Field(default=None, min_length=1, max_length=255)
     timezone: str | None = Field(default=None, max_length=50)
+    home_state: str | None = None
+
+    @field_validator("home_state")
+    @classmethod
+    def _valid_home_state(cls, v):
+        # Allow null, allow empty-string as explicit "clear", otherwise
+        # require a valid US state code. Lowercase input is normalized.
+        if v is None:
+            return v
+        if v == "":
+            return None
+        upper = v.upper()
+        if upper not in _US_STATE_CODES:
+            raise ValueError(f"home_state must be a valid US state code, got {v!r}")
+        return upper
 
 
 class ChildUpdate(BaseModel):
@@ -100,6 +129,25 @@ async def _get_child_or_404(db: AsyncSession, child_id: uuid.UUID, household_id:
 # ══════════════════════════════════════════════════
 
 
+def _household_settings_dict(household: Household) -> dict:
+    return {
+        "id": str(household.id),
+        "name": household.name,
+        "timezone": household.timezone,
+        "home_state": household.home_state,
+    }
+
+
+@router.get("/household/settings")
+async def get_household_settings(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    result = await db.execute(select(Household).where(Household.id == user.household_id))
+    household = result.scalar_one()
+    return _household_settings_dict(household)
+
+
 @router.put("/household/settings")
 async def update_household_settings(
     body: HouseholdSettingsUpdate,
@@ -112,8 +160,13 @@ async def update_household_settings(
         household.name = body.name
     if body.timezone is not None:
         household.timezone = body.timezone
+    # home_state is explicitly nullable: presence in the request (even
+    # when None) means "apply this value", so we consult model_fields_set
+    # instead of the is-not-None pattern used for name/timezone.
+    if "home_state" in body.model_fields_set:
+        household.home_state = body.home_state
     await db.flush()
-    return {"id": str(household.id), "name": household.name, "timezone": household.timezone}
+    return _household_settings_dict(household)
 
 
 VALID_PHILOSOPHIES = {"classical", "charlotte_mason", "unschooling", "eclectic", "montessori", "traditional", "custom"}

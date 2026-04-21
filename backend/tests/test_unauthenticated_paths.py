@@ -19,6 +19,7 @@ PROTECTED_ROUTES = [
     # Children / household
     ("GET", "/api/v1/children"),
     ("POST", "/api/v1/children"),
+    ("GET", "/api/v1/household/settings"),
     ("PUT", "/api/v1/household/settings"),
     ("GET", "/api/v1/household/philosophy"),
     ("PUT", "/api/v1/household/philosophy"),
