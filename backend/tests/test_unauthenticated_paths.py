@@ -19,11 +19,9 @@ PROTECTED_ROUTES = [
     # Children / household
     ("GET", "/api/v1/children"),
     ("POST", "/api/v1/children"),
-    ("GET", "/api/v1/household/settings"),
     ("PUT", "/api/v1/household/settings"),
     ("GET", "/api/v1/household/philosophy"),
     ("PUT", "/api/v1/household/philosophy"),
-    ("GET", "/api/v1/household/academic-calendar"),
     # Auth (authenticated)
     ("GET", "/api/v1/auth/me"),
     ("PUT", "/api/v1/auth/password"),
