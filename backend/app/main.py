@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.annual_curriculum import router as annual_curriculum_router
 from app.api.assessment import router as assessment_router
 from app.api.auth import router as auth_router
+from app.api.academic_calendar import router as academic_calendar_router
 from app.api.billing import router as billing_router
 from app.api.calibration import router as calibration_router
 from app.api.child_dashboard import router as child_dashboard_router
@@ -102,6 +103,7 @@ app.add_middleware(
 
 # Routers
 app.include_router(auth_router, prefix="/api/v1")
+app.include_router(academic_calendar_router, prefix="/api/v1")
 app.include_router(curriculum_router, prefix="/api/v1")
 app.include_router(state_router, prefix="/api/v1")
 app.include_router(governance_router, prefix="/api/v1")

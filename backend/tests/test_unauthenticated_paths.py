@@ -22,6 +22,8 @@ PROTECTED_ROUTES = [
     ("PUT", "/api/v1/household/settings"),
     ("GET", "/api/v1/household/philosophy"),
     ("PUT", "/api/v1/household/philosophy"),
+    ("GET", "/api/v1/household/academic-calendar"),
+    ("PUT", "/api/v1/household/academic-calendar"),
     # Auth (authenticated)
     ("GET", "/api/v1/auth/me"),
     ("PUT", "/api/v1/auth/password"),
