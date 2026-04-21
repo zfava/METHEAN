@@ -8,7 +8,7 @@ frontend read and write the same structure.
 """
 
 from fastapi import APIRouter, Depends, HTTPException
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -75,9 +75,7 @@ async def update_calendar(
             detail=f"schedule_type must be one of {sorted(_VALID_SCHEDULE_TYPES)}",
         )
 
-    household = (
-        await db.execute(select(Household).where(Household.id == user.household_id))
-    ).scalar_one()
+    household = (await db.execute(select(Household).where(Household.id == user.household_id))).scalar_one()
 
     # Merge with existing calendar so partial updates preserve other fields.
     settings = dict(household.settings or {})
