@@ -8,10 +8,10 @@ from datetime import UTC, datetime
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
-from app.api.deps import PaginationParams
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db
+from app.api.deps import PaginationParams, get_current_user, get_db
+from app.core.cache import cache_get, cache_set
 from app.models.curriculum import (
     ChildMapEnrollment,
     LearningEdge,
@@ -35,6 +35,7 @@ from app.schemas.state import (
     StateEventResponse,
 )
 from app.services.attempt_workflow import start_attempt, submit_attempt
+from app.services.learning_context import get_activity_learning_context
 from app.services.state_engine import compute_retrievability
 
 router = APIRouter(tags=["state"])
@@ -42,8 +43,11 @@ router = APIRouter(tags=["state"])
 
 # ── Helpers ──
 
+
 async def _get_child_or_404(
-    db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID,
+    db: AsyncSession,
+    child_id: uuid.UUID,
+    household_id: uuid.UUID,
 ) -> Child:
     result = await db.execute(
         select(Child).where(
@@ -59,6 +63,7 @@ async def _get_child_or_404(
 
 # ── State Query Endpoints ──
 
+
 @router.get(
     "/children/{child_id}/state",
     response_model=ChildStateResponse,
@@ -69,6 +74,12 @@ async def get_child_state(
     user: User = Depends(get_current_user),
 ) -> ChildStateResponse:
     """Full state across all enrolled maps: every node with mastery, FSRS data."""
+    # Check cache first (30s TTL)
+    cache_key = f"child_state:{user.household_id}:{child_id}"
+    cached = await cache_get(cache_key)
+    if cached:
+        return ChildStateResponse(**cached)
+
     await _get_child_or_404(db, child_id, user.household_id)
 
     # Get all enrolled maps
@@ -83,8 +94,12 @@ async def get_child_state(
 
     if not map_ids:
         return ChildStateResponse(
-            child_id=child_id, nodes=[], total_nodes=0,
-            mastered_count=0, in_progress_count=0, not_started_count=0,
+            child_id=child_id,
+            nodes=[],
+            total_nodes=0,
+            mastered_count=0,
+            in_progress_count=0,
+            not_started_count=0,
         )
 
     # Get all active nodes in enrolled maps
@@ -100,8 +115,12 @@ async def get_child_state(
 
     if not node_ids:
         return ChildStateResponse(
-            child_id=child_id, nodes=[], total_nodes=0,
-            mastered_count=0, in_progress_count=0, not_started_count=0,
+            child_id=child_id,
+            nodes=[],
+            total_nodes=0,
+            mastered_count=0,
+            in_progress_count=0,
+            not_started_count=0,
         )
 
     # Batch fetch all states
@@ -135,20 +154,22 @@ async def get_child_state(
 
         retrievability = compute_retrievability(card, now) if card else None
 
-        node_responses.append(NodeStateResponse(
-            node_id=node.id,
-            node_title=node.title,
-            mastery_level=mastery,
-            is_unlocked=state.is_unlocked if state else False,
-            attempts_count=state.attempts_count if state else 0,
-            time_spent_minutes=state.time_spent_minutes if state else 0,
-            last_activity_at=state.last_activity_at if state else None,
-            fsrs_due=card.due if card else None,
-            fsrs_stability=card.stability if card else None,
-            fsrs_difficulty=card.difficulty if card else None,
-            fsrs_retrievability=round(retrievability, 4) if retrievability is not None else None,
-            fsrs_state=card.state if card else None,
-        ))
+        node_responses.append(
+            NodeStateResponse(
+                node_id=node.id,
+                node_title=node.title,
+                mastery_level=mastery,
+                is_unlocked=state.is_unlocked if state else False,
+                attempts_count=state.attempts_count if state else 0,
+                time_spent_minutes=state.time_spent_minutes if state else 0,
+                last_activity_at=state.last_activity_at if state else None,
+                fsrs_due=card.due if card else None,
+                fsrs_stability=card.stability if card else None,
+                fsrs_difficulty=card.difficulty if card else None,
+                fsrs_retrievability=round(retrievability, 4) if retrievability is not None else None,
+                fsrs_state=card.state if card else None,
+            )
+        )
 
         if mastery == MasteryLevel.mastered:
             mastered += 1
@@ -157,7 +178,7 @@ async def get_child_state(
         else:
             not_started += 1
 
-    return ChildStateResponse(
+    response = ChildStateResponse(
         child_id=child_id,
         nodes=node_responses,
         total_nodes=len(nodes),
@@ -165,6 +186,8 @@ async def get_child_state(
         in_progress_count=in_progress,
         not_started_count=not_started,
     )
+    await cache_set(cache_key, response.model_dump(), ttl_seconds=30)
+    return response
 
 
 @router.get(
@@ -222,9 +245,14 @@ async def get_retention_summary(
 
     if not map_ids:
         return RetentionSummaryResponse(
-            child_id=child_id, total_nodes=0, mastered_count=0,
-            in_progress_count=0, not_started_count=0, decaying_count=0,
-            blocked_count=0, average_retrievability=None,
+            child_id=child_id,
+            total_nodes=0,
+            mastered_count=0,
+            in_progress_count=0,
+            not_started_count=0,
+            decaying_count=0,
+            blocked_count=0,
+            average_retrievability=None,
         )
 
     # Count nodes
@@ -241,9 +269,14 @@ async def get_retention_summary(
 
     if not node_ids:
         return RetentionSummaryResponse(
-            child_id=child_id, total_nodes=0, mastered_count=0,
-            in_progress_count=0, not_started_count=0, decaying_count=0,
-            blocked_count=0, average_retrievability=None,
+            child_id=child_id,
+            total_nodes=0,
+            mastered_count=0,
+            in_progress_count=0,
+            not_started_count=0,
+            decaying_count=0,
+            blocked_count=0,
+            average_retrievability=None,
         )
 
     # Get states
@@ -277,10 +310,7 @@ async def get_retention_summary(
         if edge.to_node_id in prereqs:
             prereqs[edge.to_node_id].append(edge.from_node_id)
 
-    mastered_set = {
-        nid for nid, s in states.items()
-        if s.mastery_level == MasteryLevel.mastered
-    }
+    mastered_set = {nid for nid, s in states.items() if s.mastery_level == MasteryLevel.mastered}
 
     now = datetime.now(UTC)
     mastered_count = 0
@@ -304,6 +334,7 @@ async def get_retention_summary(
                 if r is not None:
                     retrievabilities.append(r)
                     from app.core.config import settings as cfg
+
                     if r < cfg.DECAY_RETRIEVABILITY_THRESHOLD:
                         decaying_count += 1
         elif mastery in in_progress_levels:
@@ -321,10 +352,7 @@ async def get_retention_summary(
             else:
                 not_started_count += 1
 
-    avg_retrievability = (
-        round(sum(retrievabilities) / len(retrievabilities), 4)
-        if retrievabilities else None
-    )
+    avg_retrievability = round(sum(retrievabilities) / len(retrievabilities), 4) if retrievabilities else None
 
     return RetentionSummaryResponse(
         child_id=child_id,
@@ -339,6 +367,7 @@ async def get_retention_summary(
 
 
 # ── Attempt Endpoints ──
+
 
 @router.post(
     "/activities/{activity_id}/attempts",
@@ -422,3 +451,21 @@ async def get_attempt(
         raise HTTPException(status_code=404, detail="Attempt not found")
 
     return AttemptResponse.model_validate(attempt)
+
+
+@router.get("/activities/{activity_id}/learn")
+async def get_learning_context(
+    activity_id: uuid.UUID,
+    child_id: uuid.UUID | None = None,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Get the full learning context for a child's activity.
+
+    Returns teaching content, lesson steps, practice prompts,
+    assessment criteria, and previous attempt history.
+    """
+    try:
+        return await get_activity_learning_context(db, activity_id, user.household_id, child_id)
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))

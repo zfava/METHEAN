@@ -22,6 +22,7 @@ class Settings(BaseSettings):
 
     # Auth
     JWT_SECRET: str = "CHANGE_ME_IN_PRODUCTION"
+    PREVIOUS_JWT_SECRET: str = ""  # For zero-downtime key rotation
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
@@ -45,6 +46,24 @@ class Settings(BaseSettings):
     CELERY_BROKER_URL: str = "redis://redis:6379/1"
     CELERY_RESULT_BACKEND: str = "redis://redis:6379/2"
 
+    # Email (Resend)
+    RESEND_API_KEY: str = ""
+    EMAIL_FROM: str = "METHEAN <notifications@methean.app>"
+
+    # Stripe
+    STRIPE_SECRET_KEY: str = ""
+    STRIPE_WEBHOOK_SECRET: str = ""
+    STRIPE_PRICE_ID: str = ""
+    STRIPE_TRIAL_DAYS: int = 14
+    APP_URL: str = "http://localhost:3000"
+
+    # Monitoring
+    SENTRY_DSN: str = ""  # Empty = disabled
+
+    # Push Notifications (FCM)
+    FCM_PROJECT_ID: str = ""
+    FCM_SERVICE_ACCOUNT_JSON: str = ""  # Path or inline JSON for service account
+
     # FSRS / Retention
     FSRS_WEIGHTS: list[float] = []  # Empty = use py-fsrs defaults
     MASTERY_THRESHOLD: float = 0.8  # Confidence threshold to reach mastered
@@ -60,10 +79,7 @@ class Settings(BaseSettings):
     def jwt_secret_must_not_be_default_in_prod(cls, v: str, info) -> str:
         env = info.data.get("APP_ENV", "development")
         if env == "production" and v == "CHANGE_ME_IN_PRODUCTION":
-            raise ValueError(
-                "JWT_SECRET must be changed from default in production. "
-                "Refusing to boot."
-            )
+            raise ValueError("JWT_SECRET must be changed from default in production. Refusing to boot.")
         return v
 
     @property

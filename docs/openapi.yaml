@@ -4,6 +4,17 @@ info:
   description: Learning governance operating system for homeschool families
   version: 0.1.0
 paths:
+  /metrics:
+    get:
+      summary: Metrics
+      description: Endpoint that serves Prometheus metrics.
+      operationId: metrics_metrics_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
   /api/v1/auth/register:
     post:
       tags:
@@ -23,6 +34,78 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RegisterResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth/register-institution:
+    post:
+      tags:
+      - auth
+      summary: Register Institution
+      description: 'Bootstrap an institution: creates the household, the admin user,
+
+        and returns auth tokens so the admin is immediately logged in.'
+      operationId: register_institution_api_v1_auth_register_institution_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstitutionalRegisterRequest'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth/invite:
+    post:
+      tags:
+      - auth
+      summary: Invite User
+      description: 'Invite a user into an institution-governed household.
+
+
+        Only department admins may invite. Instructors get co_parent-level
+
+        grants, TAs and students get observer. Students also receive a
+
+        Child record and a self-scoped view_progress grant so one student
+
+        cannot read another student''s data.'
+      operationId: invite_user_api_v1_auth_invite_post
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/app__schemas__auth__InviteRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InviteResponse'
         '422':
           description: Validation Error
           content:
@@ -132,6 +215,358 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth/password:
+    put:
+      tags:
+      - auth
+      summary: Change Password
+      description: Change the current user's password.
+      operationId: change_password_api_v1_auth_password_put
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePasswordRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Change Password Api V1 Auth Password Put
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth/me/notification-preferences:
+    get:
+      tags:
+      - auth
+      summary: Get Notification Preferences
+      description: Get current user's notification preferences.
+      operationId: get_notification_preferences_api_v1_auth_me_notification_preferences_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Notification Preferences Api V1 Auth Me Notification
+                  Preferences Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - auth
+      summary: Update Notification Preferences
+      description: Update notification preferences.
+      operationId: update_notification_preferences_api_v1_auth_me_notification_preferences_put
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Body
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Update Notification Preferences Api V1 Auth Me Notification
+                  Preferences Put
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth/forgot-password:
+    post:
+      tags:
+      - auth
+      summary: Forgot Password
+      description: Send password reset email.
+      operationId: forgot_password_api_v1_auth_forgot_password_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Forgot Password Api V1 Auth Forgot Password Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth/reset-password:
+    post:
+      tags:
+      - auth
+      summary: Reset Password Endpoint
+      description: Reset password with token.
+      operationId: reset_password_endpoint_api_v1_auth_reset_password_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Reset Password Endpoint Api V1 Auth Reset Password
+                  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth/verify-email:
+    post:
+      tags:
+      - auth
+      summary: Verify Email
+      description: "Verify email with token (simplified \u2014 token = user_id for\
+        \ now)."
+      operationId: verify_email_api_v1_auth_verify_email_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Body
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Verify Email Api V1 Auth Verify Email Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth/resend-verification:
+    post:
+      tags:
+      - auth
+      summary: Resend Verification
+      description: Resend verification email.
+      operationId: resend_verification_api_v1_auth_resend_verification_post
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Resend Verification Api V1 Auth Resend Verification
+                  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth/household/invite:
+    post:
+      tags:
+      - auth
+      summary: Invite Family Member
+      description: Invite a co-parent or observer to the household.
+      operationId: invite_family_member_api_v1_auth_household_invite_post
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/app__api__auth__InviteRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Invite Family Member Api V1 Auth Household Invite
+                  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth/household/invites:
+    get:
+      tags:
+      - auth
+      summary: List Invites
+      description: List pending invites for the household.
+      operationId: list_invites_api_v1_auth_household_invites_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+                title: Response List Invites Api V1 Auth Household Invites Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth/household/invites/{invite_id}:
+    delete:
+      tags:
+      - auth
+      summary: Revoke Invite
+      description: Revoke a pending invite.
+      operationId: revoke_invite_api_v1_auth_household_invites__invite_id__delete
+      parameters:
+      - name: invite_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Invite Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Revoke Invite Api V1 Auth Household Invites  Invite
+                  Id  Delete
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/auth/accept-invite:
+    post:
+      tags:
+      - auth
+      summary: Accept Invite
+      description: Accept an invite, create account, and join household.
+      operationId: accept_invite_api_v1_auth_accept_invite_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AcceptInviteRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Accept Invite Api V1 Auth Accept Invite Post
         '422':
           description: Validation Error
           content:
@@ -570,6 +1005,109 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/learning-maps/{map_id}/credit-summary:
+    get:
+      tags:
+      - curriculum
+      summary: Get Credit Summary
+      description: 'Aggregate credit hours across all active nodes in a map.
+
+
+        child_id: optional query parameter. If omitted, falls back to the
+
+        current user''s linked_child_id (set during self-directed
+
+        registration). Credits are counted as "earned" when the child has
+
+        mastery_level of proficient or mastered on that node.'
+      operationId: get_credit_summary_api_v1_learning_maps__map_id__credit_summary_get
+      parameters:
+      - name: map_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Map Id
+      - name: child_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Credit Summary Api V1 Learning Maps  Map Id  Credit
+                  Summary Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/learning-maps/{map_id}/cohort:
+    get:
+      tags:
+      - curriculum
+      summary: Get Cohort Analytics
+      description: 'Cohort-wide mastery analytics for a learning map.
+
+
+        Available to department admins, instructors, and parent_governed
+
+        household owners (the last group has institutional_role=None).
+
+        Students and teaching assistants are rejected because the payload
+
+        includes peer data.'
+      operationId: get_cohort_analytics_api_v1_learning_maps__map_id__cohort_get
+      parameters:
+      - name: map_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Map Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Cohort Analytics Api V1 Learning Maps  Map Id  Cohort
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/learning-maps/{map_id}/edges:
     post:
       tags:
@@ -771,6 +1309,267 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/learning-maps/{map_id}/batch:
+    post:
+      tags:
+      - curriculum
+      summary: Batch Update
+      description: Process all map changes in a single transaction.
+      operationId: batch_update_api_v1_learning_maps__map_id__batch_post
+      parameters:
+      - name: map_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Map Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Batch Update Api V1 Learning Maps  Map Id  Batch Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/curriculum/map-existing:
+    post:
+      tags:
+      - curriculum
+      summary: Map Existing Curriculum Endpoint
+      description: Map an existing curriculum into METHEAN's DAG structure.
+      operationId: map_existing_curriculum_endpoint_api_v1_children__child_id__curriculum_map_existing_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MapExistingRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Map Existing Curriculum Endpoint Api V1 Children  Child
+                  Id  Curriculum Map Existing Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/curriculum/apply-mapping:
+    post:
+      tags:
+      - curriculum
+      summary: Apply Mapping Endpoint
+      description: 'Apply an approved curriculum mapping: create map, nodes, mastery
+        state.'
+      operationId: apply_mapping_endpoint_api_v1_children__child_id__curriculum_apply_mapping_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Proposal
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Apply Mapping Endpoint Api V1 Children  Child Id  Curriculum
+                  Apply Mapping Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/learning-maps/{map_id}/enrich:
+    post:
+      tags:
+      - curriculum
+      summary: Enrich Map Nodes
+      description: Trigger content enrichment for all unenriched nodes in the map.
+      operationId: enrich_map_nodes_api_v1_learning_maps__map_id__enrich_post
+      parameters:
+      - name: map_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Map Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Enrich Map Nodes Api V1 Learning Maps  Map Id  Enrich
+                  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/learning-maps/{map_id}/nodes/{node_id}/enrich:
+    post:
+      tags:
+      - curriculum
+      summary: Enrich Single Node Endpoint
+      description: Enrich a single node with teaching/assessment/resource guidance.
+      operationId: enrich_single_node_endpoint_api_v1_learning_maps__map_id__nodes__node_id__enrich_post
+      parameters:
+      - name: map_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Map Id
+      - name: node_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Node Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Enrich Single Node Endpoint Api V1 Learning Maps  Map
+                  Id  Nodes  Node Id  Enrich Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/learning-maps/{map_id}/nodes/{node_id}/content:
+    get:
+      tags:
+      - curriculum
+      summary: Get Node Content
+      description: Return the full content guidance for a node.
+      operationId: get_node_content_api_v1_learning_maps__map_id__nodes__node_id__content_get
+      parameters:
+      - name: map_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Map Id
+      - name: node_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Node Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Node Content Api V1 Learning Maps  Map Id  Nodes  Node
+                  Id  Content Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/children/{child_id}/nodes/{node_id}/override:
     post:
       tags:
@@ -805,7 +1604,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/OverrideRequest'
+              $ref: '#/components/schemas/app__schemas__curriculum__OverrideRequest'
       responses:
         '200':
           description: Successful Response
@@ -1078,6 +1877,58 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/activities/{activity_id}/learn:
+    get:
+      tags:
+      - state
+      summary: Get Learning Context
+      description: 'Get the full learning context for a child''s activity.
+
+
+        Returns teaching content, lesson steps, practice prompts,
+
+        assessment criteria, and previous attempt history.'
+      operationId: get_learning_context_api_v1_activities__activity_id__learn_get
+      parameters:
+      - name: activity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Activity Id
+      - name: child_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Learning Context Api V1 Activities  Activity Id  Learn
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/governance-rules:
     get:
       tags:
@@ -1279,12 +2130,9 @@ paths:
       tags:
       - governance
       summary: Attest Report
-      description: 'Parent''s digital signature on a governance report.
-
-
-        Creates an immutable governance event as attestation. This is the
-
-        authoritative document — not any AI summary.'
+      description: "Parent's digital signature on a governance report.\n\nCreates\
+        \ an immutable governance event as attestation. This is the\nauthoritative\
+        \ document \u2014 not any AI summary."
       operationId: attest_report_api_v1_governance_report_attest_post
       parameters:
       - name: access_token
@@ -1615,6 +2463,131 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/activities/{activity_id}/reschedule:
+    put:
+      tags:
+      - governance
+      summary: Reschedule Activity
+      description: Move an activity to a different day.
+      operationId: reschedule_activity_api_v1_activities__activity_id__reschedule_put
+      parameters:
+      - name: activity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Activity Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: Body
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Reschedule Activity Api V1 Activities  Activity Id  Reschedule
+                  Put
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/activities:
+    post:
+      tags:
+      - governance
+      summary: Create Manual Activity
+      description: Create a manually scheduled activity (not AI-generated).
+      operationId: create_manual_activity_api_v1_activities_post
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ManualActivityCreate'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Create Manual Activity Api V1 Activities Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/time-log:
+    post:
+      tags:
+      - governance
+      summary: Log Manual Time
+      description: Log manual learning time for compliance tracking.
+      operationId: log_manual_time_api_v1_children__child_id__time_log_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeLogCreate'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Log Manual Time Api V1 Children  Child Id  Time Log
+                  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/plans/{plan_id}/lock:
     put:
       tags:
@@ -1723,6 +2696,47 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TutorMessageResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/tutor/{activity_id}/stream:
+    post:
+      tags:
+      - governance
+      summary: Tutor Stream
+      description: Stream tutor response token-by-token via Server-Sent Events.
+      operationId: tutor_stream_api_v1_tutor__activity_id__stream_post
+      parameters:
+      - name: activity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Activity Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TutorMessageRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
         '422':
           description: Validation Error
           content:
@@ -1994,6 +3008,49 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AIRunResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/ai-runs/{run_id}/context-detail:
+    get:
+      tags:
+      - governance
+      summary: Get Ai Run Context Detail
+      description: 'Returns structured context breakdown for an AIRun.
+
+
+        Parses the assembled_context from input_data and returns source-level detail.
+
+        For legacy runs without assembled context, returns the raw input_data.'
+      operationId: get_ai_run_context_detail_api_v1_ai_runs__run_id__context_detail_get
+      parameters:
+      - name: run_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Run Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Ai Run Context Detail Api V1 Ai Runs  Run Id  Context
+                  Detail Get
         '422':
           description: Validation Error
           content:
@@ -2289,31 +3346,27 @@ paths:
   /api/v1/notifications:
     get:
       tags:
-      - operations
+      - notifications
       summary: List Notifications
+      description: Get recent notifications.
       operationId: list_notifications_api_v1_notifications_get
       parameters:
-      - name: skip
+      - name: unread
         in: query
         required: false
         schema:
-          type: integer
-          minimum: 0
-          description: Number of records to skip
-          default: 0
-          title: Skip
-        description: Number of records to skip
+          type: boolean
+          default: false
+          title: Unread
       - name: limit
         in: query
         required: false
         schema:
           type: integer
-          maximum: 200
+          maximum: 100
           minimum: 1
-          description: Max records to return
-          default: 50
+          default: 20
           title: Limit
-        description: Max records to return
       - name: access_token
         in: cookie
         required: false
@@ -2327,9 +3380,7 @@ paths:
           description: Successful Response
           content:
             application/json:
-              schema:
-                type: object
-                title: Response List Notifications Api V1 Notifications Get
+              schema: {}
         '422':
           description: Validation Error
           content:
@@ -2653,6 +3704,34 @@ paths:
           type: string
           format: uuid
           title: Artifact Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/household/export:
+    post:
+      tags:
+      - operations
+      summary: Export Household Data
+      description: Export complete family educational record as ZIP.
+      operationId: export_household_data_api_v1_household_export_post
+      parameters:
       - name: access_token
         in: cookie
         required: false
@@ -3515,10 +4594,4016 @@ paths:
               schema:
                 type: string
                 title: Response Prometheus Metrics Api V1 Metrics Get
+  /api/v1/children/{child_id}/education-plan/generate:
+    post:
+      tags:
+      - education-plan
+      summary: Generate Plan Endpoint
+      operationId: generate_plan_endpoint_api_v1_children__child_id__education_plan_generate_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeneratePlanRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Generate Plan Endpoint Api V1 Children  Child Id  Education
+                  Plan Generate Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/education-plan:
+    get:
+      tags:
+      - education-plan
+      summary: Get Plan
+      operationId: get_plan_api_v1_children__child_id__education_plan_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Plan Api V1 Children  Child Id  Education Plan
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - education-plan
+      summary: Update Plan
+      operationId: update_plan_api_v1_children__child_id__education_plan_put
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePlanRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Update Plan Api V1 Children  Child Id  Education Plan
+                  Put
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/education-plan/approve:
+    post:
+      tags:
+      - education-plan
+      summary: Approve Plan Endpoint
+      operationId: approve_plan_endpoint_api_v1_children__child_id__education_plan_approve_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Approve Plan Endpoint Api V1 Children  Child Id  Education
+                  Plan Approve Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/education-plan/years/{year_key}/generate-curricula:
+    post:
+      tags:
+      - education-plan
+      summary: Generate Curricula Endpoint
+      operationId: generate_curricula_endpoint_api_v1_children__child_id__education_plan_years__year_key__generate_curricula_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: year_key
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Year Key
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Generate Curricula Endpoint Api V1 Children  Child
+                  Id  Education Plan Years  Year Key  Generate Curricula Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/assessments:
+    post:
+      tags:
+      - assessment
+      summary: Create Assessment
+      operationId: create_assessment_api_v1_children__child_id__assessments_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssessmentCreate'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Create Assessment Api V1 Children  Child Id  Assessments
+                  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - assessment
+      summary: List Assessments
+      operationId: list_assessments_api_v1_children__child_id__assessments_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: assessment_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Assessment Type
+      - name: subject
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject
+      - name: skip
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Number of records to skip
+          default: 0
+          title: Skip
+        description: Number of records to skip
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          description: Max records to return
+          default: 50
+          title: Limit
+        description: Max records to return
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response List Assessments Api V1 Children  Child Id  Assessments
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/portfolio:
+    post:
+      tags:
+      - assessment
+      summary: Create Portfolio Entry
+      operationId: create_portfolio_entry_api_v1_children__child_id__portfolio_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PortfolioCreate'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Create Portfolio Entry Api V1 Children  Child Id  Portfolio
+                  Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - assessment
+      summary: List Portfolio
+      operationId: list_portfolio_api_v1_children__child_id__portfolio_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: skip
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          description: Number of records to skip
+          default: 0
+          title: Skip
+        description: Number of records to skip
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          description: Max records to return
+          default: 50
+          title: Limit
+        description: Max records to return
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response List Portfolio Api V1 Children  Child Id  Portfolio
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/transcript:
+    get:
+      tags:
+      - assessment
+      summary: Get Transcript
+      operationId: get_transcript_api_v1_children__child_id__transcript_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: year
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Year
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Transcript Api V1 Children  Child Id  Transcript
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/portfolio/export:
+    get:
+      tags:
+      - assessment
+      summary: Portfolio Export
+      operationId: portfolio_export_api_v1_children__child_id__portfolio_export_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: from
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+          title: From
+      - name: to
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+          title: To
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Portfolio Export Api V1 Children  Child Id  Portfolio
+                  Export Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/compliance/states:
+    get:
+      tags:
+      - compliance
+      summary: List States
+      description: "List all supported states with summary. Public endpoint \u2014\
+        \ no auth required."
+      operationId: list_states_api_v1_compliance_states_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  type: object
+                type: array
+                title: Response List States Api V1 Compliance States Get
+  /api/v1/compliance/states/{code}:
+    get:
+      tags:
+      - compliance
+      summary: Get State Detail
+      description: Detailed requirements for a state.
+      operationId: get_state_detail_api_v1_compliance_states__code__get
+      parameters:
+      - name: code
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Code
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get State Detail Api V1 Compliance States  Code  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/compliance/check:
+    get:
+      tags:
+      - compliance
+      summary: Compliance Check
+      operationId: compliance_check_api_v1_children__child_id__compliance_check_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: state
+        in: query
+        required: true
+        schema:
+          type: string
+          description: State code, e.g. NY, TX, CA
+          title: State
+        description: State code, e.g. NY, TX, CA
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Compliance Check Api V1 Children  Child Id  Compliance
+                  Check Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/attendance:
+    get:
+      tags:
+      - compliance
+      summary: Get Attendance
+      operationId: get_attendance_api_v1_children__child_id__attendance_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: start
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+          title: Start
+      - name: end
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+          title: End
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Attendance Api V1 Children  Child Id  Attendance
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/hours:
+    get:
+      tags:
+      - compliance
+      summary: Get Hours
+      operationId: get_hours_api_v1_children__child_id__hours_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Hours Api V1 Children  Child Id  Hours Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/compliance/domains:
+    get:
+      tags:
+      - compliance
+      summary: List Compliance Domains
+      description: List every configured compliance domain.
+      operationId: list_compliance_domains_api_v1_compliance_domains_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                items:
+                  type: object
+                type: array
+                title: Response List Compliance Domains Api V1 Compliance Domains
+                  Get
+  /api/v1/compliance/domain/{domain}/check/{child_id}:
+    get:
+      tags:
+      - compliance
+      summary: Check Domain Compliance Api
+      operationId: check_domain_compliance_api_api_v1_compliance_domain__domain__check__child_id__get
+      parameters:
+      - name: domain
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Domain
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Check Domain Compliance Api Api V1 Compliance Domain  Domain  Check  Child
+                  Id  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/curricula/generate:
+    post:
+      tags:
+      - annual-curriculum
+      summary: Generate Curriculum
+      description: Generate a new annual curriculum draft.
+      operationId: generate_curriculum_api_v1_children__child_id__curricula_generate_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/curricula:
+    get:
+      tags:
+      - annual-curriculum
+      summary: List Curricula
+      description: List all annual curricula for a child.
+      operationId: list_curricula_api_v1_children__child_id__curricula_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/curricula/{curriculum_id}:
+    get:
+      tags:
+      - annual-curriculum
+      summary: Get Curriculum
+      description: Get full curriculum detail including scope_sequence.
+      operationId: get_curriculum_api_v1_curricula__curriculum_id__get
+      parameters:
+      - name: curriculum_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Curriculum Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/curricula/{curriculum_id}/weeks/{week_number}:
+    get:
+      tags:
+      - annual-curriculum
+      summary: Get Week Detail
+      description: Get planned + actual for a specific week.
+      operationId: get_week_detail_api_v1_curricula__curriculum_id__weeks__week_number__get
+      parameters:
+      - name: curriculum_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Curriculum Id
+      - name: week_number
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Week Number
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/curricula/{curriculum_id}/approve:
+    post:
+      tags:
+      - annual-curriculum
+      summary: Approve Curriculum
+      description: Approve curriculum and materialize ALL weeks.
+      operationId: approve_curriculum_api_v1_curricula__curriculum_id__approve_post
+      parameters:
+      - name: curriculum_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Curriculum Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/curricula/{curriculum_id}/weeks/{week_number}/notes:
+    put:
+      tags:
+      - annual-curriculum
+      summary: Update Week Notes
+      description: Add/update parent notes for a week.
+      operationId: update_week_notes_api_v1_curricula__curriculum_id__weeks__week_number__notes_put
+      parameters:
+      - name: curriculum_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Curriculum Id
+      - name: week_number
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Week Number
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WeekNotesRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/curricula/{curriculum_id}/weeks/{week_number}/activities:
+    post:
+      tags:
+      - annual-curriculum
+      summary: Add Activity To Week
+      description: Add a parent-authored activity to a specific week.
+      operationId: add_activity_to_week_api_v1_curricula__curriculum_id__weeks__week_number__activities_post
+      parameters:
+      - name: curriculum_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Curriculum Id
+      - name: week_number
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Week Number
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddActivityRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/curricula/{curriculum_id}/weeks/{week_number}/activities/{activity_id}:
+    delete:
+      tags:
+      - annual-curriculum
+      summary: Remove Activity
+      description: Soft-delete an activity (set status to cancelled).
+      operationId: remove_activity_api_v1_curricula__curriculum_id__weeks__week_number__activities__activity_id__delete
+      parameters:
+      - name: curriculum_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Curriculum Id
+      - name: week_number
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Week Number
+      - name: activity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Activity Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    put:
+      tags:
+      - annual-curriculum
+      summary: Edit Activity
+      description: Edit an activity within a week.
+      operationId: edit_activity_api_v1_curricula__curriculum_id__weeks__week_number__activities__activity_id__put
+      parameters:
+      - name: curriculum_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Curriculum Id
+      - name: week_number
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Week Number
+      - name: activity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Activity Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditActivityRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/curricula/{curriculum_id}/weeks/{week_number}/activities/{activity_id}/move:
+    post:
+      tags:
+      - annual-curriculum
+      summary: Move Activity
+      description: Move an activity to a different week.
+      operationId: move_activity_api_v1_curricula__curriculum_id__weeks__week_number__activities__activity_id__move_post
+      parameters:
+      - name: curriculum_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Curriculum Id
+      - name: week_number
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Week Number
+      - name: activity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Activity Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveActivityRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/curricula/{curriculum_id}/weeks/{week_number}/complete:
+    post:
+      tags:
+      - annual-curriculum
+      summary: Complete Week
+      description: Record week completion with actual data.
+      operationId: complete_week_api_v1_curricula__curriculum_id__weeks__week_number__complete_post
+      parameters:
+      - name: curriculum_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Curriculum Id
+      - name: week_number
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Week Number
+      - name: notes
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/curricula/history:
+    get:
+      tags:
+      - annual-curriculum
+      summary: Curriculum History
+      description: Get complete historical record across all years and subjects.
+      operationId: curriculum_history_api_v1_children__child_id__curricula_history_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/curricula/history/{academic_year}:
+    get:
+      tags:
+      - annual-curriculum
+      summary: Curriculum History Year
+      description: Get all curricula for a specific academic year.
+      operationId: curriculum_history_year_api_v1_children__child_id__curricula_history__academic_year__get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: academic_year
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Academic Year
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/activities/{activity_id}/feedback:
+    post:
+      tags:
+      - feedback-reading
+      summary: Create Feedback
+      description: Leave a note for a child on a specific activity.
+      operationId: create_feedback_api_v1_activities__activity_id__feedback_post
+      parameters:
+      - name: activity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Activity Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackCreate'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - feedback-reading
+      summary: List Feedback
+      description: List feedback on an activity.
+      operationId: list_feedback_api_v1_activities__activity_id__feedback_get
+      parameters:
+      - name: activity_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Activity Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/feedback/recent:
+    get:
+      tags:
+      - feedback-reading
+      summary: Recent Feedback
+      description: Recent feedback across all activities for a child.
+      operationId: recent_feedback_api_v1_children__child_id__feedback_recent_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 50
+          minimum: 1
+          default: 10
+          title: Limit
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/reading-log:
+    post:
+      tags:
+      - feedback-reading
+      summary: Create Reading Entry
+      description: Add a book to the reading log.
+      operationId: create_reading_entry_api_v1_children__child_id__reading_log_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReadingLogCreate'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - feedback-reading
+      summary: List Reading Log
+      description: List reading log entries, filterable by status and subject.
+      operationId: list_reading_log_api_v1_children__child_id__reading_log_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+      - name: subject_area
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject Area
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          default: 50
+          title: Limit
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/reading-log/{entry_id}:
+    put:
+      tags:
+      - feedback-reading
+      summary: Update Reading Entry
+      description: Update a reading log entry.
+      operationId: update_reading_entry_api_v1_reading_log__entry_id__put
+      parameters:
+      - name: entry_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Entry Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReadingLogUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/reading-log/stats:
+    get:
+      tags:
+      - feedback-reading
+      summary: Reading Stats
+      description: Reading statistics for a child.
+      operationId: reading_stats_api_v1_children__child_id__reading_log_stats_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/reading-log/current:
+    get:
+      tags:
+      - feedback-reading
+      summary: Current Reading
+      description: Books currently being read.
+      operationId: current_reading_api_v1_children__child_id__reading_log_current_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/feedback:
+    post:
+      tags:
+      - beta-feedback
+      summary: Submit Feedback
+      description: Submit beta feedback from the parent dashboard.
+      operationId: submit_feedback_api_v1_feedback_post
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BetaFeedbackCreate'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - beta-feedback
+      summary: List Feedback
+      description: List the current user's own feedback submissions, newest first.
+      operationId: list_feedback_api_v1_feedback_get
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          default: 50
+          title: Limit
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/feedback/{feedback_id}:
+    get:
+      tags:
+      - beta-feedback
+      summary: Get Feedback
+      description: Detail for a single feedback submission owned by the current user.
+      operationId: get_feedback_api_v1_feedback__feedback_id__get
+      parameters:
+      - name: feedback_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Feedback Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/notifications/devices:
+    post:
+      tags:
+      - notifications
+      summary: Register Device
+      description: Register a push notification token. Upserts by token value.
+      operationId: register_device_api_v1_notifications_devices_post
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterDeviceBody'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/notifications/devices/{token}:
+    delete:
+      tags:
+      - notifications
+      summary: Unregister Device
+      description: Unregister a push token (e.g., on logout).
+      operationId: unregister_device_api_v1_notifications_devices__token__delete
+      parameters:
+      - name: token
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Token
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/notifications/{notification_id}/read:
+    put:
+      tags:
+      - notifications
+      summary: Read Notification
+      description: Mark a notification as read.
+      operationId: read_notification_api_v1_notifications__notification_id__read_put
+      parameters:
+      - name: notification_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Notification Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/notifications/read-all:
+    put:
+      tags:
+      - notifications
+      summary: Read All Notifications
+      description: Mark all notifications as read.
+      operationId: read_all_notifications_api_v1_notifications_read_all_put
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/notifications/test-daily-summary:
+    post:
+      tags:
+      - notifications
+      summary: Test Daily Summary
+      description: Send a test daily summary email to the current user's household.
+      operationId: test_daily_summary_api_v1_notifications_test_daily_summary_post
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Test Daily Summary Api V1 Notifications Test Daily
+                  Summary Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/documents/ihip:
+    get:
+      tags:
+      - documents
+      summary: Get Ihip
+      operationId: get_ihip_api_v1_children__child_id__documents_ihip_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: academic_year
+        in: query
+        required: true
+        schema:
+          type: string
+          description: e.g. 2026-2027
+          title: Academic Year
+        description: e.g. 2026-2027
+      - name: state
+        in: query
+        required: false
+        schema:
+          type: string
+          default: NY
+          title: State
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/documents/quarterly-report:
+    get:
+      tags:
+      - documents
+      summary: Get Quarterly Report
+      operationId: get_quarterly_report_api_v1_children__child_id__documents_quarterly_report_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: quarter
+        in: query
+        required: true
+        schema:
+          type: integer
+          maximum: 4
+          minimum: 1
+          title: Quarter
+      - name: academic_year
+        in: query
+        required: true
+        schema:
+          type: string
+          description: e.g. 2026-2027
+          title: Academic Year
+        description: e.g. 2026-2027
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/documents/attendance:
+    get:
+      tags:
+      - documents
+      summary: Get Attendance
+      operationId: get_attendance_api_v1_children__child_id__documents_attendance_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: start
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+          description: Start date
+          title: Start
+        description: Start date
+      - name: end
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date
+          description: End date
+          title: End
+        description: End date
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/documents/transcript:
+    get:
+      tags:
+      - documents
+      summary: Get Transcript
+      operationId: get_transcript_api_v1_children__child_id__documents_transcript_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/resources:
+    post:
+      tags:
+      - resources
+      summary: Create Resource
+      description: Add a resource to the family library.
+      operationId: create_resource_api_v1_resources_post
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateResourceRequest'
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    get:
+      tags:
+      - resources
+      summary: List Resources
+      description: List family resources with optional filters.
+      operationId: list_resources_api_v1_resources_get
+      parameters:
+      - name: resource_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Resource Type
+      - name: subject_area
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject Area
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/resources/{resource_id}:
+    put:
+      tags:
+      - resources
+      summary: Update Resource
+      description: Update a resource.
+      operationId: update_resource_api_v1_resources__resource_id__put
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Resource Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateResourceRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - resources
+      summary: Delete Resource
+      description: Delete a resource.
+      operationId: delete_resource_api_v1_resources__resource_id__delete
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Resource Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/resources/{resource_id}/link/{node_id}:
+    post:
+      tags:
+      - resources
+      summary: Link To Node
+      description: Link a resource to a learning node.
+      operationId: link_to_node_api_v1_resources__resource_id__link__node_id__post
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Resource Id
+      - name: node_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Node Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    delete:
+      tags:
+      - resources
+      summary: Unlink From Node
+      description: Unlink a resource from a learning node.
+      operationId: unlink_from_node_api_v1_resources__resource_id__link__node_id__delete
+      parameters:
+      - name: resource_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Resource Id
+      - name: node_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Node Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/intelligence:
+    get:
+      tags:
+      - intelligence
+      summary: Get Intelligence
+      description: Returns the full intelligence profile for a child.
+      operationId: get_intelligence_api_v1_children__child_id__intelligence_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Intelligence Api V1 Children  Child Id  Intelligence
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/intelligence/observations:
+    put:
+      tags:
+      - intelligence
+      summary: Add Observation
+      description: Parent adds a manual observation. Parent's word is law.
+      operationId: add_observation_api_v1_children__child_id__intelligence_observations_put
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddObservationRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Add Observation Api V1 Children  Child Id  Intelligence
+                  Observations Put
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/intelligence/observations/{index}:
+    delete:
+      tags:
+      - intelligence
+      summary: Remove Observation
+      description: Parent removes a specific observation by index.
+      operationId: remove_observation_api_v1_children__child_id__intelligence_observations__index__delete
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: index
+        in: path
+        required: true
+        schema:
+          type: integer
+          title: Index
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Remove Observation Api V1 Children  Child Id  Intelligence
+                  Observations  Index  Delete
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/intelligence/override:
+    put:
+      tags:
+      - intelligence
+      summary: Override Intelligence
+      description: Parent overrides any AI-accumulated observation. Parent governs.
+      operationId: override_intelligence_api_v1_children__child_id__intelligence_override_put
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/app__api__intelligence__OverrideRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Override Intelligence Api V1 Children  Child Id  Intelligence
+                  Override Put
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/household/governance-intelligence:
+    get:
+      tags:
+      - intelligence
+      summary: Get Governance Intelligence
+      description: Returns governance pattern analysis for the current household.
+      operationId: get_governance_intelligence_api_v1_household_governance_intelligence_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Governance Intelligence Api V1 Household Governance
+                  Intelligence Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/achievements:
+    get:
+      tags:
+      - intelligence
+      summary: List Achievements
+      description: List earned achievements and all possible definitions.
+      operationId: list_achievements_api_v1_children__child_id__achievements_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response List Achievements Api V1 Children  Child Id  Achievements
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/streak:
+    get:
+      tags:
+      - intelligence
+      summary: Get Child Streak
+      description: Get current streak info for a child.
+      operationId: get_child_streak_api_v1_children__child_id__streak_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Child Streak Api V1 Children  Child Id  Streak
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/billing/subscribe:
+    post:
+      tags:
+      - billing
+      summary: Subscribe
+      description: Create Stripe checkout session and return URL.
+      operationId: subscribe_api_v1_billing_subscribe_post
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/CheckoutBody'
+              - type: 'null'
+              title: Body
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Subscribe Api V1 Billing Subscribe Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/billing/status:
+    get:
+      tags:
+      - billing
+      summary: Status
+      description: Get current subscription status.
+      operationId: status_api_v1_billing_status_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Status Api V1 Billing Status Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/billing/cancel:
+    post:
+      tags:
+      - billing
+      summary: Cancel
+      description: Cancel subscription at period end.
+      operationId: cancel_api_v1_billing_cancel_post
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Cancel Api V1 Billing Cancel Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/billing/portal:
+    post:
+      tags:
+      - billing
+      summary: Portal
+      description: Get Stripe customer portal URL.
+      operationId: portal_api_v1_billing_portal_post
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/PortalBody'
+              - type: 'null'
+              title: Body
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Portal Api V1 Billing Portal Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/billing/webhook:
+    post:
+      tags:
+      - billing
+      summary: Webhook
+      description: "Process Stripe webhook (no auth \u2014 verified by signature)."
+      operationId: webhook_api_v1_billing_webhook_post
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Webhook Api V1 Billing Webhook Post
+  /api/v1/usage/current:
+    get:
+      tags:
+      - usage
+      summary: Current Usage
+      description: Get current billing period usage status.
+      operationId: current_usage_api_v1_usage_current_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Current Usage Api V1 Usage Current Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/usage/breakdown:
+    get:
+      tags:
+      - usage
+      summary: Usage Breakdown
+      description: Get detailed usage breakdown by role and day.
+      operationId: usage_breakdown_api_v1_usage_breakdown_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Usage Breakdown Api V1 Usage Breakdown Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/usage/ai-daily:
+    get:
+      tags:
+      - usage
+      summary: Ai Daily Usage
+      description: Get today's AI token and cost usage with budget status.
+      operationId: ai_daily_usage_api_v1_usage_ai_daily_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Ai Daily Usage Api V1 Usage Ai Daily Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/calibration:
+    get:
+      tags:
+      - calibration
+      summary: Get Calibration Profile
+      description: Returns the CalibrationProfile for a child.
+      operationId: get_calibration_profile_api_v1_children__child_id__calibration_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Calibration Profile Api V1 Children  Child Id  Calibration
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/calibration/predictions:
+    get:
+      tags:
+      - calibration
+      summary: List Predictions
+      description: Paginated list of evaluator predictions for a child.
+      operationId: list_predictions_api_v1_children__child_id__calibration_predictions_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: reconciled_only
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+          title: Reconciled Only
+      - name: min_drift
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: number
+            minimum: 0.0
+          - type: 'null'
+          title: Min Drift
+      - name: subject
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject
+      - name: skip
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+          default: 0
+          title: Skip
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 20
+          title: Limit
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response List Predictions Api V1 Children  Child Id  Calibration
+                  Predictions Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/calibration/offset:
+    patch:
+      tags:
+      - calibration
+      summary: Update Calibration Offset
+      description: Toggle offset active/inactive or set a parent override offset.
+      operationId: update_calibration_offset_api_v1_children__child_id__calibration_offset_patch
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OffsetUpdateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Update Calibration Offset Api V1 Children  Child Id  Calibration
+                  Offset Patch
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/calibration/drift-history:
+    get:
+      tags:
+      - calibration
+      summary: Get Drift History
+      description: Time series of mean drift grouped by week.
+      operationId: get_drift_history_api_v1_children__child_id__calibration_drift_history_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: weeks
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 52
+          minimum: 1
+          default: 12
+          title: Weeks
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Drift History Api V1 Children  Child Id  Calibration
+                  Drift History Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/calibration/temporal-drift:
+    get:
+      tags:
+      - calibration
+      summary: Get Temporal Drift
+      description: Temporal drift analysis with trend detection.
+      operationId: get_temporal_drift_api_v1_children__child_id__calibration_temporal_drift_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Temporal Drift Api V1 Children  Child Id  Calibration
+                  Temporal Drift Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/calibration/confidence-distribution:
+    get:
+      tags:
+      - calibration
+      summary: Get Confidence Distribution
+      description: Confidence score distribution histogram.
+      operationId: get_confidence_distribution_api_v1_children__child_id__calibration_confidence_distribution_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Confidence Distribution Api V1 Children  Child
+                  Id  Calibration Confidence Distribution Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/calibration/subject-detail:
+    get:
+      tags:
+      - calibration
+      summary: Get Subject Detail
+      description: Per-subject calibration detail with recommendations.
+      operationId: get_subject_detail_api_v1_children__child_id__calibration_subject_detail_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Subject Detail Api V1 Children  Child Id  Calibration
+                  Subject Detail Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/calibration/export:
+    get:
+      tags:
+      - calibration
+      summary: Export Calibration Data
+      description: Full calibration data export for a child. Parent's data.
+      operationId: export_calibration_data_api_v1_children__child_id__calibration_export_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Export Calibration Data Api V1 Children  Child Id  Calibration
+                  Export Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/style-vector:
+    get:
+      tags:
+      - style-vector
+      summary: Get Style Vector
+      description: Returns the full LearnerStyleVector for a child.
+      operationId: get_style_vector_api_v1_children__child_id__style_vector_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Style Vector Api V1 Children  Child Id  Style
+                  Vector Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/style-vector/overrides:
+    patch:
+      tags:
+      - style-vector
+      summary: Set Style Override
+      description: Lock or unlock a parent override on a style dimension.
+      operationId: set_style_override_api_v1_children__child_id__style_vector_overrides_patch
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/app__api__style_vector__OverrideRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Set Style Override Api V1 Children  Child Id  Style
+                  Vector Overrides Patch
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/style-vector/bounds:
+    patch:
+      tags:
+      - style-vector
+      summary: Set Style Bounds
+      description: Set or remove parent bounds on a style dimension.
+      operationId: set_style_bounds_api_v1_children__child_id__style_vector_bounds_patch
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BoundsRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Set Style Bounds Api V1 Children  Child Id  Style
+                  Vector Bounds Patch
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/style-vector/history:
+    get:
+      tags:
+      - style-vector
+      summary: Get Style Vector History
+      description: 'Returns the current vector state with timestamp as a history entry.
+
+
+        Can be expanded later to return multiple snapshots.'
+      operationId: get_style_vector_history_api_v1_children__child_id__style_vector_history_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Style Vector History Api V1 Children  Child Id  Style
+                  Vector History Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/household/family-insights:
+    get:
+      tags:
+      - family-intelligence
+      summary: List Family Insights
+      description: Paginated list of FamilyInsights for the household.
+      operationId: list_family_insights_api_v1_household_family_insights_get
+      parameters:
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+      - name: pattern_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Pattern Type
+      - name: child_id
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Child Id
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 100
+          minimum: 1
+          default: 20
+          title: Per Page
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response List Family Insights Api V1 Household Family Insights
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/household/family-insights/{insight_id}:
+    get:
+      tags:
+      - family-intelligence
+      summary: Get Family Insight
+      description: Returns a single FamilyInsight with full evidence.
+      operationId: get_family_insight_api_v1_household_family_insights__insight_id__get
+      parameters:
+      - name: insight_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Insight Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Family Insight Api V1 Household Family Insights  Insight
+                  Id  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/household/family-insights/{insight_id}/status:
+    patch:
+      tags:
+      - family-intelligence
+      summary: Update Insight Status
+      description: Update insight status (acknowledge, act on, or dismiss).
+      operationId: update_insight_status_api_v1_household_family_insights__insight_id__status_patch
+      parameters:
+      - name: insight_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Insight Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatusUpdateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Update Insight Status Api V1 Household Family Insights  Insight
+                  Id  Status Patch
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/household/family-insights/config:
+    get:
+      tags:
+      - family-intelligence
+      summary: Get Insight Config
+      description: Returns the FamilyInsightConfig for this household.
+      operationId: get_insight_config_api_v1_household_family_insights_config_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Insight Config Api V1 Household Family Insights
+                  Config Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - family-intelligence
+      summary: Update Insight Config
+      description: Update FamilyInsightConfig. Merges pattern_settings.
+      operationId: update_insight_config_api_v1_household_family_insights_config_patch
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigUpdateRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Update Insight Config Api V1 Household Family Insights
+                  Config Patch
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/household/family-insights/summary:
+    get:
+      tags:
+      - family-intelligence
+      summary: Get Insight Summary
+      description: Aggregate summary for the dashboard.
+      operationId: get_insight_summary_api_v1_household_family_insights_summary_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Insight Summary Api V1 Household Family Insights
+                  Summary Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/wellbeing/anomalies:
+    get:
+      tags:
+      - wellbeing
+      summary: List Anomalies
+      description: Paginated list of wellbeing anomalies for a child. PARENT-ONLY.
+      operationId: list_anomalies_api_v1_children__child_id__wellbeing_anomalies_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: status
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+      - name: anomaly_type
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Anomaly Type
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 50
+          minimum: 1
+          default: 10
+          title: Per Page
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response List Anomalies Api V1 Children  Child Id  Wellbeing
+                  Anomalies Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/wellbeing/anomalies/{anomaly_id}:
+    get:
+      tags:
+      - wellbeing
+      summary: Get Anomaly
+      description: Single anomaly with full evidence. PARENT-ONLY.
+      operationId: get_anomaly_api_v1_children__child_id__wellbeing_anomalies__anomaly_id__get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: anomaly_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Anomaly Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Anomaly Api V1 Children  Child Id  Wellbeing Anomalies  Anomaly
+                  Id  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/wellbeing/anomalies/{anomaly_id}/status:
+    patch:
+      tags:
+      - wellbeing
+      summary: Update Anomaly Status
+      description: Update anomaly status. PARENT-ONLY.
+      operationId: update_anomaly_status_api_v1_children__child_id__wellbeing_anomalies__anomaly_id__status_patch
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: anomaly_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Anomaly Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StatusUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Update Anomaly Status Api V1 Children  Child Id  Wellbeing
+                  Anomalies  Anomaly Id  Status Patch
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/wellbeing/config:
+    get:
+      tags:
+      - wellbeing
+      summary: Get Config
+      description: Returns wellbeing config or defaults. PARENT-ONLY.
+      operationId: get_config_api_v1_children__child_id__wellbeing_config_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Config Api V1 Children  Child Id  Wellbeing Config
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+    patch:
+      tags:
+      - wellbeing
+      summary: Update Config
+      description: Update wellbeing config. Merges custom_thresholds. PARENT-ONLY.
+      operationId: update_config_api_v1_children__child_id__wellbeing_config_patch
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfigUpdate'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Update Config Api V1 Children  Child Id  Wellbeing
+                  Config Patch
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/wellbeing/summary:
+    get:
+      tags:
+      - wellbeing
+      summary: Get Summary
+      description: Aggregate wellbeing summary. PARENT-ONLY.
+      operationId: get_summary_api_v1_children__child_id__wellbeing_summary_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Summary Api V1 Children  Child Id  Wellbeing Summary
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/dashboard:
+    get:
+      tags:
+      - child-dashboard
+      summary: Get Child Dashboard
+      description: 'Single endpoint: everything the child needs on load.'
+      operationId: get_child_dashboard_api_v1_children__child_id__dashboard_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get Child Dashboard Api V1 Children  Child Id  Dashboard
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/dashboard/me:
+    get:
+      tags:
+      - child-dashboard
+      summary: Get My Dashboard
+      description: 'Unified dashboard.
+
+
+        Self-directed learners get their own learning view plus a governance
+
+        summary, so both hats are visible in one place. Parents get a light
+
+        household snapshot with the list of children they govern.'
+      operationId: get_my_dashboard_api_v1_dashboard_me_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Get My Dashboard Api V1 Dashboard Me Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /health:
     get:
       summary: Health
-      description: Basic health check — API is alive.
+      description: "Basic health check \u2014 API is alive."
       operationId: health_health_get
       responses:
         '200':
@@ -3531,7 +8616,7 @@ paths:
   /health/ready:
     get:
       summary: Health Ready
-      description: Readiness probe — DB + Redis + Celery status.
+      description: "Readiness probe \u2014 DB + Redis + Celery status."
       operationId: health_ready_health_ready_get
       responses:
         '200':
@@ -3621,6 +8706,24 @@ components:
       - completed_at
       - created_at
       title: AIRunResponse
+    AcceptInviteRequest:
+      properties:
+        token:
+          type: string
+          title: Token
+        password:
+          type: string
+          minLength: 8
+          title: Password
+        display_name:
+          type: string
+          title: Display Name
+      type: object
+      required:
+      - token
+      - password
+      - display_name
+      title: AcceptInviteRequest
     ActivityApproveReject:
       properties:
         reason:
@@ -3682,6 +8785,40 @@ components:
       - node_id
       - sort_order
       title: ActivityInPlan
+    AddActivityRequest:
+      properties:
+        title:
+          type: string
+          title: Title
+        activity_type:
+          type: string
+          title: Activity Type
+          default: lesson
+        description:
+          type: string
+          title: Description
+          default: ''
+        estimated_minutes:
+          type: integer
+          title: Estimated Minutes
+          default: 30
+        scheduled_day:
+          type: string
+          title: Scheduled Day
+          default: Monday
+      type: object
+      required:
+      - title
+      title: AddActivityRequest
+    AddObservationRequest:
+      properties:
+        observation:
+          type: string
+          title: Observation
+      type: object
+      required:
+      - observation
+      title: AddObservationRequest
     AdvisorReportResponse:
       properties:
         id:
@@ -3731,6 +8868,81 @@ components:
       - parent_reviewed
       - created_at
       title: AdvisorReportResponse
+    AssessmentCreate:
+      properties:
+        node_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Node Id
+        assessment_type:
+          $ref: '#/components/schemas/AssessmentType'
+        title:
+          type: string
+          maxLength: 255
+          minLength: 1
+          title: Title
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        qualitative_notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Qualitative Notes
+        rubric_scores:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Rubric Scores
+        mastery_judgment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mastery Judgment
+        confidence_override:
+          anyOf:
+          - type: number
+            maximum: 1.0
+            minimum: 0.0
+          - type: 'null'
+          title: Confidence Override
+        artifact_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Artifact Ids
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject
+      type: object
+      required:
+      - assessment_type
+      - title
+      title: AssessmentCreate
+    AssessmentType:
+      type: string
+      enum:
+      - observation
+      - narration
+      - written
+      - demonstration
+      - project
+      - timed_exam
+      - research_paper
+      - lab_report
+      - oral_defense
+      - peer_assessment
+      - portfolio_review
+      - clinical_evaluation
+      title: AssessmentType
     AttemptResponse:
       properties:
         id:
@@ -3886,6 +9098,154 @@ components:
       - report_id
       - attestation_text
       title: AttestRequest
+    BatchEdgeCreate:
+      properties:
+        from_node_id:
+          type: string
+          title: From Node Id
+        to_node_id:
+          type: string
+          title: To Node Id
+      type: object
+      required:
+      - from_node_id
+      - to_node_id
+      title: BatchEdgeCreate
+    BatchNodeCreate:
+      properties:
+        node_type:
+          type: string
+          title: Node Type
+        title:
+          type: string
+          title: Title
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        estimated_minutes:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Estimated Minutes
+        sort_order:
+          type: integer
+          title: Sort Order
+          default: 0
+      type: object
+      required:
+      - node_type
+      - title
+      title: BatchNodeCreate
+    BatchNodeUpdate:
+      properties:
+        id:
+          type: string
+          title: Id
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        node_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Node Type
+        estimated_minutes:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Estimated Minutes
+        sort_order:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Sort Order
+      type: object
+      required:
+      - id
+      title: BatchNodeUpdate
+    BatchRequest:
+      properties:
+        nodes_create:
+          items:
+            $ref: '#/components/schemas/BatchNodeCreate'
+          type: array
+          title: Nodes Create
+          default: []
+        nodes_update:
+          items:
+            $ref: '#/components/schemas/BatchNodeUpdate'
+          type: array
+          title: Nodes Update
+          default: []
+        nodes_delete:
+          items:
+            type: string
+          type: array
+          title: Nodes Delete
+          default: []
+        edges_create:
+          items:
+            $ref: '#/components/schemas/BatchEdgeCreate'
+          type: array
+          title: Edges Create
+          default: []
+        edges_delete:
+          items:
+            type: string
+          type: array
+          title: Edges Delete
+          default: []
+      type: object
+      title: BatchRequest
+    BetaFeedbackCreate:
+      properties:
+        feedback_type:
+          $ref: '#/components/schemas/BetaFeedbackType'
+          default: general
+        page_context:
+          anyOf:
+          - type: string
+            maxLength: 255
+          - type: 'null'
+          title: Page Context
+        rating:
+          anyOf:
+          - type: integer
+            maximum: 5.0
+            minimum: 1.0
+          - type: 'null'
+          title: Rating
+        message:
+          type: string
+          minLength: 1
+          title: Message
+        screenshot_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Screenshot Url
+      type: object
+      required:
+      - message
+      title: BetaFeedbackCreate
+    BetaFeedbackType:
+      type: string
+      enum:
+      - bug
+      - feature_request
+      - usability
+      - content
+      - general
+      title: BetaFeedbackType
     Body_upload_artifact_endpoint_api_v1_children__child_id__artifacts_post:
       properties:
         file:
@@ -3896,6 +9256,27 @@ components:
       required:
       - file
       title: Body_upload_artifact_endpoint_api_v1_children__child_id__artifacts_post
+    BoundsRequest:
+      properties:
+        dimension:
+          type: string
+          title: Dimension
+        min:
+          anyOf:
+          - type: number
+          - type: integer
+          - type: 'null'
+          title: Min
+        max:
+          anyOf:
+          - type: number
+          - type: integer
+          - type: 'null'
+          title: Max
+      type: object
+      required:
+      - dimension
+      title: BoundsRequest
     CartographerCalibrateRequest:
       properties:
         learning_map_id:
@@ -3950,6 +9331,34 @@ components:
       - estimated_weeks
       - rationale
       title: CartographerRecommendation
+    ChangePasswordRequest:
+      properties:
+        current_password:
+          type: string
+          title: Current Password
+        new_password:
+          type: string
+          minLength: 8
+          title: New Password
+      type: object
+      required:
+      - current_password
+      - new_password
+      title: ChangePasswordRequest
+    CheckoutBody:
+      properties:
+        success_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Success Url
+        cancel_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Cancel Url
+      type: object
+      title: CheckoutBody
     ChildCreate:
       properties:
         first_name:
@@ -4097,6 +9506,39 @@ components:
           title: Grade Level
       type: object
       title: ChildUpdate
+    ConfigUpdate:
+      properties:
+        enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Enabled
+        sensitivity_level:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sensitivity Level
+        custom_thresholds:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Custom Thresholds
+      type: object
+      title: ConfigUpdate
+    ConfigUpdateRequest:
+      properties:
+        enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Enabled
+        pattern_settings:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Pattern Settings
+      type: object
+      title: ConfigUpdateRequest
     CounterfactualRequest:
       properties:
         changes:
@@ -4106,6 +9548,43 @@ components:
       required:
       - changes
       title: CounterfactualRequest
+    CreateResourceRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+        resource_type:
+          type: string
+          title: Resource Type
+          default: textbook
+        subject_area:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject Area
+        publisher:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Publisher
+        grade_range:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Grade Range
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+        status:
+          type: string
+          title: Status
+          default: owned
+      type: object
+      required:
+      - name
+      title: CreateResourceRequest
     DeviceRegisterRequest:
       properties:
         device_token:
@@ -4191,6 +9670,35 @@ components:
       - weight
       - created_at
       title: EdgeResponse
+    EditActivityRequest:
+      properties:
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        estimated_minutes:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Estimated Minutes
+        scheduled_day:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scheduled Day
+        activity_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Activity Type
+      type: object
+      title: EditActivityRequest
     EnrollmentCreate:
       properties:
         learning_map_id:
@@ -4243,6 +9751,87 @@ components:
       - is_active
       - progress_pct
       title: EnrollmentResponse
+    FeedbackCreate:
+      properties:
+        message:
+          type: string
+          title: Message
+        feedback_type:
+          type: string
+          title: Feedback Type
+          default: comment
+        child_id:
+          type: string
+          format: uuid
+          title: Child Id
+      type: object
+      required:
+      - message
+      - child_id
+      title: FeedbackCreate
+    ForgotPasswordRequest:
+      properties:
+        email:
+          type: string
+          title: Email
+      type: object
+      required:
+      - email
+      title: ForgotPasswordRequest
+    GeneratePlanRequest:
+      properties:
+        goals:
+          type: object
+          title: Goals
+        baseline_assessment:
+          type: object
+          title: Baseline Assessment
+        time_budget_hours_per_week:
+          type: integer
+          maximum: 60.0
+          minimum: 5.0
+          title: Time Budget Hours Per Week
+          default: 25
+      type: object
+      title: GeneratePlanRequest
+    GenerateRequest:
+      properties:
+        subject_name:
+          type: string
+          title: Subject Name
+        academic_year:
+          type: string
+          title: Academic Year
+        learning_map_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Learning Map Id
+        hours_per_week:
+          type: number
+          title: Hours Per Week
+          default: 4.0
+        total_weeks:
+          type: integer
+          title: Total Weeks
+          default: 36
+        start_date:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Start Date
+        scope_notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Scope Notes
+      type: object
+      required:
+      - subject_name
+      - academic_year
+      title: GenerateRequest
     GovernanceRuleCreate:
       properties:
         rule_type:
@@ -4446,6 +10035,66 @@ components:
           title: Timezone
       type: object
       title: HouseholdSettingsUpdate
+    InstitutionalRegisterRequest:
+      properties:
+        organization_name:
+          type: string
+          maxLength: 255
+          minLength: 1
+          title: Organization Name
+        organization_type:
+          type: string
+          title: Organization Type
+          default: university
+        admin_email:
+          type: string
+          format: email
+          title: Admin Email
+        admin_password:
+          type: string
+          maxLength: 128
+          minLength: 8
+          title: Admin Password
+        admin_display_name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Admin Display Name
+      type: object
+      required:
+      - organization_name
+      - admin_email
+      - admin_password
+      - admin_display_name
+      title: InstitutionalRegisterRequest
+    InviteResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        email:
+          type: string
+          title: Email
+        display_name:
+          type: string
+          title: Display Name
+        institutional_role:
+          type: string
+          title: Institutional Role
+        linked_child_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Linked Child Id
+      type: object
+      required:
+      - id
+      - email
+      - display_name
+      - institutional_role
+      title: InviteResponse
     LearningMapCreate:
       properties:
         subject_id:
@@ -4610,6 +10259,103 @@ components:
       - email
       - password
       title: LoginRequest
+    ManualActivityCreate:
+      properties:
+        child_id:
+          type: string
+          format: uuid
+          title: Child Id
+        title:
+          type: string
+          title: Title
+        activity_type:
+          type: string
+          title: Activity Type
+          default: lesson
+        scheduled_date:
+          type: string
+          format: date
+          title: Scheduled Date
+        estimated_minutes:
+          type: integer
+          title: Estimated Minutes
+          default: 30
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        subject_area:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject Area
+        node_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Node Id
+        tools_required:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tools Required
+        materials:
+          anyOf:
+          - items:
+              type: object
+            type: array
+          - type: 'null'
+          title: Materials
+        safety_notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Safety Notes
+        workspace:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Workspace
+      type: object
+      required:
+      - child_id
+      - title
+      - scheduled_date
+      title: ManualActivityCreate
+    MapExistingRequest:
+      properties:
+        material_name:
+          type: string
+          maxLength: 255
+          minLength: 1
+          title: Material Name
+        material_description:
+          type: string
+          title: Material Description
+          default: ''
+        table_of_contents:
+          type: string
+          minLength: 1
+          title: Table Of Contents
+        current_position:
+          type: string
+          title: Current Position
+          default: ''
+        subject_area:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Subject Area
+      type: object
+      required:
+      - material_name
+      - table_of_contents
+      - subject_area
+      title: MapExistingRequest
     MasteryLevel:
       type: string
       enum:
@@ -4628,6 +10374,15 @@ components:
       required:
       - message
       title: MessageResponse
+    MoveActivityRequest:
+      properties:
+        target_week_number:
+          type: integer
+          title: Target Week Number
+      type: object
+      required:
+      - target_week_number
+      title: MoveActivityRequest
     NodeCreate:
       properties:
         node_type:
@@ -4657,6 +10412,23 @@ components:
           type: integer
           title: Sort Order
           default: 0
+        credit_hours:
+          anyOf:
+          - type: number
+            minimum: 0.0
+          - type: 'null'
+          title: Credit Hours
+        credit_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Credit Type
+        contact_hours_per_week:
+          anyOf:
+          - type: number
+            minimum: 0.0
+          - type: 'null'
+          title: Contact Hours Per Week
       type: object
       required:
       - node_type
@@ -4838,6 +10610,19 @@ components:
       - milestone
       - concept
       - skill
+      - safety
+      - knowledge
+      - technique
+      - project
+      - certification_prep
+      - lecture
+      - reading
+      - research
+      - lab
+      - thesis_component
+      - exam_prep
+      - peer_review
+      - practicum
       title: NodeType
     NodeUpdate:
       properties:
@@ -4873,19 +10658,41 @@ components:
           anyOf:
           - $ref: '#/components/schemas/NodeType'
           - type: 'null'
+        credit_hours:
+          anyOf:
+          - type: number
+            minimum: 0.0
+          - type: 'null'
+          title: Credit Hours
+        credit_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Credit Type
+        contact_hours_per_week:
+          anyOf:
+          - type: number
+            minimum: 0.0
+          - type: 'null'
+          title: Contact Hours Per Week
       type: object
       title: NodeUpdate
-    OverrideRequest:
+    OffsetUpdateRequest:
       properties:
-        reason:
-          type: string
-          maxLength: 1000
-          minLength: 1
-          title: Reason
+        offset_active:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Offset Active
+        parent_override_offset:
+          anyOf:
+          - type: number
+            maximum: 0.15
+            minimum: -0.15
+          - type: 'null'
+          title: Parent Override Offset
       type: object
-      required:
-      - reason
-      title: OverrideRequest
+      title: OffsetUpdateRequest
     OverrideResponse:
       properties:
         governance_event_id:
@@ -5138,6 +10945,200 @@ components:
       - completed
       - archived
       title: PlanStatus
+    PortalBody:
+      properties:
+        return_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Return Url
+      type: object
+      title: PortalBody
+    PortfolioCreate:
+      properties:
+        node_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Node Id
+        assessment_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Assessment Id
+        entry_type:
+          type: string
+          maxLength: 50
+          minLength: 1
+          title: Entry Type
+        title:
+          type: string
+          maxLength: 255
+          minLength: 1
+          title: Title
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        content:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Content
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject
+        date_completed:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Date Completed
+        parent_notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parent Notes
+        tags:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: Tags
+      type: object
+      required:
+      - entry_type
+      - title
+      title: PortfolioCreate
+    ReadingLogCreate:
+      properties:
+        book_title:
+          type: string
+          title: Book Title
+        book_author:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Book Author
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+        subject_area:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject Area
+        status:
+          type: string
+          title: Status
+          default: reading
+        pages_total:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Pages Total
+        pages_read:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Pages Read
+        started_date:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Started Date
+        narration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Narration
+        parent_notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parent Notes
+        child_rating:
+          anyOf:
+          - type: integer
+            maximum: 5.0
+            minimum: 1.0
+          - type: 'null'
+          title: Child Rating
+        minutes_spent:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Minutes Spent
+      type: object
+      required:
+      - book_title
+      title: ReadingLogCreate
+    ReadingLogUpdate:
+      properties:
+        book_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Book Title
+        book_author:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Book Author
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+        pages_read:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Pages Read
+        pages_total:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Pages Total
+        narration:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Narration
+        parent_notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parent Notes
+        child_rating:
+          anyOf:
+          - type: integer
+            maximum: 5.0
+            minimum: 1.0
+          - type: 'null'
+          title: Child Rating
+        minutes_spent:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Minutes Spent
+        completed_date:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Completed Date
+      type: object
+      title: ReadingLogUpdate
     RefreshResponse:
       properties:
         access_token:
@@ -5155,6 +11156,19 @@ components:
       - access_token
       - expires_in
       title: RefreshResponse
+    RegisterDeviceBody:
+      properties:
+        token:
+          type: string
+          title: Token
+        platform:
+          type: string
+          title: Platform
+      type: object
+      required:
+      - token
+      - platform
+      title: RegisterDeviceBody
     RegisterRequest:
       properties:
         email:
@@ -5181,6 +11195,10 @@ components:
           maxLength: 50
           title: Timezone
           default: America/New_York
+        is_self_learner:
+          type: boolean
+          title: Is Self Learner
+          default: false
       type: object
       required:
       - email
@@ -5223,6 +11241,20 @@ components:
       - period_start
       - period_end
       title: ReportRequest
+    ResetPasswordRequest:
+      properties:
+        token:
+          type: string
+          title: Token
+        new_password:
+          type: string
+          minLength: 8
+          title: New Password
+      type: object
+      required:
+      - token
+      - new_password
+      title: ResetPasswordRequest
     RetentionSummaryResponse:
       properties:
         child_id:
@@ -5286,6 +11318,34 @@ components:
       - ai_boundary
       - approval_required
       title: RuleType
+    StatusUpdate:
+      properties:
+        status:
+          type: string
+          title: Status
+        parent_response:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parent Response
+      type: object
+      required:
+      - status
+      title: StatusUpdate
+    StatusUpdateRequest:
+      properties:
+        status:
+          type: string
+          title: Status
+        parent_response:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Parent Response
+      type: object
+      required:
+      - status
+      title: StatusUpdateRequest
     SubjectCreate:
       properties:
         name:
@@ -5450,6 +11510,31 @@ components:
       - subject_count
       - node_count
       title: TemplateInfo
+    TimeLogCreate:
+      properties:
+        date:
+          type: string
+          format: date
+          title: Date
+        minutes:
+          type: integer
+          maximum: 1440.0
+          minimum: 1.0
+          title: Minutes
+        subject_area:
+          type: string
+          title: Subject Area
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+      type: object
+      required:
+      - date
+      - minutes
+      - subject_area
+      title: TimeLogCreate
     TokenResponse:
       properties:
         access_token:
@@ -5470,17 +11555,25 @@ components:
     TutorMessageRequest:
       properties:
         child_id:
-          type: string
-          format: uuid
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
           title: Child Id
         message:
           type: string
           maxLength: 2000
           minLength: 1
           title: Message
+        conversation_history:
+          anyOf:
+          - items:
+              type: object
+            type: array
+          - type: 'null'
+          title: Conversation History
       type: object
       required:
-      - child_id
       - message
       title: TutorMessageRequest
     TutorMessageResponse:
@@ -5507,6 +11600,64 @@ components:
       - encouragement
       - ai_run_id
       title: TutorMessageResponse
+    UpdatePlanRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        year_plans:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Year Plans
+        goals:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Goals
+      type: object
+      title: UpdatePlanRequest
+    UpdateResourceRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        resource_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Resource Type
+        subject_area:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject Area
+        publisher:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Publisher
+        grade_range:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Grade Range
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+      type: object
+      title: UpdateResourceRequest
     UserResponse:
       properties:
         id:
@@ -5564,3 +11715,88 @@ components:
       - msg
       - type
       title: ValidationError
+    WeekNotesRequest:
+      properties:
+        notes:
+          type: string
+          title: Notes
+      type: object
+      required:
+      - notes
+      title: WeekNotesRequest
+    app__api__auth__InviteRequest:
+      properties:
+        email:
+          type: string
+          title: Email
+        role:
+          type: string
+          title: Role
+          default: parent
+      type: object
+      required:
+      - email
+      title: InviteRequest
+    app__api__intelligence__OverrideRequest:
+      properties:
+        field:
+          type: string
+          title: Field
+        value:
+          title: Value
+      type: object
+      required:
+      - field
+      - value
+      title: OverrideRequest
+    app__api__style_vector__OverrideRequest:
+      properties:
+        dimension:
+          type: string
+          title: Dimension
+        value:
+          title: Value
+        locked:
+          type: boolean
+          title: Locked
+          default: true
+      type: object
+      required:
+      - dimension
+      title: OverrideRequest
+    app__schemas__auth__InviteRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        display_name:
+          type: string
+          maxLength: 100
+          minLength: 1
+          title: Display Name
+        institutional_role:
+          type: string
+          title: Institutional Role
+        learner_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Learner Name
+      type: object
+      required:
+      - email
+      - display_name
+      - institutional_role
+      title: InviteRequest
+    app__schemas__curriculum__OverrideRequest:
+      properties:
+        reason:
+          type: string
+          maxLength: 1000
+          minLength: 1
+          title: Reason
+      type: object
+      required:
+      - reason
+      title: OverrideRequest

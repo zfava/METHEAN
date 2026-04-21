@@ -17,9 +17,7 @@ class ChildNodeState(Base):
 
     __tablename__ = "child_node_states"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     child_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("children.id", ondelete="CASCADE"), nullable=False
     )
@@ -29,16 +27,12 @@ class ChildNodeState(Base):
     node_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("learning_nodes.id", ondelete="CASCADE"), nullable=False
     )
-    mastery_level: Mapped[MasteryLevel] = mapped_column(
-        nullable=False, default=MasteryLevel.not_started
-    )
+    mastery_level: Mapped[MasteryLevel] = mapped_column(nullable=False, default=MasteryLevel.not_started)
     is_unlocked: Mapped[bool] = mapped_column(default=False)
     attempts_count: Mapped[int] = mapped_column(Integer, default=0)
     time_spent_minutes: Mapped[int] = mapped_column(Integer, default=0)
     last_activity_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
@@ -49,9 +43,7 @@ class StateEvent(Base):
 
     __tablename__ = "state_events"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     child_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("children.id", ondelete="CASCADE"), nullable=False
     )
@@ -69,9 +61,7 @@ class StateEvent(Base):
     created_by: Mapped[uuid.UUID | None] = mapped_column(
         UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL")
     )
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
 
 class FSRSCard(Base):
@@ -79,9 +69,7 @@ class FSRSCard(Base):
 
     __tablename__ = "fsrs_cards"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     child_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("children.id", ondelete="CASCADE"), nullable=False
     )
@@ -100,9 +88,7 @@ class FSRSCard(Base):
     state: Mapped[int] = mapped_column(Integer, default=0)  # FSRS card state enum
     due: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     last_review: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
@@ -113,9 +99,7 @@ class ReviewLog(Base):
 
     __tablename__ = "review_logs"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     card_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("fsrs_cards.id", ondelete="CASCADE"), nullable=False
     )
@@ -129,9 +113,5 @@ class ReviewLog(Base):
     scheduled_days: Mapped[int] = mapped_column(Integer, nullable=False)
     elapsed_days: Mapped[int] = mapped_column(Integer, nullable=False)
     review_duration_ms: Mapped[int | None] = mapped_column(Integer)
-    reviewed_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
-    created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now()
-    )
+    reviewed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

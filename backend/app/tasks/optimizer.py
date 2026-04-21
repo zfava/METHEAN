@@ -14,7 +14,9 @@ worker — the child is simply skipped and the issue is logged.
 
 import asyncio
 import time
+from datetime import UTC
 
+import structlog
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import NullPool
@@ -22,8 +24,6 @@ from sqlalchemy.pool import NullPool
 from app.core.config import settings
 from app.models.identity import Child
 from app.models.state import FSRSCard, ReviewLog
-
-import structlog
 
 logger = structlog.get_logger()
 
@@ -69,7 +69,7 @@ def _build_fsrs_review_logs(
 
         # Map the DB rating (stored as int 1-4) to FSRS Rating
         rating_val = review.rating
-        if hasattr(rating_val, 'value'):
+        if hasattr(rating_val, "value"):
             rating_val = rating_val.value
         rating_val = int(rating_val)
         fsrs_rating = rating_map.get(rating_val, FSRSRating.Good)
@@ -77,17 +77,18 @@ def _build_fsrs_review_logs(
         # Use reviewed_at for the review timestamp, fall back to created_at
         review_dt = review.reviewed_at or review.created_at
         if review_dt and review_dt.tzinfo is None:
-            from datetime import timezone
-            review_dt = review_dt.replace(tzinfo=timezone.utc)
+            review_dt = review_dt.replace(tzinfo=UTC)
 
         duration_ms = review.review_duration_ms
 
-        fsrs_logs.append(FSRSReviewLog(
-            card_id=int_card_id,
-            rating=fsrs_rating,
-            review_datetime=review_dt,
-            review_duration=duration_ms,
-        ))
+        fsrs_logs.append(
+            FSRSReviewLog(
+                card_id=int_card_id,
+                rating=fsrs_rating,
+                review_datetime=review_dt,
+                review_duration=duration_ms,
+            )
+        )
 
     return fsrs_logs
 
@@ -114,11 +115,7 @@ async def optimize_fsrs_weights(
 
         for child in children:
             # Count total reviews
-            count_result = await db.execute(
-                select(func.count(ReviewLog.id)).where(
-                    ReviewLog.child_id == child.id
-                )
-            )
+            count_result = await db.execute(select(func.count(ReviewLog.id)).where(ReviewLog.child_id == child.id))
             total_reviews = count_result.scalar() or 0
 
             # Determine threshold
@@ -134,17 +131,13 @@ async def optimize_fsrs_weights(
 
                 # Fetch all review logs for this child
                 reviews_result = await db.execute(
-                    select(ReviewLog).where(
-                        ReviewLog.child_id == child.id
-                    ).order_by(ReviewLog.created_at.asc())
+                    select(ReviewLog).where(ReviewLog.child_id == child.id).order_by(ReviewLog.created_at.asc())
                 )
                 reviews = reviews_result.scalars().all()
 
                 # Fetch card info for mapping
                 card_ids = list({r.card_id for r in reviews})
-                cards_result = await db.execute(
-                    select(FSRSCard).where(FSRSCard.id.in_(card_ids))
-                ) if card_ids else None
+                cards_result = await db.execute(select(FSRSCard).where(FSRSCard.id.in_(card_ids))) if card_ids else None
                 cards = {c.id: c for c in (cards_result.scalars().all() if cards_result else [])}
 
                 # Convert to py-fsrs ReviewLog format
@@ -157,11 +150,13 @@ async def optimize_fsrs_weights(
                 # Run the py-fsrs Optimizer
                 try:
                     from fsrs.optimizer import Optimizer
+
                     optimizer = Optimizer(fsrs_logs)
                     new_weights = optimizer.compute_optimal_parameters()
                 except (ImportError, AttributeError) as api_err:
                     try:
                         import fsrs as _fsrs_mod
+
                         ver = getattr(_fsrs_mod, "__version__", "unknown")
                     except Exception:
                         ver = "unknown"

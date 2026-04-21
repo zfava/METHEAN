@@ -10,10 +10,26 @@ class UserRole(str, enum.Enum):
 
 
 class NodeType(str, enum.Enum):
+    # Academic
     root = "root"
     milestone = "milestone"
     concept = "concept"
     skill = "skill"
+    # Vocational
+    safety = "safety"
+    knowledge = "knowledge"
+    technique = "technique"
+    project = "project"
+    certification_prep = "certification_prep"
+    # Higher Education
+    lecture = "lecture"
+    reading = "reading"
+    research = "research"
+    lab = "lab"
+    thesis_component = "thesis_component"
+    exam_prep = "exam_prep"
+    peer_review = "peer_review"
+    practicum = "practicum"
 
 
 class EdgeRelation(str, enum.Enum):
@@ -55,7 +71,7 @@ class RuleType(str, enum.Enum):
 
 class RuleTier(str, enum.Enum):
     constitutional = "constitutional"  # Requires ceremony to change
-    policy = "policy"                  # Normal CRUD
+    policy = "policy"  # Normal CRUD
 
 
 class RuleScope(str, enum.Enum):
@@ -140,3 +156,80 @@ class AuditAction(str, enum.Enum):
     login = "login"
     logout = "logout"
     export = "export"
+
+
+class FamilyPatternType(str, enum.Enum):
+    shared_struggle = "shared_struggle"
+    curriculum_gap = "curriculum_gap"
+    pacing_divergence = "pacing_divergence"
+    environmental_correlation = "environmental_correlation"
+    material_effectiveness = "material_effectiveness"
+
+
+class InsightStatus(str, enum.Enum):
+    detected = "detected"
+    notified = "notified"
+    acknowledged = "acknowledged"
+    acted_on = "acted_on"
+    dismissed = "dismissed"
+
+
+class AnomalyType(str, enum.Enum):
+    broad_disengagement = "broad_disengagement"
+    frustration_spike = "frustration_spike"
+    performance_cliff = "performance_cliff"
+    session_avoidance = "session_avoidance"
+
+
+class AnomalyStatus(str, enum.Enum):
+    detected = "detected"
+    notified = "notified"
+    acknowledged = "acknowledged"
+    dismissed = "dismissed"
+    resolved = "resolved"
+
+
+class SensitivityLevel(str, enum.Enum):
+    conservative = "conservative"
+    balanced = "balanced"
+    sensitive = "sensitive"
+
+
+class BetaFeedbackType(str, enum.Enum):
+    bug = "bug"
+    feature_request = "feature_request"
+    usability = "usability"
+    content = "content"
+    general = "general"
+
+
+class BetaFeedbackStatus(str, enum.Enum):
+    new = "new"
+    reviewed = "reviewed"
+    in_progress = "in_progress"
+    resolved = "resolved"
+    wont_fix = "wont_fix"
+
+
+class GovernanceMode(str, enum.Enum):
+    parent_governed = "parent_governed"
+    self_governed = "self_governed"
+    institution_governed = "institution_governed"
+    mentor_governed = "mentor_governed"
+
+
+class AssessmentType(str, enum.Enum):
+    # Existing
+    observation = "observation"
+    narration = "narration"
+    written = "written"
+    demonstration = "demonstration"
+    project = "project"
+    # Higher Education
+    timed_exam = "timed_exam"
+    research_paper = "research_paper"
+    lab_report = "lab_report"
+    oral_defense = "oral_defense"
+    peer_assessment = "peer_assessment"
+    portfolio_review = "portfolio_review"
+    clinical_evaluation = "clinical_evaluation"

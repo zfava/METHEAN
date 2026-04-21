@@ -16,9 +16,8 @@ import uuid
 from datetime import UTC, date, datetime, timedelta
 
 import pytest
-from sqlalchemy import select
 
-from app.models.curriculum import ChildMapEnrollment, LearningMap, LearningNode, Subject
+from app.models.curriculum import LearningNode
 from app.models.enums import (
     AlertSeverity,
     AlertStatus,
@@ -27,7 +26,7 @@ from app.models.enums import (
     StateEventType,
 )
 from app.models.evidence import Alert, WeeklySnapshot
-from app.models.identity import Child, Household, User
+from app.models.identity import Child, Household
 from app.models.operational import NotificationLog
 from app.models.state import ChildNodeState, StateEvent
 from app.services.alert_engine import detect_pattern_failure, detect_regression, detect_stalls
@@ -37,13 +36,12 @@ from app.services.notifications import (
     should_send,
 )
 
-
 # ══════════════════════════════════════════════════
 # Notification Tests
 # ══════════════════════════════════════════════════
 
-class TestNotifications:
 
+class TestNotifications:
     def test_quiet_hours_night(self):
         assert _is_quiet_hours(22) is True
         assert _is_quiet_hours(23) is True
@@ -69,7 +67,6 @@ class TestNotifications:
         the timezone conversion happens in should_send.
         """
         from unittest.mock import patch
-        from zoneinfo import ZoneInfo
 
         tz_str = "America/Denver"
 
@@ -79,8 +76,11 @@ class TestNotifications:
             mock_dt.now.return_value = fake_utc_daytime
             mock_dt.side_effect = lambda *a, **kw: datetime(*a, **kw)
             result = await should_send(
-                db_session, household.id, user.id,
-                "test", timezone=tz_str,
+                db_session,
+                household.id,
+                user.id,
+                "test",
+                timezone=tz_str,
             )
         assert result is True, "15:00 Mountain should not be quiet hours"
 
@@ -90,8 +90,11 @@ class TestNotifications:
             mock_dt.now.return_value = fake_utc_nighttime
             mock_dt.side_effect = lambda *a, **kw: datetime(*a, **kw)
             result = await should_send(
-                db_session, household.id, user.id,
-                "test", timezone=tz_str,
+                db_session,
+                household.id,
+                user.id,
+                "test",
+                timezone=tz_str,
             )
         assert result is False, "21:00 Mountain should be quiet hours"
 
@@ -99,8 +102,12 @@ class TestNotifications:
     async def test_send_notification_with_timezone(self, db_session, household, user):
         """send_notification forwards timezone to should_send."""
         notif = await send_notification(
-            db_session, household.id, user.id,
-            "test", "Test Title", "Test Body",
+            db_session,
+            household.id,
+            user.id,
+            "test",
+            "Test Title",
+            "Test Body",
             timezone=household.timezone or "UTC",
         )
         # May or may not send depending on current local hour (quiet hours)
@@ -111,14 +118,22 @@ class TestNotifications:
         tz = household.timezone or "UTC"
         # Send first
         n1 = await send_notification(
-            db_session, household.id, user.id,
-            "node_decayed", "Decay Alert", "Node decayed",
+            db_session,
+            household.id,
+            user.id,
+            "node_decayed",
+            "Decay Alert",
+            "Node decayed",
             timezone=tz,
         )
         # Second within dedup window should be blocked
         n2 = await send_notification(
-            db_session, household.id, user.id,
-            "node_decayed", "Decay Alert", "Node decayed again",
+            db_session,
+            household.id,
+            user.id,
+            "node_decayed",
+            "Decay Alert",
+            "Node decayed again",
             timezone=tz,
         )
         # n2 should be None (deduped) if n1 was sent
@@ -130,21 +145,25 @@ class TestNotifications:
 # Alert Engine Tests
 # ══════════════════════════════════════════════════
 
-class TestAlertEngine:
 
+class TestAlertEngine:
     @pytest.mark.asyncio
     async def test_detect_stalls(self, db_session, household, learning_map, child):
         node = LearningNode(
-            learning_map_id=learning_map.id, household_id=household.id,
-            node_type=NodeType.skill, title="Stalled Node",
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Stalled Node",
         )
         db_session.add(node)
         await db_session.flush()
 
         # Create stalled state (15 days old, still emerging)
         state = ChildNodeState(
-            child_id=child.id, household_id=household.id,
-            node_id=node.id, mastery_level=MasteryLevel.emerging,
+            child_id=child.id,
+            household_id=household.id,
+            node_id=node.id,
+            mastery_level=MasteryLevel.emerging,
             last_activity_at=datetime.now(UTC) - timedelta(days=15),
         )
         db_session.add(state)
@@ -157,15 +176,21 @@ class TestAlertEngine:
     @pytest.mark.asyncio
     async def test_detect_regression(self, db_session, household, child, learning_map):
         node = LearningNode(
-            learning_map_id=learning_map.id, household_id=household.id,
-            node_type=NodeType.skill, title="Regressed Node",
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Regressed Node",
         )
         db_session.add(node)
         await db_session.flush()
 
         alert = await detect_regression(
-            db_session, child.id, household.id, node.id,
-            "mastered", "proficient",
+            db_session,
+            child.id,
+            household.id,
+            node.id,
+            "mastered",
+            "proficient",
         )
         assert alert is not None
         assert "Regression" in alert.title
@@ -173,39 +198,56 @@ class TestAlertEngine:
     @pytest.mark.asyncio
     async def test_no_regression_for_non_mastered(self, db_session, household, child, learning_map):
         node = LearningNode(
-            learning_map_id=learning_map.id, household_id=household.id,
-            node_type=NodeType.skill, title="Normal Node",
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Normal Node",
         )
         db_session.add(node)
         await db_session.flush()
 
         alert = await detect_regression(
-            db_session, child.id, household.id, node.id,
-            "developing", "emerging",
+            db_session,
+            child.id,
+            household.id,
+            node.id,
+            "developing",
+            "emerging",
         )
         assert alert is None
 
     @pytest.mark.asyncio
     async def test_detect_pattern_failure(self, db_session, household, child, learning_map):
         node = LearningNode(
-            learning_map_id=learning_map.id, household_id=household.id,
-            node_type=NodeType.skill, title="Struggling Node",
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Struggling Node",
         )
         db_session.add(node)
         await db_session.flush()
 
         # Create 3 low-confidence events
         for i in range(3):
-            db_session.add(StateEvent(
-                child_id=child.id, household_id=household.id,
-                node_id=node.id, event_type=StateEventType.review_completed,
-                from_state="emerging", to_state="emerging",
-                trigger="attempt", metadata_={"confidence": 0.2},
-            ))
+            db_session.add(
+                StateEvent(
+                    child_id=child.id,
+                    household_id=household.id,
+                    node_id=node.id,
+                    event_type=StateEventType.review_completed,
+                    from_state="emerging",
+                    to_state="emerging",
+                    trigger="attempt",
+                    metadata_={"confidence": 0.2},
+                )
+            )
         await db_session.flush()
 
         alert = await detect_pattern_failure(
-            db_session, child.id, household.id, node.id,
+            db_session,
+            child.id,
+            household.id,
+            node.id,
         )
         assert alert is not None
         assert "Struggling" in alert.title
@@ -215,8 +257,8 @@ class TestAlertEngine:
 # API Error Path Tests
 # ══════════════════════════════════════════════════
 
-class TestErrorHandling:
 
+class TestErrorHandling:
     @pytest.mark.asyncio
     async def test_health_endpoint(self, client):
         resp = await client.get("/health")
@@ -242,18 +284,28 @@ class TestErrorHandling:
     @pytest.mark.asyncio
     async def test_register_validation(self, client):
         # Short password
-        resp = await client.post("/api/v1/auth/register", json={
-            "email": "bad@test.com", "password": "short",
-            "display_name": "X", "household_name": "X",
-        })
+        resp = await client.post(
+            "/api/v1/auth/register",
+            json={
+                "email": "bad@test.com",
+                "password": "short",
+                "display_name": "X",
+                "household_name": "X",
+            },
+        )
         assert resp.status_code == 422
 
     @pytest.mark.asyncio
     async def test_register_invalid_email(self, client):
-        resp = await client.post("/api/v1/auth/register", json={
-            "email": "not-an-email", "password": "securepass123",
-            "display_name": "X", "household_name": "X",
-        })
+        resp = await client.post(
+            "/api/v1/auth/register",
+            json={
+                "email": "not-an-email",
+                "password": "securepass123",
+                "display_name": "X",
+                "household_name": "X",
+            },
+        )
         assert resp.status_code == 422
 
 
@@ -261,15 +313,21 @@ class TestErrorHandling:
 # Alerts API Tests
 # ══════════════════════════════════════════════════
 
-class TestAlertsAPI:
 
+class TestAlertsAPI:
     @pytest.mark.asyncio
     async def test_list_alerts(self, auth_client, db_session, household, child):
-        db_session.add(Alert(
-            household_id=household.id, child_id=child.id,
-            severity=AlertSeverity.warning, status=AlertStatus.unread,
-            title="Test Alert", message="Test message", source="test",
-        ))
+        db_session.add(
+            Alert(
+                household_id=household.id,
+                child_id=child.id,
+                severity=AlertSeverity.warning,
+                status=AlertStatus.unread,
+                title="Test Alert",
+                message="Test message",
+                source="test",
+            )
+        )
         await db_session.flush()
 
         resp = await auth_client.get(f"/api/v1/children/{child.id}/alerts")
@@ -279,9 +337,13 @@ class TestAlertsAPI:
     @pytest.mark.asyncio
     async def test_acknowledge_alert(self, auth_client, db_session, household, child):
         alert = Alert(
-            household_id=household.id, child_id=child.id,
-            severity=AlertSeverity.info, status=AlertStatus.unread,
-            title="Ack Test", message="Test", source="test",
+            household_id=household.id,
+            child_id=child.id,
+            severity=AlertSeverity.info,
+            status=AlertStatus.unread,
+            title="Ack Test",
+            message="Test",
+            source="test",
         )
         db_session.add(alert)
         await db_session.flush()
@@ -293,9 +355,13 @@ class TestAlertsAPI:
     @pytest.mark.asyncio
     async def test_dismiss_alert(self, auth_client, db_session, household, child):
         alert = Alert(
-            household_id=household.id, child_id=child.id,
-            severity=AlertSeverity.info, status=AlertStatus.unread,
-            title="Dismiss Test", message="Test", source="test",
+            household_id=household.id,
+            child_id=child.id,
+            severity=AlertSeverity.info,
+            status=AlertStatus.unread,
+            title="Dismiss Test",
+            message="Test",
+            source="test",
         )
         db_session.add(alert)
         await db_session.flush()
@@ -309,15 +375,21 @@ class TestAlertsAPI:
 # Snapshots & Compliance Tests
 # ══════════════════════════════════════════════════
 
-class TestSnapshots:
 
+class TestSnapshots:
     @pytest.mark.asyncio
     async def test_list_snapshots(self, auth_client, db_session, household, child):
-        db_session.add(WeeklySnapshot(
-            household_id=household.id, child_id=child.id,
-            week_start=date(2026, 3, 30), week_end=date(2026, 4, 5),
-            total_minutes=120, nodes_mastered=5, nodes_progressed=3,
-        ))
+        db_session.add(
+            WeeklySnapshot(
+                household_id=household.id,
+                child_id=child.id,
+                week_start=date(2026, 3, 30),
+                week_end=date(2026, 4, 5),
+                total_minutes=120,
+                nodes_mastered=5,
+                nodes_progressed=3,
+            )
+        )
         await db_session.flush()
 
         resp = await auth_client.get(f"/api/v1/children/{child.id}/snapshots")
@@ -326,21 +398,27 @@ class TestSnapshots:
 
 
 class TestCompliance:
-
     @pytest.mark.asyncio
     async def test_compliance_report(self, auth_client, db_session, household, child, learning_map):
         node = LearningNode(
-            learning_map_id=learning_map.id, household_id=household.id,
-            node_type=NodeType.skill, title="Compliance Node",
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Compliance Node",
         )
         db_session.add(node)
         await db_session.flush()
 
-        db_session.add(ChildNodeState(
-            child_id=child.id, household_id=household.id,
-            node_id=node.id, mastery_level=MasteryLevel.mastered,
-            attempts_count=5, time_spent_minutes=120,
-        ))
+        db_session.add(
+            ChildNodeState(
+                child_id=child.id,
+                household_id=household.id,
+                node_id=node.id,
+                mastery_level=MasteryLevel.mastered,
+                attempts_count=5,
+                time_spent_minutes=120,
+            )
+        )
         await db_session.flush()
 
         resp = await auth_client.get(
@@ -358,15 +436,21 @@ class TestCompliance:
 # Notifications API Tests
 # ══════════════════════════════════════════════════
 
-class TestNotificationsAPI:
 
+class TestNotificationsAPI:
     @pytest.mark.asyncio
     async def test_list_notifications(self, auth_client, db_session, household, user):
-        db_session.add(NotificationLog(
-            household_id=household.id, user_id=user.id,
-            channel="in_app", title="Test", body="Test notification",
-            sent=True, sent_at=datetime.now(UTC),
-        ))
+        db_session.add(
+            NotificationLog(
+                household_id=household.id,
+                user_id=user.id,
+                channel="in_app",
+                title="Test",
+                body="Test notification",
+                sent=True,
+                sent_at=datetime.now(UTC),
+            )
+        )
         await db_session.flush()
 
         resp = await auth_client.get("/api/v1/notifications")
@@ -383,8 +467,8 @@ class TestNotificationsAPI:
 # Household Isolation (RLS conceptual test)
 # ══════════════════════════════════════════════════
 
-class TestHouseholdIsolation:
 
+class TestHouseholdIsolation:
     @pytest.mark.asyncio
     async def test_cannot_access_other_household_child(self, auth_client, db_session):
         """User from household A cannot access child from household B."""
@@ -394,7 +478,8 @@ class TestHouseholdIsolation:
 
         other_child = Child(
             household_id=other_household.id,
-            first_name="Other", last_name="Child",
+            first_name="Other",
+            last_name="Child",
         )
         db_session.add(other_child)
         await db_session.flush()
@@ -415,8 +500,11 @@ class TestHouseholdIsolation:
 
         alert = Alert(
             household_id=other_household.id,
-            severity=AlertSeverity.info, status=AlertStatus.unread,
-            title="Secret", message="Hidden", source="test",
+            severity=AlertSeverity.info,
+            status=AlertStatus.unread,
+            title="Secret",
+            message="Hidden",
+            source="test",
         )
         db_session.add(alert)
         await db_session.flush()

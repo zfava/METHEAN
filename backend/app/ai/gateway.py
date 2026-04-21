@@ -12,16 +12,78 @@ through parent governance.
 """
 
 import json
+import logging
 import time
 import uuid
 from datetime import UTC, datetime
 from enum import Enum
 
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.models.enums import AIRunStatus
 from app.models.operational import AIRun
+
+logger = logging.getLogger("methean.ai.gateway")
+
+
+class CircuitBreaker:
+    """Per-provider circuit breaker. States: closed (normal), open (skip), half_open (testing)."""
+
+    def __init__(self, failure_threshold: int = 3, recovery_timeout: int = 60, window: int = 300):
+        self.failure_threshold = failure_threshold
+        self.recovery_timeout = recovery_timeout
+        self.window = window
+        self.failures: list[float] = []
+        self.state: str = "closed"
+        self.opened_at: float = 0.0
+
+    def _prune(self) -> None:
+        cutoff = time.monotonic() - self.window
+        self.failures = [t for t in self.failures if t > cutoff]
+
+    def record_failure(self) -> None:
+        now = time.monotonic()
+        self.failures.append(now)
+        self._prune()
+        if self.state == "half_open":
+            self.state = "open"
+            self.opened_at = now
+            logger.warning("Circuit OPEN: half-open test failed, reopening")
+        elif len(self.failures) >= self.failure_threshold and self.state == "closed":
+            self.state = "open"
+            self.opened_at = now
+            logger.warning("Circuit OPEN: %d failures in %ds window", len(self.failures), self.window)
+
+    def record_success(self) -> None:
+        if self.state == "half_open":
+            self.state = "closed"
+            self.failures.clear()
+            logger.info("Circuit CLOSED: recovery confirmed")
+        elif self.state == "closed":
+            self._prune()
+
+    def should_allow(self) -> bool:
+        if self.state == "closed":
+            return True
+        if self.state == "open":
+            if time.monotonic() - self.opened_at >= self.recovery_timeout:
+                self.state = "half_open"
+                logger.info("Circuit HALF-OPEN: testing with single request")
+                return True
+            return False
+        # half_open: allow one test request
+        return True
+
+    @property
+    def status(self) -> dict:
+        self._prune()
+        return {"state": self.state, "failures_in_window": len(self.failures)}
+
+
+_claude_circuit = CircuitBreaker()
+_openai_circuit = CircuitBreaker()
 
 
 class AIRole(str, Enum):
@@ -30,6 +92,9 @@ class AIRole(str, Enum):
     evaluator = "evaluator"
     advisor = "advisor"
     cartographer = "cartographer"
+    education_architect = "education_architect"
+    content_architect = "content_architect"
+    curriculum_mapper = "curriculum_mapper"
 
 
 class AIProvider(str, Enum):
@@ -48,6 +113,7 @@ async def call_ai(
     expected_json: bool = True,
     max_tokens: int | None = None,
     philosophical_profile: dict | None = None,
+    assembled_context: str | None = None,
 ) -> dict:
     """Call AI through the governance gateway.
 
@@ -61,24 +127,60 @@ async def call_ai(
     max_tokens = max_tokens or settings.AI_MAX_TOKENS
     start = time.monotonic()
 
-    # Inject philosophical constraints into the system prompt
+    # Budget check before calling any provider
+    try:
+        from app.services.usage import UsageLimitExceededError, check_budget
+
+        budget = await check_budget(db, household_id)
+        if not budget["allowed"]:
+            ai_run_stub = AIRun(
+                household_id=household_id,
+                triggered_by=triggered_by,
+                run_type=role.value,
+                status=AIRunStatus.failed,
+                error_message="Monthly AI usage limit reached",
+                started_at=datetime.now(UTC),
+                completed_at=datetime.now(UTC),
+            )
+            db.add(ai_run_stub)
+            await db.flush()
+            raise UsageLimitExceededError("Monthly AI token budget exhausted. Resets on your next billing period.")
+    except UsageLimitExceededError:
+        raise
+    except Exception:
+        pass  # Budget check failure should not block AI calls
+
+    # Inject philosophical constraints into the system prompt, substituting
+    # authority-referring language for the household's governance mode.
     from app.ai.prompts import build_philosophical_constraints
-    constraints = build_philosophical_constraints(philosophical_profile)
+    from app.models.identity import Household
+
+    governance_mode = "parent_governed"
+    if philosophical_profile:
+        household = (await db.execute(select(Household).where(Household.id == household_id))).scalar_one_or_none()
+        if household is not None and hasattr(household, "governance_mode"):
+            governance_mode = household.governance_mode or "parent_governed"
+
+    constraints = build_philosophical_constraints(philosophical_profile, governance_mode=governance_mode)
     if constraints:
         system_prompt = system_prompt + "\n" + constraints
 
     # Create AIRun record
+    input_log = {
+        "system_prompt": system_prompt,
+        "user_prompt": user_prompt,
+        "role": role.value,
+        "expected_json": expected_json,
+    }
+    if assembled_context:
+        input_log["assembled_context"] = assembled_context
+
     ai_run = AIRun(
         household_id=household_id,
         triggered_by=triggered_by,
         run_type=role.value,
         status=AIRunStatus.running,
-        input_data={
-            "system_prompt": system_prompt,
-            "user_prompt": user_prompt,
-            "role": role.value,
-            "expected_json": expected_json,
-        },
+        input_data=input_log,
         started_at=datetime.now(UTC),
     )
     db.add(ai_run)
@@ -98,7 +200,11 @@ async def call_ai(
     for provider in providers:
         try:
             if provider == AIProvider.claude and settings.AI_API_KEY:
+                if not _claude_circuit.should_allow():
+                    logger.debug("Circuit open for Claude, skipping")
+                    continue
                 result = await _call_claude(system_prompt, user_prompt, max_tokens)
+                _claude_circuit.record_success()
                 output = result["content"]
                 model_used = result["model"]
                 input_tokens = result.get("input_tokens", 0)
@@ -107,7 +213,11 @@ async def call_ai(
                 break
 
             elif provider == AIProvider.openai and settings.AI_FALLBACK_API_KEY:
+                if not _openai_circuit.should_allow():
+                    logger.debug("Circuit open for OpenAI, skipping")
+                    continue
                 result = await _call_openai(system_prompt, user_prompt, max_tokens)
+                _openai_circuit.record_success()
                 output = result["content"]
                 model_used = result["model"]
                 input_tokens = result.get("input_tokens", 0)
@@ -124,7 +234,26 @@ async def call_ai(
                 break
 
         except Exception as e:
-            error_msg = f"{provider.value}: {str(e)}"
+            error_msg = f"{provider.value}: {e!s}"
+            if provider == AIProvider.claude:
+                _claude_circuit.record_failure()
+            elif provider == AIProvider.openai:
+                _openai_circuit.record_failure()
+            next_p = (
+                providers[providers.index(provider) + 1].value
+                if providers.index(provider) + 1 < len(providers)
+                else "none"
+            )
+            logger.warning(
+                "AI provider failed",
+                extra={
+                    "provider": provider.value,
+                    "role": role.value,
+                    "error_type": _classify_error(e),
+                    "household_id": str(household_id),
+                    "will_fallback_to": next_p,
+                },
+            )
             continue
 
     if output is None:
@@ -143,6 +272,7 @@ async def call_ai(
         except json.JSONDecodeError:
             # Try to extract JSON from markdown code blocks
             import re
+
             match = re.search(r"```(?:json)?\s*\n(.*?)\n```", output, re.DOTALL)
             if match:
                 parsed_output = json.loads(match.group(1))
@@ -158,7 +288,44 @@ async def call_ai(
     ai_run.output_tokens = output_tokens
     ai_run.output_data = parsed_output if isinstance(parsed_output, dict) else {"result": parsed_output}
     ai_run.completed_at = datetime.now(UTC)
+
+    # Compute and store cost estimate
+    try:
+        from app.ai.cost_controls import estimate_cost_cents
+
+        cost_cents = estimate_cost_cents(model_used or "mock", input_tokens, output_tokens)
+        ai_run.cost_usd = cost_cents / 100.0
+    except Exception:
+        pass
+
     await db.flush()
+
+    # Record usage for billing
+    try:
+        from app.services.usage import record_usage
+
+        if input_tokens or output_tokens:
+            await record_usage(
+                db,
+                household_id,
+                ai_run.id,
+                input_tokens,
+                output_tokens,
+                model_used or "unknown",
+                role.value,
+            )
+    except Exception:
+        pass  # Usage recording should not break AI response
+
+    # Record metrics
+    try:
+        from app.core.metrics import ai_calls_total, ai_latency
+
+        provider_label = provider_used.value if provider_used else "none"
+        ai_calls_total.labels(role=role.value, provider=provider_label, status="ok").inc()
+        ai_latency.labels(role=role.value).observe(elapsed_ms / 1000)
+    except Exception:
+        pass
 
     return {
         "ai_run_id": ai_run.id,
@@ -168,6 +335,61 @@ async def call_ai(
         "provider": provider_used.value if provider_used else "none",
         "elapsed_ms": elapsed_ms,
     }
+
+
+async def stream_claude(
+    system_prompt: str,
+    user_prompt: str,
+    max_tokens: int,
+):
+    """Stream tokens from Claude. Yields (event_type, data) tuples.
+
+    Event types: "token" (text chunk), "done" (usage stats), "error" (message).
+    """
+    import anthropic
+
+    client = anthropic.AsyncAnthropic(api_key=settings.AI_API_KEY)
+
+    try:
+        async with client.messages.stream(
+            model=settings.AI_PRIMARY_MODEL,
+            max_tokens=max_tokens,
+            temperature=settings.AI_TEMPERATURE,
+            system=system_prompt,
+            messages=[{"role": "user", "content": user_prompt}],
+        ) as stream:
+            async for text in stream.text_stream:
+                yield ("token", text)
+
+            final = await stream.get_final_message()
+            yield (
+                "done",
+                {
+                    "model": final.model,
+                    "input_tokens": final.usage.input_tokens,
+                    "output_tokens": final.usage.output_tokens,
+                },
+            )
+    except Exception as e:
+        yield ("error", str(e))
+
+
+def _classify_error(e: Exception) -> str:
+    """Classify an AI provider error for logging."""
+    import httpx
+
+    if isinstance(e, (TimeoutError, httpx.TimeoutException)):
+        return "timeout"
+    err_str = str(e).lower()
+    if "429" in err_str or "rate" in err_str:
+        return "rate_limit"
+    if "401" in err_str or "403" in err_str or "auth" in err_str:
+        return "auth_error"
+    if "500" in err_str or "502" in err_str or "503" in err_str:
+        return "server_error"
+    if isinstance(e, (json.JSONDecodeError, ValueError, KeyError)):
+        return "parse_error"
+    return "unknown"
 
 
 def _get_provider_chain() -> list[AIProvider]:
@@ -183,7 +405,9 @@ def _get_provider_chain() -> list[AIProvider]:
 
 
 async def _call_claude(
-    system_prompt: str, user_prompt: str, max_tokens: int,
+    system_prompt: str,
+    user_prompt: str,
+    max_tokens: int,
 ) -> dict:
     """Call Claude API."""
     import anthropic
@@ -205,7 +429,9 @@ async def _call_claude(
 
 
 async def _call_openai(
-    system_prompt: str, user_prompt: str, max_tokens: int,
+    system_prompt: str,
+    user_prompt: str,
+    max_tokens: int,
 ) -> dict:
     """Call OpenAI API as fallback."""
     import openai
@@ -234,66 +460,358 @@ def _call_mock(role: AIRole, user_prompt: str) -> dict:
     """Deterministic mock fallback — system never breaks because AI is down."""
     mock_responses = {
         AIRole.planner: {
-            "content": json.dumps({
-                "activities": [
-                    {
-                        "title": "Review previous concepts",
-                        "activity_type": "review",
-                        "estimated_minutes": 20,
-                        "difficulty": 2,
-                        "rationale": "Reinforce foundational knowledge before new material",
-                    },
-                    {
-                        "title": "Introduce new concept",
-                        "activity_type": "lesson",
-                        "estimated_minutes": 30,
-                        "difficulty": 3,
-                        "rationale": "Progressive skill building at appropriate level",
-                    },
-                    {
-                        "title": "Practice exercises",
-                        "activity_type": "practice",
-                        "estimated_minutes": 25,
-                        "difficulty": 3,
-                        "rationale": "Applied practice for skill reinforcement",
-                    },
-                ],
-                "total_minutes": 75,
-                "rationale": "Balanced plan with review, new learning, and practice",
-            })
+            "content": json.dumps(
+                {
+                    "activities": [
+                        {
+                            "title": "Review previous concepts",
+                            "activity_type": "review",
+                            "estimated_minutes": 20,
+                            "difficulty": 2,
+                            "rationale": "Reinforce foundational knowledge before new material",
+                        },
+                        {
+                            "title": "Introduce new concept",
+                            "activity_type": "lesson",
+                            "estimated_minutes": 30,
+                            "difficulty": 3,
+                            "rationale": "Progressive skill building at appropriate level",
+                        },
+                        {
+                            "title": "Practice exercises",
+                            "activity_type": "practice",
+                            "estimated_minutes": 25,
+                            "difficulty": 3,
+                            "rationale": "Applied practice for skill reinforcement",
+                        },
+                    ],
+                    "total_minutes": 75,
+                    "rationale": "Balanced plan with review, new learning, and practice",
+                }
+            )
         },
         AIRole.tutor: {
-            "content": json.dumps({
-                "message": "That's a great start! Can you tell me more about how you arrived at that answer? What steps did you take?",
-                "hints": ["Think about the relationship between the parts"],
-                "encouragement": True,
-            })
+            "content": json.dumps(
+                {
+                    "message": "That's a great start! Can you tell me more about how you arrived at that answer? What steps did you take?",
+                    "hints": ["Think about the relationship between the parts"],
+                    "encouragement": True,
+                }
+            )
         },
         AIRole.evaluator: {
-            "content": json.dumps({
-                "quality_rating": 3,
-                "confidence_score": 0.65,
-                "strengths": ["Shows understanding of core concepts", "Good effort and persistence"],
-                "areas_for_improvement": ["Could show more detailed work", "Review prerequisite concepts"],
-                "evidence_summary": "Student demonstrated developing understanding with room for growth",
-            })
+            "content": json.dumps(
+                {
+                    "quality_rating": 3,
+                    "confidence_score": 0.65,
+                    "strengths": ["Shows understanding of core concepts", "Good effort and persistence"],
+                    "areas_for_improvement": ["Could show more detailed work", "Review prerequisite concepts"],
+                    "evidence_summary": "Student demonstrated developing understanding with room for growth",
+                }
+            )
         },
         AIRole.advisor: {
-            "content": json.dumps({
-                "summary": "This week showed steady progress across enrolled subjects.",
-                "highlights": ["Completed all scheduled activities", "Improved mastery in key areas"],
-                "concerns": ["Some review items are overdue for spaced repetition"],
-                "recommended_focus": ["Prioritize overdue review items", "Continue current pace"],
-            })
+            "content": json.dumps(
+                {
+                    "summary": "This week showed steady progress across enrolled subjects.",
+                    "highlights": ["Completed all scheduled activities", "Improved mastery in key areas"],
+                    "concerns": ["Some review items are overdue for spaced repetition"],
+                    "recommended_focus": ["Prioritize overdue review items", "Continue current pace"],
+                }
+            )
         },
         AIRole.cartographer: {
-            "content": json.dumps({
-                "difficulty_adjustments": [],
-                "suggested_additions": [],
-                "suggested_removals": [],
-                "estimated_weeks": 12,
-                "rationale": "Current map structure is appropriate for the child's level",
-            })
+            "content": json.dumps(
+                {
+                    "difficulty_adjustments": [],
+                    "suggested_additions": [],
+                    "suggested_removals": [],
+                    "estimated_weeks": 12,
+                    "rationale": "Current map structure is appropriate for the child's level",
+                }
+            )
         },
+        AIRole.education_architect: {
+            "content": json.dumps(
+                {
+                    "plan_name": "Classical Education Plan",
+                    "philosophy_alignment": "This plan follows the classical trivium model",
+                    "year_plans": {
+                        "2026-2027": {
+                            "grade": "1st",
+                            "developmental_stage": "Grammar Stage",
+                            "subjects": [
+                                {
+                                    "subject": "Phonics & Reading",
+                                    "priority": "core",
+                                    "hours_per_week": 5,
+                                    "description": "Systematic phonics through reading fluency",
+                                    "approach": "Explicit phonics instruction with decodable texts",
+                                },
+                                {
+                                    "subject": "Mathematics",
+                                    "priority": "core",
+                                    "hours_per_week": 4,
+                                    "description": "Number sense through single-digit operations",
+                                    "approach": "Concrete manipulatives progressing to abstract",
+                                },
+                                {
+                                    "subject": "Handwriting & Copywork",
+                                    "priority": "core",
+                                    "hours_per_week": 2,
+                                    "description": "Letter formation and penmanship",
+                                    "approach": "Daily copywork from quality literature",
+                                },
+                                {
+                                    "subject": "History & Bible",
+                                    "priority": "core",
+                                    "hours_per_week": 3,
+                                    "description": "Ancient civilizations and Old Testament narratives",
+                                    "approach": "Narration-based with timeline building",
+                                },
+                                {
+                                    "subject": "Nature Study",
+                                    "priority": "enrichment",
+                                    "hours_per_week": 2,
+                                    "description": "Seasonal nature observation and journaling",
+                                    "approach": "Weekly nature walks with field guides",
+                                },
+                                {
+                                    "subject": "Music & Art",
+                                    "priority": "enrichment",
+                                    "hours_per_week": 2,
+                                    "description": "Hymn singing, folk songs, and drawing fundamentals",
+                                    "approach": "Integration with history period studied",
+                                },
+                            ],
+                            "total_hours_per_week": 18,
+                            "milestones": ["Reading chapter books independently", "Addition/subtraction to 20"],
+                            "notes": "Focus on building strong reading foundation",
+                        },
+                        "2027-2028": {
+                            "grade": "2nd",
+                            "developmental_stage": "Grammar Stage",
+                            "subjects": [
+                                {
+                                    "subject": "Reading & Literature",
+                                    "priority": "core",
+                                    "hours_per_week": 5,
+                                    "description": "Transition from learning to read to reading to learn",
+                                    "approach": "Living books with oral narration",
+                                },
+                                {
+                                    "subject": "Mathematics",
+                                    "priority": "core",
+                                    "hours_per_week": 4,
+                                    "description": "Place value, multi-digit addition/subtraction, intro multiplication",
+                                    "approach": "Mastery-based with concrete to pictorial to abstract",
+                                },
+                                {
+                                    "subject": "Writing & Grammar",
+                                    "priority": "core",
+                                    "hours_per_week": 3,
+                                    "description": "Sentence construction and basic grammar",
+                                    "approach": "Copywork progressing to dictation",
+                                },
+                                {
+                                    "subject": "History",
+                                    "priority": "core",
+                                    "hours_per_week": 3,
+                                    "description": "Ancient Greece and Rome",
+                                    "approach": "Story-based with primary source excerpts",
+                                },
+                                {
+                                    "subject": "Science",
+                                    "priority": "core",
+                                    "hours_per_week": 2,
+                                    "description": "Life science: plants, animals, habitats",
+                                    "approach": "Observation-based with nature journal",
+                                },
+                                {
+                                    "subject": "Latin Roots",
+                                    "priority": "enrichment",
+                                    "hours_per_week": 1,
+                                    "description": "Introduction to Latin vocabulary roots",
+                                    "approach": "Vocabulary building through word origins",
+                                },
+                            ],
+                            "total_hours_per_week": 18,
+                            "milestones": ["Fluent oral narration", "Multiplication facts to 5"],
+                            "notes": "Continue building fluency while introducing more subjects",
+                        },
+                        "2028-2029": {
+                            "grade": "3rd",
+                            "developmental_stage": "Grammar Stage",
+                            "subjects": [
+                                {
+                                    "subject": "Literature",
+                                    "priority": "core",
+                                    "hours_per_week": 4,
+                                    "description": "Classic children's literature and mythology",
+                                    "approach": "Independent reading with written narration",
+                                },
+                                {
+                                    "subject": "Mathematics",
+                                    "priority": "core",
+                                    "hours_per_week": 5,
+                                    "description": "Multiplication/division mastery, fractions introduction",
+                                    "approach": "Mastery-based with word problem emphasis",
+                                },
+                                {
+                                    "subject": "Writing",
+                                    "priority": "core",
+                                    "hours_per_week": 3,
+                                    "description": "Paragraph construction and creative writing",
+                                    "approach": "Dictation, short compositions, journal writing",
+                                },
+                                {
+                                    "subject": "History",
+                                    "priority": "core",
+                                    "hours_per_week": 3,
+                                    "description": "Middle Ages through Renaissance",
+                                    "approach": "Living books, timeline, and map work",
+                                },
+                                {
+                                    "subject": "Science",
+                                    "priority": "core",
+                                    "hours_per_week": 3,
+                                    "description": "Earth science and astronomy",
+                                    "approach": "Experiments and observation with science notebook",
+                                },
+                                {
+                                    "subject": "Latin",
+                                    "priority": "enrichment",
+                                    "hours_per_week": 2,
+                                    "description": "Formal Latin grammar introduction",
+                                    "approach": "Systematic grammar with vocabulary building",
+                                },
+                            ],
+                            "total_hours_per_week": 20,
+                            "milestones": ["Written narration fluency", "All multiplication facts memorized"],
+                            "notes": "Transition year: increasing independence and written output",
+                        },
+                    },
+                    "transitions": [
+                        {
+                            "from_year": "2026-2027",
+                            "to_year": "2027-2028",
+                            "description": "Reading shifts from learning-to-read to reading-to-learn. Writing begins.",
+                        },
+                        {
+                            "from_year": "2027-2028",
+                            "to_year": "2028-2029",
+                            "description": "Oral narration transitions to written. Latin formalized. More independent work.",
+                        },
+                    ],
+                    "graduation_pathway": "This plan builds toward college-preparatory classical education with strong humanities foundation",
+                    "rationale": "Designed for the Grammar Stage of the trivium, emphasizing memorization, narration, and foundational skills",
+                }
+            )
+        },
+    }
+    mock_responses[AIRole.content_architect] = {
+        "content": json.dumps(
+            {
+                "learning_objectives": [
+                    "Identify and produce letter sounds for all 26 letters",
+                    "Blend CVC words (consonant-vowel-consonant) independently",
+                ],
+                "teaching_guidance": {
+                    "introduction": "Begin with familiar letter sounds the child already knows, then introduce new ones in groups of 3-4",
+                    "practice_activities": ["Sound sorting games", "Blending chains", "Dictation exercises"],
+                    "common_misconceptions": ["Confusing similar sounds (b/d, p/q)", "Skipping the blending step"],
+                    "scaffolding_sequence": ["Single sounds", "Two-sound blends", "CVC words", "CCVC words"],
+                    "socratic_questions": [
+                        "What sound does this letter make?",
+                        "Can you hear the difference between these two words?",
+                    ],
+                    "real_world_connections": ["Reading signs on walks", "Sounding out names of family members"],
+                },
+                "assessment_criteria": {
+                    "mastery_indicators": [
+                        "Produces all 26 letter sounds without hesitation",
+                        "Blends 3-sound words independently",
+                    ],
+                    "proficiency_indicators": ["Most sounds correct with occasional self-correction"],
+                    "developing_indicators": ["Produces sounds with verbal cues"],
+                    "assessment_methods": ["oral response", "sound dictation", "reading decodable text"],
+                    "sample_assessment_prompts": ["What sound does M make?", "Read these three words: cat, sit, run"],
+                },
+                "resource_guidance": {
+                    "required": ["Letter tiles or cards", "Decodable readers (systematic phonics series)"],
+                    "recommended": ["Whiteboard for writing practice", "Sand tray for letter formation"],
+                    "philosophy_specific": {"classical": "Use copywork from quality literature alongside phonics"},
+                },
+                "connections": {
+                    "prerequisite_skills_from_other_subjects": [],
+                    "feeds_into": ["Sight Words (Reading)", "Spelling (Writing)"],
+                    "parallel_topics": ["Handwriting (Letter Formation)"],
+                },
+                "accommodations": {
+                    "dyslexia": "Use multisensory approach: see, say, trace, write. Extra time on blending.",
+                    "adhd": "Keep sessions to 10-15 minutes. Use movement between sound groups.",
+                    "gifted": "Accelerate to multisyllabic words. Introduce word origins.",
+                    "visual_learner": "Color-code vowels and consonants differently.",
+                    "kinesthetic_learner": "Form letters in sand, use body movements for sounds.",
+                    "auditory_learner": "Emphasize rhyming and sound discrimination games.",
+                },
+                "time_estimates": {
+                    "first_exposure": 20,
+                    "practice_session": 15,
+                    "review_session": 10,
+                    "estimated_sessions_to_mastery": 8,
+                },
+            }
+        )
+    }
+    mock_responses[AIRole.curriculum_mapper] = {
+        "content": json.dumps(
+            {
+                "source_material": "Example Curriculum",
+                "current_position": {"ref": "unit-3", "status": "in_progress"},
+                "nodes_already_mastered": ["root", "unit-1", "unit-2"],
+                "nodes": [
+                    {"ref": "root", "node_type": "root", "title": "Curriculum Root", "sort_order": 0},
+                    {
+                        "ref": "unit-1",
+                        "node_type": "milestone",
+                        "title": "Unit 1: Foundations",
+                        "sort_order": 1,
+                        "description": "Chapters 1-4",
+                        "estimated_minutes": 30,
+                    },
+                    {
+                        "ref": "unit-2",
+                        "node_type": "milestone",
+                        "title": "Unit 2: Building Blocks",
+                        "sort_order": 2,
+                        "description": "Chapters 5-8",
+                        "estimated_minutes": 30,
+                    },
+                    {
+                        "ref": "unit-3",
+                        "node_type": "milestone",
+                        "title": "Unit 3: Application",
+                        "sort_order": 3,
+                        "description": "Chapters 9-12",
+                        "estimated_minutes": 35,
+                    },
+                    {
+                        "ref": "unit-4",
+                        "node_type": "milestone",
+                        "title": "Unit 4: Mastery",
+                        "sort_order": 4,
+                        "description": "Chapters 13-16",
+                        "estimated_minutes": 35,
+                    },
+                ],
+                "edges": [
+                    {"from_ref": "root", "to_ref": "unit-1"},
+                    {"from_ref": "unit-1", "to_ref": "unit-2"},
+                    {"from_ref": "unit-2", "to_ref": "unit-3"},
+                    {"from_ref": "unit-3", "to_ref": "unit-4"},
+                ],
+            }
+        )
     }
     return mock_responses.get(role, {"content": json.dumps({"message": "Mock response"})})

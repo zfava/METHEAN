@@ -25,14 +25,14 @@ export default class ErrorBoundary extends React.Component<Props, State> {
     if (this.state.hasError) {
       return (
         <div className="min-h-screen flex items-center justify-center bg-(--color-bg)">
-          <div className="max-w-md w-full bg-white rounded-lg border border-(--color-border) p-8 text-center">
+          <div className="max-w-md w-full bg-(--color-surface) rounded-lg border border-(--color-border) p-8 text-center">
             <div className="text-2xl mb-3 text-(--color-text-secondary)">&#9888;</div>
             <h2 className="text-sm font-semibold mb-2">Something went wrong</h2>
             <p className="text-xs text-(--color-text-secondary) mb-4">
               Your data is safe. This error has been logged.
             </p>
             {this.state.error && (
-              <pre className="text-[11px] font-mono bg-gray-50 rounded p-3 mb-4 text-left overflow-auto max-h-24 text-(--color-text-secondary)">
+              <pre className="text-[11px] font-mono bg-(--color-page) rounded p-3 mb-4 text-left overflow-auto max-h-24 text-(--color-text-secondary)">
                 {this.state.error.message}
               </pre>
             )}

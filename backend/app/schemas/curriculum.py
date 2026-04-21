@@ -7,8 +7,8 @@ from pydantic import BaseModel, Field
 
 from app.models.enums import EdgeRelation, MasteryLevel, NodeType
 
-
 # ── Subject schemas ──
+
 
 class SubjectCreate(BaseModel):
     name: str = Field(min_length=1, max_length=255)
@@ -33,6 +33,7 @@ class SubjectResponse(BaseModel):
 
 
 # ── Learning Map schemas ──
+
 
 class LearningMapCreate(BaseModel):
     subject_id: uuid.UUID
@@ -67,6 +68,7 @@ class LearningMapDetailResponse(LearningMapResponse):
 
 # ── Node schemas ──
 
+
 class NodeCreate(BaseModel):
     node_type: NodeType
     title: str = Field(min_length=1, max_length=255)
@@ -74,6 +76,10 @@ class NodeCreate(BaseModel):
     content: dict | None = None
     estimated_minutes: int | None = Field(default=None, ge=0)
     sort_order: int = 0
+    # Credit-hour tracking (stored inside content.credit)
+    credit_hours: float | None = Field(default=None, ge=0)
+    credit_type: str | None = None
+    contact_hours_per_week: float | None = Field(default=None, ge=0)
 
 
 class NodeUpdate(BaseModel):
@@ -83,6 +89,9 @@ class NodeUpdate(BaseModel):
     estimated_minutes: int | None = Field(default=None, ge=0)
     sort_order: int | None = None
     node_type: NodeType | None = None
+    credit_hours: float | None = Field(default=None, ge=0)
+    credit_type: str | None = None
+    contact_hours_per_week: float | None = Field(default=None, ge=0)
 
 
 class NodeResponse(BaseModel):
@@ -102,6 +111,7 @@ class NodeResponse(BaseModel):
 
 
 # ── Edge schemas ──
+
 
 class EdgeCreate(BaseModel):
     from_node_id: uuid.UUID
@@ -124,8 +134,10 @@ class EdgeResponse(BaseModel):
 
 # ── Child Map State schemas ──
 
+
 class NodeStateStatus(BaseModel):
     """Per-node status for a child in a map."""
+
     node_id: uuid.UUID
     node_type: NodeType
     title: str
@@ -149,6 +161,7 @@ class ChildMapStateResponse(BaseModel):
 
 # ── Enrollment schemas ──
 
+
 class EnrollmentCreate(BaseModel):
     learning_map_id: uuid.UUID
 
@@ -168,6 +181,7 @@ class EnrollmentResponse(BaseModel):
 
 # ── Override schemas ──
 
+
 class OverrideRequest(BaseModel):
     reason: str = Field(min_length=1, max_length=1000)
 
@@ -180,6 +194,7 @@ class OverrideResponse(BaseModel):
 
 
 # ── Template schemas ──
+
 
 class TemplateInfo(BaseModel):
     template_id: str

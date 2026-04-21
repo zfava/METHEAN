@@ -36,19 +36,34 @@ PERM_VIEW_AI_RUNS = "view.ai_runs"
 
 # Role defaults
 ALL_PERMISSIONS = [
-    PERM_RULES_CREATE, PERM_RULES_EDIT, PERM_RULES_CONSTITUTIONAL,
-    PERM_APPROVE_ACTIVITIES, PERM_OVERRIDE_PREREQUISITES, PERM_CHANGE_PHILOSOPHY,
-    PERM_GENERATE_PLANS, PERM_VIEW_PROGRESS, PERM_TUTOR_INTERACT,
-    PERM_MANAGE_USERS, PERM_MANAGE_CHILDREN, PERM_EXPORT_DATA, PERM_VIEW_AI_RUNS,
+    PERM_RULES_CREATE,
+    PERM_RULES_EDIT,
+    PERM_RULES_CONSTITUTIONAL,
+    PERM_APPROVE_ACTIVITIES,
+    PERM_OVERRIDE_PREREQUISITES,
+    PERM_CHANGE_PHILOSOPHY,
+    PERM_GENERATE_PLANS,
+    PERM_VIEW_PROGRESS,
+    PERM_TUTOR_INTERACT,
+    PERM_MANAGE_USERS,
+    PERM_MANAGE_CHILDREN,
+    PERM_EXPORT_DATA,
+    PERM_VIEW_AI_RUNS,
 ]
 
 OWNER_PERMISSIONS = ALL_PERMISSIONS
 
 CO_PARENT_PERMISSIONS = [
-    PERM_RULES_CREATE, PERM_RULES_EDIT,
-    PERM_APPROVE_ACTIVITIES, PERM_OVERRIDE_PREREQUISITES,
-    PERM_GENERATE_PLANS, PERM_VIEW_PROGRESS, PERM_TUTOR_INTERACT,
-    PERM_MANAGE_CHILDREN, PERM_EXPORT_DATA, PERM_VIEW_AI_RUNS,
+    PERM_RULES_CREATE,
+    PERM_RULES_EDIT,
+    PERM_APPROVE_ACTIVITIES,
+    PERM_OVERRIDE_PREREQUISITES,
+    PERM_GENERATE_PLANS,
+    PERM_VIEW_PROGRESS,
+    PERM_TUTOR_INTERACT,
+    PERM_MANAGE_CHILDREN,
+    PERM_EXPORT_DATA,
+    PERM_VIEW_AI_RUNS,
 ]
 
 OBSERVER_PERMISSIONS = [
@@ -60,6 +75,34 @@ ROLE_DEFAULTS = {
     "co_parent": CO_PARENT_PERMISSIONS,
     "observer": OBSERVER_PERMISSIONS,
 }
+
+
+# Institutional-role permission presets. Used by invite flows that
+# translate an academic role (department_admin, instructor, ...) into
+# the underlying household role plus its permission list.
+INSTITUTIONAL_ROLE_DEFAULTS: dict[str, list[str]] = {
+    "department_admin": OWNER_PERMISSIONS,
+    "instructor": CO_PARENT_PERMISSIONS,
+    "teaching_assistant": OBSERVER_PERMISSIONS,
+    "student": OBSERVER_PERMISSIONS,
+}
+
+
+def get_effective_permissions(user: User) -> list[str]:
+    """Return the permission list a user should have based on their
+    institutional role when set, falling back to household role.
+
+    Students deliberately receive the observer permission list; the
+    scoping to their own learner record is enforced by grants that use
+    scope_type="child" with scope_id=user.linked_child_id, written at
+    invite time. Consumers of this function get the permission names
+    only; scope is a property of the actual UserPermission rows.
+    """
+    inst_role = getattr(user, "institutional_role", None)
+    if inst_role and inst_role in INSTITUTIONAL_ROLE_DEFAULTS:
+        return list(INSTITUTIONAL_ROLE_DEFAULTS[inst_role])
+    role_val = user.role.value if hasattr(user.role, "value") else str(user.role)
+    return list(ROLE_DEFAULTS.get(role_val, OBSERVER_PERMISSIONS))
 
 
 async def grant_role_permissions(

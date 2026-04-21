@@ -89,6 +89,7 @@ def require_role(*roles: str):
                 detail="Insufficient permissions",
             )
         return user
+
     return check_role
 
 
@@ -97,11 +98,13 @@ def require_permission(permission: str, scope_type: str | None = None):
 
     Owners always pass. Other roles need an explicit UserPermission grant.
     """
+
     async def checker(
         user: User = Depends(get_current_user),
         db: AsyncSession = Depends(get_db),
     ) -> User:
         from app.core.permissions import check_permission
+
         has_perm = await check_permission(db, user, permission, scope_type)
         if not has_perm:
             raise HTTPException(
@@ -109,4 +112,28 @@ def require_permission(permission: str, scope_type: str | None = None):
                 detail=f"Missing permission: {permission}",
             )
         return user
+
     return checker
+
+
+async def require_active_subscription(
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> User:
+    """Gate: require active or trialing subscription."""
+    from datetime import UTC, datetime
+
+    from app.models.identity import Household
+
+    result = await db.execute(select(Household).where(Household.id == user.household_id))
+    hh = result.scalar_one_or_none()
+    if not hh:
+        raise HTTPException(status_code=402, detail="Your subscription is inactive. Visit /billing to resubscribe.")
+
+    if hh.subscription_status in ("active", "trialing"):
+        return user
+
+    if hh.trial_ends_at and hh.trial_ends_at > datetime.now(UTC):
+        return user
+
+    raise HTTPException(status_code=402, detail="Your subscription is inactive. Visit /billing to resubscribe.")

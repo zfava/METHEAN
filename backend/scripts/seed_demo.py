@@ -38,11 +38,9 @@ from app.models.enums import (
     EdgeRelation,
     GovernanceAction,
     MasteryLevel,
-    NodeType,
     PlanStatus,
     RuleScope,
     RuleType,
-    StateEventType,
 )
 from app.models.evidence import AdvisorReport, Alert, WeeklySnapshot
 from app.models.governance import (
@@ -55,7 +53,7 @@ from app.models.governance import (
 )
 from app.models.identity import Child, Household, User
 from app.models.operational import AIRun
-from app.models.state import ChildNodeState, FSRSCard, ReviewLog, StateEvent
+from app.models.state import ChildNodeState, FSRSCard, ReviewLog
 
 DEMO_EMAIL = "zack@methean.app"
 DEMO_PASSWORD = "demo123"
@@ -158,7 +156,10 @@ async def _create_map(
     await db.flush()
 
     lmap = LearningMap(
-        household_id=household_id, subject_id=subj.id, name=name, version=3,
+        household_id=household_id,
+        subject_id=subj.id,
+        name=name,
+        version=3,
     )
     db.add(lmap)
     await db.flush()
@@ -166,33 +167,50 @@ async def _create_map(
     nodes: dict[str, LearningNode] = {}
     for title, ntype, minutes, order in node_defs:
         n = LearningNode(
-            learning_map_id=lmap.id, household_id=household_id,
-            node_type=ntype, title=title,
-            estimated_minutes=minutes, sort_order=order,
+            learning_map_id=lmap.id,
+            household_id=household_id,
+            node_type=ntype,
+            title=title,
+            estimated_minutes=minutes,
+            sort_order=order,
         )
         db.add(n)
         await db.flush()
         nodes[title] = n
 
     for f, t in edge_defs:
-        db.add(LearningEdge(
-            learning_map_id=lmap.id, household_id=household_id,
-            from_node_id=nodes[f].id, to_node_id=nodes[t].id,
-            relation=EdgeRelation.prerequisite,
-        ))
+        db.add(
+            LearningEdge(
+                learning_map_id=lmap.id,
+                household_id=household_id,
+                from_node_id=nodes[f].id,
+                to_node_id=nodes[t].id,
+                relation=EdgeRelation.prerequisite,
+            )
+        )
     await db.flush()
 
     return lmap, nodes
 
 
 def _make_card(
-    child_id, household_id, node_id,
-    stability=10.0, difficulty=2.5, reps=3,
-    days_since_review=5, days_until_due=5,
+    child_id,
+    household_id,
+    node_id,
+    stability=10.0,
+    difficulty=2.5,
+    reps=3,
+    days_since_review=5,
+    days_until_due=5,
 ):
     return FSRSCard(
-        child_id=child_id, household_id=household_id, node_id=node_id,
-        stability=stability, difficulty=difficulty, reps=reps, state=2,
+        child_id=child_id,
+        household_id=household_id,
+        node_id=node_id,
+        stability=stability,
+        difficulty=difficulty,
+        reps=reps,
+        state=2,
         last_review=NOW - timedelta(days=days_since_review),
         due=NOW + timedelta(days=days_until_due),
     )
@@ -200,8 +218,12 @@ def _make_card(
 
 def _make_review(card_id, child_id, household_id, rating, days_ago):
     return ReviewLog(
-        card_id=card_id, child_id=child_id, household_id=household_id,
-        rating=rating, scheduled_days=3, elapsed_days=2,
+        card_id=card_id,
+        child_id=child_id,
+        household_id=household_id,
+        rating=rating,
+        scheduled_days=3,
+        elapsed_days=2,
         reviewed_at=NOW - timedelta(days=days_ago),
     )
 
@@ -216,9 +238,7 @@ async def seed():
 
     async with sf() as db:
         # ── Idempotency check ──
-        existing = await db.execute(
-            select(User).where(User.email == DEMO_EMAIL)
-        )
+        existing = await db.execute(select(User).where(User.email == DEMO_EMAIL))
         if existing.scalar_one_or_none():
             print(f"Demo user {DEMO_EMAIL} already exists. Skipping seed.")
             await engine.dispose()
@@ -232,10 +252,46 @@ async def seed():
         await db.flush()
         hid = household.id
 
+        # Set RLS tenant context for all subsequent inserts
+        from app.core.database import set_tenant
+
+        await set_tenant(db, hid)
+
+        # Set philosophical profile
+        household.philosophical_profile = {
+            "educational_philosophy": "classical",
+            "philosophy_description": "We follow the classical trivium model adapted for a Christian worldview, emphasizing grammar, logic, and rhetoric stages.",
+            "religious_framework": "christian",
+            "religious_notes": "Protestant evangelical. Scripture is the foundation for all learning.",
+            "content_boundaries": [
+                {
+                    "topic": "evolution",
+                    "stance": "present_alternative",
+                    "notes": "Present both evolutionary theory and creation science perspectives",
+                },
+                {"topic": "sexuality_education", "stance": "parent_led_only", "notes": ""},
+            ],
+            "ai_autonomy_level": "approve_difficult",
+            "pedagogical_preferences": {
+                "socratic_method": True,
+                "memorization_valued": True,
+                "standardized_testing": False,
+                "competitive_grading": False,
+                "collaborative_learning": True,
+            },
+            "custom_constraints": [
+                "All history content should include primary sources when possible",
+                "Latin roots should be incorporated into vocabulary study",
+            ],
+        }
+        await db.flush()
+
         parent = User(
-            household_id=hid, email=DEMO_EMAIL,
+            household_id=hid,
+            email=DEMO_EMAIL,
             password_hash=hash_password(DEMO_PASSWORD),
-            display_name="Zack", role="owner",
+            display_name="Zack",
+            role="owner",
         )
         db.add(parent)
         await db.flush()
@@ -245,16 +301,25 @@ async def seed():
         # Children
         # ═══════════════════════════════════════════
         emma = Child(
-            household_id=hid, first_name="Emma", last_name="Builder",
-            date_of_birth=date(2020, 4, 12), grade_level="K",
+            household_id=hid,
+            first_name="Emma",
+            last_name="Builder",
+            date_of_birth=date(2020, 4, 12),
+            grade_level="K",
         )
         liam = Child(
-            household_id=hid, first_name="Liam", last_name="Builder",
-            date_of_birth=date(2017, 1, 8), grade_level="4th",
+            household_id=hid,
+            first_name="Liam",
+            last_name="Builder",
+            date_of_birth=date(2017, 1, 8),
+            grade_level="4th",
         )
         sophia = Child(
-            household_id=hid, first_name="Sophia", last_name="Builder",
-            date_of_birth=date(2014, 9, 3), grade_level="7th",
+            household_id=hid,
+            first_name="Sophia",
+            last_name="Builder",
+            date_of_birth=date(2014, 9, 3),
+            grade_level="7th",
         )
         db.add_all([emma, liam, sophia])
         await db.flush()
@@ -267,10 +332,14 @@ async def seed():
         map_logic, logic = await _create_map(db, hid, "Classical Logic", "#9C27B0", LOGIC_NODES, LOGIC_EDGES)
 
         for child, lmap in [(emma, map_k2), (liam, map_elem), (sophia, map_logic)]:
-            db.add(ChildMapEnrollment(
-                child_id=child.id, household_id=hid,
-                learning_map_id=lmap.id, enrolled_at_version=3,
-            ))
+            db.add(
+                ChildMapEnrollment(
+                    child_id=child.id,
+                    household_id=hid,
+                    learning_map_id=lmap.id,
+                    enrolled_at_version=3,
+                )
+            )
         await db.flush()
 
         # ═══════════════════════════════════════════
@@ -278,34 +347,44 @@ async def seed():
         # 3 mastered, 2 developing, rest not started
         # ═══════════════════════════════════════════
         emma_mastery = {
-            "Literacy":           (MasteryLevel.mastered, True, 4, 60),
+            "Literacy": (MasteryLevel.mastered, True, 4, 60),
             "Letter Recognition": (MasteryLevel.mastered, True, 3, 45),
-            "Basic Phonics":      (MasteryLevel.mastered, True, 3, 40),
-            "Sight Words":        (MasteryLevel.developing, True, 2, 30),
-            "Simple Reading":     (MasteryLevel.developing, True, 1, 15),
-            "Numeracy":           (MasteryLevel.mastered, True, 3, 40),
-            "Counting to 100":    (MasteryLevel.proficient, True, 2, 25),
-            "Addition":           (MasteryLevel.emerging, True, 1, 10),
-            "Subtraction":        (MasteryLevel.not_started, False, 0, 0),
-            "Word Problems":      (MasteryLevel.not_started, False, 0, 0),
+            "Basic Phonics": (MasteryLevel.mastered, True, 3, 40),
+            "Sight Words": (MasteryLevel.developing, True, 2, 30),
+            "Simple Reading": (MasteryLevel.developing, True, 1, 15),
+            "Numeracy": (MasteryLevel.mastered, True, 3, 40),
+            "Counting to 100": (MasteryLevel.proficient, True, 2, 25),
+            "Addition": (MasteryLevel.emerging, True, 1, 10),
+            "Subtraction": (MasteryLevel.not_started, False, 0, 0),
+            "Word Problems": (MasteryLevel.not_started, False, 0, 0),
         }
         for title, (mastery, unlocked, attempts, mins) in emma_mastery.items():
-            db.add(ChildNodeState(
-                child_id=emma.id, household_id=hid, node_id=k2[title].id,
-                mastery_level=mastery, is_unlocked=unlocked,
-                attempts_count=attempts, time_spent_minutes=mins,
-                last_activity_at=NOW - timedelta(days=2) if attempts > 0 else None,
-            ))
+            db.add(
+                ChildNodeState(
+                    child_id=emma.id,
+                    household_id=hid,
+                    node_id=k2[title].id,
+                    mastery_level=mastery,
+                    is_unlocked=unlocked,
+                    attempts_count=attempts,
+                    time_spent_minutes=mins,
+                    last_activity_at=NOW - timedelta(days=2) if attempts > 0 else None,
+                )
+            )
 
         # FSRS cards for Emma's mastered nodes
         for title in ["Literacy", "Letter Recognition", "Basic Phonics", "Numeracy"]:
             overdue = title == "Basic Phonics"
-            db.add(_make_card(
-                emma.id, hid, k2[title].id,
-                stability=3.0 if overdue else 12.0,
-                days_since_review=30 if overdue else 4,
-                days_until_due=-20 if overdue else 8,
-            ))
+            db.add(
+                _make_card(
+                    emma.id,
+                    hid,
+                    k2[title].id,
+                    stability=3.0 if overdue else 12.0,
+                    days_since_review=30 if overdue else 4,
+                    days_until_due=-20 if overdue else 8,
+                )
+            )
         await db.flush()
 
         # ═══════════════════════════════════════════
@@ -313,32 +392,37 @@ async def seed():
         # 5 mastered, 3 proficient, 1 emerging
         # ═══════════════════════════════════════════
         liam_mastery = {
-            "Mathematics":       (MasteryLevel.mastered, True, 5, 80),
-            "Multiplication":    (MasteryLevel.mastered, True, 6, 90),
-            "Division":          (MasteryLevel.mastered, True, 5, 75),
-            "Fractions":         (MasteryLevel.proficient, True, 4, 60),
-            "Decimals":          (MasteryLevel.emerging, True, 1, 15),
-            "Language Arts":     (MasteryLevel.mastered, True, 4, 55),
+            "Mathematics": (MasteryLevel.mastered, True, 5, 80),
+            "Multiplication": (MasteryLevel.mastered, True, 6, 90),
+            "Division": (MasteryLevel.mastered, True, 5, 75),
+            "Fractions": (MasteryLevel.proficient, True, 4, 60),
+            "Decimals": (MasteryLevel.emerging, True, 1, 15),
+            "Language Arts": (MasteryLevel.mastered, True, 4, 55),
             "Paragraph Writing": (MasteryLevel.mastered, True, 5, 70),
-            "Essay Structure":   (MasteryLevel.proficient, True, 3, 50),
+            "Essay Structure": (MasteryLevel.proficient, True, 3, 50),
             "Grammar & Mechanics": (MasteryLevel.proficient, True, 3, 45),
-            "Science":           (MasteryLevel.mastered, True, 3, 40),
+            "Science": (MasteryLevel.mastered, True, 3, 40),
             "Scientific Method": (MasteryLevel.proficient, True, 3, 40),
-            "Life Science":      (MasteryLevel.developing, True, 2, 30),
-            "Earth Science":     (MasteryLevel.not_started, False, 0, 0),
+            "Life Science": (MasteryLevel.developing, True, 2, 30),
+            "Earth Science": (MasteryLevel.not_started, False, 0, 0),
         }
         for title, (mastery, unlocked, attempts, mins) in liam_mastery.items():
-            db.add(ChildNodeState(
-                child_id=liam.id, household_id=hid, node_id=elem[title].id,
-                mastery_level=mastery, is_unlocked=unlocked,
-                attempts_count=attempts, time_spent_minutes=mins,
-                last_activity_at=NOW - timedelta(days=1) if attempts > 0 else None,
-            ))
+            db.add(
+                ChildNodeState(
+                    child_id=liam.id,
+                    household_id=hid,
+                    node_id=elem[title].id,
+                    mastery_level=mastery,
+                    is_unlocked=unlocked,
+                    attempts_count=attempts,
+                    time_spent_minutes=mins,
+                    last_activity_at=NOW - timedelta(days=1) if attempts > 0 else None,
+                )
+            )
 
         # FSRS cards + 50+ review logs for Liam
         review_count = 0
-        for title in ["Mathematics", "Multiplication", "Division", "Language Arts",
-                       "Paragraph Writing", "Science"]:
+        for title in ["Mathematics", "Multiplication", "Division", "Language Arts", "Paragraph Writing", "Science"]:
             card = _make_card(liam.id, hid, elem[title].id, stability=15.0, reps=6)
             db.add(card)
             await db.flush()
@@ -348,8 +432,9 @@ async def seed():
                 db.add(_make_review(card.id, liam.id, hid, rating, days_ago=60 - i * 5))
                 review_count += 1
         for title in ["Fractions", "Essay Structure", "Grammar & Mechanics", "Scientific Method"]:
-            card = _make_card(liam.id, hid, elem[title].id, stability=8.0, reps=3,
-                              days_since_review=3, days_until_due=5)
+            card = _make_card(
+                liam.id, hid, elem[title].id, stability=8.0, reps=3, days_since_review=3, days_until_due=5
+            )
             db.add(card)
             await db.flush()
             for i in range(4):
@@ -362,28 +447,36 @@ async def seed():
         # 2 mastered, 4 developing, 1 stalled
         # ═══════════════════════════════════════════
         sophia_mastery = {
-            "Formal Logic":           (MasteryLevel.mastered, True, 4, 60),
-            "Propositions":           (MasteryLevel.mastered, True, 4, 55),
-            "Syllogisms":             (MasteryLevel.developing, True, 3, 45),
-            "Logical Fallacies":      (MasteryLevel.not_started, False, 0, 0),
-            "Argument Construction":  (MasteryLevel.not_started, False, 0, 0),
-            "Rhetoric Foundations":   (MasteryLevel.mastered, True, 3, 40),
-            "Ethos":                  (MasteryLevel.developing, True, 2, 30),
-            "Pathos":                 (MasteryLevel.developing, True, 2, 30),
-            "Logos":                  (MasteryLevel.developing, True, 2, 25),
-            "Persuasive Writing":     (MasteryLevel.not_started, False, 0, 0),
+            "Formal Logic": (MasteryLevel.mastered, True, 4, 60),
+            "Propositions": (MasteryLevel.mastered, True, 4, 55),
+            "Syllogisms": (MasteryLevel.developing, True, 3, 45),
+            "Logical Fallacies": (MasteryLevel.not_started, False, 0, 0),
+            "Argument Construction": (MasteryLevel.not_started, False, 0, 0),
+            "Rhetoric Foundations": (MasteryLevel.mastered, True, 3, 40),
+            "Ethos": (MasteryLevel.developing, True, 2, 30),
+            "Pathos": (MasteryLevel.developing, True, 2, 30),
+            "Logos": (MasteryLevel.developing, True, 2, 25),
+            "Persuasive Writing": (MasteryLevel.not_started, False, 0, 0),
         }
         for title, (mastery, unlocked, attempts, mins) in sophia_mastery.items():
             # Stalled node: Syllogisms, last activity 20 days ago
-            last_act = NOW - timedelta(days=20) if title == "Syllogisms" and attempts > 0 else (
-                NOW - timedelta(days=3) if attempts > 0 else None
+            last_act = (
+                NOW - timedelta(days=20)
+                if title == "Syllogisms" and attempts > 0
+                else (NOW - timedelta(days=3) if attempts > 0 else None)
             )
-            db.add(ChildNodeState(
-                child_id=sophia.id, household_id=hid, node_id=logic[title].id,
-                mastery_level=mastery, is_unlocked=unlocked,
-                attempts_count=attempts, time_spent_minutes=mins,
-                last_activity_at=last_act,
-            ))
+            db.add(
+                ChildNodeState(
+                    child_id=sophia.id,
+                    household_id=hid,
+                    node_id=logic[title].id,
+                    mastery_level=mastery,
+                    is_unlocked=unlocked,
+                    attempts_count=attempts,
+                    time_spent_minutes=mins,
+                    last_activity_at=last_act,
+                )
+            )
 
         for title in ["Formal Logic", "Propositions", "Rhetoric Foundations"]:
             db.add(_make_card(sophia.id, hid, logic[title].id))
@@ -393,18 +486,31 @@ async def seed():
         # Governance Rules (defaults)
         # ═══════════════════════════════════════════
         for name, rtype, params, prio in [
-            ("Auto-approve easy activities", RuleType.approval_required,
-             {"max_difficulty": 3, "action": "auto_approve"}, 10),
-            ("Review difficult activities", RuleType.approval_required,
-             {"min_difficulty": 3, "action": "require_review"}, 20),
-            ("Daily time limit", RuleType.pace_limit,
-             {"max_daily_minutes": 180}, 5),
+            (
+                "Auto-approve easy activities",
+                RuleType.approval_required,
+                {"max_difficulty": 3, "action": "auto_approve"},
+                10,
+            ),
+            (
+                "Review difficult activities",
+                RuleType.approval_required,
+                {"min_difficulty": 3, "action": "require_review"},
+                20,
+            ),
+            ("Daily time limit", RuleType.pace_limit, {"max_daily_minutes": 180}, 5),
         ]:
-            db.add(GovernanceRule(
-                household_id=hid, created_by=pid,
-                rule_type=rtype, scope=RuleScope.household,
-                name=name, parameters=params, priority=prio,
-            ))
+            db.add(
+                GovernanceRule(
+                    household_id=hid,
+                    created_by=pid,
+                    rule_type=rtype,
+                    scope=RuleScope.household,
+                    name=name,
+                    parameters=params,
+                    priority=prio,
+                )
+            )
         await db.flush()
 
         # ═══════════════════════════════════════════
@@ -416,38 +522,59 @@ async def seed():
             (liam, elem, "Liam"),
             (sophia, logic, "Sophia"),
         ]:
+            # Plan dates span today so /today always returns activities
+            plan_start = min(WEEK_START, TODAY - timedelta(days=1))
+            plan_end = max(WEEK_START + timedelta(days=6), TODAY + timedelta(days=3))
+
             plan = Plan(
-                household_id=hid, child_id=child.id, created_by=pid,
+                household_id=hid,
+                child_id=child.id,
+                created_by=pid,
                 name=f"{child_label} \u2014 Week of {WEEK_START.isoformat()}",
-                status=PlanStatus.draft, start_date=WEEK_START,
-                end_date=WEEK_START + timedelta(days=4), ai_generated=True,
+                status=PlanStatus.draft,
+                start_date=plan_start,
+                end_date=plan_end,
+                ai_generated=True,
             )
             db.add(plan)
             await db.flush()
 
             week = PlanWeek(
-                plan_id=plan.id, household_id=hid,
-                week_number=1, start_date=WEEK_START,
-                end_date=WEEK_START + timedelta(days=4),
+                plan_id=plan.id,
+                household_id=hid,
+                week_number=1,
+                start_date=plan_start,
+                end_date=plan_end,
             )
             db.add(week)
             await db.flush()
 
-            # Pick 3-4 nodes per child for activities
-            # Mix of governance statuses: first 2 completed+approved, next 1 approved+scheduled,
-            # last 2 pending review (governance_approved=False) — this populates the approval queue
+            # Activities: first 3 scheduled for TODAY so the dashboard always has data.
+            # Activity 0: completed + approved (shows progress)
+            # Activity 1: scheduled + approved (ready to start in child view)
+            # Activity 2: scheduled + pending review (shows in governance queue)
+            # Activity 3-4: future dates
             node_titles = list(nodes.keys())[:5]
             for i, title in enumerate(node_titles):
-                completed = i < 2
-                approved = i < 3  # First 3 approved, last 2 pending review
+                if i < 3:
+                    sched_date = TODAY
+                    completed = i == 0
+                    approved = i < 2  # 0 and 1 approved, 2 pending
+                else:
+                    sched_date = WEEK_START + timedelta(days=i)
+                    completed = False
+                    approved = False  # 3 and 4 pending review
+
                 a = Activity(
-                    plan_week_id=week.id, household_id=hid,
+                    plan_week_id=week.id,
+                    household_id=hid,
                     node_id=nodes[title].id,
                     activity_type=ActivityType.review if i == 0 else ActivityType.lesson,
                     title=f"{'Review' if i == 0 else 'Study'} {title}",
                     status=ActivityStatus.completed if completed else ActivityStatus.scheduled,
-                    scheduled_date=WEEK_START + timedelta(days=i),
-                    estimated_minutes=25, sort_order=i,
+                    scheduled_date=sched_date,
+                    estimated_minutes=25,
+                    sort_order=i,
                     instructions={
                         "difficulty": 2 if i < 2 else 3 + (i - 2),
                         "ai_rationale": f"Recommended based on {child_label}'s current progress in {title}",
@@ -461,30 +588,43 @@ async def seed():
 
                 # Governance events (only for approved activities)
                 if approved:
-                    db.add(GovernanceEvent(
-                        household_id=hid, user_id=pid,
-                        action=GovernanceAction.approve,
-                        target_type="activity", target_id=a.id,
-                        reason="Auto-approved: difficulty < 3" if i == 0 else "Parent approved",
-                    ))
+                    db.add(
+                        GovernanceEvent(
+                            household_id=hid,
+                            user_id=pid,
+                            action=GovernanceAction.approve,
+                            target_type="activity",
+                            target_id=a.id,
+                            reason="Auto-approved: difficulty < 3" if i == 0 else "Parent approved",
+                        )
+                    )
                 else:
-                    db.add(GovernanceEvent(
-                        household_id=hid, user_id=pid,
-                        action=GovernanceAction.defer,
-                        target_type="activity", target_id=a.id,
-                        reason=f"Difficulty {3 + (i - 2)} requires parent review",
-                        metadata_={"rule_name": "Review difficult activities", "is_auto": True},
-                    ))
+                    db.add(
+                        GovernanceEvent(
+                            household_id=hid,
+                            user_id=pid,
+                            action=GovernanceAction.defer,
+                            target_type="activity",
+                            target_id=a.id,
+                            reason=f"Difficulty {3 + (i - 2)} requires parent review",
+                            metadata_={"rule_name": "Review difficult activities", "is_auto": True},
+                        )
+                    )
 
                 # Attempts for completed activities
                 if completed:
-                    db.add(Attempt(
-                        activity_id=a.id, household_id=hid, child_id=child.id,
-                        status=AttemptStatus.completed,
-                        completed_at=NOW - timedelta(hours=24 - i * 4),
-                        duration_minutes=20, score=0.75,
-                        feedback={"evaluator_summary": f"Good work on {title}"},
-                    ))
+                    db.add(
+                        Attempt(
+                            activity_id=a.id,
+                            household_id=hid,
+                            child_id=child.id,
+                            status=AttemptStatus.completed,
+                            completed_at=NOW - timedelta(hours=24 - i * 4),
+                            duration_minutes=20,
+                            score=0.75,
+                            feedback={"evaluator_summary": f"Good work on {title}"},
+                        )
+                    )
 
             plans_created += 1
         await db.flush()
@@ -492,44 +632,61 @@ async def seed():
         # ═══════════════════════════════════════════
         # Alerts (3 types)
         # ═══════════════════════════════════════════
-        db.add(Alert(
-            household_id=hid, child_id=sophia.id,
-            severity=AlertSeverity.warning, status=AlertStatus.unread,
-            title="Stalled: Syllogisms",
-            message="Sophia has not worked on 'Syllogisms' for 20 days at developing level. Consider reviewing or adjusting the approach.",
-            source="stall_detection",
-            metadata_={"node_id": str(logic["Syllogisms"].id), "days_stalled": 20},
-        ))
-        db.add(Alert(
-            household_id=hid, child_id=emma.id,
-            severity=AlertSeverity.warning, status=AlertStatus.unread,
-            title="Regression: Basic Phonics",
-            message="'Basic Phonics' dropped from mastered to proficient due to overdue review. Retention is declining.",
-            source="regression_detection",
-            metadata_={"node_id": str(k2["Basic Phonics"].id), "from": "mastered", "to": "proficient"},
-        ))
-        db.add(Alert(
-            household_id=hid, child_id=liam.id,
-            severity=AlertSeverity.action_required, status=AlertStatus.unread,
-            title="Struggling: Decimals",
-            message="Liam has had 3 consecutive low-confidence attempts on 'Decimals'. Consider reviewing prerequisite Fractions or adjusting difficulty.",
-            source="pattern_detection",
-            metadata_={"node_id": str(elem["Decimals"].id), "consecutive_low": 3},
-        ))
+        db.add(
+            Alert(
+                household_id=hid,
+                child_id=sophia.id,
+                severity=AlertSeverity.warning,
+                status=AlertStatus.unread,
+                title="Stalled: Syllogisms",
+                message="Sophia has not worked on 'Syllogisms' for 20 days at developing level. Consider reviewing or adjusting the approach.",
+                source="stall_detection",
+                metadata_={"node_id": str(logic["Syllogisms"].id), "days_stalled": 20},
+            )
+        )
+        db.add(
+            Alert(
+                household_id=hid,
+                child_id=emma.id,
+                severity=AlertSeverity.warning,
+                status=AlertStatus.unread,
+                title="Regression: Basic Phonics",
+                message="'Basic Phonics' dropped from mastered to proficient due to overdue review. Retention is declining.",
+                source="regression_detection",
+                metadata_={"node_id": str(k2["Basic Phonics"].id), "from": "mastered", "to": "proficient"},
+            )
+        )
+        db.add(
+            Alert(
+                household_id=hid,
+                child_id=liam.id,
+                severity=AlertSeverity.action_required,
+                status=AlertStatus.unread,
+                title="Struggling: Decimals",
+                message="Liam has had 3 consecutive low-confidence attempts on 'Decimals'. Consider reviewing prerequisite Fractions or adjusting difficulty.",
+                source="pattern_detection",
+                metadata_={"node_id": str(elem["Decimals"].id), "consecutive_low": 3},
+            )
+        )
         await db.flush()
 
         # ═══════════════════════════════════════════
         # AI Runs (inspection evidence)
         # ═══════════════════════════════════════════
         for role in ["planner", "planner", "planner", "evaluator", "evaluator", "tutor", "advisor"]:
-            db.add(AIRun(
-                household_id=hid, triggered_by=pid,
-                run_type=role, status=AIRunStatus.completed, model_used="mock",
-                input_data={"role": role, "system_prompt": "...", "user_prompt": "..."},
-                output_data={"mock": True, "result": f"Mock {role} output for demo"},
-                started_at=NOW - timedelta(minutes=10),
-                completed_at=NOW - timedelta(minutes=9),
-            ))
+            db.add(
+                AIRun(
+                    household_id=hid,
+                    triggered_by=pid,
+                    run_type=role,
+                    status=AIRunStatus.completed,
+                    model_used="mock",
+                    input_data={"role": role, "system_prompt": "...", "user_prompt": "..."},
+                    output_data={"mock": True, "result": f"Mock {role} output for demo"},
+                    started_at=NOW - timedelta(minutes=10),
+                    completed_at=NOW - timedelta(minutes=9),
+                )
+            )
         await db.flush()
 
         # ═══════════════════════════════════════════
@@ -541,52 +698,82 @@ async def seed():
             (liam, 4, 5, 4),
             (sophia, 1, 2, 4),
         ]:
-            db.add(WeeklySnapshot(
-                household_id=hid, child_id=child.id,
-                week_start=last_week, week_end=last_week + timedelta(days=6),
-                total_minutes=120, activities_completed=4, activities_scheduled=5,
-                nodes_mastered=mastered_prev, nodes_progressed=progressed - 1,
-                summary={"week": "previous", "trend": "improving"},
-            ))
-            db.add(WeeklySnapshot(
-                household_id=hid, child_id=child.id,
-                week_start=WEEK_START, week_end=WEEK_START + timedelta(days=6),
-                total_minutes=150, activities_completed=5, activities_scheduled=5,
-                nodes_mastered=mastered_now, nodes_progressed=progressed,
-                summary={"week": "current", "trend": "improving"},
-            ))
+            db.add(
+                WeeklySnapshot(
+                    household_id=hid,
+                    child_id=child.id,
+                    week_start=last_week,
+                    week_end=last_week + timedelta(days=6),
+                    total_minutes=120,
+                    activities_completed=4,
+                    activities_scheduled=5,
+                    nodes_mastered=mastered_prev,
+                    nodes_progressed=progressed - 1,
+                    summary={"week": "previous", "trend": "improving"},
+                )
+            )
+            db.add(
+                WeeklySnapshot(
+                    household_id=hid,
+                    child_id=child.id,
+                    week_start=WEEK_START,
+                    week_end=WEEK_START + timedelta(days=6),
+                    total_minutes=150,
+                    activities_completed=5,
+                    activities_scheduled=5,
+                    nodes_mastered=mastered_now,
+                    nodes_progressed=progressed,
+                    summary={"week": "current", "trend": "improving"},
+                )
+            )
         await db.flush()
 
         # ═══════════════════════════════════════════
         # Advisor Report (last week)
         # ═══════════════════════════════════════════
         for child, summary in [
-            (emma, "Emma had a strong week mastering Basic Phonics and making progress on Sight Words and Simple Reading."),
-            (liam, "Liam continues to excel in math. He mastered Division and is working through Fractions confidently."),
-            (sophia, "Sophia is progressing through Formal Logic. Syllogisms has stalled and may need a different approach."),
+            (
+                emma,
+                "Emma had a strong week mastering Basic Phonics and making progress on Sight Words and Simple Reading.",
+            ),
+            (
+                liam,
+                "Liam continues to excel in math. He mastered Division and is working through Fractions confidently.",
+            ),
+            (
+                sophia,
+                "Sophia is progressing through Formal Logic. Syllogisms has stalled and may need a different approach.",
+            ),
         ]:
-            db.add(AdvisorReport(
-                household_id=hid, child_id=child.id,
-                report_type="weekly",
-                period_start=last_week, period_end=last_week + timedelta(days=6),
-                content={
-                    "summary": summary,
-                    "highlights": ["Consistent engagement", "Mastery gains"],
-                    "concerns": [] if child != sophia else ["Syllogisms stalled for 20 days"],
-                    "recommended_focus": ["Continue current pace"],
-                    "engagement_score": 8 if child != sophia else 6,
-                },
-                recommendations=["Continue current pace", "Review overdue cards"],
-            ))
+            db.add(
+                AdvisorReport(
+                    household_id=hid,
+                    child_id=child.id,
+                    report_type="weekly",
+                    period_start=last_week,
+                    period_end=last_week + timedelta(days=6),
+                    content={
+                        "summary": summary,
+                        "highlights": ["Consistent engagement", "Mastery gains"],
+                        "concerns": [] if child != sophia else ["Syllogisms stalled for 20 days"],
+                        "recommended_focus": ["Continue current pace"],
+                        "engagement_score": 8 if child != sophia else 6,
+                    },
+                    recommendations=["Continue current pace", "Review overdue cards"],
+                )
+            )
 
         # Parent override governance event
-        db.add(GovernanceEvent(
-            household_id=hid, user_id=pid,
-            action=GovernanceAction.approve,
-            target_type="child_node_state",
-            target_id=k2["Addition"].id,
-            reason="Emma showed addition skills during grocery shopping",
-        ))
+        db.add(
+            GovernanceEvent(
+                household_id=hid,
+                user_id=pid,
+                action=GovernanceAction.approve,
+                target_type="child_node_state",
+                target_id=k2["Addition"].id,
+                reason="Emma showed addition skills during grocery shopping",
+            )
+        )
 
         await db.commit()
 
@@ -602,7 +789,7 @@ async def seed():
     print()
     print(f"  Login:     {DEMO_EMAIL}")
     print(f"  Password:  {DEMO_PASSWORD}")
-    print(f"  Household: The Builder Family (America/Denver)")
+    print("  Household: The Builder Family (America/Denver)")
     print()
     print("  Children:")
     print("    Emma    age 6   K      K-2 Foundations")

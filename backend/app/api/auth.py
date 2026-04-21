@@ -4,7 +4,8 @@ import hashlib
 import uuid
 from datetime import UTC, datetime, timedelta
 
-from fastapi import APIRouter, Depends, HTTPException, Response, status, Cookie
+from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
+from pydantic import BaseModel, Field
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -17,9 +18,13 @@ from app.core.security import (
     hash_password,
     verify_password,
 )
+from app.models.enums import UserRole
 from app.models.identity import Household, User
 from app.models.operational import RefreshToken
 from app.schemas.auth import (
+    InstitutionalRegisterRequest,
+    InviteRequest,
+    InviteResponse,
     LoginRequest,
     MessageResponse,
     RefreshResponse,
@@ -80,7 +85,39 @@ async def register(
 
     # Auto-grant owner permissions
     from app.core.permissions import grant_role_permissions
+
     await grant_role_permissions(db, user.id, household.id, "owner", user.id)
+
+    # Self-directed registration: the registering user is both governor
+    # and learner. Flip the household into self_governed mode and create
+    # a Child record that represents the user as a learner.
+    if body.is_self_learner:
+        household.governance_mode = "self_governed"
+        household.organization_type = "self_directed"
+        user.is_self_learner = True
+
+        from app.models.identity import Child, ChildPreferences
+
+        first_token = body.display_name.split()
+        self_child = Child(
+            household_id=household.id,
+            first_name=first_token[0] if first_token else body.display_name,
+        )
+        db.add(self_child)
+        await db.flush()
+
+        # Child.preferences is a relationship, so preferences are stored
+        # in their own row. 120 minutes matches the spec default.
+        db.add(
+            ChildPreferences(
+                child_id=self_child.id,
+                household_id=household.id,
+                daily_duration_minutes=120,
+            )
+        )
+
+        user.linked_child_id = self_child.id
+        await db.flush()
 
     # Generate tokens
     access_token = create_access_token(user.id, household.id, "owner")
@@ -110,6 +147,190 @@ async def register(
         access_token=access_token,
         token_type="bearer",
         expires_in=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+    )
+
+
+@router.post(
+    "/register-institution",
+    response_model=RegisterResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+async def register_institution(
+    body: InstitutionalRegisterRequest,
+    response: Response,
+    db: AsyncSession = Depends(get_db),
+) -> RegisterResponse:
+    """Bootstrap an institution: creates the household, the admin user,
+    and returns auth tokens so the admin is immediately logged in.
+    """
+    existing = await db.execute(select(User).where(User.email == body.admin_email))
+    if existing.scalar_one_or_none():
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Email already registered",
+        )
+
+    household = Household(
+        name=body.organization_name,
+        governance_mode="institution_governed",
+        organization_type=body.organization_type,
+    )
+    db.add(household)
+    await db.flush()
+
+    user = User(
+        household_id=household.id,
+        email=body.admin_email,
+        password_hash=hash_password(body.admin_password),
+        display_name=body.admin_display_name,
+        role="owner",
+        institutional_role="department_admin",
+    )
+    db.add(user)
+    await db.flush()
+
+    from app.core.permissions import grant_role_permissions
+
+    await grant_role_permissions(db, user.id, household.id, "owner", user.id)
+
+    access_token = create_access_token(user.id, household.id, "owner")
+    refresh_token_str, token_id = create_refresh_token(user.id, household.id)
+
+    refresh_record = RefreshToken(
+        id=token_id,
+        user_id=user.id,
+        household_id=household.id,
+        token_hash=_hash_token(refresh_token_str),
+        expires_at=datetime.now(UTC) + timedelta(days=settings.REFRESH_TOKEN_EXPIRE_DAYS),
+    )
+    db.add(refresh_record)
+
+    _set_cookie(response, "access_token", access_token, settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60)
+    _set_cookie(
+        response,
+        "refresh_token",
+        refresh_token_str,
+        settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400,
+    )
+
+    return RegisterResponse(
+        user=UserResponse.model_validate(user),
+        access_token=access_token,
+        token_type="bearer",
+        expires_in=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+    )
+
+
+_INSTITUTIONAL_ROLE_TO_HOUSEHOLD_ROLE = {
+    "instructor": "co_parent",
+    "teaching_assistant": "observer",
+    "student": "observer",
+}
+
+
+@router.post(
+    "/invite",
+    response_model=InviteResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+async def invite_user(
+    body: InviteRequest,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> InviteResponse:
+    """Invite a user into an institution-governed household.
+
+    Only department admins may invite. Instructors get co_parent-level
+    grants, TAs and students get observer. Students also receive a
+    Child record and a self-scoped view_progress grant so one student
+    cannot read another student's data.
+    """
+    household = await db.get(Household, current_user.household_id)
+    if not household or household.governance_mode != "institution_governed":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Institutional invites require an institution-governed household",
+        )
+    if current_user.institutional_role != "department_admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only department admins can invite users",
+        )
+    if body.institutional_role not in _INSTITUTIONAL_ROLE_TO_HOUSEHOLD_ROLE:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail=f"Unknown institutional role: {body.institutional_role}",
+        )
+    if body.institutional_role == "student" and not body.learner_name:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="learner_name is required when inviting a student",
+        )
+
+    existing = await db.execute(select(User).where(User.email == body.email))
+    if existing.scalar_one_or_none():
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Email already registered",
+        )
+
+    household_role = _INSTITUTIONAL_ROLE_TO_HOUSEHOLD_ROLE[body.institutional_role]
+
+    # Invited users get a placeholder password hash; the production
+    # flow would email a set-password link. Tests set passwords directly.
+    placeholder_password = hash_password(f"invite-{body.email}")
+
+    new_user = User(
+        household_id=current_user.household_id,
+        email=body.email,
+        password_hash=placeholder_password,
+        display_name=body.display_name,
+        role=household_role,
+        institutional_role=body.institutional_role,
+    )
+    db.add(new_user)
+    await db.flush()
+
+    linked_child_id: uuid.UUID | None = None
+    if body.institutional_role == "student":
+        from app.core.permissions import OBSERVER_PERMISSIONS
+        from app.models.identity import Child, UserPermission
+
+        student_child = Child(
+            household_id=current_user.household_id,
+            first_name=body.learner_name,
+        )
+        db.add(student_child)
+        await db.flush()
+        new_user.is_self_learner = True
+        new_user.linked_child_id = student_child.id
+        linked_child_id = student_child.id
+
+        # Scope every observer permission to the student's own child so
+        # students cannot read each other's data at the permission layer.
+        for perm in OBSERVER_PERMISSIONS:
+            db.add(
+                UserPermission(
+                    user_id=new_user.id,
+                    household_id=current_user.household_id,
+                    permission=perm,
+                    scope_type="child",
+                    scope_id=student_child.id,
+                    granted_by=current_user.id,
+                )
+            )
+        await db.flush()
+    else:
+        from app.core.permissions import grant_role_permissions
+
+        await grant_role_permissions(db, new_user.id, current_user.household_id, household_role, current_user.id)
+
+    return InviteResponse(
+        id=new_user.id,
+        email=new_user.email,
+        display_name=new_user.display_name,
+        institutional_role=new_user.institutional_role,
+        linked_child_id=linked_child_id,
     )
 
 
@@ -198,9 +419,7 @@ async def refresh(
         )
 
     # Look up the token record (regardless of revocation status).
-    result = await db.execute(
-        select(RefreshToken).where(RefreshToken.id == token_id)
-    )
+    result = await db.execute(select(RefreshToken).where(RefreshToken.id == token_id))
     stored_token = result.scalar_one_or_none()
 
     if not stored_token:
@@ -214,9 +433,7 @@ async def refresh(
     # for the user because the old token may have been stolen.
     if stored_token.is_revoked:
         await db.execute(
-            update(RefreshToken)
-            .where(RefreshToken.user_id == stored_token.user_id)
-            .values(is_revoked=True)
+            update(RefreshToken).where(RefreshToken.user_id == stored_token.user_id).values(is_revoked=True)
         )
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -226,9 +443,7 @@ async def refresh(
     # Verify hash matches (guards against forged token IDs)
     if stored_token.token_hash != _hash_token(refresh_token):
         await db.execute(
-            update(RefreshToken)
-            .where(RefreshToken.user_id == stored_token.user_id)
-            .values(is_revoked=True)
+            update(RefreshToken).where(RefreshToken.user_id == stored_token.user_id).values(is_revoked=True)
         )
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -286,9 +501,7 @@ async def logout(
         try:
             payload = decode_token(refresh_token)
             token_id = uuid.UUID(payload["tid"])
-            result = await db.execute(
-                select(RefreshToken).where(RefreshToken.id == token_id)
-            )
+            result = await db.execute(select(RefreshToken).where(RefreshToken.id == token_id))
             stored = result.scalar_one_or_none()
             if stored:
                 stored.is_revoked = True
@@ -303,3 +516,282 @@ async def logout(
 @router.get("/me", response_model=UserResponse)
 async def get_me(user: User = Depends(get_current_user)) -> UserResponse:
     return UserResponse.model_validate(user)
+
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str = Field(min_length=8)
+
+
+@router.put("/password")
+async def change_password(
+    body: ChangePasswordRequest,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Change the current user's password."""
+    if not verify_password(body.current_password, user.password_hash):
+        raise HTTPException(status_code=400, detail="Current password is incorrect")
+    user.password_hash = hash_password(body.new_password)
+    await db.commit()
+    return {"success": True}
+
+
+@router.get("/me/notification-preferences")
+async def get_notification_preferences(
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Get current user's notification preferences."""
+    return user.notification_preferences or {
+        "email_daily_summary": True,
+        "email_milestones": True,
+        "email_governance_alerts": True,
+        "email_weekly_digest": True,
+        "email_compliance_warnings": True,
+    }
+
+
+@router.put("/me/notification-preferences")
+async def update_notification_preferences(
+    body: dict,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Update notification preferences."""
+    allowed = {
+        "email_daily_summary",
+        "email_milestones",
+        "email_governance_alerts",
+        "email_weekly_digest",
+        "email_compliance_warnings",
+    }
+    current = dict(user.notification_preferences or {})
+    for key, val in body.items():
+        if key in allowed and isinstance(val, bool):
+            current[key] = val
+    user.notification_preferences = current
+    await db.commit()
+    return current
+
+
+# ── Password Reset ──
+
+
+class ForgotPasswordRequest(BaseModel):
+    email: str
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str = Field(min_length=8)
+
+
+@router.post("/forgot-password")
+async def forgot_password(
+    body: ForgotPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Send password reset email."""
+    from app.services.password_reset import generate_reset_token
+
+    await generate_reset_token(db, body.email)
+    return {"message": "If that email exists, a reset link has been sent."}
+
+
+@router.post("/reset-password")
+async def reset_password_endpoint(
+    body: ResetPasswordRequest,
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Reset password with token."""
+    from app.services.password_reset import reset_password
+
+    success = await reset_password(db, body.token, body.new_password)
+    if not success:
+        raise HTTPException(status_code=400, detail="Invalid or expired reset token")
+    await db.commit()
+    return {"success": True}
+
+
+# ── Email Verification ──
+
+
+@router.post("/verify-email")
+async def verify_email(
+    body: dict,
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Verify email with token (simplified — token = user_id for now)."""
+    token = body.get("token")
+    if not token:
+        raise HTTPException(status_code=400, detail="Token required")
+    result = await db.execute(select(User).where(User.id == uuid.UUID(token)))
+    user = result.scalar_one_or_none()
+    if not user:
+        raise HTTPException(status_code=400, detail="Invalid token")
+    user.email_verified = True
+    await db.commit()
+    return {"verified": True}
+
+
+@router.post("/resend-verification")
+async def resend_verification(
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Resend verification email."""
+    from app.core.config import settings
+    from app.services.email import send_email
+
+    verify_url = f"{settings.APP_URL}/auth/verify?token={user.id}"
+    html = f'<a href="{verify_url}" style="background:#4A6FA5;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;">Verify Email</a>'
+    await send_email(user.email, "Verify your METHEAN email", html)
+    return {"sent": True}
+
+
+# ── Family Invites ──
+
+
+class InviteRequest(BaseModel):
+    email: str
+    role: str = "parent"
+
+
+class AcceptInviteRequest(BaseModel):
+    token: str
+    password: str = Field(min_length=8)
+    display_name: str
+
+
+@router.post("/household/invite")
+async def invite_family_member(
+    body: InviteRequest,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Invite a co-parent or observer to the household."""
+    import secrets
+    from datetime import timedelta
+
+    from app.core.config import settings
+    from app.models.identity import FamilyInvite
+    from app.services.email import send_email
+
+    token = secrets.token_urlsafe(32)
+    invite = FamilyInvite(
+        household_id=user.household_id,
+        email=body.email,
+        role=body.role,
+        invited_by=user.id,
+        token=token,
+        expires_at=datetime.now(UTC) + timedelta(days=7),
+    )
+    db.add(invite)
+    await db.flush()
+
+    invite_url = f"{settings.APP_URL}/auth?invite={token}"
+    html = f"""
+    <div style="font-family:-apple-system,sans-serif;max-width:480px;margin:0 auto;padding:20px;">
+        <h2 style="color:#0F1B2D;">You've been invited to METHEAN</h2>
+        <p style="color:#6B6B6B;">{user.display_name} has invited you to join their family's learning platform as a {body.role}.</p>
+        <a href="{invite_url}" style="display:inline-block;background:#C6A24E;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;">Accept Invitation</a>
+        <p style="color:#9A9A9A;font-size:12px;margin-top:16px;">This invitation expires in 7 days.</p>
+    </div>"""
+    await send_email(body.email, f"{user.display_name} invited you to METHEAN", html)
+    await db.commit()
+    return {"invited": True, "email": body.email}
+
+
+@router.get("/household/invites")
+async def list_invites(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> list:
+    """List pending invites for the household."""
+    from app.models.identity import FamilyInvite
+
+    result = await db.execute(
+        select(FamilyInvite).where(
+            FamilyInvite.household_id == user.household_id,
+            FamilyInvite.status == "pending",
+        )
+    )
+    return [
+        {"id": str(i.id), "email": i.email, "role": i.role, "created_at": str(i.created_at)}
+        for i in result.scalars().all()
+    ]
+
+
+@router.delete("/household/invites/{invite_id}")
+async def revoke_invite(
+    invite_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Revoke a pending invite."""
+    from app.models.identity import FamilyInvite
+
+    result = await db.execute(
+        select(FamilyInvite).where(
+            FamilyInvite.id == invite_id,
+            FamilyInvite.household_id == user.household_id,
+        )
+    )
+    invite = result.scalar_one_or_none()
+    if not invite:
+        raise HTTPException(status_code=404, detail="Invite not found")
+    invite.status = "revoked"
+    await db.commit()
+    return {"revoked": True}
+
+
+@router.post("/accept-invite")
+async def accept_invite(
+    body: AcceptInviteRequest,
+    response: Response,
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """Accept an invite, create account, and join household."""
+    from app.models.identity import FamilyInvite
+
+    result = await db.execute(
+        select(FamilyInvite).where(
+            FamilyInvite.token == body.token,
+            FamilyInvite.status == "pending",
+        )
+    )
+    invite = result.scalar_one_or_none()
+    if not invite:
+        raise HTTPException(status_code=400, detail="Invalid or expired invitation")
+
+    if invite.expires_at and invite.expires_at < datetime.now(UTC):
+        invite.status = "expired"
+        await db.commit()
+        raise HTTPException(status_code=400, detail="Invitation has expired")
+
+    # Check if user already exists
+    existing = await db.execute(select(User).where(User.email == invite.email))
+    if existing.scalar_one_or_none():
+        raise HTTPException(
+            status_code=400, detail="An account with this email already exists. Log in and contact the household owner."
+        )
+
+    role_enum = (
+        UserRole.owner if invite.role == "owner" else UserRole.parent if invite.role == "parent" else UserRole.viewer
+    )
+    new_user = User(
+        household_id=invite.household_id,
+        email=invite.email,
+        password_hash=hash_password(body.password),
+        display_name=body.display_name,
+        role=role_enum,
+        email_verified=True,
+    )
+    db.add(new_user)
+    invite.status = "accepted"
+    await db.flush()
+
+    token = create_access_token(new_user.id, invite.household_id, new_user.role.value)
+    _set_cookie(response, "access_token", token, settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60)
+    await db.commit()
+
+    return {"user_id": str(new_user.id), "household_id": str(invite.household_id)}

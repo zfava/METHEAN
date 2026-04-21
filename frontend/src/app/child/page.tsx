@@ -1,305 +1,678 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { auth, attempts, type User } from "@/lib/api";
+import { useEffect, useState, useRef } from "react";
+import {
+  auth, attempts, learn, children as childrenApi,
+  type LearningContext, type ChildDashboardResponse,
+} from "@/lib/api";
+import { useToast } from "@/components/Toast";
+import { MetheanMark } from "@/components/Brand";
+import { useMobile } from "@/lib/useMobile";
+import { haptic } from "@/lib/haptics";
+import BottomSheet from "@/components/BottomSheet";
+import JourneyMap, { JourneyCarousel } from "@/components/child/JourneyMap";
+import LessonView from "@/components/child/LessonView";
+import PracticeView from "@/components/child/PracticeView";
+import ReviewView from "@/components/child/ReviewView";
+import AssessmentView from "@/components/child/AssessmentView";
+import ProjectView from "@/components/child/ProjectView";
+import FieldTripView from "@/components/child/FieldTripView";
+import CompletionState from "@/components/child/CompletionState";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+// ── Types ──
 
-interface TodayActivity {
-  id: string;
-  title: string;
-  activity_type: string;
-  status: string;
-  estimated_minutes: number | null;
-  node_id: string | null;
-}
+interface ChildInfo { id: string; first_name: string; grade_level: string | null }
 
-interface ChildInfo {
-  id: string;
-  first_name: string;
-  grade_level: string | null;
-}
+type DashActivity = ChildDashboardResponse["today"]["activities"][0];
 
-function greeting(name: string): string {
-  const h = new Date().getHours();
-  if (h < 12) return `Good morning, ${name}!`;
-  if (h < 17) return `Good afternoon, ${name}!`;
-  return `Good evening, ${name}!`;
-}
+// ── Theme ──
 
-const typeLabels: Record<string, { label: string; color: string }> = {
-  lesson:     { label: "Lesson",     color: "bg-blue-100 text-blue-700" },
-  practice:   { label: "Practice",   color: "bg-green-100 text-green-700" },
-  review:     { label: "Review",     color: "bg-amber-100 text-amber-700" },
-  assessment: { label: "Assessment", color: "bg-purple-100 text-purple-700" },
-  project:    { label: "Project",    color: "bg-rose-100 text-rose-700" },
-  field_trip: { label: "Field Trip", color: "bg-teal-100 text-teal-700" },
+const bgStyles: Record<string, React.CSSProperties> = {
+  plain: { background: "#FDF6E3" },
+  meadow: { background: "linear-gradient(180deg, #E8F5E9 0%, #C8E6C9 100%)" },
+  ocean: { background: "linear-gradient(180deg, #E3F2FD 0%, #BBDEFB 100%)" },
+  forest: { background: "linear-gradient(180deg, #E8F0E4 0%, #C5D9BA 100%)" },
+  space: { background: "linear-gradient(180deg, #1A1A2E 0%, #16213E 100%)", color: "#E0E0E0" },
+  desert: { background: "linear-gradient(180deg, #FFF3E0 0%, #FFE0B2 100%)" },
+  mountains: { background: "linear-gradient(180deg, #ECEFF1 0%, #CFD8DC 100%)" },
 };
 
-export default function ChildPage() {
-  const [children, setChildren] = useState<ChildInfo[]>([]);
-  const [selectedId, setSelectedId] = useState("");
-  const [activities, setActivities] = useState<TodayActivity[]>([]);
-  const [loading, setLoading] = useState(true);
+const avatarEmoji: Record<string, string> = {
+  bear: "\uD83D\uDC3B", owl: "\uD83E\uDD89", fox: "\uD83E\uDD8A", rabbit: "\uD83D\uDC30",
+  deer: "\uD83E\uDD8C", eagle: "\uD83E\uDD85", wolf: "\uD83D\uDC3A",
+};
 
-  // Focused learning state
-  const [activeActivity, setActiveActivity] = useState<TodayActivity | null>(null);
+const typeLabels: Record<string, { label: string; icon: string }> = {
+  lesson: { label: "Lesson", icon: "\uD83D\uDCD6" },
+  practice: { label: "Practice", icon: "\u270F\uFE0F" },
+  review: { label: "Review", icon: "\uD83D\uDD04" },
+  assessment: { label: "Assessment", icon: "\uD83D\uDCCB" },
+  project: { label: "Project", icon: "\uD83D\uDD28" },
+  field_trip: { label: "Field Trip", icon: "\uD83E\uDDED" },
+};
+
+const typeColors: Record<string, string> = {
+  lesson: "rgba(59,130,246,0.1)",
+  practice: "rgba(34,197,94,0.1)",
+  review: "rgba(234,179,8,0.1)",
+  assessment: "rgba(168,85,247,0.1)",
+  project: "rgba(20,184,166,0.1)",
+  field_trip: "rgba(249,115,22,0.1)",
+};
+
+// ── Progress Ring ──
+
+function ProgressRing({ completed, total, minutesRemaining, large }: {
+  completed: number; total: number; minutesRemaining: number; large?: boolean;
+}) {
+  const pct = total > 0 ? completed / total : 0;
+  const r = 36;
+  const circ = 2 * Math.PI * r;
+  const offset = circ * (1 - pct);
+  const allDone = completed >= total && total > 0;
+  const sizeClass = large ? "w-[120px] h-[120px] md:w-[140px] md:h-[140px]" : "w-24 h-24";
+
+  return (
+    <div className={`relative ${sizeClass} shrink-0`} role="img" aria-label={`${completed} of ${total} activities completed`}>
+      <svg viewBox="0 0 80 80" className="w-full h-full">
+        <circle cx="40" cy="40" r={r} fill="none" stroke="var(--color-border)" strokeWidth="4" />
+        <circle cx="40" cy="40" r={r} fill="none"
+          stroke={allDone ? "var(--color-success)" : "var(--color-accent)"}
+          strokeWidth="4" strokeLinecap="round"
+          strokeDasharray={circ} strokeDashoffset={offset}
+          transform="rotate(-90 40 40)"
+          className="transition-all duration-700" />
+      </svg>
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        {allDone ? (
+          <span className="text-2xl" role="img" aria-label="complete">&#10003;</span>
+        ) : (
+          <>
+            <span className={`${large ? "text-lg" : "text-sm"} font-bold text-(--color-text)`}>{completed}/{total}</span>
+            <span className={`${large ? "text-xs" : "text-[10px]"} text-(--color-text-tertiary)`}>{minutesRemaining}m left</span>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ── Main Page ──
+
+export default function ChildPage() {
+  const { toast } = useToast();
+
+  // Auth state
+  const [childrenList, setChildrenList] = useState<ChildInfo[]>([]);
+  const [selectedId, setSelectedId] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // Dashboard data (single API call)
+  const [dash, setDash] = useState<ChildDashboardResponse | null>(null);
+
+  // Activity mode
+  const [activeActivity, setActiveActivity] = useState<DashActivity | null>(null);
   const [attemptId, setAttemptId] = useState("");
-  const [response, setResponse] = useState("");
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [feedback, setFeedback] = useState("");
-  const [masteryNote, setMasteryNote] = useState("");
+  const [learningContext, setLearningContext] = useState<LearningContext | null>(null);
+  const [completed, setCompleted] = useState(false);
+  const [completionData, setCompletionData] = useState<{ mastery?: string; prevMastery?: string }>({});
+  const startTimeRef = useRef(0);
+
+  // Transition
+  const [transitioning, setTransitioning] = useState(false);
+  const [transitionAct, setTransitionAct] = useState<DashActivity | null>(null);
+  const [transVisible, setTransVisible] = useState(false);
+
+  // Theme & settings
+  const [theme, setTheme] = useState({ background: "plain", color_accent: "blue", font_size: "normal", avatar: "owl" });
+  const [showSettings, setShowSettings] = useState(false);
+  const [showJourney, setShowJourney] = useState(false);
+  const isMobile = useMobile();
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // ── Init ──
 
   useEffect(() => { init(); }, []);
-  useEffect(() => { if (selectedId) loadToday(); }, [selectedId]);
+  useEffect(() => {
+    if (selectedId) loadDashboard();
+  }, [selectedId]);
+  useEffect(() => {
+    if (dash) document.title = `${dash.child.first_name}'s Learning | METHEAN`;
+  }, [dash]);
 
   async function init() {
+    setLoading(true);
     try {
       await auth.me();
-      const resp = await fetch(`${API}/children`, { credentials: "include" });
-      if (resp.ok) {
-        const data: ChildInfo[] = await resp.json();
-        setChildren(data);
-        if (data.length > 0) setSelectedId(data[0].id);
-      }
-    } catch {
-      window.location.href = "/auth";
+      const data: ChildInfo[] = await childrenApi.list() as any;
+      setChildrenList(Array.isArray(data) ? data : []);
+      if (data.length > 0) setSelectedId(data[0].id);
+    } catch (err: any) {
+      if (err?.status === 401) { window.location.href = "/auth"; return; }
+      setError("Something went wrong. Try refreshing.");
     } finally {
       setLoading(false);
     }
   }
 
-  async function loadToday() {
+  async function loadDashboard() {
+    setError("");
     try {
-      const resp = await fetch(`${API}/children/${selectedId}/today`, { credentials: "include" });
-      if (resp.ok) setActivities(await resp.json());
-    } catch {}
-  }
-
-  async function startActivity(act: TodayActivity) {
-    try {
-      const attempt = await attempts.start(act.id, selectedId);
-      setAttemptId(attempt.id);
-      setActiveActivity(act);
-      setSubmitted(false);
-      setResponse("");
-      setFeedback("");
-      setMasteryNote("");
+      // Single API call — no waterfall
+      const [d, t] = await Promise.all([
+        childrenApi.dashboard(selectedId),
+        childrenApi.theme(selectedId).catch(() => null),
+      ]);
+      setDash(d);
+      if (t) setTheme({ background: t.background || "plain", color_accent: t.color_accent || "blue", font_size: t.font_size || "normal", avatar: t.avatar || "owl" });
     } catch (err: any) {
-      alert(err.detail || "Could not start activity");
+      setError("Couldn't load your learning page. Try again in a moment.");
     }
   }
 
-  async function submitWork() {
-    if (!attemptId || submitting) return;
-    setSubmitting(true);
+  // ── Timer ──
+
+  useEffect(() => {
+    if (activeActivity) {
+      setElapsedSeconds(0);
+      timerRef.current = setInterval(() => setElapsedSeconds((s) => s + 1), 1000);
+    } else {
+      if (timerRef.current) clearInterval(timerRef.current);
+    }
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [activeActivity?.id]);
+
+  const formatTimer = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, "0")}`;
+
+  // ── Activity Lifecycle ──
+
+  async function startActivity(act: DashActivity) {
+    setTransitionAct(act);
+    setTransitioning(true);
+    requestAnimationFrame(() => setTransVisible(true));
+    try {
+      const attempt = await attempts.start(act.id, selectedId);
+      setAttemptId(attempt.id);
+      startTimeRef.current = Date.now();
+      const ctx = await learn.context(act.id, selectedId);
+      setLearningContext(ctx);
+      setActiveActivity(act);
+      setCompleted(false);
+      setCompletionData({});
+      setTransVisible(false);
+      setTimeout(() => { setTransitioning(false); setTransitionAct(null); }, 150);
+    } catch {
+      setTransVisible(false);
+      setTimeout(() => { setTransitioning(false); setTransitionAct(null); }, 150);
+      toast("Couldn't start activity", "error");
+    }
+  }
+
+  async function handleComplete(data: {
+    confidence: number;
+    responses: Array<{ prompt: string; response: string }>;
+    self_reflection: string;
+  }) {
+    if (!attemptId) return;
+    const dur = Math.max(1, Math.round((Date.now() - startTimeRef.current) / 60000));
     try {
       const result = await attempts.submit(attemptId, {
-        confidence: 0.7,
-        duration_minutes: 15,
+        confidence: data.confidence, duration_minutes: dur,
+        feedback: { responses: data.responses, self_reflection: data.self_reflection },
       });
-      setSubmitted(true);
-      setFeedback("Great work! Your answer has been submitted.");
-      const level = result.mastery_level?.replace(/_/g, " ");
-      if (level && level !== "not started") {
-        setMasteryNote(`You're making progress \u2014 you're at "${level}" level!`);
-      }
+      setCompletionData({
+        mastery: result.mastery_level?.replace(/_/g, " "),
+        prevMastery: result.previous_mastery?.replace(/_/g, " "),
+      });
+      haptic("success");
+      setShowCelebration(true);
+      setTimeout(() => { setShowCelebration(false); setCompleted(true); }, 1500);
     } catch {
-      setFeedback("Something went wrong. Your work has been saved.");
-    } finally {
-      setSubmitting(false);
+      toast("Couldn't save your work. Try again.", "error");
     }
   }
 
   function goNext() {
     setActiveActivity(null);
     setAttemptId("");
-    setResponse("");
-    setSubmitted(false);
-    loadToday();
+    setLearningContext(null);
+    setCompleted(false);
+    loadDashboard();
   }
+
+  async function saveTheme(updates: Partial<typeof theme>) {
+    const t = { ...theme, ...updates };
+    setTheme(t);
+    childrenApi.updateTheme(selectedId, t).catch(() => {});
+  }
+
+  const fontSizeClass = theme.font_size === "large" ? "text-lg" : theme.font_size === "extra-large" ? "text-xl" : "";
+  const bg = bgStyles[theme.background] || bgStyles.plain;
+  const avatar = avatarEmoji[theme.avatar] || "\uD83E\uDD89";
+
+  // ── Loading ──
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-amber-50/30 flex items-center justify-center">
-        <div className="text-base text-slate-400">Loading...</div>
-      </div>
-    );
-  }
-
-  const child = children.find((c) => c.id === selectedId);
-  const childName = child?.first_name || "Student";
-  const remaining = activities.filter((a) => a.status !== "completed");
-
-  // ── FOCUSED LEARNING VIEW ──
-  if (activeActivity) {
-    return (
-      <div className="min-h-screen bg-amber-50/30">
-        <div className="max-w-xl mx-auto px-6 py-12">
-          {!submitted ? (
-            <>
-              {/* Activity header */}
-              <div className="mb-8">
-                <button onClick={goNext} className="text-sm text-slate-400 hover:text-slate-600 mb-4 block">
-                  &larr; Back to activities
-                </button>
-                <h1 className="text-2xl font-semibold text-slate-800 mb-2">
-                  {activeActivity.title}
-                </h1>
-                <div className="flex items-center gap-3">
-                  {(() => {
-                    const t = typeLabels[activeActivity.activity_type] || { label: activeActivity.activity_type, color: "bg-slate-100 text-slate-600" };
-                    return <span className={`text-xs font-medium px-2 py-1 rounded-full ${t.color}`}>{t.label}</span>;
-                  })()}
-                  {activeActivity.estimated_minutes && (
-                    <span className="text-sm text-slate-400">{activeActivity.estimated_minutes} minutes</span>
-                  )}
-                </div>
-              </div>
-
-              {/* Work area */}
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 mb-6">
-                <label className="block text-sm font-medium text-slate-600 mb-3">
-                  Your work
-                </label>
-                <textarea
-                  value={response}
-                  onChange={(e) => setResponse(e.target.value)}
-                  placeholder="Write your answer here..."
-                  className="w-full h-40 px-4 py-3 text-base text-slate-700 border border-slate-200 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 placeholder:text-slate-300"
-                />
-              </div>
-
-              <button
-                onClick={submitWork}
-                disabled={submitting}
-                className="w-full py-3.5 text-base font-semibold text-white bg-green-600 rounded-xl hover:bg-green-700 disabled:opacity-50 transition-colors shadow-sm"
-              >
-                {submitting ? "Submitting..." : "Submit My Work"}
-              </button>
-            </>
-          ) : (
-            /* ── FEEDBACK VIEW ── */
-            <div className="text-center py-8">
-              <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-green-100 flex items-center justify-center">
-                <span className="text-green-600 text-2xl">&#10003;</span>
-              </div>
-              <h2 className="text-xl font-semibold text-slate-800 mb-2">{feedback}</h2>
-              {masteryNote && (
-                <p className="text-base text-blue-600 mb-6">{masteryNote}</p>
-              )}
-              <div className="mt-8">
-                {remaining.length > 1 ? (
-                  <button onClick={goNext}
-                    className="px-8 py-3 text-base font-semibold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-colors shadow-sm"
-                  >Next Activity</button>
-                ) : (
-                  <div>
-                    <p className="text-lg text-slate-600 mb-4">All done for today!</p>
-                    <button onClick={goNext}
-                      className="px-6 py-2.5 text-sm text-slate-500 border border-slate-300 rounded-xl hover:bg-slate-50"
-                    >Back to overview</button>
-                  </div>
-                )}
-              </div>
+      <div className="min-h-screen" style={bg}>
+        <div className="max-w-2xl mx-auto px-8 py-12">
+          <div className="h-8 w-48 rounded bg-(--color-border) animate-pulse mb-3" />
+          <div className="h-5 w-72 rounded bg-(--color-border) animate-pulse mb-10" />
+          {[1, 2, 3].map(i => (
+            <div key={i} className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 mb-4">
+              <div className="h-5 w-40 rounded bg-(--color-border) animate-pulse" />
             </div>
-          )}
+          ))}
         </div>
       </div>
     );
   }
 
-  // ── DAILY OVERVIEW ──
-  return (
-    <div className="min-h-screen bg-amber-50/30">
-      {/* Header */}
-      <header className="bg-white border-b border-slate-200 px-6 py-5">
-        <div className="max-w-2xl mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="text-xl font-semibold text-slate-800">METHEAN</h1>
-          </div>
-          {children.length > 1 && (
-            <select
-              value={selectedId}
-              onChange={(e) => setSelectedId(e.target.value)}
-              className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-blue-300"
-            >
-              {children.map((c) => (
-                <option key={c.id} value={c.id}>{c.first_name}</option>
-              ))}
-            </select>
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={bg}>
+        <div className="text-center px-8 max-w-sm">
+          <p className="text-lg font-medium text-(--color-text) mb-2">Something went wrong</p>
+          <p className="text-sm text-(--color-text-secondary) mb-6">{error}</p>
+          <button onClick={() => { setError(""); init(); }}
+            className="px-6 py-3 text-sm font-medium text-white bg-(--color-accent) rounded-2xl">Try Again</button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!dash) return null;
+
+  const activities = dash.today.activities;
+  const remaining = activities.filter(a => a.status !== "completed");
+  const allDone = remaining.length === 0 && activities.length > 0;
+
+  // ═══ PHASE 3: COMPLETION ═══
+  if (activeActivity && completed) {
+    const isReview = activeActivity.is_review;
+    return (
+      <div className={`min-h-screen ${fontSizeClass}`} style={bg}>
+        <div className="max-w-xl mx-auto px-8 py-16">
+          <CompletionState
+            activityTitle={activeActivity.title}
+            masteryLevel={completionData.mastery}
+            previousMastery={completionData.prevMastery}
+            onNext={goNext}
+            allDone={remaining.length <= 1}
+          />
+          {isReview && !completionData.mastery?.includes("mastered") && (
+            <p className="text-center text-sm text-(--color-text-secondary) mt-4 italic">Your memory is getting stronger.</p>
           )}
+          <p className="text-center text-xs text-(--color-text-tertiary) mt-6">
+            {remaining.length > 1 ? `${remaining.length - 1} activit${remaining.length - 1 === 1 ? "y" : "ies"} remaining today.` : ""}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // ═══ PHASE 2: ACTIVITY MODE ═══
+  if (activeActivity && learningContext) {
+    const t = activeActivity.type;
+    return (
+      <div className={`fixed inset-0 z-50 flex flex-col ${fontSizeClass}`} style={{ ...bg, paddingTop: "var(--safe-top)" }}>
+        {/* Top bar */}
+        <div className="flex items-center h-12 px-4 shrink-0 bg-(--color-surface)/80 backdrop-blur border-b border-(--color-border)/50">
+          <button onClick={goNext} className="w-11 h-11 flex items-center justify-center press-scale" aria-label="Back">
+            <svg className="w-5 h-5 text-(--color-text-secondary)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <div className="flex-1 text-center text-sm font-medium text-(--color-text) truncate px-2">{activeActivity.title}</div>
+          <span className="text-xs text-(--color-text-tertiary) w-11 text-right">{formatTimer(elapsedSeconds)}</span>
+        </div>
+
+        {/* Activity content */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="max-w-2xl mx-auto px-4 md:px-8 py-6">
+            {t === "lesson" && <LessonView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
+            {t === "practice" && <PracticeView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
+            {t === "review" && <ReviewView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
+            {t === "assessment" && <AssessmentView context={learningContext} onComplete={handleComplete} />}
+            {t === "project" && <ProjectView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
+            {t === "field_trip" && <FieldTripView context={learningContext} onComplete={handleComplete} />}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ═══ TRANSITION OVERLAY ═══
+  const overlay = transitioning && transitionAct && (
+    <div className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{ background: "var(--color-page)", opacity: transVisible ? 1 : 0, transition: "opacity 200ms ease" }}>
+      <div className="text-center">
+        <div className="w-16 h-16 rounded-2xl bg-(--color-surface) border border-(--color-border) flex items-center justify-center text-3xl mx-auto mb-4">
+          {typeLabels[transitionAct.type]?.icon || "\uD83D\uDCC4"}
+        </div>
+        <p className="text-sm font-medium text-(--color-text) mb-4">{transitionAct.title}</p>
+        <div className="w-5 h-5 mx-auto border-2 border-(--color-accent) border-t-transparent rounded-full animate-spin" />
+      </div>
+    </div>
+  );
+
+  // ═══ PHASE 1: MORNING VIEW / PHASE 4: ALL DONE ═══
+  return (
+    <div className={`min-h-screen ${fontSizeClass}`} style={bg}>
+      {/* Header */}
+      <header className="bg-(--color-surface) border-b border-(--color-border) px-8 py-5">
+        <div className="max-w-2xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-full bg-(--color-accent-light) flex items-center justify-center text-xl" aria-hidden="true">
+              {avatar}
+            </div>
+            <span className="text-sm font-medium text-(--color-text)">{dash.child.first_name}</span>
+            {dash.child.streak.current > 0 && (
+              <span className="text-xs text-(--color-warning) font-medium flex items-center gap-1" aria-label={`${dash.child.streak.current} day streak`}>
+                <span aria-hidden="true">{dash.child.streak.current >= 7 ? "\uD83D\uDD25" : "\u2B50"}</span>
+                {dash.child.streak.current}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            {childrenList.length > 1 && (
+              <select value={selectedId} onChange={e => setSelectedId(e.target.value)}
+                className="text-sm border border-(--color-border) rounded-xl px-3 py-1.5 min-h-[44px]" aria-label="Switch child">
+                {childrenList.map(c => <option key={c.id} value={c.id}>{c.first_name}</option>)}
+              </select>
+            )}
+            <button onClick={() => setShowSettings(!showSettings)}
+              className="p-2 text-(--color-text-tertiary) hover:text-(--color-text) min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Settings">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+            </button>
+          </div>
         </div>
       </header>
 
-      <div className="max-w-2xl mx-auto px-6 py-8">
-        {/* Greeting */}
-        <h2 className="text-2xl font-semibold text-slate-800 mb-1">
-          {greeting(childName)}
-        </h2>
-        <p className="text-base text-slate-500 mb-8">
-          {remaining.length > 0
-            ? `You have ${remaining.length} ${remaining.length === 1 ? "activity" : "activities"} today.`
-            : "Let\u2019s see what\u2019s on your schedule."}
-        </p>
+      {/* Settings — BottomSheet on mobile, inline on desktop */}
+      {isMobile ? (
+        <BottomSheet open={showSettings} onClose={() => setShowSettings(false)}>
+          <div className="px-5 pb-6">
+            <h3 className="text-base font-semibold text-(--color-text) mb-5">My Settings</h3>
+            <div className="space-y-5">
+              <div>
+                <label className="text-sm text-(--color-text-secondary) mb-3 block">Background</label>
+                <div className="grid grid-cols-4 gap-2">
+                  {(["plain", "meadow", "ocean", "forest", "space", "desert", "mountains"] as const).map(bg => (
+                    <button key={bg} onClick={() => saveTheme({ background: bg })}
+                      className={`h-14 rounded-xl border-2 text-[11px] font-medium capitalize ${theme.background === bg ? "border-(--color-brand-gold) ring-2 ring-(--color-brand-gold)/20" : "border-(--color-border)"}`}
+                      style={bgStyles[bg]}>{bg}</button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="text-sm text-(--color-text-secondary) mb-3 block">Avatar</label>
+                <div className="flex gap-3 justify-center">
+                  {(["bear", "owl", "fox", "rabbit", "deer", "eagle", "wolf"] as const).map(a => (
+                    <button key={a} onClick={() => saveTheme({ avatar: a })}
+                      className={`w-12 h-12 rounded-full text-2xl border-2 transition-transform ${theme.avatar === a ? "border-(--color-brand-gold) scale-110" : "border-(--color-border)"}`}>{avatarEmoji[a]}</button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="text-sm text-(--color-text-secondary) mb-3 block">Text Size</label>
+                <div className="flex gap-2">
+                  {([["normal", "Normal"], ["large", "Large"], ["extra-large", "Extra Large"]] as const).map(([v, l]) => (
+                    <button key={v} onClick={() => saveTheme({ font_size: v })}
+                      className={`flex-1 py-3 text-sm rounded-xl border-2 ${theme.font_size === v ? "border-(--color-brand-gold) bg-(--color-accent-light) font-medium" : "border-(--color-border)"}`}>{l}</button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </BottomSheet>
+      ) : showSettings && (
+        <div className="max-w-2xl mx-auto px-8 pt-4">
+          <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 mb-4">
+            <h3 className="text-sm font-semibold text-(--color-text) mb-4">My Settings</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs text-(--color-text-secondary) mb-2 block">Background</label>
+                <div className="flex gap-2 flex-wrap">
+                  {(["plain", "meadow", "ocean", "forest", "space", "desert", "mountains"] as const).map(bg => (
+                    <button key={bg} onClick={() => saveTheme({ background: bg })}
+                      className={`w-14 h-10 rounded-xl border-2 text-[10px] font-medium capitalize min-h-[44px] ${theme.background === bg ? "border-(--color-accent)" : "border-(--color-border)"}`}
+                      style={bgStyles[bg]}>{bg}</button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="text-xs text-(--color-text-secondary) mb-2 block">Avatar</label>
+                <div className="flex gap-2">
+                  {(["bear", "owl", "fox", "rabbit", "deer", "eagle", "wolf"] as const).map(a => (
+                    <button key={a} onClick={() => saveTheme({ avatar: a })}
+                      className={`w-11 h-11 rounded-full text-xl border-2 min-h-[44px] ${theme.avatar === a ? "border-(--color-accent)" : "border-(--color-border)"}`}>{avatarEmoji[a]}</button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <label className="text-xs text-(--color-text-secondary) mb-2 block">Text Size</label>
+                <div className="flex gap-2">
+                  {([["normal", "Normal"], ["large", "Large"], ["extra-large", "Extra Large"]] as const).map(([v, l]) => (
+                    <button key={v} onClick={() => saveTheme({ font_size: v })}
+                      className={`px-4 py-2 text-xs rounded-lg border-2 min-h-[44px] ${theme.font_size === v ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)"}`}>{l}</button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
-        {/* Activities */}
-        {activities.length === 0 ? (
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 py-16 text-center">
-            <div className="text-4xl mb-4">&#9728;&#65039;</div>
-            <h3 className="text-lg font-semibold text-slate-700 mb-2">
-              No learning scheduled for today!
-            </h3>
-            <p className="text-base text-slate-400">Enjoy your free time.</p>
+      <div className="max-w-2xl mx-auto px-8 py-10">
+        {/* Hero: Greeting + Progress Ring */}
+        {isMobile ? (
+          <div className="text-center mb-6">
+            <p className="text-sm text-(--color-text-tertiary) mb-2">
+              {new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
+            </p>
+            {dash.child.streak.current > 1 && (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium mb-3"
+                style={{ background: "rgba(198,162,78,0.15)", color: "var(--color-brand-gold)" }}>
+                🔥 {dash.child.streak.current} day streak
+              </span>
+            )}
+            <h1 className="text-xl font-medium text-(--color-text) leading-snug mb-4">
+              {allDone ? `You finished everything today!` : dash.greeting}
+            </h1>
+            {activities.length > 0 && (
+              <div className="flex justify-center mb-3">
+                <ProgressRing completed={dash.today.completed} total={dash.today.total_activities}
+                  minutesRemaining={dash.today.estimated_minutes_remaining} large />
+              </div>
+            )}
+            {dash.encouragement && (
+              <p className="text-sm text-(--color-text-secondary) italic">{dash.encouragement}</p>
+            )}
           </div>
         ) : (
-          <div className="space-y-4">
-            {activities.map((act) => {
-              const done = act.status === "completed" || act.status === "in_progress";
-              const t = typeLabels[act.activity_type] || { label: act.activity_type, color: "bg-slate-100 text-slate-600" };
+          <div className="flex items-start justify-between gap-6 mb-3">
+            <div className="flex-1">
+              <h1 className="text-2xl font-medium text-(--color-text) leading-snug mb-1">
+                {allDone ? `You finished everything today. Well done, ${dash.child.first_name}.` : dash.greeting}
+              </h1>
+              {dash.encouragement && (
+                <p className="text-base text-(--color-text-secondary) italic leading-relaxed">{dash.encouragement}</p>
+              )}
+            </div>
+            {activities.length > 0 && (
+              <ProgressRing completed={dash.today.completed} total={dash.today.total_activities}
+                minutesRemaining={dash.today.estimated_minutes_remaining} />
+            )}
+          </div>
+        )}
 
+        {/* Achievements */}
+        {dash.child.recent_achievements.length > 0 && (
+          <div className="flex gap-2 mb-8 overflow-x-auto pb-1">
+            {dash.child.recent_achievements.map((ach, i) => (
+              <div key={i} className="shrink-0 bg-(--color-surface) rounded-xl border border-(--color-border) px-3 py-2 flex items-center gap-2">
+                <span className="text-lg">{ach.icon}</span>
+                <span className="text-xs font-medium text-(--color-text)">{ach.title}</span>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Today's Activities */}
+        {activities.length === 0 ? (
+          <div className="text-center py-20">
+            <div className="text-5xl mb-4" aria-hidden="true">{avatar}</div>
+            <h2 className="text-lg font-medium text-(--color-text) mb-2">No learning scheduled today</h2>
+            <p className="text-sm text-(--color-text-secondary)">Enjoy your free time, {dash.child.first_name}.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-10">
+            {/* Uncompleted activities */}
+            {activities.filter(a => a.status !== "completed").map((act, idx) => {
+              const tl = typeLabels[act.type] || { label: act.type, icon: "\uD83D\uDCC4" };
+              const isNext = idx === 0;
+              const isInProgress = act.status === "in_progress";
               return (
-                <div key={act.id}
-                  className={`bg-white rounded-2xl shadow-sm border border-slate-200 p-5 transition-colors ${
-                    done ? "opacity-60" : ""
+                <button key={act.id} onClick={() => startActivity(act)}
+                  className={`w-full text-left bg-(--color-surface) rounded-2xl border p-4 transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-(--color-accent)/30 press-scale ${
+                    isInProgress ? "border-l-3 border-(--color-brand-gold) shadow-sm" : isNext ? "border-(--color-accent)/30 shadow-sm" : "border-(--color-border)"
                   }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex-1">
-                      <h3 className={`text-lg font-medium ${done ? "text-slate-400" : "text-slate-800"}`}>
-                        {act.title}
-                      </h3>
-                      <div className="flex items-center gap-3 mt-2">
-                        <span className={`text-xs font-medium px-2 py-1 rounded-full ${t.color}`}>
-                          {t.label}
-                        </span>
-                        {act.estimated_minutes && (
-                          <span className="text-sm text-slate-400 flex items-center gap-1">
-                            <span className="text-xs">&#9201;</span> {act.estimated_minutes} min
-                          </span>
-                        )}
+                  style={{ minHeight: 64 }}
+                  aria-label={`Start ${act.title}`}>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0"
+                      style={{ background: typeColors[act.type] || "var(--color-accent-light)" }}>
+                      {tl.icon}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-[15px] font-medium text-(--color-text) truncate">{act.title}</h3>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className="text-[13px] text-(--color-text-secondary)">{tl.label}</span>
+                        {act.estimated_minutes && <span className="text-[13px] text-(--color-text-tertiary)">· {act.estimated_minutes} min</span>}
+                        {act.subject && <span className="text-[13px] text-(--color-text-tertiary)">· {act.subject}</span>}
                       </div>
                     </div>
-                    {!done ? (
-                      <button
-                        onClick={() => startActivity(act)}
-                        className="px-6 py-2.5 text-base font-semibold text-white bg-green-600 rounded-xl hover:bg-green-700 transition-colors shadow-sm"
-                      >
-                        Start
-                      </button>
-                    ) : (
-                      <span className="text-sm text-green-600 font-medium flex items-center gap-1">
-                        <span>&#10003;</span> Done
-                      </span>
+                    {isNext && !isInProgress && (
+                      <span className="text-xs font-medium text-(--color-accent) shrink-0">Next</span>
                     )}
+                  </div>
+                </button>
+              );
+            })}
+
+            {/* Completed activities */}
+            {activities.filter(a => a.status === "completed").map(act => {
+              const tl = typeLabels[act.type] || { label: act.type, icon: "\uD83D\uDCC4" };
+              return (
+                <div key={act.id} className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-4 opacity-50"
+                  style={{ minHeight: 64 }}>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0"
+                      style={{ background: typeColors[act.type] || "var(--color-accent-light)" }}>
+                      {tl.icon}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-[15px] text-(--color-text-tertiary) line-through truncate">{act.title}</h3>
+                      <span className="text-[13px] text-(--color-text-tertiary)">{tl.label}</span>
+                    </div>
+                    <span className="w-7 h-7 rounded-full bg-(--color-success-light) flex items-center justify-center shrink-0" aria-label="Completed">
+                      <svg className="w-4 h-4 text-(--color-success)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    </span>
                   </div>
                 </div>
               );
             })}
           </div>
         )}
+
+        {/* Subject Progress */}
+        {dash.progress.subjects.length > 0 && (
+          <div className="mb-10">
+            <h3 className="text-xs font-medium text-(--color-text-secondary) uppercase tracking-wide mb-3">Your Progress</h3>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              {dash.progress.subjects.map(s => (
+                <div key={s.name} className="bg-(--color-surface) rounded-xl border border-(--color-border) p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="w-2.5 h-2.5 rounded-full" style={{ background: s.color }} />
+                    <span className="text-xs font-medium text-(--color-text)">{s.name}</span>
+                  </div>
+                  <div className="h-1.5 rounded-full bg-(--color-border) mb-1">
+                    <div className="h-full rounded-full transition-all" style={{ width: `${s.percentage}%`, background: s.color }} />
+                  </div>
+                  <span className="text-[10px] text-(--color-text-tertiary)">{s.mastered} of {s.total} mastered</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Journey Maps */}
+        {dash.journey_maps.length > 0 && (
+          <div className="mb-10">
+            <button onClick={() => setShowJourney(!showJourney)}
+              className="text-xs font-medium text-(--color-text-secondary) uppercase tracking-wide mb-3 flex items-center gap-1 min-h-[44px]">
+              Your Learning Journey
+              <svg className={`w-3 h-3 transition-transform ${showJourney ? "rotate-180" : ""}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            {showJourney && (
+              <JourneyCarousel maps={dash.journey_maps.map(jm => ({
+                ...jm,
+                nodes: jm.nodes.map(n => ({
+                  id: n.id, title: n.title, mastery: n.mastery,
+                  is_next: n.is_next, is_current: n.is_current,
+                })),
+              }))} />
+            )}
+          </div>
+        )}
+
+        {/* Week stats */}
+        {dash.progress.this_week.activities_completed > 0 && (
+          <div className="text-center text-xs text-(--color-text-tertiary) py-4 border-t border-(--color-border)/50">
+            This week: {dash.progress.this_week.activities_completed} activities &middot; {dash.progress.this_week.time_spent_minutes} minutes &middot; {dash.progress.this_week.mastery_transitions_up} mastered
+          </div>
+        )}
       </div>
+
+      {overlay}
+
+      {/* Celebration animation */}
+      {showCelebration && (
+        <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center"
+          style={{ background: "rgba(250,250,248,0.95)" }}
+          onClick={() => { setShowCelebration(false); setCompleted(true); }}>
+          <div style={{ animation: "celebration-pop 0.4s cubic-bezier(0.32, 0.72, 0, 1) both" }}>
+            <div className="w-24 h-24 rounded-full flex items-center justify-center mb-4"
+              style={{ background: "rgba(45,106,79,0.1)" }}>
+              <svg className="w-14 h-14 text-(--color-success)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+          </div>
+          <p className="text-xl font-bold text-(--color-text) animate-fade-up" style={{ animationDelay: "200ms" }}>
+            Great work!
+          </p>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes celebration-pop {
+          0% { transform: scale(0); opacity: 0; }
+          60% { transform: scale(1.1); opacity: 1; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+      `}</style>
     </div>
   );
 }

@@ -13,33 +13,37 @@ import uuid
 import pytest
 from sqlalchemy import select
 
-from app.models.enums import RuleTier
-from app.models.governance import GovernanceEvent, GovernanceRule
+from app.models.governance import GovernanceEvent
 
 
 class TestConstitutionalRules:
-
     @pytest.mark.asyncio
     async def test_constitutional_requires_confirmation(self, auth_client, db_session, household, user):
         """Creating a constitutional rule without confirm_constitutional=true should fail."""
-        resp = await auth_client.post("/api/v1/governance-rules", json={
-            "rule_type": "ai_boundary",
-            "tier": "constitutional",
-            "name": "Test Constitutional",
-            "parameters": {},
-        })
+        resp = await auth_client.post(
+            "/api/v1/governance-rules",
+            json={
+                "rule_type": "ai_boundary",
+                "tier": "constitutional",
+                "name": "Test Constitutional",
+                "parameters": {},
+            },
+        )
         assert resp.status_code == 400
         assert "confirm_constitutional" in resp.json()["detail"]
 
     @pytest.mark.asyncio
     async def test_constitutional_created_with_confirmation(self, auth_client, db_session, household, user):
-        resp = await auth_client.post("/api/v1/governance-rules", json={
-            "rule_type": "ai_boundary",
-            "tier": "constitutional",
-            "name": "Test Constitutional",
-            "parameters": {},
-            "confirm_constitutional": True,
-        })
+        resp = await auth_client.post(
+            "/api/v1/governance-rules",
+            json={
+                "rule_type": "ai_boundary",
+                "tier": "constitutional",
+                "name": "Test Constitutional",
+                "parameters": {},
+                "confirm_constitutional": True,
+            },
+        )
         assert resp.status_code == 201
         data = resp.json()
         assert data["tier"] == "constitutional"
@@ -47,17 +51,18 @@ class TestConstitutionalRules:
 
     @pytest.mark.asyncio
     async def test_constitutional_creation_logged(self, auth_client, db_session, household, user):
-        await auth_client.post("/api/v1/governance-rules", json={
-            "rule_type": "ai_boundary",
-            "tier": "constitutional",
-            "name": "Logged Constitutional",
-            "parameters": {},
-            "confirm_constitutional": True,
-        })
+        await auth_client.post(
+            "/api/v1/governance-rules",
+            json={
+                "rule_type": "ai_boundary",
+                "tier": "constitutional",
+                "name": "Logged Constitutional",
+                "parameters": {},
+                "confirm_constitutional": True,
+            },
+        )
         result = await db_session.execute(
-            select(GovernanceEvent).where(
-                GovernanceEvent.target_type == "constitutional_rule_change"
-            )
+            select(GovernanceEvent).where(GovernanceEvent.target_type == "constitutional_rule_change")
         )
         event = result.scalars().first()
         assert event is not None
@@ -66,60 +71,80 @@ class TestConstitutionalRules:
     @pytest.mark.asyncio
     async def test_constitutional_update_requires_reason(self, auth_client, db_session, household, user):
         # Create the rule first
-        create_resp = await auth_client.post("/api/v1/governance-rules", json={
-            "rule_type": "ai_boundary",
-            "tier": "constitutional",
-            "name": "Update Test",
-            "parameters": {},
-            "confirm_constitutional": True,
-        })
+        create_resp = await auth_client.post(
+            "/api/v1/governance-rules",
+            json={
+                "rule_type": "ai_boundary",
+                "tier": "constitutional",
+                "name": "Update Test",
+                "parameters": {},
+                "confirm_constitutional": True,
+            },
+        )
         rule_id = create_resp.json()["id"]
 
         # Try to update without confirmation
-        resp = await auth_client.put(f"/api/v1/governance-rules/{rule_id}", json={
-            "name": "Updated Name",
-        })
+        resp = await auth_client.put(
+            f"/api/v1/governance-rules/{rule_id}",
+            json={
+                "name": "Updated Name",
+            },
+        )
         assert resp.status_code == 400
         assert "confirm_constitutional" in resp.json()["detail"]
 
         # Try with confirmation but short reason
-        resp2 = await auth_client.put(f"/api/v1/governance-rules/{rule_id}", json={
-            "name": "Updated Name",
-            "confirm_constitutional": True,
-            "reason": "too short",
-        })
+        resp2 = await auth_client.put(
+            f"/api/v1/governance-rules/{rule_id}",
+            json={
+                "name": "Updated Name",
+                "confirm_constitutional": True,
+                "reason": "too short",
+            },
+        )
         assert resp2.status_code == 400
         assert "20 characters" in resp2.json()["detail"]
 
     @pytest.mark.asyncio
     async def test_constitutional_update_with_ceremony(self, auth_client, db_session, household, user):
-        create_resp = await auth_client.post("/api/v1/governance-rules", json={
-            "rule_type": "ai_boundary",
-            "tier": "constitutional",
-            "name": "Ceremony Test",
-            "parameters": {"level": 1},
-            "confirm_constitutional": True,
-        })
+        create_resp = await auth_client.post(
+            "/api/v1/governance-rules",
+            json={
+                "rule_type": "ai_boundary",
+                "tier": "constitutional",
+                "name": "Ceremony Test",
+                "parameters": {"level": 1},
+                "confirm_constitutional": True,
+            },
+        )
         rule_id = create_resp.json()["id"]
 
-        resp = await auth_client.put(f"/api/v1/governance-rules/{rule_id}", json={
-            "name": "Ceremony Test Updated",
-            "parameters": {"level": 2},
-            "confirm_constitutional": True,
-            "reason": "Updating because the family's needs have changed after six months of use.",
-        })
+        resp = await auth_client.put(
+            f"/api/v1/governance-rules/{rule_id}",
+            json={
+                "name": "Ceremony Test Updated",
+                "parameters": {"level": 2},
+                "confirm_constitutional": True,
+                "reason": "Updating because the family's needs have changed after six months of use.",
+            },
+        )
         assert resp.status_code == 200
         assert resp.json()["name"] == "Ceremony Test Updated"
 
         # Verify governance event logged with diff
         result = await db_session.execute(
-            select(GovernanceEvent).where(
+            select(GovernanceEvent)
+            .where(
                 GovernanceEvent.target_type == "constitutional_rule_change",
                 GovernanceEvent.target_id == uuid.UUID(rule_id),
-            ).order_by(GovernanceEvent.created_at.desc())
+            )
+            .order_by(GovernanceEvent.created_at.desc())
         )
         events = result.scalars().all()
-        update_event = next((e for e in events if "changed" in (e.reason or "").lower() or "Updating" in (e.reason or "")), events[0] if events else None)
+        update_event = next(
+            (e for e in events if "changed" in (e.reason or "").lower() or "Updating" in (e.reason or "")),
+            events[0] if events else None,
+        )
         assert update_event is not None
         assert update_event.metadata_ is not None
         assert "before" in update_event.metadata_
@@ -127,13 +152,16 @@ class TestConstitutionalRules:
 
     @pytest.mark.asyncio
     async def test_constitutional_cannot_be_deleted(self, auth_client, db_session, household, user):
-        create_resp = await auth_client.post("/api/v1/governance-rules", json={
-            "rule_type": "ai_boundary",
-            "tier": "constitutional",
-            "name": "Undeletable",
-            "parameters": {},
-            "confirm_constitutional": True,
-        })
+        create_resp = await auth_client.post(
+            "/api/v1/governance-rules",
+            json={
+                "rule_type": "ai_boundary",
+                "tier": "constitutional",
+                "name": "Undeletable",
+                "parameters": {},
+                "confirm_constitutional": True,
+            },
+        )
         rule_id = create_resp.json()["id"]
 
         resp = await auth_client.delete(f"/api/v1/governance-rules/{rule_id}")
@@ -142,51 +170,65 @@ class TestConstitutionalRules:
 
     @pytest.mark.asyncio
     async def test_constitutional_deactivation_requires_reason(self, auth_client, db_session, household, user):
-        create_resp = await auth_client.post("/api/v1/governance-rules", json={
-            "rule_type": "ai_boundary",
-            "tier": "constitutional",
-            "name": "Deactivate Test",
-            "parameters": {},
-            "confirm_constitutional": True,
-        })
+        create_resp = await auth_client.post(
+            "/api/v1/governance-rules",
+            json={
+                "rule_type": "ai_boundary",
+                "tier": "constitutional",
+                "name": "Deactivate Test",
+                "parameters": {},
+                "confirm_constitutional": True,
+            },
+        )
         rule_id = create_resp.json()["id"]
 
         # Deactivate without reason
-        resp = await auth_client.put(f"/api/v1/governance-rules/{rule_id}", json={
-            "is_active": False,
-            "confirm_constitutional": True,
-        })
+        resp = await auth_client.put(
+            f"/api/v1/governance-rules/{rule_id}",
+            json={
+                "is_active": False,
+                "confirm_constitutional": True,
+            },
+        )
         assert resp.status_code == 400
         assert "reason" in resp.json()["detail"].lower()
 
         # Deactivate with proper reason
-        resp2 = await auth_client.put(f"/api/v1/governance-rules/{rule_id}", json={
-            "is_active": False,
-            "confirm_constitutional": True,
-            "reason": "Temporarily deactivating while we reassess our educational approach for the semester.",
-        })
+        resp2 = await auth_client.put(
+            f"/api/v1/governance-rules/{rule_id}",
+            json={
+                "is_active": False,
+                "confirm_constitutional": True,
+                "reason": "Temporarily deactivating while we reassess our educational approach for the semester.",
+            },
+        )
         assert resp2.status_code == 200
         assert resp2.json()["is_active"] is False
 
 
 class TestPolicyRulesUnchanged:
-
     @pytest.mark.asyncio
     async def test_policy_rule_normal_crud(self, auth_client, db_session, household, user):
         # Create without confirmation
-        resp = await auth_client.post("/api/v1/governance-rules", json={
-            "rule_type": "pace_limit",
-            "name": "Policy Rule",
-            "parameters": {"max_daily_minutes": 120},
-        })
+        resp = await auth_client.post(
+            "/api/v1/governance-rules",
+            json={
+                "rule_type": "pace_limit",
+                "name": "Policy Rule",
+                "parameters": {"max_daily_minutes": 120},
+            },
+        )
         assert resp.status_code == 201
         assert resp.json()["tier"] == "policy"
         rule_id = resp.json()["id"]
 
         # Update without ceremony
-        resp2 = await auth_client.put(f"/api/v1/governance-rules/{rule_id}", json={
-            "name": "Updated Policy",
-        })
+        resp2 = await auth_client.put(
+            f"/api/v1/governance-rules/{rule_id}",
+            json={
+                "name": "Updated Policy",
+            },
+        )
         assert resp2.status_code == 200
 
         # Delete works

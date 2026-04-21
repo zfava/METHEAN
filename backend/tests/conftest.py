@@ -1,7 +1,6 @@
 """Shared test fixtures."""
 
 import asyncio
-import uuid
 from collections.abc import AsyncGenerator
 
 import pytest
@@ -14,10 +13,10 @@ from sqlalchemy.ext.asyncio import (
 )
 from sqlalchemy.pool import NullPool
 
-from app.core.config import settings
-from app.core.database import Base
-from app.core.security import create_access_token, hash_password
 from app.api.deps import get_db
+from app.core.config import settings
+from app.core.database import Base, set_tenant
+from app.core.security import create_access_token, hash_password
 from app.main import app
 from app.models.curriculum import LearningMap, Subject
 from app.models.identity import Child, Household, User
@@ -27,9 +26,7 @@ TEST_DATABASE_URL = settings.DATABASE_URL.rsplit("/", 1)[0] + "/methean_test"
 
 # NullPool is required for async test isolation with asyncpg
 test_engine = create_async_engine(TEST_DATABASE_URL, echo=False, poolclass=NullPool)
-test_session_factory = async_sessionmaker(
-    test_engine, class_=AsyncSession, expire_on_commit=False
-)
+test_session_factory = async_sessionmaker(test_engine, class_=AsyncSession, expire_on_commit=False)
 
 # Fixed CSRF token for all test clients
 TEST_CSRF_TOKEN = "test-csrf-token-for-tests"
@@ -76,6 +73,8 @@ async def household(db_session: AsyncSession) -> Household:
     h = Household(name="Test Family", timezone="America/New_York")
     db_session.add(h)
     await db_session.flush()
+    # Set RLS tenant context so all subsequent queries are scoped
+    await set_tenant(db_session, h.id)
     return h
 
 
@@ -95,7 +94,9 @@ async def user(db_session: AsyncSession, household: Household) -> User:
 
 @pytest_asyncio.fixture
 async def auth_client(
-    client: AsyncClient, user: User, household: Household,
+    client: AsyncClient,
+    user: User,
+    household: Household,
 ) -> AsyncClient:
     """Client with access_token cookie set."""
     token = create_access_token(user.id, household.id, "owner")
@@ -125,7 +126,9 @@ async def subject(db_session: AsyncSession, household: Household) -> Subject:
 
 @pytest_asyncio.fixture
 async def learning_map(
-    db_session: AsyncSession, household: Household, subject: Subject,
+    db_session: AsyncSession,
+    household: Household,
+    subject: Subject,
 ) -> LearningMap:
     lm = LearningMap(
         household_id=household.id,

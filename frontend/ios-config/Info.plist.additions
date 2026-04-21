@@ -1,0 +1,36 @@
+<!--
+  Add these entries to ios/App/App/Info.plist after running `npx cap add ios`.
+  These are NOT automatically added by Capacitor.
+-->
+
+<!-- Camera (for portfolio evidence capture) -->
+<key>NSCameraUsageDescription</key>
+<string>METHEAN needs camera access to capture learning artifacts and portfolio evidence.</string>
+
+<!-- Photo Library (for uploading artifacts) -->
+<key>NSPhotoLibraryUsageDescription</key>
+<string>METHEAN needs photo access to upload learning artifacts.</string>
+
+<!-- Face ID -->
+<key>NSFaceIDUsageDescription</key>
+<string>Use Face ID for quick, secure login to METHEAN.</string>
+
+<!-- App Transport Security: allow API domain -->
+<!-- Remove this block in production if using HTTPS everywhere -->
+<key>NSAppTransportSecurity</key>
+<dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <false/>
+    <key>NSExceptionDomains</key>
+    <dict>
+        <key>methean.app</key>
+        <dict>
+            <key>NSIncludesSubdomains</key>
+            <true/>
+        </dict>
+    </dict>
+</dict>
+
+<!-- Export compliance: no encryption beyond standard HTTPS -->
+<key>ITSAppUsesNonExemptEncryption</key>
+<false/>

@@ -4,10 +4,11 @@ Revision ID: 003
 Revises: 002
 Create Date: 2026-04-04
 """
+
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 from sqlalchemy.dialects.postgresql import JSONB
 
 revision: str = "003"
@@ -17,9 +18,15 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.add_column("households", sa.Column(
-        "philosophical_profile", JSONB, server_default="{}", nullable=True,
-    ))
+    op.add_column(
+        "households",
+        sa.Column(
+            "philosophical_profile",
+            JSONB,
+            server_default="{}",
+            nullable=True,
+        ),
+    )
 
 
 def downgrade() -> None:

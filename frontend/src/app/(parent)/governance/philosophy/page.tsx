@@ -1,14 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
-
-function getCsrf(): string | undefined {
-  if (typeof document === "undefined") return undefined;
-  const m = document.cookie.match(/(?:^|; )csrf_token=([^;]*)/);
-  return m ? decodeURIComponent(m[1]) : undefined;
-}
+import { household } from "@/lib/api";
+import { useToast } from "@/components/Toast";
+import PageHeader from "@/components/ui/PageHeader";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
+import LoadingSkeleton from "@/components/LoadingSkeleton";
 
 const PHILOSOPHIES = [
   { value: "classical", label: "Classical", desc: "Trivium-based: grammar, logic, rhetoric stages" },
@@ -57,6 +55,9 @@ interface Boundary {
 }
 
 export default function PhilosophyPage() {
+  useEffect(() => { document.title = "Philosophy | METHEAN"; }, []);
+  const { toast } = useToast();
+
   const [philosophy, setPhilosophy] = useState("eclectic");
   const [philosophyDesc, setPhilosophyDesc] = useState("");
   const [religion, setReligion] = useState("secular");
@@ -74,14 +75,14 @@ export default function PhilosophyPage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => { load(); }, []);
 
   async function load() {
     try {
-      const resp = await fetch(`${API}/household/philosophy`, { credentials: "include" });
-      if (resp.ok) {
-        const data = await resp.json();
+      const data = await household.getPhilosophy();
+      if (data) {
         if (data.educational_philosophy) setPhilosophy(data.educational_philosophy);
         if (data.philosophy_description) setPhilosophyDesc(data.philosophy_description);
         if (data.religious_framework) setReligion(data.religious_framework);
@@ -91,29 +92,27 @@ export default function PhilosophyPage() {
         if (data.pedagogical_preferences) setPrefs({ ...prefs, ...data.pedagogical_preferences });
         if (data.custom_constraints) setCustoms(data.custom_constraints);
       }
-    } catch {} finally { setLoading(false); }
+    } catch (err: any) {
+      setError(err?.detail || err?.message || "Couldn't load your philosophical profile.");
+    } finally { setLoading(false); }
   }
 
   async function save() {
     setSaving(true);
     setSaved(false);
-    const csrf = getCsrf();
-    await fetch(`${API}/household/philosophy`, {
-      method: "PUT", credentials: "include",
-      headers: { "Content-Type": "application/json", ...(csrf ? { "X-CSRF-Token": csrf } : {}) },
-      body: JSON.stringify({
-        educational_philosophy: philosophy,
-        philosophy_description: philosophyDesc || undefined,
-        religious_framework: religion,
-        religious_notes: religionNotes || undefined,
-        content_boundaries: boundaries.filter((b) => b.topic.trim()),
-        ai_autonomy_level: autonomy,
-        pedagogical_preferences: prefs,
-        custom_constraints: customs.filter((c) => c.trim()),
-      }),
+    await household.updatePhilosophy({
+      educational_philosophy: philosophy,
+      philosophy_description: philosophyDesc || undefined,
+      religious_framework: religion,
+      religious_notes: religionNotes || undefined,
+      content_boundaries: boundaries.filter((b) => b.topic.trim()),
+      ai_autonomy_level: autonomy,
+      pedagogical_preferences: prefs,
+      custom_constraints: customs.filter((c) => c.trim()),
     });
     setSaving(false);
     setSaved(true);
+    toast("Philosophy saved", "success");
     setTimeout(() => setSaved(false), 4000);
   }
 
@@ -123,127 +122,126 @@ export default function PhilosophyPage() {
   }
   function removeBoundary(i: number) { setBoundaries(boundaries.filter((_, j) => j !== i)); }
 
-  if (loading) return <div className="max-w-3xl text-sm text-slate-400">Loading...</div>;
+  if (loading) return <div className="max-w-3xl"><PageHeader title="Educational Philosophy" /><LoadingSkeleton variant="card" count={3} /></div>;
 
   return (
     <div className="max-w-3xl">
-      <div className="mb-8">
-        <h1 className="text-xl font-semibold text-slate-800">Educational Philosophy</h1>
-        <p className="text-sm text-slate-500 mt-1">
-          Your family&apos;s foundational principles. These guide every AI recommendation.
-        </p>
-      </div>
+      <PageHeader
+        title="Educational Philosophy"
+        subtitle="Your family's foundational principles. These guide every AI recommendation."
+      />
+
+      {error && (
+        <Card className="mb-4" borderLeft="border-l-(--color-danger)">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-(--color-danger)">{error}</p>
+            <Button variant="ghost" size="sm" onClick={() => { setError(""); load(); }}>Retry</Button>
+          </div>
+        </Card>
+      )}
 
       {/* ── Section 1: Educational Approach ── */}
       <section className="mb-10">
-        <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4">
+        <h2 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-4">
           1. Educational Approach
         </h2>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {PHILOSOPHIES.map((p) => (
-            <button key={p.value} onClick={() => setPhilosophy(p.value)}
-              className={`text-left p-3.5 rounded-lg border-2 transition-colors ${
-                philosophy === p.value
-                  ? "border-blue-500 bg-blue-50"
-                  : "border-slate-200 hover:border-slate-300"
-              }`}
+            <Card key={p.value} onClick={() => setPhilosophy(p.value)} padding="p-3.5"
+              selected={philosophy === p.value}
+              className={philosophy !== p.value ? "hover:border-(--color-border-strong)" : ""}
             >
-              <div className="text-sm font-medium text-slate-800">{p.label}</div>
-              <div className="text-xs text-slate-500 mt-0.5">{p.desc}</div>
-            </button>
+              <div className="text-sm font-medium text-(--color-text)">{p.label}</div>
+              <div className="text-xs text-(--color-text-secondary) mt-0.5">{p.desc}</div>
+            </Card>
           ))}
         </div>
         <textarea
           value={philosophyDesc} onChange={(e) => setPhilosophyDesc(e.target.value)}
           placeholder="Describe your approach in your own words (optional)"
-          className="w-full mt-3 px-3 py-2 text-sm border border-slate-200 rounded-lg resize-none h-20 focus:outline-none focus:ring-1 focus:ring-blue-400"
+          className="w-full mt-3 px-3 py-2 text-sm border border-(--color-border) rounded-[14px] resize-none h-20 focus:outline-none focus:ring-1 focus:ring-(--color-accent) bg-(--color-surface) text-(--color-text)"
         />
       </section>
 
       {/* ── Section 2: Faith & Worldview ── */}
       <section className="mb-10">
-        <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4">
+        <h2 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-4">
           2. Faith &amp; Worldview
         </h2>
         <div className="flex flex-wrap gap-2 mb-3">
           {RELIGIONS.map((r) => (
-            <button key={r.value} onClick={() => setReligion(r.value)}
-              className={`px-4 py-2 text-sm rounded-lg border-2 transition-colors ${
-                religion === r.value
-                  ? "border-blue-500 bg-blue-50 font-medium"
-                  : "border-slate-200 hover:border-slate-300"
-              }`}
-            >{r.label}</button>
+            <Card key={r.value} onClick={() => setReligion(r.value)} padding="px-4 py-2"
+              selected={religion === r.value}
+              className={religion !== r.value ? "hover:border-(--color-border-strong)" : ""}
+            >
+              <span className={`text-sm ${religion === r.value ? "font-medium" : ""} text-(--color-text)`}>{r.label}</span>
+            </Card>
           ))}
         </div>
         <textarea
           value={religionNotes} onChange={(e) => setReligionNotes(e.target.value)}
           placeholder="Any specifics (denomination, traditions, etc.)"
-          className="w-full px-3 py-2 text-sm border border-slate-200 rounded-lg resize-none h-16 focus:outline-none focus:ring-1 focus:ring-blue-400"
+          className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[14px] resize-none h-16 focus:outline-none focus:ring-1 focus:ring-(--color-accent) bg-(--color-surface) text-(--color-text)"
         />
-        <p className="text-xs text-slate-400 mt-1">This informs how the AI presents topics with worldview implications.</p>
+        <p className="text-xs text-(--color-text-tertiary) mt-1">This informs how the AI presents topics with worldview implications.</p>
       </section>
 
       {/* ── Section 3: Content Boundaries ── */}
       <section className="mb-10">
-        <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4">
+        <h2 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-4">
           3. Content Boundaries
         </h2>
         {boundaries.length === 0 && (
-          <p className="text-xs text-slate-400 mb-3">No boundaries set. The AI will use its default judgment on all topics.</p>
+          <p className="text-xs text-(--color-text-tertiary) mb-3">No boundaries set. The AI will use its default judgment on all topics.</p>
         )}
         <div className="space-y-3">
           {boundaries.map((b, i) => (
-            <div key={i} className="bg-white border border-slate-200 rounded-lg p-3">
+            <Card key={i} padding="p-3">
               <div className="flex gap-2 mb-2">
                 <input type="text" value={b.topic} onChange={(e) => updateBoundary(i, "topic", e.target.value)}
-                  placeholder="Topic (e.g. evolution)" className="flex-1 px-2 py-1.5 text-sm border border-slate-200 rounded" />
+                  placeholder="Topic (e.g. evolution)" className="flex-1 px-2 py-1.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)" />
                 <select value={b.stance} onChange={(e) => updateBoundary(i, "stance", e.target.value)}
-                  className="px-2 py-1.5 text-sm border border-slate-200 rounded">
+                  className="px-2 py-1.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)">
                   {STANCES.map((s) => <option key={s.value} value={s.value}>{s.label}</option>)}
                 </select>
-                <button onClick={() => removeBoundary(i)} className="text-xs text-red-500 hover:text-red-700 px-2">Remove</button>
+                <button onClick={() => removeBoundary(i)} className="text-xs text-(--color-danger) hover:opacity-80 px-2">Remove</button>
               </div>
               <input type="text" value={b.notes} onChange={(e) => updateBoundary(i, "notes", e.target.value)}
-                placeholder="Notes (optional)" className="w-full px-2 py-1 text-xs border border-slate-100 rounded mb-1" />
+                placeholder="Notes (optional)" className="w-full px-2 py-1 text-xs border border-(--color-border)/50 rounded-[10px] mb-1 bg-(--color-surface) text-(--color-text)" />
               {b.topic && b.stance && (
-                <p className="text-[11px] text-blue-600 italic">
+                <p className="text-[11px] text-(--color-accent) italic">
                   {stancePreview[b.stance]?.(b.topic) || ""}
                 </p>
               )}
-            </div>
+            </Card>
           ))}
         </div>
-        <button onClick={addBoundary}
-          className="mt-2 px-3 py-1.5 text-xs font-medium text-blue-600 border border-blue-300 rounded-lg hover:bg-blue-50">
+        <Button variant="secondary" size="sm" className="mt-2 text-(--color-accent) border-(--color-accent)/30" onClick={addBoundary}>
           + Add Boundary
-        </button>
+        </Button>
       </section>
 
       {/* ── Section 4: AI Autonomy ── */}
       <section className="mb-10">
-        <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4">
+        <h2 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-4">
           4. AI Autonomy Level
         </h2>
         <div className="space-y-2">
           {AUTONOMY_LEVELS.map((a) => (
-            <button key={a.value} onClick={() => setAutonomy(a.value)}
-              className={`w-full text-left p-4 rounded-lg border-2 transition-colors ${
-                autonomy === a.value
-                  ? "border-blue-500 bg-blue-50"
-                  : "border-slate-200 hover:border-slate-300"
-              }`}
+            <Card key={a.value} onClick={() => setAutonomy(a.value)} padding="p-4"
+              selected={autonomy === a.value}
+              className={`w-full ${autonomy !== a.value ? "hover:border-(--color-border-strong)" : ""}`}
             >
-              <div className="text-sm font-medium text-slate-800">{a.label}</div>
-              <div className="text-xs text-slate-500 mt-0.5">{a.desc}</div>
-            </button>
+              <div className="text-sm font-medium text-(--color-text)">{a.label}</div>
+              <div className="text-xs text-(--color-text-secondary) mt-0.5">{a.desc}</div>
+            </Card>
           ))}
         </div>
       </section>
 
       {/* ── Section 5: Pedagogical Preferences ── */}
       <section className="mb-10">
-        <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4">
+        <h2 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-4">
           5. Pedagogical Preferences
         </h2>
         <div className="space-y-3">
@@ -259,8 +257,8 @@ export default function PhilosophyPage() {
                 onChange={(e) => setPrefs({ ...prefs, [key]: e.target.checked })}
                 className="mt-0.5 rounded" />
               <div>
-                <div className="text-sm text-slate-800">{label}</div>
-                <div className="text-xs text-slate-500">{desc}</div>
+                <div className="text-sm text-(--color-text)">{label}</div>
+                <div className="text-xs text-(--color-text-secondary)">{desc}</div>
               </div>
             </label>
           ))}
@@ -269,7 +267,7 @@ export default function PhilosophyPage() {
 
       {/* ── Section 6: Custom Constraints ── */}
       <section className="mb-10">
-        <h2 className="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4">
+        <h2 className="text-sm font-bold text-(--color-text) uppercase tracking-wider mb-4">
           6. Custom Constraints
         </h2>
         <div className="space-y-2">
@@ -278,26 +276,25 @@ export default function PhilosophyPage() {
               <input type="text" value={c}
                 onChange={(e) => { const next = [...customs]; next[i] = e.target.value; setCustoms(next); }}
                 placeholder="e.g. All history content should include primary sources"
-                className="flex-1 px-3 py-2 text-sm border border-slate-200 rounded-lg" />
+                className="flex-1 px-3 py-2 text-sm border border-(--color-border) rounded-[14px] bg-(--color-surface) text-(--color-text)" />
               <button onClick={() => setCustoms(customs.filter((_, j) => j !== i))}
-                className="text-xs text-red-500 hover:text-red-700 px-2">Remove</button>
+                className="text-xs text-(--color-danger) hover:opacity-80 px-2">Remove</button>
             </div>
           ))}
         </div>
-        <button onClick={() => setCustoms([...customs, ""])}
-          className="mt-2 px-3 py-1.5 text-xs font-medium text-blue-600 border border-blue-300 rounded-lg hover:bg-blue-50">
+        <Button variant="secondary" size="sm" className="mt-2 text-(--color-accent) border-(--color-accent)/30" onClick={() => setCustoms([...customs, ""])}>
           + Add Constraint
-        </button>
+        </Button>
       </section>
 
       {/* ── Save ── */}
-      <div className="border-t border-slate-200 pt-6">
-        <button onClick={save} disabled={saving}
-          className="px-8 py-3 text-sm font-semibold bg-slate-800 text-white rounded-lg hover:bg-slate-900 disabled:opacity-50 transition-colors">
+      <div className="border-t border-(--color-border) pt-6">
+        <Button variant="primary" size="lg" onClick={save} disabled={saving}
+          className="bg-(--color-text) hover:opacity-90 px-8 py-3">
           {saving ? "Saving..." : "Save Philosophy"}
-        </button>
+        </Button>
         {saved && (
-          <p className="text-sm text-green-600 mt-3">
+          <p className="text-sm text-(--color-success) mt-3">
             Philosophy updated. These constraints are now active across all AI interactions.
           </p>
         )}

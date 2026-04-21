@@ -1,6 +1,8 @@
 """SQLAlchemy models for METHEAN."""
 
-from app.models.identity import Child, ChildPreferences, Household, User
+from app.models.achievements import Achievement, Streak
+from app.models.annual_curriculum import AnnualCurriculum
+from app.models.calibration import CalibrationProfile, CalibrationSnapshot, EvaluatorPrediction
 from app.models.curriculum import (
     ChildMapEnrollment,
     LearningEdge,
@@ -9,7 +11,17 @@ from app.models.curriculum import (
     LearningNode,
     Subject,
 )
-from app.models.state import ChildNodeState, FSRSCard, ReviewLog, StateEvent
+from app.models.evidence import (
+    ActivityFeedback,
+    AdvisorReport,
+    Alert,
+    Artifact,
+    BetaFeedback,
+    FamilyResource,
+    ReadingLogEntry,
+    WeeklySnapshot,
+)
+from app.models.family_insight import FamilyInsight, FamilyInsightConfig
 from app.models.governance import (
     Activity,
     Attempt,
@@ -18,43 +30,68 @@ from app.models.governance import (
     Plan,
     PlanWeek,
 )
-from app.models.evidence import AdvisorReport, Alert, Artifact, WeeklySnapshot
+from app.models.identity import Child, ChildPreferences, FamilyInvite, Household, User
+from app.models.intelligence import LearnerIntelligence
 from app.models.operational import (
     AIRun,
     AuditLog,
     DeviceToken,
     NotificationLog,
     RefreshToken,
+    UsageEvent,
+    UsageLedger,
 )
+from app.models.state import ChildNodeState, FSRSCard, ReviewLog, StateEvent
+from app.models.style_vector import LearnerStyleVector
+from app.models.wellbeing import WellbeingAnomaly, WellbeingConfig
 
 __all__ = [
-    "Household",
-    "User",
+    "AIRun",
+    "Achievement",
+    "Activity",
+    "ActivityFeedback",
+    "AdvisorReport",
+    "Alert",
+    "AnnualCurriculum",
+    "Artifact",
+    "Attempt",
+    "AuditLog",
+    "BetaFeedback",
+    "CalibrationProfile",
+    "CalibrationSnapshot",
     "Child",
-    "ChildPreferences",
-    "Subject",
-    "LearningMap",
-    "LearningNode",
-    "LearningEdge",
-    "LearningMapClosure",
     "ChildMapEnrollment",
     "ChildNodeState",
-    "StateEvent",
+    "ChildPreferences",
+    "DeviceToken",
+    "EvaluatorPrediction",
     "FSRSCard",
-    "ReviewLog",
-    "GovernanceRule",
+    "FamilyInsight",
+    "FamilyInsightConfig",
+    "FamilyInvite",
+    "FamilyResource",
     "GovernanceEvent",
+    "GovernanceRule",
+    "Household",
+    "LearnerIntelligence",
+    "LearnerStyleVector",
+    "LearningEdge",
+    "LearningMap",
+    "LearningMapClosure",
+    "LearningNode",
+    "NotificationLog",
     "Plan",
     "PlanWeek",
-    "Activity",
-    "Attempt",
-    "Artifact",
-    "Alert",
-    "WeeklySnapshot",
-    "AdvisorReport",
-    "AIRun",
-    "AuditLog",
+    "ReadingLogEntry",
     "RefreshToken",
-    "DeviceToken",
-    "NotificationLog",
+    "ReviewLog",
+    "StateEvent",
+    "Streak",
+    "Subject",
+    "UsageEvent",
+    "UsageLedger",
+    "User",
+    "WeeklySnapshot",
+    "WellbeingAnomaly",
+    "WellbeingConfig",
 ]

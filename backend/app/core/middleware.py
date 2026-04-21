@@ -14,6 +14,30 @@ from app.core.config import settings
 logger = structlog.get_logger()
 
 
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    """Add security headers to all responses."""
+
+    async def dispatch(self, request: Request, call_next) -> Response:
+        response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-XSS-Protection"] = "1; mode=block"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "
+            "style-src 'self' 'unsafe-inline'; "
+            "img-src 'self' data: blob:; "
+            "font-src 'self'; "
+            "connect-src 'self' https://api.anthropic.com https://api.openai.com https://api.stripe.com https://api.resend.com; "
+            "frame-ancestors 'none'; "
+            "base-uri 'self'; "
+            "form-action 'self'"
+        )
+        return response
+
+
 class ErrorHandlerMiddleware(BaseHTTPMiddleware):
     """Global exception handler. Returns structured error JSON.
     Never leaks stack traces in production."""
@@ -48,6 +72,7 @@ class ErrorHandlerMiddleware(BaseHTTPMiddleware):
             )
 
             from app.core.config import settings
+
             detail = str(exc) if not settings.is_production else "Internal server error"
 
             return JSONResponse(
@@ -106,6 +131,7 @@ _CSRF_EXEMPT_PATHS = {
     "/health/ready",
     "/api/v1/auth/register",
     "/api/v1/auth/login",
+    "/api/v1/billing/webhook",
 }
 
 _STATE_CHANGING_METHODS = {"POST", "PUT", "PATCH", "DELETE"}

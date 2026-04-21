@@ -1,0 +1,20 @@
+<!--
+  Add these permissions to android/app/src/main/AndroidManifest.xml
+  after running `npx cap add android`.
+  Some may already be added by Capacitor plugins.
+-->
+
+<!-- Core -->
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.VIBRATE" />
+
+<!-- Push Notifications -->
+<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+<!-- Biometric -->
+<uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
+<!-- Camera and Photos (portfolio evidence) -->
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />

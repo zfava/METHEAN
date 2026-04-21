@@ -4,10 +4,11 @@ Revision ID: 002
 Revises: 001
 Create Date: 2026-04-03
 """
+
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 from sqlalchemy.dialects.postgresql import UUID
 
 revision: str = "002"
@@ -17,16 +18,32 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.add_column("activities", sa.Column(
-        "governance_approved", sa.Boolean, server_default="false", nullable=False,
-    ))
-    op.add_column("activities", sa.Column(
-        "governance_reviewed_by", UUID(as_uuid=True),
-        sa.ForeignKey("users.id", ondelete="SET NULL"), nullable=True,
-    ))
-    op.add_column("activities", sa.Column(
-        "governance_reviewed_at", sa.DateTime(timezone=True), nullable=True,
-    ))
+    op.add_column(
+        "activities",
+        sa.Column(
+            "governance_approved",
+            sa.Boolean,
+            server_default="false",
+            nullable=False,
+        ),
+    )
+    op.add_column(
+        "activities",
+        sa.Column(
+            "governance_reviewed_by",
+            UUID(as_uuid=True),
+            sa.ForeignKey("users.id", ondelete="SET NULL"),
+            nullable=True,
+        ),
+    )
+    op.add_column(
+        "activities",
+        sa.Column(
+            "governance_reviewed_at",
+            sa.DateTime(timezone=True),
+            nullable=True,
+        ),
+    )
 
 
 def downgrade() -> None:

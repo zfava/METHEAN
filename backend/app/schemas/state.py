@@ -7,11 +7,12 @@ from pydantic import BaseModel, Field
 
 from app.models.enums import MasteryLevel, StateEventType
 
-
 # ── State query responses ──
+
 
 class NodeStateResponse(BaseModel):
     """Full state for a single node for a child."""
+
     node_id: uuid.UUID
     node_title: str
     mastery_level: MasteryLevel
@@ -29,6 +30,7 @@ class NodeStateResponse(BaseModel):
 
 class ChildStateResponse(BaseModel):
     """Full state across all enrolled maps."""
+
     child_id: uuid.UUID
     nodes: list[NodeStateResponse]
     total_nodes: int
@@ -62,6 +64,7 @@ class RetentionSummaryResponse(BaseModel):
 
 
 # ── Attempt schemas ──
+
 
 class AttemptStartRequest(BaseModel):
     child_id: uuid.UUID
@@ -101,6 +104,7 @@ class AttemptSubmitResponse(BaseModel):
 
 
 # ── Decay job result ──
+
 
 class DecayJobResult(BaseModel):
     cards_checked: int

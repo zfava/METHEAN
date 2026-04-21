@@ -20,6 +20,7 @@ from app.models.enums import (
     PlanStatus,
 )
 from app.models.governance import Activity, Plan, PlanWeek
+from app.models.identity import Child
 from app.models.state import ChildNodeState, FSRSCard
 from app.services.governance import evaluate_activity, log_governance_event
 
@@ -36,26 +37,85 @@ async def generate_plan(
 
     Returns dict with plan_id, activities, governance_decisions.
     """
-    week_end = week_start + timedelta(days=4)  # Mon-Fri
+    # Read academic calendar
+    from sqlalchemy.orm import selectinload
+
+    from app.core.learning_levels import get_daily_minutes_for_child
+    from app.services.academic_calendar import (
+        get_academic_calendar,
+        get_instruction_days,
+        get_week_end_for_start,
+        is_break_date,
+    )
+
+    calendar = await get_academic_calendar(db, household_id)
+    instruction_days = get_instruction_days(calendar)
+    num_days = len(instruction_days)
+    week_end = get_week_end_for_start(week_start, calendar)
+
+    # Check if this week is a break
+    if is_break_date(calendar, week_start):
+        return {"plan_id": None, "message": "This week is a scheduled break.", "activities": []}
+
+    # Use calendar-aware daily minutes if default
+    if daily_minutes == 120:
+        child_r = await db.execute(select(Child).options(selectinload(Child.preferences)).where(Child.id == child_id))
+        child_obj = child_r.scalar_one_or_none()
+        if child_obj:
+            daily_minutes = get_daily_minutes_for_child(child_obj, calendar)
 
     # Gather child context for AI
     context = await _build_planner_context(
-        db, child_id, household_id, daily_minutes,
+        db,
+        child_id,
+        household_id,
+        daily_minutes,
     )
+
+    # Inject governance intelligence
+    try:
+        from app.services.governance_intelligence import get_planning_adjustments
+
+        gov_adjustments = await get_planning_adjustments(db, household_id)
+        if gov_adjustments:
+            context["governance_intelligence"] = gov_adjustments
+    except Exception:
+        pass
+
+    day_labels = ", ".join([d.capitalize() for d in instruction_days])
 
     user_prompt = f"""Generate a weekly learning plan for this child.
 
 Week: {week_start.isoformat()} to {week_end.isoformat()}
 Daily time budget: {daily_minutes} minutes
+Instruction days: {day_labels} ({num_days} days)
 
 Child's current state:
 {json.dumps(context, indent=2, default=str)}
 
-Create activities spread across 5 days (Monday=1 through Friday=5).
+Create activities spread across {num_days} days ({day_labels}).
 Prioritize nodes that are due for review, then available nodes."""
+
+    # Assemble context via centralized service (advisory, never blocking)
+    assembled_ctx = ""
+    try:
+        from app.services.context_assembly import assemble_context
+
+        assembled = await assemble_context(
+            db,
+            role="planner",
+            child_id=child_id,
+            household_id=household_id,
+        )
+        assembled_ctx = assembled["context_text"]
+        if assembled_ctx:
+            user_prompt += f"\n\n{assembled_ctx}"
+    except Exception:
+        pass
 
     # Fetch household philosophical profile for AI constraints
     from app.models.identity import Household
+
     h_result = await db.execute(select(Household).where(Household.id == household_id))
     household_obj = h_result.scalar_one_or_none()
     phil_profile = household_obj.philosophical_profile if household_obj else None
@@ -69,6 +129,7 @@ Prioritize nodes that are due for review, then available nodes."""
         household_id=household_id,
         triggered_by=user_id,
         philosophical_profile=phil_profile,
+        assembled_context=assembled_ctx,
     )
 
     ai_output = ai_result["output"]
@@ -123,30 +184,37 @@ Prioritize nodes that are due for review, then available nodes."""
 
         # Evaluate through governance rules
         decision = await evaluate_activity(
-            db, household_id, difficulty=difficulty, activity_type=act_type.value,
+            db,
+            household_id,
+            difficulty=difficulty,
+            activity_type=act_type.value,
             node_id=node_id,
         )
 
         # Blocked activities are not created at all
         if decision.action == "block":
             await log_governance_event(
-                db, household_id, user_id=user_id,
+                db,
+                household_id,
+                user_id=user_id,
                 action=GovernanceAction.reject,
                 target_type="activity_proposal",
                 target_id=uuid.uuid4(),  # no activity created
                 reason=decision.reason,
                 metadata={
                     "rule_id": str(decision.rule_id) if decision.rule_id else None,
-                    "title": act_data.get("title", f"Activity {i+1}"),
+                    "title": act_data.get("title", f"Activity {i + 1}"),
                     "blocked": True,
                 },
             )
-            governance_decisions.append({
-                "activity_id": None,
-                "title": act_data.get("title", f"Activity {i+1}"),
-                "action": "block",
-                "reason": decision.reason,
-            })
+            governance_decisions.append(
+                {
+                    "activity_id": None,
+                    "title": act_data.get("title", f"Activity {i + 1}"),
+                    "action": "block",
+                    "reason": decision.reason,
+                }
+            )
             continue
 
         activity = Activity(
@@ -154,7 +222,7 @@ Prioritize nodes that are due for review, then available nodes."""
             household_id=household_id,
             node_id=node_id,
             activity_type=act_type,
-            title=act_data.get("title", f"Activity {i+1}"),
+            title=act_data.get("title", f"Activity {i + 1}"),
             description=act_data.get("rationale", ""),
             instructions={"difficulty": difficulty, "ai_rationale": act_data.get("rationale", "")},
             estimated_minutes=act_data.get("estimated_minutes", 30),
@@ -168,26 +236,38 @@ Prioritize nodes that are due for review, then available nodes."""
 
         gov_action = GovernanceAction.approve if decision.action == "auto_approve" else GovernanceAction.defer
 
+        gov_metadata: dict = {
+            "rule_id": str(decision.rule_id) if decision.rule_id else None,
+            "rule_name": decision.rule_name,
+            "difficulty": difficulty,
+            "is_auto": True,
+        }
+        if decision.self_governed_auto_approve:
+            # Tag the audit trail so self-governed auto approvals are
+            # distinguishable from parent approvals.
+            gov_metadata["source"] = "self_governed_autonomy"
+            gov_metadata["event_type"] = "activity_auto_approved"
+            gov_metadata["autonomy_level"] = decision.autonomy_level
+
         await log_governance_event(
-            db, household_id, user_id=user_id,
+            db,
+            household_id,
+            user_id=user_id,
             action=gov_action,
             target_type="activity",
             target_id=activity.id,
             reason=decision.reason,
-            metadata={
-                "rule_id": str(decision.rule_id) if decision.rule_id else None,
-                "rule_name": decision.rule_name,
-                "difficulty": difficulty,
-                "is_auto": True,
-            },
+            metadata=gov_metadata,
         )
 
-        governance_decisions.append({
-            "activity_id": activity.id,
-            "title": activity.title,
-            "action": decision.action,
-            "reason": decision.reason,
-        })
+        governance_decisions.append(
+            {
+                "activity_id": activity.id,
+                "title": activity.title,
+                "action": decision.action,
+                "reason": decision.reason,
+            }
+        )
 
     await db.flush()
 
@@ -244,39 +324,111 @@ async def _build_planner_context(
         node_ids = [n.id for n in all_nodes]
 
         # Get states
-        state_result = await db.execute(
-            select(ChildNodeState).where(
-                ChildNodeState.child_id == child_id,
-                ChildNodeState.node_id.in_(node_ids),
+        state_result = (
+            await db.execute(
+                select(ChildNodeState).where(
+                    ChildNodeState.child_id == child_id,
+                    ChildNodeState.node_id.in_(node_ids),
+                )
             )
-        ) if node_ids else None
+            if node_ids
+            else None
+        )
         states = {s.node_id: s for s in (state_result.scalars().all() if state_result else [])}
 
         # Get FSRS cards for due dates
-        card_result = await db.execute(
-            select(FSRSCard).where(
-                FSRSCard.child_id == child_id,
-                FSRSCard.node_id.in_(node_ids),
+        card_result = (
+            await db.execute(
+                select(FSRSCard).where(
+                    FSRSCard.child_id == child_id,
+                    FSRSCard.node_id.in_(node_ids),
+                )
             )
-        ) if node_ids else None
+            if node_ids
+            else None
+        )
         cards = {c.node_id: c for c in (card_result.scalars().all() if card_result else [])}
 
         for node in all_nodes:
             state = states.get(node.id)
             card = cards.get(node.id)
-            mastery = state.mastery_level.value if state and hasattr(state.mastery_level, 'value') else (
-                str(state.mastery_level) if state else "not_started"
+            mastery = (
+                state.mastery_level.value
+                if state and hasattr(state.mastery_level, "value")
+                else (str(state.mastery_level) if state else "not_started")
             )
-            nodes.append({
-                "node_id": str(node.id),
-                "title": node.title,
-                "type": node.node_type.value if hasattr(node.node_type, 'value') else str(node.node_type),
-                "mastery": mastery,
-                "due": card.due.isoformat() if card and card.due else None,
-                "estimated_minutes": node.estimated_minutes,
-            })
+            nodes.append(
+                {
+                    "node_id": str(node.id),
+                    "title": node.title,
+                    "type": node.node_type.value if hasattr(node.node_type, "value") else str(node.node_type),
+                    "mastery": mastery,
+                    "due": card.due.isoformat() if card and card.due else None,
+                    "estimated_minutes": node.estimated_minutes,
+                }
+            )
 
-    return {
+    # Inject learner intelligence context
+    from app.services.intelligence import get_intelligence_context
+
+    try:
+        intel = await get_intelligence_context(db, child_id, household_id)
+    except Exception:
+        intel = {}
+
+    # Inject scope sequence context for AI planning
+    try:
+        from app.content.scope_sequences import get_next_topics
+        from app.core.learning_levels import SUBJECT_CATALOG, get_level_for_subject
+        from app.models.curriculum import LearningMap, Subject
+
+        # Fetch subject names for enrolled maps
+        scope_context = {}
+        if map_ids:
+            map_result = await db.execute(
+                select(LearningMap.id, Subject.name)
+                .join(Subject, LearningMap.subject_id == Subject.id)
+                .where(LearningMap.id.in_(map_ids))
+            )
+            map_subjects = {str(row[0]): row[1] for row in map_result.all()}
+
+            # Get child preferences for level detection
+            from app.models.identity import ChildPreferences
+
+            prefs_result = await db.execute(select(ChildPreferences).where(ChildPreferences.child_id == child_id))
+            child_prefs = prefs_result.scalar_one_or_none()
+
+            # Collect mastered node titles for prerequisite tracking
+            mastered_refs: list[str] = []
+
+            seen_subjects: set[str] = set()
+            for subj_name in map_subjects.values():
+                if subj_name in seen_subjects:
+                    continue
+                seen_subjects.add(subj_name)
+
+                # Resolve to scope sequence subject_id
+                subj_id = subj_name.lower().replace(" ", "_").replace("&", "and")
+                for cat in SUBJECT_CATALOG.values():
+                    for s in cat:
+                        if s["name"].lower() == subj_name.lower() or s["id"] == subj_id:
+                            subj_id = s["id"]
+                            break
+
+                level = get_level_for_subject(child_prefs, subj_name) if child_prefs else "developing"
+                next_topics = get_next_topics(subj_id, level, mastered_refs, count=5)
+                if next_topics:
+                    scope_context[subj_name] = [
+                        {"title": t["title"], "key_concepts": t["key_concepts"]} for t in next_topics
+                    ]
+    except Exception:
+        scope_context = {}
+
+    result = {
         "daily_minutes": daily_minutes,
         "nodes": nodes,
+        "learner_intelligence": intel,
     }
+    if scope_context:
+        result["scope_sequences"] = scope_context
+    return result

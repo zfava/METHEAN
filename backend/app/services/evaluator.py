@@ -41,27 +41,61 @@ async def evaluate_attempt(
     node_title: str,
     child_responses: str,
     tutor_transcript: str | None = None,
+    assessment_criteria: dict | None = None,
 ) -> dict:
     """Call AI Evaluator through governance gateway.
 
     Returns dict with: quality_rating, confidence_score, strengths,
     areas_for_improvement, evidence_summary, ai_run_id.
     """
+    criteria_text = ""
+    if assessment_criteria:
+        parts = []
+        if assessment_criteria.get("mastery_indicators"):
+            parts.append(f"Mastery looks like: {', '.join(assessment_criteria['mastery_indicators'][:3])}")
+        if assessment_criteria.get("assessment_methods"):
+            parts.append(f"Assessment methods: {', '.join(assessment_criteria['assessment_methods'])}")
+        if assessment_criteria.get("sample_assessment_prompts"):
+            parts.append(f"Key prompts: {', '.join(assessment_criteria['sample_assessment_prompts'][:2])}")
+        if parts:
+            criteria_text = "\n\nASSESSMENT CRITERIA:\n" + "\n".join(f"- {p}" for p in parts)
+
     user_prompt = f"""Evaluate this child's attempt at an activity.
 
 Activity: {activity_title}
 Learning Node: {node_title}
+{criteria_text}
 
 Child's responses/work:
 {child_responses}
 
-{f'Tutor transcript:{chr(10)}{tutor_transcript}' if tutor_transcript else ''}
+{f"Tutor transcript:{chr(10)}{tutor_transcript}" if tutor_transcript else ""}
 
 Provide your assessment."""
 
+    # Assemble context via centralized service (advisory, never blocking)
+    assembled_ctx = ""
+    try:
+        from app.services.context_assembly import assemble_context
+
+        assembled = await assemble_context(
+            db,
+            role="evaluator",
+            child_id=None,
+            household_id=household_id,
+            node_id=None,
+        )
+        assembled_ctx = assembled["context_text"]
+        if assembled_ctx:
+            user_prompt += f"\n\n{assembled_ctx}"
+    except Exception:
+        pass
+
     # Fetch philosophical profile for AI constraints
     from sqlalchemy import select as sa_select
+
     from app.models.identity import Household
+
     h_result = await db.execute(sa_select(Household).where(Household.id == household_id))
     h = h_result.scalar_one_or_none()
     phil = h.philosophical_profile if h else None
@@ -74,6 +108,7 @@ Provide your assessment."""
         household_id=household_id,
         triggered_by=user_id,
         philosophical_profile=phil,
+        assembled_context=assembled_ctx,
     )
 
     output = result["output"]

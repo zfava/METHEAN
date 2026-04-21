@@ -17,6 +17,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
+from app.core.database import set_tenant
 from app.models.enums import MasteryLevel, StateEventType
 from app.models.state import ChildNodeState, FSRSCard, StateEvent
 from app.services.state_engine import compute_retrievability, emit_state_event
@@ -34,9 +35,7 @@ async def run_decay_batch(
 
     # Create engine if not provided (Celery context)
     if session_factory is None:
-        engine = create_async_engine(
-            settings.DATABASE_URL, poolclass=NullPool
-        )
+        engine = create_async_engine(settings.DATABASE_URL, poolclass=NullPool)
         session_factory = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
     cards_checked = 0
@@ -66,6 +65,7 @@ async def run_decay_batch(
 
             for card in cards:
                 cards_checked += 1
+                await set_tenant(db, card.household_id)
 
                 # Check if this node is currently mastered
                 state_result = await db.execute(
@@ -90,14 +90,16 @@ async def run_decay_batch(
                     # Check idempotency: don't decay if already decayed in this run
                     # (look for a recent decay event for this node)
                     recent_decay = await db.execute(
-                        select(StateEvent.id).where(
+                        select(StateEvent.id)
+                        .where(
                             StateEvent.child_id == card.child_id,
                             StateEvent.node_id == card.node_id,
                             StateEvent.event_type == StateEventType.mastery_change,
                             StateEvent.trigger == "decay",
                             StateEvent.to_state == MasteryLevel.proficient.value,
                             StateEvent.created_at > now.replace(hour=0, minute=0, second=0),
-                        ).limit(1)
+                        )
+                        .limit(1)
                     )
                     if recent_decay.scalar_one_or_none():
                         continue  # Already decayed today
@@ -106,7 +108,10 @@ async def run_decay_batch(
                     node_state.mastery_level = MasteryLevel.proficient
 
                     await emit_state_event(
-                        db, card.child_id, card.household_id, card.node_id,
+                        db,
+                        card.child_id,
+                        card.household_id,
+                        card.node_id,
                         event_type=StateEventType.mastery_change,
                         from_state=MasteryLevel.mastered.value,
                         to_state=MasteryLevel.proficient.value,
@@ -115,11 +120,16 @@ async def run_decay_batch(
                             "retrievability": round(retrievability, 4),
                             "threshold": settings.DECAY_RETRIEVABILITY_THRESHOLD,
                             "fsrs_stability": card.stability,
-                            "days_overdue": (now - card.due).total_seconds() / 86400
-                            if card.due else 0,
+                            "days_overdue": (now - card.due).total_seconds() / 86400 if card.due else 0,
                         },
                     )
                     cards_decayed += 1
+                    try:
+                        from app.core.metrics import fsrs_decays
+
+                        fsrs_decays.inc()
+                    except Exception:
+                        pass
 
             offset += batch_size
             await db.flush()

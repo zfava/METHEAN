@@ -18,10 +18,7 @@ async def test_openapi_spec_is_current():
     from app.main import app
 
     if not SPEC_PATH.exists():
-        pytest.fail(
-            f"Pinned spec not found at {SPEC_PATH}. "
-            "Run: cd backend && python -m scripts.export_openapi"
-        )
+        pytest.fail(f"Pinned spec not found at {SPEC_PATH}. Run: cd backend && python -m scripts.export_openapi")
 
     pinned = json.loads(SPEC_PATH.read_text())
     current = app.openapi()

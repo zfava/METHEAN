@@ -4,7 +4,6 @@ Run: python -m scripts.export_openapi
 """
 
 import json
-import sys
 from pathlib import Path
 
 import yaml

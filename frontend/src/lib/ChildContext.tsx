@@ -8,6 +8,11 @@ interface ChildInfo {
   last_name: string | null;
   grade_level: string | null;
   enrollment_count: number;
+  preferences?: {
+    subject_levels?: Record<string, string>;
+    daily_duration_minutes?: number;
+    parent_notes?: string;
+  } | null;
 }
 
 interface ChildContextValue {

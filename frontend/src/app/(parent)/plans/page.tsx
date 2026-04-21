@@ -2,11 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { plans, type Plan, type PlanDetail, type ActivityInPlan } from "@/lib/api";
+import { useToast } from "@/components/Toast";
 import StatusBadge from "@/components/StatusBadge";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { useChild } from "@/lib/ChildContext";
+import PageHeader from "@/components/ui/PageHeader";
+import Card from "@/components/ui/Card";
+import Button from "@/components/ui/Button";
+import EmptyState from "@/components/ui/EmptyState";
+import { cn } from "@/lib/cn";
+import VocationalActivityDetail from "@/components/VocationalActivityDetail";
+import { useMobile } from "@/lib/useMobile";
 
 export default function PlansPage() {
+  useEffect(() => { document.title = "Plans | METHEAN"; }, []);
+  const { toast } = useToast();
+
   const { selectedChild } = useChild();
   const [planList, setPlanList] = useState<Plan[]>([]);
   const [selected, setSelected] = useState<PlanDetail | null>(null);
@@ -44,7 +55,9 @@ export default function PlansPage() {
       await loadPlans();
       const detail = await plans.detail(p.id);
       setSelected(detail);
+      toast("Plan generated", "success");
     } catch (e: any) {
+      toast(e.detail || "Failed to generate plan", "error");
       setError(e.detail || "Failed to generate plan");
     } finally {
       setGenerating(false);
@@ -59,6 +72,7 @@ export default function PlansPage() {
   async function handleApprove(activityId: string) {
     if (!selected) return;
     await plans.approveActivity(selected.id, activityId);
+    toast("Activity approved", "success");
     await loadPlanDetail(selected.id);
   }
 
@@ -67,6 +81,7 @@ export default function PlansPage() {
     const reason = prompt("Reason for rejection:");
     if (!reason) return;
     await plans.rejectActivity(selected.id, activityId, reason);
+    toast("Activity rejected", "info");
     await loadPlanDetail(selected.id);
   }
 
@@ -74,6 +89,7 @@ export default function PlansPage() {
     if (!selected) return;
     try {
       await plans.lock(selected.id);
+      toast("Plan activated", "success");
       await loadPlanDetail(selected.id);
     } catch (e: any) {
       const detail = e.detail;
@@ -90,6 +106,13 @@ export default function PlansPage() {
     await plans.unlock(selected.id);
     await loadPlanDetail(selected.id);
   }
+
+  const isMobile = useMobile();
+  const [expandedDay, setExpandedDay] = useState<string | null>(null);
+  const todayDow = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][new Date().getDay()] || "Mon";
+
+  // Auto-expand current day on mobile
+  useEffect(() => { if (isMobile) setExpandedDay(todayDow); }, [isMobile, todayDow]);
 
   if (!selectedChild) return <div className="text-sm text-(--color-text-secondary)">Select a child from the sidebar.</div>;
 
@@ -110,21 +133,17 @@ export default function PlansPage() {
 
   return (
     <div className="max-w-6xl">
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-xl font-semibold">Plans</h1>
-          <p className="text-sm text-(--color-text-secondary)">{selectedChild.first_name}&apos;s weekly plans</p>
-        </div>
-        <button
-          onClick={generatePlan}
-          disabled={generating}
-          className="px-4 py-2 text-sm font-medium bg-(--color-accent) text-white rounded-md hover:bg-(--color-accent-hover) disabled:opacity-50"
-        >
-          {generating ? "Generating..." : "Generate New Plan"}
-        </button>
-      </div>
+      <PageHeader
+        title="Plans"
+        subtitle={`${selectedChild.first_name}'s weekly plans`}
+        actions={
+          <Button onClick={generatePlan} disabled={generating}>
+            {generating ? "Generating..." : "Generate New Plan"}
+          </Button>
+        }
+      />
 
-      {error && <div className="mb-4 p-3 text-sm bg-red-50 text-red-700 rounded-md border border-red-200">{error}</div>}
+      {error && <div className="mb-4 p-3 text-sm bg-(--color-danger-light) text-(--color-danger) rounded-[10px] border border-(--color-danger)/30">{error}</div>}
 
       {loading ? <LoadingSkeleton variant="card" count={3} /> : (
         <>
@@ -135,9 +154,12 @@ export default function PlansPage() {
                 <button
                   key={p.id}
                   onClick={() => loadPlanDetail(p.id)}
-                  className={`shrink-0 px-3 py-1.5 text-xs rounded-md border transition-colors ${
-                    selected?.id === p.id ? "border-(--color-accent) bg-blue-50 text-(--color-accent)" : "border-(--color-border) hover:bg-gray-50"
-                  }`}
+                  className={cn(
+                    "shrink-0 px-3 py-1.5 text-xs rounded-[10px] border transition-colors",
+                    selected?.id === p.id
+                      ? "border-(--color-accent) bg-(--color-accent-light) text-(--color-accent)"
+                      : "border-(--color-border) hover:bg-(--color-page)"
+                  )}
                 >
                   {p.name}
                 </button>
@@ -147,9 +169,9 @@ export default function PlansPage() {
 
           {selected ? (
             <div>
-              <div className="flex items-center justify-between mb-4 bg-white rounded-lg border border-(--color-border) px-5 py-4">
+              <Card padding="px-5 py-4" className="flex items-center justify-between mb-4">
                 <div>
-                  <h2 className="text-sm font-semibold">{selected.name}</h2>
+                  <h2 className="text-sm font-semibold text-(--color-text)">{selected.name}</h2>
                   <div className="flex items-center gap-2 mt-1">
                     <StatusBadge status={selected.status} />
                     {selected.ai_generated && <span className="text-xs text-(--color-text-secondary)">AI generated</span>}
@@ -157,50 +179,104 @@ export default function PlansPage() {
                 </div>
                 <div className="flex gap-2">
                   {selected.status === "draft" && (
-                    <button onClick={handleLock} className="px-3 py-1.5 text-xs font-medium bg-(--color-accent) text-white rounded-md hover:bg-(--color-accent-hover)">
+                    <Button onClick={handleLock} size="sm">
                       Activate Plan
-                    </button>
+                    </Button>
                   )}
                   {selected.status === "active" && (
-                    <button onClick={handleUnlock} className="px-3 py-1.5 text-xs font-medium border border-(--color-border) rounded-md hover:bg-gray-50">
+                    <Button onClick={handleUnlock} variant="secondary" size="sm">
                       Unlock
-                    </button>
+                    </Button>
                   )}
                 </div>
-              </div>
+              </Card>
 
-              <div className="grid grid-cols-5 gap-3">
-                {days.map((day) => {
-                  const dayActivities = activitiesByDay(selected.activities)[day] || [];
-                  return (
-                    <div key={day} className="bg-white rounded-lg border border-(--color-border)">
-                      <div className="px-3 py-2 border-b border-(--color-border) text-xs font-semibold text-(--color-text-secondary)">{day}</div>
-                      <div className="p-2 space-y-2 min-h-32">
-                        {dayActivities.map((a) => (
-                          <div key={a.id} className="p-2.5 rounded-md border border-gray-100 bg-gray-50">
-                            <div className="text-xs font-medium">{a.title}</div>
-                            <div className="flex items-center gap-2 mt-1">
-                              <StatusBadge status={a.status} />
-                              {a.estimated_minutes && <span className="text-[10px] text-(--color-text-secondary)">{a.estimated_minutes}m</span>}
-                            </div>
-                            {a.status === "scheduled" && (
-                              <div className="flex gap-1 mt-2">
-                                <button onClick={() => handleApprove(a.id)} className="px-2 py-0.5 text-[10px] font-medium bg-emerald-50 text-emerald-700 rounded hover:bg-emerald-100">Approve</button>
-                                <button onClick={() => handleReject(a.id)} className="px-2 py-0.5 text-[10px] font-medium bg-red-50 text-red-700 rounded hover:bg-red-100">Reject</button>
-                              </div>
-                            )}
+              {isMobile ? (
+                /* Mobile: day-by-day accordion */
+                <div className="space-y-2">
+                  {days.map((day) => {
+                    const dayActivities = activitiesByDay(selected.activities)[day] || [];
+                    const totalMin = dayActivities.reduce((s, a) => s + (a.estimated_minutes || 0), 0);
+                    const isOpen = expandedDay === day;
+                    return (
+                      <Card key={day} padding="p-0">
+                        <button
+                          onClick={() => setExpandedDay(isOpen ? null : day)}
+                          className="w-full flex items-center justify-between px-4 py-3"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className={cn("text-sm font-semibold", day === todayDow ? "text-(--color-accent)" : "text-(--color-text)")}>{day}</span>
+                            {day === todayDow && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-(--color-accent-light) text-(--color-accent) font-medium">Today</span>}
                           </div>
-                        ))}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-(--color-text-tertiary)">{dayActivities.length} activities</span>
+                            {totalMin > 0 && <span className="text-xs text-(--color-text-tertiary)">{totalMin}m</span>}
+                            <svg className={cn("w-4 h-4 text-(--color-text-tertiary) transition-transform", isOpen && "rotate-180")} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                            </svg>
+                          </div>
+                        </button>
+                        {isOpen && (
+                          <div className="px-3 pb-3 space-y-2">
+                            {dayActivities.length === 0 ? (
+                              <div className="text-center py-4 text-xs text-(--color-text-tertiary)">No activities</div>
+                            ) : dayActivities.map((a) => (
+                              <div key={a.id} className="flex items-center gap-3 p-3 rounded-[10px] border border-(--color-border) bg-(--color-page)">
+                                <span className={cn("w-2 h-2 rounded-full shrink-0",
+                                  a.status === "completed" ? "bg-(--color-success)" : a.status === "in_progress" ? "bg-(--color-accent)" : "bg-(--color-border-strong)"
+                                )} />
+                                <div className="flex-1 min-w-0">
+                                  <div className="text-sm font-medium text-(--color-text) truncate">{a.title}</div>
+                                  <div className="flex items-center gap-2 mt-0.5">
+                                    <StatusBadge status={a.status} />
+                                  </div>
+                                </div>
+                                {a.estimated_minutes && <span className="text-xs text-(--color-text-tertiary) shrink-0">{a.estimated_minutes}m</span>}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </Card>
+                    );
+                  })}
+                </div>
+              ) : (
+                /* Desktop: 5-column grid */
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                  {days.map((day) => {
+                    const dayActivities = activitiesByDay(selected.activities)[day] || [];
+                    return (
+                      <Card key={day} padding="p-0">
+                        <div className="px-3 py-2 border-b border-(--color-border) text-xs font-semibold text-(--color-text-secondary)">{day}</div>
+                        <div className="p-2 space-y-2 min-h-32">
+                          {dayActivities.map((a) => (
+                            <div key={a.id} className="p-2.5 rounded-[10px] border border-(--color-border) bg-(--color-page)">
+                              <div className="text-xs font-medium text-(--color-text)">{a.title}</div>
+                              <div className="flex items-center gap-2 mt-1">
+                                <StatusBadge status={a.status} />
+                                {a.estimated_minutes && <span className="text-[10px] text-(--color-text-secondary)">{a.estimated_minutes}m</span>}
+                              </div>
+                              {a.status === "scheduled" && (
+                                <div className="flex gap-1 mt-2">
+                                  <button onClick={() => handleApprove(a.id)} className="px-2 py-0.5 text-[10px] font-medium bg-(--color-success-light) text-(--color-success) rounded-[6px] hover:opacity-80">Approve</button>
+                                  <button onClick={() => handleReject(a.id)} className="px-2 py-0.5 text-[10px] font-medium bg-(--color-danger-light) text-(--color-danger) rounded-[6px] hover:opacity-80">Reject</button>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      </Card>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           ) : (
-            <div className="bg-white rounded-lg border border-(--color-border) p-8 text-center">
-              <p className="text-sm text-(--color-text-secondary)">No plans yet. Click &quot;Generate New Plan&quot; to create one.</p>
-            </div>
+            <EmptyState
+              icon="empty"
+              title="No plans yet"
+              description='Click "Generate New Plan" to create one.'
+            />
           )}
         </>
       )}

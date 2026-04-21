@@ -4,7 +4,6 @@ Defines valid state transitions and enforces them. Every status change
 must go through validate_transition() to ensure only legal moves happen.
 """
 
-
 # Plan lifecycle: (current_status, action) -> new_status
 PLAN_TRANSITIONS: dict[tuple[str, str], str] = {
     ("draft", "submit"): "proposed",
@@ -53,16 +52,11 @@ def validate_transition(
 
     key = (current, action)
     if key not in transitions:
-        allowed = [
-            act for (st, act) in transitions if st == current
-        ]
+        allowed = [act for (st, act) in transitions if st == current]
         if allowed:
             raise ValueError(
-                f"Cannot '{action}' a plan/activity in '{current}' status. "
-                f"Allowed actions: {', '.join(allowed)}"
+                f"Cannot '{action}' a plan/activity in '{current}' status. Allowed actions: {', '.join(allowed)}"
             )
-        raise ValueError(
-            f"No transitions available from '{current}' status."
-        )
+        raise ValueError(f"No transitions available from '{current}' status.")
 
     return transitions[key]

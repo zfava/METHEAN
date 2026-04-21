@@ -16,7 +16,6 @@ from app.models.curriculum import (
     LearningEdge,
     LearningMap,
     LearningNode,
-    Subject,
 )
 from app.models.enums import (
     ActivityStatus,
@@ -27,51 +26,61 @@ from app.models.enums import (
     PlanStatus,
 )
 from app.models.governance import Activity, Plan, PlanWeek
-from app.models.identity import Child, Household
-from app.models.state import ChildNodeState, ReviewLog
-
+from app.models.identity import Child
+from app.models.state import ChildNodeState
 
 # ══════════════════════════════════════════════════
 # Household & Child Management
 # ══════════════════════════════════════════════════
 
-class TestHouseholdSettings:
 
+class TestHouseholdSettings:
     @pytest.mark.asyncio
     async def test_update_household_name(self, auth_client, db_session, household):
-        resp = await auth_client.put("/api/v1/household/settings", json={
-            "name": "New Family Name",
-        })
+        resp = await auth_client.put(
+            "/api/v1/household/settings",
+            json={
+                "name": "New Family Name",
+            },
+        )
         assert resp.status_code == 200
         assert resp.json()["name"] == "New Family Name"
 
     @pytest.mark.asyncio
     async def test_update_timezone(self, auth_client, db_session, household):
-        resp = await auth_client.put("/api/v1/household/settings", json={
-            "timezone": "America/Chicago",
-        })
+        resp = await auth_client.put(
+            "/api/v1/household/settings",
+            json={
+                "timezone": "America/Chicago",
+            },
+        )
         assert resp.status_code == 200
         assert resp.json()["timezone"] == "America/Chicago"
 
 
 class TestChildUpdate:
-
     @pytest.mark.asyncio
     async def test_patch_child(self, auth_client, db_session, household, child):
-        resp = await auth_client.patch(f"/api/v1/children/{child.id}", json={
-            "first_name": "Updated",
-            "grade_level": "4th",
-        })
+        resp = await auth_client.patch(
+            f"/api/v1/children/{child.id}",
+            json={
+                "first_name": "Updated",
+                "grade_level": "4th",
+            },
+        )
         assert resp.status_code == 200
         assert resp.json()["first_name"] == "Updated"
         assert resp.json()["grade_level"] == "4th"
 
     @pytest.mark.asyncio
     async def test_update_preferences(self, auth_client, db_session, household, child):
-        resp = await auth_client.put(f"/api/v1/children/{child.id}/preferences", json={
-            "daily_duration_minutes": 120,
-            "learning_style": {"visual": True},
-        })
+        resp = await auth_client.put(
+            f"/api/v1/children/{child.id}/preferences",
+            json={
+                "daily_duration_minutes": 120,
+                "learning_style": {"visual": True},
+            },
+        )
         assert resp.status_code == 200
         assert resp.json()["daily_duration_minutes"] == 120
 
@@ -80,33 +89,49 @@ class TestChildUpdate:
 # Today's Activities
 # ══════════════════════════════════════════════════
 
-class TestToday:
 
+class TestToday:
     @pytest.mark.asyncio
     async def test_get_today_activities(
-        self, auth_client, db_session, household, child, subject, user,
+        self,
+        auth_client,
+        db_session,
+        household,
+        child,
+        subject,
+        user,
     ):
         # Create activity for today
         plan = Plan(
-            household_id=household.id, child_id=child.id,
-            created_by=user.id, name="Today Plan", status=PlanStatus.active,
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Today Plan",
+            status=PlanStatus.active,
         )
         db_session.add(plan)
         await db_session.flush()
 
         week = PlanWeek(
-            plan_id=plan.id, household_id=household.id,
-            week_number=1, start_date=date.today(),
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date.today(),
             end_date=date.today() + timedelta(days=4),
         )
         db_session.add(week)
         await db_session.flush()
 
-        db_session.add(Activity(
-            plan_week_id=week.id, household_id=household.id,
-            activity_type=ActivityType.lesson, title="Today's Lesson",
-            status=ActivityStatus.scheduled, scheduled_date=date.today(),
-        ))
+        db_session.add(
+            Activity(
+                plan_week_id=week.id,
+                household_id=household.id,
+                activity_type=ActivityType.lesson,
+                title="Today's Lesson",
+                status=ActivityStatus.scheduled,
+                scheduled_date=date.today(),
+            )
+        )
         await db_session.flush()
 
         resp = await auth_client.get(f"/api/v1/children/{child.id}/today")
@@ -120,38 +145,49 @@ class TestToday:
 # Map Validation
 # ══════════════════════════════════════════════════
 
-class TestMapValidation:
 
+class TestMapValidation:
     @pytest.mark.asyncio
     async def test_validate_healthy_map(
-        self, auth_client, db_session, household, subject,
+        self,
+        auth_client,
+        db_session,
+        household,
+        subject,
     ):
-        lmap = LearningMap(
-            household_id=household.id, subject_id=subject.id, name="Valid Map"
-        )
+        lmap = LearningMap(household_id=household.id, subject_id=subject.id, name="Valid Map")
         db_session.add(lmap)
         await db_session.flush()
 
         root = LearningNode(
-            learning_map_id=lmap.id, household_id=household.id,
-            node_type=NodeType.root, title="Root",
+            learning_map_id=lmap.id,
+            household_id=household.id,
+            node_type=NodeType.root,
+            title="Root",
         )
         skill = LearningNode(
-            learning_map_id=lmap.id, household_id=household.id,
-            node_type=NodeType.skill, title="Skill",
+            learning_map_id=lmap.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Skill",
         )
         db_session.add_all([root, skill])
         await db_session.flush()
 
-        db_session.add(LearningEdge(
-            learning_map_id=lmap.id, household_id=household.id,
-            from_node_id=root.id, to_node_id=skill.id,
-            relation=EdgeRelation.prerequisite,
-        ))
+        db_session.add(
+            LearningEdge(
+                learning_map_id=lmap.id,
+                household_id=household.id,
+                from_node_id=root.id,
+                to_node_id=skill.id,
+                relation=EdgeRelation.prerequisite,
+            )
+        )
         await db_session.flush()
 
         # Build closure table so reachability check works
         from app.services.dag_engine import rebuild_closure_for_map
+
         await rebuild_closure_for_map(db_session, lmap.id)
 
         resp = await auth_client.post(f"/api/v1/learning-maps/{lmap.id}/validate")
@@ -162,21 +198,27 @@ class TestMapValidation:
 
     @pytest.mark.asyncio
     async def test_validate_detects_orphan(
-        self, auth_client, db_session, household, subject,
+        self,
+        auth_client,
+        db_session,
+        household,
+        subject,
     ):
-        lmap = LearningMap(
-            household_id=household.id, subject_id=subject.id, name="Orphan Map"
-        )
+        lmap = LearningMap(household_id=household.id, subject_id=subject.id, name="Orphan Map")
         db_session.add(lmap)
         await db_session.flush()
 
         root = LearningNode(
-            learning_map_id=lmap.id, household_id=household.id,
-            node_type=NodeType.root, title="Root",
+            learning_map_id=lmap.id,
+            household_id=household.id,
+            node_type=NodeType.root,
+            title="Root",
         )
         orphan = LearningNode(
-            learning_map_id=lmap.id, household_id=household.id,
-            node_type=NodeType.skill, title="Orphan Skill",
+            learning_map_id=lmap.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Orphan Skill",
         )
         db_session.add_all([root, orphan])
         await db_session.flush()
@@ -192,35 +234,48 @@ class TestMapValidation:
 # Pace Metrics
 # ══════════════════════════════════════════════════
 
-class TestPace:
 
+class TestPace:
     @pytest.mark.asyncio
     async def test_pace_metrics(
-        self, auth_client, db_session, household, child, subject,
+        self,
+        auth_client,
+        db_session,
+        household,
+        child,
+        subject,
     ):
-        lmap = LearningMap(
-            household_id=household.id, subject_id=subject.id, name="Pace Map"
-        )
+        lmap = LearningMap(household_id=household.id, subject_id=subject.id, name="Pace Map")
         db_session.add(lmap)
         await db_session.flush()
 
         node = LearningNode(
-            learning_map_id=lmap.id, household_id=household.id,
-            node_type=NodeType.skill, title="Pace Node",
+            learning_map_id=lmap.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Pace Node",
             estimated_minutes=30,
         )
         db_session.add(node)
         await db_session.flush()
 
-        db_session.add(ChildMapEnrollment(
-            child_id=child.id, household_id=household.id,
-            learning_map_id=lmap.id,
-        ))
-        db_session.add(ChildNodeState(
-            child_id=child.id, household_id=household.id,
-            node_id=node.id, mastery_level=MasteryLevel.mastered,
-            time_spent_minutes=25, attempts_count=2,
-        ))
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=child.id,
+                household_id=household.id,
+                learning_map_id=lmap.id,
+            )
+        )
+        db_session.add(
+            ChildNodeState(
+                child_id=child.id,
+                household_id=household.id,
+                node_id=node.id,
+                mastery_level=MasteryLevel.mastered,
+                time_spent_minutes=25,
+                attempts_count=2,
+            )
+        )
         await db_session.flush()
 
         resp = await auth_client.get(f"/api/v1/children/{child.id}/pace")
@@ -234,11 +289,15 @@ class TestPace:
 # Counterfactual
 # ══════════════════════════════════════════════════
 
-class TestCounterfactual:
 
+class TestCounterfactual:
     @pytest.mark.asyncio
     async def test_counterfactual_analysis(
-        self, auth_client, db_session, household, child,
+        self,
+        auth_client,
+        db_session,
+        household,
+        child,
     ):
         resp = await auth_client.post(
             f"/api/v1/children/{child.id}/counterfactual",
@@ -255,17 +314,20 @@ class TestCounterfactual:
 # Sync Protocol
 # ══════════════════════════════════════════════════
 
-class TestSync:
 
+class TestSync:
     @pytest.mark.asyncio
     async def test_sync_events(self, auth_client):
         now = datetime.now(UTC)
-        resp = await auth_client.post("/api/v1/sync", json={
-            "events": [
-                {"event_type": "activity_completed", "payload": {"id": "abc"}, "client_timestamp": now.isoformat()},
-                {"event_type": "attempt_submitted", "payload": {"id": "def"}, "client_timestamp": now.isoformat()},
-            ],
-        })
+        resp = await auth_client.post(
+            "/api/v1/sync",
+            json={
+                "events": [
+                    {"event_type": "activity_completed", "payload": {"id": "abc"}, "client_timestamp": now.isoformat()},
+                    {"event_type": "attempt_submitted", "payload": {"id": "def"}, "client_timestamp": now.isoformat()},
+                ],
+            },
+        )
         assert resp.status_code == 200
         data = resp.json()
         assert data["processed"] == 2
@@ -274,11 +336,14 @@ class TestSync:
     @pytest.mark.asyncio
     async def test_sync_drift_detection(self, auth_client):
         old = datetime.now(UTC) - timedelta(hours=25)
-        resp = await auth_client.post("/api/v1/sync", json={
-            "events": [
-                {"event_type": "test", "payload": {}, "client_timestamp": old.isoformat()},
-            ],
-        })
+        resp = await auth_client.post(
+            "/api/v1/sync",
+            json={
+                "events": [
+                    {"event_type": "test", "payload": {}, "client_timestamp": old.isoformat()},
+                ],
+            },
+        )
         assert resp.status_code == 200
         assert resp.json()["results"][0]["drift_warning"] is True
 
@@ -287,8 +352,8 @@ class TestSync:
 # Attempt Locking
 # ══════════════════════════════════════════════════
 
-class TestAttemptLocking:
 
+class TestAttemptLocking:
     @pytest.mark.asyncio
     async def test_lock_and_check(self, auth_client):
         activity_id = str(uuid.uuid4())
@@ -338,15 +403,18 @@ class TestAttemptLocking:
 # Device Register
 # ══════════════════════════════════════════════════
 
-class TestDeviceRegister:
 
+class TestDeviceRegister:
     @pytest.mark.asyncio
     async def test_register_device(self, auth_client):
-        resp = await auth_client.post("/api/v1/devices/register", json={
-            "device_token": "abc123",
-            "platform": "web",
-            "device_name": "Chrome on Laptop",
-        })
+        resp = await auth_client.post(
+            "/api/v1/devices/register",
+            json={
+                "device_token": "abc123",
+                "platform": "web",
+                "device_name": "Chrome on Laptop",
+            },
+        )
         assert resp.status_code == 201
         assert resp.json()["registered"] is True
 
@@ -355,16 +423,23 @@ class TestDeviceRegister:
 # Notification Log
 # ══════════════════════════════════════════════════
 
-class TestNotificationLog:
 
+class TestNotificationLog:
     @pytest.mark.asyncio
     async def test_notification_log(self, auth_client, db_session, household, user):
         from app.models.operational import NotificationLog
-        db_session.add(NotificationLog(
-            household_id=household.id, user_id=user.id,
-            channel="email", title="plan_ready: New Plan",
-            body="Test", sent=True, sent_at=datetime.now(UTC),
-        ))
+
+        db_session.add(
+            NotificationLog(
+                household_id=household.id,
+                user_id=user.id,
+                channel="email",
+                title="plan_ready: New Plan",
+                body="Test",
+                sent=True,
+                sent_at=datetime.now(UTC),
+            )
+        )
         await db_session.flush()
 
         resp = await auth_client.get("/api/v1/notifications/log")
@@ -376,8 +451,8 @@ class TestNotificationLog:
 # Metrics
 # ══════════════════════════════════════════════════
 
-class TestMetrics:
 
+class TestMetrics:
     @pytest.mark.asyncio
     async def test_prometheus_metrics(self, auth_client):
         resp = await auth_client.get("/api/v1/metrics")
@@ -389,28 +464,30 @@ class TestMetrics:
 # FSRS Optimizer
 # ══════════════════════════════════════════════════
 
-class TestFSRSOptimizer:
 
+class TestFSRSOptimizer:
     @pytest.mark.asyncio
     async def test_child_has_fsrs_weights_field(self, db_session, household):
         """Verify the model field exists."""
         child = Child(
             household_id=household.id,
-            first_name="FSRS", last_name="Test",
+            first_name="FSRS",
+            last_name="Test",
             fsrs_weights=[1.0, 2.0, 3.0],
         )
         db_session.add(child)
         await db_session.flush()
 
-        result = await db_session.execute(
-            select(Child).where(Child.id == child.id)
-        )
+        result = await db_session.execute(select(Child).where(Child.id == child.id))
         loaded = result.scalar_one()
         assert loaded.fsrs_weights == [1.0, 2.0, 3.0]
 
     @pytest.mark.asyncio
     async def test_personalized_weights_used_in_review(
-        self, db_session, household, learning_map,
+        self,
+        db_session,
+        household,
+        learning_map,
     ):
         """Verify state engine looks up child weights."""
         from app.services.state_engine import process_review
@@ -424,15 +501,20 @@ class TestFSRSOptimizer:
         await db_session.flush()
 
         node = LearningNode(
-            learning_map_id=learning_map.id, household_id=household.id,
-            node_type=NodeType.skill, title="Weight Test Node",
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Weight Test Node",
         )
         db_session.add(node)
         await db_session.flush()
 
         # Process review — should work with None weights (uses defaults)
         result = await process_review(
-            db_session, child.id, household.id, node.id,
+            db_session,
+            child.id,
+            household.id,
+            node.id,
             confidence=0.7,
         )
         assert result["mastery_level"] is not None
