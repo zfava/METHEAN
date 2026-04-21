@@ -39,11 +39,56 @@ router = APIRouter(tags=["spec-coverage"])
 # engine dict at module-import time.
 _US_STATE_CODES: frozenset[str] = frozenset(
     {
-        "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
-        "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
-        "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
-        "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
-        "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY",
+        "AL",
+        "AK",
+        "AZ",
+        "AR",
+        "CA",
+        "CO",
+        "CT",
+        "DE",
+        "FL",
+        "GA",
+        "HI",
+        "ID",
+        "IL",
+        "IN",
+        "IA",
+        "KS",
+        "KY",
+        "LA",
+        "ME",
+        "MD",
+        "MA",
+        "MI",
+        "MN",
+        "MS",
+        "MO",
+        "MT",
+        "NE",
+        "NV",
+        "NH",
+        "NJ",
+        "NM",
+        "NY",
+        "NC",
+        "ND",
+        "OH",
+        "OK",
+        "OR",
+        "PA",
+        "RI",
+        "SC",
+        "SD",
+        "TN",
+        "TX",
+        "UT",
+        "VT",
+        "VA",
+        "WA",
+        "WV",
+        "WI",
+        "WY",
         "DC",
     }
 )
@@ -91,6 +136,7 @@ class ChildPreferencesUpdate(BaseModel):
     learning_style: dict | None = None
     interests: list | None = None
     preferred_schedule: dict | None = None
+    subject_levels: dict | None = None
 
 
 class SyncEvent(BaseModel):
@@ -146,6 +192,42 @@ async def get_household_settings(
     result = await db.execute(select(Household).where(Household.id == user.household_id))
     household = result.scalar_one()
     return _household_settings_dict(household)
+
+
+# Academic vs vocational assessment types. Used by the assessment UI
+# and the curriculum builder. Academic types are parent-observable;
+# vocational types require a practical / trade demonstration.
+_ASSESSMENT_TYPES = {
+    "academic": [
+        "parent_observation",
+        "narration",
+        "written",
+        "demonstration",
+        "project",
+        "timed_exam",
+        "research_paper",
+        "oral_defense",
+        "peer_assessment",
+        "portfolio_review",
+    ],
+    "vocational": [
+        "practical_demo",
+        "weld_inspection",
+        "clinical_evaluation",
+        "lab_report",
+        "competency_signoff",
+        "safety_check",
+        "tool_qualification",
+    ],
+}
+
+
+@router.get("/assessment-types")
+async def list_assessment_types(
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Catalog of assessment types, grouped by domain."""
+    return {k: list(v) for k, v in _ASSESSMENT_TYPES.items()}
 
 
 @router.put("/household/settings")
@@ -361,6 +443,16 @@ async def update_child_preferences(
         prefs.interests = body.interests
     if body.preferred_schedule is not None:
         prefs.preferred_schedule = body.preferred_schedule
+    if body.subject_levels is not None:
+        from app.core.learning_levels import VALID_LEVELS
+
+        invalid = {subject: level for subject, level in body.subject_levels.items() if level not in VALID_LEVELS}
+        if invalid:
+            raise HTTPException(
+                status_code=400,
+                detail=(f"Invalid level(s): {invalid}. Must be one of {sorted(VALID_LEVELS)}"),
+            )
+        prefs.subject_levels = body.subject_levels
     await db.flush()
     return {"child_id": str(child_id), "daily_duration_minutes": prefs.daily_duration_minutes}
 
@@ -941,3 +1033,237 @@ async def prometheus_metrics(request: Request) -> str:
     ]
 
     return PlainTextResponse("\n".join(lines), media_type="text/plain")
+
+
+# ══════════════════════════════════════════════════
+# Certification tracking (JSONB-backed via ChildPreferences.certification_progress)
+# ══════════════════════════════════════════════════
+
+
+class CertificationCreate(BaseModel):
+    name: str
+    subject: str
+    target_date: str | None = None
+    requirements: list[dict] | None = None
+    notes: str | None = None
+
+
+class CertificationUpdate(BaseModel):
+    status: str | None = None
+    target_date: str | None = None
+    requirements: list[dict] | None = None
+    notes: str | None = None
+
+
+async def _get_or_create_prefs(db: AsyncSession, child_id, household_id):
+    result = await db.execute(select(ChildPreferences).where(ChildPreferences.child_id == child_id))
+    prefs = result.scalar_one_or_none()
+    if not prefs:
+        prefs = ChildPreferences(child_id=child_id, household_id=household_id)
+        db.add(prefs)
+        await db.flush()
+    return prefs
+
+
+@router.get("/children/{child_id}/certifications")
+async def list_certifications(
+    child_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> list:
+    await _get_child_or_404(db, child_id, user.household_id)
+    prefs = await _get_or_create_prefs(db, child_id, user.household_id)
+    return prefs.certification_progress or []
+
+
+@router.post("/children/{child_id}/certifications", status_code=201)
+async def add_certification(
+    child_id: uuid.UUID,
+    body: CertificationCreate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    await _get_child_or_404(db, child_id, user.household_id)
+    prefs = await _get_or_create_prefs(db, child_id, user.household_id)
+    certs = list(prefs.certification_progress or [])
+    cert_id = body.name.lower().replace(" ", "-").replace("(", "").replace(")", "")
+    if any(c["id"] == cert_id for c in certs):
+        raise HTTPException(409, "Certification already exists for this child")
+    from datetime import date as d
+
+    new_cert = {
+        "id": cert_id,
+        "name": body.name,
+        "subject": body.subject,
+        "status": "not_started",
+        "target_date": body.target_date,
+        "requirements": body.requirements or [],
+        "notes": body.notes or "",
+        "created_at": d.today().isoformat(),
+    }
+    certs.append(new_cert)
+    prefs.certification_progress = certs
+    from sqlalchemy.orm.attributes import flag_modified
+
+    flag_modified(prefs, "certification_progress")
+    await db.flush()
+    return new_cert
+
+
+@router.put("/children/{child_id}/certifications/{cert_id}")
+async def update_certification(
+    child_id: uuid.UUID,
+    cert_id: str,
+    body: CertificationUpdate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    await _get_child_or_404(db, child_id, user.household_id)
+    prefs = await _get_or_create_prefs(db, child_id, user.household_id)
+    certs = list(prefs.certification_progress or [])
+    cert = next((c for c in certs if c["id"] == cert_id), None)
+    if not cert:
+        raise HTTPException(404, "Certification not found")
+    if body.status:
+        valid = {"not_started", "in_progress", "ready_for_exam", "certified"}
+        if body.status not in valid:
+            raise HTTPException(400, f"status must be: {', '.join(sorted(valid))}")
+        cert["status"] = body.status
+    if body.target_date:
+        cert["target_date"] = body.target_date
+    if body.requirements is not None:
+        cert["requirements"] = body.requirements
+    if body.notes is not None:
+        cert["notes"] = body.notes
+    prefs.certification_progress = certs
+    from sqlalchemy.orm.attributes import flag_modified
+
+    flag_modified(prefs, "certification_progress")
+    await db.flush()
+    return cert
+
+
+# ══════════════════════════════════════════════════
+# Mentors (JSONB-backed via Household.settings["mentors"])
+# ══════════════════════════════════════════════════
+
+
+class MentorCreate(BaseModel):
+    name: str
+    trade: str
+    relationship: str | None = None
+    availability: str | None = None
+    children: list[str] | None = None
+    notes: str | None = None
+
+
+@router.get("/household/mentors")
+async def list_mentors(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> list:
+    household = (await db.execute(select(Household).where(Household.id == user.household_id))).scalar_one()
+    return (household.settings or {}).get("mentors", [])
+
+
+@router.post("/household/mentors", status_code=201)
+async def add_mentor(
+    body: MentorCreate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    household = (await db.execute(select(Household).where(Household.id == user.household_id))).scalar_one()
+    settings = dict(household.settings or {})
+    mentors = list(settings.get("mentors", []))
+    mentor = {
+        "id": f"mentor-{len(mentors) + 1}",
+        "name": body.name,
+        "trade": body.trade,
+        "relationship": body.relationship or "",
+        "availability": body.availability or "",
+        "children": body.children or [],
+        "notes": body.notes or "",
+    }
+    mentors.append(mentor)
+    settings["mentors"] = mentors
+    household.settings = settings
+    from sqlalchemy.orm.attributes import flag_modified
+
+    flag_modified(household, "settings")
+    await db.flush()
+    return mentor
+
+
+@router.delete("/household/mentors/{mentor_id}")
+async def remove_mentor(
+    mentor_id: str,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    household = (await db.execute(select(Household).where(Household.id == user.household_id))).scalar_one()
+    settings = dict(household.settings or {})
+    mentors = list(settings.get("mentors", []))
+    settings["mentors"] = [m for m in mentors if m["id"] != mentor_id]
+    household.settings = settings
+    from sqlalchemy.orm.attributes import flag_modified
+
+    flag_modified(household, "settings")
+    await db.flush()
+    return {"deleted": True}
+
+
+# ══════════════════════════════════════════════════
+# Subject Catalog & Learning Levels
+# ══════════════════════════════════════════════════
+
+
+@router.get("/subjects/catalog")
+async def get_subject_catalog(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Return the full subject catalog with learning levels."""
+    from app.core.learning_levels import LEARNING_LEVELS, SUBJECT_CATALOG
+
+    household = (await db.execute(select(Household).where(Household.id == user.household_id))).scalar_one()
+    custom = (household.settings or {}).get("custom_subjects", [])
+    return {
+        "academic": SUBJECT_CATALOG["academic"],
+        "vocational": SUBJECT_CATALOG["vocational"],
+        "custom": custom,
+        "levels": LEARNING_LEVELS,
+    }
+
+
+class CustomSubjectCreate(BaseModel):
+    name: str = Field(min_length=1, max_length=255)
+    category: str = "custom"
+    description: str | None = None
+
+
+@router.post("/subjects/custom", status_code=201)
+async def add_custom_subject(
+    body: CustomSubjectCreate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Add a custom subject to the household catalog."""
+    household = (await db.execute(select(Household).where(Household.id == user.household_id))).scalar_one()
+    settings = dict(household.settings or {})
+    custom = list(settings.get("custom_subjects", []))
+    if any(s["name"].lower() == body.name.lower() for s in custom):
+        raise HTTPException(409, f"Subject '{body.name}' already exists")
+    new_subj = {
+        "id": body.name.lower().replace(" ", "_"),
+        "name": body.name,
+        "category": body.category,
+        "description": body.description or "",
+    }
+    custom.append(new_subj)
+    settings["custom_subjects"] = custom
+    household.settings = settings
+    from sqlalchemy.orm.attributes import flag_modified
+
+    flag_modified(household, "settings")
+    await db.flush()
+    return new_subj

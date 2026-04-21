@@ -397,6 +397,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Change Password Api V1 Auth Password Put"
                 }
               }
@@ -448,6 +449,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Notification Preferences Api V1 Auth Me Notification Preferences Get"
                 }
               }
@@ -496,6 +498,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "additionalProperties": true,
                 "title": "Body"
               }
             }
@@ -508,6 +511,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Update Notification Preferences Api V1 Auth Me Notification Preferences Put"
                 }
               }
@@ -550,6 +554,7 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "additionalProperties": true,
                   "type": "object",
                   "title": "Response Forgot Password Api V1 Auth Forgot Password Post"
                 }
@@ -593,6 +598,7 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "additionalProperties": true,
                   "type": "object",
                   "title": "Response Reset Password Endpoint Api V1 Auth Reset Password Post"
                 }
@@ -624,6 +630,7 @@
           "content": {
             "application/json": {
               "schema": {
+                "additionalProperties": true,
                 "type": "object",
                 "title": "Body"
               }
@@ -637,6 +644,7 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "additionalProperties": true,
                   "type": "object",
                   "title": "Response Verify Email Api V1 Auth Verify Email Post"
                 }
@@ -689,6 +697,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Resend Verification Api V1 Auth Resend Verification Post"
                 }
               }
@@ -750,6 +759,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Invite Family Member Api V1 Auth Household Invite Post"
                 }
               }
@@ -863,6 +873,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Revoke Invite Api V1 Auth Household Invites  Invite Id  Delete"
                 }
               }
@@ -905,8 +916,121 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "additionalProperties": true,
                   "type": "object",
                   "title": "Response Accept Invite Api V1 Auth Accept Invite Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/household/academic-calendar": {
+      "get": {
+        "tags": [
+          "academic-calendar"
+        ],
+        "summary": "Get Calendar",
+        "description": "Return the household's academic calendar, merged with defaults.",
+        "operationId": "get_calendar_api_v1_household_academic_calendar_get",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Calendar Api V1 Household Academic Calendar Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "academic-calendar"
+        ],
+        "summary": "Update Calendar",
+        "description": "Persist calendar preferences under household.settings.academic_calendar.\n\nValidates:\n- total_instructional_weeks is between 1 and 52\n- instruction_days_per_week is between 1 and 7\n- instruction_days are real weekday names\n- schedule_type is one of the allowed values",
+        "operationId": "update_calendar_api_v1_household_academic_calendar_put",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AcademicCalendarUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Update Calendar Api V1 Household Academic Calendar Put"
                 }
               }
             }
@@ -1040,6 +1164,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response List Subjects Api V1 Subjects Get"
                 }
               }
@@ -1285,6 +1410,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response List Learning Maps Api V1 Learning Maps Get"
                 }
               }
@@ -1697,6 +1823,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Credit Summary Api V1 Learning Maps  Map Id  Credit Summary Get"
                 }
               }
@@ -1758,6 +1885,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Cohort Analytics Api V1 Learning Maps  Map Id  Cohort Get"
                 }
               }
@@ -2161,6 +2289,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Batch Update Api V1 Learning Maps  Map Id  Batch Post"
                 }
               }
@@ -2232,6 +2361,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Map Existing Curriculum Endpoint Api V1 Children  Child Id  Curriculum Map Existing Post"
                 }
               }
@@ -2292,6 +2422,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "additionalProperties": true,
                 "title": "Proposal"
               }
             }
@@ -2304,6 +2435,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Apply Mapping Endpoint Api V1 Children  Child Id  Curriculum Apply Mapping Post"
                 }
               }
@@ -2365,6 +2497,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Enrich Map Nodes Api V1 Learning Maps  Map Id  Enrich Post"
                 }
               }
@@ -2436,6 +2569,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Enrich Single Node Endpoint Api V1 Learning Maps  Map Id  Nodes  Node Id  Enrich Post"
                 }
               }
@@ -2507,6 +2641,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Node Content Api V1 Learning Maps  Map Id  Nodes  Node Id  Content Get"
                 }
               }
@@ -2744,6 +2879,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Node History Api V1 Children  Child Id  Nodes  Node Id  History Get"
                 }
               }
@@ -3082,6 +3218,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Learning Context Api V1 Activities  Activity Id  Learn Get"
                 }
               }
@@ -3159,6 +3296,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response List Governance Rules Api V1 Governance Rules Get"
                 }
               }
@@ -3343,6 +3481,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Delete Governance Rule Api V1 Governance Rules  Rule Id  Delete"
                 }
               }
@@ -3404,6 +3543,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Generate Report Api V1 Governance Report Post"
                 }
               }
@@ -3465,6 +3605,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Attest Report Api V1 Governance Report Attest Post"
                 }
               }
@@ -3517,7 +3658,8 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "type": "object",
+                    "additionalProperties": true
                   },
                   "title": "Response Upcoming Triggers Api V1 Governance Rules Upcoming Get"
                 }
@@ -3728,6 +3870,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response List Plans Api V1 Children  Child Id  Plans Get"
                 }
               }
@@ -3874,6 +4017,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Approve Activity Api V1 Plans  Plan Id  Activities  Activity Id  Approve Put"
                 }
               }
@@ -3954,6 +4098,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Reject Activity Api V1 Plans  Plan Id  Activities  Activity Id  Reject Put"
                 }
               }
@@ -4014,6 +4159,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "additionalProperties": true,
                 "title": "Body"
               }
             }
@@ -4026,6 +4172,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Reschedule Activity Api V1 Activities  Activity Id  Reschedule Put"
                 }
               }
@@ -4087,6 +4234,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Create Manual Activity Api V1 Activities Post"
                 }
               }
@@ -4158,6 +4306,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Log Manual Time Api V1 Children  Child Id  Time Log Post"
                 }
               }
@@ -4218,6 +4367,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Lock Plan Api V1 Plans  Plan Id  Lock Put"
                 }
               }
@@ -4278,6 +4428,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Unlock Plan Api V1 Plans  Plan Id  Unlock Put"
                 }
               }
@@ -4631,6 +4782,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response List Advisor Reports Api V1 Children  Child Id  Advisor Reports Get"
                 }
               }
@@ -4800,6 +4952,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response List Ai Runs Api V1 Ai Runs Get"
                 }
               }
@@ -4920,6 +5073,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Ai Run Context Detail Api V1 Ai Runs  Run Id  Context Detail Get"
                 }
               }
@@ -4981,6 +5135,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Decision Trace Api V1 Plans  Plan Id  Decision Trace Get"
                 }
               }
@@ -5058,6 +5213,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response List Governance Events Api V1 Governance Events Get"
                 }
               }
@@ -5136,6 +5292,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Governance Queue Api V1 Governance Queue Get"
                 }
               }
@@ -5239,6 +5396,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response List Alerts Api V1 Children  Child Id  Alerts Get"
                 }
               }
@@ -5299,6 +5457,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Acknowledge Alert Api V1 Alerts  Alert Id  Acknowledge Put"
                 }
               }
@@ -5375,6 +5534,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Dismiss Alert Api V1 Alerts  Alert Id  Dismiss Put"
                 }
               }
@@ -5496,6 +5656,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Send Test Notification Api V1 Notifications Test Post"
                 }
               }
@@ -5583,6 +5744,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response List Snapshots Api V1 Children  Child Id  Snapshots Get"
                 }
               }
@@ -5663,6 +5825,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Compare Snapshots Api V1 Children  Child Id  Snapshots Compare Get"
                 }
               }
@@ -5744,6 +5907,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Compliance Report Api V1 Children  Child Id  Compliance Report Get"
                 }
               }
@@ -5832,6 +5996,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Upload Artifact Endpoint Api V1 Children  Child Id  Artifacts Post"
                 }
               }
@@ -5918,6 +6083,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response List Artifacts Api V1 Children  Child Id  Artifacts Get"
                 }
               }
@@ -6043,6 +6209,55 @@
       }
     },
     "/api/v1/household/settings": {
+      "get": {
+        "tags": [
+          "spec-coverage"
+        ],
+        "summary": "Get Household Settings",
+        "operationId": "get_household_settings_api_v1_household_settings_get",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Household Settings Api V1 Household Settings Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
       "put": {
         "tags": [
           "spec-coverage"
@@ -6084,7 +6299,60 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Update Household Settings Api V1 Household Settings Put"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/assessment-types": {
+      "get": {
+        "tags": [
+          "spec-coverage"
+        ],
+        "summary": "List Assessment Types",
+        "description": "Catalog of assessment types, grouped by domain.",
+        "operationId": "list_assessment_types_api_v1_assessment_types_get",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response List Assessment Types Api V1 Assessment Types Get"
                 }
               }
             }
@@ -6145,6 +6413,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Update Philosophy Api V1 Household Philosophy Put"
                 }
               }
@@ -6193,6 +6462,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Philosophy Api V1 Household Philosophy Get"
                 }
               }
@@ -6245,7 +6515,8 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "type": "object",
+                    "additionalProperties": true
                   },
                   "title": "Response List Children Api V1 Children Get"
                 }
@@ -6305,6 +6576,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Create Child Api V1 Children Post"
                 }
               }
@@ -6375,6 +6647,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Update Child Api V1 Children  Child Id  Patch"
                 }
               }
@@ -6445,6 +6718,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Update Child Preferences Api V1 Children  Child Id  Preferences Put"
                 }
               }
@@ -6524,7 +6798,8 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "type": "object",
+                    "additionalProperties": true
                   },
                   "title": "Response Get Today Api V1 Children  Child Id  Today Get"
                 }
@@ -6587,7 +6862,8 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "type": "object",
+                    "additionalProperties": true
                   },
                   "title": "Response List User Permissions Api V1 Users  User Id  Permissions Get"
                 }
@@ -6657,6 +6933,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Grant Permission Api V1 Users  User Id  Permissions Post"
                 }
               }
@@ -6727,6 +7004,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Revoke Permission Api V1 Users  User Id  Permissions  Permission Id  Delete"
                 }
               }
@@ -6788,6 +7066,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Validate Map Api V1 Learning Maps  Map Id  Validate Post"
                 }
               }
@@ -6867,6 +7146,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Map Diff Api V1 Learning Maps  Map Id  Diff Get"
                 }
               }
@@ -6928,6 +7208,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Pace Api V1 Children  Child Id  Pace Get"
                 }
               }
@@ -6999,6 +7280,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Counterfactual Api V1 Children  Child Id  Counterfactual Post"
                 }
               }
@@ -7060,6 +7342,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Sync Events Api V1 Sync Post"
                 }
               }
@@ -7120,6 +7403,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Lock Status Api V1 Activities  Activity Id  Lock Status Get"
                 }
               }
@@ -7190,6 +7474,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Lock Activity Api V1 Activities  Activity Id  Lock Post"
                 }
               }
@@ -7248,6 +7533,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Unlock Activity Api V1 Activities  Activity Id  Lock Delete"
                 }
               }
@@ -7308,6 +7594,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Register Device Api V1 Devices Register Post"
                 }
               }
@@ -7386,7 +7673,8 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object"
+                    "type": "object",
+                    "additionalProperties": true
                   },
                   "title": "Response Notification Log Api V1 Notifications Log Get"
                 }
@@ -7422,6 +7710,500 @@
                 "schema": {
                   "type": "string",
                   "title": "Response Prometheus Metrics Api V1 Metrics Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/children/{child_id}/certifications": {
+      "get": {
+        "tags": [
+          "spec-coverage"
+        ],
+        "summary": "List Certifications",
+        "operationId": "list_certifications_api_v1_children__child_id__certifications_get",
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {},
+                  "title": "Response List Certifications Api V1 Children  Child Id  Certifications Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "spec-coverage"
+        ],
+        "summary": "Add Certification",
+        "operationId": "add_certification_api_v1_children__child_id__certifications_post",
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CertificationCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Add Certification Api V1 Children  Child Id  Certifications Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/children/{child_id}/certifications/{cert_id}": {
+      "put": {
+        "tags": [
+          "spec-coverage"
+        ],
+        "summary": "Update Certification",
+        "operationId": "update_certification_api_v1_children__child_id__certifications__cert_id__put",
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          },
+          {
+            "name": "cert_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Cert Id"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CertificationUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Update Certification Api V1 Children  Child Id  Certifications  Cert Id  Put"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/household/mentors": {
+      "get": {
+        "tags": [
+          "spec-coverage"
+        ],
+        "summary": "List Mentors",
+        "operationId": "list_mentors_api_v1_household_mentors_get",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {},
+                  "title": "Response List Mentors Api V1 Household Mentors Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "spec-coverage"
+        ],
+        "summary": "Add Mentor",
+        "operationId": "add_mentor_api_v1_household_mentors_post",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MentorCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Add Mentor Api V1 Household Mentors Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/household/mentors/{mentor_id}": {
+      "delete": {
+        "tags": [
+          "spec-coverage"
+        ],
+        "summary": "Remove Mentor",
+        "operationId": "remove_mentor_api_v1_household_mentors__mentor_id__delete",
+        "parameters": [
+          {
+            "name": "mentor_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Mentor Id"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Remove Mentor Api V1 Household Mentors  Mentor Id  Delete"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/subjects/catalog": {
+      "get": {
+        "tags": [
+          "spec-coverage"
+        ],
+        "summary": "Get Subject Catalog",
+        "description": "Return the full subject catalog with learning levels.",
+        "operationId": "get_subject_catalog_api_v1_subjects_catalog_get",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Subject Catalog Api V1 Subjects Catalog Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/subjects/custom": {
+      "post": {
+        "tags": [
+          "spec-coverage"
+        ],
+        "summary": "Add Custom Subject",
+        "description": "Add a custom subject to the household catalog.",
+        "operationId": "add_custom_subject_api_v1_subjects_custom_post",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CustomSubjectCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Add Custom Subject Api V1 Subjects Custom Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
                 }
               }
             }
@@ -7481,6 +8263,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Generate Plan Endpoint Api V1 Children  Child Id  Education Plan Generate Post"
                 }
               }
@@ -7541,6 +8324,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Plan Api V1 Children  Child Id  Education Plan Get"
                 }
               }
@@ -7609,6 +8393,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Update Plan Api V1 Children  Child Id  Education Plan Put"
                 }
               }
@@ -7669,6 +8454,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Approve Plan Endpoint Api V1 Children  Child Id  Education Plan Approve Post"
                 }
               }
@@ -7738,6 +8524,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Generate Curricula Endpoint Api V1 Children  Child Id  Education Plan Years  Year Key  Generate Curricula Post"
                 }
               }
@@ -7808,6 +8595,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Create Assessment Api V1 Children  Child Id  Assessments Post"
                 }
               }
@@ -7925,6 +8713,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response List Assessments Api V1 Children  Child Id  Assessments Get"
                 }
               }
@@ -7995,6 +8784,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Create Portfolio Entry Api V1 Children  Child Id  Portfolio Post"
                 }
               }
@@ -8080,6 +8870,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response List Portfolio Api V1 Children  Child Id  Portfolio Get"
                 }
               }
@@ -8156,6 +8947,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Transcript Api V1 Children  Child Id  Transcript Get"
                 }
               }
@@ -8236,6 +9028,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Portfolio Export Api V1 Children  Child Id  Portfolio Export Get"
                 }
               }
@@ -8269,6 +9062,7 @@
               "application/json": {
                 "schema": {
                   "items": {
+                    "additionalProperties": true,
                     "type": "object"
                   },
                   "type": "array",
@@ -8322,6 +9116,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get State Detail Api V1 Compliance States  Code  Get"
                 }
               }
@@ -8393,6 +9188,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Compliance Check Api V1 Children  Child Id  Compliance Check Get"
                 }
               }
@@ -8473,6 +9269,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Attendance Api V1 Children  Child Id  Attendance Get"
                 }
               }
@@ -8533,6 +9330,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Hours Api V1 Children  Child Id  Hours Get"
                 }
               }
@@ -8566,6 +9364,7 @@
               "application/json": {
                 "schema": {
                   "items": {
+                    "additionalProperties": true,
                     "type": "object"
                   },
                   "type": "array",
@@ -8628,6 +9427,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Check Domain Compliance Api Api V1 Compliance Domain  Domain  Check  Child Id  Get"
                 }
               }
@@ -10540,6 +11340,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Test Daily Summary Api V1 Notifications Test Daily Summary Post"
                 }
               }
@@ -11306,6 +12107,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Intelligence Api V1 Children  Child Id  Intelligence Get"
                 }
               }
@@ -11377,6 +12179,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Add Observation Api V1 Children  Child Id  Intelligence Observations Put"
                 }
               }
@@ -11447,6 +12250,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Remove Observation Api V1 Children  Child Id  Intelligence Observations  Index  Delete"
                 }
               }
@@ -11518,6 +12322,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Override Intelligence Api V1 Children  Child Id  Intelligence Override Put"
                 }
               }
@@ -11569,6 +12374,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Governance Intelligence Api V1 Household Governance Intelligence Get"
                 }
               }
@@ -11630,6 +12436,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response List Achievements Api V1 Children  Child Id  Achievements Get"
                 }
               }
@@ -11691,6 +12498,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Child Streak Api V1 Children  Child Id  Streak Get"
                 }
               }
@@ -11759,6 +12567,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Subscribe Api V1 Billing Subscribe Post"
                 }
               }
@@ -11810,6 +12619,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Status Api V1 Billing Status Get"
                 }
               }
@@ -11861,6 +12671,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Cancel Api V1 Billing Cancel Post"
                 }
               }
@@ -11929,6 +12740,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Portal Api V1 Billing Portal Post"
                 }
               }
@@ -11961,6 +12773,7 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "additionalProperties": true,
                   "type": "object",
                   "title": "Response Webhook Api V1 Billing Webhook Post"
                 }
@@ -12003,6 +12816,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Current Usage Api V1 Usage Current Get"
                 }
               }
@@ -12054,6 +12868,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Usage Breakdown Api V1 Usage Breakdown Get"
                 }
               }
@@ -12105,6 +12920,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Ai Daily Usage Api V1 Usage Ai Daily Get"
                 }
               }
@@ -12166,6 +12982,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Calibration Profile Api V1 Children  Child Id  Calibration Get"
                 }
               }
@@ -12221,7 +13038,7 @@
               "anyOf": [
                 {
                   "type": "number",
-                  "minimum": 0.0
+                  "minimum": 0
                 },
                 {
                   "type": "null"
@@ -12293,6 +13110,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response List Predictions Api V1 Children  Child Id  Calibration Predictions Get"
                 }
               }
@@ -12364,6 +13182,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Update Calibration Offset Api V1 Children  Child Id  Calibration Offset Patch"
                 }
               }
@@ -12437,6 +13256,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Drift History Api V1 Children  Child Id  Calibration Drift History Get"
                 }
               }
@@ -12498,6 +13318,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Temporal Drift Api V1 Children  Child Id  Calibration Temporal Drift Get"
                 }
               }
@@ -12559,6 +13380,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Confidence Distribution Api V1 Children  Child Id  Calibration Confidence Distribution Get"
                 }
               }
@@ -12620,6 +13442,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Subject Detail Api V1 Children  Child Id  Calibration Subject Detail Get"
                 }
               }
@@ -12681,6 +13504,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Export Calibration Data Api V1 Children  Child Id  Calibration Export Get"
                 }
               }
@@ -12742,6 +13566,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Style Vector Api V1 Children  Child Id  Style Vector Get"
                 }
               }
@@ -12813,6 +13638,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Set Style Override Api V1 Children  Child Id  Style Vector Overrides Patch"
                 }
               }
@@ -12884,6 +13710,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Set Style Bounds Api V1 Children  Child Id  Style Vector Bounds Patch"
                 }
               }
@@ -12945,6 +13772,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Style Vector History Api V1 Children  Child Id  Style Vector History Get"
                 }
               }
@@ -13068,6 +13896,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response List Family Insights Api V1 Household Family Insights Get"
                 }
               }
@@ -13129,6 +13958,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Family Insight Api V1 Household Family Insights  Insight Id  Get"
                 }
               }
@@ -13200,6 +14030,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Update Insight Status Api V1 Household Family Insights  Insight Id  Status Patch"
                 }
               }
@@ -13251,6 +14082,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Insight Config Api V1 Household Family Insights Config Get"
                 }
               }
@@ -13310,6 +14142,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Update Insight Config Api V1 Household Family Insights Config Patch"
                 }
               }
@@ -13361,6 +14194,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Insight Summary Api V1 Household Family Insights Summary Get"
                 }
               }
@@ -13477,6 +14311,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response List Anomalies Api V1 Children  Child Id  Wellbeing Anomalies Get"
                 }
               }
@@ -13548,6 +14383,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Anomaly Api V1 Children  Child Id  Wellbeing Anomalies  Anomaly Id  Get"
                 }
               }
@@ -13629,6 +14465,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Update Anomaly Status Api V1 Children  Child Id  Wellbeing Anomalies  Anomaly Id  Status Patch"
                 }
               }
@@ -13690,6 +14527,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Config Api V1 Children  Child Id  Wellbeing Config Get"
                 }
               }
@@ -13759,6 +14597,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Update Config Api V1 Children  Child Id  Wellbeing Config Patch"
                 }
               }
@@ -13820,6 +14659,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Summary Api V1 Children  Child Id  Wellbeing Summary Get"
                 }
               }
@@ -13881,6 +14721,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get Child Dashboard Api V1 Children  Child Id  Dashboard Get"
                 }
               }
@@ -13932,6 +14773,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "additionalProperties": true,
                   "title": "Response Get My Dashboard Api V1 Dashboard Me Get"
                 }
               }
@@ -13961,6 +14803,7 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "additionalProperties": true,
                   "type": "object",
                   "title": "Response Health Health Get"
                 }
@@ -13981,6 +14824,7 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "additionalProperties": true,
                   "type": "object",
                   "title": "Response Health Ready Health Ready Get"
                 }
@@ -14049,6 +14893,7 @@
           "input_data": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -14060,6 +14905,7 @@
           "output_data": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -14126,6 +14972,98 @@
           "created_at"
         ],
         "title": "AIRunResponse"
+      },
+      "AcademicCalendarUpdate": {
+        "properties": {
+          "schedule_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schedule Type"
+          },
+          "total_instructional_weeks": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total Instructional Weeks"
+          },
+          "instruction_days_per_week": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Instruction Days Per Week"
+          },
+          "instruction_days": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Instruction Days"
+          },
+          "breaks": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Breaks"
+          },
+          "start_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Start Date"
+          },
+          "daily_target_minutes": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Daily Target Minutes"
+          }
+        },
+        "type": "object",
+        "title": "AcademicCalendarUpdate",
+        "description": "All fields optional so partial updates work."
       },
       "AcceptInviteRequest": {
         "properties": {
@@ -14325,6 +15263,7 @@
             "title": "Period End"
           },
           "content": {
+            "additionalProperties": true,
             "type": "object",
             "title": "Content"
           },
@@ -14412,6 +15351,7 @@
           "rubric_scores": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -14563,6 +15503,7 @@
           "feedback": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -14644,6 +15585,7 @@
           "feedback": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -14977,7 +15919,7 @@
         "properties": {
           "file": {
             "type": "string",
-            "format": "binary",
+            "contentMediaType": "application/octet-stream",
             "title": "File"
           }
         },
@@ -15061,6 +16003,7 @@
           },
           "difficulty_adjustments": {
             "items": {
+              "additionalProperties": true,
               "type": "object"
             },
             "type": "array",
@@ -15068,6 +16011,7 @@
           },
           "suggested_additions": {
             "items": {
+              "additionalProperties": true,
               "type": "object"
             },
             "type": "array",
@@ -15075,6 +16019,7 @@
           },
           "suggested_removals": {
             "items": {
+              "additionalProperties": true,
               "type": "object"
             },
             "type": "array",
@@ -15099,6 +16044,115 @@
           "rationale"
         ],
         "title": "CartographerRecommendation"
+      },
+      "CertificationCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "subject": {
+            "type": "string",
+            "title": "Subject"
+          },
+          "target_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Date"
+          },
+          "requirements": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Requirements"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "subject"
+        ],
+        "title": "CertificationCreate"
+      },
+      "CertificationUpdate": {
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Status"
+          },
+          "target_date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Target Date"
+          },
+          "requirements": {
+            "anyOf": [
+              {
+                "items": {
+                  "additionalProperties": true,
+                  "type": "object"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Requirements"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "title": "CertificationUpdate"
       },
       "ChangePasswordRequest": {
         "properties": {
@@ -15257,6 +16311,7 @@
           "learning_style": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -15280,6 +16335,7 @@
           "preferred_schedule": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -15287,6 +16343,18 @@
               }
             ],
             "title": "Preferred Schedule"
+          },
+          "subject_levels": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subject Levels"
           }
         },
         "type": "object",
@@ -15415,6 +16483,7 @@
           "custom_thresholds": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -15443,6 +16512,7 @@
           "pattern_settings": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -15458,6 +16528,7 @@
       "CounterfactualRequest": {
         "properties": {
           "changes": {
+            "additionalProperties": true,
             "type": "object",
             "title": "Changes"
           }
@@ -15534,6 +16605,37 @@
           "name"
         ],
         "title": "CreateResourceRequest"
+      },
+      "CustomSubjectCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 255,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category",
+            "default": "custom"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "title": "CustomSubjectCreate"
       },
       "DeviceRegisterRequest": {
         "properties": {
@@ -15818,10 +16920,12 @@
       "GeneratePlanRequest": {
         "properties": {
           "goals": {
+            "additionalProperties": true,
             "type": "object",
             "title": "Goals"
           },
           "baseline_assessment": {
+            "additionalProperties": true,
             "type": "object",
             "title": "Baseline Assessment"
           },
@@ -15942,6 +17046,7 @@
             "title": "Description"
           },
           "parameters": {
+            "additionalProperties": true,
             "type": "object",
             "title": "Parameters"
           },
@@ -15982,6 +17087,7 @@
           "trigger_conditions": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -16047,6 +17153,7 @@
             "title": "Description"
           },
           "parameters": {
+            "additionalProperties": true,
             "type": "object",
             "title": "Parameters"
           },
@@ -16085,6 +17192,7 @@
           "trigger_conditions": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -16148,6 +17256,7 @@
           "parameters": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -16237,6 +17346,17 @@
               }
             ],
             "title": "Timezone"
+          },
+          "home_state": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Home State"
           }
         },
         "type": "object",
@@ -16639,6 +17759,7 @@
             "anyOf": [
               {
                 "items": {
+                  "additionalProperties": true,
                   "type": "object"
                 },
                 "type": "array"
@@ -16729,6 +17850,71 @@
         ],
         "title": "MasteryLevel"
       },
+      "MentorCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "trade": {
+            "type": "string",
+            "title": "Trade"
+          },
+          "relationship": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Relationship"
+          },
+          "availability": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Availability"
+          },
+          "children": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Children"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "trade"
+        ],
+        "title": "MentorCreate"
+      },
       "MessageResponse": {
         "properties": {
           "message": {
@@ -16780,6 +17966,7 @@
           "content": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -16886,6 +18073,7 @@
           "content": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -17157,6 +18345,7 @@
           "content": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -17386,6 +18575,7 @@
             "anyOf": [
               {
                 "items": {
+                  "additionalProperties": true,
                   "type": "object"
                 },
                 "type": "array"
@@ -17410,6 +18600,7 @@
           "pedagogical_preferences": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -17740,6 +18931,7 @@
           "content": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -18480,6 +19672,7 @@
             "title": "Event Type"
           },
           "payload": {
+            "additionalProperties": true,
             "type": "object",
             "title": "Payload"
           },
@@ -18665,6 +19858,7 @@
             "anyOf": [
               {
                 "items": {
+                  "additionalProperties": true,
                   "type": "object"
                 },
                 "type": "array"
@@ -18730,6 +19924,7 @@
           "year_plans": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -18741,6 +19936,7 @@
           "goals": {
             "anyOf": [
               {
+                "additionalProperties": true,
                 "type": "object"
               },
               {
@@ -18905,6 +20101,13 @@
           "type": {
             "type": "string",
             "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
           }
         },
         "type": "object",
