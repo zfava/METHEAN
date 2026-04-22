@@ -38,7 +38,7 @@ export default function PrivacyPage() {
         <p className="text-sm text-(--color-text-tertiary) mb-6">Effective April 2026</p>
 
         <div className="bg-(--color-brand-cream) rounded-[12px] p-5 mb-8 text-sm text-(--color-text-secondary) leading-relaxed">
-          This privacy policy was written to be understood by real people. If anything is unclear, email <a href="mailto:zack@spartansolutions.co" className="text-(--color-accent) hover:underline">zack@spartansolutions.co</a>.
+          This privacy policy was written to be understood by real people. If anything is unclear, email <a href="mailto:zack@methean.io" className="text-(--color-accent) hover:underline">zack@methean.io</a>.
         </div>
 
         <nav className="mb-10">
@@ -80,13 +80,13 @@ export default function PrivacyPage() {
         <Section id="coppa" title="5. Children's Privacy (COPPA)">
           <p>METHEAN is designed for use by parents and guardians. All child accounts are created and managed by parents. Children do not create their own accounts or provide personal information directly to METHEAN.</p>
           <p>The child learning interface does not collect email addresses, social media handles, or contact information.</p>
-          <p>Parents can review all data collected about their children at any time through the Intelligence, Inspection, and Governance pages. Parents can delete child data by contacting <a href="mailto:zack@spartansolutions.co" className="text-(--color-accent) hover:underline">zack@spartansolutions.co</a>.</p>
+          <p>Parents can review all data collected about their children at any time through the Intelligence, Inspection, and Governance pages. Parents can delete child data by contacting <a href="mailto:zack@methean.io" className="text-(--color-accent) hover:underline">zack@methean.io</a>.</p>
         </Section>
 
         <Section id="retention" title="6. Data Retention">
           <p><strong>Active accounts:</strong> Data retained for the duration of your subscription.</p>
           <p><strong>Canceled accounts:</strong> Data retained for 90 days after cancellation, then permanently deleted.</p>
-          <p>Parents can request immediate deletion by emailing <a href="mailto:zack@spartansolutions.co" className="text-(--color-accent) hover:underline">zack@spartansolutions.co</a>.</p>
+          <p>Parents can request immediate deletion by emailing <a href="mailto:zack@methean.io" className="text-(--color-accent) hover:underline">zack@methean.io</a>.</p>
           <p>AI interaction logs are retained for the duration of your subscription for parent inspection.</p>
         </Section>
 
@@ -107,7 +107,7 @@ export default function PrivacyPage() {
         </Section>
 
         <Section id="contact" title="10. Contact">
-          <p>Zack Fava · <a href="mailto:zack@spartansolutions.co" className="text-(--color-accent) hover:underline">zack@spartansolutions.co</a> · Spartan Solutions</p>
+          <p>Zack Fava · <a href="mailto:zack@methean.io" className="text-(--color-accent) hover:underline">zack@methean.io</a> · METHEAN, Inc.</p>
         </Section>
       </main>
 
@@ -117,7 +117,7 @@ export default function PrivacyPage() {
           <div className="flex items-center gap-4 text-[12px] text-(--color-text-tertiary)">
             <Link href="/terms" className="hover:underline">Terms of Service</Link>
             <span>·</span>
-            <span>© 2026 Spartan Solutions</span>
+            <span>© 2026 METHEAN, Inc.</span>
           </div>
         </div>
       </footer>

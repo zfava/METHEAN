@@ -10,7 +10,7 @@ METHEAN is operated by a solo founder (Zack Fava). All on-call responsibility fa
 
 | Role | Person | Contact | Hours |
 |---|---|---|---|
-| Primary on-call | Zack Fava | zack@spartansolutions.co | 24/7 (solo founder) |
+| Primary on-call | Zack Fava | zack@methean.io | 24/7 (solo founder) |
 | Backup | None | n/a | n/a |
 
 When a second engineer joins (employee, contractor, or co-founder), rotate weekly on-call.
@@ -31,7 +31,7 @@ When a second engineer joins (employee, contractor, or co-founder), rotate weekl
 | Sentry | Application errors, performance | Email (configure SMS for P0) |
 | Uptime monitor (TBD) | /health endpoint availability | SMS + email |
 | Hosting provider | Infrastructure health | Provider dashboard alerts |
-| Customer email | User-reported issues | zack@spartansolutions.co |
+| Customer email | User-reported issues | zack@methean.io |
 
 ## Quiet Hours
 

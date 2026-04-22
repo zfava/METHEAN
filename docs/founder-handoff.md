@@ -27,9 +27,9 @@ Last updated: 2026-04-17
 
 | Role | Contact | Notes |
 |---|---|---|
-| Founder/CTO | Zack Fava, zack@spartansolutions.co | Primary for everything |
+| Founder/CTO | Zack Fava, zack@methean.io | Primary for everything |
 | Legal | (TBD, engage before seed) | COPPA/FERPA review needed |
-| Accountant | (TBD) | Spartan Solutions LLC books |
+| Accountant | (TBD) | METHEAN, Inc. LLC books |
 | AI Provider (Anthropic) | Enterprise support (when DPA signed) | Primary AI provider |
 | Hosting (Railway) | support@railway.app | Infra issues |
 
@@ -40,7 +40,7 @@ Last updated: 2026-04-17
 - **DNS**: Domain registrar (see access-inventory.md)
 - **Credentials**: 1Password vault (see access-inventory.md)
 - **Legal docs**: (TBD, not yet centralized)
-- **Financial**: Stripe dashboard for billing, bank account for Spartan Solutions LLC
+- **Financial**: Stripe dashboard for billing, bank account for METHEAN, Inc. LLC
 
 ## What Is Weird (Non-Obvious Decisions)
 

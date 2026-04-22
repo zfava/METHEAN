@@ -1,6 +1,6 @@
 # METHEAN backend
 
-Learning governance operating system for homeschool families. Governance-first, AI-augmented platform where parents govern and AI serves. Single pricing tier: $99/month. Built by Spartan Solutions.
+Learning governance operating system for homeschool families. Governance-first, AI-augmented platform where parents govern and AI serves. Single pricing tier: $99/month. Built by METHEAN, Inc..
 
 ## Tech stack
 
@@ -153,4 +153,4 @@ RLS policies are created in-migration (see `027_harden_rls_safe_settings.py` for
 
 ## License
 
-Proprietary. Copyright 2026 Spartan Solutions.
+Proprietary. Copyright 2026 METHEAN, Inc..

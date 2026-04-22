@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
-  appId: "co.spartansolutions.methean",
+  appId: "io.methean.app",
   appName: "METHEAN",
   webDir: "out",
   server: {

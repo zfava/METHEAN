@@ -317,7 +317,7 @@ export default function SettingsPage() {
         <SectionHeader title="About" />
         <div className="mt-2 text-xs text-(--color-text-tertiary) space-y-1">
           <p>METHEAN v0.1.0</p>
-          <p>Built by Spartan Solutions</p>
+          <p>Built by METHEAN, Inc.</p>
           <Link href="/" className="text-(--color-accent) hover:underline">Visit landing page</Link>
         </div>
       </Card>

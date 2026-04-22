@@ -33,7 +33,7 @@ npm run cap:android     # Opens Android Studio
 ## iOS Setup
 
 ### 1. Apple Developer Portal
-- Create an App ID: `co.spartansolutions.methean`
+- Create an App ID: `io.methean.app`
 - Enable capabilities: Push Notifications, Associated Domains
 - Create provisioning profiles (Development + Distribution)
 

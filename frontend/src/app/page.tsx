@@ -289,7 +289,7 @@ export default function LandingPage() {
             <a href="/privacy" className="hover:underline">Privacy</a>
             <a href="/terms" className="hover:underline">Terms</a>
             <span>·</span>
-            <span>© 2026 Spartan Solutions · zack@spartansolutions.co</span>
+            <span>© 2026 METHEAN, Inc. · zack@methean.io</span>
           </div>
         </div>
       </footer>

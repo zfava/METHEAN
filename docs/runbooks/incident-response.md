@@ -9,7 +9,7 @@ Incidents are detected through:
 1. **Sentry alerts**: error rate spike, new error type, performance degradation
 2. **Prometheus/Grafana**: custom metrics (ai_calls_total, governance_decisions, fsrs_decays) and request latency
 3. **Health endpoint**: `GET /health` returns non-200 (monitored by hosting provider)
-4. **Customer report**: email to zack@spartansolutions.co or in-app feedback
+4. **Customer report**: email to zack@methean.io or in-app feedback
 
 ## Severity Levels
 

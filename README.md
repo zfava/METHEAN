@@ -253,7 +253,7 @@ docker compose -f docker-compose.yml -f docker-compose.staging.yml up -d
 
 ## License
 
-Proprietary. All rights reserved. Copyright 2026 Spartan Solutions.
+Proprietary. All rights reserved. Copyright 2026 METHEAN, Inc..
 
 ---
 

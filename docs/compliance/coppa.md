@@ -102,7 +102,7 @@ Deletion of the account serves as consent withdrawal. No further data collection
 
 ## Contact
 
-Privacy inquiries: zack@spartansolutions.co
+Privacy inquiries: zack@methean.io
 
 ## What Is Not Yet Implemented
 
