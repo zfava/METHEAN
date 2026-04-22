@@ -29,7 +29,7 @@ class TestEstimateCostCents:
 
     def test_opus_cost(self):
         """Opus: 1M input = $15, 1M output = $75."""
-        cost = estimate_cost_cents("claude-opus-4-7", 1_000_000, 1_000_000)
+        cost = estimate_cost_cents("claude-opus-4-6", 1_000_000, 1_000_000)
         assert cost == 9000  # $15 + $75 = $90 = 9000 cents
 
     def test_mock_cost_is_zero(self):

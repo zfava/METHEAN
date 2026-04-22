@@ -127,24 +127,50 @@ async def call_ai(
     max_tokens = max_tokens or settings.AI_MAX_TOKENS
     start = time.monotonic()
 
+    # Load the household once. Used for governance mode, AI tier, and
+    # philosophical-prompt constraints below.
+    from app.models.identity import Household
+
+    household = (await db.execute(select(Household).where(Household.id == household_id))).scalar_one_or_none()
+
+    # Pick the Claude model based on the household's selected tier.
+    ai_tier = (household.settings or {}).get("ai_tier", "opus") if household else "opus"
+    tier_models = {
+        "opus": settings.AI_PRIMARY_MODEL,
+        "sonnet": settings.AI_STANDARD_MODEL,
+        "haiku": settings.AI_LIGHT_MODEL,
+    }
+    selected_model = tier_models.get(ai_tier, settings.AI_PRIMARY_MODEL)
+
+    # Per-tier daily token ceiling enforced by cost_controls.check_budget.
+    tier_daily_limits = {
+        "opus": 50_000,
+        "sonnet": 100_000,
+        "haiku": 200_000,
+    }
+    daily_limit = tier_daily_limits.get(ai_tier, 50_000)
+
     # Budget check before calling any provider
     try:
-        from app.services.usage import UsageLimitExceededError, check_budget
+        from app.ai.cost_controls import check_budget
+        from app.services.usage import UsageLimitExceededError
 
-        budget = await check_budget(db, household_id)
+        budget = await check_budget(db, household_id, daily_token_limit=daily_limit)
         if not budget["allowed"]:
             ai_run_stub = AIRun(
                 household_id=household_id,
                 triggered_by=triggered_by,
                 run_type=role.value,
                 status=AIRunStatus.failed,
-                error_message="Monthly AI usage limit reached",
+                error_message="Daily AI usage limit reached",
                 started_at=datetime.now(UTC),
                 completed_at=datetime.now(UTC),
             )
             db.add(ai_run_stub)
             await db.flush()
-            raise UsageLimitExceededError("Monthly AI token budget exhausted. Resets on your next billing period.")
+            raise UsageLimitExceededError(
+                f"Daily AI token limit ({daily_limit}) reached for tier '{ai_tier}'. Resets at midnight UTC."
+            )
     except UsageLimitExceededError:
         raise
     except Exception:
@@ -153,13 +179,10 @@ async def call_ai(
     # Inject philosophical constraints into the system prompt, substituting
     # authority-referring language for the household's governance mode.
     from app.ai.prompts import build_philosophical_constraints
-    from app.models.identity import Household
 
     governance_mode = "parent_governed"
-    if philosophical_profile:
-        household = (await db.execute(select(Household).where(Household.id == household_id))).scalar_one_or_none()
-        if household is not None and hasattr(household, "governance_mode"):
-            governance_mode = household.governance_mode or "parent_governed"
+    if philosophical_profile and household is not None and hasattr(household, "governance_mode"):
+        governance_mode = household.governance_mode or "parent_governed"
 
     constraints = build_philosophical_constraints(philosophical_profile, governance_mode=governance_mode)
     if constraints:
@@ -203,7 +226,7 @@ async def call_ai(
                 if not _claude_circuit.should_allow():
                     logger.debug("Circuit open for Claude, skipping")
                     continue
-                result = await _call_claude(system_prompt, user_prompt, max_tokens)
+                result = await _call_claude(system_prompt, user_prompt, max_tokens, model=selected_model)
                 _claude_circuit.record_success()
                 output = result["content"]
                 model_used = result["model"]
@@ -341,10 +364,12 @@ async def stream_claude(
     system_prompt: str,
     user_prompt: str,
     max_tokens: int,
+    model: str | None = None,
 ):
     """Stream tokens from Claude. Yields (event_type, data) tuples.
 
     Event types: "token" (text chunk), "done" (usage stats), "error" (message).
+    model defaults to the platform primary model when None.
     """
     import anthropic
 
@@ -352,7 +377,7 @@ async def stream_claude(
 
     try:
         async with client.messages.stream(
-            model=settings.AI_PRIMARY_MODEL,
+            model=model or settings.AI_PRIMARY_MODEL,
             max_tokens=max_tokens,
             temperature=settings.AI_TEMPERATURE,
             system=system_prompt,
@@ -408,13 +433,14 @@ async def _call_claude(
     system_prompt: str,
     user_prompt: str,
     max_tokens: int,
+    model: str | None = None,
 ) -> dict:
-    """Call Claude API."""
+    """Call Claude API. model defaults to the platform primary model."""
     import anthropic
 
     client = anthropic.AsyncAnthropic(api_key=settings.AI_API_KEY)
     response = await client.messages.create(
-        model=settings.AI_PRIMARY_MODEL,
+        model=model or settings.AI_PRIMARY_MODEL,
         max_tokens=max_tokens,
         temperature=settings.AI_TEMPERATURE,
         system=system_prompt,

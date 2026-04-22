@@ -233,3 +233,9 @@ class AssessmentType(str, enum.Enum):
     peer_assessment = "peer_assessment"
     portfolio_review = "portfolio_review"
     clinical_evaluation = "clinical_evaluation"
+
+
+class AITier(str, enum.Enum):
+    opus = "opus"
+    sonnet = "sonnet"
+    haiku = "haiku"

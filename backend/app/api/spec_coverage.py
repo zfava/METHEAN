@@ -97,10 +97,16 @@ _US_STATE_CODES: frozenset[str] = frozenset(
 # ── Schemas ──
 
 
+_VALID_AI_TIERS = frozenset({"opus", "sonnet", "haiku"})
+
+
 class HouseholdSettingsUpdate(BaseModel):
     name: str | None = Field(default=None, min_length=1, max_length=255)
     timezone: str | None = Field(default=None, max_length=50)
     home_state: str | None = None
+    # Free-form household settings blob; today we validate ai_tier inside it.
+    settings: dict | None = None
+    ai_tier: str | None = None
 
     @field_validator("home_state")
     @classmethod
@@ -115,6 +121,26 @@ class HouseholdSettingsUpdate(BaseModel):
         if upper not in _US_STATE_CODES:
             raise ValueError(f"home_state must be a valid US state code, got {v!r}")
         return upper
+
+    @field_validator("ai_tier")
+    @classmethod
+    def _valid_ai_tier(cls, v):
+        if v is None:
+            return v
+        if v not in _VALID_AI_TIERS:
+            raise ValueError(f"ai_tier must be one of {sorted(_VALID_AI_TIERS)}, got {v!r}")
+        return v
+
+    @field_validator("settings")
+    @classmethod
+    def _valid_settings_blob(cls, v):
+        # If ai_tier is nested inside settings JSON, validate it too.
+        if v is None:
+            return v
+        tier = v.get("ai_tier")
+        if tier is not None and tier not in _VALID_AI_TIERS:
+            raise ValueError(f"settings.ai_tier must be one of {sorted(_VALID_AI_TIERS)}, got {tier!r}")
+        return v
 
 
 class ChildUpdate(BaseModel):
@@ -176,11 +202,14 @@ async def _get_child_or_404(db: AsyncSession, child_id: uuid.UUID, household_id:
 
 
 def _household_settings_dict(household: Household) -> dict:
+    hh_settings = household.settings or {}
     return {
         "id": str(household.id),
         "name": household.name,
         "timezone": household.timezone,
         "home_state": household.home_state,
+        "ai_tier": hh_settings.get("ai_tier", "opus"),
+        "settings": hh_settings,
     }
 
 
@@ -247,6 +276,21 @@ async def update_household_settings(
     # instead of the is-not-None pattern used for name/timezone.
     if "home_state" in body.model_fields_set:
         household.home_state = body.home_state
+
+    # ai_tier lives inside household.settings so it round-trips through the
+    # existing JSONB column. Accept it as a top-level field for client
+    # ergonomics and also honor settings["ai_tier"] when sent nested.
+    new_settings = dict(household.settings or {})
+    if body.settings is not None:
+        # Merge the caller's settings blob over the existing one.
+        new_settings.update(body.settings)
+    if body.ai_tier is not None:
+        new_settings["ai_tier"] = body.ai_tier
+    if body.settings is not None or body.ai_tier is not None:
+        household.settings = new_settings
+        from sqlalchemy.orm.attributes import flag_modified
+
+        flag_modified(household, "settings")
     await db.flush()
     return _household_settings_dict(household)
 

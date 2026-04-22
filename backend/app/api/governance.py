@@ -1144,8 +1144,20 @@ Respond in plain text as the Socratic tutor. Do NOT use JSON. Just speak natural
     run_id = ai_run.id
     full_text: list[str] = []
 
+    # Resolve the household's AI tier so stream_claude uses the right model.
+    from app.models.identity import Household as _Household
+
+    hh_row = (await db.execute(select(_Household).where(_Household.id == user.household_id))).scalar_one_or_none()
+    tier = (hh_row.settings or {}).get("ai_tier", "opus") if hh_row else "opus"
+    stream_tier_models = {
+        "opus": settings.AI_PRIMARY_MODEL,
+        "sonnet": settings.AI_STANDARD_MODEL,
+        "haiku": settings.AI_LIGHT_MODEL,
+    }
+    stream_model = stream_tier_models.get(tier, settings.AI_PRIMARY_MODEL)
+
     async def event_generator():
-        async for event_type, data in stream_claude(system, user_prompt, settings.AI_MAX_TOKENS):
+        async for event_type, data in stream_claude(system, user_prompt, settings.AI_MAX_TOKENS, model=stream_model):
             if event_type == "token":
                 full_text.append(data)
                 yield f"data: {json.dumps({'type': 'token', 'text': data})}\n\n"

@@ -30,7 +30,9 @@ class Settings(BaseSettings):
     # AI
     AI_API_KEY: str = ""
     AI_FALLBACK_API_KEY: str = ""
-    AI_PRIMARY_MODEL: str = "claude-sonnet-4-20250514"
+    AI_PRIMARY_MODEL: str = "claude-opus-4-6"
+    AI_STANDARD_MODEL: str = "claude-sonnet-4-6"
+    AI_LIGHT_MODEL: str = "claude-haiku-4-5-20251001"
     AI_FALLBACK_MODEL: str = "gpt-4o-mini"
     AI_MOCK_ENABLED: bool = True  # Allow mock fallback when providers unavailable
     AI_MAX_TOKENS: int = 4096
