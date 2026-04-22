@@ -72,6 +72,10 @@ jobs:
         working-directory: backend
         run: alembic upgrade head
 
+      - name: Regenerate OpenAPI spec
+        working-directory: backend
+        run: python -m scripts.export_openapi
+
       - name: Route contract check
         working-directory: backend
         run: pytest tests/test_route_contract.py -v
