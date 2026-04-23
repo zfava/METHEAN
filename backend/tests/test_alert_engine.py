@@ -1,16 +1,12 @@
 """Tests for the alert detection engine."""
 
-import uuid
 from datetime import UTC, datetime, timedelta
 
 import pytest
 import pytest_asyncio
-from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.curriculum import LearningMap, LearningNode, Subject
 from app.models.enums import MasteryLevel, NodeType
-from app.models.evidence import Alert
 from app.models.identity import Child, Household
 from app.models.state import ChildNodeState
 

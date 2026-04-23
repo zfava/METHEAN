@@ -13,13 +13,20 @@ import pytest
 import pytest_asyncio
 from sqlalchemy import select
 
-from app.models.curriculum import LearningMap, LearningNode, Subject
+from app.models.curriculum import ChildMapEnrollment, LearningMap, LearningNode, Subject
 from app.models.enums import NodeType
+from app.models.evidence import Alert
 from app.models.fitness import FitnessBenchmark, FitnessLog
 from app.models.identity import Child, Household
-from app.models.state import ChildNodeState
+from app.models.state import ChildNodeState, FSRSCard
+from app.services.alert_engine import (
+    detect_fitness_overtraining,
+    detect_fitness_regression,
+    detect_fitness_stall,
+)
 from app.services.compliance_engine import get_hours_breakdown
 from app.services.fitness_service import (
+    _rate_fitness_session,
     get_detailed_stats,
     get_progress_summary,
     log_fitness_activity,
@@ -767,3 +774,332 @@ class TestFitnessDetailedStats:
         entry = stats["strength"][0]
         # 150 * (1 + 10/30) = 200.0
         assert entry["estimated_1rm"] == pytest.approx(200.0, abs=0.01)
+
+
+# ══════════════════════════════════════════════════
+# 8. FSRS integration (pure-Python rating logic + DB-backed card creation)
+# ══════════════════════════════════════════════════
+
+
+class TestFitnessFSRSRating:
+    """Pure-Python tests for the _rate_fitness_session mapping."""
+
+    def test_no_threshold_returns_good(self):
+        from fsrs import Rating
+
+        assert _rate_fitness_session(None, None, "gte", "pass_fail") == Rating.Good
+        assert _rate_fitness_session(12, None, "gte", "counted") == Rating.Good
+
+    def test_threshold_met_returns_easy(self):
+        from fsrs import Rating
+
+        # gte: 22 reps meets a 20-rep target.
+        assert _rate_fitness_session(22, 20, "gte", "counted") == Rating.Easy
+        # lte: 540s beats a 600s target.
+        assert _rate_fitness_session(540, 600, "lte", "timed") == Rating.Easy
+
+    def test_struggled_returns_hard(self):
+        from fsrs import Rating
+
+        # gte + <50% of target → Hard.
+        assert _rate_fitness_session(8, 20, "gte", "counted") == Rating.Hard
+        # lte + >200% of target (e.g. 1500s when goal was 600s) → Hard.
+        assert _rate_fitness_session(1500, 600, "lte", "timed") == Rating.Hard
+
+    def test_partial_between_50_and_100_returns_good(self):
+        from fsrs import Rating
+
+        # gte + 60% of target (not met, but not struggling) → Good.
+        assert _rate_fitness_session(12, 20, "gte", "counted") == Rating.Good
+        # lte + 150% of target (slow but not struggling) → Good.
+        assert _rate_fitness_session(900, 600, "lte", "timed") == Rating.Good
+
+
+class TestFitnessFSRSCardCreation:
+    @pytest.mark.asyncio
+    async def test_log_creates_fsrs_card(self, db_session, household, child, user, pe_node):
+        """First fitness log on a node creates an FSRSCard row."""
+        await log_fitness_activity(
+            db_session,
+            household_id=household.id,
+            child_id=child.id,
+            node_id=pe_node.id,
+            logged_at=datetime.now(UTC),
+            duration_minutes=30,
+            measurement_type="counted",
+            measurement_value=12,
+            measurement_unit="repetitions",
+            logged_by=user.id,
+        )
+        card_result = await db_session.execute(
+            select(FSRSCard).where(
+                FSRSCard.child_id == child.id,
+                FSRSCard.node_id == pe_node.id,
+            )
+        )
+        card = card_result.scalar_one()
+        assert card.last_review is not None
+        assert card.reps >= 1
+
+    @pytest.mark.asyncio
+    async def test_second_log_reuses_existing_card(self, db_session, household, child, user, pe_node):
+        """Subsequent fitness logs update the existing card rather than creating a new one."""
+        for _ in range(2):
+            await log_fitness_activity(
+                db_session,
+                household_id=household.id,
+                child_id=child.id,
+                node_id=pe_node.id,
+                logged_at=datetime.now(UTC),
+                duration_minutes=20,
+                measurement_type="counted",
+                measurement_value=12,
+                measurement_unit="repetitions",
+                logged_by=user.id,
+            )
+        cards_result = await db_session.execute(
+            select(FSRSCard).where(
+                FSRSCard.child_id == child.id,
+                FSRSCard.node_id == pe_node.id,
+            )
+        )
+        cards = cards_result.scalars().all()
+        assert len(cards) == 1
+        assert cards[0].reps >= 2
+
+    @pytest.mark.asyncio
+    async def test_log_result_includes_fsrs_rating(self, db_session, household, child, user, pe_node):
+        """log_fitness_activity returns the FSRS rating used for the review."""
+        result = await log_fitness_activity(
+            db_session,
+            household_id=household.id,
+            child_id=child.id,
+            node_id=pe_node.id,
+            logged_at=datetime.now(UTC),
+            duration_minutes=20,
+            measurement_type="counted",
+            measurement_value=12,
+            measurement_unit="repetitions",
+            logged_by=user.id,
+        )
+        # Node has no benchmark_threshold and assessment_type="counted" → Good (3).
+        assert result["fsrs_rating"] == 3
+
+
+# ══════════════════════════════════════════════════
+# 9. Fitness alert detection
+# ══════════════════════════════════════════════════
+
+
+class TestFitnessAlerts:
+    @pytest.mark.asyncio
+    async def test_stall_fires_when_no_logs_for_14_days(self, db_session, household, child, pe_map):
+        """Active PE enrollment with zero logs → info alert."""
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=child.id,
+                household_id=household.id,
+                learning_map_id=pe_map.id,
+                is_active=True,
+            )
+        )
+        await db_session.flush()
+
+        alerts = await detect_fitness_stall(db_session, household.id)
+        assert len(alerts) == 1
+        assert alerts[0].severity.value == "info"
+        assert alerts[0].source == "fitness_stall_detection"
+        assert "two weeks" in alerts[0].message
+
+    @pytest.mark.asyncio
+    async def test_stall_does_not_fire_with_recent_log(self, db_session, household, child, user, pe_node, pe_map):
+        """Any log in the last 14 days suppresses the stall alert."""
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=child.id,
+                household_id=household.id,
+                learning_map_id=pe_map.id,
+                is_active=True,
+            )
+        )
+        await db_session.flush()
+        await log_fitness_activity(
+            db_session,
+            household_id=household.id,
+            child_id=child.id,
+            node_id=pe_node.id,
+            logged_at=datetime.now(UTC) - timedelta(days=1),
+            duration_minutes=20,
+            measurement_type="counted",
+            measurement_value=10,
+            measurement_unit="repetitions",
+            logged_by=user.id,
+        )
+        alerts = await detect_fitness_stall(db_session, household.id)
+        assert alerts == []
+
+    @pytest.mark.asyncio
+    async def test_stall_skips_children_without_pe_enrollment(self, db_session, household, child):
+        """Children with no PE enrollment are not candidates for the stall check."""
+        alerts = await detect_fitness_stall(db_session, household.id)
+        assert alerts == []
+
+    @pytest.mark.asyncio
+    async def test_regression_fires_on_three_worsening_benchmarks(self, db_session, household, child):
+        """Three consecutively worse mile_run times → warning alert."""
+        base = datetime.now(UTC) - timedelta(days=30)
+        for offset, value in [(0, 500), (10, 520), (20, 540)]:
+            await record_benchmark(
+                db_session,
+                household_id=household.id,
+                child_id=child.id,
+                benchmark_name="mile_run",
+                value=value,
+                unit="seconds",
+                measured_at=base + timedelta(days=offset),
+            )
+        # record_benchmark fires the alert inline. Query directly.
+        alerts_result = await db_session.execute(
+            select(Alert).where(
+                Alert.household_id == household.id,
+                Alert.child_id == child.id,
+                Alert.source == "fitness_regression:mile_run",
+            )
+        )
+        alert = alerts_result.scalar_one()
+        assert alert.severity.value == "warning"
+        assert "declined" in alert.message
+
+    @pytest.mark.asyncio
+    async def test_regression_does_not_fire_on_mixed_trend(self, db_session, household, child):
+        """Improving or mixed benchmarks do not trigger regression."""
+        base = datetime.now(UTC) - timedelta(days=30)
+        for offset, value in [(0, 540), (10, 500), (20, 480)]:  # improving
+            await record_benchmark(
+                db_session,
+                household_id=household.id,
+                child_id=child.id,
+                benchmark_name="mile_run",
+                value=value,
+                unit="seconds",
+                measured_at=base + timedelta(days=offset),
+            )
+        alerts = await detect_fitness_regression(db_session, child.id, household.id, "mile_run")
+        assert alerts is None
+
+    @pytest.mark.asyncio
+    async def test_overtraining_fires_for_tier_1_child(self, db_session, household, child, user, pe_node, pe_map):
+        """>6 long sessions in current week for a Tier 1 child → info alert."""
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=child.id,
+                household_id=household.id,
+                learning_map_id=pe_map.id,
+                is_active=True,
+            )
+        )
+        await db_session.flush()
+        now = datetime.now(UTC)
+        for _ in range(7):
+            await log_fitness_activity(
+                db_session,
+                household_id=household.id,
+                child_id=child.id,
+                node_id=pe_node.id,
+                logged_at=now,
+                duration_minutes=45,
+                measurement_type="counted",
+                measurement_value=10,
+                measurement_unit="repetitions",
+                logged_by=user.id,
+            )
+        alerts_result = await db_session.execute(
+            select(Alert).where(
+                Alert.household_id == household.id,
+                Alert.child_id == child.id,
+                Alert.source == "fitness_overtraining_detection",
+            )
+        )
+        alert = alerts_result.scalar_one()
+        assert alert.severity.value == "info"
+        assert "rest day" in alert.message.lower()
+
+    @pytest.mark.asyncio
+    async def test_overtraining_skips_short_sessions(self, db_session, household, child, user, pe_node, pe_map):
+        """Sessions ≤ 30 minutes are not counted toward the overtraining threshold."""
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=child.id,
+                household_id=household.id,
+                learning_map_id=pe_map.id,
+                is_active=True,
+            )
+        )
+        await db_session.flush()
+        now = datetime.now(UTC)
+        for _ in range(8):
+            await log_fitness_activity(
+                db_session,
+                household_id=household.id,
+                child_id=child.id,
+                node_id=pe_node.id,
+                logged_at=now,
+                duration_minutes=25,  # below threshold
+                measurement_type="counted",
+                measurement_value=10,
+                measurement_unit="repetitions",
+                logged_by=user.id,
+            )
+        result = await detect_fitness_overtraining(db_session, child.id, household.id)
+        assert result is None
+
+    @pytest.mark.asyncio
+    async def test_overtraining_skips_tier_4_and_5(self, db_session, household, child, user, pe_subject):
+        """Tier 4 (Advanced) and Tier 5 (Independent) children are exempt."""
+        advanced_map = LearningMap(
+            household_id=household.id,
+            subject_id=pe_subject.id,
+            name="Physical Fitness: Advanced",
+        )
+        db_session.add(advanced_map)
+        await db_session.flush()
+        advanced_node = LearningNode(
+            learning_map_id=advanced_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Pull-Up",
+            content={
+                "description": "Strict pull-up.",
+                "benchmark_criteria": "5 strict.",
+                "assessment_type": "counted",
+                "measurement_unit": "repetitions",
+                "suggested_frequency": 3,
+            },
+        )
+        db_session.add(advanced_node)
+        await db_session.flush()
+        db_session.add(
+            ChildMapEnrollment(
+                child_id=child.id,
+                household_id=household.id,
+                learning_map_id=advanced_map.id,
+                is_active=True,
+            )
+        )
+        await db_session.flush()
+        now = datetime.now(UTC)
+        for _ in range(7):
+            await log_fitness_activity(
+                db_session,
+                household_id=household.id,
+                child_id=child.id,
+                node_id=advanced_node.id,
+                logged_at=now,
+                duration_minutes=60,
+                measurement_type="counted",
+                measurement_value=8,
+                measurement_unit="repetitions",
+                logged_by=user.id,
+            )
+        result = await detect_fitness_overtraining(db_session, child.id, household.id)
+        assert result is None

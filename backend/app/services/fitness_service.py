@@ -11,14 +11,23 @@ from datetime import UTC, datetime, timedelta
 from itertools import pairwise
 from typing import Any
 
+from fsrs import Rating
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.curriculum import LearningEdge, LearningMap, LearningNode
 from app.models.enums import EdgeRelation, MasteryLevel, StateEventType
 from app.models.fitness import FitnessBenchmark, FitnessLog
-from app.models.state import ChildNodeState
-from app.services.state_engine import emit_state_event, get_or_create_node_state
+from app.models.identity import Child
+from app.models.state import ChildNodeState, ReviewLog
+from app.services.state_engine import (
+    _db_card_to_fsrs,
+    _fsrs_card_to_db,
+    _get_scheduler,
+    emit_state_event,
+    get_or_create_fsrs_card,
+    get_or_create_node_state,
+)
 
 # Units where a smaller number means a better performance.
 _LOWER_IS_BETTER_UNITS = {"seconds", "minutes"}
@@ -77,6 +86,74 @@ def _meets_threshold(
     if comparator == "lte":
         return measurement_value <= threshold
     return measurement_value >= threshold
+
+
+def _rate_fitness_session(
+    measurement_value: float | None,
+    threshold: float | None,
+    comparator: str,
+    assessment_type: str | None,
+) -> Rating:
+    """Map a fitness session's performance to an FSRS rating.
+
+    - Benchmark met → Rating.Easy (4)
+    - Struggled (< 50% of target when higher-is-better, or > 200% when lower-is-better)
+      → Rating.Hard (2)
+    - Everything else (including observed/pass_fail without a numeric threshold)
+      → Rating.Good (3)
+    """
+    if threshold is None or measurement_value is None:
+        return Rating.Good
+
+    if _meets_threshold(measurement_value, threshold, comparator):
+        return Rating.Easy
+
+    # "Below 50% of benchmark" — apply symmetrically to timed (lower-is-better) metrics.
+    if comparator == "lte":
+        # A time more than 2× the target time is struggling.
+        if measurement_value > 2.0 * threshold:
+            return Rating.Hard
+    else:
+        if measurement_value < 0.5 * threshold:
+            return Rating.Hard
+
+    return Rating.Good
+
+
+async def _update_fsrs_for_fitness(
+    db: AsyncSession,
+    child_id: uuid.UUID,
+    household_id: uuid.UUID,
+    node_id: uuid.UUID,
+    rating: Rating,
+    logged_at: datetime,
+    duration_minutes: int | None,
+) -> None:
+    """Run the FSRS review cycle against the fitness node and append a ReviewLog."""
+    db_card = await get_or_create_fsrs_card(db, child_id, household_id, node_id)
+
+    child_result = await db.execute(select(Child).where(Child.id == child_id))
+    child_obj = child_result.scalar_one_or_none()
+    weights = child_obj.fsrs_weights if child_obj else None
+
+    scheduler = _get_scheduler(weights)
+    fsrs_card = _db_card_to_fsrs(db_card)
+    updated_card, _ = scheduler.review_card(fsrs_card, rating, logged_at)
+
+    _fsrs_card_to_db(updated_card, db_card)
+    db_card.last_review = logged_at
+
+    db.add(
+        ReviewLog(
+            card_id=db_card.id,
+            child_id=child_id,
+            household_id=household_id,
+            rating=rating.value,
+            scheduled_days=db_card.scheduled_days or 0,
+            elapsed_days=db_card.elapsed_days or 0,
+            review_duration_ms=(duration_minutes * 60 * 1000) if duration_minutes else None,
+        )
+    )
 
 
 async def _all_prereqs_mastered(db: AsyncSession, child_id: uuid.UUID, node_id: uuid.UUID) -> bool:
@@ -151,19 +228,23 @@ async def log_fitness_activity(
     mastery_advanced = False
     previous_mastery = state.mastery_level
     state_event_id: uuid.UUID | None = None
+    threshold: float | None = None
+    comparator: str = "gte"
+    assessment_type: str | None = None
 
     if node is not None:
         content = node.content or {}
         benchmark_criteria = content.get("benchmark_criteria")
         if benchmark_criteria:
-            threshold = content.get("benchmark_threshold")
+            raw_threshold = content.get("benchmark_threshold")
+            threshold = float(raw_threshold) if raw_threshold is not None else None
             assessment_type = content.get("assessment_type")
             unit = content.get("measurement_unit") or measurement_unit
             default_comparator = "lte" if _is_lower_better(unit) else "gte"
             comparator = content.get("benchmark_comparator", default_comparator)
 
             if threshold is not None:
-                threshold_met = _meets_threshold(measurement_value, float(threshold), comparator)
+                threshold_met = _meets_threshold(measurement_value, threshold, comparator)
             elif assessment_type in ("pass_fail", "observed"):
                 # No numeric threshold; successful logging is the signal.
                 threshold_met = True
@@ -194,7 +275,27 @@ async def log_fitness_activity(
                 )
                 state_event_id = event.id
 
+    # Run the FSRS review cycle so unpracticed fitness skills surface in the due queue.
+    fsrs_rating = _rate_fitness_session(measurement_value, threshold, comparator, assessment_type)
+    await _update_fsrs_for_fitness(
+        db,
+        child_id=child_id,
+        household_id=household_id,
+        node_id=node_id,
+        rating=fsrs_rating,
+        logged_at=logged_at,
+        duration_minutes=duration_minutes,
+    )
+
     await db.flush()
+
+    # Overtraining check is a non-blocking alert — advisory only.
+    try:
+        from app.services.alert_engine import detect_fitness_overtraining
+
+        await detect_fitness_overtraining(db, child_id, household_id)
+    except Exception:
+        pass
 
     return {
         "id": log.id,
@@ -219,6 +320,7 @@ async def log_fitness_activity(
         if hasattr(state.mastery_level, "value")
         else str(state.mastery_level),
         "state_event_id": state_event_id,
+        "fsrs_rating": fsrs_rating.value,
     }
 
 
@@ -272,6 +374,14 @@ async def record_benchmark(
     )
     db.add(benchmark)
     await db.flush()
+
+    # Fire a regression alert if the last 3 benchmarks are all worsening.
+    try:
+        from app.services.alert_engine import detect_fitness_regression
+
+        await detect_fitness_regression(db, child_id, household_id, benchmark_name)
+    except Exception:
+        pass
 
     return {
         "id": benchmark.id,
