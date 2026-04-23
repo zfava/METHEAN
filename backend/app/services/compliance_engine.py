@@ -1485,7 +1485,7 @@ async def get_hours_breakdown(
         pass  # ReadingLogEntry table may not exist yet
 
     return {
-        "total_hours": round(total_minutes / 60, 1),
+        "total_hours": round(total_minutes / 60, 2),
         "by_subject": {k: round(v, 1) for k, v in sorted(by_subject.items())},
     }
 
