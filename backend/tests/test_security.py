@@ -209,6 +209,8 @@ RLS_COVERED_TABLES = [
     "family_insight_configs",
     "wellbeing_anomalies",
     "wellbeing_configs",
+    "fitness_logs",
+    "fitness_benchmarks",
 ]
 
 
@@ -388,4 +390,5 @@ class TestRLSCoverageMatrix:
         # 49 tables have household_id, minus 1 (households itself) = 48
         # audit_logs was missing from 027 but is now in the coverage list
         # beta_feedback added in migration 032 / 033
-        assert len(RLS_COVERED_TABLES) == 50
+        # fitness_logs + fitness_benchmarks added in migration 037
+        assert len(RLS_COVERED_TABLES) == 52
