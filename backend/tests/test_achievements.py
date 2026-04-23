@@ -6,11 +6,10 @@ import pytest
 import pytest_asyncio
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.achievements import Streak
+from app.core.security import hash_password
 from app.models.enums import ActivityStatus, ActivityType, AttemptStatus, PlanStatus
 from app.models.governance import Activity, Attempt, Plan, PlanWeek
 from app.models.identity import Child, Household, User
-from app.core.security import hash_password
 from app.services.achievements import (
     ACHIEVEMENT_DEFS,
     check_achievements,

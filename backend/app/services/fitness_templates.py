@@ -763,6 +763,18 @@ FITNESS_INDEPENDENT = Template(
             sort_order=7,
         ),
         _node(
+            "coaching_fundamentals",
+            "Coaching Fundamentals",
+            node_type="project",
+            description="Teach a fitness skill to a younger learner: plan a session, cue form, give feedback, and assess progress.",
+            benchmark="Deliver a 20-minute fitness lesson to a younger learner with a written plan and reflection.",
+            assessment_type="pass_fail",
+            unit="boolean",
+            frequency=1,
+            minutes=60,
+            sort_order=8,
+        ),
+        _node(
             "pf5-milestone",
             "Independent Capstone",
             node_type="milestone",
@@ -772,7 +784,7 @@ FITNESS_INDEPENDENT = Template(
             unit="boolean",
             frequency=1,
             minutes=120,
-            sort_order=8,
+            sort_order=9,
         ),
     ],
     edges=[
@@ -784,6 +796,7 @@ FITNESS_INDEPENDENT = Template(
         TemplateEdge("pf5-reassess", "pf5-specialize"),
         TemplateEdge("pf5-specialize", "pf5-lifelong"),
         TemplateEdge("pf5-reassess", "pf5-lifelong"),
+        TemplateEdge("pf5-specialize", "coaching_fundamentals"),
         TemplateEdge("pf5-assess", "pf5-milestone"),
         TemplateEdge("pf5-periodize", "pf5-milestone"),
         TemplateEdge("pf5-execute", "pf5-milestone"),
@@ -792,6 +805,7 @@ FITNESS_INDEPENDENT = Template(
         TemplateEdge("pf5-specialize", "pf5-milestone"),
         TemplateEdge("pf5-reassess", "pf5-milestone"),
         TemplateEdge("pf5-lifelong", "pf5-milestone"),
+        TemplateEdge("coaching_fundamentals", "pf5-milestone"),
     ],
 )
 

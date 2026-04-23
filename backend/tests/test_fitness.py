@@ -13,12 +13,14 @@ import pytest
 import pytest_asyncio
 from sqlalchemy import select
 
+from app.models.achievements import Achievement
 from app.models.curriculum import ChildMapEnrollment, LearningMap, LearningNode, Subject
 from app.models.enums import NodeType
 from app.models.evidence import Alert
 from app.models.fitness import FitnessBenchmark, FitnessLog
 from app.models.identity import Child, Household
 from app.models.state import ChildNodeState, FSRSCard
+from app.services.achievements import ACHIEVEMENT_DEFS
 from app.services.alert_engine import (
     detect_fitness_overtraining,
     detect_fitness_regression,
@@ -1103,3 +1105,300 @@ class TestFitnessAlerts:
             )
         result = await detect_fitness_overtraining(db_session, child.id, household.id)
         assert result is None
+
+
+# ══════════════════════════════════════════════════
+# 10. Fitness achievements
+# ══════════════════════════════════════════════════
+
+
+class TestFitnessAchievementDefinitions:
+    """Pure-Python checks on the six fitness ACHIEVEMENT_DEFS entries."""
+
+    EXPECTED = {
+        "first_mile",
+        "iron_consistency",
+        "personal_best",
+        "tier_up",
+        "century_fitness",
+        "coaching_badge",
+    }
+
+    def test_all_six_registered(self):
+        types = {d["type"] for d in ACHIEVEMENT_DEFS if d.get("category") == "fitness"}
+        assert types == self.EXPECTED
+
+    def test_icons_are_slug_strings(self):
+        slug_icons = {"trophy-running", "calendar-check", "medal", "arrow-up-circle", "flame", "users"}
+        for d in ACHIEVEMENT_DEFS:
+            if d.get("category") == "fitness":
+                assert d["icon"] in slug_icons
+
+
+class TestFitnessAchievements:
+    @pytest.mark.asyncio
+    async def test_first_mile_fires_on_mile_run_benchmark(self, db_session, household, child):
+        await record_benchmark(
+            db_session,
+            household_id=household.id,
+            child_id=child.id,
+            benchmark_name="mile_run",
+            value=540.0,
+            unit="seconds",
+        )
+        result = await db_session.execute(
+            select(Achievement).where(
+                Achievement.child_id == child.id,
+                Achievement.achievement_type == "first_mile",
+            )
+        )
+        assert result.scalar_one_or_none() is not None
+
+    @pytest.mark.asyncio
+    async def test_first_mile_skips_other_benchmarks(self, db_session, household, child):
+        await record_benchmark(
+            db_session,
+            household_id=household.id,
+            child_id=child.id,
+            benchmark_name="vertical_jump",
+            value=18.0,
+            unit="inches",
+        )
+        result = await db_session.execute(
+            select(Achievement).where(
+                Achievement.child_id == child.id,
+                Achievement.achievement_type == "first_mile",
+            )
+        )
+        assert result.scalar_one_or_none() is None
+
+    @pytest.mark.asyncio
+    async def test_personal_best_fires_on_new_record(self, db_session, household, child):
+        """First benchmark does NOT grant PB; subsequent improvement does."""
+        base = datetime.now(UTC) - timedelta(days=30)
+        await record_benchmark(
+            db_session,
+            household_id=household.id,
+            child_id=child.id,
+            benchmark_name="mile_run",
+            value=600.0,
+            unit="seconds",
+            measured_at=base,
+        )
+        first_pb = await db_session.execute(
+            select(Achievement).where(
+                Achievement.child_id == child.id,
+                Achievement.achievement_type == "personal_best",
+            )
+        )
+        assert first_pb.scalar_one_or_none() is None
+
+        await record_benchmark(
+            db_session,
+            household_id=household.id,
+            child_id=child.id,
+            benchmark_name="mile_run",
+            value=540.0,
+            unit="seconds",
+            measured_at=base + timedelta(days=10),
+        )
+        after = await db_session.execute(
+            select(Achievement).where(
+                Achievement.child_id == child.id,
+                Achievement.achievement_type == "personal_best",
+            )
+        )
+        assert after.scalar_one_or_none() is not None
+
+    @pytest.mark.asyncio
+    async def test_century_fitness_fires_at_100_logs(self, db_session, household, child, user, pe_node):
+        now = datetime.now(UTC)
+        for i in range(99):
+            db_session.add(
+                FitnessLog(
+                    household_id=household.id,
+                    child_id=child.id,
+                    node_id=pe_node.id,
+                    logged_at=now - timedelta(minutes=i),
+                    duration_minutes=15,
+                    measurement_type="counted",
+                    measurement_value=10,
+                    measurement_unit="repetitions",
+                    logged_by=user.id,
+                )
+            )
+        await db_session.flush()
+
+        await log_fitness_activity(
+            db_session,
+            household_id=household.id,
+            child_id=child.id,
+            node_id=pe_node.id,
+            logged_at=now,
+            duration_minutes=15,
+            measurement_type="counted",
+            measurement_value=12,
+            measurement_unit="repetitions",
+            logged_by=user.id,
+        )
+        result = await db_session.execute(
+            select(Achievement).where(
+                Achievement.child_id == child.id,
+                Achievement.achievement_type == "century_fitness",
+            )
+        )
+        assert result.scalar_one_or_none() is not None
+
+    @pytest.mark.asyncio
+    async def test_century_fitness_does_not_fire_at_low_count(self, db_session, household, child, user, pe_node):
+        await log_fitness_activity(
+            db_session,
+            household_id=household.id,
+            child_id=child.id,
+            node_id=pe_node.id,
+            logged_at=datetime.now(UTC),
+            duration_minutes=10,
+            measurement_type="counted",
+            measurement_value=5,
+            measurement_unit="repetitions",
+            logged_by=user.id,
+        )
+        result = await db_session.execute(
+            select(Achievement).where(
+                Achievement.child_id == child.id,
+                Achievement.achievement_type == "century_fitness",
+            )
+        )
+        assert result.scalar_one_or_none() is None
+
+    @pytest.mark.asyncio
+    async def test_iron_consistency_fires_on_4_weeks_of_5_days(self, db_session, household, child, user, pe_node):
+        now = datetime.now(UTC)
+        current_week_start = (now - timedelta(days=now.weekday())).replace(hour=0, minute=0, second=0, microsecond=0)
+        window_start = current_week_start - timedelta(weeks=4)
+
+        for w in range(4):
+            for d in range(5):
+                db_session.add(
+                    FitnessLog(
+                        household_id=household.id,
+                        child_id=child.id,
+                        node_id=pe_node.id,
+                        logged_at=window_start + timedelta(weeks=w, days=d, hours=9),
+                        duration_minutes=20,
+                        measurement_type="counted",
+                        measurement_value=10,
+                        measurement_unit="repetitions",
+                        logged_by=user.id,
+                    )
+                )
+        await db_session.flush()
+
+        await log_fitness_activity(
+            db_session,
+            household_id=household.id,
+            child_id=child.id,
+            node_id=pe_node.id,
+            logged_at=now,
+            duration_minutes=20,
+            measurement_type="counted",
+            measurement_value=10,
+            measurement_unit="repetitions",
+            logged_by=user.id,
+        )
+        result = await db_session.execute(
+            select(Achievement).where(
+                Achievement.child_id == child.id,
+                Achievement.achievement_type == "iron_consistency",
+            )
+        )
+        assert result.scalar_one_or_none() is not None
+
+    @pytest.mark.asyncio
+    async def test_iron_consistency_misses_sparse_week(self, db_session, household, child, user, pe_node):
+        now = datetime.now(UTC)
+        current_week_start = (now - timedelta(days=now.weekday())).replace(hour=0, minute=0, second=0, microsecond=0)
+        window_start = current_week_start - timedelta(weeks=4)
+
+        for w in range(4):
+            days = 5 if w != 1 else 2
+            for d in range(days):
+                db_session.add(
+                    FitnessLog(
+                        household_id=household.id,
+                        child_id=child.id,
+                        node_id=pe_node.id,
+                        logged_at=window_start + timedelta(weeks=w, days=d, hours=9),
+                        duration_minutes=20,
+                        measurement_type="counted",
+                        measurement_value=10,
+                        measurement_unit="repetitions",
+                        logged_by=user.id,
+                    )
+                )
+        await db_session.flush()
+
+        await log_fitness_activity(
+            db_session,
+            household_id=household.id,
+            child_id=child.id,
+            node_id=pe_node.id,
+            logged_at=now,
+            duration_minutes=20,
+            measurement_type="counted",
+            measurement_value=10,
+            measurement_unit="repetitions",
+            logged_by=user.id,
+        )
+        result = await db_session.execute(
+            select(Achievement).where(
+                Achievement.child_id == child.id,
+                Achievement.achievement_type == "iron_consistency",
+            )
+        )
+        assert result.scalar_one_or_none() is None
+
+    @pytest.mark.asyncio
+    async def test_coaching_badge_fires_on_coaching_node_mastery(self, db_session, household, child, user, pe_subject):
+        independent = LearningMap(
+            household_id=household.id,
+            subject_id=pe_subject.id,
+            name="Physical Fitness: Independent",
+        )
+        db_session.add(independent)
+        await db_session.flush()
+        coaching = LearningNode(
+            learning_map_id=independent.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Coaching Fundamentals",
+            content={
+                "description": "Teach a fitness skill.",
+                "benchmark_criteria": "Deliver a 20-minute lesson.",
+                "assessment_type": "pass_fail",
+                "measurement_unit": "boolean",
+                "suggested_frequency": 1,
+            },
+        )
+        db_session.add(coaching)
+        await db_session.flush()
+
+        await log_fitness_activity(
+            db_session,
+            household_id=household.id,
+            child_id=child.id,
+            node_id=coaching.id,
+            logged_at=datetime.now(UTC),
+            duration_minutes=20,
+            measurement_type="pass_fail",
+            measurement_value=1,
+            measurement_unit="boolean",
+            logged_by=user.id,
+        )
+        result = await db_session.execute(
+            select(Achievement).where(
+                Achievement.child_id == child.id,
+                Achievement.achievement_type == "coaching_badge",
+            )
+        )
+        assert result.scalar_one_or_none() is not None

@@ -297,6 +297,27 @@ async def log_fitness_activity(
     except Exception:
         pass
 
+    # Achievement checks are non-blocking.
+    new_achievements: list = []
+    try:
+        from app.services import achievements as achievements_svc
+
+        new_achievements = await achievements_svc.check_achievements(
+            db,
+            child_id,
+            household_id,
+            trigger_event="fitness_log",
+            context={
+                "node_id": str(node_id),
+                "mastery_advanced": mastery_advanced,
+                "current_mastery": state.mastery_level.value
+                if hasattr(state.mastery_level, "value")
+                else str(state.mastery_level),
+            },
+        )
+    except Exception:
+        pass
+
     return {
         "id": log.id,
         "household_id": log.household_id,
@@ -321,6 +342,7 @@ async def log_fitness_activity(
         else str(state.mastery_level),
         "state_event_id": state_event_id,
         "fsrs_rating": fsrs_rating.value,
+        "new_achievements": [{"type": a.achievement_type, "title": a.title} for a in new_achievements],
     }
 
 
@@ -383,6 +405,28 @@ async def record_benchmark(
     except Exception:
         pass
 
+    # Achievement checks are non-blocking.
+    new_achievements: list = []
+    try:
+        from app.services import achievements as achievements_svc
+
+        new_achievements = await achievements_svc.check_achievements(
+            db,
+            child_id,
+            household_id,
+            trigger_event="fitness_benchmark",
+            context={
+                "benchmark_name": benchmark_name,
+                "unit": unit,
+                "value": value,
+                "personal_best": personal_best,
+                "history_count": len(prior) + 1,
+                "improvement_pct": improvement_pct,
+            },
+        )
+    except Exception:
+        pass
+
     return {
         "id": benchmark.id,
         "household_id": benchmark.household_id,
@@ -398,6 +442,7 @@ async def record_benchmark(
         "improvement_pct": improvement_pct,
         "personal_best": personal_best,
         "history_count": len(prior) + 1,
+        "new_achievements": [{"type": a.achievement_type, "title": a.title} for a in new_achievements],
     }
 
 
