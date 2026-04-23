@@ -318,6 +318,14 @@ async def log_fitness_activity(
     except Exception:
         pass
 
+    # Fitness logs count toward the general learning streak.
+    try:
+        from app.services.achievements import update_streak
+
+        await update_streak(db, child_id, household_id)
+    except Exception:
+        pass
+
     return {
         "id": log.id,
         "household_id": log.household_id,

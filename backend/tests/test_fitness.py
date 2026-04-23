@@ -7,13 +7,15 @@ Covers:
 - HTTP API: 201s on create, GETs on read, auth enforcement, household isolation.
 """
 
+import uuid
 from datetime import UTC, datetime, timedelta
 
 import pytest
 import pytest_asyncio
 from sqlalchemy import select
 
-from app.models.achievements import Achievement
+from app.api.child_dashboard import _build_fitness_block, _fitness_trend
+from app.models.achievements import Achievement, Streak
 from app.models.curriculum import ChildMapEnrollment, LearningMap, LearningNode, Subject
 from app.models.enums import NodeType
 from app.models.evidence import Alert
@@ -1402,3 +1404,163 @@ class TestFitnessAchievements:
             )
         )
         assert result.scalar_one_or_none() is not None
+
+
+# ══════════════════════════════════════════════════
+# 11. Dashboard + streak integration
+# ══════════════════════════════════════════════════
+
+
+class TestFitnessTrendHelper:
+    """Pure-Python trend classifier used by the dashboard builder."""
+
+    def test_improving_higher_is_better(self):
+        assert _fitness_trend([10, 12, 14, 16, 18], lower_is_better=False) == "improving"
+
+    def test_improving_lower_is_better(self):
+        assert _fitness_trend([600, 560, 540, 520, 500], lower_is_better=True) == "improving"
+
+    def test_declining_higher_is_better(self):
+        assert _fitness_trend([20, 18, 16, 14, 12], lower_is_better=False) == "declining"
+
+    def test_plateau_mixed(self):
+        assert _fitness_trend([10, 12, 10, 12, 10], lower_is_better=False) == "plateau"
+
+    def test_short_series_is_plateau(self):
+        assert _fitness_trend([15], lower_is_better=False) == "plateau"
+
+
+class TestFitnessDashboardBlock:
+    @pytest.mark.asyncio
+    async def test_returns_none_without_enrollment(self, db_session, household, child):
+        from datetime import date
+
+        today = date.today()
+        week_start = today - timedelta(days=today.weekday())
+        block = await _build_fitness_block(db_session, child.id, household.id, today, week_start)
+        assert block is None
+
+    @pytest.mark.asyncio
+    async def test_returns_block_with_tier_and_streak(self, db_session, household, child, user, pe_map, pe_node):
+        """Enrollment + two consecutive days of logs yields a populated fitness block."""
+        from datetime import date
+
+        db_session.add(
+            ChildMapEnrollment(
+                household_id=household.id,
+                child_id=child.id,
+                learning_map_id=pe_map.id,
+                is_active=True,
+            )
+        )
+        await db_session.flush()
+
+        today = date.today()
+        week_start = today - timedelta(days=today.weekday())
+        for offset in (1, 0):  # yesterday + today
+            await log_fitness_activity(
+                db_session,
+                household_id=household.id,
+                child_id=child.id,
+                node_id=pe_node.id,
+                logged_at=datetime.combine(today - timedelta(days=offset), datetime.min.time(), tzinfo=UTC)
+                + timedelta(hours=10),
+                duration_minutes=30,
+                measurement_type="counted",
+                measurement_value=12,
+                measurement_unit="repetitions",
+                logged_by=user.id,
+            )
+
+        block = await _build_fitness_block(db_session, child.id, household.id, today, week_start)
+        assert block is not None
+        assert block["current_tier"] == "Foundations"
+        assert block["streak_days"] == 2
+        assert block["this_week_minutes"] >= 30  # at least today's 30 counted
+
+    @pytest.mark.asyncio
+    async def test_recent_benchmark_includes_trend(self, db_session, household, child, pe_map):
+        """Latest benchmark surfaces with a trend classification."""
+        from datetime import date
+
+        db_session.add(
+            ChildMapEnrollment(
+                household_id=household.id,
+                child_id=child.id,
+                learning_map_id=pe_map.id,
+                is_active=True,
+            )
+        )
+        await db_session.flush()
+
+        base = datetime.now(UTC) - timedelta(days=30)
+        for offset, value in [(0, 600), (10, 580), (20, 560)]:
+            await record_benchmark(
+                db_session,
+                household_id=household.id,
+                child_id=child.id,
+                benchmark_name="mile_run",
+                value=value,
+                unit="seconds",
+                measured_at=base + timedelta(days=offset),
+            )
+
+        today = date.today()
+        week_start = today - timedelta(days=today.weekday())
+        block = await _build_fitness_block(db_session, child.id, household.id, today, week_start)
+        assert block is not None
+        bench = block["recent_benchmark"]
+        assert bench is not None
+        assert bench["name"] == "mile_run"
+        assert bench["value"] == 560
+        assert bench["unit"] == "seconds"
+        assert bench["trend"] == "improving"
+
+
+class TestFitnessStreakIntegration:
+    @pytest.mark.asyncio
+    async def test_fitness_log_updates_streak(self, db_session, household, child, user, pe_node):
+        """Logging a fitness session bumps the shared Streak for the child."""
+        await log_fitness_activity(
+            db_session,
+            household_id=household.id,
+            child_id=child.id,
+            node_id=pe_node.id,
+            logged_at=datetime.now(UTC),
+            duration_minutes=20,
+            measurement_type="counted",
+            measurement_value=10,
+            measurement_unit="repetitions",
+            logged_by=user.id,
+        )
+        streak_result = await db_session.execute(select(Streak).where(Streak.child_id == child.id))
+        streak = streak_result.scalar_one()
+        assert streak.current_streak >= 1
+        assert streak.last_activity_date is not None
+
+
+class TestFitnessActivityGovernance:
+    """PE activities with activity_type=practice or assessment flow through governance unchanged."""
+
+    @pytest.mark.asyncio
+    async def test_activity_context_accepts_practice_type(self):
+        """ActivityContext string activity_type field lets fitness activities ride the existing queue."""
+        from app.services.governance import ActivityContext
+
+        ctx = ActivityContext(
+            household_id=uuid.uuid4(),
+            child_id=uuid.uuid4(),
+            activity_type="practice",
+            node_id=uuid.uuid4(),
+            estimated_minutes=30,
+        )
+        assert ctx.activity_type == "practice"
+
+        assessment_ctx = ActivityContext(
+            household_id=uuid.uuid4(),
+            child_id=uuid.uuid4(),
+            activity_type="assessment",
+            node_id=uuid.uuid4(),
+            estimated_minutes=20,
+        )
+        assert assessment_ctx.activity_type == "assessment"

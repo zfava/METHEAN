@@ -46,6 +46,137 @@ async def _get_child_or_404(db: AsyncSession, child_id: uuid.UUID, household_id:
     return child
 
 
+_FITNESS_TIER_ORDER = [
+    "Physical Fitness: Foundations",
+    "Physical Fitness: Development",
+    "Physical Fitness: Intermediate",
+    "Physical Fitness: Advanced",
+    "Physical Fitness: Independent",
+]
+_FITNESS_LOWER_IS_BETTER = {"seconds", "minutes"}
+
+
+async def _build_fitness_block(
+    db: AsyncSession,
+    child_id: uuid.UUID,
+    household_id: uuid.UUID,
+    today: date,
+    week_start: date,
+) -> dict | None:
+    """Assemble the dashboard's optional fitness summary.
+
+    Returns None when the child has no PE enrollment — the key is then
+    omitted from the response entirely so non-PE families see no change.
+    """
+    from app.models.fitness import FitnessBenchmark, FitnessLog
+
+    enrolled_result = await db.execute(
+        select(LearningMap.name)
+        .join(ChildMapEnrollment, ChildMapEnrollment.learning_map_id == LearningMap.id)
+        .where(
+            ChildMapEnrollment.household_id == household_id,
+            ChildMapEnrollment.child_id == child_id,
+            ChildMapEnrollment.is_active == True,  # noqa: E712
+            LearningMap.name.ilike("Physical Fitness%"),
+        )
+    )
+    enrolled_names = [r[0] for r in enrolled_result.all()]
+    if not enrolled_names:
+        return None
+
+    current_tier = None
+    for name in reversed(_FITNESS_TIER_ORDER):
+        if name in enrolled_names:
+            current_tier = name.replace("Physical Fitness: ", "")
+            break
+
+    # Streak: consecutive days with at least one fitness log, ending today
+    # (or yesterday if today has no log yet).
+    log_dates_result = await db.execute(
+        select(FitnessLog.logged_at).where(
+            FitnessLog.household_id == household_id,
+            FitnessLog.child_id == child_id,
+        )
+    )
+    log_dates = {ts.date() for (ts,) in log_dates_result.all()}
+    streak_days = 0
+    anchor = today if today in log_dates else (today - timedelta(days=1))
+    if anchor in log_dates:
+        cursor = anchor
+        while cursor in log_dates:
+            streak_days += 1
+            cursor -= timedelta(days=1)
+
+    week_minutes_result = await db.execute(
+        select(func.coalesce(func.sum(FitnessLog.duration_minutes), 0)).where(
+            FitnessLog.household_id == household_id,
+            FitnessLog.child_id == child_id,
+            FitnessLog.logged_at >= datetime.combine(week_start, datetime.min.time(), tzinfo=UTC),
+        )
+    )
+    this_week_minutes = int(week_minutes_result.scalar_one() or 0)
+
+    latest_result = await db.execute(
+        select(FitnessBenchmark)
+        .where(
+            FitnessBenchmark.household_id == household_id,
+            FitnessBenchmark.child_id == child_id,
+        )
+        .order_by(FitnessBenchmark.measured_at.desc())
+        .limit(1)
+    )
+    latest = latest_result.scalar_one_or_none()
+    recent_benchmark: dict | None = None
+    if latest is not None:
+        history_result = await db.execute(
+            select(FitnessBenchmark.value)
+            .where(
+                FitnessBenchmark.household_id == household_id,
+                FitnessBenchmark.child_id == child_id,
+                FitnessBenchmark.benchmark_name == latest.benchmark_name,
+            )
+            .order_by(FitnessBenchmark.measured_at.asc())
+        )
+        values = [v for (v,) in history_result.all()]
+        trend = _fitness_trend(values, (latest.unit or "").lower() in _FITNESS_LOWER_IS_BETTER)
+        recent_benchmark = {
+            "name": latest.benchmark_name,
+            "value": latest.value,
+            "unit": latest.unit,
+            "trend": trend,
+        }
+
+    return {
+        "streak_days": streak_days,
+        "this_week_minutes": this_week_minutes,
+        "current_tier": current_tier,
+        "recent_benchmark": recent_benchmark,
+    }
+
+
+def _fitness_trend(values: list[float], lower_is_better: bool) -> str:
+    """Improving/plateau/declining over the last 5 values."""
+    tail = values[-5:]
+    if len(tail) < 2:
+        return "plateau"
+    better = 0
+    worse = 0
+    for i in range(1, len(tail)):
+        delta = tail[i] - tail[i - 1]
+        if delta == 0:
+            continue
+        is_better = (delta < 0) if lower_is_better else (delta > 0)
+        if is_better:
+            better += 1
+        else:
+            worse += 1
+    if better > worse:
+        return "improving"
+    if worse > better:
+        return "declining"
+    return "plateau"
+
+
 @router.get("/children/{child_id}/dashboard")
 async def get_child_dashboard(
     child_id: uuid.UUID,
@@ -397,7 +528,14 @@ async def get_child_dashboard(
     except Exception:
         pass
 
-    return {
+    # ── Fitness block (only if the child has a PE enrollment) ──
+    fitness_block = None
+    try:
+        fitness_block = await _build_fitness_block(db, child_id, household_id, today, week_start)
+    except Exception:
+        fitness_block = None
+
+    response: dict = {
         "child": {
             "first_name": child.first_name,
             "grade_level": child.grade_level,
@@ -434,3 +572,6 @@ async def get_child_dashboard(
         "encouragement": encouragement,
         "style_hints": style_hints,
     }
+    if fitness_block is not None:
+        response["fitness"] = fitness_block
+    return response
