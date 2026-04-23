@@ -92,6 +92,7 @@ PLANNER_PROFILE = RoleContextProfile(
         ContextSource("family_insights", "fetch_family_planner_context", 300, 0.7, 30),
         ContextSource("previous_week_signals", "fetch_previous_week_signals", 400, 0.8, 14),
         ContextSource("intelligence_summary", "fetch_intelligence_summary", 300, 0.6, 30),
+        ContextSource("fitness_summary", "fetch_fitness_context", 250, 0.6, 14),
     ],
 )
 
@@ -108,6 +109,7 @@ ADVISOR_PROFILE = RoleContextProfile(
         ContextSource("fsrs_retention_summary", "fetch_retention_summary", 300, 0.7, 30),
         ContextSource("intelligence_full", "fetch_intelligence_full", 400, 0.6, 30),
         ContextSource("parent_observations", "fetch_parent_observations", 300, 0.65, 90),
+        ContextSource("fitness_summary", "fetch_fitness_context", 300, 0.8, 14),
     ],
 )
 
@@ -954,6 +956,110 @@ async def fetch_subject_affinity(db, child_id, household_id, **kw) -> dict:
     return {"text": f"Subject affinities: {aff}", "metadata": {"timestamp": v.last_computed_at}}
 
 
+async def fetch_fitness_context(db, child_id, household_id, **kw) -> dict:
+    """Concise PE summary: current tier, recent sessions, benchmark trends.
+
+    Returns empty when the child has no fitness enrollment or log history,
+    so the planner/advisor naturally omit the section for non-PE families.
+    """
+    from sqlalchemy import func, select
+
+    from app.models.curriculum import ChildMapEnrollment, LearningMap
+    from app.models.fitness import FitnessLog
+
+    fitness_prefix = "Physical Fitness"
+    tier_names = [
+        "Physical Fitness: Foundations",
+        "Physical Fitness: Development",
+        "Physical Fitness: Intermediate",
+        "Physical Fitness: Advanced",
+        "Physical Fitness: Independent",
+    ]
+
+    enrolled_result = await db.execute(
+        select(LearningMap.name)
+        .join(ChildMapEnrollment, ChildMapEnrollment.learning_map_id == LearningMap.id)
+        .where(
+            ChildMapEnrollment.household_id == household_id,
+            ChildMapEnrollment.child_id == child_id,
+            ChildMapEnrollment.is_active == True,  # noqa: E712
+            LearningMap.name.ilike(f"{fitness_prefix}%"),
+        )
+    )
+    enrolled_names = [r[0] for r in enrolled_result.all()]
+
+    log_count_result = await db.execute(
+        select(func.count(FitnessLog.id)).where(
+            FitnessLog.child_id == child_id,
+            FitnessLog.household_id == household_id,
+        )
+    )
+    total_logs = log_count_result.scalar_one() or 0
+    if not enrolled_names and total_logs == 0:
+        return _empty()
+
+    # Determine the highest active tier by template ordering.
+    current_tier = None
+    for name in reversed(tier_names):
+        if name in enrolled_names:
+            current_tier = name.replace(f"{fitness_prefix}: ", "")
+            break
+    if current_tier is None and enrolled_names:
+        current_tier = enrolled_names[0].replace(f"{fitness_prefix}: ", "")
+
+    cutoff = _now() - timedelta(days=14)
+    recent_result = await db.execute(
+        select(FitnessLog).where(
+            FitnessLog.child_id == child_id,
+            FitnessLog.household_id == household_id,
+            FitnessLog.logged_at >= cutoff,
+        )
+    )
+    recent_logs = list(recent_result.scalars().all())
+    session_count = len(recent_logs)
+    total_minutes = sum(log.duration_minutes or 0 for log in recent_logs)
+    last_log_ts = max((log.logged_at for log in recent_logs), default=None)
+
+    # Benchmark summary via progress summary.
+    progress = {}
+    try:
+        from app.services.fitness_service import get_progress_summary
+
+        progress = await get_progress_summary(db, household_id, child_id)
+    except Exception:
+        progress = {"benchmarks": []}
+
+    lines: list[str] = []
+    tier_line = f"Physical Fitness: Tier {current_tier}" if current_tier else "Physical Fitness"
+    lines.append(f"{tier_line}. Last 14 days: {session_count} sessions, {total_minutes / 60:.1f} hours total.")
+
+    for bench in progress.get("benchmarks", [])[:5]:
+        name = bench["benchmark_name"]
+        unit = bench.get("unit") or ""
+        latest = bench.get("latest_value")
+        first = bench.get("first_value")
+        trend = bench.get("trend", "plateau")
+        if unit == "seconds" and isinstance(latest, int | float):
+            latest_str = f"{int(latest) // 60}:{int(latest) % 60:02d}"
+            first_str = f"{int(first) // 60}:{int(first) % 60:02d}" if isinstance(first, int | float) else "?"
+        else:
+            latest_str = f"{latest} {unit}".strip() if latest is not None else "?"
+            first_str = f"{first} {unit}".strip() if first is not None else "?"
+        if trend == "improving":
+            lines.append(f"{name}: {latest_str} (improving, from {first_str}).")
+        elif trend == "declining":
+            lines.append(f"{name}: {latest_str} (declining, from {first_str}).")
+        else:
+            lines.append(f"{name}: {latest_str} (plateau).")
+
+    if last_log_ts:
+        idle_days = (_now() - last_log_ts).days
+        if idle_days >= 10:
+            lines.append(f"No flexibility/strength work logged in {idle_days} days.")
+
+    return {"text": " ".join(lines), "metadata": {"timestamp": last_log_ts or _now()}}
+
+
 # ══════════════════════════════════════════════════
 # Fetcher Registry
 # ══════════════════════════════════════════════════
@@ -991,6 +1097,7 @@ FETCHER_MAP: dict[str, callable] = {
     "fetch_style_strategic": fetch_style_strategic,
     "fetch_material_effectiveness": fetch_material_effectiveness,
     "fetch_subject_affinity": fetch_subject_affinity,
+    "fetch_fitness_context": fetch_fitness_context,
 }
 
 
