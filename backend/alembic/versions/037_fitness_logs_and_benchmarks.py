@@ -3,8 +3,8 @@
 Tracks per-practice fitness log entries (fitness_logs) and standardised
 benchmark scores (fitness_benchmarks), both scoped by household for RLS.
 
-Revision ID: 033
-Revises: 032
+Revision ID: 037
+Revises: 036
 Create Date: 2026-04-23
 """
 
@@ -14,8 +14,8 @@ from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import UUID
 
-revision: str = "033"
-down_revision: Union[str, None] = "032"
+revision: str = "037"
+down_revision: Union[str, None] = "036"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
