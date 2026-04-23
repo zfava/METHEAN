@@ -22,6 +22,7 @@ from app.models.evidence import (
     WeeklySnapshot,
 )
 from app.models.family_insight import FamilyInsight, FamilyInsightConfig
+from app.models.fitness import FitnessBenchmark, FitnessLog
 from app.models.governance import (
     Activity,
     Attempt,
@@ -70,6 +71,8 @@ __all__ = [
     "FamilyInsightConfig",
     "FamilyInvite",
     "FamilyResource",
+    "FitnessBenchmark",
+    "FitnessLog",
     "GovernanceEvent",
     "GovernanceRule",
     "Household",
