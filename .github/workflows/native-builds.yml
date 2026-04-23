@@ -32,7 +32,7 @@ jobs:
         working-directory: frontend/android
         run: ./gradlew bundleRelease
       - name: Upload AAB
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: android-release
           path: frontend/android/app/build/outputs/bundle/release/*.aab
@@ -65,7 +65,7 @@ jobs:
             archive \
             CODE_SIGNING_ALLOWED=NO
       - name: Upload Archive
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ios-archive
           path: frontend/ios/App/build/App.xcarchive
