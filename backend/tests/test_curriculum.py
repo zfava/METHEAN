@@ -16,6 +16,7 @@ import pytest
 from sqlalchemy import select
 
 from app.models.curriculum import (
+    ChildMapEnrollment,
     LearningEdge,
     LearningMapClosure,
     LearningNode,
