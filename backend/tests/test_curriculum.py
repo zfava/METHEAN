@@ -16,7 +16,6 @@ import pytest
 from sqlalchemy import select
 
 from app.models.curriculum import (
-    ChildMapEnrollment,
     LearningEdge,
     LearningMapClosure,
     LearningNode,
@@ -846,11 +845,13 @@ class TestTemplates:
         resp = await auth_client.get("/api/v1/learning-maps/templates")
         assert resp.status_code == 200
         templates = resp.json()
-        assert len(templates) == 7
+        assert len(templates) == 12
         ids = {t["template_id"] for t in templates}
         assert "math-foundational" in ids
         assert "elementary-core" in ids
         assert "classical-logic" in ids
+        assert "physical_fitness_foundations" in ids
+        assert "physical_fitness_independent" in ids
 
     @pytest.mark.asyncio
     async def test_copy_template_creates_independent_copy(

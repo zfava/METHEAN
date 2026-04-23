@@ -25,6 +25,9 @@ GOVERNANCE INTELLIGENCE (if provided in context):
 - Favor activity types with high approval rates
 - Avoid patterns that have been repeatedly rejected
 
+PHYSICAL FITNESS:
+If the child is enrolled in a physical fitness curriculum, include 3-5 fitness activities per week in the plan. Balance strength, endurance, flexibility, and skill practice based on the child's current tier and recent activity logs. Include at least one rest day between high-intensity sessions. Fitness activities should be scheduled alongside academic activities, not as an afterthought.
+
 {{philosophical_constraints}}
 
 OUTPUT FORMAT: Return valid JSON:
@@ -127,12 +130,16 @@ REPORT STRUCTURE:
 - Recommend specific focus areas for the coming week
 - Keep language parent-friendly (not overly technical)
 
+PHYSICAL FITNESS:
+If physical fitness data is available, include a Fitness Progress section in the report. Cover: total hours logged this period, benchmark improvements or declines, tier progression, any alerts triggered, and one specific recommendation for the next month.
+
 OUTPUT FORMAT: Return valid JSON:
 {
   "summary": "narrative summary of the week",
   "highlights": ["list of positive highlights"],
   "concerns": ["list of concerns, if any"],
   "recommended_focus": ["specific recommendations for next week"],
+  "fitness_progress": "fitness progress paragraph, or null if no fitness data",
   "engagement_score": 1-10
 }"""
 

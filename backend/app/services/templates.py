@@ -16,6 +16,7 @@ class TemplateNode:
     description: str = ""
     estimated_minutes: int | None = None
     sort_order: int = 0
+    content: dict | None = None
 
 
 @dataclass
@@ -901,3 +902,7 @@ TEMPLATES: dict[str, Template] = {
         WOODWORKING_FUNDAMENTALS,
     ]
 }
+
+# Side-effect registration of additional template libraries. Keep at the very
+# bottom so TEMPLATES already exists when the imported module registers.
+import app.services.fitness_templates  # noqa: E402, F401

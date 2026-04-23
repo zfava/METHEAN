@@ -225,6 +225,10 @@ async def copy_template(
         await db.flush()
         ref_to_uuid[tnode.ref] = node.id
 
+        # Inline content on the template node takes precedence.
+        if tnode.content is not None:
+            node.content = tnode.content
+
         # Inject pre-enriched content if available
         try:
             from app.content.math_foundational_content import MATH_FOUNDATIONAL_CONTENT

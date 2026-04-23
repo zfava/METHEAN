@@ -6,7 +6,7 @@ import pytest
 class TestVocationalTemplates:
     @pytest.mark.asyncio
     async def test_seven_templates_registered(self, auth_client):
-        """All 7 templates (3 academic + 4 vocational) in template list."""
+        """Core templates (3 academic + 4 vocational + 5 fitness tiers) in template list."""
         resp = await auth_client.get("/api/v1/learning-maps/templates")
         assert resp.status_code == 200
         templates = resp.json()
@@ -16,7 +16,9 @@ class TestVocationalTemplates:
         assert "Electrical Fundamentals" in names
         assert "Automotive Fundamentals" in names
         assert "Woodworking Fundamentals" in names
-        assert len(templates) == 7
+        assert "Physical Fitness: Foundations" in names
+        assert "Physical Fitness: Independent" in names
+        assert len(templates) == 12
 
     @pytest.mark.asyncio
     async def test_welding_template_has_safety_first(self, auth_client):

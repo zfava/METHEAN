@@ -892,3 +892,103 @@ class TestAssemblyResultShape:
             result = await assemble_context(db_session, role, ctx_child.id, ctx_household.id)
             for name in result["sources_used"]:
                 assert name in valid_names, f"Role {role}: unknown source name {name} in sources_used"
+
+
+# ──────────────────────────────────────────────────
+# Fitness context
+# ──────────────────────────────────────────────────
+
+
+class TestFitnessContextProfile:
+    """Fitness source is wired into planner + advisor profiles with expected weights."""
+
+    def test_fitness_source_in_planner_profile(self):
+        planner = ROLE_PROFILES["planner"]
+        fitness_source = next((s for s in planner.sources if s.name == "fitness_summary"), None)
+        assert fitness_source is not None, "fitness_summary missing from planner profile"
+        assert fitness_source.required is False
+        assert fitness_source.relevance_weight == pytest.approx(0.6)
+        assert fitness_source.query_fn == "fetch_fitness_context"
+
+    def test_fitness_source_in_advisor_profile(self):
+        advisor = ROLE_PROFILES["advisor"]
+        fitness_source = next((s for s in advisor.sources if s.name == "fitness_summary"), None)
+        assert fitness_source is not None, "fitness_summary missing from advisor profile"
+        assert fitness_source.required is False
+        assert fitness_source.relevance_weight == pytest.approx(0.8)
+        assert fitness_source.query_fn == "fetch_fitness_context"
+
+    def test_fitness_fetcher_is_registered(self):
+        assert "fetch_fitness_context" in FETCHER_MAP
+
+
+@pytest.mark.asyncio
+class TestFitnessContextFetcher:
+    async def test_empty_when_no_pe_or_logs(self, db_session, ctx_child, ctx_household):
+        from app.services.context_assembly import fetch_fitness_context
+
+        result = await fetch_fitness_context(db_session, ctx_child.id, ctx_household.id)
+        assert result["text"] == ""
+
+    async def test_returns_summary_when_enrolled_and_logged(self, db_session, ctx_child, ctx_household):
+        from app.models.curriculum import ChildMapEnrollment
+        from app.services.context_assembly import fetch_fitness_context
+        from app.services.fitness_service import log_fitness_activity
+
+        pe_subject_row = Subject(household_id=ctx_household.id, name="Physical Fitness")
+        db_session.add(pe_subject_row)
+        await db_session.flush()
+        pe_map = LearningMap(
+            household_id=ctx_household.id,
+            subject_id=pe_subject_row.id,
+            name="Physical Fitness: Foundations",
+        )
+        db_session.add(pe_map)
+        await db_session.flush()
+        pe_node = LearningNode(
+            learning_map_id=pe_map.id,
+            household_id=ctx_household.id,
+            node_type=NodeType.skill,
+            title="Two-Foot Jump",
+            content={
+                "description": "Jump.",
+                "benchmark_criteria": "Land 8 of 10.",
+                "assessment_type": "counted",
+                "measurement_unit": "repetitions",
+                "suggested_frequency": 4,
+            },
+        )
+        db_session.add(pe_node)
+        db_session.add(
+            ChildMapEnrollment(
+                household_id=ctx_household.id,
+                child_id=ctx_child.id,
+                learning_map_id=pe_map.id,
+                is_active=True,
+            )
+        )
+        await db_session.flush()
+
+        for minutes in (20, 30, 25):
+            await log_fitness_activity(
+                db_session,
+                household_id=ctx_household.id,
+                child_id=ctx_child.id,
+                node_id=pe_node.id,
+                logged_at=datetime.now(UTC),
+                duration_minutes=minutes,
+                measurement_type="counted",
+                measurement_value=10,
+                measurement_unit="repetitions",
+            )
+
+        result = await fetch_fitness_context(db_session, ctx_child.id, ctx_household.id)
+        text = result["text"]
+        assert "Physical Fitness" in text
+        assert "Foundations" in text
+        assert "3 sessions" in text
+
+    async def test_empty_result_is_excluded_from_assembly(self, db_session, ctx_child, ctx_household):
+        """With no PE data, the planner's fitness_summary source should not appear in sources_used."""
+        result = await assemble_context(db_session, "planner", ctx_child.id, ctx_household.id)
+        assert "fitness_summary" not in result["sources_used"]
