@@ -21,6 +21,7 @@ from app.api.education_plan import router as education_plan_router
 from app.api.family_intelligence import router as family_intelligence_router
 from app.api.feedback import router as feedback_router
 from app.api.feedback_beta import router as feedback_beta_router
+from app.api.fitness import router as fitness_router
 from app.api.governance import router as governance_router
 from app.api.intelligence import router as intelligence_router
 from app.api.notifications import router as notifications_router
@@ -124,6 +125,7 @@ app.include_router(style_vector_router, prefix="/api/v1")
 app.include_router(family_intelligence_router, prefix="/api/v1")
 app.include_router(wellbeing_router, prefix="/api/v1")  # PARENT-ONLY
 app.include_router(child_dashboard_router, prefix="/api/v1")
+app.include_router(fitness_router, prefix="/api/v1")
 
 
 @app.get("/health")

@@ -65,6 +65,13 @@ PROTECTED_ROUTES = [
     ("GET", f"/api/v1/children/{DUMMY_UUID}/assessments"),
     ("GET", f"/api/v1/children/{DUMMY_UUID}/portfolio"),
     ("GET", f"/api/v1/children/{DUMMY_UUID}/transcript"),
+    # Fitness
+    ("POST", "/api/v1/fitness/log"),
+    ("GET", f"/api/v1/fitness/log/{DUMMY_UUID}"),
+    ("POST", "/api/v1/fitness/benchmark"),
+    ("GET", f"/api/v1/fitness/benchmarks/{DUMMY_UUID}"),
+    ("GET", f"/api/v1/fitness/progress/{DUMMY_UUID}"),
+    ("GET", f"/api/v1/fitness/stats/{DUMMY_UUID}"),
     # Billing (authenticated)
     ("GET", "/api/v1/billing/status"),
     ("POST", "/api/v1/billing/subscribe"),
