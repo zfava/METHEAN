@@ -27,7 +27,7 @@ from app.models.curriculum import (
 from app.models.enums import (
     ActivityStatus,
 )
-from app.models.governance import Activity
+from app.models.governance import Activity, Plan, PlanWeek
 from app.models.identity import Child, ChildPreferences, Household, User, UserPermission
 from app.models.operational import DeviceToken, NotificationLog
 from app.models.state import ChildNodeState
@@ -520,14 +520,23 @@ async def get_today(
     user: User = Depends(get_current_user),
     _child: Child = Depends(require_child_access("read")),
 ) -> list[dict]:
-    """Return today's scheduled activities for a child."""
+    """Return today's scheduled activities for the target child.
+
+    Activity has no ``child_id`` column — the child link lives on
+    :class:`Plan` — so we join Activity → PlanWeek → Plan and filter
+    on ``Plan.child_id``. A bare household-only filter would leak
+    every sibling's activities for the day.
+    """
     await _get_child_or_404(db, child_id, user.household_id)
     today = target_date or date.today()
 
     result = await db.execute(
         select(Activity)
+        .join(PlanWeek, Activity.plan_week_id == PlanWeek.id)
+        .join(Plan, PlanWeek.plan_id == Plan.id)
         .where(
             Activity.household_id == user.household_id,
+            Plan.child_id == child_id,
             Activity.scheduled_date == today,
             Activity.status.in_([ActivityStatus.scheduled, ActivityStatus.in_progress]),
         )
