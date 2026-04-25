@@ -615,24 +615,27 @@ class ResetPasswordRequest(BaseModel):
 @router.post("/forgot-password")
 async def forgot_password(
     body: ForgotPasswordRequest,
+    request: Request,
     db: AsyncSession = Depends(get_db),
 ) -> dict:
     """Send password reset email."""
     from app.services.password_reset import generate_reset_token
 
-    await generate_reset_token(db, body.email)
+    await generate_reset_token(db, body.email, request)
+    await db.commit()
     return {"message": "If that email exists, a reset link has been sent."}
 
 
 @router.post("/reset-password")
 async def reset_password_endpoint(
     body: ResetPasswordRequest,
+    request: Request,
     db: AsyncSession = Depends(get_db),
 ) -> dict:
     """Reset password with token."""
     from app.services.password_reset import reset_password
 
-    success = await reset_password(db, body.token, body.new_password)
+    success = await reset_password(db, body.token, body.new_password, request)
     if not success:
         raise HTTPException(status_code=400, detail="Invalid or expired reset token")
     await db.commit()

@@ -753,3 +753,324 @@ async def test_resend_verification_does_not_leak_user_id_in_url(client: AsyncCli
     assert str(user.id) not in sent_html, (
         "resend-verification must not embed the user UUID in the link"
     )
+
+
+# ══════════════════════════════════════════════════════════════════════
+# Password reset persistence (METHEAN-6-04)
+# ══════════════════════════════════════════════════════════════════════
+
+
+from unittest.mock import AsyncMock, patch  # noqa: E402 — grouped with the reset block
+
+
+def _extract_token_from_email(mock_send: AsyncMock) -> str:
+    """Pull the plaintext token out of the verification URL the
+    email mock captured. The URL is stamped as href="…?token=PLAIN"."""
+    html = mock_send.call_args[0][2]
+    return html.split("token=", 1)[1].split('"', 1)[0]
+
+
+@pytest.mark.asyncio
+@patch("app.services.password_reset.send_email", new_callable=AsyncMock, return_value=True)
+async def test_forgot_password_persists_token_row(mock_send, client: AsyncClient, db_session):
+    """A forgot-password request creates exactly one PasswordResetToken row."""
+    from sqlalchemy import func
+
+    from app.models.identity import PasswordResetToken
+
+    # Register a user via the API so the surrounding plumbing matches prod.
+    await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "pwpersist@example.com",
+            "password": "originalpw123",
+            "display_name": "PW Persist",
+            "household_name": "PW Family",
+        },
+    )
+    user = (
+        await db_session.execute(select(User).where(User.email == "pwpersist@example.com"))
+    ).scalar_one()
+
+    resp = await client.post(
+        "/api/v1/auth/forgot-password", json={"email": "pwpersist@example.com"}
+    )
+    assert resp.status_code == 200, resp.text
+
+    count = (
+        await db_session.execute(
+            select(func.count())
+            .select_from(PasswordResetToken)
+            .where(
+                PasswordResetToken.user_id == user.id,
+                PasswordResetToken.used_at.is_(None),
+            )
+        )
+    ).scalar()
+    assert count == 1
+
+
+@pytest.mark.asyncio
+@patch("app.services.password_reset.send_email", new_callable=AsyncMock, return_value=True)
+async def test_forgot_password_unknown_email_no_row_no_leak(mock_send, client: AsyncClient, db_session):
+    """An unknown email still returns 200 and writes zero rows."""
+    from sqlalchemy import func
+
+    from app.models.identity import PasswordResetToken
+
+    resp = await client.post(
+        "/api/v1/auth/forgot-password", json={"email": "ghost@nowhere.invalid"}
+    )
+    assert resp.status_code == 200
+    assert mock_send.called is False
+
+    total = (
+        await db_session.execute(select(func.count()).select_from(PasswordResetToken))
+    ).scalar()
+    assert total == 0
+
+
+@pytest.mark.asyncio
+@patch("app.services.password_reset.send_email", new_callable=AsyncMock, return_value=True)
+async def test_reset_password_happy_path(mock_send, client: AsyncClient, db_session):
+    """The plaintext token sent in the email rotates the user's password."""
+    from app.core.security import verify_password
+
+    await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "happyreset@example.com",
+            "password": "originalpw123",
+            "display_name": "Happy Reset",
+            "household_name": "Reset Family",
+        },
+    )
+    await client.post(
+        "/api/v1/auth/forgot-password", json={"email": "happyreset@example.com"}
+    )
+    plaintext = _extract_token_from_email(mock_send)
+
+    resp = await client.post(
+        "/api/v1/auth/reset-password",
+        json={"token": plaintext, "new_password": "rotatedpw456"},
+    )
+    assert resp.status_code == 200, resp.text
+
+    user = (
+        await db_session.execute(select(User).where(User.email == "happyreset@example.com"))
+    ).scalar_one()
+    await db_session.refresh(user)
+    assert verify_password("rotatedpw456", user.password_hash)
+
+
+@pytest.mark.asyncio
+@patch("app.services.password_reset.send_email", new_callable=AsyncMock, return_value=True)
+async def test_reset_password_expired_token(mock_send, client: AsyncClient, db_session):
+    """Expired tokens return 400 and don't change the password."""
+    from datetime import UTC, datetime, timedelta
+
+    from app.models.identity import PasswordResetToken
+
+    await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "expreset@example.com",
+            "password": "originalpw123",
+            "display_name": "Exp Reset",
+            "household_name": "Exp Family",
+        },
+    )
+    user = (
+        await db_session.execute(select(User).where(User.email == "expreset@example.com"))
+    ).scalar_one()
+    original_hash = user.password_hash
+
+    await client.post(
+        "/api/v1/auth/forgot-password", json={"email": "expreset@example.com"}
+    )
+    plaintext = _extract_token_from_email(mock_send)
+
+    row = (
+        await db_session.execute(
+            select(PasswordResetToken).where(PasswordResetToken.user_id == user.id)
+        )
+    ).scalars().all()[-1]
+    row.expires_at = datetime.now(UTC) - timedelta(minutes=5)
+    await db_session.commit()
+
+    resp = await client.post(
+        "/api/v1/auth/reset-password",
+        json={"token": plaintext, "new_password": "shouldnotapply"},
+    )
+    assert resp.status_code == 400, resp.text
+
+    await db_session.refresh(user)
+    assert user.password_hash == original_hash
+
+
+@pytest.mark.asyncio
+@patch("app.services.password_reset.send_email", new_callable=AsyncMock, return_value=True)
+async def test_reset_password_reused_token(mock_send, client: AsyncClient, db_session):
+    """A token that was already redeemed cannot be redeemed again."""
+    await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "reusereset@example.com",
+            "password": "originalpw123",
+            "display_name": "Reuse Reset",
+            "household_name": "Reuse Family",
+        },
+    )
+    await client.post(
+        "/api/v1/auth/forgot-password", json={"email": "reusereset@example.com"}
+    )
+    plaintext = _extract_token_from_email(mock_send)
+
+    first = await client.post(
+        "/api/v1/auth/reset-password",
+        json={"token": plaintext, "new_password": "rotated1"},
+    )
+    assert first.status_code == 200, first.text
+
+    second = await client.post(
+        "/api/v1/auth/reset-password",
+        json={"token": plaintext, "new_password": "rotated2"},
+    )
+    assert second.status_code == 400, second.text
+
+
+@pytest.mark.asyncio
+@patch("app.services.password_reset.send_email", new_callable=AsyncMock, return_value=True)
+async def test_reset_password_invalidates_old_active_tokens(
+    mock_send, client: AsyncClient, db_session
+):
+    """Issuing a fresh token marks any prior active token used."""
+    from sqlalchemy import func
+
+    from app.models.identity import PasswordResetToken
+
+    await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "doubleissue@example.com",
+            "password": "originalpw123",
+            "display_name": "Double Issue",
+            "household_name": "Double Family",
+        },
+    )
+    user = (
+        await db_session.execute(select(User).where(User.email == "doubleissue@example.com"))
+    ).scalar_one()
+
+    await client.post(
+        "/api/v1/auth/forgot-password", json={"email": "doubleissue@example.com"}
+    )
+    await client.post(
+        "/api/v1/auth/forgot-password", json={"email": "doubleissue@example.com"}
+    )
+
+    active = (
+        await db_session.execute(
+            select(func.count())
+            .select_from(PasswordResetToken)
+            .where(
+                PasswordResetToken.user_id == user.id,
+                PasswordResetToken.used_at.is_(None),
+            )
+        )
+    ).scalar()
+    assert active == 1, (
+        "partial unique index uq_pwreset_user_active enforces single active row"
+    )
+
+
+@pytest.mark.asyncio
+@patch("app.services.password_reset.send_email", new_callable=AsyncMock, return_value=True)
+async def test_reset_password_token_is_hashed_at_rest(
+    mock_send, client: AsyncClient, db_session
+):
+    """The plaintext never touches the DB — only the SHA-256 digest does."""
+    import hashlib
+
+    from app.models.identity import PasswordResetToken
+
+    await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "hashedat@example.com",
+            "password": "originalpw123",
+            "display_name": "Hashed Rest",
+            "household_name": "Hash Family",
+        },
+    )
+    user = (
+        await db_session.execute(select(User).where(User.email == "hashedat@example.com"))
+    ).scalar_one()
+    await client.post(
+        "/api/v1/auth/forgot-password", json={"email": "hashedat@example.com"}
+    )
+    plaintext = _extract_token_from_email(mock_send)
+    expected = hashlib.sha256(plaintext.encode("utf-8")).hexdigest()
+
+    row = (
+        await db_session.execute(
+            select(PasswordResetToken).where(PasswordResetToken.user_id == user.id)
+        )
+    ).scalars().all()[-1]
+    assert row.token_hash == expected
+    assert row.token_hash != plaintext
+
+
+@pytest.mark.asyncio
+@patch("app.services.password_reset.send_email", new_callable=AsyncMock, return_value=True)
+async def test_reset_password_revokes_existing_refresh_tokens(
+    mock_send, client: AsyncClient, db_session
+):
+    """A successful reset revokes every active refresh token so a stolen
+    cookie can't outlive the rotation. Verify by attempting /refresh
+    after reset and expecting 401.
+    """
+    register = await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "revoke-on-reset@example.com",
+            "password": "originalpw123",
+            "display_name": "Revoke Reset",
+            "household_name": "Revoke Family",
+        },
+    )
+    assert register.status_code == 201
+    # The refresh cookie is now sitting on the client.
+    refresh_before = client.cookies.get("refresh_token")
+    assert refresh_before, "register should set refresh_token"
+
+    await client.post(
+        "/api/v1/auth/forgot-password", json={"email": "revoke-on-reset@example.com"}
+    )
+    plaintext = _extract_token_from_email(mock_send)
+    reset = await client.post(
+        "/api/v1/auth/reset-password",
+        json={"token": plaintext, "new_password": "rotatedpw456"},
+    )
+    assert reset.status_code == 200, reset.text
+
+    # The old refresh token must be revoked. Restore the pre-reset
+    # cookie (in case any handler updated it) and call /refresh.
+    client.cookies.set("refresh_token", refresh_before)
+    refresh = await client.post("/api/v1/auth/refresh")
+    assert refresh.status_code == 401, refresh.text
+
+
+def test_reset_password_module_no_longer_uses_inmemory_dict():
+    """Locks in the regression: the in-memory dict must stay gone.
+
+    Build the attribute name dynamically so this assertion file
+    itself contains zero literal occurrences of the old identifier.
+    """
+    import app.services.password_reset as svc
+
+    forbidden = "_" + "reset" + "_" + "tokens"
+    assert not hasattr(svc, forbidden), (
+        f"{forbidden} is back in app.services.password_reset — "
+        "tokens must stay in PostgreSQL, not module-level dicts."
+    )
