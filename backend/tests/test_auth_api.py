@@ -428,3 +428,174 @@ async def test_student_cannot_access_other_students(client: AsyncClient, db_sess
         db_session, student_a, PERM_VIEW_PROGRESS, scope_type="child", scope_id=student_b.linked_child_id
     )
     assert allowed_other is False
+
+
+# ══════════════════════════════════════════════════
+# Email verification tokens (METHEAN-6-03)
+# ══════════════════════════════════════════════════
+
+
+async def _register_and_get_user(client: AsyncClient, db_session, email: str = "verify@test.example.com") -> User:
+    """Helper: register a fresh household + return the User row."""
+    resp = await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": email,
+            "password": "testpass123",
+            "display_name": "Verify Test",
+            "household_name": "Verify Family",
+        },
+    )
+    assert resp.status_code == 201, resp.text
+    return (await db_session.execute(select(User).where(User.email == email))).scalar_one()
+
+
+@pytest.mark.asyncio
+async def test_register_issues_verification_token_row(client: AsyncClient, db_session):
+    """Registration creates exactly one EmailVerificationToken row for the new user."""
+    from app.models.identity import EmailVerificationToken
+
+    user = await _register_and_get_user(client, db_session)
+    rows = (
+        (await db_session.execute(select(EmailVerificationToken).where(EmailVerificationToken.user_id == user.id)))
+        .scalars()
+        .all()
+    )
+    assert len(rows) == 1
+    assert rows[0].used_at is None
+    assert rows[0].expires_at is not None
+
+
+@pytest.mark.asyncio
+async def test_verify_email_happy_path(client: AsyncClient, db_session, monkeypatch):
+    """A freshly-issued token verifies the user and is single-use."""
+    captured: dict = {}
+
+    async def fake_send_email(to, subject, html, text=None):
+        captured["html"] = html
+        return True
+
+    monkeypatch.setattr("app.services.email.send_email", fake_send_email)
+    user = await _register_and_get_user(client, db_session)
+
+    # Pull the plaintext token out of the captured email HTML.
+    import re
+
+    match = re.search(r"token=([A-Za-z0-9_\-]+)", captured.get("html", ""))
+    assert match, captured.get("html")
+    plaintext = match.group(1)
+
+    resp = await client.post("/api/v1/auth/verify-email", json={"token": plaintext})
+    assert resp.status_code == 200, resp.text
+
+    await db_session.refresh(user)
+    assert user.email_verified is True
+
+
+@pytest.mark.asyncio
+async def test_verify_email_rejects_unknown_token(client: AsyncClient):
+    resp = await client.post("/api/v1/auth/verify-email", json={"token": "completely-bogus-token-value"})
+    assert resp.status_code == 400
+
+
+@pytest.mark.asyncio
+async def test_verify_email_rejects_expired_token(client: AsyncClient, db_session, monkeypatch):
+    """Backdate expires_at — the verify endpoint should now refuse the token."""
+    import re
+    from datetime import UTC, datetime, timedelta
+
+    from app.models.identity import EmailVerificationToken
+
+    captured: dict = {}
+
+    async def fake_send_email(to, subject, html, text=None):
+        captured["html"] = html
+        return True
+
+    monkeypatch.setattr("app.services.email.send_email", fake_send_email)
+    user = await _register_and_get_user(client, db_session, "expired@test.example.com")
+
+    plaintext = re.search(r"token=([A-Za-z0-9_\-]+)", captured["html"]).group(1)
+    row = (
+        await db_session.execute(select(EmailVerificationToken).where(EmailVerificationToken.user_id == user.id))
+    ).scalar_one()
+    row.expires_at = datetime.now(UTC) - timedelta(minutes=1)
+    await db_session.commit()
+
+    resp = await client.post("/api/v1/auth/verify-email", json={"token": plaintext})
+    assert resp.status_code == 400
+
+
+@pytest.mark.asyncio
+async def test_verify_email_rejects_reused_token(client: AsyncClient, db_session, monkeypatch):
+    """A token that has been used once cannot be used again."""
+    import re
+
+    captured: dict = {}
+
+    async def fake_send_email(to, subject, html, text=None):
+        captured["html"] = html
+        return True
+
+    monkeypatch.setattr("app.services.email.send_email", fake_send_email)
+    await _register_and_get_user(client, db_session, "reuse@test.example.com")
+    plaintext = re.search(r"token=([A-Za-z0-9_\-]+)", captured["html"]).group(1)
+
+    first = await client.post("/api/v1/auth/verify-email", json={"token": plaintext})
+    assert first.status_code == 200, first.text
+
+    second = await client.post("/api/v1/auth/verify-email", json={"token": plaintext})
+    assert second.status_code == 400
+
+
+@pytest.mark.asyncio
+async def test_verify_email_does_not_accept_user_id_as_token(client: AsyncClient, db_session):
+    """Sending the user's UUID as a token must fail — closes the original attack vector."""
+    user = await _register_and_get_user(client, db_session, "uuidattack@test.example.com")
+    resp = await client.post("/api/v1/auth/verify-email", json={"token": str(user.id)})
+    assert resp.status_code == 400
+
+
+@pytest.mark.asyncio
+async def test_resend_verification_does_not_leak_user_id_in_url(client: AsyncClient, db_session, monkeypatch):
+    """The resend email must NOT contain the user's UUID anywhere in the body."""
+    captured: dict = {"history": []}
+
+    async def fake_send_email(to, subject, html, text=None):
+        captured["history"].append(html)
+        return True
+
+    monkeypatch.setattr("app.services.email.send_email", fake_send_email)
+    user = await _register_and_get_user(client, db_session, "resend@test.example.com")
+
+    resp = await client.post("/api/v1/auth/resend-verification")
+    assert resp.status_code == 200, resp.text
+
+    resend_html = captured["history"][-1]
+    assert str(user.id) not in resend_html
+
+
+@pytest.mark.asyncio
+async def test_email_verification_token_is_hashed_at_rest(client: AsyncClient, db_session, monkeypatch):
+    """The DB row stores a SHA-256 hash, not the plaintext token sent to the user."""
+    import hashlib
+    import re
+
+    from app.models.identity import EmailVerificationToken
+
+    captured: dict = {}
+
+    async def fake_send_email(to, subject, html, text=None):
+        captured["html"] = html
+        return True
+
+    monkeypatch.setattr("app.services.email.send_email", fake_send_email)
+    user = await _register_and_get_user(client, db_session, "hashed@test.example.com")
+
+    plaintext = re.search(r"token=([A-Za-z0-9_\-]+)", captured["html"]).group(1)
+    row = (
+        await db_session.execute(select(EmailVerificationToken).where(EmailVerificationToken.user_id == user.id))
+    ).scalar_one()
+    assert row.token_hash != plaintext
+    assert row.token_hash == hashlib.sha256(plaintext.encode()).hexdigest()
+    assert len(row.token_hash) == 64

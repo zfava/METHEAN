@@ -206,6 +206,22 @@ def welcome_email(parent_name: str) -> str:
     return _base("Welcome to METHEAN", body)
 
 
+def email_verification_email(verify_url: str) -> str:
+    """Email verification with single-use, expiring link (60 minutes)."""
+    body = f"""
+    <h2 style="font-size:20px;color:#0F1B2D;margin:0 0 8px;">Verify your METHEAN email</h2>
+    <p style="font-size:14px;color:#6B6B6B;line-height:1.6;margin:0 0 20px;">
+        Click the button below to confirm your email address. This link expires in 1 hour and works only once.
+    </p>
+    <div style="text-align:center;margin:0 0 20px;">
+        <a href="{verify_url}" style="display:inline-block;background:#4A6FA5;color:white;padding:14px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">Verify Email</a>
+    </div>
+    <p style="font-size:12px;color:#9A9A9A;margin:0;">
+        If you didn't create a METHEAN account, you can safely ignore this email.
+    </p>"""
+    return _base("Verify your METHEAN email", body)
+
+
 def password_reset_email(reset_url: str) -> str:
     """Password reset email with secure link."""
     body = f"""
