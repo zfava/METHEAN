@@ -7,7 +7,7 @@ import redis.asyncio as aioredis
 import structlog
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 
 from app.ai.gateway import AIProviderUnavailableError
 from app.api.academic_calendar import router as academic_calendar_router
@@ -130,6 +130,45 @@ app.include_router(family_intelligence_router, prefix="/api/v1")
 app.include_router(wellbeing_router, prefix="/api/v1")  # PARENT-ONLY
 app.include_router(child_dashboard_router, prefix="/api/v1")
 app.include_router(fitness_router, prefix="/api/v1")
+
+
+# Browsers send CSP violation reports as POSTs without our CSRF
+# cookie, so the report endpoint has to live outside CSRF protection.
+# The body size is capped to 10 KiB — real reports are tiny and a
+# larger payload is almost certainly an attempt to abuse the log
+# channel.
+_CSP_REPORT_MAX_BYTES = 10 * 1024
+
+
+@app.post("/api/v1/csp-report", include_in_schema=False)
+async def csp_report(request: Request) -> Response:
+    """Receive Content-Security-Policy-Report-Only violation reports.
+
+    Logs the parsed body via structlog and returns 204 No Content so
+    the browser stops retrying. Always returns 204, even on parse
+    errors, to avoid feeding signal back to a hostile reporter.
+    """
+    import json
+
+    raw = await request.body()
+    if len(raw) > _CSP_REPORT_MAX_BYTES:
+        logger.warning("csp_report_oversized", bytes=len(raw))
+        return Response(status_code=204)
+
+    parsed: object = None
+    try:
+        if raw:
+            parsed = json.loads(raw.decode("utf-8", errors="replace"))
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        parsed = {"raw": raw[:512].decode("utf-8", errors="replace")}
+
+    logger.warning(
+        "csp_violation",
+        report=parsed,
+        user_agent=request.headers.get("user-agent", ""),
+        client_ip=request.client.host if request.client else "unknown",
+    )
+    return Response(status_code=204)
 
 
 @app.exception_handler(AIProviderUnavailableError)

@@ -139,6 +139,31 @@ See the repo-root `.env.example` for the full list. Required in any real environ
 - `S3_ENDPOINT_URL`, plus S3 access keys and bucket
 - `SENTRY_DSN` (optional; disabled if empty)
 
+## Content-Security-Policy rollout
+
+The production CSP issued by `SecurityHeadersMiddleware` drops
+`'unsafe-eval'` and replaces `'unsafe-inline'` on `script-src` with
+a per-request nonce (`X-CSP-Nonce` response header). The Next.js
+layout should read that header and stamp the value onto its inline
+scripts.
+
+Rollout sequence:
+
+1. Deploy with `CSP_ENFORCE=False` (default). The strict policy
+   ships as `Content-Security-Policy-Report-Only` and violations are
+   POSTed to `/api/v1/csp-report`, where the backend logs them via
+   structlog under the `csp_violation` event.
+2. Tail the report stream for at least one week. Investigate every
+   `csp_violation` log line — if a legitimate vendor needs an
+   allowlist entry, add it to the production CSP block in
+   `app/core/middleware.py:SecurityHeadersMiddleware`.
+3. Once the report stream is clean, flip `CSP_ENFORCE=True`. The
+   browser starts rejecting violations instead of just reporting
+   them.
+
+Development mode keeps `'unsafe-eval' 'unsafe-inline'` and adds
+`ws: wss:` to `connect-src` so Next.js HMR and React DevTools work.
+
 ## Migrations
 
 Alembic lives at `backend/alembic/`. Migration files are numeric-prefixed and apply in order.

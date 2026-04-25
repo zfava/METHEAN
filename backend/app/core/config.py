@@ -71,6 +71,12 @@ class Settings(BaseSettings):
     # trust no proxy and always use ``request.client.host``.
     TRUSTED_PROXIES: list[str] = []
 
+    # When True, ship the strict CSP as Content-Security-Policy. When
+    # False (default), ship it as Content-Security-Policy-Report-Only
+    # so violations are logged via /api/v1/csp-report without breaking
+    # users. Flip to True after one clean week of report traffic.
+    CSP_ENFORCE: bool = False
+
     # Monitoring
     SENTRY_DSN: str = ""  # Empty = disabled
 

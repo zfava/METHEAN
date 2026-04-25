@@ -15,26 +15,68 @@ logger = structlog.get_logger()
 
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
-    """Add security headers to all responses."""
+    """Add security headers to all responses.
+
+    The Content-Security-Policy is environment-aware:
+
+    * Production drops ``'unsafe-eval'`` and replaces ``'unsafe-inline'``
+      on script-src with a per-request nonce, allows js.stripe.com for
+      payments, and forces upgrade-insecure-requests.
+    * Development keeps ``'unsafe-eval' 'unsafe-inline'`` so Next.js
+      HMR and React DevTools work, plus ``ws:``/``wss:`` for the dev
+      server.
+
+    The header name is ``Content-Security-Policy-Report-Only`` until
+    ``settings.CSP_ENFORCE`` flips to True. Each response also carries
+    the chosen nonce as ``X-CSP-Nonce`` so the Next.js layout can
+    stamp it onto its inline scripts.
+    """
 
     async def dispatch(self, request: Request, call_next) -> Response:
+        nonce = secrets.token_urlsafe(16)
         response = await call_next(request)
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["X-XSS-Protection"] = "1; mode=block"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
-        response.headers["Content-Security-Policy"] = (
-            "default-src 'self'; "
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval'; "
-            "style-src 'self' 'unsafe-inline'; "
-            "img-src 'self' data: blob:; "
-            "font-src 'self'; "
-            "connect-src 'self' https://api.anthropic.com https://api.openai.com https://api.stripe.com https://api.resend.com; "
-            "frame-ancestors 'none'; "
-            "base-uri 'self'; "
-            "form-action 'self'"
-        )
+        response.headers["X-CSP-Nonce"] = nonce
+
+        if settings.APP_ENV == "production":
+            csp = (
+                "default-src 'self'; "
+                f"script-src 'self' 'nonce-{nonce}' https://js.stripe.com; "
+                "style-src 'self' 'unsafe-inline'; "
+                "img-src 'self' data: blob: https:; "
+                "font-src 'self' data:; "
+                "connect-src 'self' https://api.anthropic.com https://api.openai.com "
+                "https://api.stripe.com https://api.resend.com; "
+                "frame-src https://js.stripe.com; "
+                "frame-ancestors 'none'; "
+                "base-uri 'self'; "
+                "form-action 'self'; "
+                "upgrade-insecure-requests"
+            )
+        else:
+            csp = (
+                "default-src 'self'; "
+                "script-src 'self' 'unsafe-eval' 'unsafe-inline'; "
+                "style-src 'self' 'unsafe-inline'; "
+                "img-src 'self' data: blob:; "
+                "font-src 'self'; "
+                "connect-src 'self' ws: wss: https://api.anthropic.com https://api.openai.com "
+                "https://api.stripe.com https://api.resend.com; "
+                "frame-ancestors 'none'; "
+                "base-uri 'self'; "
+                "form-action 'self'"
+            )
+
+        if settings.CSP_ENFORCE:
+            response.headers["Content-Security-Policy"] = csp
+        else:
+            response.headers["Content-Security-Policy-Report-Only"] = (
+                csp + "; report-uri /api/v1/csp-report"
+            )
         return response
 
 
@@ -140,6 +182,8 @@ _CSRF_EXEMPT_PATHS = {
     "/api/v1/auth/register",
     "/api/v1/auth/login",
     "/api/v1/billing/webhook",
+    # Browsers post CSP violation reports without our CSRF cookie.
+    "/api/v1/csp-report",
 }
 
 _STATE_CHANGING_METHODS = {"POST", "PUT", "PATCH", "DELETE"}
