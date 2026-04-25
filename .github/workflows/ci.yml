@@ -80,6 +80,10 @@ jobs:
         working-directory: backend
         run: pytest tests/test_route_contract.py -v
 
+      - name: RLS coverage check (must run on migrated schema before drop_all)
+        working-directory: backend
+        run: pytest tests/test_rls_coverage.py -v
+
       - name: Route auth contract check
         working-directory: backend
         run: pytest tests/test_unauthenticated_paths.py -v
