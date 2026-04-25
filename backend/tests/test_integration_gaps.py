@@ -18,7 +18,9 @@ class TestVocationalTemplates:
         assert "Woodworking Fundamentals" in names
         assert "Physical Fitness: Foundations" in names
         assert "Physical Fitness: Independent" in names
-        assert len(templates) == 12
+        assert "Visual Art: Foundations" in names
+        assert "Visual Art: Independent" in names
+        assert len(templates) == 17
 
     @pytest.mark.asyncio
     async def test_welding_template_has_safety_first(self, auth_client):

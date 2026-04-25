@@ -905,4 +905,5 @@ TEMPLATES: dict[str, Template] = {
 
 # Side-effect registration of additional template libraries. Keep at the very
 # bottom so TEMPLATES already exists when the imported module registers.
+import app.services.art_templates  # noqa: E402
 import app.services.fitness_templates  # noqa: E402, F401

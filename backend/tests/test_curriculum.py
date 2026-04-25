@@ -846,13 +846,15 @@ class TestTemplates:
         resp = await auth_client.get("/api/v1/learning-maps/templates")
         assert resp.status_code == 200
         templates = resp.json()
-        assert len(templates) == 12
+        assert len(templates) == 17
         ids = {t["template_id"] for t in templates}
         assert "math-foundational" in ids
         assert "elementary-core" in ids
         assert "classical-logic" in ids
         assert "physical_fitness_foundations" in ids
         assert "physical_fitness_independent" in ids
+        assert "visual_art_foundations" in ids
+        assert "visual_art_independent" in ids
 
     @pytest.mark.asyncio
     async def test_copy_template_creates_independent_copy(
