@@ -117,17 +117,9 @@ async def reset_password(
     if not plaintext_token:
         return False
 
-    result = await db.execute(
-        select(PasswordResetToken).where(
-            PasswordResetToken.token_hash == _hash(plaintext_token)
-        )
-    )
+    result = await db.execute(select(PasswordResetToken).where(PasswordResetToken.token_hash == _hash(plaintext_token)))
     token = result.scalar_one_or_none()
-    if (
-        not token
-        or token.used_at is not None
-        or token.expires_at < datetime.now(UTC)
-    ):
+    if not token or token.used_at is not None or token.expires_at < datetime.now(UTC):
         return False
 
     result = await db.execute(select(User).where(User.id == token.user_id))

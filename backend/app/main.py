@@ -172,9 +172,7 @@ async def csp_report(request: Request) -> Response:
 
 
 @app.exception_handler(AIProviderUnavailableError)
-async def _ai_unavailable_handler(
-    request: Request, exc: AIProviderUnavailableError
-) -> JSONResponse:
+async def _ai_unavailable_handler(request: Request, exc: AIProviderUnavailableError) -> JSONResponse:
     """Translate gateway-level provider failure into a structured 503.
 
     Sets ``Retry-After`` so clients back off for the same window the

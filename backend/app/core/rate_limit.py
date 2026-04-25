@@ -50,18 +50,10 @@ POLICIES: dict[str, RateLimitPolicy] = {
     "default": RateLimitPolicy("default", 60, 60, ["ip", "endpoint"], fail_open=True),
     "login": RateLimitPolicy("login", 10, 60, ["ip", "email"], fail_open=False),
     "register": RateLimitPolicy("register", 5, 60, ["ip"], fail_open=False),
-    "forgot_password": RateLimitPolicy(
-        "forgot_password", 5, 3600, ["ip", "email"], fail_open=False
-    ),
-    "verify_email": RateLimitPolicy(
-        "verify_email", 20, 3600, ["ip"], fail_open=False
-    ),
-    "ai_generation": RateLimitPolicy(
-        "ai_generation", 30, 60, ["user_id", "household"], fail_open=False, cost=5
-    ),
-    "tutor_message": RateLimitPolicy(
-        "tutor_message", 60, 60, ["user_id", "household"], fail_open=False, cost=2
-    ),
+    "forgot_password": RateLimitPolicy("forgot_password", 5, 3600, ["ip", "email"], fail_open=False),
+    "verify_email": RateLimitPolicy("verify_email", 20, 3600, ["ip"], fail_open=False),
+    "ai_generation": RateLimitPolicy("ai_generation", 30, 60, ["user_id", "household"], fail_open=False, cost=5),
+    "tutor_message": RateLimitPolicy("tutor_message", 60, 60, ["user_id", "household"], fail_open=False, cost=2),
 }
 
 
@@ -76,9 +68,7 @@ async def check_and_consume(
     is meaningful only when ``allowed`` is False.
     """
     window = int(time.time()) // policy.window_seconds
-    parts = [policy.name, str(window)] + [
-        f"{k}={key_values.get(k, '_')}" for k in policy.key_components
-    ]
+    parts = [policy.name, str(window)] + [f"{k}={key_values.get(k, '_')}" for k in policy.key_components]
     redis_key = ":".join(["ratelimit"] + parts)
     try:
         count = await redis.incrby(redis_key, policy.cost)
@@ -117,9 +107,7 @@ def rate_limit(policy_name: str):
             "ip": client_ip(request, settings.TRUSTED_PROXIES),
             "endpoint": request.url.path,
         }
-        allowed, retry_after = await check_and_consume(
-            request.app.state.redis, policy, key_values
-        )
+        allowed, retry_after = await check_and_consume(request.app.state.redis, policy, key_values)
         if not allowed:
             raise HTTPException(
                 status_code=429,
@@ -144,9 +132,7 @@ def rate_limit_user(policy_name: str):
             "user_id": str(user.id),
             "household": str(user.household_id),
         }
-        allowed, retry_after = await check_and_consume(
-            request.app.state.redis, policy, key_values
-        )
+        allowed, retry_after = await check_and_consume(request.app.state.redis, policy, key_values)
         if not allowed:
             raise HTTPException(
                 status_code=429,

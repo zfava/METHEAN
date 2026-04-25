@@ -109,8 +109,7 @@ class Settings(BaseSettings):
         allow = info.data.get("ALLOW_AI_MOCK_IN_PRODUCTION", False)
         if env == "production" and v and not allow:
             raise ValueError(
-                "AI_MOCK_ENABLED=True in production requires ALLOW_AI_MOCK_IN_PRODUCTION=true. "
-                "Refusing to boot."
+                "AI_MOCK_ENABLED=True in production requires ALLOW_AI_MOCK_IN_PRODUCTION=true. Refusing to boot."
             )
         return v
 

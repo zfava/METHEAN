@@ -76,16 +76,10 @@ async def verify_token(
         raise generic
 
     result = await db.execute(
-        select(EmailVerificationToken).where(
-            EmailVerificationToken.token_hash == _hash(plaintext_token)
-        )
+        select(EmailVerificationToken).where(EmailVerificationToken.token_hash == _hash(plaintext_token))
     )
     token = result.scalar_one_or_none()
-    if (
-        not token
-        or token.used_at is not None
-        or token.expires_at < datetime.now(UTC)
-    ):
+    if not token or token.used_at is not None or token.expires_at < datetime.now(UTC):
         raise generic
 
     result = await db.execute(select(User).where(User.id == token.user_id))

@@ -74,9 +74,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         if settings.CSP_ENFORCE:
             response.headers["Content-Security-Policy"] = csp
         else:
-            response.headers["Content-Security-Policy-Report-Only"] = (
-                csp + "; report-uri /api/v1/csp-report"
-            )
+            response.headers["Content-Security-Policy-Report-Only"] = csp + "; report-uri /api/v1/csp-report"
         return response
 
 
@@ -158,9 +156,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             "ip": client_ip(request, settings.TRUSTED_PROXIES),
             "endpoint": request.url.path,
         }
-        allowed, retry_after = await check_and_consume(
-            request.app.state.redis, policy, key_values
-        )
+        allowed, retry_after = await check_and_consume(request.app.state.redis, policy, key_values)
         if not allowed:
             return JSONResponse(
                 status_code=429,
