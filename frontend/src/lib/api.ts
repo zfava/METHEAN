@@ -743,11 +743,13 @@ export interface WellbeingSummary {
   threshold_adjustments: Record<string, number>;
 }
 
+// Family invite endpoints live under the auth router prefix on the backend.
+// See backend/app/api/auth.py: APIRouter(prefix="/auth").
 export const familyInvites = {
   invite: (email: string, role: string) =>
-    request<{ invited: boolean }>("/household/invite", { method: "POST", body: JSON.stringify({ email, role }) }),
-  list: () => request<any[]>("/household/invites"),
-  revoke: (inviteId: string) => request<{ revoked: boolean }>(`/household/invites/${inviteId}`, { method: "DELETE" }),
+    request<{ invited: boolean }>("/auth/household/invite", { method: "POST", body: JSON.stringify({ email, role }) }),
+  list: () => request<any[]>("/auth/household/invites"),
+  revoke: (inviteId: string) => request<{ revoked: boolean }>(`/auth/household/invites/${inviteId}`, { method: "DELETE" }),
   accept: (token: string, password: string, displayName: string) =>
     request<any>("/auth/accept-invite", { method: "POST", body: JSON.stringify({ token, password, display_name: displayName }) }),
 };
