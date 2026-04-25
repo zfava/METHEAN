@@ -22,9 +22,13 @@ from sqlalchemy import text
 # Tables that intentionally lack RLS (e.g. global tables with no
 # household scope). Every entry MUST include a comment justifying the
 # exemption — a household_id column without RLS is almost always a bug.
-ALLOWED_NO_RLS: set[str] = {
-    # (no exemptions today — every household_id table is RLS-protected)
-}
+#
+# Declared as ``set()`` rather than ``{}``: empty curly braces parse as
+# an empty *dict* in Python, which would later blow up the
+# ``set - set - ALLOWED_NO_RLS`` arithmetic with a TypeError.
+ALLOWED_NO_RLS: set[str] = set()
+# Add table names here only with a justifying comment, e.g.:
+#   ALLOWED_NO_RLS = {"alembic_version"}  # internal alembic bookkeeping
 
 
 @pytest.mark.asyncio
@@ -68,9 +72,5 @@ async def test_every_household_scoped_table_has_rls(db_session):
     missing_rls = household_tables - rls_enabled - ALLOWED_NO_RLS
     missing_policy = household_tables - policied - ALLOWED_NO_RLS
 
-    assert not missing_rls, (
-        f"Tables with household_id missing RLS: {sorted(missing_rls)}"
-    )
-    assert not missing_policy, (
-        f"Tables with household_id missing isolation policy: {sorted(missing_policy)}"
-    )
+    assert not missing_rls, f"Tables with household_id missing RLS: {sorted(missing_rls)}"
+    assert not missing_policy, f"Tables with household_id missing isolation policy: {sorted(missing_policy)}"
