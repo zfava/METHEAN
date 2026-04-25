@@ -1,3 +1,5 @@
+# subscription_exempt: regulatory access cannot be paywalled
+# See fix/methean6-08-subscription-gating for classification rationale.
 """Compliance & Attendance API."""
 
 import uuid

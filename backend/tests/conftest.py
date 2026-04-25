@@ -77,7 +77,18 @@ async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
 
 @pytest_asyncio.fixture
 async def household(db_session: AsyncSession) -> Household:
-    h = Household(name="Test Family", timezone="America/New_York")
+    from datetime import UTC, datetime, timedelta
+
+    # Default test household is in an active trial so the
+    # require_active_subscription gate doesn't block tests that aren't
+    # specifically exercising billing state. Tests that need a
+    # canceled/past_due/etc. household construct their own Household.
+    h = Household(
+        name="Test Family",
+        timezone="America/New_York",
+        subscription_status="trialing",
+        trial_ends_at=datetime.now(UTC) + timedelta(days=14),
+    )
     db_session.add(h)
     await db_session.flush()
     # Set RLS tenant context so all subsequent queries are scoped

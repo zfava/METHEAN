@@ -8,7 +8,7 @@ from fastapi.responses import Response
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db, require_child_access
+from app.api.deps import get_current_user, get_db, require_active_subscription, require_child_access
 from app.models.identity import Child, User
 from app.services.document_generator import (
     generate_attendance_record,
@@ -17,7 +17,7 @@ from app.services.document_generator import (
     generate_transcript,
 )
 
-router = APIRouter(tags=["documents"])
+router = APIRouter(tags=["documents"], dependencies=[Depends(require_active_subscription)])
 
 
 async def _child_or_404(db, child_id, household_id):

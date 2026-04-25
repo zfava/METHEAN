@@ -1,3 +1,5 @@
+# subscription_exempt: users must reach billing endpoints to subscribe or recover
+# See fix/methean6-08-subscription-gating for classification rationale.
 """Billing API endpoints: subscribe, cancel, webhook, portal."""
 
 from fastapi import APIRouter, Depends, HTTPException, Request

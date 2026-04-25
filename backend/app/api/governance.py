@@ -1,3 +1,5 @@
+# subscription_exempt: mixed file — AI/generation routes (plans/generate, tutor, cartographer, advisor-reports/generate) gated per-route
+# See fix/methean6-08-subscription-gating for classification rationale.
 """Parent Governance + AI Integration API.
 
 Plan generation, governance rules CRUD, plan approve/reject/lock,
@@ -24,6 +26,7 @@ from app.api.deps import (
     PaginationParams,
     get_current_user,
     get_db,
+    require_active_subscription,
     require_child_access,
     require_permission,
     require_role,
@@ -476,7 +479,12 @@ async def initialize_default_rules(
 # ══════════════════════════════════════════════════
 
 
-@router.post("/children/{child_id}/plans/generate", response_model=PlanResponse, status_code=201)
+@router.post(
+    "/children/{child_id}/plans/generate",
+    response_model=PlanResponse,
+    status_code=201,
+    dependencies=[Depends(require_active_subscription)],
+)
 async def generate_plan_endpoint(
     child_id: uuid.UUID,
     body: PlanGenerateRequest,
@@ -911,7 +919,11 @@ async def unlock_plan(
 # ══════════════════════════════════════════════════
 
 
-@router.post("/tutor/{activity_id}/message", response_model=TutorMessageResponse)
+@router.post(
+    "/tutor/{activity_id}/message",
+    response_model=TutorMessageResponse,
+    dependencies=[Depends(require_active_subscription)],
+)
 async def tutor_message(
     activity_id: uuid.UUID,
     body: TutorMessageRequest,
@@ -1031,7 +1043,7 @@ Continue the Socratic dialogue. Reference what was discussed earlier if relevant
     )
 
 
-@router.post("/tutor/{activity_id}/stream")
+@router.post("/tutor/{activity_id}/stream", dependencies=[Depends(require_active_subscription)])
 async def tutor_stream(
     activity_id: uuid.UUID,
     body: TutorMessageRequest,
@@ -1224,6 +1236,7 @@ Respond in plain text as the Socratic tutor. Do NOT use JSON. Just speak natural
 @router.post(
     "/children/{child_id}/cartographer/calibrate",
     response_model=CartographerRecommendation,
+    dependencies=[Depends(require_active_subscription)],
 )
 async def cartographer_calibrate(
     child_id: uuid.UUID,
@@ -1311,7 +1324,12 @@ Provide calibration recommendations."""
 # ══════════════════════════════════════════════════
 
 
-@router.post("/children/{child_id}/advisor-reports/generate", response_model=AdvisorReportResponse, status_code=201)
+@router.post(
+    "/children/{child_id}/advisor-reports/generate",
+    response_model=AdvisorReportResponse,
+    status_code=201,
+    dependencies=[Depends(require_active_subscription)],
+)
 async def generate_advisor_report(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),

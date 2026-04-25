@@ -1,3 +1,5 @@
+# subscription_exempt: notification delivery channel must remain open for billing alerts
+# See fix/methean6-08-subscription-gating for classification rationale.
 """Notification API endpoints."""
 
 import uuid

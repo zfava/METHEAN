@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db, require_child_access, require_permission
+from app.api.deps import get_current_user, get_db, require_active_subscription, require_child_access, require_permission
 from app.models.annual_curriculum import AnnualCurriculum
 from app.models.enums import ActivityStatus, ActivityType
 from app.models.governance import Activity, Plan, PlanWeek
@@ -20,7 +20,7 @@ from app.services.annual_curriculum import (
     record_week_completion,
 )
 
-router = APIRouter(tags=["annual-curriculum"])
+router = APIRouter(tags=["annual-curriculum"], dependencies=[Depends(require_active_subscription)])
 
 
 # ── Schemas ───────────────────────────────────────

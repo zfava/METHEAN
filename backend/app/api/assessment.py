@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import PaginationParams, get_current_user, get_db, require_child_access
+from app.api.deps import PaginationParams, get_current_user, get_db, require_active_subscription, require_child_access
 from app.models.assessment import Assessment, PortfolioEntry
 from app.models.enums import AssessmentType
 from app.models.identity import Child, User
@@ -18,7 +18,7 @@ from app.services.assessment_engine import (
     record_assessment,
 )
 
-router = APIRouter(tags=["assessment"])
+router = APIRouter(tags=["assessment"], dependencies=[Depends(require_active_subscription)])
 
 
 async def _get_child_or_404(db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID) -> Child:

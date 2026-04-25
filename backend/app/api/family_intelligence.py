@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db
+from app.api.deps import get_current_user, get_db, require_active_subscription
 from app.models.curriculum import LearningNode
 from app.models.enums import (
     AuditAction,
@@ -19,7 +19,7 @@ from app.models.governance import GovernanceEvent
 from app.models.identity import Child, User
 from app.models.operational import AuditLog
 
-router = APIRouter(tags=["family-intelligence"])
+router = APIRouter(tags=["family-intelligence"], dependencies=[Depends(require_active_subscription)])
 
 DEFAULT_SETTINGS = {
     "shared_struggle": {"enabled": True, "min_children": 2, "drift_threshold": 1.5},

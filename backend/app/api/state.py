@@ -1,3 +1,5 @@
+# subscription_exempt: learner state read surface; account/recovery visibility
+# See fix/methean6-08-subscription-gating for classification rationale.
 """Learner State Engine API (System 2).
 
 State queries, retention summaries, attempt workflow, and state history.

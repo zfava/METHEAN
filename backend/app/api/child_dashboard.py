@@ -1,3 +1,5 @@
+# subscription_exempt: core read-only learner dashboard; degrades but does not paywall
+# See fix/methean6-08-subscription-gating for classification rationale.
 """Child Personal Dashboard API.
 
 Single endpoint that assembles everything a child needs on load.

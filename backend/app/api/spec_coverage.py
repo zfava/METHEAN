@@ -1,3 +1,5 @@
+# subscription_exempt: mixed file — paid routes (counterfactual, pace, validate, certifications POST/PUT) gated per-route
+# See fix/methean6-08-subscription-gating for classification rationale.
 """Spec coverage endpoints — closes every gap between codebase and architecture spec.
 
 Covers: household settings, child PATCH/preferences, /today, map validate,
@@ -16,7 +18,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.ai.gateway import AIRole, call_ai
 from app.ai.prompts import PLANNER_SYSTEM
-from app.api.deps import get_current_user, get_db, require_child_access, require_role
+from app.api.deps import get_current_user, get_db, require_active_subscription, require_child_access, require_role
 from app.models.curriculum import (
     ChildMapEnrollment,
     LearningEdge,
@@ -644,7 +646,7 @@ async def revoke_permission(
 # ══════════════════════════════════════════════════
 
 
-@router.post("/learning-maps/{map_id}/validate")
+@router.post("/learning-maps/{map_id}/validate", dependencies=[Depends(require_active_subscription)])
 async def validate_map(
     map_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
@@ -775,7 +777,7 @@ async def map_diff(
 # ══════════════════════════════════════════════════
 
 
-@router.get("/children/{child_id}/pace")
+@router.get("/children/{child_id}/pace", dependencies=[Depends(require_active_subscription)])
 async def get_pace(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
@@ -879,7 +881,7 @@ async def get_pace(
 # ══════════════════════════════════════════════════
 
 
-@router.post("/children/{child_id}/counterfactual")
+@router.post("/children/{child_id}/counterfactual", dependencies=[Depends(require_active_subscription)])
 async def counterfactual(
     child_id: uuid.UUID,
     body: CounterfactualRequest,
@@ -1138,7 +1140,11 @@ async def list_certifications(
     return prefs.certification_progress or []
 
 
-@router.post("/children/{child_id}/certifications", status_code=201)
+@router.post(
+    "/children/{child_id}/certifications",
+    status_code=201,
+    dependencies=[Depends(require_active_subscription)],
+)
 async def add_certification(
     child_id: uuid.UUID,
     body: CertificationCreate,
@@ -1173,7 +1179,10 @@ async def add_certification(
     return new_cert
 
 
-@router.put("/children/{child_id}/certifications/{cert_id}")
+@router.put(
+    "/children/{child_id}/certifications/{cert_id}",
+    dependencies=[Depends(require_active_subscription)],
+)
 async def update_certification(
     child_id: uuid.UUID,
     cert_id: str,

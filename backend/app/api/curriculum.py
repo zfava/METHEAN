@@ -12,7 +12,14 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.api.deps import PaginationParams, get_current_user, get_db, require_child_access, require_permission
+from app.api.deps import (
+    PaginationParams,
+    get_current_user,
+    get_db,
+    require_active_subscription,
+    require_child_access,
+    require_permission,
+)
 from app.models.curriculum import (
     ChildMapEnrollment,
     LearningEdge,
@@ -54,7 +61,7 @@ from app.services.dag_engine import (
 )
 from app.services.templates import TEMPLATES
 
-router = APIRouter(tags=["curriculum"])
+router = APIRouter(tags=["curriculum"], dependencies=[Depends(require_active_subscription)])
 
 
 # ── Helpers ──

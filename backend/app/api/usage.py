@@ -1,3 +1,5 @@
+# subscription_exempt: usage metrics inform billing decisions and must remain visible regardless of state
+# See fix/methean6-08-subscription-gating for classification rationale.
 """Usage tracking API endpoints."""
 
 from fastapi import APIRouter, Depends

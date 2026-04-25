@@ -1,3 +1,5 @@
+# subscription_exempt: login/registration/refresh must work without an active subscription
+# See fix/methean6-08-subscription-gating for classification rationale.
 """Auth API endpoints: register, login, logout, refresh."""
 
 import hashlib

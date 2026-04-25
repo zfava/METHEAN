@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db, require_child_access
+from app.api.deps import get_current_user, get_db, require_active_subscription, require_child_access
 from app.models.enums import AuditAction, GovernanceAction
 from app.models.governance import GovernanceEvent
 from app.models.identity import Child, User
@@ -16,7 +16,7 @@ from app.models.intelligence import LearnerIntelligence
 from app.models.operational import AuditLog
 from app.models.style_vector import LearnerStyleVector
 
-router = APIRouter(tags=["style-vector"])
+router = APIRouter(tags=["style-vector"], dependencies=[Depends(require_active_subscription)])
 
 # Valid dimensions with their value ranges
 VALID_DIMENSIONS: dict[str, dict[str, Any]] = {

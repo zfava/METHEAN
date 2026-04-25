@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db, require_child_access
+from app.api.deps import get_current_user, get_db, require_active_subscription, require_child_access
 from app.models.fitness import FitnessBenchmark, FitnessLog
 from app.models.identity import Child, User
 from app.services.fitness_service import (
@@ -18,7 +18,7 @@ from app.services.fitness_service import (
     record_benchmark,
 )
 
-router = APIRouter(prefix="/fitness", tags=["fitness"])
+router = APIRouter(prefix="/fitness", tags=["fitness"], dependencies=[Depends(require_active_subscription)])
 
 
 async def _get_child_or_404(db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID) -> Child:

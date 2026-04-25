@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db, require_child_access, require_permission
+from app.api.deps import get_current_user, get_db, require_active_subscription, require_child_access, require_permission
 from app.models.education_plan import EducationPlan
 from app.models.identity import Child, User
 from app.services.education_architect import (
@@ -16,7 +16,7 @@ from app.services.education_architect import (
     generate_year_curricula,
 )
 
-router = APIRouter(tags=["education-plan"])
+router = APIRouter(tags=["education-plan"], dependencies=[Depends(require_active_subscription)])
 
 
 class GeneratePlanRequest(BaseModel):

@@ -1,3 +1,5 @@
+# subscription_exempt: household calendar config; required during onboarding before subscription
+# See fix/methean6-08-subscription-gating for classification rationale.
 """Academic Calendar API.
 
 Exposes GET and PUT endpoints for the household academic calendar,

@@ -1,3 +1,5 @@
+# subscription_exempt: feedback signal channel must remain open
+# See fix/methean6-08-subscription-gating for classification rationale.
 """Activity Feedback and Reading Log API."""
 
 import uuid

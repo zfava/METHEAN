@@ -1,3 +1,5 @@
+# subscription_exempt: beta feedback signal channel must remain open
+# See fix/methean6-08-subscription-gating for classification rationale.
 """Beta feedback API — parent-submitted feedback about METHEAN itself."""
 
 import uuid

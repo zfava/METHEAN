@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db, require_child_access
+from app.api.deps import get_current_user, get_db, require_active_subscription, require_child_access
 from app.models.enums import (
     AnomalyStatus,
     AuditAction,
@@ -21,7 +21,7 @@ from app.models.identity import Child, User
 from app.models.operational import AuditLog
 from app.models.wellbeing import WellbeingAnomaly, WellbeingConfig
 
-router = APIRouter(tags=["wellbeing"])
+router = APIRouter(tags=["wellbeing"], dependencies=[Depends(require_active_subscription)])
 
 
 async def _get_child_or_404(db: AsyncSession, child_id: uuid.UUID, household_id: uuid.UUID) -> Child:

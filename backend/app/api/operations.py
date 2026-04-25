@@ -1,3 +1,5 @@
+# subscription_exempt: operational alerts and snapshots; required for account stewardship
+# See fix/methean6-08-subscription-gating for classification rationale.
 """Operations API: Alerts, Notifications, Artifacts, Snapshots, Compliance, Health."""
 
 import uuid

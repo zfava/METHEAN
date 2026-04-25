@@ -178,20 +178,34 @@ async def require_active_subscription(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> User:
-    """Gate: require active or trialing subscription."""
+    """Gate: require active or trialing subscription.
+
+    Pass-through statuses: ``active``, ``trialing`` (and households
+    still inside their trial window even if the recorded status hasn't
+    been refreshed yet). Every other status — ``canceled``, ``past_due``,
+    ``paused``, ``incomplete``, ``incomplete_expired``, ``unpaid``, or
+    anything unrecognised — is rejected with a structured 402 the
+    frontend can branch on to render the upgrade banner.
+    """
     from datetime import UTC, datetime
 
     from app.models.identity import Household
 
     result = await db.execute(select(Household).where(Household.id == user.household_id))
     hh = result.scalar_one_or_none()
-    if not hh:
-        raise HTTPException(status_code=402, detail="Your subscription is inactive. Visit /billing to resubscribe.")
+    current_status = hh.subscription_status if hh else "unknown"
 
-    if hh.subscription_status in ("active", "trialing"):
-        return user
+    if hh is not None:
+        if hh.subscription_status in ("active", "trialing"):
+            return user
+        if hh.trial_ends_at and hh.trial_ends_at > datetime.now(UTC):
+            return user
 
-    if hh.trial_ends_at and hh.trial_ends_at > datetime.now(UTC):
-        return user
-
-    raise HTTPException(status_code=402, detail="Your subscription is inactive. Visit /billing to resubscribe.")
+    raise HTTPException(
+        status_code=402,
+        detail={
+            "error": "subscription_required",
+            "status": current_status,
+            "checkout_url": "/billing/checkout",
+        },
+    )
