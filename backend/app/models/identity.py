@@ -86,6 +86,30 @@ class User(Base):
     household: Mapped["Household"] = relationship(back_populates="users")
 
 
+class EmailVerificationToken(Base):
+    """Hashed, expiring, single-use email-verification token.
+
+    The plaintext token is delivered via email (URL query param). The
+    DB only stores the SHA-256 hex digest, so a row leak does not let
+    an attacker mint a verified-email account. ``used_at`` enforces
+    single use; ``expires_at`` enforces a 60-minute TTL via
+    ``app.services.email_verification.TOKEN_TTL_MINUTES``.
+    """
+
+    __tablename__ = "email_verification_tokens"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    token_hash: Mapped[str] = mapped_column(String(64), unique=True, nullable=False, index=True)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    ip_address: Mapped[str | None] = mapped_column(String(45))
+    user_agent: Mapped[str | None] = mapped_column(String(500))
+
+
 class Child(Base):
     __tablename__ = "children"
 

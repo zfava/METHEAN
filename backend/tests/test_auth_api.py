@@ -569,3 +569,187 @@ async def test_invite_accept_rejects_corrupted_legacy_role_in_db(client, db_sess
     )
     assert resp.status_code == 400, resp.text
     assert "Invalid role" in resp.json().get("detail", "")
+
+
+# ══════════════════════════════════════════════════════════════════════
+# Email verification (METHEAN-6-03)
+# ══════════════════════════════════════════════════════════════════════
+
+
+async def _register_for_verify(client: AsyncClient, email: str = "verify@example.com") -> str:
+    """Register a user and return the email used. Verification tokens
+    are issued on register; tests pull them back out of the DB."""
+    resp = await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": email,
+            "password": "verifypass123",
+            "display_name": "Verify User",
+            "household_name": "Verify Family",
+        },
+    )
+    assert resp.status_code == 201, resp.text
+    return email
+
+
+@pytest.mark.asyncio
+async def test_register_issues_verification_token_row(client: AsyncClient, db_session):
+    """Registering a new user must drop a row in email_verification_tokens."""
+    from sqlalchemy import func
+
+    from app.models.identity import EmailVerificationToken
+
+    email = await _register_for_verify(client, email="rowcheck@example.com")
+    user = (await db_session.execute(select(User).where(User.email == email))).scalar_one()
+    count = (
+        await db_session.execute(
+            select(func.count())
+            .select_from(EmailVerificationToken)
+            .where(EmailVerificationToken.user_id == user.id)
+        )
+    ).scalar()
+    assert count == 1
+
+
+@pytest.mark.asyncio
+async def test_email_verification_token_is_hashed_at_rest(client: AsyncClient, db_session):
+    """The plaintext token never touches the DB — only the SHA-256 digest does."""
+    import hashlib
+
+    from app.models.identity import EmailVerificationToken
+    from app.services.email_verification import issue_token
+
+    # Direct issuance lets us hold the plaintext for comparison.
+    await _register_for_verify(client, email="hashed@example.com")
+    user = (await db_session.execute(select(User).where(User.email == "hashed@example.com"))).scalar_one()
+    plaintext = await issue_token(db_session, user)
+    await db_session.flush()
+
+    expected_hash = hashlib.sha256(plaintext.encode("utf-8")).hexdigest()
+    rows = (
+        await db_session.execute(
+            select(EmailVerificationToken).where(EmailVerificationToken.user_id == user.id)
+        )
+    ).scalars().all()
+    persisted_hashes = {r.token_hash for r in rows}
+    assert plaintext not in persisted_hashes, "plaintext token must never be stored"
+    assert expected_hash in persisted_hashes
+
+
+@pytest.mark.asyncio
+async def test_verify_email_happy_path(client: AsyncClient, db_session):
+    """A freshly issued token verifies the user's email."""
+    from app.models.identity import EmailVerificationToken
+    from app.services.email_verification import issue_token
+
+    await _register_for_verify(client, email="happy@example.com")
+    user = (await db_session.execute(select(User).where(User.email == "happy@example.com"))).scalar_one()
+    plaintext = await issue_token(db_session, user)
+    await db_session.commit()
+
+    resp = await client.post("/api/v1/auth/verify-email", json={"token": plaintext})
+    assert resp.status_code == 200, resp.text
+    assert resp.json() == {"verified": True}
+
+    await db_session.refresh(user)
+    assert user.email_verified is True
+
+    # Token row used_at is populated.
+    token = (
+        await db_session.execute(
+            select(EmailVerificationToken).where(EmailVerificationToken.user_id == user.id)
+        )
+    ).scalars().all()[-1]
+    await db_session.refresh(token)
+    assert token.used_at is not None
+
+
+@pytest.mark.asyncio
+async def test_verify_email_rejects_unknown_token(client: AsyncClient):
+    """A random unrecognised token returns the generic 400."""
+    resp = await client.post(
+        "/api/v1/auth/verify-email",
+        json={"token": "totally-not-a-real-token-1234567890"},
+    )
+    assert resp.status_code == 400, resp.text
+    assert resp.json()["detail"] == "Invalid or expired token"
+
+
+@pytest.mark.asyncio
+async def test_verify_email_rejects_expired_token(client: AsyncClient, db_session):
+    """Backdating expires_at causes the same generic 400."""
+    from datetime import UTC, datetime, timedelta
+
+    from app.models.identity import EmailVerificationToken
+    from app.services.email_verification import issue_token
+
+    await _register_for_verify(client, email="expired@example.com")
+    user = (await db_session.execute(select(User).where(User.email == "expired@example.com"))).scalar_one()
+    plaintext = await issue_token(db_session, user)
+    await db_session.flush()
+    token_row = (
+        await db_session.execute(
+            select(EmailVerificationToken).where(EmailVerificationToken.user_id == user.id)
+        )
+    ).scalars().all()[-1]
+    token_row.expires_at = datetime.now(UTC) - timedelta(minutes=5)
+    await db_session.commit()
+
+    resp = await client.post("/api/v1/auth/verify-email", json={"token": plaintext})
+    assert resp.status_code == 400
+    assert resp.json()["detail"] == "Invalid or expired token"
+
+
+@pytest.mark.asyncio
+async def test_verify_email_rejects_reused_token(client: AsyncClient, db_session):
+    """A token that was already consumed cannot be reused."""
+    from app.services.email_verification import issue_token
+
+    await _register_for_verify(client, email="reused@example.com")
+    user = (await db_session.execute(select(User).where(User.email == "reused@example.com"))).scalar_one()
+    plaintext = await issue_token(db_session, user)
+    await db_session.commit()
+
+    first = await client.post("/api/v1/auth/verify-email", json={"token": plaintext})
+    assert first.status_code == 200, first.text
+    second = await client.post("/api/v1/auth/verify-email", json={"token": plaintext})
+    assert second.status_code == 400, second.text
+    assert second.json()["detail"] == "Invalid or expired token"
+
+
+@pytest.mark.asyncio
+async def test_verify_email_does_not_accept_user_id_as_token(client: AsyncClient, db_session):
+    """The legacy attack — sending the user's UUID as the token — must fail."""
+    await _register_for_verify(client, email="legacy-attack@example.com")
+    user = (await db_session.execute(select(User).where(User.email == "legacy-attack@example.com"))).scalar_one()
+
+    resp = await client.post("/api/v1/auth/verify-email", json={"token": str(user.id)})
+    assert resp.status_code == 400, resp.text
+    assert resp.json()["detail"] == "Invalid or expired token"
+
+    await db_session.refresh(user)
+    assert user.email_verified is False
+
+
+@pytest.mark.asyncio
+async def test_resend_verification_does_not_leak_user_id_in_url(client: AsyncClient, db_session):
+    """The verification URL must contain a fresh hashed-token, not the user's UUID."""
+    from unittest.mock import AsyncMock, patch
+
+    email = "resend-no-leak@example.com"
+    await _register_for_verify(client, email=email)
+    user = (await db_session.execute(select(User).where(User.email == email))).scalar_one()
+
+    with patch(
+        "app.services.email.send_email",
+        new_callable=AsyncMock,
+        return_value=True,
+    ) as mock_send:
+        resp = await client.post("/api/v1/auth/resend-verification")
+        assert resp.status_code == 200, resp.text
+
+    assert mock_send.called
+    sent_html = mock_send.call_args[0][2]
+    assert str(user.id) not in sent_html, (
+        "resend-verification must not embed the user UUID in the link"
+    )

@@ -156,6 +156,8 @@ class AuditAction(str, enum.Enum):
     login = "login"
     logout = "logout"
     export = "export"
+    email_verification_issued = "email_verification_issued"
+    email_verification_succeeded = "email_verification_succeeded"
 
 
 class FamilyPatternType(str, enum.Enum):

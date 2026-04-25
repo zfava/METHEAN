@@ -4,7 +4,7 @@ import hashlib
 import uuid
 from datetime import UTC, datetime, timedelta
 
-from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Cookie, Depends, HTTPException, Request, Response, status
 from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -63,6 +63,7 @@ def _hash_token(token: str) -> str:
 async def register(
     body: RegisterRequest,
     response: Response,
+    request: Request,
     db: AsyncSession = Depends(get_db),
 ) -> RegisterResponse:
     # Check if email already exists
@@ -147,6 +148,25 @@ async def register(
         refresh_token_str,
         settings.REFRESH_TOKEN_EXPIRE_DAYS * 86400,
     )
+
+    # Issue an email-verification token + send the verification email.
+    # Failures are swallowed so a downed email provider doesn't block
+    # account creation; the user can request a fresh token via
+    # /auth/resend-verification.
+    try:
+        from app.services.email import send_email
+        from app.services.email_templates import email_verification_email
+        from app.services.email_verification import issue_token
+
+        verify_plaintext = await issue_token(db, user, request)
+        verify_url = f"{settings.APP_URL}/auth/verify?token={verify_plaintext}"
+        await send_email(
+            user.email,
+            "Verify your METHEAN email",
+            email_verification_email(verify_url),
+        )
+    except Exception:
+        pass
 
     return RegisterResponse(
         user=UserResponse.model_validate(user),
@@ -625,32 +645,37 @@ async def reset_password_endpoint(
 @router.post("/verify-email")
 async def verify_email(
     body: dict,
+    request: Request,
     db: AsyncSession = Depends(get_db),
 ) -> dict:
-    """Verify email with token (simplified — token = user_id for now)."""
-    token = body.get("token")
-    if not token:
-        raise HTTPException(status_code=400, detail="Token required")
-    result = await db.execute(select(User).where(User.id == uuid.UUID(token)))
-    user = result.scalar_one_or_none()
-    if not user:
-        raise HTTPException(status_code=400, detail="Invalid token")
-    user.email_verified = True
+    """Consume a SHA-256-hashed, single-use, expiring verification token."""
+    from app.services.email_verification import verify_token
+
+    await verify_token(db, body.get("token"), request)
     await db.commit()
     return {"verified": True}
 
 
 @router.post("/resend-verification")
 async def resend_verification(
+    request: Request,
+    db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> dict:
-    """Resend verification email."""
+    """Re-issue a fresh verification token and email it to the user."""
     from app.core.config import settings
     from app.services.email import send_email
+    from app.services.email_templates import email_verification_email
+    from app.services.email_verification import issue_token
 
-    verify_url = f"{settings.APP_URL}/auth/verify?token={user.id}"
-    html = f'<a href="{verify_url}" style="background:#4A6FA5;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;">Verify Email</a>'
-    await send_email(user.email, "Verify your METHEAN email", html)
+    plaintext = await issue_token(db, user, request)
+    verify_url = f"{settings.APP_URL}/auth/verify?token={plaintext}"
+    await send_email(
+        user.email,
+        "Verify your METHEAN email",
+        email_verification_email(verify_url),
+    )
+    await db.commit()
     return {"sent": True}
 
 
