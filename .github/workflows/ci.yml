@@ -156,7 +156,7 @@ jobs:
 
       - name: ESLint
         working-directory: frontend
-        run: npx next lint
+        run: npm run lint
 
       - name: Build check
         working-directory: frontend
