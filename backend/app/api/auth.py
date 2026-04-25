@@ -13,6 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user, get_db
 from app.core.config import settings
+from app.core.rate_limit import POLICIES, check_and_consume, client_ip, rate_limit
 from app.core.security import (
     create_access_token,
     create_refresh_token,
@@ -61,7 +62,12 @@ def _hash_token(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()
 
 
-@router.post("/register", response_model=RegisterResponse, status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/register",
+    response_model=RegisterResponse,
+    status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(rate_limit("register"))],
+)
 async def register(
     body: RegisterRequest,
     response: Response,
@@ -365,9 +371,24 @@ async def invite_user(
 @router.post("/login", response_model=TokenResponse)
 async def login(
     body: LoginRequest,
+    request: Request,
     response: Response,
     db: AsyncSession = Depends(get_db),
 ) -> TokenResponse:
+    # Rate-limit per (ip, email) so a single attacker can't brute-force
+    # one account and a compromised IP can't lock out unrelated users.
+    allowed, retry_after = await check_and_consume(
+        request.app.state.redis,
+        POLICIES["login"],
+        {"ip": client_ip(request, settings.TRUSTED_PROXIES), "email": body.email.lower()},
+    )
+    if not allowed:
+        raise HTTPException(
+            status_code=429,
+            detail="Too many login attempts",
+            headers={"Retry-After": str(retry_after)},
+        )
+
     result = await db.execute(select(User).where(User.email == body.email))
     user = result.scalar_one_or_none()
 
@@ -623,6 +644,20 @@ async def forgot_password(
     """Send password reset email."""
     from app.services.password_reset import generate_reset_token
 
+    # Per-(ip,email) hourly cap. The dependency form can't read the
+    # body, so the check runs in-handler.
+    allowed, retry_after = await check_and_consume(
+        request.app.state.redis,
+        POLICIES["forgot_password"],
+        {"ip": client_ip(request, settings.TRUSTED_PROXIES), "email": body.email.lower()},
+    )
+    if not allowed:
+        raise HTTPException(
+            status_code=429,
+            detail="Too many password reset requests",
+            headers={"Retry-After": str(retry_after)},
+        )
+
     await generate_reset_token(db, body.email, request)
     await db.commit()
     return {"message": "If that email exists, a reset link has been sent."}
@@ -647,7 +682,7 @@ async def reset_password_endpoint(
 # ── Email Verification ──
 
 
-@router.post("/verify-email")
+@router.post("/verify-email", dependencies=[Depends(rate_limit("verify_email"))])
 async def verify_email(
     body: dict,
     request: Request,

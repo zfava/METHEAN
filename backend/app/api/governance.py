@@ -32,6 +32,7 @@ from app.api.deps import (
     require_role,
 )
 from app.core.config import settings
+from app.core.rate_limit import rate_limit_user
 from app.models.curriculum import LearningMap, LearningNode
 from app.models.enums import (
     ActivityStatus,
@@ -922,7 +923,10 @@ async def unlock_plan(
 @router.post(
     "/tutor/{activity_id}/message",
     response_model=TutorMessageResponse,
-    dependencies=[Depends(require_active_subscription)],
+    dependencies=[
+        Depends(require_active_subscription),
+        Depends(rate_limit_user("tutor_message")),
+    ],
 )
 async def tutor_message(
     activity_id: uuid.UUID,
@@ -1043,7 +1047,13 @@ Continue the Socratic dialogue. Reference what was discussed earlier if relevant
     )
 
 
-@router.post("/tutor/{activity_id}/stream", dependencies=[Depends(require_active_subscription)])
+@router.post(
+    "/tutor/{activity_id}/stream",
+    dependencies=[
+        Depends(require_active_subscription),
+        Depends(rate_limit_user("tutor_message")),
+    ],
+)
 async def tutor_stream(
     activity_id: uuid.UUID,
     body: TutorMessageRequest,

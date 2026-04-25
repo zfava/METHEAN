@@ -87,10 +87,21 @@ class ErrorHandlerMiddleware(BaseHTTPMiddleware):
 
 
 class RateLimitMiddleware(BaseHTTPMiddleware):
-    """Redis-backed rate limiter. Returns 429 with Retry-After header."""
+    """Coarse-grained baseline limiter using the shared "default" policy.
+
+    Per-endpoint, per-identity limits are layered on top via
+    :mod:`app.core.rate_limit` dependency factories. This middleware
+    only enforces the wide-net cap on requests per IP+endpoint and
+    fails open on Redis exceptions so an outage doesn't take down
+    the whole API. Auth and AI routes get their own fail-closed
+    policies via dependencies.
+    """
 
     def __init__(self, app: FastAPI, requests_per_minute: int = 60):
         super().__init__(app)
+        # rpm kept for backwards compatibility with main.py wiring;
+        # the canonical numbers live in
+        # ``rate_limit.POLICIES["default"]``.
         self.rpm = requests_per_minute
 
     async def dispatch(self, request: Request, call_next) -> Response:
@@ -98,29 +109,26 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         if request.url.path in ("/health", "/health/ready", "/metrics"):
             return await call_next(request)
 
-        # Get client identifier (IP or user from token)
-        client_ip = request.client.host if request.client else "unknown"
-        window_key = f"ratelimit:{client_ip}:{int(time.time()) // 60}"
+        from app.core.rate_limit import POLICIES, check_and_consume, client_ip
 
-        try:
-            redis = request.app.state.redis
-            count = await redis.incr(window_key)
-            if count == 1:
-                await redis.expire(window_key, 60)
-
-            if count > self.rpm:
-                return JSONResponse(
-                    status_code=429,
-                    content={
-                        "code": "rate_limited",
-                        "message": "Too many requests",
-                        "detail": f"Rate limit: {self.rpm} requests per minute",
-                    },
-                    headers={"Retry-After": "60"},
-                )
-        except Exception:
-            # If Redis is down, allow the request (fail open)
-            pass
+        policy = POLICIES["default"]
+        key_values = {
+            "ip": client_ip(request, settings.TRUSTED_PROXIES),
+            "endpoint": request.url.path,
+        }
+        allowed, retry_after = await check_and_consume(
+            request.app.state.redis, policy, key_values
+        )
+        if not allowed:
+            return JSONResponse(
+                status_code=429,
+                content={
+                    "code": "rate_limited",
+                    "message": "Too many requests",
+                    "detail": f"Rate limit: {policy.requests} requests per {policy.window_seconds}s",
+                },
+                headers={"Retry-After": str(retry_after)},
+            )
 
         return await call_next(request)
 

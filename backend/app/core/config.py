@@ -65,6 +65,12 @@ class Settings(BaseSettings):
     STRIPE_TRIAL_DAYS: int = 14
     APP_URL: str = "http://localhost:3000"
 
+    # Trusted reverse-proxy IPs. ``X-Forwarded-For`` is only honored
+    # when the immediate peer is in this list, so external clients
+    # cannot spoof their source IP for rate limiting. Empty list =
+    # trust no proxy and always use ``request.client.host``.
+    TRUSTED_PROXIES: list[str] = []
+
     # Monitoring
     SENTRY_DSN: str = ""  # Empty = disabled
 

@@ -9,6 +9,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user, get_db, require_active_subscription, require_child_access
+from app.core.rate_limit import rate_limit_user
 from app.models.identity import Child, User
 from app.models.intelligence import LearnerIntelligence
 from app.services.intelligence import get_intelligence_context
@@ -191,7 +192,10 @@ async def override_intelligence(
     return {"status": "overridden", "field": body.field}
 
 
-@router.get("/household/governance-intelligence")
+@router.get(
+    "/household/governance-intelligence",
+    dependencies=[Depends(rate_limit_user("ai_generation"))],
+)
 async def get_governance_intelligence(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),

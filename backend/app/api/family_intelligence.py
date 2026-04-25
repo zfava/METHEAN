@@ -8,6 +8,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user, get_db, require_active_subscription
+from app.core.rate_limit import rate_limit_user
 from app.models.curriculum import LearningNode
 from app.models.enums import (
     AuditAction,
@@ -348,7 +349,10 @@ async def update_insight_config(
 # ── GET /household/family-insights/summary ──
 
 
-@router.get("/household/family-insights/summary")
+@router.get(
+    "/household/family-insights/summary",
+    dependencies=[Depends(rate_limit_user("ai_generation"))],
+)
 async def get_insight_summary(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
