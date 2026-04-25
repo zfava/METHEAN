@@ -5,7 +5,7 @@ import uuid
 from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -23,7 +23,6 @@ from app.models.identity import Household, User
 from app.models.operational import RefreshToken
 from app.schemas.auth import (
     InstitutionalRegisterRequest,
-    InviteRequest,
     InviteResponse,
     LoginRequest,
     MessageResponse,
@@ -33,6 +32,13 @@ from app.schemas.auth import (
     TokenResponse,
     UserResponse,
 )
+
+# /auth/invite is the institutional invite endpoint and uses a richer
+# schema. /auth/household/invite is the family invite endpoint and
+# uses the small local InviteRequest below. The two collided on the
+# bare name "InviteRequest" — aliasing the institutional one keeps
+# the local family schema as the canonical InviteRequest.
+from app.schemas.auth import InviteRequest as InstitutionalInviteRequest
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -234,7 +240,7 @@ _INSTITUTIONAL_ROLE_TO_HOUSEHOLD_ROLE = {
     status_code=status.HTTP_201_CREATED,
 )
 async def invite_user(
-    body: InviteRequest,
+    body: InstitutionalInviteRequest,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> InviteResponse:
@@ -651,9 +657,37 @@ async def resend_verification(
 # ── Family Invites ──
 
 
+# UserRole enum has only owner/co_parent/observer. Two legacy aliases
+# ("parent", "viewer") survived in old invite payloads and DB rows, so
+# every entry into the role-handling code paths flows through this
+# normaliser before reaching the enum. Adding new aliases means just
+# adding a new entry here — never adding new UserRole values.
+_INVITE_ROLE_ALIASES: dict[str, UserRole] = {
+    "owner": UserRole.owner,
+    "co_parent": UserRole.co_parent,
+    "parent": UserRole.co_parent,  # legacy alias
+    "observer": UserRole.observer,
+    "viewer": UserRole.observer,  # legacy alias
+}
+
+
+def _normalize_invite_role(raw: str) -> UserRole:
+    try:
+        return _INVITE_ROLE_ALIASES[raw.strip().lower()]
+    except (KeyError, AttributeError) as exc:
+        raise HTTPException(status_code=400, detail=f"Invalid role: {raw}") from exc
+
+
 class InviteRequest(BaseModel):
     email: str
-    role: str = "parent"
+    role: str = "co_parent"
+
+    @field_validator("role")
+    @classmethod
+    def _validate_role(cls, v: str) -> str:
+        if v.strip().lower() not in _INVITE_ROLE_ALIASES:
+            raise ValueError(f"Invalid role: {v}")
+        return v.strip().lower()
 
 
 class AcceptInviteRequest(BaseModel):
@@ -676,11 +710,16 @@ async def invite_family_member(
     from app.models.identity import FamilyInvite
     from app.services.email import send_email
 
+    # Persist the canonical enum value so a legacy "parent"/"viewer" in
+    # the request body never reaches the DB. _validate_role above has
+    # already filtered unknown values; this just maps aliases.
+    canonical_role = _normalize_invite_role(body.role)
+
     token = secrets.token_urlsafe(32)
     invite = FamilyInvite(
         household_id=user.household_id,
         email=body.email,
-        role=body.role,
+        role=canonical_role.value,
         invited_by=user.id,
         token=token,
         expires_at=datetime.now(UTC) + timedelta(days=7),
@@ -775,9 +814,7 @@ async def accept_invite(
             status_code=400, detail="An account with this email already exists. Log in and contact the household owner."
         )
 
-    role_enum = (
-        UserRole.owner if invite.role == "owner" else UserRole.parent if invite.role == "parent" else UserRole.viewer
-    )
+    role_enum = _normalize_invite_role(invite.role)
     new_user = User(
         household_id=invite.household_id,
         email=invite.email,

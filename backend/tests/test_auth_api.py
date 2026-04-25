@@ -428,3 +428,144 @@ async def test_student_cannot_access_other_students(client: AsyncClient, db_sess
         db_session, student_a, PERM_VIEW_PROGRESS, scope_type="child", scope_id=student_b.linked_child_id
     )
     assert allowed_other is False
+
+
+# ══════════════════════════════════════════════════════════════════════
+# Family invite role normalisation (METHEAN-6-01)
+# ══════════════════════════════════════════════════════════════════════
+
+
+async def _create_household_invite(auth_client: AsyncClient, *, email: str, role: str):
+    return await auth_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": email, "role": role},
+    )
+
+
+@pytest.mark.asyncio
+async def test_invite_create_with_co_parent_role(auth_client, db_session):
+    """Canonical co_parent role is accepted and persisted as-is."""
+    from app.models.identity import FamilyInvite
+
+    resp = await _create_household_invite(auth_client, email="cp@example.com", role="co_parent")
+    assert resp.status_code == 200, resp.text
+
+    invite = (
+        await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "cp@example.com"))
+    ).scalar_one()
+    assert invite.role == "co_parent"
+
+
+@pytest.mark.asyncio
+async def test_invite_create_with_observer_role(auth_client, db_session):
+    """Canonical observer role is accepted and persisted as-is."""
+    from app.models.identity import FamilyInvite
+
+    resp = await _create_household_invite(auth_client, email="obs@example.com", role="observer")
+    assert resp.status_code == 200, resp.text
+
+    invite = (
+        await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "obs@example.com"))
+    ).scalar_one()
+    assert invite.role == "observer"
+
+
+@pytest.mark.asyncio
+async def test_invite_create_with_legacy_parent_alias_normalized_to_co_parent(auth_client, db_session):
+    """Legacy 'parent' alias must be flattened to 'co_parent' in the DB."""
+    from app.models.identity import FamilyInvite
+
+    resp = await _create_household_invite(auth_client, email="legacy-p@example.com", role="parent")
+    assert resp.status_code == 200, resp.text
+
+    invite = (
+        await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "legacy-p@example.com"))
+    ).scalar_one()
+    assert invite.role == "co_parent", f"expected normalised co_parent, got {invite.role!r}"
+
+
+@pytest.mark.asyncio
+async def test_invite_create_with_legacy_viewer_alias_normalized_to_observer(auth_client, db_session):
+    """Legacy 'viewer' alias must be flattened to 'observer' in the DB."""
+    from app.models.identity import FamilyInvite
+
+    resp = await _create_household_invite(auth_client, email="legacy-v@example.com", role="viewer")
+    assert resp.status_code == 200, resp.text
+
+    invite = (
+        await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "legacy-v@example.com"))
+    ).scalar_one()
+    assert invite.role == "observer"
+
+
+@pytest.mark.asyncio
+async def test_invite_create_rejects_unknown_role(auth_client):
+    """An unknown role must fail Pydantic validation (422)."""
+    resp = await _create_household_invite(auth_client, email="bad@example.com", role="admin")
+    # Pydantic v2 rejects with 422; the helper raises 400 — accept either.
+    assert resp.status_code in (400, 422), resp.text
+
+
+@pytest.mark.asyncio
+async def test_invite_accept_creates_user_with_canonical_role(auth_client, client, db_session):
+    """End-to-end: invite -> accept -> User row holds the canonical enum."""
+    from app.models.enums import UserRole
+    from app.models.identity import FamilyInvite
+
+    # Use legacy alias on creation to also exercise normalisation.
+    resp = await _create_household_invite(auth_client, email="accept-me@example.com", role="parent")
+    assert resp.status_code == 200, resp.text
+
+    invite = (
+        await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "accept-me@example.com"))
+    ).scalar_one()
+    # Anonymous client (no auth cookie) — accept is unauthenticated.
+    accept = await client.post(
+        "/api/v1/auth/accept-invite",
+        json={
+            "token": invite.token,
+            "password": "newpassword123",
+            "display_name": "Accepted",
+        },
+    )
+    assert accept.status_code == 200, accept.text
+
+    new_user = (
+        await db_session.execute(select(User).where(User.email == "accept-me@example.com"))
+    ).scalar_one()
+    role_value = new_user.role.value if hasattr(new_user.role, "value") else new_user.role
+    assert role_value == UserRole.co_parent.value
+
+
+@pytest.mark.asyncio
+async def test_invite_accept_rejects_corrupted_legacy_role_in_db(client, db_session, household):
+    """If a row in the DB carries an unknown role string (e.g. from an
+    unmigrated import), accept-invite must 400 instead of 500.
+    """
+    import secrets
+    from datetime import UTC, datetime, timedelta
+
+    from app.models.identity import FamilyInvite
+
+    token = secrets.token_urlsafe(32)
+    invite = FamilyInvite(
+        household_id=household.id,
+        email="corrupt@example.com",
+        role="admin",  # not in _INVITE_ROLE_ALIASES
+        token=token,
+        expires_at=datetime.now(UTC) + timedelta(days=1),
+        status="pending",
+    )
+    db_session.add(invite)
+    await db_session.flush()
+
+    resp = await client.post(
+        "/api/v1/auth/accept-invite",
+        json={
+            "token": token,
+            "password": "newpassword123",
+            "display_name": "Corrupt",
+        },
+    )
+    assert resp.status_code == 400, resp.text
+    assert "Invalid role" in resp.json().get("detail", "")
