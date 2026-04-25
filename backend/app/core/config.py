@@ -34,7 +34,13 @@ class Settings(BaseSettings):
     AI_STANDARD_MODEL: str = "claude-sonnet-4-6"
     AI_LIGHT_MODEL: str = "claude-haiku-4-5-20251001"
     AI_FALLBACK_MODEL: str = "gpt-4o-mini"
-    AI_MOCK_ENABLED: bool = True  # Allow mock fallback when providers unavailable
+    # Mock fallback is OFF by default. In production it also requires
+    # ALLOW_AI_MOCK_IN_PRODUCTION=true so it can never be flipped on
+    # accidentally — see the validator below. ``ALLOW_AI_MOCK_IN_PRODUCTION``
+    # must be declared above ``AI_MOCK_ENABLED`` so it's already in
+    # ``info.data`` when the validator runs.
+    ALLOW_AI_MOCK_IN_PRODUCTION: bool = False
+    AI_MOCK_ENABLED: bool = False  # Allow mock fallback when providers unavailable
     AI_MAX_TOKENS: int = 4096
     AI_TEMPERATURE: float = 0.7
 
@@ -82,6 +88,18 @@ class Settings(BaseSettings):
         env = info.data.get("APP_ENV", "development")
         if env == "production" and v == "CHANGE_ME_IN_PRODUCTION":
             raise ValueError("JWT_SECRET must be changed from default in production. Refusing to boot.")
+        return v
+
+    @field_validator("AI_MOCK_ENABLED")
+    @classmethod
+    def mock_must_be_off_in_production(cls, v: bool, info) -> bool:
+        env = info.data.get("APP_ENV", "development")
+        allow = info.data.get("ALLOW_AI_MOCK_IN_PRODUCTION", False)
+        if env == "production" and v and not allow:
+            raise ValueError(
+                "AI_MOCK_ENABLED=True in production requires ALLOW_AI_MOCK_IN_PRODUCTION=true. "
+                "Refusing to boot."
+            )
         return v
 
     @property

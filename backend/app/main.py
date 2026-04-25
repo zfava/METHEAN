@@ -5,9 +5,11 @@ from contextlib import asynccontextmanager
 
 import redis.asyncio as aioredis
 import structlog
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
+from app.ai.gateway import AIProviderUnavailableError
 from app.api.academic_calendar import router as academic_calendar_router
 from app.api.annual_curriculum import router as annual_curriculum_router
 from app.api.assessment import router as assessment_router
@@ -128,6 +130,27 @@ app.include_router(family_intelligence_router, prefix="/api/v1")
 app.include_router(wellbeing_router, prefix="/api/v1")  # PARENT-ONLY
 app.include_router(child_dashboard_router, prefix="/api/v1")
 app.include_router(fitness_router, prefix="/api/v1")
+
+
+@app.exception_handler(AIProviderUnavailableError)
+async def _ai_unavailable_handler(
+    request: Request, exc: AIProviderUnavailableError
+) -> JSONResponse:
+    """Translate gateway-level provider failure into a structured 503.
+
+    Sets ``Retry-After`` so clients back off for the same window the
+    server expects to need before recovery.
+    """
+    retry = getattr(exc, "retry_after_seconds", 60)
+    return JSONResponse(
+        status_code=503,
+        content={
+            "error": "ai_unavailable",
+            "message": "AI services are temporarily unavailable. Your request was not processed.",
+            "retry_after_seconds": retry,
+        },
+        headers={"Retry-After": str(retry)},
+    )
 
 
 @app.get("/health")

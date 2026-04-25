@@ -21,6 +21,13 @@ from app.main import app
 from app.models.curriculum import LearningMap, Subject
 from app.models.identity import Child, Household, User
 
+# Tests rely on the deterministic mock provider as a stand-in for real
+# AI calls. Production now defaults AI_MOCK_ENABLED to False, so flip
+# it on for the test session to keep existing gateway-driven tests
+# working. Tests that need the prod default (e.g. the new
+# AIProviderUnavailableError path) override via monkeypatch.
+settings.AI_MOCK_ENABLED = True
+
 # Use a test database URL - replace only the database name at the end
 TEST_DATABASE_URL = settings.DATABASE_URL.rsplit("/", 1)[0] + "/methean_test"
 

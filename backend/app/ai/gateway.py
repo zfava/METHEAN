@@ -28,6 +28,26 @@ from app.models.operational import AIRun
 logger = logging.getLogger("methean.ai.gateway")
 
 
+class AIProviderUnavailableError(Exception):
+    """All real AI providers failed and mock fallback is disabled.
+
+    Raised by the gateway when neither Claude nor OpenAI returned a
+    usable response and ``settings.AI_MOCK_ENABLED`` is False. The
+    FastAPI handler in ``app.main`` translates this into HTTP 503 with
+    a structured body and a ``Retry-After`` header so the UI can show
+    degraded-state messaging instead of treating canned mock content
+    as success.
+    """
+
+    def __init__(
+        self,
+        message: str = "All AI providers unavailable",
+        retry_after_seconds: int = 60,
+    ):
+        super().__init__(message)
+        self.retry_after_seconds = retry_after_seconds
+
+
 class CircuitBreaker:
     """Per-provider circuit breaker. States: closed (normal), open (skip), half_open (testing)."""
 
@@ -98,7 +118,11 @@ class AIRole(str, Enum):
 
 
 class AIProvider(str, Enum):
-    claude = "claude"
+    # Wire/log values are normalised to provider brand names so the
+    # response payload uses {"anthropic", "openai", "mock"} per spec.
+    # Internal references keep the historical ``AIProvider.claude``
+    # member name so callers don't churn.
+    claude = "anthropic"
     openai = "openai"
     mock = "mock"
 
@@ -249,6 +273,18 @@ async def call_ai(
                 break
 
             elif provider == AIProvider.mock and settings.AI_MOCK_ENABLED:
+                # Reaching the mock branch means every real provider
+                # above us was either unconfigured, circuit-broken, or
+                # threw — log a WARNING so degraded responses are
+                # visible in production logs.
+                logger.warning(
+                    "ai_gateway.mock_fallback_used",
+                    extra={
+                        "reason": error_msg or "real_providers_unavailable",
+                        "household_id": str(household_id),
+                        "role": role.value,
+                    },
+                )
                 result = _call_mock(role, user_prompt)
                 output = result["content"]
                 model_used = "mock"
@@ -280,12 +316,23 @@ async def call_ai(
             continue
 
     if output is None:
-        # All providers failed
+        # All providers failed AND mock fallback is disabled (or
+        # unavailable). Surface this loudly with a typed exception so
+        # the FastAPI handler in app.main can return a structured 503
+        # instead of a generic 500.
         ai_run.status = AIRunStatus.failed
         ai_run.error_message = error_msg or "All AI providers unavailable"
         ai_run.completed_at = datetime.now(UTC)
         await db.flush()
-        raise RuntimeError(f"AI call failed for role={role.value}: {error_msg}")
+        try:
+            from app.core.metrics import ai_calls_total
+
+            ai_calls_total.labels(role=role.value, provider="none", status="error").inc()
+        except Exception:
+            pass
+        raise AIProviderUnavailableError(
+            f"AI call failed for role={role.value}: {error_msg or 'all providers unavailable'}"
+        )
 
     # Parse JSON if expected
     parsed_output = output
@@ -354,6 +401,7 @@ async def call_ai(
         "ai_run_id": ai_run.id,
         "output": parsed_output,
         "is_mock": is_mock,
+        "degraded": is_mock,
         "model_used": model_used,
         "provider": provider_used.value if provider_used else "none",
         "elapsed_ms": elapsed_ms,
