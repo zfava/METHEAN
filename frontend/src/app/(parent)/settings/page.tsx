@@ -36,7 +36,7 @@ export default function SettingsPage() {
   // Family members
   const [invites, setInvites] = useState<any[]>([]);
   const [inviteEmail, setInviteEmail] = useState("");
-  const [inviteRole, setInviteRole] = useState("parent");
+  const [inviteRole, setInviteRole] = useState("co_parent");
   const [inviting, setInviting] = useState(false);
 
   // Household
@@ -350,8 +350,8 @@ export default function SettingsPage() {
             className="flex-1 px-3 py-2 text-sm border border-(--color-border-strong) rounded-[10px]" />
           <select value={inviteRole} onChange={(e) => setInviteRole(e.target.value)}
             className="px-3 py-2 text-sm border border-(--color-border-strong) rounded-[10px]">
-            <option value="parent">Parent</option>
-            <option value="viewer">Observer</option>
+            <option value="co_parent">Parent</option>
+            <option value="observer">Observer</option>
           </select>
           <Button variant="primary" size="sm" disabled={!inviteEmail.trim() || inviting} onClick={async () => {
             setInviting(true);
