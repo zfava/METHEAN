@@ -54,9 +54,13 @@ source = ["app"]
 omit = [
     "app/content/*",
     "app/tasks/worker.py",
+    "app/migrations/*",
+    "*/tests/*",
+    "app/main.py",
 ]
 
 [tool.coverage.report]
-fail_under = 25
+fail_under = 50
 show_missing = true
+skip_covered = false
 skip_empty = true
