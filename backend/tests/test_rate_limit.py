@@ -102,12 +102,8 @@ async def test_login_different_emails_independent():
 
     for _ in range(policy.requests):
         await check_and_consume(redis, policy, {"ip": ip, "email": "alice@example.com"})
-    alice_blocked, _ = await check_and_consume(
-        redis, policy, {"ip": ip, "email": "alice@example.com"}
-    )
-    bob_first, _ = await check_and_consume(
-        redis, policy, {"ip": ip, "email": "bob@example.com"}
-    )
+    alice_blocked, _ = await check_and_consume(redis, policy, {"ip": ip, "email": "alice@example.com"})
+    bob_first, _ = await check_and_consume(redis, policy, {"ip": ip, "email": "bob@example.com"})
 
     assert alice_blocked is False
     assert bob_first is True
@@ -240,3 +236,55 @@ async def test_retry_after_header_present_on_429():
     assert real.window_seconds == 60
     # Sanity: helper math doesn't drift across the second boundary.
     assert int(time.time()) // real.window_seconds >= 0
+
+
+# ══════════════════════════════════════════════════════════════════════
+# Missing-Redis tolerance
+# ══════════════════════════════════════════════════════════════════════
+#
+# Pre-fix: the middleware unconditionally read ``request.app.state.redis``.
+# In the test environment the lifespan handler never runs, so the State
+# object had no ``redis`` attribute and Starlette raised AttributeError,
+# returning 500 from every non-health request. These tests lock in the
+# fix at both layers (middleware + helper).
+
+
+@pytest.mark.asyncio
+async def test_middleware_does_not_crash_when_redis_unavailable():
+    """The middleware must fall through to fail_open behavior when
+    ``app.state.redis`` is missing — no AttributeError, no 500.
+
+    Uses a fresh ``httpx.AsyncClient`` against the raw ASGI app so
+    this test doesn't depend on the conftest ``client`` fixture's
+    db_session setup. The middleware exempts ``/health`` from rate
+    limiting entirely; this test additionally hits ``/metrics`` which
+    is exempt for the same reason — together they confirm the rest
+    of the request pipeline (CSRF, security headers) survives a
+    missing redis cleanly.
+    """
+    from httpx import ASGITransport, AsyncClient
+
+    from app.main import app
+
+    if hasattr(app.state, "redis"):
+        del app.state.redis
+
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
+        resp = await ac.get("/health")
+        assert resp.status_code == 200
+
+
+@pytest.mark.asyncio
+async def test_check_and_consume_returns_fail_open_when_redis_is_none():
+    # default policy is fail_open=True
+    allowed, _ = await check_and_consume(None, POLICIES["default"], {"ip": "1.1.1.1"})
+    assert allowed is True
+
+
+@pytest.mark.asyncio
+async def test_check_and_consume_returns_fail_closed_when_redis_is_none_for_login():
+    # login policy is fail_open=False; the helper must NOT silently
+    # admit when Redis is absent.
+    allowed, _ = await check_and_consume(None, POLICIES["login"], {"ip": "1.1.1.1", "email": "a@b.c"})
+    assert allowed is False

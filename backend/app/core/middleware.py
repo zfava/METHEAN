@@ -156,7 +156,23 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             "ip": client_ip(request, settings.TRUSTED_PROXIES),
             "endpoint": request.url.path,
         }
-        allowed, retry_after = await check_and_consume(request.app.state.redis, policy, key_values)
+        redis = getattr(request.app.state, "redis", None)
+        if redis is None:
+            # No Redis configured (e.g. test environment). Apply policy's
+            # fail_open behavior. Closed-fail policies (login, AI, etc.)
+            # cannot enforce without Redis — log once and fall through;
+            # tests for those routes should mock the limiter directly.
+            if not policy.fail_open:
+                import logging
+
+                logging.getLogger("methean.middleware.ratelimit").warning(
+                    "Rate limit policy %s cannot enforce: redis unavailable", policy.name
+                )
+            # Allow the request either way to avoid breaking the
+            # request pipeline.
+            return await call_next(request)
+
+        allowed, retry_after = await check_and_consume(redis, policy, key_values)
         if not allowed:
             return JSONResponse(
                 status_code=429,

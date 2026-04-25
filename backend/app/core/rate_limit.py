@@ -66,7 +66,16 @@ async def check_and_consume(
 
     Returns ``(allowed, retry_after_seconds)``. ``retry_after_seconds``
     is meaningful only when ``allowed`` is False.
+
+    A ``None`` redis client is treated identically to an exception
+    from a real client: the policy's ``fail_open`` flag decides
+    whether the request is admitted. This matters for environments
+    where Redis isn't wired up (tests, local dev without docker
+    compose) — auth + AI policies stay closed, the wide-net
+    ``default`` policy stays open.
     """
+    if redis is None:
+        return policy.fail_open, 60
     window = int(time.time()) // policy.window_seconds
     parts = [policy.name, str(window)] + [f"{k}={key_values.get(k, '_')}" for k in policy.key_components]
     redis_key = ":".join(["ratelimit"] + parts)
@@ -107,7 +116,8 @@ def rate_limit(policy_name: str):
             "ip": client_ip(request, settings.TRUSTED_PROXIES),
             "endpoint": request.url.path,
         }
-        allowed, retry_after = await check_and_consume(request.app.state.redis, policy, key_values)
+        redis = getattr(request.app.state, "redis", None)
+        allowed, retry_after = await check_and_consume(redis, policy, key_values)
         if not allowed:
             raise HTTPException(
                 status_code=429,
@@ -132,7 +142,8 @@ def rate_limit_user(policy_name: str):
             "user_id": str(user.id),
             "household": str(user.household_id),
         }
-        allowed, retry_after = await check_and_consume(request.app.state.redis, policy, key_values)
+        redis = getattr(request.app.state, "redis", None)
+        allowed, retry_after = await check_and_consume(redis, policy, key_values)
         if not allowed:
             raise HTTPException(
                 status_code=429,
