@@ -1,14 +1,18 @@
 """Shared FastAPI dependencies."""
 
 import uuid
+from typing import Literal
 
-from fastapi import Cookie, Depends, HTTPException, Query, status
+from fastapi import Cookie, Depends, HTTPException, Path, Query, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_session, set_tenant
 from app.core.security import decode_token
-from app.models.identity import User
+from app.models.enums import UserRole
+from app.models.identity import Child, User
+
+AccessMode = Literal["read", "write"]
 
 
 class PaginationParams:
@@ -112,6 +116,60 @@ def require_permission(permission: str, scope_type: str | None = None):
                 detail=f"Missing permission: {permission}",
             )
         return user
+
+    return checker
+
+
+def require_child_access(mode: AccessMode = "read"):
+    """Factory: returns a FastAPI dependency that enforces per-child access.
+
+    Pattern matches :func:`require_permission`. Wire it onto any
+    learner-scoped route::
+
+        child: Child = Depends(require_child_access("read"))   # GET
+        child: Child = Depends(require_child_access("write"))  # POST/PUT/PATCH/DELETE
+
+    The returned :class:`Child` row is the validated, household-scoped
+    record — the surrounding handler can use it directly and skip
+    the legacy ``_get_child_or_404`` lookup.
+
+    Trust-boundary order:
+
+    1. Tenant isolation. A child outside the user's household is a
+       404 — never leak existence.
+    2. Observer write block. ``UserRole.observer`` is read-only.
+    3. Linked-learner constraint. A user with ``linked_child_id`` set
+       can only touch that child; any other id is a 403.
+    """
+
+    async def checker(
+        child_id: uuid.UUID = Path(...),
+        user: User = Depends(get_current_user),
+        db: AsyncSession = Depends(get_db),
+    ) -> Child:
+        result = await db.execute(
+            select(Child).where(
+                Child.id == child_id,
+                Child.household_id == user.household_id,
+            )
+        )
+        child = result.scalar_one_or_none()
+        if not child:
+            raise HTTPException(status_code=404, detail="Child not found")
+
+        if mode == "write" and user.role == UserRole.observer:
+            raise HTTPException(
+                status_code=403,
+                detail="Observers cannot modify child records",
+            )
+
+        if user.linked_child_id is not None and child_id != user.linked_child_id:
+            raise HTTPException(
+                status_code=403,
+                detail="Not authorized for this learner",
+            )
+
+        return child
 
     return checker
 

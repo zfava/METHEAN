@@ -13,7 +13,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db
+from app.api.deps import get_current_user, get_db, require_child_access
 from app.models.curriculum import (
     ChildMapEnrollment,
     LearningMap,
@@ -182,6 +182,7 @@ async def get_child_dashboard(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Single endpoint: everything the child needs on load."""
     return await _build_child_dashboard(db, child_id, user.household_id)

@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db, require_permission
+from app.api.deps import get_current_user, get_db, require_child_access, require_permission
 from app.models.annual_curriculum import AnnualCurriculum
 from app.models.enums import ActivityStatus, ActivityType
 from app.models.governance import Activity, Plan, PlanWeek
@@ -104,6 +104,7 @@ async def generate_curriculum(
     body: GenerateRequest,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("plans.generate")),
+    _child: Child = Depends(require_child_access("write")),
 ):
     """Generate a new annual curriculum draft."""
     await _get_child(db, child_id, user.household_id)
@@ -129,6 +130,7 @@ async def list_curricula(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ):
     """List all annual curricula for a child."""
     await _get_child(db, child_id, user.household_id)
@@ -370,6 +372,7 @@ async def curriculum_history(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ):
     """Get complete historical record across all years and subjects."""
     await _get_child(db, child_id, user.household_id)
@@ -407,6 +410,7 @@ async def curriculum_history_year(
     academic_year: str,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ):
     """Get all curricula for a specific academic year."""
     await _get_child(db, child_id, user.household_id)

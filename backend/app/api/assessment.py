@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import PaginationParams, get_current_user, get_db
+from app.api.deps import PaginationParams, get_current_user, get_db, require_child_access
 from app.models.assessment import Assessment, PortfolioEntry
 from app.models.enums import AssessmentType
 from app.models.identity import Child, User
@@ -65,6 +65,7 @@ async def create_assessment(
     body: AssessmentCreate,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     assessment = await record_assessment(
@@ -92,6 +93,7 @@ async def list_assessments(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
     pagination: PaginationParams = Depends(),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     base = select(Assessment).where(
@@ -136,6 +138,7 @@ async def create_portfolio_entry(
     body: PortfolioCreate,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     entry = PortfolioEntry(
@@ -168,6 +171,7 @@ async def list_portfolio(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
     pagination: PaginationParams = Depends(),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     base = select(PortfolioEntry).where(
@@ -206,6 +210,7 @@ async def get_transcript(
     year: int | None = Query(default=None),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     return await generate_transcript(db, user.household_id, child_id, year)
@@ -218,6 +223,7 @@ async def portfolio_export(
     period_end: date = Query(alias="to"),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     return await generate_portfolio_export(db, user.household_id, child_id, period_start, period_end)

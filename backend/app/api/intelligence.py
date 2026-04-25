@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db
+from app.api.deps import get_current_user, get_db, require_child_access
 from app.models.identity import Child, User
 from app.models.intelligence import LearnerIntelligence
 from app.services.intelligence import get_intelligence_context
@@ -38,6 +38,7 @@ async def get_intelligence(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Returns the full intelligence profile for a child."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -76,6 +77,7 @@ async def add_observation(
     body: AddObservationRequest,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     """Parent adds a manual observation. Parent's word is law."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -113,6 +115,7 @@ async def remove_observation(
     index: int,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     """Parent removes a specific observation by index."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -141,6 +144,7 @@ async def override_intelligence(
     body: OverrideRequest,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     """Parent overrides any AI-accumulated observation. Parent governs."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -203,6 +207,7 @@ async def list_achievements(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """List earned achievements and all possible definitions."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -217,6 +222,7 @@ async def get_child_streak(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Get current streak info for a child."""
     await _get_child_or_404(db, child_id, user.household_id)

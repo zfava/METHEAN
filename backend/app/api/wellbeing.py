@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db
+from app.api.deps import get_current_user, get_db, require_child_access
 from app.models.enums import (
     AnomalyStatus,
     AuditAction,
@@ -44,6 +44,7 @@ async def list_anomalies(
     per_page: int = Query(10, ge=1, le=50),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Paginated list of wellbeing anomalies for a child. PARENT-ONLY."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -82,6 +83,7 @@ async def get_anomaly(
     anomaly_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Single anomaly with full evidence. PARENT-ONLY."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -117,6 +119,7 @@ async def update_anomaly_status(
     body: StatusUpdate,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     """Update anomaly status. PARENT-ONLY."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -196,6 +199,7 @@ async def get_config(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Returns wellbeing config or defaults. PARENT-ONLY."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -245,6 +249,7 @@ async def update_config(
     body: ConfigUpdate,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     """Update wellbeing config. Merges custom_thresholds. PARENT-ONLY."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -322,6 +327,7 @@ async def get_summary(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Aggregate wellbeing summary. PARENT-ONLY."""
     await _get_child_or_404(db, child_id, user.household_id)

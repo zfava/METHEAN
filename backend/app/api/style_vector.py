@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db
+from app.api.deps import get_current_user, get_db, require_child_access
 from app.models.enums import AuditAction, GovernanceAction
 from app.models.governance import GovernanceEvent
 from app.models.identity import Child, User
@@ -88,6 +88,7 @@ async def get_style_vector(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Returns the full LearnerStyleVector for a child."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -134,6 +135,7 @@ async def set_style_override(
     body: OverrideRequest,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     """Lock or unlock a parent override on a style dimension."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -216,6 +218,7 @@ async def set_style_bounds(
     body: BoundsRequest,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     """Set or remove parent bounds on a style dimension."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -305,6 +308,7 @@ async def get_style_vector_history(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Returns the current vector state with timestamp as a history entry.
 

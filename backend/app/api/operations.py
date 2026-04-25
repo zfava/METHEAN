@@ -8,7 +8,7 @@ from fastapi.responses import RedirectResponse
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import PaginationParams, get_current_user, get_db
+from app.api.deps import PaginationParams, get_current_user, get_db, require_child_access
 from app.models.curriculum import LearningNode
 from app.models.enums import AlertStatus, ArtifactType, MasteryLevel
 from app.models.evidence import Alert, Artifact, WeeklySnapshot
@@ -96,6 +96,7 @@ async def list_alerts(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
     pagination: PaginationParams = Depends(),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     base = select(Alert).where(
@@ -235,6 +236,7 @@ async def list_snapshots(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
     pagination: PaginationParams = Depends(),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     base = select(WeeklySnapshot).where(
@@ -274,6 +276,7 @@ async def compare_snapshots(
     to_date: date = Query(alias="to"),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
 
@@ -317,6 +320,7 @@ async def compliance_report(
     to_date: date = Query(alias="to"),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Generate structured compliance report for homeschool state reporting."""
     child = await _get_child_or_404(db, child_id, user.household_id)
@@ -373,6 +377,7 @@ async def upload_artifact_endpoint(
     attempt_id: uuid.UUID | None = Query(default=None),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     """Upload an artifact file for a child. Max 50 MB."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -432,6 +437,7 @@ async def list_artifacts(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
     pagination: PaginationParams = Depends(),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """List artifacts for a child with pagination."""
     await _get_child_or_404(db, child_id, user.household_id)

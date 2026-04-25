@@ -12,7 +12,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.api.deps import PaginationParams, get_current_user, get_db, require_permission
+from app.api.deps import PaginationParams, get_current_user, get_db, require_child_access, require_permission
 from app.models.curriculum import (
     ChildMapEnrollment,
     LearningEdge,
@@ -737,6 +737,7 @@ async def get_child_map_state(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> list[ChildMapStateResponse]:
     await _get_child_or_404(db, child_id, user.household_id)
 
@@ -783,6 +784,7 @@ async def get_child_single_map_state(
     map_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> ChildMapStateResponse:
     await _get_child_or_404(db, child_id, user.household_id)
     lmap = await _get_map_or_404(db, map_id, user.household_id)
@@ -821,6 +823,7 @@ async def enroll_child(
     body: EnrollmentCreate,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("manage.children")),
+    _child: Child = Depends(require_child_access("write")),
 ) -> EnrollmentResponse:
     await _get_child_or_404(db, child_id, user.household_id)
     lmap = await _get_map_or_404(db, body.learning_map_id, user.household_id)
@@ -1057,6 +1060,7 @@ async def map_existing_curriculum_endpoint(
     body: MapExistingRequest,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     """Map an existing curriculum into METHEAN's DAG structure."""
     from app.services.curriculum_mapper import map_existing_curriculum
@@ -1082,6 +1086,7 @@ async def apply_mapping_endpoint(
     proposal: dict,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("manage.children")),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     """Apply an approved curriculum mapping: create map, nodes, mastery state."""
     from app.services.curriculum_mapper import apply_curriculum_mapping
@@ -1154,6 +1159,7 @@ async def override_blocked_node(
     body: OverrideRequest,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("override.prerequisites")),
+    _child: Child = Depends(require_child_access("write")),
 ) -> OverrideResponse:
     await _get_child_or_404(db, child_id, user.household_id)
 

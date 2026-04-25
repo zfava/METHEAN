@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db
+from app.api.deps import get_current_user, get_db, require_child_access
 from app.models.fitness import FitnessBenchmark, FitnessLog
 from app.models.identity import Child, User
 from app.services.fitness_service import (
@@ -107,6 +107,7 @@ async def list_fitness_logs(
     limit: int = Query(default=50, ge=1, le=500),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     stmt = select(FitnessLog).where(
@@ -183,6 +184,7 @@ async def list_benchmarks(
     benchmark_name: str | None = Query(default=None),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     stmt = select(FitnessBenchmark).where(
@@ -221,6 +223,7 @@ async def get_progress(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     return await get_progress_summary(db, user.household_id, child_id)
@@ -233,6 +236,7 @@ async def get_stats(
     period_end: datetime | None = Query(default=None),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     now = datetime.now(UTC)

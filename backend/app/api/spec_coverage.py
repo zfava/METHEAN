@@ -16,7 +16,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.ai.gateway import AIRole, call_ai
 from app.ai.prompts import PLANNER_SYSTEM
-from app.api.deps import get_current_user, get_db, require_role
+from app.api.deps import get_current_user, get_db, require_child_access, require_role
 from app.models.curriculum import (
     ChildMapEnrollment,
     LearningEdge,
@@ -378,15 +378,19 @@ async def list_children(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
 ) -> list[dict]:
-    """List all children in the authenticated user's household."""
-    result = await db.execute(
-        select(Child)
-        .where(
-            Child.household_id == user.household_id,
-            Child.is_active == True,  # noqa: E712
-        )
-        .order_by(Child.first_name)
+    """List children in the authenticated user's household.
+
+    A user with ``linked_child_id`` set (a self-learner or institutional
+    student) only sees that single child — even if other children exist
+    in the household.
+    """
+    query = select(Child).where(
+        Child.household_id == user.household_id,
+        Child.is_active == True,  # noqa: E712
     )
+    if user.linked_child_id is not None:
+        query = query.where(Child.id == user.linked_child_id)
+    result = await db.execute(query.order_by(Child.first_name))
     children = result.scalars().all()
 
     items = []
@@ -443,6 +447,7 @@ async def update_child(
     body: ChildUpdate,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_role("owner")),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     child = await _get_child_or_404(db, child_id, user.household_id)
     if body.first_name is not None:
@@ -468,6 +473,7 @@ async def update_child_preferences(
     body: ChildPreferencesUpdate,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_role("owner")),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     result = await db.execute(select(ChildPreferences).where(ChildPreferences.child_id == child_id))
@@ -512,6 +518,7 @@ async def get_today(
     target_date: date | None = Query(default=None, alias="date"),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> list[dict]:
     """Return today's scheduled activities for a child."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -764,6 +771,7 @@ async def get_pace(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Return pace metrics per active node."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -868,6 +876,7 @@ async def counterfactual(
     body: CounterfactualRequest,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_role("owner", "co_parent")),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     """What-if analysis without state changes."""
     child = await _get_child_or_404(db, child_id, user.household_id)
@@ -1126,6 +1135,7 @@ async def add_certification(
     body: CertificationCreate,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     prefs = await _get_or_create_prefs(db, child_id, user.household_id)
@@ -1161,6 +1171,7 @@ async def update_certification(
     body: CertificationUpdate,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     prefs = await _get_or_create_prefs(db, child_id, user.household_id)

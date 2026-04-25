@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db
+from app.api.deps import get_current_user, get_db, require_child_access
 from app.models.evidence import ActivityFeedback, ReadingLogEntry
 from app.models.identity import Child, User
 
@@ -88,6 +88,7 @@ async def recent_feedback(
     limit: int = Query(10, ge=1, le=50),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ):
     """Recent feedback across all activities for a child."""
     await _get_child(db, child_id, user.household_id)
@@ -148,6 +149,7 @@ async def create_reading_entry(
     body: ReadingLogCreate,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
 ):
     """Add a book to the reading log."""
     await _get_child(db, child_id, user.household_id)
@@ -181,6 +183,7 @@ async def list_reading_log(
     limit: int = Query(50, ge=1, le=200),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ):
     """List reading log entries, filterable by status and subject."""
     await _get_child(db, child_id, user.household_id)
@@ -244,6 +247,7 @@ async def reading_stats(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ):
     """Reading statistics for a child."""
     await _get_child(db, child_id, user.household_id)
@@ -283,6 +287,7 @@ async def current_reading(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ):
     """Books currently being read."""
     await _get_child(db, child_id, user.household_id)

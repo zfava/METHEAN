@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db
+from app.api.deps import get_current_user, get_db, require_child_access
 from app.models.calibration import CalibrationProfile, EvaluatorPrediction
 from app.models.enums import GovernanceAction
 from app.models.governance import GovernanceEvent
@@ -33,6 +33,7 @@ async def get_calibration_profile(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Returns the CalibrationProfile for a child."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -95,6 +96,7 @@ async def list_predictions(
     limit: int = Query(20, ge=1, le=100),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Paginated list of evaluator predictions for a child."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -152,6 +154,7 @@ async def update_calibration_offset(
     body: OffsetUpdateRequest,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     """Toggle offset active/inactive or set a parent override offset."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -212,6 +215,7 @@ async def get_drift_history(
     weeks: int = Query(12, ge=1, le=52),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Time series of mean drift grouped by week."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -263,6 +267,7 @@ async def get_temporal_drift(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Temporal drift analysis with trend detection."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -279,6 +284,7 @@ async def get_confidence_distribution(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Confidence score distribution histogram."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -295,6 +301,7 @@ async def get_subject_detail(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Per-subject calibration detail with recommendations."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -312,6 +319,7 @@ async def export_calibration_data(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """Full calibration data export for a child. Parent's data."""
     await _get_child_or_404(db, child_id, user.household_id)

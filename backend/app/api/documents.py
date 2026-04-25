@@ -8,7 +8,7 @@ from fastapi.responses import Response
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db
+from app.api.deps import get_current_user, get_db, require_child_access
 from app.models.identity import Child, User
 from app.services.document_generator import (
     generate_attendance_record,
@@ -44,6 +44,7 @@ async def get_ihip(
     state: str = Query("NY"),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ):
     await _child_or_404(db, child_id, user.household_id)
     pdf = await generate_ihip(db, user.household_id, child_id, state, academic_year)
@@ -57,6 +58,7 @@ async def get_quarterly_report(
     academic_year: str = Query(description="e.g. 2026-2027"),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ):
     await _child_or_404(db, child_id, user.household_id)
     pdf = await generate_quarterly_report(db, user.household_id, child_id, quarter, academic_year)
@@ -70,6 +72,7 @@ async def get_attendance(
     end: date = Query(description="End date"),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ):
     await _child_or_404(db, child_id, user.household_id)
     pdf = await generate_attendance_record(db, user.household_id, child_id, start, end)
@@ -81,6 +84,7 @@ async def get_transcript(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ):
     await _child_or_404(db, child_id, user.household_id)
     pdf = await generate_transcript(db, user.household_id, child_id)

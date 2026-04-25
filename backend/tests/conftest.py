@@ -138,3 +138,108 @@ async def learning_map(
     db_session.add(lm)
     await db_session.flush()
     return lm
+
+
+# ══════════════════════════════════════════════════════════════════════
+# Per-child access fixtures (METHEAN-6-05)
+# ══════════════════════════════════════════════════════════════════════
+
+
+@pytest_asyncio.fixture
+async def co_parent_user(db_session: AsyncSession, household: Household) -> User:
+    from app.models.enums import UserRole
+
+    u = User(
+        household_id=household.id,
+        email="coparent@test.local",
+        password_hash=hash_password("xxxxxxxx"),
+        display_name="Co Parent",
+        role=UserRole.co_parent,
+    )
+    db_session.add(u)
+    await db_session.flush()
+    return u
+
+
+@pytest_asyncio.fixture
+async def observer_user(db_session: AsyncSession, household: Household) -> User:
+    from app.models.enums import UserRole
+
+    u = User(
+        household_id=household.id,
+        email="observer@test.local",
+        password_hash=hash_password("xxxxxxxx"),
+        display_name="Observer",
+        role=UserRole.observer,
+    )
+    db_session.add(u)
+    await db_session.flush()
+    return u
+
+
+@pytest_asyncio.fixture
+async def second_child(db_session: AsyncSession, household: Household) -> Child:
+    from datetime import date
+
+    c = Child(
+        household_id=household.id,
+        first_name="Second",
+        last_name="Child",
+        date_of_birth=date(2015, 1, 1),
+    )
+    db_session.add(c)
+    await db_session.flush()
+    return c
+
+
+@pytest_asyncio.fixture
+async def self_learner_user(
+    db_session: AsyncSession, household: Household, child: Child
+) -> User:
+    from app.models.enums import UserRole
+
+    u = User(
+        household_id=household.id,
+        email="learner@test.local",
+        password_hash=hash_password("xxxxxxxx"),
+        display_name="Self Learner",
+        role=UserRole.co_parent,
+        is_self_learner=True,
+        linked_child_id=child.id,
+    )
+    db_session.add(u)
+    await db_session.flush()
+    return u
+
+
+def _client_with_token(client: AsyncClient, user: User, household: Household, role: str) -> AsyncClient:
+    token = create_access_token(user.id, household.id, role)
+    client.cookies.set("access_token", token)
+    return client
+
+
+@pytest_asyncio.fixture
+async def co_parent_client(
+    client: AsyncClient,
+    co_parent_user: User,
+    household: Household,
+) -> AsyncClient:
+    return _client_with_token(client, co_parent_user, household, "co_parent")
+
+
+@pytest_asyncio.fixture
+async def observer_client(
+    client: AsyncClient,
+    observer_user: User,
+    household: Household,
+) -> AsyncClient:
+    return _client_with_token(client, observer_user, household, "observer")
+
+
+@pytest_asyncio.fixture
+async def self_learner_client(
+    client: AsyncClient,
+    self_learner_user: User,
+    household: Household,
+) -> AsyncClient:
+    return _client_with_token(client, self_learner_user, household, "co_parent")

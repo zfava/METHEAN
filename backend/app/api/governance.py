@@ -20,7 +20,14 @@ from app.ai.prompts import (
     CARTOGRAPHER_SYSTEM,
     TUTOR_SYSTEM,
 )
-from app.api.deps import PaginationParams, get_current_user, get_db, require_permission, require_role
+from app.api.deps import (
+    PaginationParams,
+    get_current_user,
+    get_db,
+    require_child_access,
+    require_permission,
+    require_role,
+)
 from app.core.config import settings
 from app.models.curriculum import LearningMap, LearningNode
 from app.models.enums import (
@@ -475,6 +482,7 @@ async def generate_plan_endpoint(
     body: PlanGenerateRequest,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("plans.generate")),
+    _child: Child = Depends(require_child_access("write")),
 ) -> PlanResponse:
     await _get_child_or_404(db, child_id, user.household_id)
 
@@ -498,6 +506,7 @@ async def list_plans(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
     pagination: PaginationParams = Depends(),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     base = select(Plan).where(Plan.child_id == child_id, Plan.household_id == user.household_id)
@@ -808,6 +817,7 @@ async def log_manual_time(
     body: TimeLogCreate,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     """Log manual learning time for compliance tracking."""
     from app.models.evidence import ReadingLogEntry
@@ -1220,6 +1230,7 @@ async def cartographer_calibrate(
     body: CartographerCalibrateRequest,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("approve.activities")),
+    _child: Child = Depends(require_child_access("write")),
 ) -> CartographerRecommendation:
     child = await _get_child_or_404(db, child_id, user.household_id)
 
@@ -1305,6 +1316,7 @@ async def generate_advisor_report(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("approve.activities")),
+    _child: Child = Depends(require_child_access("write")),
 ) -> AdvisorReportResponse:
     child = await _get_child_or_404(db, child_id, user.household_id)
 
@@ -1389,6 +1401,7 @@ async def list_advisor_reports(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
     pagination: PaginationParams = Depends(),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     base = select(AdvisorReport).where(

@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db, require_permission
+from app.api.deps import get_current_user, get_db, require_child_access, require_permission
 from app.models.education_plan import EducationPlan
 from app.models.identity import Child, User
 from app.services.education_architect import (
@@ -45,6 +45,7 @@ async def generate_plan_endpoint(
     body: GeneratePlanRequest,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("plans.generate")),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
 
@@ -75,6 +76,7 @@ async def get_plan(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
 
@@ -107,6 +109,7 @@ async def update_plan(
     body: UpdatePlanRequest,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("plans.generate")),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
 
@@ -136,6 +139,7 @@ async def approve_plan_endpoint(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("approve.activities")),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
 
@@ -167,6 +171,7 @@ async def generate_curricula_endpoint(
     year_key: str,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("plans.generate")),
+    _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
 

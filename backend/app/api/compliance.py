@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db
+from app.api.deps import get_current_user, get_db, require_child_access
 from app.models.identity import Child, User
 from app.services.attendance import get_attendance_record
 from app.services.compliance_engine import (
@@ -71,6 +71,7 @@ async def get_attendance(
     end: date = Query(alias="end"),
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     return await get_attendance_record(db, user.household_id, child_id, start, end)
@@ -81,6 +82,7 @@ async def get_hours(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)
     return await get_hours_breakdown(db, user.household_id, child_id)

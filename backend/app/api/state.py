@@ -10,7 +10,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import PaginationParams, get_current_user, get_db
+from app.api.deps import PaginationParams, get_current_user, get_db, require_child_access
 from app.core.cache import cache_get, cache_set
 from app.models.curriculum import (
     ChildMapEnrollment,
@@ -72,6 +72,7 @@ async def get_child_state(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> ChildStateResponse:
     """Full state across all enrolled maps: every node with mastery, FSRS data."""
     # Check cache first (30s TTL)
@@ -199,6 +200,7 @@ async def get_node_history(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
     pagination: PaginationParams = Depends(),
+    _child: Child = Depends(require_child_access("read")),
 ) -> dict:
     """StateEvent stream for one node, chronological."""
     await _get_child_or_404(db, child_id, user.household_id)
@@ -229,6 +231,7 @@ async def get_retention_summary(
     child_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
 ) -> RetentionSummaryResponse:
     """Aggregate retention summary: counts and average retrievability."""
     await _get_child_or_404(db, child_id, user.household_id)
