@@ -5,7 +5,7 @@ import uuid
 from datetime import UTC, datetime, timedelta
 
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Response, status
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -651,9 +651,36 @@ async def resend_verification(
 # ── Family Invites ──
 
 
+# Map invite role strings (incl. legacy aliases) to canonical UserRole values.
+# `parent`/`viewer` are kept for backward compatibility with older invite emails
+# already in the wild; `co_parent`/`observer` are the canonical names.
+_INVITE_ROLE_ALIASES: dict[str, UserRole] = {
+    "owner": UserRole.owner,
+    "co_parent": UserRole.co_parent,
+    "parent": UserRole.co_parent,  # legacy alias
+    "observer": UserRole.observer,
+    "viewer": UserRole.observer,  # legacy alias
+}
+
+
+def _normalize_invite_role(raw: str) -> UserRole:
+    """Resolve any accepted invite role string (canonical or legacy) to UserRole."""
+    try:
+        return _INVITE_ROLE_ALIASES[raw.strip().lower()]
+    except (KeyError, AttributeError):
+        raise HTTPException(status_code=400, detail=f"Invalid role: {raw}") from None
+
+
 class InviteRequest(BaseModel):
     email: str
-    role: str = "parent"
+    role: str = "co_parent"
+
+    @field_validator("role")
+    @classmethod
+    def _validate_role(cls, v: str) -> str:
+        if v.strip().lower() not in _INVITE_ROLE_ALIASES:
+            raise ValueError(f"Invalid role: {v}")
+        return v.strip().lower()
 
 
 class AcceptInviteRequest(BaseModel):
@@ -677,10 +704,11 @@ async def invite_family_member(
     from app.services.email import send_email
 
     token = secrets.token_urlsafe(32)
+    canonical_role = _normalize_invite_role(body.role).value
     invite = FamilyInvite(
         household_id=user.household_id,
         email=body.email,
-        role=body.role,
+        role=canonical_role,
         invited_by=user.id,
         token=token,
         expires_at=datetime.now(UTC) + timedelta(days=7),
@@ -775,9 +803,7 @@ async def accept_invite(
             status_code=400, detail="An account with this email already exists. Log in and contact the household owner."
         )
 
-    role_enum = (
-        UserRole.owner if invite.role == "owner" else UserRole.parent if invite.role == "parent" else UserRole.viewer
-    )
+    role_enum = _normalize_invite_role(invite.role)
     new_user = User(
         household_id=invite.household_id,
         email=invite.email,
