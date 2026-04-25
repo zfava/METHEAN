@@ -1,6 +1,6 @@
 """Application configuration with startup guards."""
 
-from pydantic import field_validator
+from pydantic import field_validator, model_validator
 from pydantic_settings import BaseSettings
 
 
@@ -101,6 +101,53 @@ class Settings(BaseSettings):
                 "Refusing to boot."
             )
         return v
+
+    @model_validator(mode="after")
+    def _validate_production_defaults(self) -> "Settings":
+        """Cross-field guard: refuse to boot prod/staging on dev defaults.
+
+        Staging is treated like production for everything except S3
+        credentials (may keep minio for fixtures) and Stripe keys
+        (test keys allowed). Failures are aggregated so operators see
+        the full punch list at once instead of fixing them one at a
+        time.
+        """
+        if self.APP_ENV not in ("production", "staging"):
+            return self
+
+        failures: list[str] = []
+        is_prod = self.APP_ENV == "production"
+
+        # Both prod and staging
+        if "methean_dev" in self.DATABASE_URL or "localhost" in self.DATABASE_URL:
+            failures.append("DATABASE_URL must not be a development default")
+        if "methean_dev" in self.DATABASE_URL_SYNC or "localhost" in self.DATABASE_URL_SYNC:
+            failures.append("DATABASE_URL_SYNC must not be a development default")
+        if "localhost" in self.REDIS_URL:
+            failures.append("REDIS_URL must not point to localhost")
+        if self.APP_URL.startswith("http://"):
+            failures.append("APP_URL must use https://")
+        if not self.AI_API_KEY:
+            failures.append("AI_API_KEY must be set")
+
+        # Prod only
+        if is_prod:
+            if self.S3_ACCESS_KEY == "minioadmin":
+                failures.append("S3_ACCESS_KEY must not be the minio default")
+            if self.S3_SECRET_KEY == "minioadmin":
+                failures.append("S3_SECRET_KEY must not be the minio default")
+            if not self.STRIPE_SECRET_KEY or self.STRIPE_SECRET_KEY.startswith("sk_test_"):
+                failures.append("STRIPE_SECRET_KEY must be a live key")
+            if not self.STRIPE_WEBHOOK_SECRET:
+                failures.append("STRIPE_WEBHOOK_SECRET must be set")
+            if not self.RESEND_API_KEY:
+                failures.append("RESEND_API_KEY must be set")
+
+        if failures:
+            bullets = "\n  - ".join(failures)
+            raise ValueError(f"Production startup blocked. Failed checks:\n  - {bullets}")
+
+        return self
 
     @property
     def is_production(self) -> bool:
