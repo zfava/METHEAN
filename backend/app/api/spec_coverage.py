@@ -474,7 +474,7 @@ async def update_child_preferences(
     child_id: uuid.UUID,
     body: ChildPreferencesUpdate,
     db: AsyncSession = Depends(get_db),
-    user: User = Depends(require_role("owner")),
+    user: User = Depends(get_current_user),
     _child: Child = Depends(require_child_access("write")),
 ) -> dict:
     await _get_child_or_404(db, child_id, user.household_id)

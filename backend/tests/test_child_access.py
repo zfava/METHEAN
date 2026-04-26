@@ -165,3 +165,34 @@ async def test_dependency_returns_child_object_to_route_handler(auth_client: Asy
     """
     r = await auth_client.get(f"/api/v1/children/{child.id}/dashboard")
     assert r.status_code == 200, r.text
+
+
+# ══════════════════════════════════════════════════════════════════════
+# Boundary guards on co_parent authority (paired with the write fix)
+# ══════════════════════════════════════════════════════════════════════
+#
+# These three tests guard the upper edges of co_parent authority so a
+# future "make co_parent more permissive" change can't silently leak
+# household-deletion or billing-mutation rights.
+
+
+@pytest.mark.skip(reason="endpoint not yet implemented in this build")
+@pytest.mark.asyncio
+async def test_co_parent_cannot_delete_household(co_parent_client: AsyncClient):
+    """Co-parents must never be able to delete the household.
+
+    Skipped: no DELETE /household endpoint exists today. Re-enable when
+    the household-delete route lands so the boundary stays guarded.
+    """
+    r = await co_parent_client.delete("/api/v1/household")
+    assert r.status_code == 403, r.text
+
+
+@pytest.mark.asyncio
+async def test_co_parent_cannot_change_billing(co_parent_client: AsyncClient):
+    """Billing mutations are owner-only. A co_parent attempting to start
+    a subscription must be rejected (403) — or unauthenticated (401) if
+    the auth gate fires first.
+    """
+    r = await co_parent_client.post("/api/v1/billing/subscribe", json={})
+    assert r.status_code in (401, 403), r.text
