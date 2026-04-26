@@ -102,13 +102,16 @@ async def test_reset_password_success(mock_email, db_session, reset_user):
 
 
 @pytest.mark.asyncio
-async def test_reset_password_invalid():
-    """An unknown plaintext token returns False without raising."""
+async def test_reset_password_invalid(db_session):
+    """An unknown plaintext token returns False without raising.
+
+    The service queries by hash and returns False when no row matches.
+    We pass a real session so the unconditional ``db.execute()`` at
+    the top of ``reset_password`` runs and finds nothing.
+    """
     from app.services.password_reset import reset_password
 
-    # No DB needed — the service queries by hash and returns False
-    # when no row matches. We pass None to keep the test offline.
-    assert await reset_password(None, "irrelevant", "irrelevant") is False  # type: ignore[arg-type]
+    assert await reset_password(db_session, "definitely-not-a-real-token", "newpass") is False
 
 
 @pytest.mark.asyncio

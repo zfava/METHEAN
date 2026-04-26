@@ -28,6 +28,49 @@ from app.models.identity import Child, Household, User
 # AIProviderUnavailableError path) override via monkeypatch.
 settings.AI_MOCK_ENABLED = True
 
+
+class _FakeRedis:
+    """No-op stand-in for ``app.state.redis``.
+
+    httpx's ASGITransport doesn't fire FastAPI lifespan events, so the
+    real redis client the lifespan would install is missing during
+    tests. Without it, the fail-closed auth rate-limit policies
+    (login/register/forgot_password/verify_email) reject every request
+    with 429. This stub keeps the rate-limit middleware on a happy
+    path so individual tests can assert real auth behavior instead of
+    rate-limit fallout.
+    """
+
+    async def incrby(self, *_args, **_kwargs):
+        return 1
+
+    async def expire(self, *_args, **_kwargs):
+        return True
+
+    async def get(self, *_args, **_kwargs):
+        return None
+
+    async def set(self, *_args, **_kwargs):
+        return True
+
+    async def delete(self, *_args, **_kwargs):
+        return 0
+
+
+@pytest.fixture(autouse=True)
+def _ensure_fake_redis():
+    """Re-install the fake redis before every test.
+
+    Some tests (test_rate_limit.py) intentionally delete
+    ``app.state.redis`` to exercise the missing-redis path; without
+    this autouse fixture, every subsequent test in the run would
+    inherit the gap and start failing with 429s.
+    """
+    if not hasattr(app.state, "redis") or not isinstance(app.state.redis, _FakeRedis):
+        app.state.redis = _FakeRedis()
+    yield
+
+
 # Use a test database URL - replace only the database name at the end
 TEST_DATABASE_URL = settings.DATABASE_URL.rsplit("/", 1)[0] + "/methean_test"
 

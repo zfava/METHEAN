@@ -385,7 +385,7 @@ paths:
       tags:
       - auth
       summary: Verify Email
-      description: Verify email with token (simplified — token = user_id for now).
+      description: Consume a SHA-256-hashed, single-use, expiring verification token.
       operationId: verify_email_api_v1_auth_verify_email_post
       requestBody:
         content:
@@ -413,7 +413,7 @@ paths:
       tags:
       - auth
       summary: Resend Verification
-      description: Resend verification email.
+      description: Re-issue a fresh verification token and email it to the user.
       operationId: resend_verification_api_v1_auth_resend_verification_post
       parameters:
       - name: access_token
@@ -3994,7 +3994,14 @@ paths:
       tags:
       - spec-coverage
       summary: List Children
-      description: List all children in the authenticated user's household.
+      description: 'List children in the authenticated user''s household.
+
+
+        A user with ``linked_child_id`` set (a self-learner or institutional
+
+        student) only sees that single child — even if other children exist
+
+        in the household.'
       operationId: list_children_api_v1_children_get
       parameters:
       - name: access_token
@@ -4145,7 +4152,16 @@ paths:
       tags:
       - spec-coverage
       summary: Get Today
-      description: Return today's scheduled activities for a child.
+      description: 'Return today''s scheduled activities for the target child.
+
+
+        Activity has no ``child_id`` column — the child link lives on
+
+        :class:`Plan` — so we join Activity → PlanWeek → Plan and filter
+
+        on ``Plan.child_id``. A bare household-only filter would leak
+
+        every sibling''s activities for the day.'
       operationId: get_today_api_v1_children__child_id__today_get
       parameters:
       - name: child_id
@@ -12735,7 +12751,7 @@ components:
         role:
           type: string
           title: Role
-          default: parent
+          default: co_parent
       type: object
       required:
       - email

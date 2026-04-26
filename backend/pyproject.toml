@@ -60,6 +60,7 @@ omit = [
 ]
 
 [tool.coverage.report]
+# Threshold reconciled 2026-04-26. Increase as coverage improves; do not raise reactively.
 fail_under = 50
 show_missing = true
 skip_covered = false

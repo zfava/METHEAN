@@ -618,7 +618,7 @@
           "auth"
         ],
         "summary": "Verify Email",
-        "description": "Verify email with token (simplified \u2014 token = user_id for now).",
+        "description": "Consume a SHA-256-hashed, single-use, expiring verification token.",
         "operationId": "verify_email_api_v1_auth_verify_email_post",
         "requestBody": {
           "content": {
@@ -662,7 +662,7 @@
           "auth"
         ],
         "summary": "Resend Verification",
-        "description": "Resend verification email.",
+        "description": "Re-issue a fresh verification token and email it to the user.",
         "operationId": "resend_verification_api_v1_auth_resend_verification_post",
         "parameters": [
           {
@@ -6426,7 +6426,7 @@
           "spec-coverage"
         ],
         "summary": "List Children",
-        "description": "List all children in the authenticated user's household.",
+        "description": "List children in the authenticated user's household.\n\nA user with ``linked_child_id`` set (a self-learner or institutional\nstudent) only sees that single child \u2014 even if other children exist\nin the household.",
         "operationId": "list_children_api_v1_children_get",
         "parameters": [
           {
@@ -6678,7 +6678,7 @@
           "spec-coverage"
         ],
         "summary": "Get Today",
-        "description": "Return today's scheduled activities for a child.",
+        "description": "Return today's scheduled activities for the target child.\n\nActivity has no ``child_id`` column \u2014 the child link lives on\n:class:`Plan` \u2014 so we join Activity \u2192 PlanWeek \u2192 Plan and filter\non ``Plan.child_id``. A bare household-only filter would leak\nevery sibling's activities for the day.",
         "operationId": "get_today_api_v1_children__child_id__today_get",
         "parameters": [
           {
@@ -20651,7 +20651,7 @@
           "role": {
             "type": "string",
             "title": "Role",
-            "default": "parent"
+            "default": "co_parent"
           }
         },
         "type": "object",

@@ -46,19 +46,34 @@ class TestSettingsValidator:
         assert "ALLOW_AI_MOCK_IN_PRODUCTION" in str(exc.value)
 
     def test_settings_load_with_prod_mock_and_override(self, monkeypatch):
-        for key in (
-            "APP_ENV",
-            "AI_MOCK_ENABLED",
-            "ALLOW_AI_MOCK_IN_PRODUCTION",
-            "JWT_SECRET",
-        ):
+        # Production-required env vars must all be set, otherwise the
+        # cross-field model_validator (_validate_production_defaults)
+        # rejects the boot before the AI_MOCK_ENABLED override is even
+        # examined. We populate the full punch list with fake-but-valid
+        # values so the test exercises only the override path.
+        prod_env = {
+            "APP_ENV": "production",
+            "DATABASE_URL": "postgresql+asyncpg://prod:pw@db.example.com:5432/methean",
+            "DATABASE_URL_SYNC": "postgresql://prod:pw@db.example.com:5432/methean",
+            "REDIS_URL": "redis://prod-redis.example.com:6379/0",
+            "APP_URL": "https://methean.app",
+            "JWT_SECRET": "test-jwt-secret-not-default-1234567890abcdef",
+            "AI_API_KEY": "sk-ant-fake-test-key",
+            "S3_ACCESS_KEY": "fake-prod-access",
+            "S3_SECRET_KEY": "fake-prod-secret",
+            "STRIPE_SECRET_KEY": "sk_live_fake",
+            "STRIPE_WEBHOOK_SECRET": "whsec_fake",
+            "RESEND_API_KEY": "re_fake",
+            "AI_MOCK_ENABLED": "true",
+            "ALLOW_AI_MOCK_IN_PRODUCTION": "true",
+        }
+        for key in prod_env:
             monkeypatch.delenv(key, raising=False)
-        monkeypatch.setenv("APP_ENV", "production")
-        monkeypatch.setenv("AI_MOCK_ENABLED", "true")
-        monkeypatch.setenv("ALLOW_AI_MOCK_IN_PRODUCTION", "true")
-        monkeypatch.setenv("JWT_SECRET", "test-prod-secret-not-default")
+        for key, value in prod_env.items():
+            monkeypatch.setenv(key, value)
 
-        s = Settings()
+        s = Settings(_env_file=None)
+        assert s.APP_ENV == "production"
         assert s.AI_MOCK_ENABLED is True
         assert s.ALLOW_AI_MOCK_IN_PRODUCTION is True
 
