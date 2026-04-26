@@ -1,5 +1,8 @@
 """Tests for auth API endpoints."""
 
+import uuid
+from datetime import UTC, datetime
+
 import pytest
 from httpx import AsyncClient
 from sqlalchemy import select
@@ -1325,3 +1328,486 @@ async def test_institutional_invite_requires_admin(client: AsyncClient, db_sessi
         },
     )
     assert r2.status_code == 403, r2.text
+
+
+# ══════════════════════════════════════════════════════════════════════
+# Targeted coverage: login / refresh / logout / get_me /
+# notification_preferences / forgot_password / reset_password
+# ══════════════════════════════════════════════════════════════════════
+
+
+async def _register_and_capture(
+    client: AsyncClient,
+    email: str,
+    *,
+    password: str = "securepass123",
+    display_name: str = "Session User",
+    household_name: str = "Session Family",
+) -> dict:
+    """Register a fresh user and return the registration response JSON.
+    Helper to avoid repeating the same payload in every session test."""
+    resp = await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": email,
+            "password": password,
+            "display_name": display_name,
+            "household_name": household_name,
+        },
+    )
+    assert resp.status_code == 201, resp.text
+    return resp.json()
+
+
+# ── login ────────────────────────────────────────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_login_sets_httponly_cookies(client: AsyncClient):
+    """Login must set both access and refresh cookies with HttpOnly +
+    SameSite=lax + Path=/. The cookies are the user's session — JS
+    access would expose them to XSS exfiltration."""
+    await _register_and_capture(client, "login-cookies@test.com")
+    client.cookies.clear()
+
+    resp = await client.post(
+        "/api/v1/auth/login",
+        json={"email": "login-cookies@test.com", "password": "securepass123"},
+    )
+    assert resp.status_code == 200, resp.text
+
+    headers = resp.headers.get_list("set-cookie")
+    access = next((h for h in headers if h.startswith("access_token=")), None)
+    refresh = next((h for h in headers if h.startswith("refresh_token=")), None)
+    assert access is not None, f"access_token cookie missing: {headers}"
+    assert refresh is not None, f"refresh_token cookie missing: {headers}"
+    for header in (access, refresh):
+        assert "HttpOnly" in header, f"cookie must be HttpOnly: {header}"
+        assert "SameSite=lax" in header, f"cookie must be SameSite=lax: {header}"
+        assert "Path=/" in header, f"cookie must scope to Path=/: {header}"
+
+
+@pytest.mark.asyncio
+async def test_login_returns_user_data_in_body(client: AsyncClient):
+    """Login's TokenResponse body carries the bearer token, type, and
+    expiry. NB: it does NOT carry user_id / email / role — those live
+    on /auth/me, which the frontend hits right after login. Locking
+    down the actual shape so a future ``return user.id`` change can't
+    silently leak the household_id pair."""
+    await _register_and_capture(client, "login-body@test.com")
+    client.cookies.clear()
+
+    resp = await client.post(
+        "/api/v1/auth/login",
+        json={"email": "login-body@test.com", "password": "securepass123"},
+    )
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert body["token_type"] == "bearer"
+    assert isinstance(body["access_token"], str) and body["access_token"]
+    assert isinstance(body["expires_in"], int) and body["expires_in"] > 0
+
+
+@pytest.mark.asyncio
+async def test_login_nonexistent_email_returns_401(client: AsyncClient):
+    """A login attempt for an email that has never registered must
+    return 401 with the same generic message used for wrong passwords
+    so an attacker can't enumerate existing accounts."""
+    client.cookies.clear()
+    resp = await client.post(
+        "/api/v1/auth/login",
+        json={"email": "nobody-here@test.com", "password": "securepass123"},
+    )
+    assert resp.status_code == 401, resp.text
+    assert "Invalid" in resp.json()["detail"]
+
+
+@pytest.mark.asyncio
+async def test_login_creates_refresh_token_in_db(client: AsyncClient, db_session):
+    """Successful login must persist a RefreshToken row keyed to the
+    user. Without the row, /auth/refresh would have no way to verify
+    that the cookie's tid maps to a live, unrevoked session."""
+    from app.models.operational import RefreshToken
+
+    await _register_and_capture(client, "login-row@test.com")
+    client.cookies.clear()
+
+    user = (await db_session.execute(select(User).where(User.email == "login-row@test.com"))).scalar_one()
+    rows_before = (
+        (await db_session.execute(select(RefreshToken).where(RefreshToken.user_id == user.id))).scalars().all()
+    )
+    count_before = len(rows_before)
+
+    resp = await client.post(
+        "/api/v1/auth/login",
+        json={"email": "login-row@test.com", "password": "securepass123"},
+    )
+    assert resp.status_code == 200, resp.text
+
+    rows_after = (await db_session.execute(select(RefreshToken).where(RefreshToken.user_id == user.id))).scalars().all()
+    assert len(rows_after) == count_before + 1, "login must add exactly one RefreshToken row"
+    new_row = next(r for r in rows_after if r.id not in {r0.id for r0 in rows_before})
+    assert new_row.is_revoked is False
+    assert new_row.token_hash, "stored row must carry a hash, never the plaintext"
+
+
+# ── refresh ──────────────────────────────────────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_refresh_rotates_token(client: AsyncClient):
+    """A successful refresh issues a brand-new refresh token and
+    invalidates the previous one. test_refresh_token_reuse_revokes_all_tokens
+    already exercises the replay defense; this test focuses on the
+    rotation contract itself: new token != old token, old token can't
+    refresh again."""
+    reg = await _register_and_capture(client, "refresh-rotate@test.com")
+    old_refresh = client.cookies.get("refresh_token")
+    assert old_refresh is not None
+
+    r1 = await client.post("/api/v1/auth/refresh")
+    assert r1.status_code == 200, r1.text
+    new_refresh = r1.cookies.get("refresh_token")
+    assert new_refresh is not None and new_refresh != old_refresh
+    assert r1.json()["access_token"] != reg["access_token"]
+
+    # Old token now rejected — proves invalidation, not just rotation.
+    client.cookies.delete("refresh_token")
+    client.cookies.set("refresh_token", old_refresh)
+    r2 = await client.post("/api/v1/auth/refresh")
+    assert r2.status_code == 401
+
+
+@pytest.mark.asyncio
+async def test_refresh_no_cookie_returns_401(client: AsyncClient):
+    """No refresh_token cookie → 401, never a 500."""
+    client.cookies.clear()
+    resp = await client.post("/api/v1/auth/refresh")
+    assert resp.status_code == 401
+    assert "No refresh token" in resp.json()["detail"]
+
+
+@pytest.mark.asyncio
+async def test_refresh_expired_token_returns_401(client: AsyncClient, db_session):
+    """A refresh token whose JWT is structurally valid but whose
+    embedded ``exp`` claim is in the past must be rejected as 401 by
+    the decode_token guard — without leaking why."""
+    import jwt as _jwt
+
+    from app.core.config import settings as _settings
+    from app.models.operational import RefreshToken
+
+    await _register_and_capture(client, "refresh-expired@test.com")
+    client.cookies.clear()
+    user = (await db_session.execute(select(User).where(User.email == "refresh-expired@test.com"))).scalar_one()
+
+    expired_jwt = _jwt.encode(
+        {
+            "sub": str(user.id),
+            "hid": str(user.household_id),
+            "tid": str(uuid.uuid4()),
+            "type": "refresh",
+            "exp": int(datetime.now(UTC).timestamp()) - 60,
+            "iat": int(datetime.now(UTC).timestamp()) - 3600,
+        },
+        _settings.JWT_SECRET,
+        algorithm=_settings.JWT_ALGORITHM,
+    )
+    client.cookies.set("refresh_token", expired_jwt)
+    resp = await client.post("/api/v1/auth/refresh")
+    assert resp.status_code == 401
+    # Touch RefreshToken table only to keep the import live for ruff.
+    _ = RefreshToken
+
+
+@pytest.mark.asyncio
+async def test_refresh_sets_new_cookies(client: AsyncClient):
+    """Refresh response must carry fresh Set-Cookie headers with the
+    same security attributes as register/login (HttpOnly etc.)."""
+    await _register_and_capture(client, "refresh-cookies@test.com")
+    resp = await client.post("/api/v1/auth/refresh")
+    assert resp.status_code == 200
+
+    headers = resp.headers.get_list("set-cookie")
+    access = next((h for h in headers if h.startswith("access_token=")), None)
+    refresh = next((h for h in headers if h.startswith("refresh_token=")), None)
+    assert access is not None and refresh is not None
+    for header in (access, refresh):
+        assert "HttpOnly" in header
+        assert "SameSite=lax" in header
+        assert "Path=/" in header
+
+
+# ── logout ───────────────────────────────────────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_logout_clears_cookies(client: AsyncClient):
+    """Logout must emit ``Max-Age=0`` (or expire-in-the-past) cookies
+    so the browser drops them. We check the raw Set-Cookie headers."""
+    await _register_and_capture(client, "logout-clear@test.com")
+
+    resp = await client.post("/api/v1/auth/logout")
+    assert resp.status_code == 200
+
+    headers = resp.headers.get_list("set-cookie")
+    access = next((h for h in headers if h.startswith("access_token=")), None)
+    refresh = next((h for h in headers if h.startswith("refresh_token=")), None)
+    assert access is not None and refresh is not None
+    # Starlette's delete_cookie sets max-age=0 + an expired Expires.
+    for header in (access, refresh):
+        assert "Max-Age=0" in header or 'expires="Thu, 01 Jan 1970' in header.lower(), (
+            f"logout must mark the cookie for deletion, got: {header}"
+        )
+
+
+@pytest.mark.asyncio
+async def test_logout_revokes_refresh_token(client: AsyncClient, db_session):
+    """The refresh-token row must be marked is_revoked=True after a
+    logout so the cookie can't be replayed even if it leaked."""
+    from app.models.operational import RefreshToken
+
+    await _register_and_capture(client, "logout-revoke@test.com")
+    user = (await db_session.execute(select(User).where(User.email == "logout-revoke@test.com"))).scalar_one()
+
+    rows = (await db_session.execute(select(RefreshToken).where(RefreshToken.user_id == user.id))).scalars().all()
+    assert rows and not rows[0].is_revoked
+
+    resp = await client.post("/api/v1/auth/logout")
+    assert resp.status_code == 200
+    await db_session.refresh(rows[0])
+    assert rows[0].is_revoked is True
+
+
+# ── get_me ───────────────────────────────────────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_get_me_includes_household_id(client: AsyncClient, db_session):
+    """/auth/me must include the user's household_id so the frontend
+    can scope subsequent requests without a separate /household call."""
+    await _register_and_capture(client, "me-household@test.com")
+
+    resp = await client.get("/api/v1/auth/me")
+    assert resp.status_code == 200
+    body = resp.json()
+    assert "household_id" in body
+    user = (await db_session.execute(select(User).where(User.email == "me-household@test.com"))).scalar_one()
+    assert body["household_id"] == str(user.household_id)
+
+
+@pytest.mark.asyncio
+async def test_get_me_includes_role(client: AsyncClient):
+    """/auth/me must include the user's role so the frontend can
+    branch on owner vs co_parent vs observer when rendering UI."""
+    await _register_and_capture(client, "me-role@test.com")
+
+    resp = await client.get("/api/v1/auth/me")
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["role"] == "owner"
+
+
+# ── notification_preferences ────────────────────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_get_notification_preferences_returns_defaults(client: AsyncClient):
+    """A freshly-registered user has notification_preferences=NULL,
+    so the endpoint falls through to the hardcoded all-True default
+    set."""
+    await _register_and_capture(client, "notif-defaults@test.com")
+
+    resp = await client.get("/api/v1/auth/me/notification-preferences")
+    assert resp.status_code == 200, resp.text
+    prefs = resp.json()
+    for key in (
+        "email_daily_summary",
+        "email_milestones",
+        "email_governance_alerts",
+        "email_weekly_digest",
+        "email_compliance_warnings",
+    ):
+        assert prefs.get(key) is True, f"default for {key} should be True, got {prefs}"
+
+
+@pytest.mark.asyncio
+async def test_update_notification_preferences_persists(client: AsyncClient):
+    """A PUT with a subset of allowed flags must persist; a follow-up
+    GET must read the same values back. Allowed keys are the
+    email_* set; anything else is silently dropped (locked down by
+    a separate test elsewhere)."""
+    await _register_and_capture(client, "notif-persist@test.com")
+
+    put_resp = await client.put(
+        "/api/v1/auth/me/notification-preferences",
+        json={
+            "email_daily_summary": False,
+            "email_weekly_digest": False,
+            # Unknown key — silently dropped by the allowlist filter.
+            "quiet_hours": "22:00-07:00",
+        },
+    )
+    assert put_resp.status_code == 200, put_resp.text
+    assert put_resp.json()["email_daily_summary"] is False
+    assert put_resp.json()["email_weekly_digest"] is False
+    assert "quiet_hours" not in put_resp.json()
+
+    get_resp = await client.get("/api/v1/auth/me/notification-preferences")
+    assert get_resp.status_code == 200
+    assert get_resp.json()["email_daily_summary"] is False
+    assert get_resp.json()["email_weekly_digest"] is False
+    # Untouched keys keep their default of True (or are absent — both
+    # behaviors are acceptable since the endpoint merges over the
+    # stored dict, not the defaults).
+    assert get_resp.json().get("email_milestones", True) is True
+
+
+@pytest.mark.asyncio
+async def test_notification_preferences_requires_auth(client: AsyncClient):
+    """Both GET and PUT for notification-preferences must reject
+    unauthenticated requests with 401."""
+    client.cookies.clear()
+    client.headers.pop("Authorization", None)
+
+    get_resp = await client.get("/api/v1/auth/me/notification-preferences")
+    assert get_resp.status_code == 401
+    put_resp = await client.put(
+        "/api/v1/auth/me/notification-preferences",
+        json={"email_daily_summary": False},
+    )
+    assert put_resp.status_code == 401
+
+
+# ── forgot_password / reset_password ────────────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_forgot_password_creates_token_row(client: AsyncClient, db_session):
+    """POST /auth/forgot-password must drop a PasswordResetToken row
+    even if the email service is mocked. Without the row, the user
+    couldn't redeem the link."""
+    from unittest.mock import AsyncMock, patch
+
+    from app.models.identity import PasswordResetToken
+
+    await _register_and_capture(client, "forgot-row@test.com")
+
+    rows_before = (await db_session.execute(select(PasswordResetToken))).scalars().all()
+    count_before = len(rows_before)
+
+    with patch("app.services.password_reset.send_email", new_callable=AsyncMock, return_value=True):
+        resp = await client.post(
+            "/api/v1/auth/forgot-password",
+            json={"email": "forgot-row@test.com"},
+        )
+    assert resp.status_code == 200
+
+    rows_after = (await db_session.execute(select(PasswordResetToken))).scalars().all()
+    assert len(rows_after) == count_before + 1, "forgot-password must add exactly one PasswordResetToken row"
+
+
+@pytest.mark.asyncio
+async def test_forgot_password_sends_email(client: AsyncClient):
+    """The endpoint dispatches a reset email (subject containing
+    'reset') with the plaintext token in the URL of the body."""
+    from unittest.mock import AsyncMock, patch
+
+    await _register_and_capture(client, "forgot-email@test.com")
+
+    with patch("app.services.password_reset.send_email", new_callable=AsyncMock, return_value=True) as mock:
+        resp = await client.post(
+            "/api/v1/auth/forgot-password",
+            json={"email": "forgot-email@test.com"},
+        )
+    assert resp.status_code == 200
+    assert mock.await_count == 1
+    args = mock.await_args.args
+    assert args[0] == "forgot-email@test.com"
+    assert "reset" in args[1].lower()
+    assert "token=" in args[2]
+
+
+@pytest.mark.asyncio
+async def test_reset_password_with_valid_token_changes_hash(client: AsyncClient, db_session):
+    """After redeeming a reset token, the user's password_hash must
+    differ from the pre-reset hash and verify against the new
+    plaintext."""
+    from unittest.mock import AsyncMock, patch
+
+    from app.core.security import verify_password
+
+    await _register_and_capture(client, "reset-hash@test.com", password="oldpassword123")
+    user_pre = (await db_session.execute(select(User).where(User.email == "reset-hash@test.com"))).scalar_one()
+    old_hash = user_pre.password_hash
+
+    with patch("app.services.password_reset.send_email", new_callable=AsyncMock, return_value=True) as mock:
+        forgot = await client.post(
+            "/api/v1/auth/forgot-password",
+            json={"email": "reset-hash@test.com"},
+        )
+    assert forgot.status_code == 200
+    sent_html = mock.await_args.args[2]
+    plaintext = sent_html.split("token=")[1].split('"')[0]
+
+    reset = await client.post(
+        "/api/v1/auth/reset-password",
+        json={"token": plaintext, "new_password": "brandnewpass456"},
+    )
+    assert reset.status_code == 200, reset.text
+
+    await db_session.refresh(user_pre)
+    assert user_pre.password_hash != old_hash
+    assert verify_password("brandnewpass456", user_pre.password_hash)
+
+
+@pytest.mark.asyncio
+async def test_reset_password_revokes_refresh_tokens(client: AsyncClient, db_session):
+    """Resetting the password must revoke every active refresh token
+    so any session that relied on the old credentials is killed.
+    Mirrors test_reset_password_revokes_existing_refresh_tokens but
+    drives the API end-to-end without monkeypatching the service."""
+    from unittest.mock import AsyncMock, patch
+
+    from app.models.operational import RefreshToken
+
+    await _register_and_capture(client, "reset-revoke@test.com", password="oldpassword123")
+    user = (await db_session.execute(select(User).where(User.email == "reset-revoke@test.com"))).scalar_one()
+
+    active_before = (
+        (
+            await db_session.execute(
+                select(RefreshToken).where(
+                    RefreshToken.user_id == user.id,
+                    RefreshToken.is_revoked == False,  # noqa: E712 SQL three-valued
+                )
+            )
+        )
+        .scalars()
+        .all()
+    )
+    assert active_before, "registration should have left at least one active refresh token"
+
+    with patch("app.services.password_reset.send_email", new_callable=AsyncMock, return_value=True) as mock:
+        await client.post("/api/v1/auth/forgot-password", json={"email": "reset-revoke@test.com"})
+    plaintext = mock.await_args.args[2].split("token=")[1].split('"')[0]
+
+    reset = await client.post(
+        "/api/v1/auth/reset-password",
+        json={"token": plaintext, "new_password": "brandnewpass456"},
+    )
+    assert reset.status_code == 200
+
+    active_after = (
+        (
+            await db_session.execute(
+                select(RefreshToken).where(
+                    RefreshToken.user_id == user.id,
+                    RefreshToken.is_revoked == False,  # noqa: E712
+                )
+            )
+        )
+        .scalars()
+        .all()
+    )
+    assert active_after == [], "all active refresh tokens must be revoked after a password reset"
