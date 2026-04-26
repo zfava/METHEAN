@@ -1,17 +1,11 @@
 """enable_rls_all_household_tables
 
-Re-asserts Row-Level Security + a household_isolation policy on every
-table that carries a ``household_id`` column. The historical RLS
-migrations (001, 005, 007, 008, 015, 021-027, 031-033, 037, 039, 040)
-covered every table when each was added, but ``test_rls_coverage`` is
-the catch-all guard: any table that ever drifts off the list — by
-naming, by environment, or by a missed migration — is flagged here
-in one pass instead of via per-table archaeology.
-
-The policy is named plainly ``household_isolation`` (not the historical
-``<table>_household_isolation``) so it coexists with prior policies
-without collision; PostgreSQL OR-combines permissive policies, so the
-addition is safe and cumulative.
+Enables Row-Level Security and a per-table household_isolation policy
+on every table that carries a household_id column. The policy uses
+``current_setting('app.current_household_id', true)`` (missing_ok=true)
+so unset session variables return NULL instead of raising — required
+for migrations and any test environment that doesn't pre-set the
+tenant.
 
 Revision ID: 042
 Revises: 041
@@ -28,8 +22,7 @@ branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
 
 
-# Every table with a NOT NULL household_id column in the current model.
-HOUSEHOLD_TABLES: list[str] = [
+tables = [
     "achievements",
     "activities",
     "activity_feedback",
@@ -40,6 +33,7 @@ HOUSEHOLD_TABLES: list[str] = [
     "artifacts",
     "assessments",
     "attempts",
+    "audit_logs",
     "beta_feedback",
     "calibration_profiles",
     "calibration_snapshots",
@@ -83,32 +77,21 @@ HOUSEHOLD_TABLES: list[str] = [
     "wellbeing_configs",
 ]
 
-# audit_logs has a nullable household_id; its policy must permit NULL
-# rows so system-level audit entries (no tenant) remain reachable.
-NULLABLE_HID_TABLE = "audit_logs"
-
-USING_CLAUSE = "USING (household_id = current_setting('app.current_household_id', true)::uuid)"
-USING_CLAUSE_NULLABLE = (
-    "USING (household_id = current_setting('app.current_household_id', true)::uuid OR household_id IS NULL)"
-)
-
 
 def upgrade() -> None:
-    for table in HOUSEHOLD_TABLES:
+    for table in tables:
         op.execute(f"ALTER TABLE {table} ENABLE ROW LEVEL SECURITY")
         op.execute(f"ALTER TABLE {table} FORCE ROW LEVEL SECURITY")
-        op.execute(f"DROP POLICY IF EXISTS household_isolation ON {table}")
-        op.execute(f"CREATE POLICY household_isolation ON {table} {USING_CLAUSE}")
-
-    op.execute(f"ALTER TABLE {NULLABLE_HID_TABLE} ENABLE ROW LEVEL SECURITY")
-    op.execute(f"ALTER TABLE {NULLABLE_HID_TABLE} FORCE ROW LEVEL SECURITY")
-    op.execute(f"DROP POLICY IF EXISTS household_isolation ON {NULLABLE_HID_TABLE}")
-    op.execute(f"CREATE POLICY household_isolation ON {NULLABLE_HID_TABLE} {USING_CLAUSE_NULLABLE}")
+        op.execute(f"DROP POLICY IF EXISTS household_isolation_{table} ON {table}")
+        op.execute(
+            f"""
+            CREATE POLICY household_isolation_{table} ON {table}
+            USING (household_id = current_setting('app.current_household_id', true)::uuid)
+            """
+        )
 
 
 def downgrade() -> None:
-    # Drop only the household_isolation policy this migration added.
-    # The pre-existing per-table policies (e.g. <table>_household_isolation)
-    # remain in place, so RLS stays effective after a downgrade.
-    for table in [*HOUSEHOLD_TABLES, NULLABLE_HID_TABLE]:
-        op.execute(f"DROP POLICY IF EXISTS household_isolation ON {table}")
+    for table in tables:
+        op.execute(f"DROP POLICY IF EXISTS household_isolation_{table} ON {table}")
+        op.execute(f"ALTER TABLE {table} DISABLE ROW LEVEL SECURITY")
