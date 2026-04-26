@@ -79,6 +79,34 @@ async def _get_household_id(db: AsyncSession, child_id: str) -> uuid.UUID:
     return result.scalar_one()
 
 
+async def _activate_subscription_for_household(household_id: str) -> None:
+    """Flip the household's subscription to ``active`` so the billing
+    gate stops 402'ing the rest of the workflow.
+
+    Newly-registered households default to ``subscription_status="trial"``
+    with ``trial_ends_at=None``, which the require_active_subscription
+    gate rejects (it only admits ``active`` / ``trialing`` or a future
+    ``trial_ends_at``). Uses the same dependency-override session as
+    _process_review_for_golden so the write lands in the same DB the
+    HTTP client is reading.
+    """
+    from sqlalchemy import text
+
+    from app.api.deps import get_db
+    from app.main import app
+
+    override = app.dependency_overrides.get(get_db)
+    if not override:
+        return
+    async for db in override():
+        await db.execute(
+            text("UPDATE households SET subscription_status = 'active' WHERE id = :hid"),
+            {"hid": household_id},
+        )
+        await db.flush()
+        break
+
+
 @pytest.mark.asyncio
 async def test_golden_workflow(client: AsyncClient):
     """End-to-end workflow that exercises every METHEAN subsystem."""
@@ -101,6 +129,12 @@ async def test_golden_workflow(client: AsyncClient):
     me = await client.get("/api/v1/auth/me")
     assert me.status_code == 200, f"Step 1 /me failed: {me.text}"
     assert me.json()["email"] == "golden@test.com"
+
+    # Activate subscription so the billing gate stops 402'ing the
+    # rest of the workflow. /me returns the household_id; we flip the
+    # row directly via the shared test session.
+    household_id = me.json()["household_id"]
+    await _activate_subscription_for_household(household_id)
 
     # ── 2. CREATE CHILD ──────────────────────────────────────────────
     child_resp = await client.post(
