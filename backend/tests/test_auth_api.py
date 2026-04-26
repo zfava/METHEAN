@@ -1027,3 +1027,301 @@ def test_reset_password_module_no_longer_uses_inmemory_dict():
     assert not hasattr(svc, forbidden), (
         f"{forbidden} is back in app.services.password_reset — tokens must stay in PostgreSQL, not module-level dicts."
     )
+
+
+# ══════════════════════════════════════════════════════════════════════
+# Targeted coverage: register / register_institution / institutional invite
+# ══════════════════════════════════════════════════════════════════════
+
+
+@pytest.mark.asyncio
+async def test_register_returns_httponly_cookies(client: AsyncClient):
+    """Register's Set-Cookie headers must be HttpOnly + SameSite=lax +
+    Path=/ for both the access and refresh tokens. The token-bearing
+    cookies are the user's session — JS access would expose them to
+    XSS exfiltration."""
+    response = await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "cookie-shape@test.com",
+            "password": "securepass123",
+            "display_name": "Cookie Shape",
+            "household_name": "Cookie Family",
+        },
+    )
+    assert response.status_code == 201, response.text
+
+    set_cookie_headers = response.headers.get_list("set-cookie")
+    access = next((h for h in set_cookie_headers if h.startswith("access_token=")), None)
+    refresh = next((h for h in set_cookie_headers if h.startswith("refresh_token=")), None)
+    assert access is not None, f"access_token cookie missing from headers: {set_cookie_headers}"
+    assert refresh is not None, f"refresh_token cookie missing from headers: {set_cookie_headers}"
+    for header in (access, refresh):
+        assert "HttpOnly" in header, f"cookie must be HttpOnly: {header}"
+        assert "SameSite=lax" in header, f"cookie must be SameSite=lax: {header}"
+        assert "Path=/" in header, f"cookie must scope to Path=/: {header}"
+
+
+@pytest.mark.asyncio
+async def test_register_creates_household_and_child_for_self_learner(client: AsyncClient, db_session):
+    """is_self_learner=True wires the registering user as the lone
+    learner: a Child row exists, the user is linked to it, and the
+    household flips to self_governed/self_directed."""
+    response = await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "solo-link@test.com",
+            "password": "testpass123",
+            "display_name": "Solo Link",
+            "household_name": "Solo Family",
+            "is_self_learner": True,
+        },
+    )
+    assert response.status_code == 201, response.text
+
+    user_row = (await db_session.execute(select(User).where(User.email == "solo-link@test.com"))).scalar_one()
+    household = (await db_session.execute(select(Household).where(Household.id == user_row.household_id))).scalar_one()
+    children = (await db_session.execute(select(Child).where(Child.household_id == household.id))).scalars().all()
+
+    assert len(children) == 1, f"self-learner registration must seed exactly one Child, got {len(children)}"
+    child = children[0]
+    assert household.governance_mode == "self_governed"
+    assert household.organization_type == "self_directed"
+    assert user_row.is_self_learner is True
+    assert user_row.linked_child_id == child.id
+
+
+@pytest.mark.asyncio
+async def test_register_sends_verification_email(client: AsyncClient):
+    """Registration calls send_email with the verification subject so
+    the user can confirm ownership of the address. Failures are
+    swallowed by the handler, but the call MUST be attempted."""
+    from unittest.mock import AsyncMock, patch
+
+    with patch("app.services.email.send_email", new_callable=AsyncMock, return_value=True) as mock:
+        response = await client.post(
+            "/api/v1/auth/register",
+            json={
+                "email": "verify-email@test.com",
+                "password": "testpass123",
+                "display_name": "Verify Email",
+                "household_name": "Verify Family",
+            },
+        )
+    assert response.status_code == 201, response.text
+    assert mock.await_count >= 1, "send_email was never invoked from the register handler"
+    # The verification call uses the user's email + the verification subject.
+    call = next((c for c in mock.await_args_list if c.args and c.args[0] == "verify-email@test.com"), None)
+    assert call is not None, "send_email was not called with the registering user's email"
+    assert "verify" in call.args[1].lower(), f"send_email subject did not mention verification: {call.args[1]}"
+
+
+@pytest.mark.asyncio
+async def test_register_sets_trial_status(client: AsyncClient, db_session):
+    """Newly-registered households start in subscription_status="trial".
+    The billing gate later promotes them to "trialing"/"active"; this
+    test pins the default at the moment of registration so a model
+    refactor that flips the default to e.g. "canceled" can't ship
+    silently."""
+    response = await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "trial-status@test.com",
+            "password": "testpass123",
+            "display_name": "Trial Status",
+            "household_name": "Trial Family",
+        },
+    )
+    assert response.status_code == 201, response.text
+
+    user_row = (await db_session.execute(select(User).where(User.email == "trial-status@test.com"))).scalar_one()
+    household = (await db_session.execute(select(Household).where(Household.id == user_row.household_id))).scalar_one()
+    assert household.subscription_status == "trial"
+
+
+@pytest.mark.asyncio
+async def test_register_institution_creates_correct_governance_mode(client: AsyncClient, db_session):
+    """register-institution must mark the household institution_governed.
+    Every other governance-aware code path branches on this string, so
+    a typo in the constant would silently demote the institution to
+    parent_governed and break instructor permissions."""
+    resp = await client.post(
+        "/api/v1/auth/register-institution",
+        json={
+            "organization_name": "Governance U",
+            "organization_type": "university",
+            "admin_email": "gov-admin@u.example.com",
+            "admin_password": "testpass123",
+            "admin_display_name": "Gov Admin",
+        },
+    )
+    assert resp.status_code == 201, resp.text
+
+    admin = (await db_session.execute(select(User).where(User.email == "gov-admin@u.example.com"))).scalar_one()
+    household = (await db_session.execute(select(Household).where(Household.id == admin.household_id))).scalar_one()
+    assert household.governance_mode == "institution_governed"
+
+
+@pytest.mark.asyncio
+async def test_register_institution_sets_organization_metadata(client: AsyncClient, db_session):
+    """The organization_name and organization_type from the request
+    body must round-trip into the household record so admin tooling
+    can render the institution's identity."""
+    resp = await client.post(
+        "/api/v1/auth/register-institution",
+        json={
+            "organization_name": "Acme Bootcamp",
+            "organization_type": "bootcamp",
+            "admin_email": "meta-admin@acme.example.com",
+            "admin_password": "testpass123",
+            "admin_display_name": "Meta Admin",
+        },
+    )
+    assert resp.status_code == 201, resp.text
+
+    admin = (await db_session.execute(select(User).where(User.email == "meta-admin@acme.example.com"))).scalar_one()
+    household = (await db_session.execute(select(Household).where(Household.id == admin.household_id))).scalar_one()
+    assert household.name == "Acme Bootcamp"
+    assert household.organization_type == "bootcamp"
+
+
+@pytest.mark.asyncio
+async def test_register_institution_owner_gets_admin_role(client: AsyncClient, db_session):
+    """The bootstrapping admin must be persisted as the household
+    owner AND as institutional_role=department_admin. The institutional
+    invite endpoint guards on that exact pair, so any drift here breaks
+    the entire institutional onboarding flow."""
+    resp = await client.post(
+        "/api/v1/auth/register-institution",
+        json={
+            "organization_name": "Owner Role College",
+            "organization_type": "university",
+            "admin_email": "owner-admin@orc.example.com",
+            "admin_password": "testpass123",
+            "admin_display_name": "Owner Admin",
+        },
+    )
+    assert resp.status_code == 201, resp.text
+
+    admin = (await db_session.execute(select(User).where(User.email == "owner-admin@orc.example.com"))).scalar_one()
+    assert admin.role.value == "owner"
+    assert admin.institutional_role == "department_admin"
+
+
+@pytest.mark.asyncio
+async def test_register_institution_missing_org_name_rejected(client: AsyncClient):
+    """organization_name is required (min_length=1). Pydantic rejects
+    an empty / missing field at the schema layer with 422 — the
+    handler never runs."""
+    resp = await client.post(
+        "/api/v1/auth/register-institution",
+        json={
+            "organization_type": "university",
+            "admin_email": "noname@u.example.com",
+            "admin_password": "testpass123",
+            "admin_display_name": "No Name",
+        },
+    )
+    assert resp.status_code in (400, 422), resp.text
+
+
+@pytest.mark.asyncio
+async def test_institutional_invite_maps_instructor_role(client: AsyncClient, db_session):
+    """instructor → household role co_parent. Locks down the
+    _INSTITUTIONAL_ROLE_TO_HOUSEHOLD_ROLE mapping at the API layer."""
+    await _register_inst_admin(client)
+
+    resp = await client.post(
+        "/api/v1/auth/invite",
+        json={
+            "email": "instructor-map@u.example.com",
+            "display_name": "Instructor Map",
+            "institutional_role": "instructor",
+        },
+    )
+    assert resp.status_code == 201, resp.text
+
+    instructor = (
+        await db_session.execute(select(User).where(User.email == "instructor-map@u.example.com"))
+    ).scalar_one()
+    assert instructor.role.value == "co_parent"
+    assert instructor.institutional_role == "instructor"
+
+
+@pytest.mark.asyncio
+async def test_institutional_invite_maps_student_role(client: AsyncClient, db_session):
+    """student → household role observer, plus a self-linked Child
+    row for permission scoping."""
+    await _register_inst_admin(client)
+
+    resp = await client.post(
+        "/api/v1/auth/invite",
+        json={
+            "email": "student-map@u.example.com",
+            "display_name": "Student Map",
+            "institutional_role": "student",
+            "learner_name": "Student Map",
+        },
+    )
+    assert resp.status_code == 201, resp.text
+
+    student = (await db_session.execute(select(User).where(User.email == "student-map@u.example.com"))).scalar_one()
+    assert student.role.value == "observer"
+    assert student.institutional_role == "student"
+    assert student.linked_child_id is not None
+
+
+@pytest.mark.asyncio
+async def test_institutional_invite_rejects_unknown_institutional_role(client: AsyncClient):
+    """An institutional_role not in the role-mapping must 422.
+    department_admin is intentionally NOT in the mapping (admins
+    are bootstrapped via /register-institution, never invited)."""
+    await _register_inst_admin(client)
+
+    resp = await client.post(
+        "/api/v1/auth/invite",
+        json={
+            "email": "unknown-role@u.example.com",
+            "display_name": "Unknown Role",
+            "institutional_role": "principal",  # not in the role map
+        },
+    )
+    assert resp.status_code == 422, resp.text
+
+
+@pytest.mark.asyncio
+async def test_institutional_invite_requires_admin(client: AsyncClient, db_session):
+    """Only department admins can invite — any other institutional
+    role attempting to invite must 403."""
+    from app.core.security import create_access_token
+
+    await _register_inst_admin(client)
+
+    # Bootstrap an instructor via the admin's session.
+    r1 = await client.post(
+        "/api/v1/auth/invite",
+        json={
+            "email": "requires-admin-instr@u.example.com",
+            "display_name": "Instr",
+            "institutional_role": "instructor",
+        },
+    )
+    assert r1.status_code == 201, r1.text
+    instructor = (
+        await db_session.execute(select(User).where(User.email == "requires-admin-instr@u.example.com"))
+    ).scalar_one()
+
+    # Switch to the instructor's token, then try to invite.
+    token = create_access_token(instructor.id, instructor.household_id, "co_parent")
+    client.cookies.delete("access_token")
+    client.cookies.set("access_token", token)
+
+    r2 = await client.post(
+        "/api/v1/auth/invite",
+        json={
+            "email": "requires-admin-target@u.example.com",
+            "display_name": "Target",
+            "institutional_role": "teaching_assistant",
+        },
+    )
+    assert r2.status_code == 403, r2.text
