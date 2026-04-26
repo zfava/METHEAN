@@ -708,6 +708,9 @@ async def resend_verification(
     from app.services.email_templates import email_verification_email
     from app.services.email_verification import issue_token
 
+    if user.email_verified:
+        raise HTTPException(status_code=400, detail="Email already verified")
+
     plaintext = await issue_token(db, user, request)
     verify_url = f"{settings.APP_URL}/auth/verify?token={plaintext}"
     await send_email(
@@ -775,10 +778,28 @@ async def invite_family_member(
     from app.models.identity import FamilyInvite
     from app.services.email import send_email
 
+    # Observers can read but never invite — adding members to the
+    # household is an authority that belongs to owner / co_parent only.
+    if user.role == UserRole.observer:
+        raise HTTPException(status_code=403, detail="Observers cannot invite household members")
+
     # Persist the canonical enum value so a legacy "parent"/"viewer" in
     # the request body never reaches the DB. _validate_role above has
     # already filtered unknown values; this just maps aliases.
     canonical_role = _normalize_invite_role(body.role)
+
+    # One pending invite per (household, email). Stops accidental dupes
+    # when the inviter retries; resending the email goes through a
+    # separate "resend" path against the existing row.
+    existing = await db.execute(
+        select(FamilyInvite).where(
+            FamilyInvite.household_id == user.household_id,
+            FamilyInvite.email == body.email,
+            FamilyInvite.status == "pending",
+        )
+    )
+    if existing.scalar_one_or_none() is not None:
+        raise HTTPException(status_code=409, detail="A pending invite for this email already exists")
 
     token = secrets.token_urlsafe(32)
     invite = FamilyInvite(
@@ -833,6 +854,9 @@ async def revoke_invite(
 ) -> dict:
     """Revoke a pending invite."""
     from app.models.identity import FamilyInvite
+
+    if user.role == UserRole.observer:
+        raise HTTPException(status_code=403, detail="Observers cannot revoke invites")
 
     result = await db.execute(
         select(FamilyInvite).where(

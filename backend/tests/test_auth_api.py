@@ -1811,3 +1811,421 @@ async def test_reset_password_revokes_refresh_tokens(client: AsyncClient, db_ses
         .all()
     )
     assert active_after == [], "all active refresh tokens must be revoked after a password reset"
+
+
+# ══════════════════════════════════════════════════════════════════════
+# Targeted coverage: resend_verification + family invites + accept_invite
+# ══════════════════════════════════════════════════════════════════════
+
+
+# ── resend_verification ─────────────────────────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_resend_verification_creates_new_token(client: AsyncClient, db_session):
+    """POST /auth/resend-verification must drop a fresh
+    EmailVerificationToken row keyed to the requesting user."""
+    from sqlalchemy import func
+
+    from app.models.identity import EmailVerificationToken
+
+    await _register_and_capture(client, "resend-new@test.com")
+    user = (await db_session.execute(select(User).where(User.email == "resend-new@test.com"))).scalar_one()
+
+    count_before = (await db_session.execute(select(func.count(EmailVerificationToken.id)))).scalar_one()
+
+    resp = await client.post("/api/v1/auth/resend-verification")
+    assert resp.status_code == 200, resp.text
+    assert resp.json() == {"sent": True}
+
+    rows = (
+        (await db_session.execute(select(EmailVerificationToken).where(EmailVerificationToken.user_id == user.id)))
+        .scalars()
+        .all()
+    )
+    count_after = (await db_session.execute(select(func.count(EmailVerificationToken.id)))).scalar_one()
+    assert count_after >= count_before + 1
+    assert rows, "no token row was persisted for the user"
+    assert rows[-1].used_at is None
+
+
+@pytest.mark.skip(
+    reason=(
+        "issue_token currently allows multiple coexisting valid tokens; "
+        "invalidating prior tokens on resend would require a service-layer "
+        "change in app/services/email_verification.py and is out of scope "
+        "for this commit. Locking in a skip-marker so the gap stays visible."
+    )
+)
+@pytest.mark.asyncio
+async def test_resend_verification_invalidates_old_token(client: AsyncClient, db_session):
+    """Aspirational: after resend, the previous token should no longer
+    verify. Skipped pending the service-layer change described in the
+    skip reason."""
+
+
+@pytest.mark.asyncio
+async def test_resend_verification_for_already_verified_user(client: AsyncClient, db_session):
+    """A user whose email is already verified must not be able to
+    burn a new verification token — return 400."""
+    await _register_and_capture(client, "resend-verified@test.com")
+    user = (await db_session.execute(select(User).where(User.email == "resend-verified@test.com"))).scalar_one()
+    user.email_verified = True
+    await db_session.flush()
+
+    resp = await client.post("/api/v1/auth/resend-verification")
+    assert resp.status_code == 400, resp.text
+    assert "already verified" in resp.json()["detail"].lower()
+
+
+@pytest.mark.asyncio
+async def test_resend_verification_sends_email(client: AsyncClient):
+    """The handler must invoke send_email with the verification subject
+    and a tokenised URL in the body."""
+    from unittest.mock import AsyncMock, patch
+
+    await _register_and_capture(client, "resend-send@test.com")
+
+    with patch("app.services.email.send_email", new_callable=AsyncMock, return_value=True) as mock:
+        resp = await client.post("/api/v1/auth/resend-verification")
+    assert resp.status_code == 200, resp.text
+    assert mock.await_count == 1
+    args = mock.await_args.args
+    assert args[0] == "resend-send@test.com"
+    assert "verify" in args[1].lower()
+    assert "token=" in args[2]
+
+
+@pytest.mark.asyncio
+async def test_resend_verification_requires_auth(client: AsyncClient):
+    """No access_token cookie → 401, never a 500."""
+    client.cookies.clear()
+    client.headers.pop("Authorization", None)
+    resp = await client.post("/api/v1/auth/resend-verification")
+    assert resp.status_code == 401
+
+
+# ── invite_family_member (POST /household/invite) ───────────────────
+
+
+@pytest.mark.asyncio
+async def test_invite_family_member_creates_invite_row(auth_client, db_session):
+    """The POST handler must persist a FamilyInvite row keyed to the
+    inviter's household, with the email + canonical role on the row."""
+    from app.models.identity import FamilyInvite
+
+    resp = await auth_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": "fam-row@test.com", "role": "co_parent"},
+    )
+    assert resp.status_code == 200, resp.text
+    assert resp.json() == {"invited": True, "email": "fam-row@test.com"}
+
+    invite = (
+        await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "fam-row@test.com"))
+    ).scalar_one()
+    assert invite.role == "co_parent"
+    assert invite.status == "pending"
+    assert invite.token, "invite must carry a token"
+
+
+@pytest.mark.asyncio
+async def test_invite_family_member_sends_email(auth_client):
+    """send_email must be called with the invitee's address and a
+    subject mentioning the inviter."""
+    from unittest.mock import AsyncMock, patch
+
+    with patch("app.services.email.send_email", new_callable=AsyncMock, return_value=True) as mock:
+        resp = await auth_client.post(
+            "/api/v1/auth/household/invite",
+            json={"email": "fam-email@test.com", "role": "co_parent"},
+        )
+    assert resp.status_code == 200, resp.text
+    assert mock.await_count == 1
+    assert mock.await_args.args[0] == "fam-email@test.com"
+    assert "invited" in mock.await_args.args[1].lower()
+
+
+@pytest.mark.asyncio
+async def test_invite_family_member_observer_cannot_invite(observer_client):
+    """Observers can read but cannot invite new household members."""
+    resp = await observer_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": "fam-observer@test.com", "role": "co_parent"},
+    )
+    assert resp.status_code == 403, resp.text
+    assert "observer" in resp.json()["detail"].lower() or "cannot" in resp.json()["detail"].lower()
+
+
+@pytest.mark.asyncio
+async def test_invite_family_member_duplicate_email_rejected(auth_client, db_session):
+    """A second pending invite for the same email in the same
+    household must be rejected with 409 — stops accidental dupes when
+    the inviter retries the form."""
+    from app.models.identity import FamilyInvite
+
+    r1 = await auth_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": "fam-dup@test.com", "role": "co_parent"},
+    )
+    assert r1.status_code == 200, r1.text
+
+    r2 = await auth_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": "fam-dup@test.com", "role": "observer"},
+    )
+    assert r2.status_code == 409, r2.text
+
+    rows = (
+        (await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "fam-dup@test.com"))).scalars().all()
+    )
+    assert len(rows) == 1, f"only the first invite must be persisted; found {len(rows)}"
+
+
+# ── list_invites (GET /household/invites) ───────────────────────────
+
+
+@pytest.mark.asyncio
+async def test_list_invites_returns_pending(auth_client):
+    """A pending invite created via POST must appear in the GET
+    listing with the same email + role."""
+    create = await auth_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": "list-pending@test.com", "role": "observer"},
+    )
+    assert create.status_code == 200, create.text
+
+    listing = await auth_client.get("/api/v1/auth/household/invites")
+    assert listing.status_code == 200, listing.text
+    items = listing.json()
+    match = next((i for i in items if i["email"] == "list-pending@test.com"), None)
+    assert match is not None, f"pending invite missing from listing: {items}"
+    assert match["role"] == "observer"
+
+
+@pytest.mark.asyncio
+async def test_list_invites_empty_for_new_household(auth_client):
+    """A household with no invites returns an empty list (not 404)."""
+    resp = await auth_client.get("/api/v1/auth/household/invites")
+    assert resp.status_code == 200
+    assert resp.json() == []
+
+
+# ── revoke_invite (DELETE /household/invites/{id}) ──────────────────
+
+
+@pytest.mark.asyncio
+async def test_revoke_invite_marks_inactive(auth_client, db_session):
+    """Revoking a pending invite must flip its status to "revoked";
+    a follow-up GET listing must no longer include it."""
+    from app.models.identity import FamilyInvite
+
+    create = await auth_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": "revoke-marks@test.com", "role": "co_parent"},
+    )
+    assert create.status_code == 200, create.text
+    invite = (
+        await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "revoke-marks@test.com"))
+    ).scalar_one()
+
+    revoke = await auth_client.delete(f"/api/v1/auth/household/invites/{invite.id}")
+    assert revoke.status_code == 200, revoke.text
+    assert revoke.json() == {"revoked": True}
+
+    await db_session.refresh(invite)
+    assert invite.status == "revoked"
+
+    listing = await auth_client.get("/api/v1/auth/household/invites")
+    assert listing.status_code == 200
+    assert all(i["email"] != "revoke-marks@test.com" for i in listing.json())
+
+
+@pytest.mark.asyncio
+async def test_revoke_invite_not_found_returns_404(auth_client):
+    """A made-up invite id → 404. Cross-household ids fall into the
+    same branch (the where-clause filters by household_id), so the
+    same response code applies."""
+    bogus = uuid.uuid4()
+    resp = await auth_client.delete(f"/api/v1/auth/household/invites/{bogus}")
+    assert resp.status_code == 404, resp.text
+
+
+@pytest.mark.asyncio
+async def test_revoke_invite_observer_cannot_revoke(auth_client, observer_client, db_session):
+    """Observers can read but cannot revoke invites."""
+    from app.models.identity import FamilyInvite
+
+    create = await auth_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": "rev-obs-target@test.com", "role": "co_parent"},
+    )
+    assert create.status_code == 200, create.text
+    invite = (
+        await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "rev-obs-target@test.com"))
+    ).scalar_one()
+
+    resp = await observer_client.delete(f"/api/v1/auth/household/invites/{invite.id}")
+    assert resp.status_code == 403, resp.text
+
+
+# ── accept_invite (POST /accept-invite) ─────────────────────────────
+
+
+async def _create_invite(auth_client, *, email: str, role: str) -> str:
+    from sqlalchemy import select as _select
+
+    from app.models.identity import FamilyInvite
+
+    create = await auth_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": email, "role": role},
+    )
+    assert create.status_code == 200, create.text
+    # Pull the token directly from the DB — the API doesn't return it
+    # so the "real" flow is email-only delivery; we cheat for tests.
+    from tests.conftest import test_session_factory  # local helper module
+
+    async with test_session_factory() as session:
+        row = (await session.execute(_select(FamilyInvite).where(FamilyInvite.email == email))).scalar_one()
+        return row.token
+
+
+@pytest.mark.asyncio
+async def test_accept_invite_creates_user_in_household(auth_client, client, db_session):
+    """The accepting user must land in the inviter's household."""
+    from app.models.identity import FamilyInvite
+
+    create = await auth_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": "accept-user@test.com", "role": "co_parent"},
+    )
+    assert create.status_code == 200, create.text
+    invite = (
+        await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "accept-user@test.com"))
+    ).scalar_one()
+
+    client.cookies.clear()
+    resp = await client.post(
+        "/api/v1/auth/accept-invite",
+        json={"token": invite.token, "password": "newuserpass123", "display_name": "New User"},
+    )
+    assert resp.status_code == 200, resp.text
+
+    new_user = (await db_session.execute(select(User).where(User.email == "accept-user@test.com"))).scalar_one()
+    assert new_user.household_id == invite.household_id
+
+
+@pytest.mark.asyncio
+async def test_accept_invite_sets_correct_role(auth_client, client, db_session):
+    """The role on the persisted user must match the role on the
+    invite (canonicalised through _normalize_invite_role)."""
+    from app.models.identity import FamilyInvite
+
+    for email, role, expected in [
+        ("accept-cp@test.com", "co_parent", "co_parent"),
+        ("accept-obs@test.com", "observer", "observer"),
+    ]:
+        create = await auth_client.post(
+            "/api/v1/auth/household/invite",
+            json={"email": email, "role": role},
+        )
+        assert create.status_code == 200, create.text
+        invite = (await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == email))).scalar_one()
+
+        client.cookies.clear()
+        resp = await client.post(
+            "/api/v1/auth/accept-invite",
+            json={"token": invite.token, "password": "abcdef123456", "display_name": "X"},
+        )
+        assert resp.status_code == 200, resp.text
+        new_user = (await db_session.execute(select(User).where(User.email == email))).scalar_one()
+        assert new_user.role.value == expected
+
+
+@pytest.mark.asyncio
+async def test_accept_invite_with_expired_invite_returns_error(auth_client, client, db_session):
+    """An invite whose expires_at is in the past → 400 'expired'."""
+    from datetime import timedelta
+
+    from app.models.identity import FamilyInvite
+
+    create = await auth_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": "accept-exp@test.com", "role": "co_parent"},
+    )
+    assert create.status_code == 200, create.text
+    invite = (
+        await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "accept-exp@test.com"))
+    ).scalar_one()
+    invite.expires_at = datetime.now(UTC) - timedelta(days=1)
+    await db_session.flush()
+
+    client.cookies.clear()
+    resp = await client.post(
+        "/api/v1/auth/accept-invite",
+        json={"token": invite.token, "password": "abcdef123456", "display_name": "Y"},
+    )
+    assert resp.status_code == 400, resp.text
+    assert "expired" in resp.json()["detail"].lower()
+
+
+@pytest.mark.asyncio
+async def test_accept_invite_already_accepted_returns_error(auth_client, client, db_session):
+    """Accepting an already-accepted invite must 400 — the handler
+    queries pending-only, so an accepted row is invisible to it."""
+    from app.models.identity import FamilyInvite
+
+    create = await auth_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": "accept-twice@test.com", "role": "observer"},
+    )
+    assert create.status_code == 200, create.text
+    invite = (
+        await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "accept-twice@test.com"))
+    ).scalar_one()
+    token = invite.token
+
+    client.cookies.clear()
+    first = await client.post(
+        "/api/v1/auth/accept-invite",
+        json={"token": token, "password": "abcdef123456", "display_name": "Twice"},
+    )
+    assert first.status_code == 200, first.text
+
+    client.cookies.clear()
+    second = await client.post(
+        "/api/v1/auth/accept-invite",
+        json={"token": token, "password": "abcdef123456", "display_name": "Twice"},
+    )
+    assert second.status_code == 400, second.text
+
+
+@pytest.mark.asyncio
+async def test_accept_invite_sets_cookies(auth_client, client, db_session):
+    """A successful accept must set the access_token cookie so the
+    user is logged in immediately and doesn't need a follow-up
+    /login round trip."""
+    from app.models.identity import FamilyInvite
+
+    create = await auth_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": "accept-cookie@test.com", "role": "co_parent"},
+    )
+    assert create.status_code == 200, create.text
+    invite = (
+        await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "accept-cookie@test.com"))
+    ).scalar_one()
+
+    client.cookies.clear()
+    resp = await client.post(
+        "/api/v1/auth/accept-invite",
+        json={"token": invite.token, "password": "abcdef123456", "display_name": "Cookie"},
+    )
+    assert resp.status_code == 200, resp.text
+
+    headers = resp.headers.get_list("set-cookie")
+    access = next((h for h in headers if h.startswith("access_token=")), None)
+    assert access is not None, f"access_token cookie missing: {headers}"
+    assert "HttpOnly" in access
+    assert "SameSite=lax" in access
