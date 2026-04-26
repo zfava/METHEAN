@@ -288,3 +288,40 @@ async def test_check_and_consume_returns_fail_closed_when_redis_is_none_for_logi
     # admit when Redis is absent.
     allowed, _ = await check_and_consume(None, POLICIES["login"], {"ip": "1.1.1.1", "email": "a@b.c"})
     assert allowed is False
+
+
+# ══════════════════════════════════════════════════════════════════════
+# In-handler call sites must also tolerate missing redis
+# ══════════════════════════════════════════════════════════════════════
+#
+# login + forgot-password are body-keyed, so they call check_and_consume
+# directly inside the handler instead of via the dependency factory.
+# Those call sites must use ``getattr(..., "redis", None)`` to match the
+# middleware-level fix, otherwise a missing redis client crashes the
+# request with AttributeError.
+
+
+@pytest.mark.asyncio
+async def test_login_handler_does_not_crash_when_redis_unavailable(client):
+    """Locks in the fix: login must reach its real response, not 500,
+    when redis is absent."""
+    resp = await client.post(
+        "/api/v1/auth/login",
+        json={"email": "nobody@example.com", "password": "wrongpassword"},
+        headers={"x-csrf-token": "test-csrf-token-for-tests"},
+    )
+    # Acceptable outcomes: 401 (bad creds), 422 (validation), 429 (if a
+    # later prompt wires fakeredis). NOT acceptable: 500 (the bug).
+    assert resp.status_code != 500, f"Login crashed with 500: {resp.text}"
+    assert resp.status_code in (200, 401, 403, 422, 429)
+
+
+@pytest.mark.asyncio
+async def test_forgot_password_handler_does_not_crash_when_redis_unavailable(client):
+    resp = await client.post(
+        "/api/v1/auth/forgot-password",
+        json={"email": "anyone@example.com"},
+        headers={"x-csrf-token": "test-csrf-token-for-tests"},
+    )
+    assert resp.status_code != 500
+    assert resp.status_code in (200, 202, 422)

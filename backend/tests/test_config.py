@@ -100,9 +100,7 @@ def test_dev_config_loads_with_defaults():
 
 def test_prod_config_rejects_dev_database_url():
     with pytest.raises(ValidationError) as exc:
-        _make_prod(
-            DATABASE_URL="postgresql+asyncpg://methean:methean_dev@postgres:5432/methean"
-        )
+        _make_prod(DATABASE_URL="postgresql+asyncpg://methean:methean_dev@postgres:5432/methean")
     assert "DATABASE_URL must not be a development default" in str(exc.value)
 
 

@@ -450,9 +450,7 @@ async def test_invite_create_with_co_parent_role(auth_client, db_session):
     resp = await _create_household_invite(auth_client, email="cp@example.com", role="co_parent")
     assert resp.status_code == 200, resp.text
 
-    invite = (
-        await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "cp@example.com"))
-    ).scalar_one()
+    invite = (await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "cp@example.com"))).scalar_one()
     assert invite.role == "co_parent"
 
 
@@ -530,9 +528,7 @@ async def test_invite_accept_creates_user_with_canonical_role(auth_client, clien
     )
     assert accept.status_code == 200, accept.text
 
-    new_user = (
-        await db_session.execute(select(User).where(User.email == "accept-me@example.com"))
-    ).scalar_one()
+    new_user = (await db_session.execute(select(User).where(User.email == "accept-me@example.com"))).scalar_one()
     role_value = new_user.role.value if hasattr(new_user.role, "value") else new_user.role
     assert role_value == UserRole.co_parent.value
 
@@ -603,9 +599,7 @@ async def test_register_issues_verification_token_row(client: AsyncClient, db_se
     user = (await db_session.execute(select(User).where(User.email == email))).scalar_one()
     count = (
         await db_session.execute(
-            select(func.count())
-            .select_from(EmailVerificationToken)
-            .where(EmailVerificationToken.user_id == user.id)
+            select(func.count()).select_from(EmailVerificationToken).where(EmailVerificationToken.user_id == user.id)
         )
     ).scalar()
     assert count == 1
@@ -627,10 +621,10 @@ async def test_email_verification_token_is_hashed_at_rest(client: AsyncClient, d
 
     expected_hash = hashlib.sha256(plaintext.encode("utf-8")).hexdigest()
     rows = (
-        await db_session.execute(
-            select(EmailVerificationToken).where(EmailVerificationToken.user_id == user.id)
-        )
-    ).scalars().all()
+        (await db_session.execute(select(EmailVerificationToken).where(EmailVerificationToken.user_id == user.id)))
+        .scalars()
+        .all()
+    )
     persisted_hashes = {r.token_hash for r in rows}
     assert plaintext not in persisted_hashes, "plaintext token must never be stored"
     assert expected_hash in persisted_hashes
@@ -656,10 +650,10 @@ async def test_verify_email_happy_path(client: AsyncClient, db_session):
 
     # Token row used_at is populated.
     token = (
-        await db_session.execute(
-            select(EmailVerificationToken).where(EmailVerificationToken.user_id == user.id)
-        )
-    ).scalars().all()[-1]
+        (await db_session.execute(select(EmailVerificationToken).where(EmailVerificationToken.user_id == user.id)))
+        .scalars()
+        .all()[-1]
+    )
     await db_session.refresh(token)
     assert token.used_at is not None
 
@@ -688,10 +682,10 @@ async def test_verify_email_rejects_expired_token(client: AsyncClient, db_sessio
     plaintext = await issue_token(db_session, user)
     await db_session.flush()
     token_row = (
-        await db_session.execute(
-            select(EmailVerificationToken).where(EmailVerificationToken.user_id == user.id)
-        )
-    ).scalars().all()[-1]
+        (await db_session.execute(select(EmailVerificationToken).where(EmailVerificationToken.user_id == user.id)))
+        .scalars()
+        .all()[-1]
+    )
     token_row.expires_at = datetime.now(UTC) - timedelta(minutes=5)
     await db_session.commit()
 
@@ -750,9 +744,7 @@ async def test_resend_verification_does_not_leak_user_id_in_url(client: AsyncCli
 
     assert mock_send.called
     sent_html = mock_send.call_args[0][2]
-    assert str(user.id) not in sent_html, (
-        "resend-verification must not embed the user UUID in the link"
-    )
+    assert str(user.id) not in sent_html, "resend-verification must not embed the user UUID in the link"
 
 
 # ══════════════════════════════════════════════════════════════════════
@@ -788,13 +780,9 @@ async def test_forgot_password_persists_token_row(mock_send, client: AsyncClient
             "household_name": "PW Family",
         },
     )
-    user = (
-        await db_session.execute(select(User).where(User.email == "pwpersist@example.com"))
-    ).scalar_one()
+    user = (await db_session.execute(select(User).where(User.email == "pwpersist@example.com"))).scalar_one()
 
-    resp = await client.post(
-        "/api/v1/auth/forgot-password", json={"email": "pwpersist@example.com"}
-    )
+    resp = await client.post("/api/v1/auth/forgot-password", json={"email": "pwpersist@example.com"})
     assert resp.status_code == 200, resp.text
 
     count = (
@@ -818,15 +806,11 @@ async def test_forgot_password_unknown_email_no_row_no_leak(mock_send, client: A
 
     from app.models.identity import PasswordResetToken
 
-    resp = await client.post(
-        "/api/v1/auth/forgot-password", json={"email": "ghost@nowhere.invalid"}
-    )
+    resp = await client.post("/api/v1/auth/forgot-password", json={"email": "ghost@nowhere.invalid"})
     assert resp.status_code == 200
     assert mock_send.called is False
 
-    total = (
-        await db_session.execute(select(func.count()).select_from(PasswordResetToken))
-    ).scalar()
+    total = (await db_session.execute(select(func.count()).select_from(PasswordResetToken))).scalar()
     assert total == 0
 
 
@@ -845,9 +829,7 @@ async def test_reset_password_happy_path(mock_send, client: AsyncClient, db_sess
             "household_name": "Reset Family",
         },
     )
-    await client.post(
-        "/api/v1/auth/forgot-password", json={"email": "happyreset@example.com"}
-    )
+    await client.post("/api/v1/auth/forgot-password", json={"email": "happyreset@example.com"})
     plaintext = _extract_token_from_email(mock_send)
 
     resp = await client.post(
@@ -856,9 +838,7 @@ async def test_reset_password_happy_path(mock_send, client: AsyncClient, db_sess
     )
     assert resp.status_code == 200, resp.text
 
-    user = (
-        await db_session.execute(select(User).where(User.email == "happyreset@example.com"))
-    ).scalar_one()
+    user = (await db_session.execute(select(User).where(User.email == "happyreset@example.com"))).scalar_one()
     await db_session.refresh(user)
     assert verify_password("rotatedpw456", user.password_hash)
 
@@ -880,21 +860,17 @@ async def test_reset_password_expired_token(mock_send, client: AsyncClient, db_s
             "household_name": "Exp Family",
         },
     )
-    user = (
-        await db_session.execute(select(User).where(User.email == "expreset@example.com"))
-    ).scalar_one()
+    user = (await db_session.execute(select(User).where(User.email == "expreset@example.com"))).scalar_one()
     original_hash = user.password_hash
 
-    await client.post(
-        "/api/v1/auth/forgot-password", json={"email": "expreset@example.com"}
-    )
+    await client.post("/api/v1/auth/forgot-password", json={"email": "expreset@example.com"})
     plaintext = _extract_token_from_email(mock_send)
 
     row = (
-        await db_session.execute(
-            select(PasswordResetToken).where(PasswordResetToken.user_id == user.id)
-        )
-    ).scalars().all()[-1]
+        (await db_session.execute(select(PasswordResetToken).where(PasswordResetToken.user_id == user.id)))
+        .scalars()
+        .all()[-1]
+    )
     row.expires_at = datetime.now(UTC) - timedelta(minutes=5)
     await db_session.commit()
 
@@ -921,9 +897,7 @@ async def test_reset_password_reused_token(mock_send, client: AsyncClient, db_se
             "household_name": "Reuse Family",
         },
     )
-    await client.post(
-        "/api/v1/auth/forgot-password", json={"email": "reusereset@example.com"}
-    )
+    await client.post("/api/v1/auth/forgot-password", json={"email": "reusereset@example.com"})
     plaintext = _extract_token_from_email(mock_send)
 
     first = await client.post(
@@ -941,9 +915,7 @@ async def test_reset_password_reused_token(mock_send, client: AsyncClient, db_se
 
 @pytest.mark.asyncio
 @patch("app.services.password_reset.send_email", new_callable=AsyncMock, return_value=True)
-async def test_reset_password_invalidates_old_active_tokens(
-    mock_send, client: AsyncClient, db_session
-):
+async def test_reset_password_invalidates_old_active_tokens(mock_send, client: AsyncClient, db_session):
     """Issuing a fresh token marks any prior active token used."""
     from sqlalchemy import func
 
@@ -958,16 +930,10 @@ async def test_reset_password_invalidates_old_active_tokens(
             "household_name": "Double Family",
         },
     )
-    user = (
-        await db_session.execute(select(User).where(User.email == "doubleissue@example.com"))
-    ).scalar_one()
+    user = (await db_session.execute(select(User).where(User.email == "doubleissue@example.com"))).scalar_one()
 
-    await client.post(
-        "/api/v1/auth/forgot-password", json={"email": "doubleissue@example.com"}
-    )
-    await client.post(
-        "/api/v1/auth/forgot-password", json={"email": "doubleissue@example.com"}
-    )
+    await client.post("/api/v1/auth/forgot-password", json={"email": "doubleissue@example.com"})
+    await client.post("/api/v1/auth/forgot-password", json={"email": "doubleissue@example.com"})
 
     active = (
         await db_session.execute(
@@ -979,16 +945,12 @@ async def test_reset_password_invalidates_old_active_tokens(
             )
         )
     ).scalar()
-    assert active == 1, (
-        "partial unique index uq_pwreset_user_active enforces single active row"
-    )
+    assert active == 1, "partial unique index uq_pwreset_user_active enforces single active row"
 
 
 @pytest.mark.asyncio
 @patch("app.services.password_reset.send_email", new_callable=AsyncMock, return_value=True)
-async def test_reset_password_token_is_hashed_at_rest(
-    mock_send, client: AsyncClient, db_session
-):
+async def test_reset_password_token_is_hashed_at_rest(mock_send, client: AsyncClient, db_session):
     """The plaintext never touches the DB — only the SHA-256 digest does."""
     import hashlib
 
@@ -1003,29 +965,23 @@ async def test_reset_password_token_is_hashed_at_rest(
             "household_name": "Hash Family",
         },
     )
-    user = (
-        await db_session.execute(select(User).where(User.email == "hashedat@example.com"))
-    ).scalar_one()
-    await client.post(
-        "/api/v1/auth/forgot-password", json={"email": "hashedat@example.com"}
-    )
+    user = (await db_session.execute(select(User).where(User.email == "hashedat@example.com"))).scalar_one()
+    await client.post("/api/v1/auth/forgot-password", json={"email": "hashedat@example.com"})
     plaintext = _extract_token_from_email(mock_send)
     expected = hashlib.sha256(plaintext.encode("utf-8")).hexdigest()
 
     row = (
-        await db_session.execute(
-            select(PasswordResetToken).where(PasswordResetToken.user_id == user.id)
-        )
-    ).scalars().all()[-1]
+        (await db_session.execute(select(PasswordResetToken).where(PasswordResetToken.user_id == user.id)))
+        .scalars()
+        .all()[-1]
+    )
     assert row.token_hash == expected
     assert row.token_hash != plaintext
 
 
 @pytest.mark.asyncio
 @patch("app.services.password_reset.send_email", new_callable=AsyncMock, return_value=True)
-async def test_reset_password_revokes_existing_refresh_tokens(
-    mock_send, client: AsyncClient, db_session
-):
+async def test_reset_password_revokes_existing_refresh_tokens(mock_send, client: AsyncClient, db_session):
     """A successful reset revokes every active refresh token so a stolen
     cookie can't outlive the rotation. Verify by attempting /refresh
     after reset and expecting 401.
@@ -1044,9 +1000,7 @@ async def test_reset_password_revokes_existing_refresh_tokens(
     refresh_before = client.cookies.get("refresh_token")
     assert refresh_before, "register should set refresh_token"
 
-    await client.post(
-        "/api/v1/auth/forgot-password", json={"email": "revoke-on-reset@example.com"}
-    )
+    await client.post("/api/v1/auth/forgot-password", json={"email": "revoke-on-reset@example.com"})
     plaintext = _extract_token_from_email(mock_send)
     reset = await client.post(
         "/api/v1/auth/reset-password",
@@ -1071,6 +1025,5 @@ def test_reset_password_module_no_longer_uses_inmemory_dict():
 
     forbidden = "_" + "reset" + "_" + "tokens"
     assert not hasattr(svc, forbidden), (
-        f"{forbidden} is back in app.services.password_reset — "
-        "tokens must stay in PostgreSQL, not module-level dicts."
+        f"{forbidden} is back in app.services.password_reset — tokens must stay in PostgreSQL, not module-level dicts."
     )

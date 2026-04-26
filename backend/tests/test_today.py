@@ -72,9 +72,7 @@ async def sibling(db_session: AsyncSession, household: Household) -> Child:
 
 
 @pytest.mark.asyncio
-async def test_today_returns_only_target_child_activities(
-    auth_client, db_session, household, child, sibling
-):
+async def test_today_returns_only_target_child_activities(auth_client, db_session, household, child, sibling):
     today = date.today()
     await _make_plan_with_activity(
         db_session,
@@ -119,9 +117,7 @@ async def test_today_returns_empty_for_child_with_no_activities_today(
 
 
 @pytest.mark.asyncio
-async def test_today_excludes_completed_and_cancelled_activities(
-    auth_client, db_session, household, child
-):
+async def test_today_excludes_completed_and_cancelled_activities(auth_client, db_session, household, child):
     """Only ``scheduled`` and ``in_progress`` are returned."""
     today = date.today()
     for title, status in [
@@ -146,9 +142,7 @@ async def test_today_excludes_completed_and_cancelled_activities(
 
 
 @pytest.mark.asyncio
-async def test_today_respects_target_date_query_param(
-    auth_client, db_session, household, child
-):
+async def test_today_respects_target_date_query_param(auth_client, db_session, household, child):
     today = date.today()
     future = today + timedelta(days=3)
     await _make_plan_with_activity(
@@ -176,9 +170,7 @@ async def test_today_respects_target_date_query_param(
 
 
 @pytest.mark.asyncio
-async def test_today_uses_plan_join_not_household_only(
-    auth_client, db_session, household, child, sibling
-):
+async def test_today_uses_plan_join_not_household_only(auth_client, db_session, household, child, sibling):
     """Pre-fix sentinel: with both children seeded, a household-only
     filter would return every row. The join MUST trim the result to
     the target child.

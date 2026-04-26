@@ -40,9 +40,7 @@ def client(monkeypatch) -> TestClient:
 
 def _csp_value(response, *, enforced: bool) -> str:
     header = "Content-Security-Policy" if enforced else "Content-Security-Policy-Report-Only"
-    assert header in response.headers, (
-        f"expected {header} in headers, got: {sorted(response.headers.keys())}"
-    )
+    assert header in response.headers, f"expected {header} in headers, got: {sorted(response.headers.keys())}"
     return response.headers[header]
 
 
@@ -78,9 +76,7 @@ def test_csp_header_in_prod_does_not_contain_unsafe_eval(client, monkeypatch):
     csp = _csp_value(resp, enforced=True)
     assert "'unsafe-eval'" not in csp, f"prod CSP must drop 'unsafe-eval'; got: {csp}"
     script_src = next(s for s in csp.split(";") if s.strip().startswith("script-src"))
-    assert "'unsafe-inline'" not in script_src, (
-        "prod script-src must use a nonce instead of 'unsafe-inline'"
-    )
+    assert "'unsafe-inline'" not in script_src, "prod script-src must use a nonce instead of 'unsafe-inline'"
 
 
 def test_csp_header_in_prod_contains_nonce(client, monkeypatch):

@@ -95,17 +95,11 @@ class TestGatewayMockFallback:
         assert result["degraded"] is True
         assert result["provider"] == "mock"
 
-        warnings = [
-            r
-            for r in caplog.records
-            if r.levelno >= logging.WARNING and "mock_fallback_used" in r.message
-        ]
+        warnings = [r for r in caplog.records if r.levelno >= logging.WARNING and "mock_fallback_used" in r.message]
         assert warnings, "expected at least one mock_fallback_used WARNING record"
 
     @pytest.mark.asyncio
-    async def test_ai_gateway_in_prod_raises_provider_unavailable(
-        self, db_session, household, user, monkeypatch
-    ):
+    async def test_ai_gateway_in_prod_raises_provider_unavailable(self, db_session, household, user, monkeypatch):
         """When mock is disabled and no real providers are configured,
         the gateway raises AIProviderUnavailableError instead of
         silently returning canned content.
@@ -150,9 +144,7 @@ class TestGatewayMockFallback:
         assert result["provider"] == "mock"
 
     @pytest.mark.asyncio
-    async def test_ai_response_includes_provider_field(
-        self, db_session, household, user, monkeypatch
-    ):
+    async def test_ai_response_includes_provider_field(self, db_session, household, user, monkeypatch):
         """Every gateway response — mock or real — exposes
         ``provider``, ``is_mock``, ``degraded``.
         """

@@ -378,7 +378,7 @@ async def login(
     # Rate-limit per (ip, email) so a single attacker can't brute-force
     # one account and a compromised IP can't lock out unrelated users.
     allowed, retry_after = await check_and_consume(
-        request.app.state.redis,
+        getattr(request.app.state, "redis", None),
         POLICIES["login"],
         {"ip": client_ip(request, settings.TRUSTED_PROXIES), "email": body.email.lower()},
     )
@@ -647,7 +647,7 @@ async def forgot_password(
     # Per-(ip,email) hourly cap. The dependency form can't read the
     # body, so the check runs in-handler.
     allowed, retry_after = await check_and_consume(
-        request.app.state.redis,
+        getattr(request.app.state, "redis", None),
         POLICIES["forgot_password"],
         {"ip": client_ip(request, settings.TRUSTED_PROXIES), "email": body.email.lower()},
     )

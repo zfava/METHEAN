@@ -211,9 +211,7 @@ async def second_child(db_session: AsyncSession, household: Household) -> Child:
 
 
 @pytest_asyncio.fixture
-async def self_learner_user(
-    db_session: AsyncSession, household: Household, child: Child
-) -> User:
+async def self_learner_user(db_session: AsyncSession, household: Household, child: Child) -> User:
     from app.models.enums import UserRole
 
     u = User(

@@ -59,9 +59,7 @@ async def _request(client, method: str, url: str):
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(("method", "path"), PAID_ROUTES)
-async def test_paid_route_requires_active_subscription(
-    method, path, auth_client, db_session, household, child
-):
+async def test_paid_route_requires_active_subscription(method, path, auth_client, db_session, household, child):
     await _set_subscription(db_session, household, status="canceled", trial_ends_at=None)
 
     resp = await _request(auth_client, method, _format(path, child.id))
@@ -72,9 +70,7 @@ async def test_paid_route_requires_active_subscription(
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(("method", "path"), PAID_ROUTES)
-async def test_paid_route_allows_active(
-    method, path, auth_client, db_session, household, child
-):
+async def test_paid_route_allows_active(method, path, auth_client, db_session, household, child):
     await _set_subscription(db_session, household, status="active", trial_ends_at=None)
 
     resp = await _request(auth_client, method, _format(path, child.id))
@@ -85,9 +81,7 @@ async def test_paid_route_allows_active(
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(("method", "path"), PAID_ROUTES)
-async def test_paid_route_allows_trialing(
-    method, path, auth_client, db_session, household, child
-):
+async def test_paid_route_allows_trialing(method, path, auth_client, db_session, household, child):
     await _set_subscription(
         db_session,
         household,
@@ -108,9 +102,7 @@ async def test_paid_route_allows_trialing(
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize(("method", "path"), EXEMPT_ROUTES)
-async def test_exempt_route_works_without_subscription(
-    method, path, auth_client, db_session, household
-):
+async def test_exempt_route_works_without_subscription(method, path, auth_client, db_session, household):
     await _set_subscription(db_session, household, status="canceled", trial_ends_at=None)
 
     resp = await _request(auth_client, method, path)

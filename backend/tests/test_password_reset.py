@@ -42,12 +42,16 @@ async def reset_user(db_session: AsyncSession, reset_household: Household) -> Us
 
 async def _latest_token_row(db: AsyncSession, user_id) -> PasswordResetToken:
     rows = (
-        await db.execute(
-            select(PasswordResetToken)
-            .where(PasswordResetToken.user_id == user_id)
-            .order_by(PasswordResetToken.created_at.desc())
+        (
+            await db.execute(
+                select(PasswordResetToken)
+                .where(PasswordResetToken.user_id == user_id)
+                .order_by(PasswordResetToken.created_at.desc())
+            )
         )
-    ).scalars().all()
+        .scalars()
+        .all()
+    )
     assert rows, "expected at least one PasswordResetToken row"
     return rows[0]
 
@@ -127,9 +131,7 @@ async def test_reset_password_expired_token_returns_false(mock_email, db_session
 @pytest.mark.asyncio
 async def test_forgot_password_api_returns_200(client):
     """POST /auth/forgot-password always returns 200 (no enumeration leak)."""
-    resp = await client.post(
-        "/api/v1/auth/forgot-password", json={"email": "whatever@test.com"}
-    )
+    resp = await client.post("/api/v1/auth/forgot-password", json={"email": "whatever@test.com"})
     assert resp.status_code == 200
     assert "message" in resp.json()
 
@@ -144,6 +146,5 @@ def test_password_reset_module_no_inmemory_dict():
 
     forbidden = "_" + "reset" + "_" + "tokens"
     assert not hasattr(svc, forbidden), (
-        f"{forbidden} is back in app.services.password_reset — "
-        "tokens must stay in PostgreSQL, not module-level dicts."
+        f"{forbidden} is back in app.services.password_reset — tokens must stay in PostgreSQL, not module-level dicts."
     )
