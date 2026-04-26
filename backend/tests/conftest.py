@@ -6,6 +6,7 @@ from collections.abc import AsyncGenerator
 import pytest
 import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
+from sqlalchemy import text
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
     async_sessionmaker,
@@ -82,6 +83,93 @@ test_session_factory = async_sessionmaker(test_engine, class_=AsyncSession, expi
 TEST_CSRF_TOKEN = "test-csrf-token-for-tests"
 
 
+# Tables that carry a household_id column. Mirrors the production list
+# in alembic/versions/042_enable_rls_all_household_tables.py so the
+# test schema enforces the same isolation as production. Drift between
+# this list and migration 042 will surface as a test_rls_coverage
+# failure — fix both lists when adding a household-scoped table.
+RLS_TABLES = [
+    "achievements",
+    "activities",
+    "activity_feedback",
+    "advisor_reports",
+    "ai_runs",
+    "alerts",
+    "annual_curricula",
+    "artifacts",
+    "assessments",
+    "attempts",
+    "audit_logs",
+    "beta_feedback",
+    "calibration_profiles",
+    "calibration_snapshots",
+    "child_map_enrollments",
+    "child_node_states",
+    "child_preferences",
+    "children",
+    "device_tokens",
+    "education_plans",
+    "evaluator_predictions",
+    "family_insight_configs",
+    "family_insights",
+    "family_invites",
+    "family_resources",
+    "fitness_benchmarks",
+    "fitness_logs",
+    "fsrs_cards",
+    "governance_events",
+    "governance_rules",
+    "learner_intelligence",
+    "learner_style_vectors",
+    "learning_edges",
+    "learning_maps",
+    "learning_nodes",
+    "notification_logs",
+    "plan_weeks",
+    "plans",
+    "portfolio_entries",
+    "reading_log_entries",
+    "refresh_tokens",
+    "review_logs",
+    "state_events",
+    "streaks",
+    "subjects",
+    "usage_events",
+    "usage_ledger",
+    "user_permissions",
+    "users",
+    "weekly_snapshots",
+    "wellbeing_anomalies",
+    "wellbeing_configs",
+]
+
+
+async def _apply_rls_policies(conn) -> None:
+    """Enable RLS + per-table household_isolation policy on every
+    household-scoped table.
+
+    create_all() only creates tables; it never runs the RLS DDL that
+    alembic migration 042 applies in production. Without this helper
+    the test database would be a strictly looser version of prod and
+    the RLS coverage guard would have nothing to assert against.
+
+    Idempotent: DROP POLICY IF EXISTS handles the case where alembic
+    already migrated the schema (CI's pre-test 'alembic upgrade head'
+    step), and ENABLE/FORCE ROW LEVEL SECURITY is a no-op when already
+    set.
+    """
+    for table in RLS_TABLES:
+        await conn.execute(text(f"ALTER TABLE {table} ENABLE ROW LEVEL SECURITY"))
+        await conn.execute(text(f"ALTER TABLE {table} FORCE ROW LEVEL SECURITY"))
+        await conn.execute(text(f"DROP POLICY IF EXISTS household_isolation_{table} ON {table}"))
+        await conn.execute(
+            text(
+                f"CREATE POLICY household_isolation_{table} ON {table} "
+                "USING (household_id = current_setting('app.current_household_id', true)::uuid)"
+            )
+        )
+
+
 @pytest.fixture(scope="session")
 def event_loop():
     loop = asyncio.new_event_loop()
@@ -93,6 +181,7 @@ def event_loop():
 async def db_session() -> AsyncGenerator[AsyncSession, None]:
     async with test_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        await _apply_rls_policies(conn)
 
     async with test_session_factory() as session:
         yield session
