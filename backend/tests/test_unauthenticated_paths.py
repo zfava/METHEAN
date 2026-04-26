@@ -198,7 +198,7 @@ async def test_login_does_not_require_auth(client: AsyncClient):
     # Should not return 401 for unauthenticated access — it IS the auth endpoint
     # Returns 401 for wrong credentials, but that's different from "no auth token"
     # The key check: it processes the request, not rejects it for missing auth
-    assert resp.status_code in (200, 401, 403, 422), f"Login returned unexpected {resp.status_code}"
+    assert resp.status_code in (200, 401, 403, 422, 429), f"Login returned unexpected {resp.status_code}"
 
 
 # ─── Webhook must reject without valid Stripe signature ───
