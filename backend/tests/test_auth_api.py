@@ -1916,11 +1916,16 @@ async def test_resend_verification_sends_email(client: AsyncClient):
 
 @pytest.mark.asyncio
 async def test_resend_verification_requires_auth(client: AsyncClient):
-    """No access_token cookie → 401, never a 500."""
+    """An unauthenticated POST is rejected. The test clears every
+    cookie (including csrf_token) before posting, so the CSRF
+    middleware fires first and returns 403 before the request can
+    reach get_current_user. /auth/resend-verification is not in the
+    CSRF exempt list (only register, login, billing webhook, and the
+    csp-report endpoint are), so the 403 is the correct response."""
     client.cookies.clear()
     client.headers.pop("Authorization", None)
     resp = await client.post("/api/v1/auth/resend-verification")
-    assert resp.status_code == 401
+    assert resp.status_code == 403
 
 
 # ── invite_family_member (POST /household/invite) ───────────────────
