@@ -1678,8 +1678,13 @@ async def test_update_notification_preferences_persists(client: AsyncClient):
 
 @pytest.mark.asyncio
 async def test_notification_preferences_requires_auth(client: AsyncClient):
-    """Both GET and PUT for notification-preferences must reject
-    unauthenticated requests with 401."""
+    """Unauthenticated GET → 401 (no auth cookie hits get_current_user).
+
+    Unauthenticated PUT → 403 (the test clears every cookie, including
+    csrf_token, so the CSRF middleware blocks state-changing requests
+    before the auth dependency even runs). Both responses correctly
+    deny access; they just come from different layers of the
+    middleware stack."""
     client.cookies.clear()
     client.headers.pop("Authorization", None)
 
@@ -1689,7 +1694,7 @@ async def test_notification_preferences_requires_auth(client: AsyncClient):
         "/api/v1/auth/me/notification-preferences",
         json={"email_daily_summary": False},
     )
-    assert put_resp.status_code == 401
+    assert put_resp.status_code == 403
 
 
 # ── forgot_password / reset_password ────────────────────────────────
