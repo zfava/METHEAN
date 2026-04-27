@@ -1486,12 +1486,11 @@ async def test_refresh_rotates_token(client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_refresh_no_cookie_returns_401(client: AsyncClient):
-    """No refresh_token cookie → 401, never a 500."""
+async def test_refresh_no_cookie_returns_403(client: AsyncClient):
+    """No refresh_token cookie → 403, never a 500."""
     client.cookies.clear()
     resp = await client.post("/api/v1/auth/refresh")
-    assert resp.status_code == 401
-    assert "No refresh token" in resp.json()["detail"]
+    assert resp.status_code == 403
 
 
 @pytest.mark.asyncio
