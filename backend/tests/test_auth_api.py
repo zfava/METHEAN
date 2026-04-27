@@ -2477,3 +2477,380 @@ async def test_register_continues_when_verification_email_fails(client: AsyncCli
     # delivery raised — that's the guarantee the swallow exists for.
     user = (await db_session.execute(select(User).where(User.email == "email-down@test.com"))).scalar_one()
     assert user.email == "email-down@test.com"
+
+
+# ══════════════════════════════════════════════════════════════════════
+# Targeted coverage of remaining body gaps in auth.py
+# ══════════════════════════════════════════════════════════════════════
+#
+# After the conftest race fix (f72d1eb), the register/login/etc.
+# bodies are exercised. These tests close the remaining handler-body
+# gaps in refresh, accept_invite, list_invites/revoke_invite, and the
+# trailing returns of logout / change_password / notification-prefs /
+# forgot_password / reset_password / verify_email / resend_verification.
+
+
+# ── refresh: exercise the full happy path + missing branches ─────────
+
+
+@pytest.mark.asyncio
+async def test_refresh_handler_403_for_missing_cookie(client: AsyncClient):
+    """Hits the handler's 403 raise (not the CSRF middleware's). The
+    other no-cookie test (test_refresh_no_cookie_returns_403) clears
+    every cookie including csrf_token, which means the CSRF middleware
+    blocks before reaching the handler. Here we keep csrf_token + the
+    X-CSRF-Token header in place and only drop refresh_token, so the
+    request flows through CSRF and lands on the handler's "if not
+    refresh_token: raise 403" branch."""
+    client.cookies.delete("refresh_token")  # csrf_token survives
+    resp = await client.post("/api/v1/auth/refresh")
+    assert resp.status_code == 403, resp.text
+    assert "No refresh token" in resp.json()["detail"]
+
+
+@pytest.mark.asyncio
+async def test_refresh_invalid_token_type_returns_401(client: AsyncClient, db_session):
+    """A JWT whose ``type`` claim is "access" instead of "refresh"
+    must be rejected with 401 — exercises the in-handler type check
+    that lives inside the decode try-block."""
+    import jwt as _jwt
+
+    from app.core.config import settings as _settings
+
+    await _register_and_capture(client, "wrong-type@test.com")
+    user = (await db_session.execute(select(User).where(User.email == "wrong-type@test.com"))).scalar_one()
+
+    access_jwt = _jwt.encode(
+        {
+            "sub": str(user.id),
+            "hid": str(user.household_id),
+            "tid": str(uuid.uuid4()),
+            "type": "access",  # NOT "refresh"
+            "exp": int(datetime.now(UTC).timestamp()) + 3600,
+            "iat": int(datetime.now(UTC).timestamp()),
+        },
+        _settings.JWT_SECRET,
+        algorithm=_settings.JWT_ALGORITHM,
+    )
+    client.cookies.delete("refresh_token")
+    client.cookies.set("refresh_token", access_jwt)
+
+    resp = await client.post("/api/v1/auth/refresh")
+    assert resp.status_code == 401, resp.text
+    assert "Invalid token type" in resp.json()["detail"]
+
+
+@pytest.mark.asyncio
+async def test_refresh_full_happy_path_executes_body(client: AsyncClient, db_session):
+    """Drives the entire refresh handler from start to finish: looks
+    up the stored row, marks it revoked, queries the user, builds and
+    persists the new RefreshToken row, sets the rotated cookies, and
+    returns the RefreshResponse body. Locks down each observable
+    side effect so a regression in any single line is caught."""
+    from app.models.operational import RefreshToken
+
+    reg = await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "refresh-full@test.com",
+            "password": "TestPass123!",
+            "display_name": "Refresh Full",
+            "household_name": "Refresh Full Family",
+        },
+    )
+    assert reg.status_code == 201, reg.text
+    original_refresh = reg.cookies.get("refresh_token")
+    assert original_refresh
+
+    user = (await db_session.execute(select(User).where(User.email == "refresh-full@test.com"))).scalar_one()
+    rows_before = (
+        (await db_session.execute(select(RefreshToken).where(RefreshToken.user_id == user.id))).scalars().all()
+    )
+    assert len(rows_before) == 1
+    assert rows_before[0].is_revoked is False
+
+    resp = await client.post("/api/v1/auth/refresh")
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert body["token_type"] == "bearer"
+    assert isinstance(body["access_token"], str) and body["access_token"]
+    assert isinstance(body["expires_in"], int) and body["expires_in"] > 0
+
+    # New cookie issued + old row revoked.
+    new_refresh = resp.cookies.get("refresh_token")
+    assert new_refresh and new_refresh != original_refresh
+    rows_after = (await db_session.execute(select(RefreshToken).where(RefreshToken.user_id == user.id))).scalars().all()
+    assert len(rows_after) == 2, "refresh must persist a second row, not replace the first"
+    revoked = [r for r in rows_after if r.is_revoked]
+    active = [r for r in rows_after if not r.is_revoked]
+    assert len(revoked) == 1 and len(active) == 1
+
+
+# ── change_password: only the failure branch was tested previously ──
+
+
+@pytest.mark.asyncio
+async def test_change_password_success(client: AsyncClient, db_session):
+    """Correct current_password + new_password ≥8 chars must rotate
+    the hash, commit, and return ``{"success": True}``."""
+    from app.core.security import verify_password
+
+    await _register_and_capture(client, "chg-pw@test.com", password="originalpw123")
+    user = (await db_session.execute(select(User).where(User.email == "chg-pw@test.com"))).scalar_one()
+    old_hash = user.password_hash
+
+    resp = await client.put(
+        "/api/v1/auth/password",
+        json={"current_password": "originalpw123", "new_password": "newshinypw456"},
+    )
+    assert resp.status_code == 200, resp.text
+    assert resp.json() == {"success": True}
+
+    await db_session.refresh(user)
+    assert user.password_hash != old_hash
+    assert verify_password("newshinypw456", user.password_hash)
+
+
+@pytest.mark.asyncio
+async def test_change_password_wrong_current_returns_400(client: AsyncClient):
+    """An incorrect current_password must 400 — covers the verify
+    branch before the rotation."""
+    await _register_and_capture(client, "chg-pw-wrong@test.com", password="rightpw123")
+    resp = await client.put(
+        "/api/v1/auth/password",
+        json={"current_password": "wrongpw123", "new_password": "newpw456789"},
+    )
+    assert resp.status_code == 400, resp.text
+
+
+# ── notification prefs / password reset / verify-email tail returns ─
+
+
+@pytest.mark.asyncio
+async def test_update_notification_preferences_returns_dict(client: AsyncClient):
+    """Locks down the return payload's shape: a dict of email_*
+    booleans that reflects the merged state after the PUT."""
+    await _register_and_capture(client, "notif-return@test.com")
+
+    resp = await client.put(
+        "/api/v1/auth/me/notification-preferences",
+        json={"email_milestones": False},
+    )
+    assert resp.status_code == 200
+    body = resp.json()
+    assert isinstance(body, dict)
+    assert body["email_milestones"] is False
+
+
+@pytest.mark.asyncio
+async def test_forgot_password_returns_generic_message(client: AsyncClient):
+    """Locks down the response body of /forgot-password — the
+    no-enumeration generic string. Covers the trailing commit + return
+    inside the handler regardless of whether a matching user exists."""
+    from unittest.mock import AsyncMock, patch
+
+    await _register_and_capture(client, "forgot-msg@test.com")
+
+    with patch("app.services.password_reset.send_email", new_callable=AsyncMock, return_value=True):
+        resp = await client.post(
+            "/api/v1/auth/forgot-password",
+            json={"email": "forgot-msg@test.com"},
+        )
+    assert resp.status_code == 200, resp.text
+    assert "reset link" in resp.json()["message"].lower()
+
+
+@pytest.mark.asyncio
+async def test_reset_password_invalid_token_returns_400(client: AsyncClient):
+    """When reset_password() returns False (invalid / unknown token),
+    the handler raises 400. Covers the "if not success" branch."""
+    resp = await client.post(
+        "/api/v1/auth/reset-password",
+        json={"token": "definitely-not-a-real-token", "new_password": "newpw12345678"},
+    )
+    assert resp.status_code == 400, resp.text
+    assert "Invalid" in resp.json()["detail"] or "expired" in resp.json()["detail"].lower()
+
+
+@pytest.mark.asyncio
+async def test_verify_email_returns_verified_true(client: AsyncClient, db_session):
+    """The verify-email handler's tail: after the service marks the
+    token used + flips email_verified, the handler commits and
+    returns {"verified": True}."""
+    from sqlalchemy import select as _select
+
+    from app.models.identity import EmailVerificationToken
+
+    await _register_and_capture(client, "verify-tail@test.com")
+    user = (await db_session.execute(select(User).where(User.email == "verify-tail@test.com"))).scalar_one()
+    # Register issued a token row; query via DB and recover the
+    # plaintext via a fresh issue_token call so we have something
+    # to redeem.
+    from app.services.email_verification import issue_token
+
+    plaintext = await issue_token(db_session, user)
+    # commit the issued row so the verify endpoint can see it.
+    await db_session.commit()
+
+    resp = await client.post("/api/v1/auth/verify-email", json={"token": plaintext})
+    assert resp.status_code == 200, resp.text
+    assert resp.json() == {"verified": True}
+
+    # Side-effect lock: row exists.
+    rows = (await db_session.execute(_select(EmailVerificationToken))).scalars().all()
+    assert rows
+
+
+@pytest.mark.asyncio
+async def test_resend_verification_returns_sent_true(client: AsyncClient):
+    """Resend's tail: ``await db.commit()`` + ``return {"sent": True}``
+    after the email is dispatched."""
+    from unittest.mock import AsyncMock, patch
+
+    await _register_and_capture(client, "resend-tail@test.com")
+
+    with patch("app.services.email.send_email", new_callable=AsyncMock, return_value=True):
+        resp = await client.post("/api/v1/auth/resend-verification")
+    assert resp.status_code == 200, resp.text
+    assert resp.json() == {"sent": True}
+
+
+# ── invite_family_member: full happy-path body ──────────────────────
+
+
+@pytest.mark.asyncio
+async def test_invite_family_member_full_flow(auth_client, db_session):
+    """Drives the invite_family_member body all the way through:
+    duplicate-check passes, FamilyInvite row persisted with the
+    canonical role, send_email called with the inviter's display_name
+    in the subject, db.commit() committed, response shape correct."""
+    from unittest.mock import AsyncMock, patch
+
+    from app.models.identity import FamilyInvite
+
+    with patch("app.services.email.send_email", new_callable=AsyncMock, return_value=True) as mock:
+        resp = await auth_client.post(
+            "/api/v1/auth/household/invite",
+            json={"email": "invite-full@test.com", "role": "co_parent"},
+        )
+    assert resp.status_code == 200, resp.text
+    assert resp.json() == {"invited": True, "email": "invite-full@test.com"}
+
+    invite = (
+        await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "invite-full@test.com"))
+    ).scalar_one()
+    assert invite.role == "co_parent"
+    assert invite.status == "pending"
+    assert invite.token, "token must be set on persisted row"
+
+    # send_email gets (recipient, subject, html). Subject mentions
+    # the inviter (the auth_client fixture's "Test Parent").
+    assert mock.await_count == 1
+    args = mock.await_args.args
+    assert args[0] == "invite-full@test.com"
+    assert "invited" in args[1].lower()
+
+
+# ── list_invites: covers the SELECT + the comprehension build ───────
+
+
+@pytest.mark.asyncio
+async def test_list_invites_returns_full_invite_records(auth_client, db_session):
+    """The list_invites handler queries pending invites and returns
+    a list of dicts. Each dict carries id/email/role/created_at —
+    exercise that comprehension by creating two invites and asserting
+    every field round-trips."""
+    create_a = await auth_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": "list-a@test.com", "role": "co_parent"},
+    )
+    assert create_a.status_code == 200, create_a.text
+    create_b = await auth_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": "list-b@test.com", "role": "observer"},
+    )
+    assert create_b.status_code == 200, create_b.text
+
+    listing = await auth_client.get("/api/v1/auth/household/invites")
+    assert listing.status_code == 200, listing.text
+    items = listing.json()
+    by_email = {i["email"]: i for i in items}
+    assert "list-a@test.com" in by_email
+    assert "list-b@test.com" in by_email
+    a = by_email["list-a@test.com"]
+    assert a["role"] == "co_parent"
+    assert "id" in a and isinstance(a["id"], str)
+    assert "created_at" in a
+    assert by_email["list-b@test.com"]["role"] == "observer"
+
+
+# ── revoke_invite: full happy path through the SELECT + status flip ─
+
+
+@pytest.mark.asyncio
+async def test_revoke_invite_full_flow(auth_client, db_session):
+    """Owner creates an invite, then revokes it. Locks down the
+    SELECT match, the in-memory status flip, the db.commit(), and
+    the {"revoked": True} response payload."""
+    from app.models.identity import FamilyInvite
+
+    create = await auth_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": "revoke-full@test.com", "role": "co_parent"},
+    )
+    assert create.status_code == 200, create.text
+    invite = (
+        await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "revoke-full@test.com"))
+    ).scalar_one()
+
+    revoke = await auth_client.delete(f"/api/v1/auth/household/invites/{invite.id}")
+    assert revoke.status_code == 200, revoke.text
+    assert revoke.json() == {"revoked": True}
+
+    await db_session.refresh(invite)
+    assert invite.status == "revoked"
+
+
+# ── accept_invite: full happy-path body, exercising every line ──────
+
+
+@pytest.mark.asyncio
+async def test_accept_invite_full_flow(auth_client, client, db_session):
+    """Owner sends an invite, then a fresh accept-invite POST creates
+    the user with the canonical role, sets email_verified=True, marks
+    the invite "accepted", and sets the access_token cookie. This
+    test asserts every observable side effect end-to-end so any
+    regression in the body trips at least one assertion."""
+    from app.models.identity import FamilyInvite
+
+    create = await auth_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": "accept-full@test.com", "role": "co_parent"},
+    )
+    assert create.status_code == 200, create.text
+    invite = (
+        await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "accept-full@test.com"))
+    ).scalar_one()
+
+    resp = await client.post(
+        "/api/v1/auth/accept-invite",
+        json={"token": invite.token, "password": "newuserpw1234", "display_name": "Accept Full"},
+    )
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert "user_id" in body and "household_id" in body
+    assert body["household_id"] == str(invite.household_id)
+
+    # User row created with canonical role + verified flag set.
+    new_user = (await db_session.execute(select(User).where(User.email == "accept-full@test.com"))).scalar_one()
+    assert new_user.role.value == "co_parent"
+    assert new_user.email_verified is True
+    assert str(new_user.id) == body["user_id"]
+
+    # Invite was flipped to accepted (so a second accept would 400).
+    await db_session.refresh(invite)
+    assert invite.status == "accepted"
+
+    # access_token cookie set so the new user is logged in.
+    set_cookie = next((h for h in resp.headers.get_list("set-cookie") if h.startswith("access_token=")), None)
+    assert set_cookie is not None and "HttpOnly" in set_cookie
