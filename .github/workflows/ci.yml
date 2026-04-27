@@ -92,6 +92,38 @@ jobs:
         working-directory: backend
         run: pytest --cov=app --cov-report=xml --cov-report=term-missing --cov-report=json -x -v
 
+      - name: Print auth.py coverage detail
+        if: always()
+        working-directory: backend
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("coverage.json")
+          if not path.exists():
+              print("coverage.json not generated — pytest probably failed before --cov-report=json ran.")
+              raise SystemExit(0)
+          data = json.loads(path.read_text())
+          auth = data["files"].get("app/api/auth.py", {})
+          if not auth:
+              print("app/api/auth.py is not in the coverage report (check omit list).")
+              raise SystemExit(0)
+          summary = auth.get("summary", {})
+          print(f"auth.py coverage: {summary.get('percent_covered', 'N/A')}%")
+          print(f"Statements: {summary.get('num_statements', 'N/A')}")
+          print(f"Covered:    {summary.get('covered_lines', 'N/A')}")
+          print(f"Missing:    {summary.get('missing_lines', 'N/A')}")
+          print(f"Missing line numbers: {auth.get('missing_lines', [])}")
+          PY
+
+      - name: Upload coverage data
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-data
+          path: backend/coverage.json
+
       - name: Check coverage threshold
         working-directory: backend
         run: coverage report --fail-under=35
