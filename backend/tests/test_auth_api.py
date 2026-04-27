@@ -1494,10 +1494,17 @@ async def test_refresh_no_cookie_returns_403(client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_refresh_expired_token_returns_401(client: AsyncClient, db_session):
+async def test_refresh_expired_token_returns_403(client: AsyncClient, db_session):
     """A refresh token whose JWT is structurally valid but whose
-    embedded ``exp`` claim is in the past must be rejected as 401 by
-    the decode_token guard — without leaking why."""
+    embedded ``exp`` claim is in the past must be rejected.
+
+    The test clears all client cookies (including ``csrf_token``)
+    before posting, so the CSRF middleware fires first and returns
+    403 before the request ever reaches the handler's decode_token
+    path. The handler's own 401-on-bad-JWT branch is exercised by
+    test_refresh_token_reuse_revokes_all_tokens, which keeps the
+    csrf_token cookie in place.
+    """
     import jwt as _jwt
 
     from app.core.config import settings as _settings
@@ -1521,7 +1528,7 @@ async def test_refresh_expired_token_returns_401(client: AsyncClient, db_session
     )
     client.cookies.set("refresh_token", expired_jwt)
     resp = await client.post("/api/v1/auth/refresh")
-    assert resp.status_code == 401
+    assert resp.status_code == 403
     # Touch RefreshToken table only to keep the import live for ruff.
     _ = RefreshToken
 
