@@ -65,11 +65,23 @@ def _ensure_fake_redis():
     Some tests (test_rate_limit.py) intentionally delete
     ``app.state.redis`` to exercise the missing-redis path; without
     this autouse fixture, every subsequent test in the run would
-    inherit the gap and start failing with 429s.
+    inherit the gap and start failing with 429s on the rate-limited
+    auth routes (register / login / forgot_password / verify_email).
     """
     if not hasattr(app.state, "redis") or not isinstance(app.state.redis, _FakeRedis):
         app.state.redis = _FakeRedis()
     yield
+
+
+# Belt-and-suspenders: set app.state.redis at module import time as
+# well, so the very first test that runs (before pytest has invoked
+# any fixture) can still hit a rate-limited route without 429ing.
+# pytest-asyncio's auto mode has, in some version pairings, run
+# sync autouse fixtures AFTER the first await — by which point the
+# rate-limit dependency on /auth/register has already seen a missing
+# redis and rejected with 429, leaving the handler body uncovered.
+if not hasattr(app.state, "redis") or not isinstance(app.state.redis, _FakeRedis):
+    app.state.redis = _FakeRedis()
 
 
 # Use a test database URL - replace only the database name at the end
