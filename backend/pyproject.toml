@@ -51,6 +51,12 @@ skips = ["B101"]
 
 [tool.coverage.run]
 source = ["app"]
+# SQLAlchemy's asyncio extra runs every async DB call through a greenlet
+# trampoline, so any line executed inside a greenlet context is invisible
+# to coverage.py unless it's told to follow greenlets. Without this, the
+# auth endpoint bodies (which all do ``await db.execute(...)``) record as
+# uncovered even though the tests demonstrably hit them.
+concurrency = ["greenlet"]
 omit = [
     "app/content/*",
     "app/tasks/worker.py",

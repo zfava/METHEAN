@@ -7,6 +7,10 @@ uvloop==0.21.0
 # Database
 asyncpg==0.30.0
 sqlalchemy[asyncio]==2.0.36
+# Pinned explicitly even though sqlalchemy[asyncio] already pulls it in:
+# coverage.py uses concurrency=["greenlet"] (see pyproject.toml) and we
+# don't want a transitive bump to silently drop greenlet from CI.
+greenlet==3.1.1
 alembic==1.14.1
 psycopg2-binary==2.9.10
 
