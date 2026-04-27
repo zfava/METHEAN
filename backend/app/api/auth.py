@@ -443,9 +443,13 @@ async def refresh(
     refresh_token: str | None = Cookie(default=None),
     db: AsyncSession = Depends(get_db),
 ) -> RefreshResponse:
+    # No cookie → no credentials presented → 403. Every other
+    # rejection (bad type, malformed JWT, expired exp, unknown tid,
+    # revoked row, hash mismatch, dead user) is 401: credentials
+    # WERE presented and they failed authentication.
     if not refresh_token:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
+            status_code=status.HTTP_403_FORBIDDEN,
             detail="No refresh token provided",
         )
 

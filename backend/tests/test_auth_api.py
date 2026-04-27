@@ -1494,16 +1494,16 @@ async def test_refresh_no_cookie_returns_403(client: AsyncClient):
 
 
 @pytest.mark.asyncio
-async def test_refresh_expired_token_returns_403(client: AsyncClient, db_session):
+async def test_refresh_expired_token_returns_401(client: AsyncClient, db_session):
     """A refresh token whose JWT is structurally valid but whose
-    embedded ``exp`` claim is in the past must be rejected.
+    embedded ``exp`` claim is in the past must be rejected by the
+    handler's decode_token guard with 401 — credentials were
+    presented and failed authentication.
 
-    The test clears all client cookies (including ``csrf_token``)
-    before posting, so the CSRF middleware fires first and returns
-    403 before the request ever reaches the handler's decode_token
-    path. The handler's own 401-on-bad-JWT branch is exercised by
-    test_refresh_token_reuse_revokes_all_tokens, which keeps the
-    csrf_token cookie in place.
+    The test deletes only ``refresh_token`` and replaces it with an
+    expired JWT; ``csrf_token`` plus the X-CSRF-Token header from the
+    conftest fixture stay in place so the CSRF middleware admits the
+    request and the handler's 401 branch is the one exercised.
     """
     import jwt as _jwt
 
@@ -1511,7 +1511,6 @@ async def test_refresh_expired_token_returns_403(client: AsyncClient, db_session
     from app.models.operational import RefreshToken
 
     await _register_and_capture(client, "refresh-expired@test.com")
-    client.cookies.clear()
     user = (await db_session.execute(select(User).where(User.email == "refresh-expired@test.com"))).scalar_one()
 
     expired_jwt = _jwt.encode(
@@ -1526,9 +1525,10 @@ async def test_refresh_expired_token_returns_403(client: AsyncClient, db_session
         _settings.JWT_SECRET,
         algorithm=_settings.JWT_ALGORITHM,
     )
+    client.cookies.delete("refresh_token")
     client.cookies.set("refresh_token", expired_jwt)
     resp = await client.post("/api/v1/auth/refresh")
-    assert resp.status_code == 403
+    assert resp.status_code == 401
     # Touch RefreshToken table only to keep the import live for ruff.
     _ = RefreshToken
 
