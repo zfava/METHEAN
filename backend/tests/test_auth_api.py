@@ -2144,7 +2144,10 @@ async def test_accept_invite_creates_user_in_household(auth_client, client, db_s
         await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "accept-user@test.com"))
     ).scalar_one()
 
-    client.cookies.clear()
+    # Don't clear cookies — /api/v1/auth/accept-invite isn't in the
+    # CSRF exempt list, so we'd lose csrf_token and the middleware
+    # would 403 the call. The handler ignores access_token anyway,
+    # so leaving the inviter's cookie in place is harmless.
     resp = await client.post(
         "/api/v1/auth/accept-invite",
         json={"token": invite.token, "password": "newuserpass123", "display_name": "New User"},
@@ -2172,7 +2175,8 @@ async def test_accept_invite_sets_correct_role(auth_client, client, db_session):
         assert create.status_code == 200, create.text
         invite = (await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == email))).scalar_one()
 
-        client.cookies.clear()
+        # Don't clear cookies (csrf_token must survive — accept-invite
+        # isn't CSRF-exempt). The handler doesn't read access_token.
         resp = await client.post(
             "/api/v1/auth/accept-invite",
             json={"token": invite.token, "password": "abcdef123456", "display_name": "X"},
@@ -2200,7 +2204,8 @@ async def test_accept_invite_with_expired_invite_returns_error(auth_client, clie
     invite.expires_at = datetime.now(UTC) - timedelta(days=1)
     await db_session.flush()
 
-    client.cookies.clear()
+    # Don't clear cookies (csrf_token must survive — accept-invite
+    # isn't CSRF-exempt). The handler doesn't read access_token.
     resp = await client.post(
         "/api/v1/auth/accept-invite",
         json={"token": invite.token, "password": "abcdef123456", "display_name": "Y"},
@@ -2225,14 +2230,14 @@ async def test_accept_invite_already_accepted_returns_error(auth_client, client,
     ).scalar_one()
     token = invite.token
 
-    client.cookies.clear()
+    # Don't clear cookies (csrf_token must survive — accept-invite
+    # isn't CSRF-exempt). The handler doesn't read access_token.
     first = await client.post(
         "/api/v1/auth/accept-invite",
         json={"token": token, "password": "abcdef123456", "display_name": "Twice"},
     )
     assert first.status_code == 200, first.text
 
-    client.cookies.clear()
     second = await client.post(
         "/api/v1/auth/accept-invite",
         json={"token": token, "password": "abcdef123456", "display_name": "Twice"},
@@ -2256,7 +2261,8 @@ async def test_accept_invite_sets_cookies(auth_client, client, db_session):
         await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "accept-cookie@test.com"))
     ).scalar_one()
 
-    client.cookies.clear()
+    # Don't clear cookies (csrf_token must survive — accept-invite
+    # isn't CSRF-exempt). The handler doesn't read access_token.
     resp = await client.post(
         "/api/v1/auth/accept-invite",
         json={"token": invite.token, "password": "abcdef123456", "display_name": "Cookie"},
