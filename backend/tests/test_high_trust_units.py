@@ -614,7 +614,15 @@ async def test_login_returns_429_when_rate_limit_blocks(monkeypatch):
     from fastapi import Request
 
     from app.api import auth as auth_module
+    from app.core.config import settings as _settings
     from app.schemas.auth import LoginRequest
+
+    # The handler short-circuits its in-handler rate-limit check when
+    # APP_ENV == "test" (Playwright E2E hits the same loopback IP and
+    # would otherwise saturate the per-IP register/login policies).
+    # Flip the env to "production" for this unit test so the
+    # rate-limit branch we're verifying actually runs.
+    monkeypatch.setattr(_settings, "APP_ENV", "production")
 
     async def _block(*_args, **_kwargs):
         return False, 30
@@ -644,6 +652,12 @@ async def test_forgot_password_returns_429_when_rate_limit_blocks(monkeypatch):
     from fastapi import Request
 
     from app.api import auth as auth_module
+    from app.core.config import settings as _settings
+
+    # See test_login_returns_429_when_rate_limit_blocks for why we
+    # flip APP_ENV away from "test" before exercising the in-handler
+    # rate-limit branch.
+    monkeypatch.setattr(_settings, "APP_ENV", "production")
 
     async def _block(*_args, **_kwargs):
         return False, 60

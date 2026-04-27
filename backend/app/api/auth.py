@@ -377,17 +377,19 @@ async def login(
 ) -> TokenResponse:
     # Rate-limit per (ip, email) so a single attacker can't brute-force
     # one account and a compromised IP can't lock out unrelated users.
-    allowed, retry_after = await check_and_consume(
-        getattr(request.app.state, "redis", None),
-        POLICIES["login"],
-        {"ip": client_ip(request, settings.TRUSTED_PROXIES), "email": body.email.lower()},
-    )
-    if not allowed:
-        raise HTTPException(
-            status_code=429,
-            detail="Too many login attempts",
-            headers={"Retry-After": str(retry_after)},
+    # Skip in test environments — see _rate_limiting_disabled().
+    if settings.APP_ENV != "test":
+        allowed, retry_after = await check_and_consume(
+            getattr(request.app.state, "redis", None),
+            POLICIES["login"],
+            {"ip": client_ip(request, settings.TRUSTED_PROXIES), "email": body.email.lower()},
         )
+        if not allowed:
+            raise HTTPException(
+                status_code=429,
+                detail="Too many login attempts",
+                headers={"Retry-After": str(retry_after)},
+            )
 
     result = await db.execute(select(User).where(User.email == body.email))
     user = result.scalar_one_or_none()
@@ -655,18 +657,20 @@ async def forgot_password(
     from app.services.password_reset import generate_reset_token
 
     # Per-(ip,email) hourly cap. The dependency form can't read the
-    # body, so the check runs in-handler.
-    allowed, retry_after = await check_and_consume(
-        getattr(request.app.state, "redis", None),
-        POLICIES["forgot_password"],
-        {"ip": client_ip(request, settings.TRUSTED_PROXIES), "email": body.email.lower()},
-    )
-    if not allowed:
-        raise HTTPException(
-            status_code=429,
-            detail="Too many password reset requests",
-            headers={"Retry-After": str(retry_after)},
+    # body, so the check runs in-handler. Skip in test environments —
+    # see _rate_limiting_disabled() in app.core.rate_limit.
+    if settings.APP_ENV != "test":
+        allowed, retry_after = await check_and_consume(
+            getattr(request.app.state, "redis", None),
+            POLICIES["forgot_password"],
+            {"ip": client_ip(request, settings.TRUSTED_PROXIES), "email": body.email.lower()},
         )
+        if not allowed:
+            raise HTTPException(
+                status_code=429,
+                detail="Too many password reset requests",
+                headers={"Retry-After": str(retry_after)},
+            )
 
     await generate_reset_token(db, body.email, request)
     await db.commit()

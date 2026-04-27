@@ -107,10 +107,26 @@ def client_ip(request: Request, trusted_proxies: list[str]) -> str:
     return direct
 
 
+def _rate_limiting_disabled() -> bool:
+    """Single decision point for skipping rate-limit enforcement.
+
+    Returns True iff ``settings.APP_ENV == "test"``. In CI / Playwright
+    E2E runs, parallel tests register users from the same loopback IP
+    and would otherwise saturate the per-IP register policy (5/min).
+    The check_and_consume helper is intentionally NOT gated on this —
+    test_rate_limit.py drives it directly to verify fail-open /
+    fail-closed semantics; we only bypass at the enforcement sites
+    (middleware, dependency factories, in-handler login/forgot calls).
+    """
+    return settings.APP_ENV == "test"
+
+
 def rate_limit(policy_name: str):
     """Anonymous-friendly limiter keyed on IP + endpoint."""
 
     async def checker(request: Request) -> None:
+        if _rate_limiting_disabled():
+            return
         policy = POLICIES[policy_name]
         key_values = {
             "ip": client_ip(request, settings.TRUSTED_PROXIES),
@@ -135,6 +151,8 @@ def rate_limit_user(policy_name: str):
         request: Request,
         user: User = Depends(get_current_user),
     ) -> None:
+        if _rate_limiting_disabled():
+            return
         policy = POLICIES[policy_name]
         key_values = {
             "ip": client_ip(request, settings.TRUSTED_PROXIES),

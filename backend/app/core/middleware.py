@@ -149,6 +149,12 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         if request.url.path in ("/health", "/health/ready", "/metrics"):
             return await call_next(request)
 
+        # Skip in test environments. Playwright E2E runs all
+        # registrations from localhost in parallel and would otherwise
+        # saturate the default policy after the first few requests.
+        if settings.APP_ENV == "test":
+            return await call_next(request)
+
         from app.core.rate_limit import POLICIES, check_and_consume, client_ip
 
         policy = POLICIES["default"]
