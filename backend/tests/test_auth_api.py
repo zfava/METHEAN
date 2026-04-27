@@ -2075,8 +2075,17 @@ async def test_revoke_invite_not_found_returns_404(auth_client):
 
 
 @pytest.mark.asyncio
-async def test_revoke_invite_observer_cannot_revoke(auth_client, observer_client, db_session):
-    """Observers can read but cannot revoke invites."""
+async def test_revoke_invite_observer_cannot_revoke(auth_client, observer_user, db_session):
+    """Observers can read but cannot revoke invites.
+
+    auth_client and observer_client both mutate the same underlying
+    client's cookie jar, so taking both fixtures in the same test
+    causes the second-resolved fixture to overwrite the first's
+    access_token cookie. We take the owner client + the observer
+    user row, and swap the cookie manually after creating the
+    invite — same pattern as test_non_admin_cannot_invite.
+    """
+    from app.core.security import create_access_token
     from app.models.identity import FamilyInvite
 
     create = await auth_client.post(
@@ -2088,7 +2097,14 @@ async def test_revoke_invite_observer_cannot_revoke(auth_client, observer_client
         await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "rev-obs-target@test.com"))
     ).scalar_one()
 
-    resp = await observer_client.delete(f"/api/v1/auth/household/invites/{invite.id}")
+    # Switch the shared client's access_token to the observer's, then
+    # attempt the revoke. Delete first so httpx doesn't merge old and
+    # new values onto the same cookie jar.
+    observer_token = create_access_token(observer_user.id, observer_user.household_id, "observer")
+    auth_client.cookies.delete("access_token")
+    auth_client.cookies.set("access_token", observer_token)
+
+    resp = await auth_client.delete(f"/api/v1/auth/household/invites/{invite.id}")
     assert resp.status_code == 403, resp.text
 
 
