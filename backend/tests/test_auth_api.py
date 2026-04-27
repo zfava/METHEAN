@@ -2274,3 +2274,206 @@ async def test_accept_invite_sets_cookies(auth_client, client, db_session):
     assert access is not None, f"access_token cookie missing: {headers}"
     assert "HttpOnly" in access
     assert "SameSite=lax" in access
+
+
+# ══════════════════════════════════════════════════════════════════════
+# Targeted coverage of remaining branch gaps in auth.py
+# ══════════════════════════════════════════════════════════════════════
+#
+# Each test below exercises one specific raise / branch that none of
+# the existing tests reach. They were chosen by static-analyzing the
+# handler bodies against the existing test calls, not by running
+# coverage in this sandbox (no Postgres reachable).
+
+
+@pytest.mark.asyncio
+async def test_login_deactivated_user_returns_403(client: AsyncClient, db_session):
+    """When a registered user has is_active=False but supplies the
+    correct password, login must reject with 403 "Account is
+    deactivated" (auth.py L401-405). Existing test_login_wrong_password
+    only exercises the 401 path."""
+    await _register_and_capture(client, "deactivated@test.com", password="correctpw123")
+    user = (await db_session.execute(select(User).where(User.email == "deactivated@test.com"))).scalar_one()
+    user.is_active = False
+    await db_session.flush()
+    await db_session.commit()
+
+    client.cookies.clear()
+    resp = await client.post(
+        "/api/v1/auth/login",
+        json={"email": "deactivated@test.com", "password": "correctpw123"},
+    )
+    assert resp.status_code == 403, resp.text
+    assert "deactivated" in resp.json()["detail"].lower()
+
+
+@pytest.mark.asyncio
+async def test_refresh_unknown_token_id_returns_401(client: AsyncClient, db_session):
+    """A refresh token whose JWT decodes cleanly but whose ``tid``
+    isn't in refresh_tokens must 401 (auth.py L478-482). The reuse
+    test exercises a known-revoked tid; this test exercises a tid
+    that was never issued."""
+    import jwt as _jwt
+
+    from app.core.config import settings as _settings
+
+    await _register_and_capture(client, "unknown-tid@test.com")
+    user = (await db_session.execute(select(User).where(User.email == "unknown-tid@test.com"))).scalar_one()
+
+    # Build a syntactically valid refresh JWT that points to a
+    # never-persisted tid. Signature + exp are valid so decode passes
+    # and we land in the stored_token-is-None branch.
+    bogus_jwt = _jwt.encode(
+        {
+            "sub": str(user.id),
+            "hid": str(user.household_id),
+            "tid": str(uuid.uuid4()),  # never inserted
+            "type": "refresh",
+            "exp": int(datetime.now(UTC).timestamp()) + 3600,
+            "iat": int(datetime.now(UTC).timestamp()),
+        },
+        _settings.JWT_SECRET,
+        algorithm=_settings.JWT_ALGORITHM,
+    )
+    client.cookies.delete("refresh_token")
+    client.cookies.set("refresh_token", bogus_jwt)
+
+    resp = await client.post("/api/v1/auth/refresh")
+    assert resp.status_code == 401, resp.text
+    assert "not found" in resp.json()["detail"].lower()
+
+
+@pytest.mark.asyncio
+async def test_refresh_hash_mismatch_returns_401(client: AsyncClient, db_session):
+    """When the cookie's plaintext refresh_token hashes to something
+    other than the stored token_hash for that tid, the handler treats
+    it as a forged token and revokes every active session (auth.py
+    L497-504). Constructed by hand: take the real tid issued by
+    register, but ship a different plaintext value in the cookie."""
+    import jwt as _jwt
+
+    from app.core.config import settings as _settings
+    from app.models.operational import RefreshToken
+
+    await _register_and_capture(client, "hash-mismatch@test.com")
+    user = (await db_session.execute(select(User).where(User.email == "hash-mismatch@test.com"))).scalar_one()
+    real_tid = (await db_session.execute(select(RefreshToken.id).where(RefreshToken.user_id == user.id))).scalar_one()
+
+    # JWT signs over a plaintext we never persisted the hash of.
+    forged_jwt = _jwt.encode(
+        {
+            "sub": str(user.id),
+            "hid": str(user.household_id),
+            "tid": str(real_tid),  # real row id, but the JWT itself is a different plaintext
+            "type": "refresh",
+            "exp": int(datetime.now(UTC).timestamp()) + 3600,
+            "iat": int(datetime.now(UTC).timestamp()),
+        },
+        _settings.JWT_SECRET,
+        algorithm=_settings.JWT_ALGORITHM,
+    )
+    client.cookies.delete("refresh_token")
+    client.cookies.set("refresh_token", forged_jwt)
+
+    resp = await client.post("/api/v1/auth/refresh")
+    assert resp.status_code == 401, resp.text
+    assert "reuse" in resp.json()["detail"].lower()
+
+    # Defense-in-depth: every active token for the user must now be
+    # revoked, mirroring the reuse-detection test.
+    active_after = (
+        (
+            await db_session.execute(
+                select(RefreshToken).where(
+                    RefreshToken.user_id == user.id,
+                    RefreshToken.is_revoked == False,  # noqa: E712
+                )
+            )
+        )
+        .scalars()
+        .all()
+    )
+    assert active_after == []
+
+
+@pytest.mark.asyncio
+async def test_refresh_inactive_user_returns_401(client: AsyncClient, db_session):
+    """If the refresh token, hash, and revocation flag all check out
+    but the underlying user has been deactivated since the token was
+    issued, the handler refuses to mint new credentials (auth.py
+    L512-516)."""
+    await _register_and_capture(client, "inactive-refresh@test.com")
+    user = (await db_session.execute(select(User).where(User.email == "inactive-refresh@test.com"))).scalar_one()
+    user.is_active = False
+    await db_session.flush()
+    await db_session.commit()
+
+    resp = await client.post("/api/v1/auth/refresh")
+    assert resp.status_code == 401, resp.text
+    assert "inactive" in resp.json()["detail"].lower()
+
+
+@pytest.mark.asyncio
+async def test_accept_invite_existing_email_rejected(auth_client, client, db_session):
+    """When the invitee email already has a user row in the DB,
+    accept-invite must 400 with "An account with this email already
+    exists" (auth.py L877-880). The other accept_invite tests use
+    fresh emails."""
+    from app.models.identity import FamilyInvite
+
+    # Pre-existing account with the same email the invite will use.
+    register_existing = await client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "already-exists@test.com",
+            "password": "existingpw123",
+            "display_name": "Already There",
+            "household_name": "Other Family",
+        },
+    )
+    assert register_existing.status_code == 201, register_existing.text
+
+    # Owner (different household) sends the invite, then we try to
+    # accept it as the already-existing user.
+    create = await auth_client.post(
+        "/api/v1/auth/household/invite",
+        json={"email": "already-exists@test.com", "role": "co_parent"},
+    )
+    assert create.status_code == 200, create.text
+    invite = (
+        await db_session.execute(select(FamilyInvite).where(FamilyInvite.email == "already-exists@test.com"))
+    ).scalar_one()
+
+    resp = await client.post(
+        "/api/v1/auth/accept-invite",
+        json={"token": invite.token, "password": "abcdef123456", "display_name": "Dup"},
+    )
+    assert resp.status_code == 400, resp.text
+    assert "already exists" in resp.json()["detail"].lower()
+
+
+@pytest.mark.asyncio
+async def test_register_continues_when_verification_email_fails(client: AsyncClient, db_session):
+    """The verification-email block in register is wrapped in a
+    bare try/except so a downed email provider doesn't block account
+    creation (auth.py L176-177). Patching send_email to raise
+    exercises that swallow path; test_register_sends_verification_email
+    only covers the happy side."""
+    from unittest.mock import AsyncMock, patch
+
+    with patch("app.services.email.send_email", new_callable=AsyncMock, side_effect=RuntimeError("smtp down")):
+        resp = await client.post(
+            "/api/v1/auth/register",
+            json={
+                "email": "email-down@test.com",
+                "password": "registerpw123",
+                "display_name": "Email Down",
+                "household_name": "Email Down Family",
+            },
+        )
+    assert resp.status_code == 201, resp.text
+
+    # The user row must still have been persisted even though email
+    # delivery raised — that's the guarantee the swallow exists for.
+    user = (await db_session.execute(select(User).where(User.email == "email-down@test.com"))).scalar_one()
+    assert user.email == "email-down@test.com"
