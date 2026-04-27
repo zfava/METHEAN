@@ -558,6 +558,12 @@ async def logout(
             stored = result.scalar_one_or_none()
             if stored:
                 stored.is_revoked = True
+                # Persist the revocation so a stolen cookie can't be
+                # replayed against /auth/refresh after logout. Commit
+                # is inside the try block so any DB error is swallowed
+                # together with the decode/lookup errors — logout must
+                # never fail from the user's perspective.
+                await db.commit()
         except Exception:
             pass  # Best-effort revocation
 
