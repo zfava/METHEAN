@@ -2,8 +2,9 @@
 
 import { useCallback, useRef, useState } from "react";
 import { haptic } from "@/lib/haptics";
+import { MetheanMark } from "@/components/Brand";
 
-const THRESHOLD = 64;
+const THRESHOLD = 80;
 
 export default function PullToRefresh({
   onRefresh,
@@ -91,18 +92,41 @@ export default function PullToRefresh({
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      {/* Refresh indicator */}
+      {/* Refresh indicator — METHEAN shield. The shield rotates
+          gently while a refresh is in flight (3s/360deg, eased) so
+          it reads as "the system is thinking" rather than a generic
+          spinner. While pulling, scale + opacity follow the gesture. */}
       <div
         ref={indicatorRef}
         className="absolute left-1/2 -ml-4 top-0 z-10 pointer-events-none"
-        style={{ opacity: 0, transform: "translateY(0) scale(0)", transition: pulling ? "none" : "all 0.25s var(--ease)" }}
+        style={{
+          opacity: 0,
+          transform: "translateY(0) scale(0)",
+          transition: pulling ? "none" : "all 0.25s var(--ease)",
+        }}
       >
         <div
-          className="w-8 h-8 rounded-full border-2 border-(--color-accent) border-t-transparent"
-          style={{ animation: refreshing ? "spin 0.6s linear infinite" : "none" }}
-        />
+          className="w-8 h-8 rounded-full glass border border-(--color-border) flex items-center justify-center shadow-[var(--shadow-card)]"
+          style={{
+            animation: refreshing
+              ? "ptr-shield-spin 3s cubic-bezier(0.25,0.1,0.25,1) infinite"
+              : "none",
+          }}
+          aria-hidden="true"
+        >
+          <MetheanMark size={18} color="var(--color-brand-gold)" />
+        </div>
       </div>
       {children}
+      <style>{`
+        @keyframes ptr-shield-spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          @keyframes ptr-shield-spin { from, to { transform: rotate(0deg); } }
+        }
+      `}</style>
     </div>
   );
 }

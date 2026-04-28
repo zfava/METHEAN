@@ -1,33 +1,18 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
 import BottomSheet from "@/components/BottomSheet";
 import { haptic } from "@/lib/haptics";
 
+// The sheet now collapses to four canonical groups per the spec.
+// Items inside each group keep the existing routes; we just rewire
+// the labels and group membership.
 const NAV_SECTIONS = [
-  {
-    label: "Overview",
-    items: [
-      { href: "/dashboard", label: "Dashboard" },
-      { href: "/family", label: "Family" },
-      { href: "/compliance", label: "Compliance" },
-    ],
-  },
-  {
-    label: "Curriculum",
-    items: [
-      { href: "/curriculum", label: "Curriculum" },
-      { href: "/curriculum/year", label: "Year Plan" },
-      { href: "/curriculum/scope", label: "Scope & Sequence" },
-      { href: "/curriculum/history", label: "History" },
-      { href: "/curriculum/editor", label: "Map Editor" },
-      { href: "/curriculum/mapper", label: "Map Curriculum" },
-    ],
-  },
   {
     label: "Learning",
     items: [
+      { href: "/dashboard", label: "Dashboard" },
+      { href: "/curriculum", label: "Curriculum" },
       { href: "/calendar", label: "Calendar" },
       { href: "/plans", label: "Weekly Plans" },
       { href: "/plans/vision", label: "Education Plan" },
@@ -38,20 +23,8 @@ const NAV_SECTIONS = [
     ],
   },
   {
-    label: "Intelligence",
-    items: [
-      { href: "/inspection", label: "AI Inspection" },
-      { href: "/intelligence", label: "Learner Profile" },
-      { href: "/calibration", label: "Evaluator Calibration" },
-      { href: "/style-profile", label: "Learning Style" },
-      { href: "/family-insights", label: "Family Insights" },
-      { href: "/wellbeing", label: "Wellbeing" },
-    ],
-  },
-  {
     label: "Governance",
     items: [
-      { href: "/governance", label: "Overview" },
       { href: "/governance/queue", label: "Approval Queue" },
       { href: "/governance/rules", label: "Rules" },
       { href: "/governance/philosophy", label: "Philosophy" },
@@ -60,22 +33,32 @@ const NAV_SECTIONS = [
       { href: "/governance/overrides", label: "Overrides" },
     ],
   },
-];
-
-const BOTTOM_ITEMS = [
-  { href: "/billing", label: "Billing" },
-  { href: "/settings", label: "Settings" },
-  { href: "/child", label: "Child View" },
-];
+  {
+    label: "Insights",
+    items: [
+      { href: "/inspection", label: "AI Inspection" },
+      { href: "/intelligence", label: "Learner Profile" },
+      { href: "/family-insights", label: "Family Insights" },
+      { href: "/wellbeing", label: "Wellbeing" },
+      { href: "/style-profile", label: "Learning Style" },
+      { href: "/calibration", label: "Evaluator Calibration" },
+    ],
+  },
+  {
+    label: "Settings",
+    items: [
+      { href: "/family", label: "Family" },
+      { href: "/compliance", label: "Compliance" },
+      { href: "/billing", label: "Billing" },
+      { href: "/settings", label: "Settings" },
+      { href: "/child", label: "Child View" },
+    ],
+  },
+] as const;
 
 export default function MobileNavSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-
-  function toggleSection(label: string) {
-    setExpanded((prev) => ({ ...prev, [label]: !prev[label] }));
-  }
 
   function navigate(href: string) {
     haptic("light");
@@ -88,65 +71,38 @@ export default function MobileNavSheet({ open, onClose }: { open: boolean; onClo
   }
 
   return (
-    <BottomSheet open={open} onClose={onClose} snapPoints={[0.85]}>
-      <div className="px-4 pb-6">
-        {NAV_SECTIONS.map((section) => {
-          const isOpen = expanded[section.label] ?? true;
-          return (
-            <div key={section.label} className="mb-1">
-              <button
-                onClick={() => toggleSection(section.label)}
-                className="w-full flex items-center justify-between py-2.5"
-              >
-                <span className="text-[11px] font-semibold tracking-wider uppercase text-(--color-text-secondary)">
-                  {section.label}
-                </span>
-                <svg
-                  className="w-3.5 h-3.5 text-(--color-text-tertiary) transition-transform duration-150"
-                  style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0)" }}
-                  fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-              {isOpen && (
-                <div className="mb-2">
-                  {section.items.map((item) => (
-                    <button
-                      key={item.href}
-                      onClick={() => navigate(item.href)}
-                      className="w-full flex items-center h-12 px-3 rounded-[10px] text-left text-sm transition-colors"
-                      style={{
-                        background: isActive(item.href) ? "var(--color-accent-light)" : "transparent",
-                        color: isActive(item.href) ? "var(--color-accent)" : "var(--color-text)",
-                        fontWeight: isActive(item.href) ? 500 : 400,
-                      }}
-                    >
-                      {item.label}
-                    </button>
-                  ))}
-                </div>
-              )}
+    <BottomSheet open={open} onClose={onClose} snapPoints={[0.85]} label="Main navigation">
+      <div className="px-4 pb-6 pt-1">
+        {NAV_SECTIONS.map((section) => (
+          <div key={section.label} className="mb-4 last:mb-0">
+            {/* Static section header — no toggle. The sheet is short
+                enough that hiding groups behind a tap was friction
+                without payoff. */}
+            <div className="px-1 pb-2">
+              <span className="text-[11px] font-semibold tracking-wider uppercase text-(--color-text-tertiary)">
+                {section.label}
+              </span>
             </div>
-          );
-        })}
-
-        {/* Divider */}
-        <div className="h-px bg-(--color-border) my-2" />
-
-        {/* Bottom items */}
-        {BOTTOM_ITEMS.map((item) => (
-          <button
-            key={item.href}
-            onClick={() => navigate(item.href)}
-            className="w-full flex items-center h-12 px-3 rounded-[10px] text-left text-sm transition-colors"
-            style={{
-              color: isActive(item.href) ? "var(--color-accent)" : "var(--color-text-secondary)",
-              fontWeight: isActive(item.href) ? 500 : 400,
-            }}
-          >
-            {item.label}
-          </button>
+            <div className="space-y-0.5">
+              {section.items.map((item) => {
+                const active = isActive(item.href);
+                return (
+                  <button
+                    key={item.href}
+                    onClick={() => navigate(item.href)}
+                    className="w-full flex items-center h-12 px-3 rounded-[10px] text-left text-sm transition-colors min-h-[44px]"
+                    style={{
+                      background: active ? "var(--color-accent-light)" : "transparent",
+                      color: active ? "var(--color-accent)" : "var(--color-text)",
+                      fontWeight: active ? 500 : 400,
+                    }}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         ))}
       </div>
     </BottomSheet>

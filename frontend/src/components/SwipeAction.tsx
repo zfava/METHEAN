@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, useEffect } from "react";
 import { haptic } from "@/lib/haptics";
+import { useMobile } from "@/lib/useMobile";
 
 // Global reset: only one SwipeAction open at a time
 let activeReset: (() => void) | null = null;
@@ -19,12 +20,19 @@ interface SwipeActionProps {
 export default function SwipeAction({
   onSwipeLeft,
   onSwipeRight,
-  leftLabel = "Approve",
-  rightLabel = "Reject",
+  // Defaults reflect the most common task-row use case (mark a
+  // child's activity Complete vs Reschedule). Callers that need
+  // approve/reject etc. continue to override.
+  leftLabel = "Complete",
+  rightLabel = "Reschedule",
   leftColor = "var(--color-success)",
-  rightColor = "var(--color-danger)",
+  rightColor = "var(--color-blocked)",
   children,
 }: SwipeActionProps) {
+  // Only enable swipe on touch / small viewports. On desktop we
+  // pass children straight through so mouse interactions on the
+  // underlying card aren't intercepted by the swipe handlers.
+  const isMobile = useMobile();
   const contentRef = useRef<HTMLDivElement>(null);
   const dragStart = useRef<{ x: number; y: number; time: number } | null>(null);
   const dragX = useRef(0);
@@ -131,6 +139,13 @@ export default function SwipeAction({
       if (activeReset === resetPosition) activeReset = null;
     };
   }, [resetPosition]);
+
+  // Desktop: render children straight through with no overflow
+  // wrapper. The keystroke / click path on the underlying card
+  // handlers continues to work uninterrupted.
+  if (!isMobile) {
+    return <>{children}</>;
+  }
 
   return (
     <div className="relative overflow-hidden">

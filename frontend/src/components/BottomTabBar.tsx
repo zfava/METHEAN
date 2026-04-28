@@ -23,32 +23,22 @@ const TABS: Tab[] = [
     ),
   },
   {
-    key: "learning",
-    label: "Learning",
-    href: "/plans",
+    key: "child",
+    label: "Child",
+    href: "/child",
     icon: (
       <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
       </svg>
     ),
   },
   {
     key: "governance",
     label: "Govern",
-    href: "/governance",
+    href: "/governance/queue",
     icon: (
       <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-      </svg>
-    ),
-  },
-  {
-    key: "intelligence",
-    label: "Insights",
-    href: "/inspection",
-    icon: (
-      <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
       </svg>
     ),
   },
@@ -66,9 +56,8 @@ const TABS: Tab[] = [
 function isTabActive(key: string, pathname: string): boolean {
   switch (key) {
     case "dashboard": return pathname === "/dashboard";
-    case "learning": return pathname.startsWith("/plans") || pathname.startsWith("/calendar") || pathname.startsWith("/maps") || pathname.startsWith("/assessment") || pathname.startsWith("/reading") || pathname.startsWith("/resources");
+    case "child": return pathname.startsWith("/child");
     case "governance": return pathname.startsWith("/governance");
-    case "intelligence": return pathname.startsWith("/inspection") || pathname.startsWith("/intelligence") || pathname.startsWith("/calibration") || pathname.startsWith("/style-profile") || pathname.startsWith("/family-insights") || pathname.startsWith("/wellbeing");
     default: return false;
   }
 }
@@ -141,21 +130,25 @@ export default function BottomTabBar({ onMorePress }: { onMorePress: () => void 
               key={tab.key}
               role="tab"
               onClick={() => handleTab(tab)}
-              className="flex flex-col items-center justify-center flex-1 h-14 gap-0.5"
+              className="flex flex-col items-center justify-center flex-1 h-14 gap-0.5 min-h-[44px]"
               aria-label={tab.label}
               aria-selected={active}
             >
+              {/* Icon sits inside a pill that fills with the accent
+                  light when active — Copilot-style. The icon color
+                  flips to gold on the active pill. */}
               <div
+                className="flex items-center justify-center h-7 w-12 rounded-full transition-all duration-200"
                 style={{
+                  background: active ? "var(--color-accent-light)" : "transparent",
                   color: active ? "var(--color-brand-gold)" : "var(--color-text-tertiary)",
-                  transform: active ? "scale(1.05)" : "scale(1)",
-                  transition: "color 0.15s, transform 0.15s",
+                  transform: active ? "scale(1.02)" : "scale(1)",
                 }}
               >
                 {tab.icon}
               </div>
               <span
-                className="text-[10px] font-medium"
+                className="text-[10px] font-medium transition-colors"
                 style={{ color: active ? "var(--color-brand-gold)" : "var(--color-text-tertiary)" }}
               >
                 {tab.label}
