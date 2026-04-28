@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { children as childrenApi, governance, annualCurriculum, plans, curriculum, household } from "@/lib/api";
 import { MetheanLogoVertical } from "@/components/Brand";
@@ -97,6 +97,47 @@ export default function OnboardingPage() {
   const [summary, setSummary] = useState<{ rules: number; activities: Record<string, number> }>({ rules: 0, activities: {} });
 
   useEffect(() => { document.title = "Welcome | METHEAN"; }, []);
+
+  // ── Step transition direction (forward / backward) ───────────────
+  // Visual-only: tracks whether the most recent step change advanced
+  // or retreated, so the wrapper can pick slide-in-left vs
+  // slide-in-right. Doesn't touch step navigation logic.
+  const prevStepRef = useRef(step);
+  const [direction, setDirection] = useState<"forward" | "backward">("forward");
+  useEffect(() => {
+    if (step !== prevStepRef.current) {
+      setDirection(step > prevStepRef.current ? "forward" : "backward");
+      prevStepRef.current = step;
+    }
+  }, [step]);
+
+  // ── Curriculum-generation observed-completion set ────────────────
+  // Tracks every distinct ``${child}: ${subject}`` value generatingFor
+  // has held during the current generation so the step-6 progress UI
+  // can render checkmarks for completed subjects without modifying
+  // the existing generateCurricula flow. The current generatingFor
+  // is treated as "in progress" — only previously-seen values count
+  // as done.
+  const [doneSubjects, setDoneSubjects] = useState<Set<string>>(new Set());
+  const prevGenForRef = useRef("");
+  useEffect(() => {
+    const prev = prevGenForRef.current;
+    if (prev && prev !== generatingFor) {
+      setDoneSubjects((s) => {
+        const next = new Set(s);
+        next.add(prev);
+        return next;
+      });
+    }
+    prevGenForRef.current = generatingFor;
+  }, [generatingFor]);
+  // Reset whenever we leave step 6 so a fresh run starts clean.
+  useEffect(() => {
+    if (step !== 6) {
+      setDoneSubjects(new Set());
+      prevGenForRef.current = "";
+    }
+  }, [step]);
 
   // ── Step 2: Add Child ──
   async function addChild() {
@@ -298,7 +339,8 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* Error display */}
+        {/* Error display lives outside the slide container so the
+            slide animation doesn't replay on dismissal. */}
         {error && (
           <Card className="mb-4" borderLeft="border-l-(--color-danger)">
             <div className="flex items-center justify-between gap-4">
@@ -307,6 +349,17 @@ export default function OnboardingPage() {
             </div>
           </Card>
         )}
+
+        {/* Step content slide container. Re-keyed on every step
+            change so the slide animation re-fires; direction picks
+            slide-in-left when advancing and slide-in-right when
+            navigating backward. */}
+        <div
+          key={`step-${step}`}
+          className={cn(
+            direction === "forward" ? "animate-slide-left" : "animate-slide-right",
+          )}
+        >
 
         {/* ── Step 1: Welcome ── */}
         {step === 1 && (
@@ -916,103 +969,352 @@ export default function OnboardingPage() {
         )}
 
         {/* ── Step 6/7: Loading ── */}
-        {loading && (step === 6 || step === 7) && (
-          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-8 text-center">
-            <div className="w-10 h-10 mx-auto mb-4 rounded-full border-2 border-(--color-accent) border-t-transparent animate-spin" />
-            <p className="text-sm text-(--color-text) mb-1">
-              {step === 6 && generatingFor && `Generating ${generatingFor}...`}
-              {step === 7 && planProgress.length > 0 && `Creating ${planProgress[planProgress.length - 1]}'s plan...`}
-              {!generatingFor && step === 6 && "Setting up curricula..."}
-            </p>
-            <p className="text-xs text-(--color-text-tertiary)">This may take a moment.</p>
-          </div>
-        )}
+        {/* ── Step 6 progress: per-(child, subject) checklist ── */}
+        {loading && step === 6 && (() => {
+          // Reconstruct the same per-child subject lists that
+          // generateCurricula() iterates over so the UI mirrors the
+          // backend's exact sequence. We don't change the API call —
+          // we just observe its side effects via generatingFor.
+          const eligible = addedChildren.filter(
+            (c) => (curriculumChoices[c.id] || "skip") !== "skip",
+          );
+          const totalSubjects = eligible.reduce((sum, c) => {
+            const levels = childSubjectLevels[c.id] || {};
+            const subjects = Object.keys(levels).length > 0
+              ? Object.keys(levels)
+              : ["reading", "mathematics"];
+            return sum + subjects.length;
+          }, 0);
+          const completedCount = doneSubjects.size;
+          const pct = totalSubjects > 0
+            ? Math.min(100, Math.round((completedCount / totalSubjects) * 100))
+            : 0;
+          return (
+            <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6 animate-fade-up">
+              <h3 className="text-sm font-semibold text-(--color-text) mb-1">Building your curricula</h3>
+              <p className="text-xs text-(--color-text-secondary) mb-4">
+                METHEAN is scaffolding each subject under your governance. This may take a moment.
+              </p>
 
-        {/* ── Step 7: Generate Plans ── */}
+              {/* Progress bar */}
+              <div className="h-1.5 rounded-full bg-(--color-border) overflow-hidden mb-1">
+                <div
+                  className="h-full bg-(--color-accent) transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+              <p className="text-[11px] text-(--color-text-tertiary) mb-4">
+                {completedCount} of {totalSubjects} subjects scaffolded
+              </p>
+
+              {/* Per-(child, subject) checklist */}
+              <div className="space-y-3">
+                {eligible.map((c) => {
+                  const levels = childSubjectLevels[c.id] || {};
+                  const subjects = Object.keys(levels).length > 0
+                    ? Object.keys(levels).map((id) =>
+                        id.replace(/_/g, " ").replace(/\b\w/g, (ch) => ch.toUpperCase()),
+                      )
+                    : ["Reading", "Mathematics"];
+                  const hue = avatarHueFor(c.firstName || c.id);
+                  return (
+                    <div key={c.id} className="rounded-[10px] border border-(--color-border) bg-(--color-page) p-3">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span
+                          className="h-6 w-6 rounded-full flex items-center justify-center text-[11px] font-semibold"
+                          style={{
+                            background: `hsl(${hue}, 55%, 88%)`,
+                            color: `hsl(${hue}, 55%, 32%)`,
+                          }}
+                          aria-hidden="true"
+                        >
+                          {(c.firstName || "?").charAt(0).toUpperCase()}
+                        </span>
+                        <span className="text-[13px] font-medium text-(--color-text)">{c.firstName}</span>
+                      </div>
+                      <ul className="space-y-1.5 pl-1">
+                        {subjects.map((subject) => {
+                          const key = `${c.firstName}: ${subject}`;
+                          const isCurrent = generatingFor === key;
+                          const isDone = doneSubjects.has(key);
+                          return (
+                            <li key={subject} className="flex items-center gap-2 text-[12px]">
+                              {isDone ? (
+                                <span
+                                  className="h-4 w-4 rounded-full bg-(--color-success) flex items-center justify-center shrink-0 animate-fade-in"
+                                  aria-hidden="true"
+                                >
+                                  <svg className="h-2.5 w-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                                  </svg>
+                                </span>
+                              ) : isCurrent ? (
+                                <span className="h-4 w-4 rounded-full border-2 border-(--color-accent)/30 border-t-(--color-accent) animate-spin shrink-0" aria-hidden="true" />
+                              ) : (
+                                <span className="h-4 w-4 rounded-full border border-(--color-border) shrink-0" aria-hidden="true" />
+                              )}
+                              <span className={cn(
+                                isDone && "text-(--color-text-tertiary)",
+                                isCurrent && "text-(--color-text) font-medium",
+                                !isDone && !isCurrent && "text-(--color-text-secondary)",
+                              )}>
+                                {subject}
+                              </span>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })()}
+
+        {/* ── Step 7 progress: per-child plan generation ── */}
+        {loading && step === 7 && (() => {
+          const eligible = addedChildren.filter(
+            (c) => (curriculumChoices[c.id] || "skip") !== "skip",
+          );
+          // planProgress is appended to as each child starts; the
+          // last entry is "in-progress" while loading is true.
+          const lastIdx = planProgress.length - 1;
+          const currentName = lastIdx >= 0 ? planProgress[lastIdx] : "";
+          const completedNames = new Set(planProgress.slice(0, lastIdx));
+          const pct = eligible.length > 0
+            ? Math.min(100, Math.round(((completedNames.size + (currentName ? 0.5 : 0)) / eligible.length) * 100))
+            : 0;
+          return (
+            <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6 animate-fade-up">
+              <h3 className="text-sm font-semibold text-(--color-text) mb-1">Building this week&apos;s plans</h3>
+              <p className="text-xs text-(--color-text-secondary) mb-4">
+                Translating curricula into daily activities. This is the last step.
+              </p>
+              <div className="h-1.5 rounded-full bg-(--color-border) overflow-hidden mb-1">
+                <div
+                  className="h-full bg-(--color-accent) transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+              <p className="text-[11px] text-(--color-text-tertiary) mb-4">
+                {completedNames.size} of {eligible.length} {eligible.length === 1 ? "child" : "children"} planned
+              </p>
+              <ul className="space-y-2">
+                {eligible.map((c) => {
+                  const isDone = completedNames.has(c.firstName);
+                  const isCurrent = !isDone && currentName === c.firstName;
+                  const hue = avatarHueFor(c.firstName || c.id);
+                  return (
+                    <li key={c.id} className="flex items-center gap-3 rounded-[10px] border border-(--color-border) bg-(--color-page) px-3 py-2">
+                      <span
+                        className="h-7 w-7 rounded-full flex items-center justify-center text-[12px] font-semibold shrink-0"
+                        style={{
+                          background: `hsl(${hue}, 55%, 88%)`,
+                          color: `hsl(${hue}, 55%, 32%)`,
+                        }}
+                        aria-hidden="true"
+                      >
+                        {(c.firstName || "?").charAt(0).toUpperCase()}
+                      </span>
+                      <span className="flex-1 text-[13px] text-(--color-text) font-medium">{c.firstName}</span>
+                      {isDone ? (
+                        <span className="h-5 w-5 rounded-full bg-(--color-success) flex items-center justify-center shrink-0 animate-fade-in" aria-hidden="true">
+                          <svg className="h-3 w-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        </span>
+                      ) : isCurrent ? (
+                        <span className="h-5 w-5 rounded-full border-2 border-(--color-accent)/30 border-t-(--color-accent) animate-spin shrink-0" aria-hidden="true" />
+                      ) : (
+                        <span className="h-5 w-5 rounded-full border border-(--color-border) shrink-0" aria-hidden="true" />
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          );
+        })()}
+
+        {/* ── Step 7: Generate Plans (idle) ── */}
         {step === 7 && !loading && (
-          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6 text-center">
-            <h3 className="text-sm font-semibold text-(--color-text) mb-2">Curricula ready!</h3>
+          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6 text-center animate-fade-up">
+            <div
+              className="w-14 h-14 mx-auto mb-4 rounded-full flex items-center justify-center"
+              style={{ background: "rgba(45,106,79,0.10)" }}
+            >
+              <svg className="h-7 w-7 text-(--color-success)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h3 className="text-base font-semibold text-(--color-text) mb-1">Curricula ready</h3>
             <p className="text-xs text-(--color-text-secondary) mb-6">
               Now let&apos;s create this week&apos;s activity schedule.
             </p>
             <Button variant="primary" size="lg" onClick={generatePlans} className="w-full">
               Generate First Week&apos;s Plan
             </Button>
-            <button onClick={() => { setStep(8); setSummary({ rules: 4, activities: {} }); }}
-              className="block mx-auto mt-3 text-xs text-(--color-text-tertiary) hover:underline">
+            <button
+              onClick={() => { setStep(8); setSummary({ rules: 4, activities: {} }); }}
+              className="block mx-auto mt-3 text-xs text-(--color-text-tertiary) hover:underline"
+            >
               Skip — I&apos;ll generate plans later
             </button>
           </div>
         )}
 
-        {/* ── Step 8: All Set ── */}
-        {step === 8 && (
-          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-8">
-            <div className="text-center mb-6">
-              <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-(--color-success-light) flex items-center justify-center">
-                <svg className="w-7 h-7 text-(--color-success)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
+        {/* ── Step 8: All Set — dashboard preview ── */}
+        {step === 8 && (() => {
+          const totalActivities = Object.values(summary.activities).reduce(
+            (s, n) => s + (n || 0),
+            0,
+          );
+          const ratifiedCount = constitutionalRules.length;
+          return (
+            <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6 sm:p-8">
+              <div className="text-center mb-6 animate-fade-up">
+                <div
+                  className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
+                  style={{
+                    background:
+                      "radial-gradient(circle, rgba(198,162,78,0.20) 0%, rgba(198,162,78,0) 65%)",
+                  }}
+                >
+                  <ShieldIcon size={32} className="text-[color:var(--gold)]" />
+                </div>
+                <h2 className="text-[22px] font-semibold tracking-tight text-(--color-text)">
+                  Your family is ready
+                </h2>
+                <p className="text-sm text-(--color-text-secondary) mt-1">
+                  Here&apos;s what we built together.
+                </p>
               </div>
-              <h2 className="text-lg font-semibold text-(--color-text)">Your family is ready!</h2>
-            </div>
 
-            {/* ── Your Constitution ── */}
-            <div className="mb-5 p-4 bg-(--color-constitutional-light) border border-(--color-constitutional)/15 rounded-[10px]">
-              <div className="flex items-center gap-2 mb-2">
-                <ShieldIcon size={16} className="text-(--color-constitutional)" />
-                <span className="text-xs font-semibold text-(--color-constitutional)">Constitutional Governance Established</span>
+              {/* Bento metric tiles — same visual language as the
+                  parent dashboard so the transition feels continuous. */}
+              <div className="grid grid-cols-2 gap-3 mb-5">
+                <div className="bg-(--color-page) rounded-[12px] border border-(--color-border) p-4 animate-fade-up stagger-1">
+                  <div className="text-[10px] text-(--color-text-tertiary) uppercase tracking-wide mb-1">
+                    Children
+                  </div>
+                  <div className="text-[22px] font-semibold tracking-tight text-(--color-text) leading-none">
+                    {addedChildren.length}
+                  </div>
+                </div>
+                <div className="bg-(--color-page) rounded-[12px] border border-(--color-border) p-4 animate-fade-up stagger-2">
+                  <div className="text-[10px] text-(--color-text-tertiary) uppercase tracking-wide mb-1">
+                    Governance rules
+                  </div>
+                  <div className="text-[22px] font-semibold tracking-tight text-(--color-text) leading-none">
+                    {summary.rules}
+                  </div>
+                </div>
+                <div className="bg-(--color-page) rounded-[12px] border border-(--color-border) p-4 animate-fade-up stagger-3">
+                  <div className="text-[10px] text-(--color-text-tertiary) uppercase tracking-wide mb-1">
+                    Activities this week
+                  </div>
+                  <div className="text-[22px] font-semibold tracking-tight text-(--color-text) leading-none">
+                    {totalActivities}
+                  </div>
+                </div>
+                <div className="bg-(--color-page) rounded-[12px] border border-(--color-border) p-4 animate-fade-up stagger-4">
+                  <div className="text-[10px] text-(--color-text-tertiary) uppercase tracking-wide mb-1">
+                    Constitutional
+                  </div>
+                  <div className="text-[22px] font-semibold tracking-tight text-(--color-text) leading-none">
+                    {ratifiedCount > 0 ? ratifiedCount : "Ratified"}
+                  </div>
+                </div>
               </div>
-              {constitutionalRules.length > 0 && (
-                <ul className="space-y-1 mb-2">
-                  {constitutionalRules.map((name, i) => (
-                    <li key={i} className="flex items-center gap-1.5 text-[11px] text-(--color-text-secondary)">
-                      <span className="w-1 h-1 rounded-full bg-(--color-constitutional) shrink-0" />
-                      {name}
-                    </li>
-                  ))}
-                </ul>
-              )}
-              {ceremonyReason && (
-                <div className="border-t border-(--color-constitutional)/15 pt-2 mt-2">
-                  <p className="text-[11px] text-(--color-text-secondary) italic leading-relaxed">
-                    &ldquo;{ceremonyReason}&rdquo;
-                  </p>
+
+              {/* Per-child activity breakdown */}
+              {Object.keys(summary.activities).length > 0 && (
+                <div className="space-y-1.5 mb-5 animate-fade-up stagger-5">
+                  {Object.entries(summary.activities).map(([name, count]) => {
+                    const hue = avatarHueFor(name);
+                    return (
+                      <div
+                        key={name}
+                        className="flex items-center gap-3 px-3 py-2 bg-(--color-page) rounded-[10px] border border-(--color-border)"
+                      >
+                        <span
+                          className="h-7 w-7 rounded-full flex items-center justify-center text-[11px] font-semibold shrink-0"
+                          style={{
+                            background: `hsl(${hue}, 55%, 88%)`,
+                            color: `hsl(${hue}, 55%, 32%)`,
+                          }}
+                          aria-hidden="true"
+                        >
+                          {name.charAt(0).toUpperCase()}
+                        </span>
+                        <span className="flex-1 text-sm text-(--color-text) font-medium">{name}</span>
+                        <span className="text-xs text-(--color-text-secondary)">
+                          {count} {count === 1 ? "activity" : "activities"} this week
+                        </span>
+                      </div>
+                    );
+                  })}
                 </div>
               )}
-            </div>
 
-            {/* Activity preview */}
-            {Object.keys(summary.activities).length > 0 && (
-              <div className="space-y-2 mb-4">
-                {Object.entries(summary.activities).map(([name, count]) => (
-                  <div key={name} className="flex items-center justify-between px-3 py-2 bg-(--color-page) rounded-[10px]">
-                    <span className="text-sm text-(--color-text)">{name}</span>
-                    <span className="text-xs text-(--color-text-secondary)">{count} activities today</span>
+              {/* Constitution recap */}
+              {(constitutionalRules.length > 0 || ceremonyReason) && (
+                <div
+                  className="mb-6 p-4 rounded-[10px] border animate-fade-up stagger-6"
+                  style={{
+                    background: "rgba(139,115,85,0.06)",
+                    borderColor: "rgba(139,115,85,0.18)",
+                  }}
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    <ShieldIcon size={14} className="text-(--color-constitutional)" />
+                    <span className="text-[11px] font-semibold text-(--color-constitutional) uppercase tracking-wide">
+                      Constitution ratified
+                    </span>
                   </div>
-                ))}
-              </div>
-            )}
-
-            {/* Rules summary */}
-            {summary.rules > 0 && (
-              <div className="mb-6 p-3 bg-(--color-page) rounded-[10px]">
-                <p className="text-xs text-(--color-text-secondary) font-medium">{summary.rules} governance rules protecting your family's education.</p>
-              </div>
-            )}
-
-            <div className="space-y-2">
-              <Button variant="primary" size="lg" onClick={() => router.push("/dashboard")} className="w-full">
-                Go to Dashboard
-              </Button>
-              {addedChildren.length > 0 && (
-                <Button variant="secondary" size="md" onClick={() => router.push("/child")} className="w-full">
-                  Open {addedChildren[0].firstName}'s Learning
-                </Button>
+                  {constitutionalRules.length > 0 && (
+                    <ul className="space-y-1 mb-2">
+                      {constitutionalRules.map((name, i) => (
+                        <li key={i} className="flex items-center gap-1.5 text-[11px] text-(--color-text-secondary)">
+                          <span className="w-1 h-1 rounded-full bg-(--color-constitutional) shrink-0" />
+                          {name}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {ceremonyReason && (
+                    <p className="text-[12px] text-(--color-text-secondary) italic leading-relaxed border-t border-(--color-constitutional)/15 pt-2 mt-2">
+                      &ldquo;{ceremonyReason}&rdquo;
+                    </p>
+                  )}
+                </div>
               )}
+
+              <div className="space-y-2 animate-fade-up stagger-7">
+                <Button
+                  variant="gold"
+                  size="lg"
+                  onClick={() => router.push("/dashboard")}
+                  className="w-full"
+                >
+                  Go to Dashboard
+                </Button>
+                {addedChildren.length > 0 && (
+                  <Button
+                    variant="secondary"
+                    size="md"
+                    onClick={() => router.push("/child")}
+                    className="w-full"
+                  >
+                    Open {addedChildren[0].firstName}&apos;s learning
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
+        </div>{/* end step slide container */}
         </div>
       </div>
     </div>
