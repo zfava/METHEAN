@@ -10,6 +10,8 @@ import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 import MetricCard from "@/components/ui/MetricCard";
 import SectionHeader from "@/components/ui/SectionHeader";
+import AnimatedNumber from "@/components/ui/AnimatedNumber";
+import Badge from "@/components/ui/Badge";
 import MasteryChart from "@/components/MasteryChart";
 import { ShieldIcon } from "@/components/ConstitutionalCeremony";
 import { useChild } from "@/lib/ChildContext";
@@ -23,6 +25,33 @@ import SwipeAction from "@/components/SwipeAction";
 interface TodayActivity { id: string; title: string; activity_type: string; status: string; estimated_minutes: number | null; }
 interface AlertItem { title: string; message: string; severity: string; }
 interface ChildSummary { id: string; mastered: number; total: number; todayCount: number; }
+
+function ChartUpIcon({ className }: { className?: string }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <polyline points="3 17 9 11 13 15 21 7" />
+      <polyline points="14 7 21 7 21 14" />
+    </svg>
+  );
+}
+
+function CalendarIcon({ className }: { className?: string }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+      <rect x="3" y="4" width="18" height="18" rx="2" />
+      <line x1="16" y1="2" x2="16" y2="6" />
+      <line x1="8" y1="2" x2="8" y2="6" />
+      <line x1="3" y1="10" x2="21" y2="10" />
+    </svg>
+  );
+}
+
+function timeAwareGreeting(): string {
+  const h = new Date().getHours();
+  if (h < 12) return "Good morning";
+  if (h < 17) return "Good afternoon";
+  return "Good evening";
+}
 
 function FamilyInsightsWidget({ childCount }: { childCount: number }) {
   const [summary, setSummary] = useState<FamilyInsightSummary | null>(null);
@@ -71,10 +100,57 @@ function WellbeingIndicator({ childId }: { childId: string | undefined }) {
   if (!childId || count === 0) return null;
   return (
     <Link href="/wellbeing" className="flex items-center gap-2 px-3 py-2 bg-(--color-warning-light) border border-(--color-warning)/10 rounded-[10px] text-xs text-(--color-warning) hover:bg-(--color-warning)/10 transition-colors">
-      <span className="w-2 h-2 rounded-full bg-(--color-warning)" />
+      <span className="w-2 h-2 rounded-full bg-(--color-warning) animate-pulse-soft" />
       {count} wellbeing observation{count > 1 ? "s" : ""} to review
     </Link>
   );
+}
+
+/** Bento metric card: label + animated value + tone-tinted icon. */
+function DashMetric({
+  label,
+  value,
+  href,
+  icon,
+  tone,
+  className,
+}: {
+  label: string;
+  value: number;
+  href?: string;
+  icon: React.ReactNode;
+  tone: "constitutional" | "success" | "accent";
+  className?: string;
+}) {
+  const toneText =
+    tone === "constitutional" ? "text-(--color-constitutional)"
+    : tone === "success" ? "text-(--color-success)"
+    : "text-(--color-accent)";
+  const toneBg =
+    tone === "constitutional" ? "bg-(--color-constitutional-light)"
+    : tone === "success" ? "bg-(--color-success-light)"
+    : "bg-(--color-accent-light)";
+
+  const inner = (
+    <div className={cn(
+      "bg-(--color-surface) rounded-[14px] border border-(--color-border) p-5 h-full",
+      "shadow-[var(--shadow-card)]",
+      "transition-all duration-200 ease-[cubic-bezier(0.25,0.1,0.25,1)]",
+      href && "press-scale hover:shadow-[var(--shadow-card-hover)] hover:-translate-y-[1px]",
+      className,
+    )}>
+      <div className="flex items-start justify-between mb-3">
+        <div className="text-xs text-(--color-text-tertiary) uppercase tracking-wide">{label}</div>
+        <div className={cn("h-8 w-8 rounded-[8px] flex items-center justify-center", toneBg, toneText)}>
+          {icon}
+        </div>
+      </div>
+      <div className="text-[26px] sm:text-[30px] font-semibold tracking-tight text-(--color-text) leading-none">
+        <AnimatedNumber value={value} />
+      </div>
+    </div>
+  );
+  return href ? <Link href={href} className="block h-full">{inner}</Link> : inner;
 }
 
 export default function DashboardPage() {
@@ -232,10 +308,20 @@ export default function DashboardPage() {
   const cardVisibility = useStagger(children.length, 60);
 
   if (loading || childLoading) return (
-    <div className="max-w-5xl space-y-6"><LoadingSkeleton variant="text" count={1} /><LoadingSkeleton variant="card" count={3} /><LoadingSkeleton variant="list" count={5} /></div>
+    <div className="max-w-5xl"><LoadingSkeleton variant="dashboard" /></div>
   );
 
   const today = new Date().toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+  const greeting = timeAwareGreeting();
+  const ownerName = user?.display_name?.split(" ")[0] || "";
+  const totalToday = Object.values(summaries).reduce((sum, s) => sum + (s?.todayCount || 0), 0);
+  const heroSummary =
+    children.length === 0
+      ? "Add your first learner to get started."
+      : totalToday === 0
+        ? "All caught up for today."
+        : `${totalToday} ${totalToday === 1 ? "activity" : "activities"} planned today across ${children.length} ${children.length === 1 ? "child" : "children"}.`;
+  const totalMastered = Object.values(summaries).reduce((sum, s) => sum + (s?.mastered || 0), 0);
   const masterySegments = childState ? [
     { label: "Mastered", count: childState.mastered_count, color: "bg-(--color-success)" },
     { label: "In Progress", count: childState.in_progress_count, color: "bg-(--color-accent)" },
@@ -245,33 +331,15 @@ export default function DashboardPage() {
 
   const content = (
     <div className="max-w-5xl">
-      <PageHeader title="Dashboard" subtitle={today}
-        actions={
-          <Card href="/governance" padding="px-4 py-2.5" className="flex items-center gap-3">
-            <ShieldIcon size={16} className="text-(--color-constitutional) shrink-0" />
-            <span className="text-xs font-medium text-(--color-text)">{govHealth.rules} rules active</span>
-            <div className="w-px h-3 bg-(--color-border) hidden sm:block" />
-            <span className={cn("text-xs hidden sm:inline", govHealth.transparency === "full" ? "text-(--color-success)" : "text-(--color-warning)")}>
-              AI: {govHealth.transparency}
-            </span>
-            <div className="w-px h-3 bg-(--color-border)" />
-            <span className={cn("text-xs font-medium flex items-center gap-1", govHealth.pending > 0 ? "text-(--color-warning)" : "text-(--color-success)")}>
-              {govHealth.pending > 0 && <span className="w-1.5 h-1.5 rounded-full bg-(--color-warning) animate-pulse shrink-0" />}
-              {govHealth.pending > 0 ? `${govHealth.pending} pending` : "All clear"}
-            </span>
-            {govHealth.constitutional > 0 && (
-              <span className="text-[10px] px-1.5 py-0.5 bg-(--color-constitutional-light) text-(--color-constitutional) rounded-full font-medium hidden sm:inline">{govHealth.constitutional} constitutional</span>
-            )}
-            {aiUsagePct != null && aiUsagePct > 0.8 && (
-              <span className={cn("text-[10px] px-1.5 py-0.5 rounded-full font-medium hidden sm:inline",
-                aiUsagePct >= 1.0 ? "bg-(--color-danger-light) text-(--color-danger)" : "bg-(--color-warning-light) text-(--color-warning)"
-              )}>
-                AI: {Math.round(aiUsagePct * 100)}% used
-              </span>
-            )}
-          </Card>
-        }
-      />
+      {/* ── Hero ── */}
+      <header className="mb-6">
+        <h1 className="text-[24px] sm:text-[28px] font-semibold tracking-tight text-(--color-text) animate-fade-up">
+          {greeting}{ownerName ? `, ${ownerName}` : ""}
+        </h1>
+        <p className="mt-1 text-sm text-(--color-text-secondary) animate-fade-up stagger-1">
+          {heroSummary} <span className="text-(--color-text-tertiary)">· {today}</span>
+        </p>
+      </header>
 
       {error && (
         <Card className="mb-4" borderLeft="border-l-(--color-danger)">
@@ -282,9 +350,84 @@ export default function DashboardPage() {
         </Card>
       )}
 
-      {/* ── Child cards ── */}
+      {/* ── Empty state for first-run households ── */}
       {children.length === 0 && !childLoading && (
-        <EmptyState icon="empty" title="Welcome to METHEAN" description="Add your first child from the Family page to get started." action={<a href="/family" className="text-sm text-(--color-accent) hover:underline">Go to Family</a>} />
+        <div className="animate-fade-up stagger-2">
+          <EmptyState
+            icon="empty"
+            title="Add your first child to get started"
+            description="METHEAN tailors every plan to a specific learner. Once you add a child we'll build their first weekly schedule."
+            action={
+              <Link href="/onboarding" className="inline-flex items-center justify-center gap-2 rounded-[10px] font-medium px-5 py-2.5 text-[14px] bg-(--color-accent) text-white hover:bg-(--color-accent-hover) press-scale">
+                Add a child
+              </Link>
+            }
+          />
+        </div>
+      )}
+
+      {/* ── Bento metric row ── */}
+      {children.length > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
+          <div className="animate-fade-up stagger-2">
+            <DashMetric
+              label="Governance"
+              value={pendingReviews}
+              href="/governance/queue"
+              icon={<ShieldIcon size={16} />}
+              tone="constitutional"
+            />
+          </div>
+          <div className="animate-fade-up stagger-3">
+            <DashMetric
+              label="Mastery"
+              value={totalMastered}
+              icon={<ChartUpIcon className="h-4 w-4" />}
+              tone="success"
+            />
+          </div>
+          <div className="animate-fade-up stagger-4 col-span-2 sm:col-span-1">
+            <DashMetric
+              label="Today"
+              value={totalToday}
+              icon={<CalendarIcon className="h-4 w-4" />}
+              tone="accent"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* ── Governance queue preview ── */}
+      {children.length > 0 && (
+        <div className="mb-6 animate-fade-up stagger-5">
+          {pendingReviews > 0 ? (
+            <Card borderLeft="border-l-(--color-constitutional)" className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="h-8 w-8 rounded-[8px] flex items-center justify-center bg-(--color-constitutional-light) text-(--color-constitutional) shrink-0">
+                  <ShieldIcon size={16} />
+                </div>
+                <div>
+                  <div className="text-sm font-medium text-(--color-text)">
+                    {pendingReviews} {pendingReviews === 1 ? "item" : "items"} awaiting your review
+                  </div>
+                  <div className="text-xs text-(--color-text-secondary)">Approve or adjust before locking the plan.</div>
+                </div>
+              </div>
+              <Link href="/governance/queue">
+                <Button variant="secondary" size="sm">Review</Button>
+              </Link>
+            </Card>
+          ) : (
+            <Card className="flex items-center gap-3" borderLeft="border-l-(--color-success)">
+              <div className="h-7 w-7 rounded-full flex items-center justify-center bg-(--color-success-light) text-(--color-success) shrink-0">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </div>
+              <div className="text-sm text-(--color-text)">Governance queue clear</div>
+            </Card>
+          )}
+        </div>
       )}
       {isMobile ? (
         /* Mobile: horizontal snap-scroll carousel */
@@ -447,25 +590,47 @@ export default function DashboardPage() {
           ) : (
             /* Desktop: unchanged grid layout */
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-              <div className="lg:col-span-2">
+              <div className="lg:col-span-2 animate-fade-up stagger-6">
                 <Card padding="p-0">
                   <div className="px-5 py-3 border-b border-(--color-border)">
                     <SectionHeader title={`${selectedChild.first_name}'s Activities Today`} />
                   </div>
                   {todayActivities.length === 0 ? (
                     <div className="px-5 py-8 text-center text-sm text-(--color-text-tertiary)">No activities scheduled for today. Generate a weekly plan or build a curriculum to get started.</div>
-                  ) : todayActivities.map((a) => (
-                    <div key={a.id} className="flex items-center justify-between px-5 py-3 border-b border-(--color-border)/50 last:border-0">
-                      <div className="flex items-center gap-3">
-                        <span className={cn("w-1.5 h-1.5 rounded-full shrink-0",
-                          a.status === "completed" ? "bg-(--color-success)" : a.status === "in_progress" ? "bg-(--color-accent)" : "bg-(--color-border-strong)"
-                        )} />
-                        <span className="text-sm text-(--color-text)">{a.title}</span>
-                        <StatusBadge status={a.activity_type} />
+                  ) : todayActivities.map((a, idx) => {
+                    const borderColor = a.status === "completed"
+                      ? "border-l-(--color-success)"
+                      : a.status === "in_progress"
+                      ? "border-l-(--color-progress)"
+                      : "border-l-(--color-blocked)";
+                    const badgeVariant = a.status === "completed"
+                      ? "mastered"
+                      : a.status === "in_progress"
+                      ? "progressing"
+                      : "blocked";
+                    return (
+                      <div
+                        key={a.id}
+                        className={cn(
+                          "flex items-center justify-between gap-3 px-5 py-3 border-b border-(--color-border)/50 last:border-0",
+                          "border-l-[3px]", borderColor,
+                          a.status === "completed" && "opacity-60",
+                          `animate-fade-up stagger-${Math.min(8, idx + 1)}`,
+                        )}
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <span className="text-sm text-(--color-text) truncate">{a.title}</span>
+                          <Badge variant={badgeVariant} withDot={false}>{a.activity_type}</Badge>
+                          {children.length > 1 && (
+                            <span className="text-[11px] text-(--color-text-tertiary) shrink-0">{selectedChild.first_name}</span>
+                          )}
+                        </div>
+                        {a.estimated_minutes && (
+                          <span className="text-xs text-(--color-text-tertiary) shrink-0">{a.estimated_minutes}m</span>
+                        )}
                       </div>
-                      {a.estimated_minutes && <span className="text-xs text-(--color-text-tertiary)">{a.estimated_minutes}m</span>}
-                    </div>
-                  ))}
+                    );
+                  })}
                 </Card>
               </div>
               <Card padding="p-0">
@@ -556,8 +721,12 @@ export default function DashboardPage() {
           )}
 
           {/* ── Family Insights Widget ── */}
-          <FamilyInsightsWidget childCount={children.length} />
-          <WellbeingIndicator childId={selectedChild?.id} />
+          <div className="animate-fade-up stagger-7 mb-3">
+            <FamilyInsightsWidget childCount={children.length} />
+          </div>
+          <div className="animate-fade-up stagger-8 mb-3">
+            <WellbeingIndicator childId={selectedChild?.id} />
+          </div>
 
           {/* ── Weekly Summary ── */}
           {isMobile ? (
