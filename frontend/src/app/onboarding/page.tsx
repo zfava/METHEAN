@@ -560,152 +560,311 @@ export default function OnboardingPage() {
         })()}
 
         {/* ── Step 4: Philosophy ── */}
-        {step === 4 && (
-          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6">
-            <h3 className="text-sm font-semibold text-(--color-text) mb-1">Your educational approach</h3>
-            <p className="text-xs text-(--color-text-secondary) mb-4">This guides how the AI generates curriculum and activities.</p>
+        {step === 4 && (() => {
+          // Tiny inline SVG glyphs that evoke each philosophy's
+          // character without dragging in a full icon set. Currents
+          // are 16px stroke icons; rendered inside a tinted square so
+          // the visual language matches the dashboard's bento icons.
+          const PHIL_GLYPHS: Record<string, React.ReactNode> = {
+            classical: (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                <path d="M4 21h16M5 21V8M19 21V8M9 21V8M15 21V8M3 8h18M5 4h14l-1 4H6z" />
+              </svg>
+            ),
+            charlotte_mason: (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M12 21V8" />
+                <path d="M12 8c0-3 2-5 5-5 0 4-2 7-5 7" />
+                <path d="M12 13c0-2-1.5-4-4-4 0 3 1.5 5 4 5" />
+              </svg>
+            ),
+            unschooling: (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M16 8l-3 5-5 3 3-5z" fill="currentColor" stroke="none" />
+              </svg>
+            ),
+            eclectic: (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <circle cx="9" cy="12" r="6" />
+                <circle cx="15" cy="12" r="6" />
+              </svg>
+            ),
+            montessori: (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <rect x="4" y="14" width="6" height="6" rx="1" />
+                <rect x="14" y="14" width="6" height="6" rx="1" />
+                <rect x="9" y="6" width="6" height="6" rx="1" />
+              </svg>
+            ),
+            traditional: (
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M4 5h7a3 3 0 0 1 3 3v12H7a3 3 0 0 1-3-3z" />
+                <path d="M20 5h-7a3 3 0 0 0-3 3v12h7a3 3 0 0 0 3-3z" />
+              </svg>
+            ),
+          };
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
-              {PHILOSOPHIES.map((p) => (
-                <button key={p.value} onClick={() => setPhilosophy(p.value)}
-                  className={cn("text-left p-3 rounded-[10px] border transition-colors",
-                    philosophy === p.value ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border) hover:border-(--color-border-strong)")}>
-                  <div className="text-xs font-medium text-(--color-text)">{p.label}</div>
-                  <div className="text-[10px] text-(--color-text-tertiary)">{p.desc}</div>
-                </button>
-              ))}
+          // Autonomy descriptions tailored for the segmented control —
+          // they replace the previous separate description block with
+          // a single explanatory paragraph that updates with the
+          // active selection.
+          const AUTONOMY_DETAIL: Record<string, string> = {
+            preview_all: "Every AI recommendation lands in your queue before it reaches your child. Highest oversight; expect a daily review.",
+            approve_difficult: "AI auto-approves routine recommendations and routes only the harder calls (constitutional concerns, big shifts) to you.",
+            trust_within_rules: "AI operates freely inside the rules you've ratified. You see the audit trail; you don't approve every step.",
+          };
+
+          return (
+            <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6 animate-fade-up">
+              <h3 className="text-sm font-semibold text-(--color-text) mb-1">Your educational approach</h3>
+              <p className="text-xs text-(--color-text-secondary) mb-4">This guides how the AI generates curriculum and activities.</p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-6">
+                {PHILOSOPHIES.map((p) => {
+                  const isSelected = philosophy === p.value;
+                  return (
+                    <button
+                      key={p.value}
+                      onClick={() => setPhilosophy(p.value)}
+                      aria-pressed={isSelected}
+                      className={cn(
+                        "text-left p-3 rounded-[12px] border bg-(--color-surface) flex items-start gap-3",
+                        "transition-all duration-200 ease-[cubic-bezier(0.25,0.1,0.25,1)]",
+                        isSelected
+                          ? "border-(--color-accent) ring-2 ring-(--color-accent)/20 scale-[1.02] shadow-[var(--shadow-card)]"
+                          : "border-(--color-border) hover:border-(--color-border-strong) hover:scale-[1.01]",
+                      )}
+                    >
+                      <div
+                        className={cn(
+                          "h-8 w-8 rounded-[8px] flex items-center justify-center shrink-0 transition-colors",
+                          isSelected
+                            ? "bg-(--color-accent-light) text-(--color-accent)"
+                            : "bg-(--color-page) text-(--color-text-tertiary)",
+                        )}
+                      >
+                        {PHIL_GLYPHS[p.value]}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-[13px] font-medium text-(--color-text)">{p.label}</div>
+                        <div className="text-[11px] text-(--color-text-tertiary) leading-snug">{p.desc}</div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <h4 className="text-xs font-medium text-(--color-text) mb-2">AI autonomy level</h4>
+              {/* Segmented control: three equal-width segments share a
+                  rounded outer track. The active segment lifts via
+                  shadow + accent text; inactive segments stay flat. */}
+              <div
+                className="grid grid-cols-3 rounded-[10px] border border-(--color-border) bg-(--color-page) p-1 mb-2"
+                role="tablist"
+                aria-label="AI autonomy level"
+              >
+                {AUTONOMY.map((a) => {
+                  const isActive = autonomy === a.value;
+                  return (
+                    <button
+                      key={a.value}
+                      role="tab"
+                      aria-selected={isActive}
+                      onClick={() => setAutonomy(a.value)}
+                      className={cn(
+                        "px-2 py-2 text-[11px] font-medium rounded-[8px] transition-all duration-200",
+                        isActive
+                          ? "bg-(--color-surface) text-(--color-accent) shadow-[var(--shadow-card)]"
+                          : "text-(--color-text-secondary) hover:text-(--color-text)",
+                      )}
+                    >
+                      {a.label}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-[11px] text-(--color-text-secondary) leading-relaxed mb-6 min-h-[3em]">
+                {AUTONOMY_DETAIL[autonomy] || AUTONOMY.find((a) => a.value === autonomy)?.desc}
+              </p>
+
+              <Button variant="primary" size="lg" onClick={savePhilosophy} disabled={loading} className="w-full">
+                {loading ? "Saving..." : "Continue"}
+              </Button>
             </div>
-
-            <h4 className="text-xs font-medium text-(--color-text) mb-2">AI autonomy level</h4>
-            <div className="space-y-2 mb-6">
-              {AUTONOMY.map((a) => (
-                <button key={a.value} onClick={() => setAutonomy(a.value)}
-                  className={cn("w-full text-left p-3 rounded-[10px] border transition-colors",
-                    autonomy === a.value ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)")}>
-                  <div className="text-xs font-medium text-(--color-text)">{a.label}</div>
-                  <div className="text-[10px] text-(--color-text-tertiary)">{a.desc}</div>
-                </button>
-              ))}
-            </div>
-
-            <Button variant="primary" size="lg" onClick={savePhilosophy} disabled={loading} className="w-full">
-              {loading ? "Saving..." : "Continue"}
-            </Button>
-          </div>
-        )}
+          );
+        })()}
 
         {/* ── Step 5: Constitutional Ceremony ── */}
         {step === 5 && !ratified && (
-          <Card padding="p-0" borderLeft="border-l-(--color-constitutional)">
-            <div className="p-6">
+          <div
+            className="rounded-[14px] overflow-hidden shadow-[var(--shadow-lg)] animate-fade-up"
+            style={{ background: "var(--color-brand-navy)", color: "white" }}
+          >
+            {/* Gold accent line at the top — reads as the "seal" on a
+                founding document. */}
+            <div className="h-[3px]" style={{ background: "var(--gold)" }} aria-hidden="true" />
+
+            <div className="p-6 sm:p-7">
               {/* Header */}
               <div className="flex items-start gap-3 mb-5">
-                <div className="w-10 h-10 rounded-[10px] bg-(--color-constitutional-light) flex items-center justify-center shrink-0">
-                  <ShieldIcon size={22} className="text-(--color-constitutional)" />
+                <div
+                  className="w-11 h-11 rounded-[10px] flex items-center justify-center shrink-0"
+                  style={{ background: "rgba(198,162,78,0.15)" }}
+                >
+                  <ShieldIcon size={22} className="text-[color:var(--gold)]" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-(--color-text)">
-                    Establishing Your Family&apos;s AI Constitution
+                  <h3 className="text-[18px] font-semibold tracking-tight text-white">
+                    Establishing your family&apos;s AI constitution
                   </h3>
-                  <p className="text-xs text-(--color-text-secondary) mt-1 leading-relaxed">
+                  <p className="text-xs text-white/70 mt-1 leading-relaxed">
                     These are the foundational rules that govern how AI interacts with your children.
                     Constitutional rules cannot be changed casually; they require a formal amendment process.
                   </p>
                 </div>
               </div>
 
-              {/* Constitutional rule display */}
-              <div className="bg-(--color-constitutional-light) border border-(--color-constitutional)/15 rounded-[10px] p-4 mb-6">
+              {/* Constitutional rule display — translucent gold panel */}
+              <div
+                className="rounded-[10px] p-4 mb-6 border"
+                style={{
+                  background: "rgba(198,162,78,0.10)",
+                  borderColor: "rgba(198,162,78,0.30)",
+                }}
+              >
                 <div className="flex items-center gap-2 mb-2">
-                  <ShieldIcon size={14} className="text-(--color-constitutional)" />
-                  <span className="text-xs font-semibold text-(--color-constitutional) uppercase tracking-wide">AI Oversight Guarantee</span>
+                  <ShieldIcon size={14} className="text-[color:var(--gold)]" />
+                  <span className="text-xs font-semibold uppercase tracking-wide text-[color:var(--gold)]">
+                    AI Oversight Guarantee
+                  </span>
                 </div>
-                <p className="text-sm text-(--color-text) leading-relaxed">
+                <p className="text-sm text-white/90 leading-relaxed">
                   All AI-generated content and recommendations are logged with full input/output for parent inspection.
                   AI cannot modify child state without governance approval.
                 </p>
               </div>
 
-              {/* Affirmation checkboxes */}
+              {/* Affirmations — sequential fade-up. Each parent
+                  affirmation appears one at a time so the parent
+                  reads them deliberately. */}
               <div className="space-y-3 mb-6">
-                {CEREMONY_AFFIRMATIONS.map((text, i) => (
-                  <label key={i} className="flex items-start gap-3 cursor-pointer group" onClick={() => {
-                    setCeremonyChecks((prev) => { const next = [...prev]; next[i] = !next[i]; return next; });
-                  }}>
-                    <span className={cn(
-                      "w-5 h-5 shrink-0 mt-0.5 rounded-[4px] border-2 flex items-center justify-center transition-all",
-                      ceremonyChecks[i]
-                        ? "bg-(--gold) border-(--gold)"
-                        : "border-(--color-border-strong) group-hover:border-(--color-text-tertiary)"
-                    )}>
-                      {ceremonyChecks[i] && (
-                        <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                        </svg>
+                {CEREMONY_AFFIRMATIONS.map((text, i) => {
+                  const checked = ceremonyChecks[i];
+                  return (
+                    <label
+                      key={i}
+                      className={cn(
+                        "flex items-start gap-3 cursor-pointer group rounded-[10px] p-3 transition-colors",
+                        "animate-fade-up",
+                        i === 0 ? "stagger-2" : i === 1 ? "stagger-3" : "stagger-4",
+                        checked ? "bg-white/5" : "hover:bg-white/5",
                       )}
-                    </span>
-                    <span className="text-xs text-(--color-text) leading-relaxed">{text}</span>
-                  </label>
-                ))}
+                      onClick={() => {
+                        setCeremonyChecks((prev) => { const next = [...prev]; next[i] = !next[i]; return next; });
+                      }}
+                    >
+                      <span
+                        className={cn(
+                          "w-5 h-5 shrink-0 mt-0.5 rounded-[4px] border-2 flex items-center justify-center transition-all",
+                          checked
+                            ? "border-transparent"
+                            : "border-white/40 group-hover:border-white/60",
+                        )}
+                        style={checked ? { background: "var(--gold)", borderColor: "var(--gold)" } : undefined}
+                      >
+                        {checked && (
+                          <svg className="w-3 h-3 text-(--color-brand-navy)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3.5} aria-hidden="true">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                          </svg>
+                        )}
+                      </span>
+                      <span className="text-sm leading-relaxed text-white/95">{text}</span>
+                    </label>
+                  );
+                })}
               </div>
 
-              {/* Reason field */}
+              {/* Reason field — significant copy, larger text, more
+                  comfortable line height. The textarea uses a dark
+                  translucent fill so it reads as part of the navy
+                  document, not a popped-in form control. */}
               <div className="mb-6">
-                <label className="text-xs font-medium text-(--color-text) block mb-1.5">
-                  In your own words, why are these protections important to your family?
+                <label className="text-sm font-medium text-white block mb-2">
+                  Why are you homeschooling?
                 </label>
+                <p className="text-xs text-white/60 mb-2 leading-relaxed">
+                  This shapes how METHEAN serves your family.
+                </p>
                 <textarea
                   value={ceremonyReason}
                   onChange={(e) => setCeremonyReason(e.target.value)}
                   placeholder="This is your founding statement — what matters to your family..."
-                  rows={3}
-                  className="w-full px-3 py-2.5 text-sm border border-(--color-border-strong) rounded-[10px] bg-(--color-surface) resize-none focus:outline-none focus:ring-1 focus:ring-(--color-constitutional) text-(--color-text)"
+                  rows={4}
+                  className="w-full px-4 py-3 text-[15px] leading-[1.7] rounded-[10px] resize-none focus:outline-none text-white placeholder:text-white/35"
+                  style={{
+                    background: "rgba(255,255,255,0.06)",
+                    border: "1px solid rgba(255,255,255,0.18)",
+                  }}
                 />
                 {ceremonyReason.length > 0 && ceremonyReason.trim().length < 20 && (
-                  <p className="text-[10px] text-(--color-text-tertiary) mt-1">
+                  <p className="text-[11px] text-white/55 mt-1.5">
                     {20 - ceremonyReason.trim().length} more characters needed
                   </p>
                 )}
               </div>
 
-              {/* Ratify button */}
-              <Button
-                variant="gold"
-                size="lg"
-                className="w-full"
-                disabled={!allCeremonyChecked || !ceremonyReasonValid}
-                onClick={handleRatify}
-              >
-                Ratify Constitution
-              </Button>
+              {/* Ratify button — appears with scale-in once all three
+                  affirmations are checked AND the reason is valid.
+                  Wrapped in a min-height container so the layout
+                  doesn't jump when the button materializes. */}
+              <div className="min-h-[52px]">
+                {allCeremonyChecked && ceremonyReasonValid ? (
+                  <Button
+                    variant="gold"
+                    size="lg"
+                    className="w-full animate-scale-in shadow-[0_0_24px_rgba(198,162,78,0.35)]"
+                    onClick={handleRatify}
+                  >
+                    Ratify Constitution
+                  </Button>
+                ) : (
+                  <div className="w-full h-[52px] rounded-[10px] flex items-center justify-center text-xs text-white/45"
+                    style={{ border: "1px dashed rgba(255,255,255,0.18)" }}>
+                    {!allCeremonyChecked
+                      ? `Affirm all three above (${ceremonyChecks.filter(Boolean).length}/3)`
+                      : "Add your founding statement above"}
+                  </div>
+                )}
+              </div>
             </div>
-          </Card>
+          </div>
         )}
 
         {/* ── Step 5: Ratification confirmation ── */}
         {step === 5 && ratified && (
-          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-8 text-center">
+          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-8 text-center animate-scale-in overflow-hidden">
+            {/* Gold accent line at the very top mirrors the document
+                "seal" on the ceremony itself — visual continuity
+                from "ratifying" to "ratified". */}
+            <div className="h-[2px] -mx-8 -mt-8 mb-6" style={{ background: "var(--gold)" }} aria-hidden="true" />
             <div className="flex justify-center mb-4">
               <div
-                className="w-16 h-16 rounded-full bg-(--color-constitutional-light) flex items-center justify-center"
-                style={{ animation: "ratify-glow 500ms ease-out forwards" }}
+                className="w-16 h-16 rounded-full flex items-center justify-center"
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(198,162,78,0.20) 0%, rgba(198,162,78,0) 65%)",
+                }}
               >
-                <ShieldIcon size={32} className="text-(--color-constitutional)" />
+                <ShieldIcon size={36} className="text-[color:var(--gold)]" />
               </div>
             </div>
-            <h2 className="text-lg font-semibold text-(--color-text) mb-1">
-              Your family&apos;s AI constitution is established.
+            <h2 className="text-[20px] font-semibold tracking-tight text-(--color-text) mb-1">
+              Your family&apos;s constitution is ratified.
             </h2>
-            <p className="text-xs text-(--color-text-secondary)">
-              These protections are now active for every AI interaction.
+            <p className="text-sm text-(--color-text-secondary) leading-relaxed">
+              METHEAN now operates under your authority.
             </p>
-            <style>{`
-              @keyframes ratify-glow {
-                0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(184, 134, 11, 0.3); }
-                50% { transform: scale(1.1); box-shadow: 0 0 24px 8px rgba(184, 134, 11, 0.2); }
-                100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(184, 134, 11, 0); }
-              }
-            `}</style>
           </div>
         )}
 
