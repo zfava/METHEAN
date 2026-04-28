@@ -34,6 +34,27 @@ const CEREMONY_AFFIRMATIONS = [
   "I understand that constitutional rules require a formal amendment process to change, protecting my family's values from casual modification.",
 ] as const;
 
+const STEP_LABELS = [
+  "Welcome",
+  "Children",
+  "Learning",
+  "Philosophy",
+  "Constitution",
+  "Curriculum",
+  "Plan",
+  "Ready",
+] as const;
+
+/** Hash a string to a stable hue so each child's avatar gets a
+ *  consistent color across renders without hardcoding a palette per
+ *  name. djb2 keeps the distribution wide enough that two siblings
+ *  rarely collide. */
+function avatarHueFor(name: string): number {
+  let h = 5381;
+  for (let i = 0; i < name.length; i++) h = ((h << 5) + h + name.charCodeAt(i)) | 0;
+  return Math.abs(h) % 360;
+}
+
 interface OnboardingChild { id: string; firstName: string; grade: string }
 
 export default function OnboardingPage() {
@@ -211,27 +232,71 @@ export default function OnboardingPage() {
   const ceremonyReasonValid = ceremonyReason.trim().length >= 20;
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-(--color-page) px-4 py-8">
-      <div className="w-full max-w-lg">
-        {/* Logo + Progress */}
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <MetheanLogoVertical markSize={step === 1 ? 52 : 36} wordmarkHeight={step === 1 ? 18 : 14} color="#0F1B2D" gap={8} />
+    <div className="min-h-screen bg-(--color-page)">
+      {/* ── Sticky progress bar ───────────────────────────────────── */}
+      <div
+        className="sticky top-0 z-30 bg-(--color-surface)/95 backdrop-blur supports-[backdrop-filter]:bg-(--color-surface)/80 border-b border-(--color-border)"
+        style={{ paddingTop: "var(--safe-top)" }}
+      >
+        <div className="max-w-lg mx-auto px-4 py-3">
+          <div className="flex items-center justify-between gap-1.5" aria-label={`Step ${step} of ${STEP_LABELS.length}: ${STEP_LABELS[step - 1]}`}>
+            {STEP_LABELS.map((_, i) => {
+              const stepNum = i + 1;
+              const isComplete = stepNum < step;
+              const isCurrent = stepNum === step;
+              return (
+                <div key={stepNum} className="flex items-center flex-1 last:flex-none">
+                  <div
+                    className={cn(
+                      "h-6 w-6 shrink-0 rounded-full flex items-center justify-center text-[10px] font-semibold transition-all duration-300",
+                      isComplete && "bg-(--color-accent) text-white",
+                      isCurrent && "bg-(--color-accent) text-white ring-4 ring-(--color-accent)/15",
+                      !isComplete && !isCurrent &&
+                        "bg-(--color-surface) border border-(--color-border) text-(--color-text-tertiary)",
+                    )}
+                    aria-current={isCurrent ? "step" : undefined}
+                  >
+                    {isComplete ? (
+                      <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3} aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                      stepNum
+                    )}
+                  </div>
+                  {stepNum < STEP_LABELS.length && (
+                    <div className="flex-1 h-px mx-1 relative overflow-hidden bg-(--color-border)">
+                      <div
+                        className="absolute inset-y-0 left-0 bg-(--color-accent) transition-all duration-500 ease-[cubic-bezier(0.25,0.1,0.25,1)]"
+                        style={{ width: stepNum < step ? "100%" : "0%" }}
+                      />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
-          {step === 1 && (
-            <>
-              <h2 className="text-lg font-medium text-(--color-text) mt-4">Welcome</h2>
-              <p className="text-sm text-(--color-text-secondary) mt-1">Let&apos;s set up your learning environment.</p>
-            </>
-          )}
-          {step > 1 && (
-            <div className="flex items-center justify-center gap-2 mt-3">
-              {[2, 3, 4, 5, 6, 7, 8].map((s) => (
-                <div key={s} className={cn("w-7 h-1 rounded-full transition-colors", step >= s ? "bg-(--color-accent)" : "bg-(--color-border)")} />
-              ))}
-            </div>
-          )}
+          <div className="mt-2 flex items-baseline justify-between">
+            <span className="text-[11px] text-(--color-text-tertiary) uppercase tracking-wide">
+              Step {step} of {STEP_LABELS.length}
+            </span>
+            <span className="text-sm font-medium text-(--color-text)">{STEP_LABELS[step - 1]}</span>
+          </div>
         </div>
+      </div>
+
+      <div className="flex items-center justify-center px-4 py-8">
+        <div className="w-full max-w-lg">
+        {/* Step 1 wordmark / hero only on the first step. */}
+        {step === 1 && (
+          <div className="text-center mb-8">
+            <div className="flex justify-center mb-4">
+              <MetheanLogoVertical markSize={52} wordmarkHeight={18} color="#0F1B2D" gap={8} />
+            </div>
+            <h2 className="text-lg font-medium text-(--color-text) mt-4">Welcome</h2>
+            <p className="text-sm text-(--color-text-secondary) mt-1">Let&apos;s set up your learning environment.</p>
+          </div>
+        )}
 
         {/* Error display */}
         {error && (
@@ -259,101 +324,240 @@ export default function OnboardingPage() {
 
         {/* ── Step 2: Add Children ── */}
         {step === 2 && (
-          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6">
+          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6 animate-fade-up">
             <h3 className="text-sm font-semibold text-(--color-text) mb-1">Who&apos;s learning at home?</h3>
             <p className="text-xs text-(--color-text-secondary) mb-4">Add at least one child to continue.</p>
 
-            <div className="flex flex-col sm:flex-row gap-2 mb-4">
-              <input value={newName} onChange={(e) => setNewName(e.target.value)}
-                placeholder="First name"
-                className="flex-1 px-3 py-2.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)"
-                onKeyDown={(e) => e.key === "Enter" && addChild()} />
-              <select value={newGrade} onChange={(e) => setNewGrade(e.target.value)}
-                className="w-full sm:w-28 px-3 py-2.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)">
-                <option value="">Optional</option>
-                {GRADES.map((g) => <option key={g} value={g}>{g}</option>)}
-              </select>
-              <Button variant="primary" size="md" onClick={addChild} disabled={!newName.trim()}>Add</Button>
-            </div>
-
             {addedChildren.length > 0 && (
               <div className="space-y-2 mb-4">
-                {addedChildren.map((c) => (
-                  <div key={c.id} className="flex items-center justify-between px-3 py-2 bg-(--color-page) rounded-[10px]">
-                    <span className="text-sm text-(--color-text)">{c.firstName}{c.grade && <span className="text-(--color-text-tertiary)"> · {c.grade}</span>}</span>
-                    <button onClick={() => removeChild(c.id)} className="text-xs text-(--color-danger) hover:underline">Remove</button>
-                  </div>
-                ))}
+                {addedChildren.map((c) => {
+                  const hue = avatarHueFor(c.firstName || c.id);
+                  return (
+                    <div
+                      key={c.id}
+                      className="animate-scale-in flex items-center gap-3 pl-2 pr-3 py-2 bg-(--color-page) rounded-[12px] border border-(--color-border)"
+                    >
+                      <div
+                        className="h-9 w-9 shrink-0 rounded-full flex items-center justify-center text-sm font-semibold"
+                        style={{
+                          background: `hsl(${hue}, 55%, 92%)`,
+                          color: `hsl(${hue}, 55%, 32%)`,
+                        }}
+                        aria-hidden="true"
+                      >
+                        {(c.firstName || "?").charAt(0).toUpperCase()}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium text-(--color-text) truncate">{c.firstName}</div>
+                        {c.grade && (
+                          <div className="text-[11px] text-(--color-text-tertiary)">{c.grade}</div>
+                        )}
+                      </div>
+                      <button
+                        onClick={() => removeChild(c.id)}
+                        className="text-xs text-(--color-text-tertiary) hover:text-(--color-danger) px-2 py-1 rounded-md min-h-[36px]"
+                        aria-label={`Remove ${c.firstName}`}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             )}
 
+            <div className="flex flex-col sm:flex-row gap-2 mb-3">
+              <input
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                placeholder={addedChildren.length === 0 ? "First name" : "Add another child's name"}
+                className="flex-1 px-3 py-2.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)"
+                onKeyDown={(e) => e.key === "Enter" && addChild()}
+              />
+              <select
+                value={newGrade}
+                onChange={(e) => setNewGrade(e.target.value)}
+                className="w-full sm:w-28 px-3 py-2.5 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text)"
+              >
+                <option value="">Grade</option>
+                {GRADES.map((g) => <option key={g} value={g}>{g}</option>)}
+              </select>
+              <Button
+                variant={addedChildren.length === 0 ? "primary" : "ghost"}
+                size="md"
+                onClick={addChild}
+                disabled={!newName.trim()}
+              >
+                {addedChildren.length === 0 ? (
+                  "Add"
+                ) : (
+                  <span className="inline-flex items-center gap-1.5">
+                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                    </svg>
+                    Add another
+                  </span>
+                )}
+              </Button>
+            </div>
+
             <p className="text-[10px] text-(--color-text-tertiary) mb-4">You can add more children later from the Family page.</p>
 
-            <Button variant="primary" size="lg" onClick={() => setStep(3)} disabled={addedChildren.length === 0} className="w-full">
+            <Button
+              variant="primary"
+              size="lg"
+              onClick={() => setStep(3)}
+              disabled={addedChildren.length === 0}
+              className={cn(
+                "w-full transition-opacity",
+                addedChildren.length === 0 && "opacity-60",
+              )}
+            >
               Continue
             </Button>
           </div>
         )}
 
         {/* ── Step 3: Learning Profile ── */}
-        {step === 3 && addedChildren.length > 0 && (
-          <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6">
-            <h3 className="text-sm font-semibold text-(--color-text) mb-1">
-              What is {addedChildren[profileChildIdx]?.firstName} studying?
-            </h3>
-            <p className="text-xs text-(--color-text-secondary) mb-4">
-              Select subjects and set learning levels. All subjects available regardless of age.
-            </p>
-            <SubjectLevelPicker
-              selected={childSubjectLevels[addedChildren[profileChildIdx]?.id] || {}}
-              onChange={(levels) => setChildSubjectLevels(prev => ({
-                ...prev,
-                [addedChildren[profileChildIdx].id]: levels,
-              }))}
-              showCustom={false}
-            />
-            <div className="mt-4">
-              <label className="text-xs text-(--color-text-secondary)">Daily learning target (minutes)</label>
-              <div className="flex items-center gap-2 mt-1">
-                <input
-                  type="number"
-                  value={childMinutes[addedChildren[profileChildIdx]?.id] || 120}
-                  onChange={(e) => setChildMinutes(prev => ({
+        {step === 3 && addedChildren.length > 0 && (() => {
+          const activeChild = addedChildren[profileChildIdx];
+          const grade = activeChild?.grade || "";
+          // Grade-aware daily-minutes recommendation. Mirrors the
+          // legacy "Suggested: 90-240" hint but specialized so the
+          // copy is meaningful when a grade is set.
+          const recForGrade = (() => {
+            if (grade === "K") return { lo: 60, hi: 120, label: "Kindergarten" };
+            if (["1st", "2nd", "3rd"].includes(grade)) return { lo: 90, hi: 180, label: "Lower elementary" };
+            if (["4th", "5th"].includes(grade)) return { lo: 120, hi: 210, label: "Upper elementary" };
+            if (["6th", "7th", "8th"].includes(grade)) return { lo: 150, hi: 240, label: "Middle school" };
+            if (["9th", "10th", "11th", "12th"].includes(grade)) return { lo: 180, hi: 300, label: "High school" };
+            return { lo: 90, hi: 240, label: "All grades" };
+          })();
+          const currentMinutes = childMinutes[activeChild?.id] || 120;
+          return (
+            <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) p-6 animate-fade-up">
+              {/* Child tabs — only shown when there's more than one. */}
+              {addedChildren.length > 1 && (
+                <div className="flex items-center gap-1.5 mb-4 overflow-x-auto pb-1" role="tablist">
+                  {addedChildren.map((c, i) => {
+                    const hue = avatarHueFor(c.firstName || c.id);
+                    const active = i === profileChildIdx;
+                    return (
+                      <button
+                        key={c.id}
+                        role="tab"
+                        aria-selected={active}
+                        onClick={() => setProfileChildIdx(i)}
+                        className={cn(
+                          "shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200",
+                          active
+                            ? "bg-(--color-accent) text-white"
+                            : "bg-(--color-page) text-(--color-text-secondary) hover:text-(--color-text) border border-(--color-border)",
+                        )}
+                      >
+                        <span
+                          className="h-4 w-4 rounded-full flex items-center justify-center text-[10px] font-semibold"
+                          style={{
+                            background: active ? "rgba(255,255,255,0.18)" : `hsl(${hue}, 55%, 88%)`,
+                            color: active ? "white" : `hsl(${hue}, 55%, 32%)`,
+                          }}
+                          aria-hidden="true"
+                        >
+                          {(c.firstName || "?").charAt(0).toUpperCase()}
+                        </span>
+                        {c.firstName}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Animate the body re-mount on tab switch using a key
+                  derived from the active child. The .animate-fade-in
+                  class re-runs on each remount because every tab
+                  yields a fresh subtree. */}
+              <div key={activeChild?.id} className="animate-fade-in">
+                <h3 className="text-sm font-semibold text-(--color-text) mb-1">
+                  What is {activeChild?.firstName} studying?
+                </h3>
+                <p className="text-xs text-(--color-text-secondary) mb-4">
+                  Select subjects and set learning levels. All subjects available regardless of age.
+                </p>
+                <SubjectLevelPicker
+                  selected={childSubjectLevels[activeChild?.id] || {}}
+                  onChange={(levels) => setChildSubjectLevels(prev => ({
                     ...prev,
-                    [addedChildren[profileChildIdx].id]: Math.max(30, Math.min(480, +e.target.value)),
+                    [activeChild.id]: levels,
                   }))}
-                  className="w-24 px-3 py-2 text-sm border border-(--color-border) rounded-[10px]"
+                  showCustom={false}
                 />
-                <span className="text-xs text-(--color-text-tertiary)">You decide. Suggested: 90-240.</span>
+                <div className="mt-4">
+                  <label className="text-xs text-(--color-text-secondary)">Daily learning target (minutes)</label>
+                  <div className="flex items-center gap-2 mt-1">
+                    <input
+                      type="number"
+                      value={currentMinutes}
+                      onChange={(e) => setChildMinutes(prev => ({
+                        ...prev,
+                        [activeChild.id]: Math.max(30, Math.min(480, +e.target.value)),
+                      }))}
+                      className="w-24 px-3 py-2 text-sm border border-(--color-border) rounded-[10px]"
+                    />
+                    <span className="text-xs text-(--color-text-tertiary)">
+                      You decide. {recForGrade.label}: <span className="text-(--color-text-secondary) font-medium">{recForGrade.lo}-{recForGrade.hi} min</span>.
+                    </span>
+                  </div>
+                  {/* Visual range guide — a thin track with the
+                      recommended window highlighted and the current
+                      value as a dot. Helps the parent locate
+                      themselves on the spectrum at a glance. */}
+                  <div className="mt-2 h-1.5 rounded-full bg-(--color-border) relative overflow-hidden" aria-hidden="true">
+                    <div
+                      className="absolute inset-y-0 bg-(--color-accent-light)"
+                      style={{
+                        left: `${(recForGrade.lo / 480) * 100}%`,
+                        width: `${((recForGrade.hi - recForGrade.lo) / 480) * 100}%`,
+                      }}
+                    />
+                    <div
+                      className="absolute top-1/2 -translate-y-1/2 h-3 w-3 rounded-full bg-(--color-accent) ring-2 ring-(--color-surface)"
+                      style={{
+                        left: `calc(${Math.min(100, (currentMinutes / 480) * 100)}% - 6px)`,
+                        transition: "left 200ms var(--ease)",
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
+
+              <Button
+                variant="primary"
+                size="lg"
+                className="w-full mt-6"
+                onClick={async () => {
+                  const childId = activeChild.id;
+                  const levels = childSubjectLevels[childId] || {};
+                  const minutes = childMinutes[childId] || 120;
+                  try {
+                    await childrenApi.updatePreferences(childId, {
+                      subject_levels: levels,
+                      daily_duration_minutes: minutes,
+                    });
+                  } catch { /* preferences can be set later from family page */ }
+                  if (profileChildIdx < addedChildren.length - 1) {
+                    setProfileChildIdx(profileChildIdx + 1);
+                  } else {
+                    setStep(4);
+                  }
+                }}
+              >
+                {profileChildIdx < addedChildren.length - 1
+                  ? `Next: ${addedChildren[profileChildIdx + 1].firstName}`
+                  : "Continue to Philosophy"}
+              </Button>
             </div>
-            <Button
-              variant="primary"
-              size="lg"
-              className="w-full mt-6"
-              onClick={async () => {
-                const childId = addedChildren[profileChildIdx].id;
-                const levels = childSubjectLevels[childId] || {};
-                const minutes = childMinutes[childId] || 120;
-                try {
-                  await childrenApi.updatePreferences(childId, {
-                    subject_levels: levels,
-                    daily_duration_minutes: minutes,
-                  });
-                } catch { /* preferences can be set later from family page */ }
-                if (profileChildIdx < addedChildren.length - 1) {
-                  setProfileChildIdx(profileChildIdx + 1);
-                } else {
-                  setStep(4);
-                }
-              }}
-            >
-              {profileChildIdx < addedChildren.length - 1
-                ? `Next: ${addedChildren[profileChildIdx + 1].firstName}`
-                : "Continue to Philosophy"}
-            </Button>
-          </div>
-        )}
+          );
+        })()}
 
         {/* ── Step 4: Philosophy ── */}
         {step === 4 && (
@@ -650,6 +854,7 @@ export default function OnboardingPage() {
             </div>
           </div>
         )}
+        </div>
       </div>
     </div>
   );
