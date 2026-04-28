@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { streamTutorMessage } from "@/lib/api";
+import { MetheanMark } from "@/components/Brand";
 
 interface TutorChatProps {
   activityId: string;
@@ -246,12 +247,24 @@ export default function TutorChat({
 
                 {msg.role === "tutor" ? (
                   <div className={`max-w-[85%] md:max-w-[60%] ${grouped ? "mt-0.5" : "mt-3"}`} role="status">
-                    <div className="bg-[#F5F0E6] text-(--color-text) rounded-2xl rounded-bl-md px-4 py-3 text-[15px] leading-relaxed">
-                      {msg.text}
-                      {isStreaming && i === messages.length - 1 && (
-                        <span className="inline-block w-0.5 h-4 bg-(--color-text) ml-0.5 align-text-bottom"
-                              style={{ animation: "cursor-blink 0.8s step-end infinite" }} />
-                      )}
+                    <div className="flex items-end gap-2">
+                      {/* METHEAN shield as the tutor's "avatar". Hidden
+                          when the previous message was also from the
+                          tutor so consecutive bubbles read as one
+                          continuous turn. */}
+                      <div
+                        className={`shrink-0 h-7 w-7 rounded-full glass border border-(--color-border) flex items-center justify-center ${grouped ? "opacity-0" : ""}`}
+                        aria-hidden={grouped ? "true" : undefined}
+                      >
+                        <MetheanMark size={16} color="var(--color-brand-gold)" />
+                      </div>
+                      <div className="glass border border-(--color-border) text-(--color-text) rounded-2xl rounded-bl-md px-4 py-3 text-[15px] leading-relaxed shadow-[var(--shadow-card)]">
+                        {msg.text}
+                        {isStreaming && i === messages.length - 1 && (
+                          <span className="inline-block w-0.5 h-4 bg-(--color-text) ml-0.5 align-text-bottom"
+                                style={{ animation: "cursor-blink 0.8s step-end infinite" }} />
+                        )}
+                      </div>
                     </div>
 
                     {/* Hint blocks */}
@@ -283,11 +296,16 @@ export default function TutorChat({
           {/* Typing indicator (hidden during streaming — live text replaces it) */}
           {loading && !isStreaming && (
             <div className="max-w-[85%] mt-3">
-              <div className="bg-[#F5F0E6] rounded-2xl rounded-bl-md px-4 py-3 flex items-center gap-1.5 w-16">
-                {[0, 150, 300].map(d => (
-                  <span key={d} className="w-1.5 h-1.5 rounded-full bg-(--color-text-tertiary)"
-                    style={{ animation: "typing-pulse 1s ease-in-out infinite", animationDelay: `${d}ms` }} />
-                ))}
+              <div className="flex items-end gap-2">
+                <div className="shrink-0 h-7 w-7 rounded-full glass border border-(--color-border) flex items-center justify-center" aria-hidden="true">
+                  <MetheanMark size={16} color="var(--color-brand-gold)" />
+                </div>
+                <div className="glass border border-(--color-border) rounded-2xl rounded-bl-md px-4 py-3 flex items-center gap-1.5 w-16 shadow-[var(--shadow-card)]">
+                  {[0, 150, 300].map(d => (
+                    <span key={d} className="w-1.5 h-1.5 rounded-full bg-(--color-text-tertiary)"
+                      style={{ animation: "typing-pulse 1s ease-in-out infinite", animationDelay: `${d}ms` }} />
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -322,7 +340,7 @@ export default function TutorChat({
               value={input}
               onChange={e => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Type your question or answer..."
+              placeholder="Ask me anything about this lesson..."
               rows={1}
               className="flex-1 px-4 py-3 text-[16px] border border-(--color-border) rounded-2xl bg-white text-(--color-text) resize-none focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20 leading-relaxed min-h-[44px]"
               style={{ maxHeight: 96 }}

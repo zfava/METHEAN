@@ -133,7 +133,24 @@ function SubjectMap({ nodes, subjectColor }: { nodes: JourneyNode[]; subjectColo
   return (
     <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full" role="img"
       aria-label={`Learning journey with ${orderedNodes.length} topics`}>
-      {/* Full upcoming path (dashed) */}
+      {/* Soft drop-shadow used by mastered nodes for a subtle weight. */}
+      <defs>
+        <filter id="masteredShadow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur in="SourceAlpha" stdDeviation="1.5" />
+          <feOffset dy="1.5" />
+          <feComponentTransfer>
+            <feFuncA type="linear" slope="0.35" />
+          </feComponentTransfer>
+          <feMerge>
+            <feMergeNode />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
+
+      {/* Full upcoming path (dashed). Smooth bezier curves between
+          every node, not straight lines — bezierPath() in this file
+          interpolates control points at 40% of the segment height. */}
       {allPts.length > 1 && (
         <path d={bezierPath(allPts)} fill="none" stroke="var(--color-border)" strokeWidth="2"
           strokeDasharray="6 4" strokeLinecap="round" />
@@ -153,6 +170,7 @@ function SubjectMap({ nodes, subjectColor }: { nodes: JourneyNode[]; subjectColo
         const isLocked = node.mastery === "not_started" && !isCurrent;
         const isMilestone = node.type === "milestone";
         const r = isCurrent ? currentSize / 2 : isMilestone ? nodeSize / 2 + 4 : nodeSize / 2;
+        const nodeFilter = isMastered ? "url(#masteredShadow)" : undefined;
 
         // Label position: alternate left/right
         const labelSide = Math.sin(i * 0.75) > 0 ? "left" : "right";
@@ -164,7 +182,10 @@ function SubjectMap({ nodes, subjectColor }: { nodes: JourneyNode[]; subjectColo
             className="cursor-pointer" role="button" tabIndex={0} aria-label={`${node.title}: ${node.mastery}`}
             onKeyDown={e => { if (e.key === "Enter") setTooltip(tooltip?.node.id === node.id ? null : { node, x: pos.x, y: pos.y }); }}>
 
-            {/* Current node pulse */}
+            {/* Current node pulse — uses the design-system
+                .animate-pulse-soft class wrapped on a <g> so the
+                whole node breathes gently. SVG <animate> still drives
+                the expanding outer ring for the "active step" feel. */}
             {isCurrent && !reducedMotion && (
               <circle cx={pos.x} cy={pos.y} r={r + 6} fill="none" stroke={subjectColor} strokeWidth="2" opacity="0.3">
                 <animate attributeName="r" from={String(r + 4)} to={String(r + 14)} dur="2s" repeatCount="indefinite" />
@@ -188,6 +209,9 @@ function SubjectMap({ nodes, subjectColor }: { nodes: JourneyNode[]; subjectColo
                 stroke={isMastered ? subjectColor : isCurrent ? subjectColor : isLocked ? "var(--color-border)" : "var(--color-border)"}
                 strokeWidth={isCurrent ? 3 : 2}
                 strokeDasharray={isLocked ? "3 2" : undefined}
+                filter={nodeFilter}
+                className={isCurrent && !reducedMotion ? "animate-pulse-soft" : undefined}
+                style={isCurrent ? { transformOrigin: `${pos.x}px ${pos.y}px` } : undefined}
               />
             ) : (
               /* Regular circle */
@@ -197,6 +221,9 @@ function SubjectMap({ nodes, subjectColor }: { nodes: JourneyNode[]; subjectColo
                 strokeWidth={isCurrent ? 3 : 2}
                 strokeDasharray={isLocked ? "3 2" : undefined}
                 opacity={isLocked ? 0.5 : 1}
+                filter={nodeFilter}
+                className={isCurrent && !reducedMotion ? "animate-pulse-soft" : undefined}
+                style={isCurrent ? { transformOrigin: `${pos.x}px ${pos.y}px` } : undefined}
               />
             )}
 

@@ -60,6 +60,20 @@ const typeColors: Record<string, string> = {
   field_trip: "rgba(249,115,22,0.1)",
 };
 
+/** Top-edge border colors per activity type for the new card layout.
+ *  Spec mapping: lesson = blue accent, practice = brand gold,
+ *  assessment = navy, project = green, field_trip = constitutional
+ *  (warm brown), review keeps the gold ladder. Solid CSS variable
+ *  references so the value tracks the design tokens. */
+const typeTopBorder: Record<string, string> = {
+  lesson: "var(--color-accent)",
+  practice: "var(--color-brand-gold)",
+  review: "var(--color-progress)",
+  assessment: "var(--color-brand-navy)",
+  project: "var(--color-success)",
+  field_trip: "var(--color-constitutional)",
+};
+
 // ── Progress Ring ──
 
 function ProgressRing({ completed, total, minutesRemaining, large }: {
@@ -533,57 +547,77 @@ export default function ChildPage() {
             <p className="text-sm text-(--color-text-secondary)">Enjoy your free time, {dash.child.first_name}.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-10">
+          <div className="max-w-[640px] mx-auto flex flex-col gap-3 mb-10">
             {/* Uncompleted activities */}
             {activities.filter(a => a.status !== "completed").map((act, idx) => {
               const tl = typeLabels[act.type] || { label: act.type, icon: "\uD83D\uDCC4" };
-              const isNext = idx === 0;
               const isInProgress = act.status === "in_progress";
+              const topColor = typeTopBorder[act.type] || "var(--color-accent)";
+              const ctaLabel = isInProgress ? "Continue" : act.type === "review" ? "Review" : "Start";
+              const staggerClass = `stagger-${Math.min(8, idx + 1)}`;
               return (
-                <button key={act.id} onClick={() => startActivity(act)}
-                  className={`w-full text-left bg-(--color-surface) rounded-2xl border p-4 transition-all hover:shadow-md focus:outline-none focus:ring-2 focus:ring-(--color-accent)/30 press-scale ${
-                    isInProgress ? "border-l-3 border-(--color-brand-gold) shadow-sm" : isNext ? "border-(--color-accent)/30 shadow-sm" : "border-(--color-border)"
-                  }`}
-                  style={{ minHeight: 64 }}
-                  aria-label={`Start ${act.title}`}>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0"
-                      style={{ background: typeColors[act.type] || "var(--color-accent-light)" }}>
+                <div
+                  key={act.id}
+                  className={`animate-fade-up ${staggerClass} bg-(--color-surface) rounded-[14px] border border-(--color-border) shadow-[var(--shadow-card)] overflow-hidden`}
+                >
+                  <div className="h-[3px] w-full" style={{ background: topColor }} aria-hidden="true" />
+                  <div className="p-4 sm:p-5 flex items-center gap-4">
+                    <div className="w-11 h-11 rounded-full flex items-center justify-center text-lg shrink-0"
+                      style={{ background: typeColors[act.type] || "var(--color-accent-light)" }}
+                      aria-hidden="true">
                       {tl.icon}
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-[15px] font-medium text-(--color-text) truncate">{act.title}</h3>
-                      <div className="flex items-center gap-2 mt-0.5">
-                        <span className="text-[13px] text-(--color-text-secondary)">{tl.label}</span>
-                        {act.estimated_minutes && <span className="text-[13px] text-(--color-text-tertiary)">· {act.estimated_minutes} min</span>}
-                        {act.subject && <span className="text-[13px] text-(--color-text-tertiary)">· {act.subject}</span>}
+                      <div className="flex items-center gap-2 mt-1.5">
+                        <span className="text-[12px] font-medium text-(--color-text-secondary)">{tl.label}</span>
+                        {act.estimated_minutes && (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-(--color-page) border border-(--color-border) text-[11px] text-(--color-text-tertiary)">
+                            {act.estimated_minutes} min
+                          </span>
+                        )}
+                        {act.subject && (
+                          <span className="text-[12px] text-(--color-text-tertiary) truncate">· {act.subject}</span>
+                        )}
                       </div>
                     </div>
-                    {isNext && !isInProgress && (
-                      <span className="text-xs font-medium text-(--color-accent) shrink-0">Next</span>
-                    )}
+                    <button
+                      onClick={() => startActivity(act)}
+                      className="shrink-0 inline-flex items-center justify-center gap-1.5 rounded-[10px] font-medium px-4 py-2 text-[13px] bg-(--color-accent) text-white hover:bg-(--color-accent-hover) press-scale focus-visible:ring-2 focus-visible:ring-(--color-accent)/30 focus-visible:ring-offset-2 min-h-[44px]"
+                      aria-label={`${ctaLabel} ${act.title}`}>
+                      {ctaLabel}
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
                   </div>
-                </button>
+                </div>
               );
             })}
 
             {/* Completed activities */}
-            {activities.filter(a => a.status === "completed").map(act => {
+            {activities.filter(a => a.status === "completed").map((act, idx) => {
               const tl = typeLabels[act.type] || { label: act.type, icon: "\uD83D\uDCC4" };
+              const topColor = typeTopBorder[act.type] || "var(--color-accent)";
+              const staggerClass = `stagger-${Math.min(8, idx + 1)}`;
               return (
-                <div key={act.id} className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-4 opacity-50"
-                  style={{ minHeight: 64 }}>
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg shrink-0"
-                      style={{ background: typeColors[act.type] || "var(--color-accent-light)" }}>
+                <div
+                  key={act.id}
+                  className={`animate-fade-up ${staggerClass} bg-(--color-surface) rounded-[14px] border border-(--color-border) overflow-hidden opacity-60`}
+                >
+                  <div className="h-[3px] w-full" style={{ background: topColor }} aria-hidden="true" />
+                  <div className="p-4 sm:p-5 flex items-center gap-4">
+                    <div className="w-11 h-11 rounded-full flex items-center justify-center text-lg shrink-0"
+                      style={{ background: typeColors[act.type] || "var(--color-accent-light)" }}
+                      aria-hidden="true">
                       {tl.icon}
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-[15px] text-(--color-text-tertiary) line-through truncate">{act.title}</h3>
-                      <span className="text-[13px] text-(--color-text-tertiary)">{tl.label}</span>
+                      <span className="text-[12px] text-(--color-text-tertiary)">{tl.label}</span>
                     </div>
-                    <span className="w-7 h-7 rounded-full bg-(--color-success-light) flex items-center justify-center shrink-0" aria-label="Completed">
-                      <svg className="w-4 h-4 text-(--color-success)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <span className="w-9 h-9 rounded-full bg-(--color-success-light) flex items-center justify-center shrink-0 animate-scale-in" aria-label="Completed">
+                      <svg className="w-5 h-5 text-(--color-success)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                       </svg>
                     </span>

@@ -1,6 +1,7 @@
 "use client";
 
 import Button from "@/components/ui/Button";
+import { MetheanMark } from "@/components/Brand";
 
 interface CompletionStateProps {
   activityTitle: string;
@@ -9,75 +10,145 @@ interface CompletionStateProps {
   onNext: () => void;
   allDone: boolean;
   durationMinutes?: number;
+  /** Child's first name for the warm "Great work today, X" message
+   *  when the day is done. Optional so the older callsites still
+   *  compile without it. */
+  childName?: string;
+  /** Counts displayed when allDone — replaces the confetti motif. */
+  daySummary?: {
+    activitiesCompleted: number;
+    subjectsPracticed: number;
+    masteryGains: Array<{ subject: string; from: string; to: string }>;
+  };
 }
 
 const MASTERY_HEADINGS: Record<string, string> = {
-  mastered: "Mastered! 🎯",
-  proficient: "Great progress!",
-  developing: "Building understanding!",
-  emerging: "Getting started!",
+  mastered: "Mastered",
+  proficient: "Great progress",
+  developing: "Building understanding",
+  emerging: "Getting started",
 };
 
+function ShieldGlow() {
+  return (
+    <div
+      className="relative w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center animate-scale-in"
+      style={{
+        background: "radial-gradient(circle, rgba(198,162,78,0.15) 0%, rgba(198,162,78,0) 65%)",
+      }}
+    >
+      <MetheanMark size={48} color="var(--color-brand-gold)" />
+    </div>
+  );
+}
+
 export default function CompletionState({
-  activityTitle, masteryLevel, previousMastery, onNext, allDone, durationMinutes,
+  activityTitle,
+  masteryLevel,
+  previousMastery,
+  onNext,
+  allDone,
+  durationMinutes,
+  childName,
+  daySummary,
 }: CompletionStateProps) {
   const masteryChanged = masteryLevel && previousMastery && masteryLevel !== previousMastery;
 
+  // ── End-of-day calm ──────────────────────────────────────────────
+  if (allDone) {
+    const completed = daySummary?.activitiesCompleted ?? 0;
+    const subjects = daySummary?.subjectsPracticed ?? 0;
+    const gains = daySummary?.masteryGains ?? [];
+    return (
+      <div className="text-center py-12 px-6 max-w-md mx-auto animate-scale-in">
+        <ShieldGlow />
+        <h2 className="text-[26px] font-semibold tracking-tight text-(--color-text) mb-2">
+          Great work today{childName ? `, ${childName}` : ""}.
+        </h2>
+        {(completed > 0 || subjects > 0) && (
+          <p className="text-sm text-(--color-text-secondary) mb-6">
+            You completed {completed} {completed === 1 ? "activity" : "activities"}
+            {subjects > 0 ? ` and practiced ${subjects} ${subjects === 1 ? "subject" : "subjects"}` : ""}.
+          </p>
+        )}
+
+        {gains.length > 0 && (
+          <div className="bg-(--color-surface) border border-(--color-border) rounded-[14px] px-4 py-3 mb-6 text-left animate-fade-up stagger-2">
+            <div className="text-xs uppercase tracking-wide text-(--color-text-tertiary) mb-2">
+              Mastery moved up
+            </div>
+            <ul className="space-y-1.5">
+              {gains.map((g, i) => (
+                <li key={i} className="flex items-center gap-2 text-sm">
+                  <span className="text-(--color-success)" aria-hidden="true">↗</span>
+                  <span className="text-(--color-text)">{g.subject}</span>
+                  <span className="text-(--color-text-tertiary) text-xs ml-auto">
+                    <span className="capitalize">{g.from.replace(/_/g, " ")}</span>
+                    {" → "}
+                    <span className="text-(--color-success) capitalize font-medium">
+                      {g.to.replace(/_/g, " ")}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <Button onClick={onNext} variant="gold" size="lg" className="w-full max-w-xs mx-auto">
+          See you tomorrow
+        </Button>
+      </div>
+    );
+  }
+
+  // ── Single-activity completion (between-activity transition) ─────
   return (
-    <div className="text-center py-12 px-6 max-w-md mx-auto">
+    <div className="text-center py-12 px-6 max-w-md mx-auto animate-scale-in">
       {masteryChanged ? (
         <>
-          {/* Celebration circle */}
-          <div className="relative w-20 h-20 mx-auto mb-6">
-            <div className="w-20 h-20 rounded-full bg-(--color-success-light) flex items-center justify-center"
-              style={{ animation: "celebration-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards" }}>
-              <svg className="w-10 h-10 text-(--color-success)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            {/* Confetti dots */}
-            {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
-              <span key={i} className="absolute rounded-full"
-                style={{
-                  width: 6 + (i % 3) * 2,
-                  height: 6 + (i % 3) * 2,
-                  top: "50%", left: "50%",
-                  background: ["var(--color-success)", "var(--color-accent)", "var(--gold)", "var(--color-warning)"][i % 4],
-                  animation: `confetti-burst 0.6s ${0.1 + i * 0.05}s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`,
-                  opacity: 0,
-                  transform: `translate(-50%, -50%)`,
-                  ["--confetti-x" as any]: `${Math.cos((i / 8) * Math.PI * 2) * 50}px`,
-                  ["--confetti-y" as any]: `${Math.sin((i / 8) * Math.PI * 2) * 50}px`,
-                }} />
-            ))}
-          </div>
-
-          {/* Mastery heading */}
-          <h2 className="text-2xl font-semibold text-(--color-text) mb-1">
-            {MASTERY_HEADINGS[masteryLevel || ""] || "Nice work!"}
-          </h2>
-
-          {/* Mastery badge slides up */}
-          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-(--color-accent-light) text-(--color-accent) text-sm font-medium mb-2"
-            style={{ animation: "slide-up-fade 0.3s 0.2s ease-out forwards", opacity: 0, transform: "translateY(10px)" }}>
-            <span className="capitalize">{previousMastery?.replace(/_/g, " ")}</span>
-            <span>→</span>
-            <span className="capitalize font-bold">{masteryLevel?.replace(/_/g, " ")}</span>
-          </div>
-
-          <p className="text-sm text-(--color-text-secondary) mb-1">{activityTitle}</p>
-          <p className="text-xs text-(--color-text-tertiary) mb-8">Keep going, you&apos;re building something amazing.</p>
-        </>
-      ) : (
-        <>
-          {/* Simple completion */}
-          <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-(--color-success-light) flex items-center justify-center"
-            style={{ animation: "celebration-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards" }}>
-            <svg className="w-8 h-8 text-(--color-success)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-(--color-success-light) flex items-center justify-center">
+            <svg
+              className="w-9 h-9 text-(--color-success)"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+              aria-hidden="true"
+            >
               <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-2xl font-semibold text-(--color-text) mb-2">Activity Complete!</h2>
+          <h2 className="text-[22px] font-semibold tracking-tight text-(--color-text) mb-1">
+            {MASTERY_HEADINGS[masteryLevel || ""] || "Nice work"}
+          </h2>
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-(--color-accent-light) text-(--color-accent) text-xs font-medium mb-3 animate-fade-up stagger-2">
+            <span className="capitalize">{previousMastery?.replace(/_/g, " ")}</span>
+            <span aria-hidden="true">→</span>
+            <span className="capitalize font-semibold">{masteryLevel?.replace(/_/g, " ")}</span>
+          </div>
+          <p className="text-sm text-(--color-text-secondary) mb-1">{activityTitle}</p>
+          <p className="text-xs text-(--color-text-tertiary) mb-8">
+            Keep going — every step compounds.
+          </p>
+        </>
+      ) : (
+        <>
+          <div className="w-14 h-14 mx-auto mb-5 rounded-full bg-(--color-success-light) flex items-center justify-center">
+            <svg
+              className="w-7 h-7 text-(--color-success)"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+              aria-hidden="true"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h2 className="text-[22px] font-semibold tracking-tight text-(--color-text) mb-2">
+            Activity complete
+          </h2>
           <p className="text-sm text-(--color-text-secondary) mb-1">{activityTitle}</p>
           {durationMinutes && durationMinutes > 0 && (
             <p className="text-xs text-(--color-text-tertiary) mb-6">{durationMinutes} minutes</p>
@@ -86,25 +157,9 @@ export default function CompletionState({
         </>
       )}
 
-      <Button onClick={onNext} variant={allDone ? "gold" : "primary"} size="lg" className="w-full max-w-xs mx-auto">
-        {allDone ? "All Done for Today! ✨" : "Next Activity →"}
+      <Button onClick={onNext} variant="primary" size="lg" className="w-full max-w-xs mx-auto">
+        Next activity
       </Button>
-
-      {/* CSS keyframes */}
-      <style>{`
-        @keyframes celebration-pop {
-          from { transform: scale(0); opacity: 0; }
-          to { transform: scale(1); opacity: 1; }
-        }
-        @keyframes slide-up-fade {
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes confetti-burst {
-          0% { opacity: 1; transform: translate(-50%, -50%) scale(0); }
-          60% { opacity: 1; transform: translate(calc(-50% + var(--confetti-x)), calc(-50% + var(--confetti-y))) scale(1); }
-          100% { opacity: 0; transform: translate(calc(-50% + var(--confetti-x) * 1.3), calc(-50% + var(--confetti-y) * 1.3)) scale(0.5); }
-        }
-      `}</style>
     </div>
   );
 }
