@@ -7,25 +7,96 @@ import { MetheanLogo, MetheanMark } from "@/components/Brand";
 import Button from "@/components/ui/Button";
 import Card from "@/components/ui/Card";
 
+// Minimal stroke-based feature icons. 24x24 viewBox, currentColor
+// stroke at width 1.5, no fill — same visual weight as the rest of
+// the design system.
+const SVG_PROPS = {
+  width: 24,
+  height: 24,
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.5,
+  strokeLinecap: "round" as const,
+  strokeLinejoin: "round" as const,
+  "aria-hidden": true,
+};
+
+function FeatureShield() {
+  // Philosophy-driven AI / governance
+  return (
+    <svg {...SVG_PROPS}>
+      <path d="M12 2L4 6v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V6z" />
+    </svg>
+  );
+}
+
+function FeatureDoc() {
+  // All 50 states — document with a checkmark
+  return (
+    <svg {...SVG_PROPS}>
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+      <path d="M14 2v6h6" />
+      <path d="M9 14l2 2 4-4" />
+    </svg>
+  );
+}
+
+function FeatureFamily() {
+  // Multi-child family — two circles (heads) with shoulders
+  return (
+    <svg {...SVG_PROPS}>
+      <circle cx="9" cy="9" r="3" />
+      <circle cx="16" cy="9" r="3" />
+      <path d="M4 20c0-3 2-5 5-5" />
+      <path d="M20 20c0-3-2-5-5-5" />
+    </svg>
+  );
+}
+
+function FeatureChart() {
+  // Mastery tracking — upward trending line
+  return (
+    <svg {...SVG_PROPS}>
+      <polyline points="3 17 9 11 13 15 21 7" />
+      <polyline points="14 7 21 7 21 14" />
+    </svg>
+  );
+}
+
+function FeatureWrench() {
+  // Vocational & trades — wrench
+  return (
+    <svg {...SVG_PROPS}>
+      <path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.7 2.7-2.6-.4-.4-2.6z" />
+    </svg>
+  );
+}
+
+function FeatureLightbulb() {
+  // Child learning space — lightbulb
+  return (
+    <svg {...SVG_PROPS}>
+      <path d="M12 2a7 7 0 0 1 4 12.7c-.7.5-1 1.3-1 2.1V18H9v-1.2c0-.8-.3-1.6-1-2.1A7 7 0 0 1 12 2z" />
+      <path d="M9 18h6" />
+      <path d="M10 22h4" />
+    </svg>
+  );
+}
+
 const features = [
-  { icon: "📚", title: "Philosophy-Driven AI", desc: "Your values shape every recommendation." },
-  { icon: "📋", title: "All 50 States + DC", desc: "Automatic hour tracking and document generation." },
-  { icon: "👨‍👩‍👧‍👦", title: "Multi-Child Family", desc: "See everyone on one screen." },
-  { icon: "📊", title: "Mastery Tracking", desc: "FSRS v6 spaced repetition knows what your child knows." },
-  { icon: "🔧", title: "Vocational & Trades", desc: "Welding, electrical, automotive. Certification tracking." },
-  { icon: "🧒", title: "Child Learning Space", desc: "Personalized themes, Socratic tutor." },
+  { icon: <FeatureShield />, title: "Philosophy-Driven AI", desc: "Your values shape every recommendation." },
+  { icon: <FeatureDoc />, title: "All 50 States + DC", desc: "Automatic hour tracking and document generation." },
+  { icon: <FeatureFamily />, title: "Multi-Child Family", desc: "See everyone on one screen." },
+  { icon: <FeatureChart />, title: "Mastery Tracking", desc: "FSRS v6 spaced repetition knows what your child knows." },
+  { icon: <FeatureWrench />, title: "Vocational & Trades", desc: "Welding, electrical, automotive. Certification tracking." },
+  { icon: <FeatureLightbulb />, title: "Child Learning Space", desc: "Personalized themes, Socratic tutor." },
 ];
 
 const steps = [
   { num: "01", title: "Set Your Rules.", body: "Choose your educational philosophy. Define content boundaries. Set how much authority you give the AI. The system creates constitutional governance rules that AI cannot override." },
   { num: "02", title: "AI Builds, You Approve.", body: "METHEAN generates curriculum, weekly plans, and teaching guidance tailored to your family. Everything routes through your governance rules before reaching your child. Nothing happens without your authorization." },
   { num: "03", title: "Watch Mastery Grow.", body: "Spaced repetition tracks what your child actually knows, not just what they completed. Five intelligence engines learn your child's patterns. A family at month three gets a qualitatively different experience than day one." },
-];
-
-const testimonials = [
-  { quote: "We tried three other platforms before METHEAN. This is the first one that actually understands that I am the teacher and AI is the assistant, not the other way around.", who: "Classical homeschool family, 4 children" },
-  { quote: "The compliance dashboard alone is worth the subscription. I used to spend hours every quarter pulling records together. Now it is just there.", who: "Charlotte Mason family, Utah" },
-  { quote: "My kids actually ask to do their learning time. The child experience is thoughtful in a way that respects them without dumbing things down.", who: "Eclectic homeschool, 3 children" },
 ];
 
 const comparisons = [
@@ -102,20 +173,42 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* ── Social Proof ── */}
+      {/* ── Built by a Homeschool Family ── */}
+      {/* Replaces the previous testimonials block. METHEAN is pre-
+          revenue with no shipped users; instead of inventing quotes
+          we lead with the founder's principles. */}
       <section className="py-20 px-6" style={{ background: "#F5F1E8" }}>
-        <div className="max-w-[1100px] mx-auto">
-          <p className="text-[22px] font-medium text-(--color-text) text-center mb-10 tracking-tight">Built for families like yours.</p>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            {/* REPLACE WITH REAL TESTIMONIALS FROM LOI FAMILIES */}
-            {testimonials.map((t, i) => (
-              <div key={i} className="bg-(--color-surface) rounded-[16px] p-6 border border-(--color-border)">
-                <p className="text-[14px] italic text-(--color-text-secondary) leading-relaxed">&ldquo;{t.quote}&rdquo;</p>
-                <div className="w-10 h-px bg-(--color-brand-gold) my-4" />
-                <p className="text-[13px] font-medium" style={{ color: "#C6A24E" }}>{t.who}</p>
-              </div>
-            ))}
-          </div>
+        <div className="max-w-[640px] mx-auto">
+          <Card padding="p-8 sm:p-10" className="text-center">
+            <p className="text-[13px] uppercase tracking-[0.1em] text-(--color-text-tertiary) mb-3">
+              Built by a Homeschool Family
+            </p>
+            <h2
+              className="text-[24px] sm:text-[28px] font-semibold tracking-tight mb-6"
+              style={{ color: "var(--color-brand-navy)" }}
+            >
+              Three principles, written before a single line of code.
+            </h2>
+            <ul className="space-y-3 text-left max-w-[420px] mx-auto">
+              {[
+                "Parents govern. AI serves.",
+                "Every decision is auditable.",
+                "Your data stays in your household.",
+              ].map((line) => (
+                <li
+                  key={line}
+                  className="flex items-start gap-3 text-[15px] text-(--color-text-secondary) leading-relaxed"
+                >
+                  <span
+                    className="mt-2 h-1.5 w-1.5 rounded-full shrink-0"
+                    style={{ background: "var(--gold)" }}
+                    aria-hidden="true"
+                  />
+                  {line}
+                </li>
+              ))}
+            </ul>
+          </Card>
         </div>
       </section>
 
@@ -209,7 +302,11 @@ export default function LandingPage() {
             </div>
             {features.map((f) => (
               <div key={f.title} className="bg-[#1A2740] border border-white/[0.05] rounded-[16px] p-6 hover:border-white/[0.10] transition-all duration-200">
-                <div className="text-xl mb-2">{f.icon}</div>
+                {/* Icon wrapper sets the gold currentColor that the
+                    new stroke-based SVGs inherit; text-xl on the
+                    previous emoji wrapper was a sizing tweak that
+                    doesn't apply to a fixed-size 24x24 svg. */}
+                <div className="mb-2 text-[color:var(--gold)]">{f.icon}</div>
                 <div className="text-white font-medium text-[15px] mb-1">{f.title}</div>
                 <div className="text-white/40 text-[13px] leading-relaxed">{f.desc}</div>
               </div>
