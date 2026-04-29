@@ -121,10 +121,10 @@ export default function SettingsPage() {
     }
   }
 
-  if (loading) return <div className="max-w-3xl"><PageHeader title="Settings" /><LoadingSkeleton variant="card" count={3} /></div>;
+  if (loading) return <div className="max-w-3xl lg:max-w-5xl"><PageHeader title="Settings" /><LoadingSkeleton variant="card" count={3} /></div>;
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-3xl lg:max-w-5xl">
       <PageHeader title="Settings" subtitle="Manage your household and account." />
 
       {error && (

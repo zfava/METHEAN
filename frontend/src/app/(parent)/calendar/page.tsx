@@ -379,7 +379,7 @@ function MobileCalendar({ weekStart, activitiesForDay, expanded, setExpanded }: 
           return (
             <button key={day} onClick={() => setActiveDay(i)}
               className={cn(
-                "flex-1 py-2 text-xs font-medium rounded-[10px] transition-colors relative",
+                "flex-1 py-2 text-xs font-medium rounded-[10px] transition-colors relative min-h-[44px] flex items-center justify-center",
                 activeDay === i ? "bg-(--color-text) text-white" : "bg-(--color-page) text-(--color-text-secondary)"
               )}>
               {day.slice(0, 3)}

@@ -578,11 +578,17 @@ export default function QueuePage() {
                     {/* ── Action area ── */}
                     {!isActive ? (
                       <div className="px-5 pt-3 pb-4 border-t border-(--color-border)/50 space-y-2">
-                        <div className="flex items-center gap-2">
+                        {/* Approve + Modify stack vertically on mobile
+                            so each carries the full row width and an
+                            unambiguous tap target; side-by-side from
+                            sm+. min-h-[44px] is enforced both by
+                            globals.css's pointer:coarse rule and by
+                            the design-system Button md size. */}
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2">
                           <Button
                             variant="success"
                             size="md"
-                            className="flex-1"
+                            className="flex-1 min-h-[44px]"
                             onClick={() => startAction(item.activity_id, "approve")}
                           >
                             Approve
@@ -590,23 +596,24 @@ export default function QueuePage() {
                           <Button
                             variant="secondary"
                             size="md"
-                            className="flex-1"
+                            className="flex-1 min-h-[44px]"
                             onClick={() => startAction(item.activity_id, "modify")}
                           >
                             Modify
                           </Button>
                         </div>
-                        <div className="flex items-center justify-between gap-3 pt-1">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 pt-1">
                           <Button
                             variant="ghost"
                             size="sm"
+                            className="min-h-[44px] sm:min-h-0"
                             onClick={() => startAction(item.activity_id, "reject")}
                           >
                             Reject
                           </Button>
                           <Link
                             href="/governance/trace"
-                            className="text-xs text-(--color-accent) hover:underline"
+                            className="text-xs text-(--color-accent) hover:underline min-h-[44px] sm:min-h-0 inline-flex items-center"
                           >
                             Inspect AI prompt + response →
                           </Link>
