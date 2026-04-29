@@ -290,26 +290,29 @@ export default function LandingPage() {
           <p className="text-[22px] font-medium text-white text-center max-w-[600px] mx-auto mb-12 tracking-tight">
             Navigate your family&apos;s education with confidence.
           </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* Spec breakpoints: 1 col mobile, 2 col at md (768px tablet),
+              3 col at lg (1024px+ desktop). Each tile is now a Card so
+              the section inherits the design-system surface, border,
+              shadow, and hover behavior — same component family the
+              dashboard and onboarding use. */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Large sovereignty card */}
-            <div className="sm:row-span-2 bg-[#1A2740] border border-white/[0.05] rounded-[16px] p-7 hover:border-white/[0.10] transition-all duration-200">
-              <div className="text-2xl mb-3">🛡️</div>
-              <div className="text-white font-medium text-[17px] mb-2">Parent Sovereignty</div>
-              <div className="text-white/50 text-[14px] leading-relaxed">
+            <Card padding="p-7" className="md:row-span-2">
+              <div className="mb-3 text-[color:var(--gold)]">🛡️</div>
+              <div className="text-(--color-text) font-medium text-[17px] mb-2">Parent Sovereignty</div>
+              <div className="text-(--color-text-secondary) text-[14px] leading-relaxed">
                 Constitutional rules that AI cannot override. You define the boundaries.
                 The system respects them. Every decision logged. Full transparency.
               </div>
-            </div>
+            </Card>
             {features.map((f) => (
-              <div key={f.title} className="bg-[#1A2740] border border-white/[0.05] rounded-[16px] p-6 hover:border-white/[0.10] transition-all duration-200">
+              <Card key={f.title} padding="p-6">
                 {/* Icon wrapper sets the gold currentColor that the
-                    new stroke-based SVGs inherit; text-xl on the
-                    previous emoji wrapper was a sizing tweak that
-                    doesn't apply to a fixed-size 24x24 svg. */}
+                    stroke-based SVGs inherit. */}
                 <div className="mb-2 text-[color:var(--gold)]">{f.icon}</div>
-                <div className="text-white font-medium text-[15px] mb-1">{f.title}</div>
-                <div className="text-white/40 text-[13px] leading-relaxed">{f.desc}</div>
-              </div>
+                <div className="text-(--color-text) font-medium text-[15px] mb-1">{f.title}</div>
+                <div className="text-(--color-text-secondary) text-[13px] leading-relaxed">{f.desc}</div>
+              </Card>
             ))}
           </div>
         </div>
@@ -318,7 +321,14 @@ export default function LandingPage() {
       {/* ── Built Different ── */}
       <section className="py-20 px-6 bg-(--color-page)">
         <div className="max-w-[900px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border border-(--color-border) rounded-[16px] overflow-hidden bg-(--color-surface)">
+          {/* Card wraps the comparison so border, radius, shadow, and
+              transitions come from the design system. overflow-x-auto
+              + min-w-[480px] on the inner grid keeps the two-column
+              comparison readable on narrow phones — if the cell text
+              ever wraps awkwardly it'll horizontally scroll instead
+              of stacking pairs out of order. */}
+          <Card padding="p-0" className="overflow-x-auto">
+          <div className="grid grid-cols-2 gap-0 min-w-[480px]">
             {/* Headers */}
             <div className="px-6 py-4 border-b border-(--color-border) bg-(--color-page)">
               <p className="text-[15px] font-medium text-(--color-text-secondary)">Other platforms</p>
@@ -338,6 +348,7 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
+          </Card>
         </div>
       </section>
 
