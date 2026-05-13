@@ -211,6 +211,7 @@ RLS_COVERED_TABLES = [
     "wellbeing_configs",
     "fitness_logs",
     "fitness_benchmarks",
+    "personalization_policy",
 ]
 
 
@@ -391,4 +392,5 @@ class TestRLSCoverageMatrix:
         # audit_logs was missing from 027 but is now in the coverage list
         # beta_feedback added in migration 032 / 033
         # fitness_logs + fitness_benchmarks added in migration 037
-        assert len(RLS_COVERED_TABLES) == 52
+        # personalization_policy added in migration 043
+        assert len(RLS_COVERED_TABLES) == 53

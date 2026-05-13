@@ -6672,6 +6672,142 @@
         }
       }
     },
+    "/api/v1/children/{child_id}/theme": {
+      "get": {
+        "tags": [
+          "spec-coverage",
+          "spec-coverage",
+          "deprecated"
+        ],
+        "summary": "Get Child Theme Legacy",
+        "description": "Deprecated. Use ``GET /children/{child_id}/personalization``.",
+        "operationId": "get_child_theme_legacy_api_v1_children__child_id__theme_get",
+        "deprecated": true,
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get Child Theme Legacy Api V1 Children  Child Id  Theme Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "spec-coverage",
+          "spec-coverage",
+          "deprecated"
+        ],
+        "summary": "Put Child Theme Legacy",
+        "description": "Deprecated. Use ``PUT /children/{child_id}/personalization``.\n\nThe whole payload lands in ``personalization.legacy_theme`` so\nlegacy clients keep their state; if ``background`` is one of the\nsix known names, we also forward it to ``personalization.vibe``\nso the modern client picks it up. Unknown background values are\naccepted in the legacy bag but do not touch ``vibe``.",
+        "operationId": "put_child_theme_legacy_api_v1_children__child_id__theme_put",
+        "deprecated": true,
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/_LegacyThemeUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Put Child Theme Legacy Api V1 Children  Child Id  Theme Put"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/children/{child_id}/today": {
       "get": {
         "tags": [
@@ -15120,6 +15256,288 @@
         }
       }
     },
+    "/api/v1/personalization/library": {
+      "get": {
+        "tags": [
+          "personalization"
+        ],
+        "summary": "Get Library",
+        "description": "Return the full library with per-entry availability flags.\n\nEach entry has ``available: bool`` reflecting whether the\nhousehold policy permits it. Frontend renders the locked entries\ndifferently (greyed out with an explanation).",
+        "operationId": "get_library_api_v1_personalization_library_get",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalizationLibraryRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/children/{child_id}/personalization": {
+      "get": {
+        "tags": [
+          "personalization"
+        ],
+        "summary": "Get Child Personalization",
+        "operationId": "get_child_personalization_api_v1_children__child_id__personalization_get",
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChildPersonalizationRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "personalization"
+        ],
+        "summary": "Update Child Personalization",
+        "operationId": "update_child_personalization_api_v1_children__child_id__personalization_put",
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChildPersonalizationUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChildPersonalizationRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/personalization/policy": {
+      "get": {
+        "tags": [
+          "personalization"
+        ],
+        "summary": "Get Policy",
+        "operationId": "get_policy_api_v1_personalization_policy_get",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalizationPolicyRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "personalization"
+        ],
+        "summary": "Update Policy",
+        "operationId": "update_policy_api_v1_personalization_policy_put",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonalizationPolicyUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalizationPolicyRead"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/health": {
       "get": {
         "summary": "Health",
@@ -15623,6 +16041,34 @@
           "created_at"
         ],
         "title": "AdvisorReportResponse"
+      },
+      "AffirmationToneEntry": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "tone_summary": {
+            "type": "string",
+            "title": "Tone Summary"
+          },
+          "available": {
+            "type": "boolean",
+            "title": "Available"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "tone_summary",
+          "available"
+        ],
+        "title": "AffirmationToneEntry"
       },
       "AssessmentCreate": {
         "properties": {
@@ -16673,6 +17119,170 @@
           "nodes"
         ],
         "title": "ChildMapStateResponse"
+      },
+      "ChildPersonalizationRead": {
+        "properties": {
+          "child_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Child Id"
+          },
+          "companion_name": {
+            "type": "string",
+            "title": "Companion Name"
+          },
+          "companion_voice": {
+            "type": "string",
+            "title": "Companion Voice"
+          },
+          "vibe": {
+            "type": "string",
+            "title": "Vibe"
+          },
+          "iconography_pack": {
+            "type": "string",
+            "title": "Iconography Pack"
+          },
+          "sound_pack": {
+            "type": "string",
+            "title": "Sound Pack"
+          },
+          "affirmation_tone": {
+            "type": "string",
+            "title": "Affirmation Tone"
+          },
+          "interest_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Interest Tags"
+          },
+          "out_of_policy": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Out Of Policy"
+          },
+          "onboarded": {
+            "type": "boolean",
+            "title": "Onboarded"
+          }
+        },
+        "type": "object",
+        "required": [
+          "child_id",
+          "companion_name",
+          "companion_voice",
+          "vibe",
+          "iconography_pack",
+          "sound_pack",
+          "affirmation_tone",
+          "interest_tags",
+          "out_of_policy",
+          "onboarded"
+        ],
+        "title": "ChildPersonalizationRead"
+      },
+      "ChildPersonalizationUpdate": {
+        "properties": {
+          "companion_name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 30,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Companion Name"
+          },
+          "companion_voice": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Companion Voice"
+          },
+          "vibe": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vibe"
+          },
+          "iconography_pack": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Iconography Pack"
+          },
+          "sound_pack": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sound Pack"
+          },
+          "affirmation_tone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Affirmation Tone"
+          },
+          "interest_tags": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Interest Tags"
+          },
+          "onboarded": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Onboarded"
+          }
+        },
+        "type": "object",
+        "title": "ChildPersonalizationUpdate"
       },
       "ChildPreferencesUpdate": {
         "properties": {
@@ -17891,6 +18501,42 @@
         "type": "object",
         "title": "HouseholdSettingsUpdate"
       },
+      "IconographyPackEntry": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "icons": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Icons"
+          },
+          "available": {
+            "type": "boolean",
+            "title": "Available"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "description",
+          "icons",
+          "available"
+        ],
+        "title": "IconographyPackEntry"
+      },
       "InstitutionalRegisterRequest": {
         "properties": {
           "organization_name": {
@@ -17930,6 +18576,39 @@
           "admin_display_name"
         ],
         "title": "InstitutionalRegisterRequest"
+      },
+      "InterestTagEntry": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "icon_keyword": {
+            "type": "string",
+            "title": "Icon Keyword"
+          },
+          "available": {
+            "type": "boolean",
+            "title": "Available"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "category",
+          "icon_keyword",
+          "available"
+        ],
+        "title": "InterestTagEntry"
       },
       "InviteResponse": {
         "properties": {
@@ -19050,6 +19729,248 @@
         ],
         "title": "PermissionGrant"
       },
+      "PersonalizationLibraryRead": {
+        "properties": {
+          "vibes": {
+            "items": {
+              "$ref": "#/components/schemas/VibeEntry"
+            },
+            "type": "array",
+            "title": "Vibes"
+          },
+          "interest_tags": {
+            "items": {
+              "$ref": "#/components/schemas/InterestTagEntry"
+            },
+            "type": "array",
+            "title": "Interest Tags"
+          },
+          "voice_personas": {
+            "items": {
+              "$ref": "#/components/schemas/VoicePersonaEntry"
+            },
+            "type": "array",
+            "title": "Voice Personas"
+          },
+          "iconography_packs": {
+            "items": {
+              "$ref": "#/components/schemas/IconographyPackEntry"
+            },
+            "type": "array",
+            "title": "Iconography Packs"
+          },
+          "sound_packs": {
+            "items": {
+              "$ref": "#/components/schemas/SoundPackEntry"
+            },
+            "type": "array",
+            "title": "Sound Packs"
+          },
+          "affirmation_tones": {
+            "items": {
+              "$ref": "#/components/schemas/AffirmationToneEntry"
+            },
+            "type": "array",
+            "title": "Affirmation Tones"
+          },
+          "max_interest_tags_per_child": {
+            "type": "integer",
+            "title": "Max Interest Tags Per Child"
+          }
+        },
+        "type": "object",
+        "required": [
+          "vibes",
+          "interest_tags",
+          "voice_personas",
+          "iconography_packs",
+          "sound_packs",
+          "affirmation_tones",
+          "max_interest_tags_per_child"
+        ],
+        "title": "PersonalizationLibraryRead"
+      },
+      "PersonalizationPolicyRead": {
+        "properties": {
+          "allowed_vibes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Allowed Vibes"
+          },
+          "allowed_interest_tags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Allowed Interest Tags"
+          },
+          "allowed_voice_personas": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Allowed Voice Personas"
+          },
+          "allowed_iconography_packs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Allowed Iconography Packs"
+          },
+          "allowed_sound_packs": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Allowed Sound Packs"
+          },
+          "allowed_affirmation_tones": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Allowed Affirmation Tones"
+          },
+          "companion_name_requires_review": {
+            "type": "boolean",
+            "title": "Companion Name Requires Review"
+          },
+          "max_interest_tags_per_child": {
+            "type": "integer",
+            "title": "Max Interest Tags Per Child"
+          }
+        },
+        "type": "object",
+        "required": [
+          "allowed_vibes",
+          "allowed_interest_tags",
+          "allowed_voice_personas",
+          "allowed_iconography_packs",
+          "allowed_sound_packs",
+          "allowed_affirmation_tones",
+          "companion_name_requires_review",
+          "max_interest_tags_per_child"
+        ],
+        "title": "PersonalizationPolicyRead"
+      },
+      "PersonalizationPolicyUpdate": {
+        "properties": {
+          "allowed_vibes": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Allowed Vibes"
+          },
+          "allowed_interest_tags": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Allowed Interest Tags"
+          },
+          "allowed_voice_personas": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Allowed Voice Personas"
+          },
+          "allowed_iconography_packs": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Allowed Iconography Packs"
+          },
+          "allowed_sound_packs": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Allowed Sound Packs"
+          },
+          "allowed_affirmation_tones": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Allowed Affirmation Tones"
+          },
+          "companion_name_requires_review": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Companion Name Requires Review"
+          },
+          "max_interest_tags_per_child": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 15.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Interest Tags Per Child"
+          }
+        },
+        "type": "object",
+        "title": "PersonalizationPolicyUpdate",
+        "description": "Partial-update payload.\n\nEach list field may be ``[\"*\"]`` (sentinel for \"all from the\nlibrary\") or an explicit list of valid library IDs. Unknown IDs\nare rejected at the API layer with 400."
+      },
       "PhilosophicalProfileUpdate": {
         "properties": {
           "educational_philosophy": {
@@ -20006,6 +20927,49 @@
         ],
         "title": "RuleType"
       },
+      "SoundPackEntry": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "cues": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Cues"
+          },
+          "available": {
+            "type": "boolean",
+            "title": "Available"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "description",
+          "cues",
+          "available"
+        ],
+        "title": "SoundPackEntry"
+      },
       "StatusUpdate": {
         "properties": {
           "status": {
@@ -20629,6 +21593,75 @@
         ],
         "title": "ValidationError"
       },
+      "VibeEntry": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "tokens": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Tokens"
+          },
+          "available": {
+            "type": "boolean",
+            "title": "Available"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "description",
+          "tokens",
+          "available"
+        ],
+        "title": "VibeEntry"
+      },
+      "VoicePersonaEntry": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "default_companion_name": {
+            "type": "string",
+            "title": "Default Companion Name"
+          },
+          "tone_summary": {
+            "type": "string",
+            "title": "Tone Summary"
+          },
+          "available": {
+            "type": "boolean",
+            "title": "Available"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "default_companion_name",
+          "tone_summary",
+          "available"
+        ],
+        "title": "VoicePersonaEntry"
+      },
       "WeekNotesRequest": {
         "properties": {
           "notes": {
@@ -20641,6 +21674,56 @@
           "notes"
         ],
         "title": "WeekNotesRequest"
+      },
+      "_LegacyThemeUpdate": {
+        "properties": {
+          "background": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Background"
+          },
+          "color_accent": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Color Accent"
+          },
+          "font_size": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Font Size"
+          },
+          "avatar": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Avatar"
+          }
+        },
+        "type": "object",
+        "title": "_LegacyThemeUpdate"
       },
       "app__api__auth__InviteRequest": {
         "properties": {

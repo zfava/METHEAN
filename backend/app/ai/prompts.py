@@ -3,6 +3,8 @@
 Each role has a system prompt defining behavior constraints.
 """
 
+from app.ai.gateway import PersonalizationContext
+
 PLANNER_SYSTEM = """You are the METHEAN Learning Planner. You create weekly learning plans that are pedagogically sequenced, developmentally appropriate, and aligned to the family's educational philosophy.
 
 PLANNING RULES:
@@ -48,6 +50,12 @@ OUTPUT FORMAT: Return valid JSON:
   "rationale": "overall plan reasoning referencing scope, review priorities, and learner profile"
 }}"""
 
+# Pulled out so :func:`render_tutor_system` can preserve every existing
+# Socratic-tutor rule while swapping the opener for a personalized one.
+_TUTOR_ORIGINAL_OPENER = (
+    "You are the METHEAN Socratic Tutor. You guide children through learning using questions, never answers."
+)
+
 TUTOR_SYSTEM = """You are the METHEAN Socratic Tutor. You guide children through learning using questions, never answers.
 
 ABSOLUTE RULES:
@@ -85,6 +93,60 @@ OUTPUT FORMAT: Return valid JSON:
   "struggle_detected": false,
   "concept_gap": null
 }}"""
+
+
+def render_tutor_system(ctx: PersonalizationContext) -> str:
+    """Compose the tutor system prompt with kid-driven personalization.
+
+    Personalization is additive: every rule in :data:`TUTOR_SYSTEM`
+    (NEVER give the answer, one question at a time, hint cadence,
+    developmental matching, JSON output shape) is preserved verbatim.
+    The opener line is swapped for a personalized greeting that names
+    the companion, layers in voice and affirmation tone summaries, and
+    optionally injects an interests block above the rules. An empty
+    context degrades to "your learning companion" and a single
+    Socratic-tutor mission line above the unchanged rules body.
+    """
+    companion = ctx.companion_name or "your learning companion"
+    intro_lines: list[str] = [f"You are {companion}, the child's learning companion in METHEAN."]
+    if ctx.companion_voice_tone:
+        intro_lines.append(ctx.companion_voice_tone)
+    if ctx.affirmation_tone:
+        intro_lines.append(ctx.affirmation_tone)
+
+    interests_block = ""
+    if ctx.interests:
+        bullets = "\n".join(f"- {it.content_hint}" for it in ctx.interests)
+        interests_block = (
+            "When this child needs an example, an analogy, a word problem, "
+            "or any other piece of teachable framing, prefer these interests "
+            "when one fits naturally:\n\n"
+            f"{bullets}\n\n"
+            "If no interest fits, do not force one. Never sacrifice clarity for theming."
+        )
+
+    # Strip the original opener so we don't render two identity lines,
+    # but keep the Socratic-tutor mission statement directly under the
+    # personalized greeting so the role anchor never drifts.
+    if TUTOR_SYSTEM.startswith(_TUTOR_ORIGINAL_OPENER):
+        rules_body = TUTOR_SYSTEM[len(_TUTOR_ORIGINAL_OPENER) :].lstrip("\n")
+    else:
+        # Defensive: if the constant ever stops starting with the
+        # known opener, fall back to including it verbatim so no rule
+        # is lost.
+        rules_body = TUTOR_SYSTEM
+
+    socratic_line = (
+        "You play the role of the METHEAN Socratic Tutor: you guide children "
+        "through learning using questions, never answers."
+    )
+
+    sections: list[str] = ["\n".join(intro_lines), socratic_line]
+    if interests_block:
+        sections.append(interests_block)
+    sections.append(rules_body)
+    return "\n\n".join(sections)
+
 
 EVALUATOR_SYSTEM = """You are the METHEAN Learning Evaluator. You assess a child's work with precision, fairness, and encouragement.
 

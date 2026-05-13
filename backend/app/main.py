@@ -29,6 +29,7 @@ from app.api.governance import router as governance_router
 from app.api.intelligence import router as intelligence_router
 from app.api.notifications import router as notifications_router
 from app.api.operations import router as operations_router
+from app.api.personalization import router as personalization_router
 from app.api.resources import router as resources_router
 from app.api.spec_coverage import router as spec_router
 from app.api.state import router as state_router
@@ -130,6 +131,7 @@ app.include_router(family_intelligence_router, prefix="/api/v1")
 app.include_router(wellbeing_router, prefix="/api/v1")  # PARENT-ONLY
 app.include_router(child_dashboard_router, prefix="/api/v1")
 app.include_router(fitness_router, prefix="/api/v1")
+app.include_router(personalization_router, prefix="/api/v1")
 
 
 # Browsers send CSP violation reports as POSTs without our CSRF

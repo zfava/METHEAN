@@ -3,8 +3,8 @@
 import uuid
 from datetime import date, datetime
 
-from sqlalchemy import Boolean, Date, DateTime, ForeignKey, String, Text
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy import Boolean, Date, DateTime, ForeignKey, Integer, String, Text, text
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 
@@ -43,6 +43,9 @@ class Household(Base):
     # Relationships
     users: Mapped[list["User"]] = relationship(back_populates="household")
     children: Mapped[list["Child"]] = relationship(back_populates="household")
+    personalization_policy: Mapped["PersonalizationPolicy | None"] = relationship(
+        back_populates="household", uselist=False
+    )
 
 
 class User(Base):
@@ -170,6 +173,9 @@ class ChildPreferences(Base):
     )
     learning_style: Mapped[dict | None] = mapped_column(JSONB, default=dict)
     interests: Mapped[list | None] = mapped_column(JSONB, default=list)
+    personalization: Mapped[dict] = mapped_column(
+        JSONB, nullable=False, server_default=text("'{}'::jsonb"), default=dict
+    )
     accommodations: Mapped[dict | None] = mapped_column(JSONB, default=dict)
     daily_duration_minutes: Mapped[int | None] = mapped_column()
     preferred_schedule: Mapped[dict | None] = mapped_column(JSONB, default=dict)
@@ -223,3 +229,56 @@ class FamilyInvite(Base):
     status: Mapped[str] = mapped_column(String(20), default="pending")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
+
+class PersonalizationPolicy(Base):
+    """Household-level policy that gates the personalization library.
+
+    Each list column holds either the sentinel ``["*"]`` (meaning "any
+    library entry is allowed") or an explicit list of library IDs.
+    Expansion of the sentinel into the full ID set happens at the API
+    layer so adding new library entries does not require a data
+    migration. One row per household, RLS-isolated by household_id.
+    """
+
+    __tablename__ = "personalization_policy"
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"), default=uuid.uuid4
+    )
+    household_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("households.id", ondelete="CASCADE"),
+        unique=True,
+        nullable=False,
+    )
+    allowed_vibes: Mapped[list[str]] = mapped_column(
+        ARRAY(Text()), nullable=False, server_default=text("ARRAY['*']::text[]"), default=lambda: ["*"]
+    )
+    allowed_interest_tags: Mapped[list[str]] = mapped_column(
+        ARRAY(Text()), nullable=False, server_default=text("ARRAY['*']::text[]"), default=lambda: ["*"]
+    )
+    allowed_voice_personas: Mapped[list[str]] = mapped_column(
+        ARRAY(Text()), nullable=False, server_default=text("ARRAY['*']::text[]"), default=lambda: ["*"]
+    )
+    allowed_iconography_packs: Mapped[list[str]] = mapped_column(
+        ARRAY(Text()), nullable=False, server_default=text("ARRAY['*']::text[]"), default=lambda: ["*"]
+    )
+    allowed_sound_packs: Mapped[list[str]] = mapped_column(
+        ARRAY(Text()), nullable=False, server_default=text("ARRAY['*']::text[]"), default=lambda: ["*"]
+    )
+    allowed_affirmation_tones: Mapped[list[str]] = mapped_column(
+        ARRAY(Text()), nullable=False, server_default=text("ARRAY['*']::text[]"), default=lambda: ["*"]
+    )
+    companion_name_requires_review: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("false"), default=False
+    )
+    max_interest_tags_per_child: Mapped[int] = mapped_column(
+        Integer, nullable=False, server_default=text("5"), default=5
+    )
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+    household: Mapped["Household"] = relationship(back_populates="personalization_policy")
