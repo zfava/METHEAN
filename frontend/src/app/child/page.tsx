@@ -9,6 +9,8 @@ import { useToast } from "@/components/Toast";
 import { useMobile } from "@/lib/useMobile";
 import { haptic } from "@/lib/haptics";
 import { usePersonalization } from "@/lib/PersonalizationProvider";
+import { useSoundCue } from "@/lib/useSoundCue";
+import { ActivityIcon, type ActivityType } from "@/components/ActivityIcon";
 import BottomSheet from "@/components/BottomSheet";
 import JourneyMap, { JourneyCarousel } from "@/components/child/JourneyMap";
 import LessonView from "@/components/child/LessonView";
@@ -172,6 +174,17 @@ export default function ChildPage() {
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  // Sound cues. The hook short-circuits when the kid's pack is
+  // "off" or before the first user gesture, so wiring it here is
+  // always safe.
+  const playCue = useSoundCue();
+
+  // Tracks the previous mastery_transitions_up count so a refresh
+  // that brings the number up plays the mastery_up cue exactly
+  // once per transition. Null on first load (don't fire for the
+  // initial value, only for deltas).
+  const prevMasteryUpRef = useRef<number | null>(null);
+
   // ── Init ──
 
   useEffect(() => { init(); }, []);
@@ -181,6 +194,19 @@ export default function ChildPage() {
   useEffect(() => {
     if (dash) document.title = `${dash.child.first_name}'s Learning | METHEAN`;
   }, [dash]);
+
+  // Fire the mastery_up cue exactly once per upward transition.
+  // First-load value is recorded without firing so refreshing the
+  // page doesn't replay yesterday's celebration.
+  useEffect(() => {
+    if (!dash) return;
+    const next = dash.progress.this_week.mastery_transitions_up;
+    const prev = prevMasteryUpRef.current;
+    if (prev !== null && next > prev) {
+      playCue("mastery_up", { volume: 0.6 });
+    }
+    prevMasteryUpRef.current = next;
+  }, [dash, playCue]);
 
   async function init() {
     setLoading(true);
@@ -400,8 +426,8 @@ export default function ChildPage() {
     <div className="fixed inset-0 z-50 flex items-center justify-center"
       style={{ background: "var(--color-page)", opacity: transVisible ? 1 : 0, transition: "opacity 200ms ease" }}>
       <div className="text-center">
-        <div className="w-16 h-16 rounded-2xl bg-(--color-surface) border border-(--color-border) flex items-center justify-center text-3xl mx-auto mb-4">
-          {typeLabels[transitionAct.type]?.icon || "\uD83D\uDCC4"}
+        <div className="w-16 h-16 rounded-2xl bg-(--color-surface) border border-(--color-border) flex items-center justify-center mx-auto mb-4 text-(--color-text-secondary)">
+          <ActivityIcon type={transitionAct.type as ActivityType} size={28} />
         </div>
         <p className="text-sm font-medium text-(--color-text) mb-4">{transitionAct.title}</p>
         <div className="w-5 h-5 mx-auto border-2 border-(--color-accent) border-t-transparent rounded-full animate-spin" />
@@ -610,10 +636,9 @@ export default function ChildPage() {
                 >
                   <div className="h-[3px] w-full" style={{ background: topColor }} aria-hidden="true" />
                   <div className="p-4 sm:p-5 flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-full flex items-center justify-center text-lg shrink-0"
-                      style={{ background: typeColors[act.type] || "var(--color-accent-light)" }}
-                      aria-hidden="true">
-                      {tl.icon}
+                    <div className="w-11 h-11 rounded-full flex items-center justify-center shrink-0 text-(--color-text-secondary)"
+                      style={{ background: typeColors[act.type] || "var(--color-accent-light)" }}>
+                      <ActivityIcon type={act.type as ActivityType} size={20} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-[15px] font-medium text-(--color-text) truncate">{act.title}</h3>
@@ -655,10 +680,9 @@ export default function ChildPage() {
                 >
                   <div className="h-[3px] w-full" style={{ background: topColor }} aria-hidden="true" />
                   <div className="p-4 sm:p-5 flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-full flex items-center justify-center text-lg shrink-0"
-                      style={{ background: typeColors[act.type] || "var(--color-accent-light)" }}
-                      aria-hidden="true">
-                      {tl.icon}
+                    <div className="w-11 h-11 rounded-full flex items-center justify-center shrink-0 text-(--color-text-secondary)"
+                      style={{ background: typeColors[act.type] || "var(--color-accent-light)" }}>
+                      <ActivityIcon type={act.type as ActivityType} size={20} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-[15px] text-(--color-text-tertiary) line-through truncate">{act.title}</h3>

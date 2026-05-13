@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { LearningContext } from "@/lib/api";
+import { useSoundCue } from "@/lib/useSoundCue";
 
 interface FieldTripViewProps {
   context: LearningContext;
@@ -11,6 +12,7 @@ interface FieldTripViewProps {
 export default function FieldTripView({ context, onComplete }: FieldTripViewProps) {
   const [responses, setResponses] = useState<Record<string, string>>({});
   const [phase, setPhase] = useState<"prep" | "reflect">("prep");
+  const playCue = useSoundCue();
 
   const reflectionPrompts = [
     "What did you observe?",
@@ -18,7 +20,13 @@ export default function FieldTripView({ context, onComplete }: FieldTripViewProp
     "How does this connect to what you've been learning?",
   ];
 
+  useEffect(() => {
+    playCue("activity_start");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function handleSubmit() {
+    playCue("activity_complete");
     onComplete({
       confidence: 0.7,
       responses: reflectionPrompts.map((p) => ({ prompt: p, response: responses[p] || "" })),
