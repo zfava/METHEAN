@@ -130,11 +130,45 @@ export const children = {
   today: (childId: string) => request<any[]>(`/children/${childId}/today`),
   dashboard: (childId: string) => request<ChildDashboardResponse>(`/children/${childId}/dashboard`),
   alerts: (childId: string, limit = 5) => request<any>(`/children/${childId}/alerts?limit=${limit}`),
+  /**
+   * @deprecated Use `personalization.getForChild()`. The legacy
+   * `/theme` route still proxies to the personalization JSONB on
+   * the backend so the current Settings panel keeps working until
+   * the My Space rewrite (Prompt 4) replaces it.
+   */
   theme: (childId: string) => request<any>(`/children/${childId}/theme`),
+  /**
+   * @deprecated Use `personalization.updateForChild()`. Kept as the
+   * write path for the legacy Settings panel until Prompt 4.
+   */
   updateTheme: (childId: string, data: object) =>
     request<any>(`/children/${childId}/theme`, { method: "PUT", body: JSON.stringify(data) }),
   updatePreferences: (childId: string, data: object) =>
     request<any>(`/children/${childId}/preferences`, { method: "PUT", body: JSON.stringify(data) }),
+};
+
+// Personalization
+import type {
+  ChildPersonalization,
+  PersonalizationLibrary,
+  PersonalizationPolicy,
+} from "./personalization-types";
+
+export const personalization = {
+  library: () => request<PersonalizationLibrary>(`/personalization/library`),
+  getForChild: (childId: string) =>
+    request<ChildPersonalization>(`/children/${childId}/personalization`),
+  updateForChild: (childId: string, data: Partial<ChildPersonalization>) =>
+    request<ChildPersonalization>(`/children/${childId}/personalization`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+  getPolicy: () => request<PersonalizationPolicy>(`/personalization/policy`),
+  updatePolicy: (data: Partial<PersonalizationPolicy>) =>
+    request<PersonalizationPolicy>(`/personalization/policy`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
 };
 
 // Snapshots

@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { streamTutorMessage } from "@/lib/api";
-import { MetheanMark } from "@/components/Brand";
+import { CompanionAvatar } from "@/components/CompanionAvatar";
+import { usePersonalization } from "@/lib/PersonalizationProvider";
 
 interface TutorChatProps {
   activityId: string;
@@ -26,6 +27,17 @@ export default function TutorChat({
   activityId, childId, onClose,
   activityTitle, subjectColor, isStuck, currentStep, totalSteps,
 }: TutorChatProps) {
+  // Companion identity from the kid's personalization profile.
+  // Empty strings degrade to neutral fallbacks; the chat never
+  // refers to a brand-named "Methean" voice now that personas
+  // exist.
+  const { profile } = usePersonalization();
+  const companionName = profile.companion_name || "Your Companion";
+  const companionVoice = profile.companion_voice || "default_warm";
+  const dialogLabel = profile.companion_name
+    ? `${profile.companion_name} chat`
+    : "Companion chat";
+
   // Context-aware opening
   const openingMsg = isStuck
     ? `I can see this is tricky. Let's work through it together. What part is confusing you?`
@@ -202,7 +214,7 @@ export default function TutorChat({
       {/* Panel — slides up from bottom */}
       <div className="fixed inset-x-0 bottom-0 z-50 flex flex-col bg-[#FFFDF8] rounded-t-2xl shadow-2xl"
         style={{ height: "min(80dvh, 600px)", minHeight: 320, paddingBottom: "var(--safe-bottom)" }}
-        role="dialog" aria-label="Tutor chat">
+        role="dialog" aria-label={dialogLabel}>
 
         {/* Drag handle */}
         <div className="flex justify-center pt-2 pb-1">
@@ -212,7 +224,7 @@ export default function TutorChat({
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-2 border-b border-(--color-border)/50">
           <div>
-            <h3 className="text-sm font-medium text-(--color-text)">Your Guide</h3>
+            <h3 className="text-sm font-medium text-(--color-text)">{companionName}</h3>
             {activityTitle && (
               <p className="text-[10px] text-(--color-text-tertiary) truncate max-w-[200px]">
                 Helping with: {activityTitle}
@@ -248,15 +260,15 @@ export default function TutorChat({
                 {msg.role === "tutor" ? (
                   <div className={`max-w-[85%] md:max-w-[60%] ${grouped ? "mt-0.5" : "mt-3"}`} role="status">
                     <div className="flex items-end gap-2">
-                      {/* METHEAN shield as the tutor's "avatar". Hidden
-                          when the previous message was also from the
-                          tutor so consecutive bubbles read as one
-                          continuous turn. */}
+                      {/* Persona avatar for the kid's chosen
+                          companion. Hidden when the previous message
+                          was also from the tutor so consecutive
+                          bubbles read as one continuous turn. */}
                       <div
-                        className={`shrink-0 h-7 w-7 rounded-full glass border border-(--color-border) flex items-center justify-center ${grouped ? "opacity-0" : ""}`}
+                        className={`shrink-0 h-7 w-7 rounded-full glass border border-(--color-border) flex items-center justify-center text-(--color-accent) ${grouped ? "opacity-0" : ""}`}
                         aria-hidden={grouped ? "true" : undefined}
                       >
-                        <MetheanMark size={16} color="var(--color-brand-gold)" />
+                        <CompanionAvatar personaId={companionVoice} size={18} />
                       </div>
                       <div className="glass border border-(--color-border) text-(--color-text) rounded-2xl rounded-bl-md px-4 py-3 text-[15px] leading-relaxed shadow-[var(--shadow-card)]">
                         {msg.text}
@@ -297,8 +309,8 @@ export default function TutorChat({
           {loading && !isStreaming && (
             <div className="max-w-[85%] mt-3">
               <div className="flex items-end gap-2">
-                <div className="shrink-0 h-7 w-7 rounded-full glass border border-(--color-border) flex items-center justify-center" aria-hidden="true">
-                  <MetheanMark size={16} color="var(--color-brand-gold)" />
+                <div className="shrink-0 h-7 w-7 rounded-full glass border border-(--color-border) flex items-center justify-center text-(--color-accent)" aria-hidden="true">
+                  <CompanionAvatar personaId={companionVoice} size={18} />
                 </div>
                 <div className="glass border border-(--color-border) rounded-2xl rounded-bl-md px-4 py-3 flex items-center gap-1.5 w-16 shadow-[var(--shadow-card)]">
                   {[0, 150, 300].map(d => (

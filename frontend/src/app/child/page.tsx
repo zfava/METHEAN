@@ -6,9 +6,9 @@ import {
   type LearningContext, type ChildDashboardResponse,
 } from "@/lib/api";
 import { useToast } from "@/components/Toast";
-import { MetheanMark } from "@/components/Brand";
 import { useMobile } from "@/lib/useMobile";
 import { haptic } from "@/lib/haptics";
+import { usePersonalization } from "@/lib/PersonalizationProvider";
 import BottomSheet from "@/components/BottomSheet";
 import JourneyMap, { JourneyCarousel } from "@/components/child/JourneyMap";
 import LessonView from "@/components/child/LessonView";
@@ -27,7 +27,11 @@ type DashActivity = ChildDashboardResponse["today"]["activities"][0];
 
 // ── Theme ──
 
-const bgStyles: Record<string, React.CSSProperties> = {
+// Visual swatches the deprecated Settings panel renders for each
+// background option. The page itself is themed through the
+// VibeProvider's CSS variables; this map only drives the picker
+// preview tiles. Removed when My Space ships (Prompt 4).
+const bgPreview: Record<string, React.CSSProperties> = {
   plain: { background: "#FDF6E3" },
   meadow: { background: "linear-gradient(180deg, #E8F5E9 0%, #C8E6C9 100%)" },
   ocean: { background: "linear-gradient(180deg, #E3F2FD 0%, #BBDEFB 100%)" },
@@ -35,6 +39,19 @@ const bgStyles: Record<string, React.CSSProperties> = {
   space: { background: "linear-gradient(180deg, #1A1A2E 0%, #16213E 100%)", color: "#E0E0E0" },
   desert: { background: "linear-gradient(180deg, #FFF3E0 0%, #FFE0B2 100%)" },
   mountains: { background: "linear-gradient(180deg, #ECEFF1 0%, #CFD8DC 100%)" },
+};
+
+// Legacy background id -> personalization vibe id. The Settings
+// panel forwards the kid's pick into the personalization system so
+// the page actually re-themes.
+const legacyBackgroundToVibe: Record<string, string> = {
+  plain: "calm",
+  meadow: "field",
+  forest: "field",
+  ocean: "orbit",
+  space: "orbit",
+  desert: "workshop",
+  mountains: "workshop",
 };
 
 const avatarEmoji: Record<string, string> = {
@@ -115,6 +132,11 @@ function ProgressRing({ completed, total, minutesRemaining, large }: {
 
 export default function ChildPage() {
   const { toast } = useToast();
+  // Personalization is owned by the wrapping layout's
+  // <PersonalizationProvider>; the VibeProvider already applies the
+  // CSS-variable token bag to the subtree, so the page no longer
+  // owns its own background style.
+  const { profile, updateProfile } = usePersonalization();
 
   // Auth state
   const [childrenList, setChildrenList] = useState<ChildInfo[]>([]);
@@ -138,7 +160,10 @@ export default function ChildPage() {
   const [transitionAct, setTransitionAct] = useState<DashActivity | null>(null);
   const [transVisible, setTransVisible] = useState(false);
 
-  // Theme & settings
+  // Legacy local theme state. Drives the deprecated Settings panel
+  // (background / avatar / font-size). Vibe theming flows through
+  // the personalization provider above; this state only feeds the
+  // picker UI until Prompt 4 replaces the panel entirely.
   const [theme, setTheme] = useState({ background: "plain", color_accent: "blue", font_size: "normal", avatar: "owl" });
   const [showSettings, setShowSettings] = useState(false);
   const [showJourney, setShowJourney] = useState(false);
@@ -175,14 +200,11 @@ export default function ChildPage() {
   async function loadDashboard() {
     setError("");
     try {
-      // Single API call — no waterfall
-      const [d, t] = await Promise.all([
-        childrenApi.dashboard(selectedId),
-        childrenApi.theme(selectedId).catch(() => null),
-      ]);
+      // Theme used to be fetched here. The PersonalizationProvider
+      // now owns canonical vibe/companion state for the subtree.
+      const d = await childrenApi.dashboard(selectedId);
       setDash(d);
-      if (t) setTheme({ background: t.background || "plain", color_accent: t.color_accent || "blue", font_size: t.font_size || "normal", avatar: t.avatar || "owl" });
-    } catch (err: any) {
+    } catch {
       setError("Couldn't load your learning page. Try again in a moment.");
     }
   }
@@ -257,21 +279,35 @@ export default function ChildPage() {
     loadDashboard();
   }
 
+  // Settings panel is deprecated; this shim keeps the existing
+  // pickers working until Prompt 4. Background picks fan out to the
+  // personalization provider so the vibe re-themes the page; the
+  // legacy bag (avatar, color_accent, font_size) keeps round-
+  // tripping through the deprecated /theme endpoint.
   async function saveTheme(updates: Partial<typeof theme>) {
     const t = { ...theme, ...updates };
     setTheme(t);
+    if (updates.background !== undefined) {
+      const vibe = legacyBackgroundToVibe[updates.background];
+      if (vibe) {
+        void updateProfile({ vibe }).catch(() => {});
+      }
+    }
     childrenApi.updateTheme(selectedId, t).catch(() => {});
   }
 
   const fontSizeClass = theme.font_size === "large" ? "text-lg" : theme.font_size === "extra-large" ? "text-xl" : "";
-  const bg = bgStyles[theme.background] || bgStyles.plain;
-  const avatar = avatarEmoji[theme.avatar] || "\uD83E\uDD89";
+  // Page background comes from the active vibe's CSS variable bag
+  // that VibeProvider applies on the wrapper. Pre-personalization
+  // this was a hardcoded gradient lookup; that map now drives the
+  // Settings panel preview tiles only.
+  const pageBg: React.CSSProperties = { background: "var(--color-page)" };
 
   // ── Loading ──
 
   if (loading) {
     return (
-      <div className="min-h-screen" style={bg}>
+      <div className="min-h-screen" style={pageBg}>
         <div className="max-w-2xl mx-auto px-8 py-12">
           <div className="h-8 w-48 rounded bg-(--color-border) animate-pulse mb-3" />
           <div className="h-5 w-72 rounded bg-(--color-border) animate-pulse mb-10" />
@@ -287,7 +323,7 @@ export default function ChildPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={bg}>
+      <div className="min-h-screen flex items-center justify-center" style={pageBg}>
         <div className="text-center px-8 max-w-sm">
           <p className="text-lg font-medium text-(--color-text) mb-2">Something went wrong</p>
           <p className="text-sm text-(--color-text-secondary) mb-6">{error}</p>
@@ -308,7 +344,7 @@ export default function ChildPage() {
   if (activeActivity && completed) {
     const isReview = activeActivity.is_review;
     return (
-      <div className={`min-h-screen ${fontSizeClass}`} style={bg}>
+      <div className={`min-h-screen ${fontSizeClass}`} style={pageBg}>
         <div className="max-w-xl mx-auto px-8 py-16">
           <CompletionState
             activityTitle={activeActivity.title}
@@ -332,7 +368,7 @@ export default function ChildPage() {
   if (activeActivity && learningContext) {
     const t = activeActivity.type;
     return (
-      <div className={`fixed inset-0 z-50 flex flex-col ${fontSizeClass}`} style={{ ...bg, paddingTop: "var(--safe-top)" }}>
+      <div className={`fixed inset-0 z-50 flex flex-col ${fontSizeClass}`} style={{ ...pageBg, paddingTop: "var(--safe-top)" }}>
         {/* Top bar */}
         <div className="flex items-center h-12 px-4 shrink-0 bg-(--color-surface)/80 backdrop-blur border-b border-(--color-border)/50">
           <button onClick={goNext} className="w-11 h-11 flex items-center justify-center press-scale" aria-label="Back">
@@ -375,13 +411,21 @@ export default function ChildPage() {
 
   // ═══ PHASE 1: MORNING VIEW / PHASE 4: ALL DONE ═══
   return (
-    <div className={`min-h-screen ${fontSizeClass}`} style={bg}>
+    <div className={`min-h-screen ${fontSizeClass}`} style={pageBg}>
       {/* Header */}
       <header className="bg-(--color-surface) border-b border-(--color-border) px-8 py-5">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-(--color-accent-light) flex items-center justify-center text-xl" aria-hidden="true">
-              {avatar}
+            {/* Companion identity. Persona-driven avatar lands in
+                Prompt 4; for this wave the slot renders the
+                companion's name (or a generic fallback) so the
+                emoji-avatar pattern is gone everywhere outside
+                the deprecated Settings panel picker. */}
+            <div
+              className="px-3 h-10 rounded-full bg-(--color-accent-light) flex items-center justify-center text-xs font-medium text-(--color-text)"
+              aria-label="Your companion"
+            >
+              {profile.companion_name || "Companion"}
             </div>
             <span className="text-sm font-medium text-(--color-text)">{dash.child.first_name}</span>
             {dash.child.streak.current > 0 && (
@@ -421,7 +465,7 @@ export default function ChildPage() {
                   {(["plain", "meadow", "ocean", "forest", "space", "desert", "mountains"] as const).map(bg => (
                     <button key={bg} onClick={() => saveTheme({ background: bg })}
                       className={`h-14 rounded-xl border-2 text-[11px] font-medium capitalize ${theme.background === bg ? "border-(--color-brand-gold) ring-2 ring-(--color-brand-gold)/20" : "border-(--color-border)"}`}
-                      style={bgStyles[bg]}>{bg}</button>
+                      style={bgPreview[bg]}>{bg}</button>
                   ))}
                 </div>
               </div>
@@ -457,7 +501,7 @@ export default function ChildPage() {
                   {(["plain", "meadow", "ocean", "forest", "space", "desert", "mountains"] as const).map(bg => (
                     <button key={bg} onClick={() => saveTheme({ background: bg })}
                       className={`w-14 h-10 rounded-xl border-2 text-[10px] font-medium capitalize min-h-[44px] ${theme.background === bg ? "border-(--color-accent)" : "border-(--color-border)"}`}
-                      style={bgStyles[bg]}>{bg}</button>
+                      style={bgPreview[bg]}>{bg}</button>
                   ))}
                 </div>
               </div>
@@ -542,7 +586,11 @@ export default function ChildPage() {
         {/* Today's Activities */}
         {activities.length === 0 ? (
           <div className="text-center py-20">
-            <div className="text-5xl mb-4" aria-hidden="true">{avatar}</div>
+            {/* Companion-named callout while the persona avatar
+                is still iterated in Prompt 4. */}
+            <div className="text-sm font-medium text-(--color-text-secondary) mb-4">
+              {profile.companion_name || "Your companion"}
+            </div>
             <h2 className="text-lg font-medium text-(--color-text) mb-2">No learning scheduled today</h2>
             <p className="text-sm text-(--color-text-secondary)">Enjoy your free time, {dash.child.first_name}.</p>
           </div>
