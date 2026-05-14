@@ -72,6 +72,21 @@ export interface PersonalizationPolicy {
   allowed_affirmation_tones: string[];
   companion_name_requires_review: boolean;
   max_interest_tags_per_child: number;
+  // Voice-input governance (Sprint v2 Prompt 1).
+  voice_input_enabled: boolean;
+  voice_minutes_daily_cap: number;
+  whisper_provider: "openai" | "local";
+}
+
+export interface TranscribeResponse {
+  text: string;
+  duration_seconds: number;
+  remaining_minutes: number;
+  is_silent: boolean;
+  safety_intervention: boolean;
+  intervention_kind: string | null;
+  suggested_response: string | null;
+  provider: "openai" | "local";
 }
 
 /**

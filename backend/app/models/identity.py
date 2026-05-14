@@ -3,7 +3,7 @@
 import uuid
 from datetime import date, datetime
 
-from sqlalchemy import Boolean, Date, DateTime, ForeignKey, Integer, String, Text, text
+from sqlalchemy import Boolean, Date, DateTime, ForeignKey, Integer, String, Text, UniqueConstraint, text
 from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
@@ -276,9 +276,48 @@ class PersonalizationPolicy(Base):
     max_interest_tags_per_child: Mapped[int] = mapped_column(
         Integer, nullable=False, server_default=text("5"), default=5
     )
+    # Voice-input governance (migration 044). Default-on; cap 60 min/day
+    # per child; openai is the cloud Whisper provider, "local" routes
+    # transcription to the homestead faster-whisper service.
+    voice_input_enabled: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("true"), default=True
+    )
+    voice_minutes_daily_cap: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("60"), default=60)
+    whisper_provider: Mapped[str] = mapped_column(
+        Text, nullable=False, server_default=text("'openai'"), default="openai"
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
 
     household: Mapped["Household"] = relationship(back_populates="personalization_policy")
+
+
+class VoiceUsageDaily(Base):
+    """Per-child per-day STT (and TTS, after migration 045) counter.
+
+    Atomic debit path uses INSERT ... ON CONFLICT DO UPDATE on
+    ``(child_id, usage_date)`` so concurrent transcribe calls can't
+    bypass the daily cap via a race between SELECT and UPDATE. RLS
+    isolates rows by household_id, mirroring migration 042.
+    """
+
+    __tablename__ = "voice_usage_daily"
+    __table_args__ = (UniqueConstraint("child_id", "usage_date", name="uq_voice_usage_daily_child_date"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), primary_key=True, server_default=text("gen_random_uuid()"), default=uuid.uuid4
+    )
+    child_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("children.id", ondelete="CASCADE"), nullable=False
+    )
+    household_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("households.id", ondelete="CASCADE"), nullable=False
+    )
+    usage_date: Mapped[date] = mapped_column(Date, nullable=False)
+    stt_seconds_used: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("0"), default=0)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )

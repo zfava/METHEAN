@@ -341,6 +341,77 @@ export default function PersonalizationPolicyPage() {
         </div>
       </Card>
 
+      {/* Voice */}
+      <Card className="mb-6">
+        <h3 className="text-sm font-semibold text-(--color-text) mb-3">Voice</h3>
+        <p className="text-xs text-(--color-text-secondary) leading-relaxed mb-4">
+          Kids can speak instead of typing. Audio never leaves memory; the
+          transcript replaces nothing your kid wrote and the safety check runs
+          before any text returns.
+        </p>
+        <div className="space-y-4">
+          <label className="flex items-start justify-between gap-3 cursor-pointer">
+            <span className="min-w-0">
+              <span className="text-sm text-(--color-text) block">Allow voice input</span>
+              <span className="text-[11px] text-(--color-text-tertiary) leading-snug">
+                Microphone in every textarea, capped daily per child.
+              </span>
+            </span>
+            <input
+              type="checkbox"
+              checked={policy.voice_input_enabled}
+              onChange={(e) => void updatePolicy({ voice_input_enabled: e.target.checked })}
+              className="mt-1 w-4 h-4 accent-(--color-accent)"
+            />
+          </label>
+
+          <div className="flex items-center justify-between gap-3">
+            <span className="min-w-0">
+              <span className="text-sm text-(--color-text) block">Voice minutes per child per day</span>
+              <span className="text-[11px] text-(--color-text-tertiary) leading-snug">0 to 480.</span>
+            </span>
+            <input
+              type="number"
+              min={0}
+              max={480}
+              value={policy.voice_minutes_daily_cap}
+              onChange={(e) => {
+                const next = Math.max(0, Math.min(480, Number(e.target.value) || 0));
+                if (next === policy.voice_minutes_daily_cap) return;
+                void updatePolicy({ voice_minutes_daily_cap: next });
+              }}
+              className="w-20 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text) text-right"
+              aria-label="Voice minutes per child per day"
+            />
+          </div>
+
+          <div>
+            <span className="text-sm text-(--color-text) block mb-2">Transcription provider</span>
+            <div className="flex gap-2">
+              {(["openai", "local"] as const).map((p) => (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => void updatePolicy({ whisper_provider: p })}
+                  className={[
+                    "px-3 py-2 text-xs rounded-full border min-h-[36px]",
+                    policy.whisper_provider === p
+                      ? "border-(--color-brand-gold) bg-(--color-accent-light) text-(--color-text) font-medium"
+                      : "border-(--color-border) text-(--color-text-secondary)",
+                  ].join(" ")}
+                >
+                  {p === "openai" ? "OpenAI (cloud)" : "Local Whisper (homestead)"}
+                </button>
+              ))}
+            </div>
+            <p className="text-[11px] text-(--color-text-tertiary) mt-1.5 leading-snug">
+              The local option falls back to OpenAI automatically when the
+              homestead service is unreachable.
+            </p>
+          </div>
+        </div>
+      </Card>
+
       {/* Affected children */}
       <section className="mb-10">
         <div className="flex items-baseline justify-between mb-3">
