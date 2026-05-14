@@ -3,7 +3,11 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { streamTutorMessage } from "@/lib/api";
 import { CompanionAvatar } from "@/components/CompanionAvatar";
+import { MicButton } from "@/components/child/MicButton";
+import { CapReachedNotice } from "@/components/child/voice/CapReachedNotice";
+import { PermissionDeniedNotice } from "@/components/child/voice/PermissionDeniedNotice";
 import { usePersonalization } from "@/lib/PersonalizationProvider";
+import { useVoiceInput } from "@/lib/useVoiceInput";
 
 interface TutorChatProps {
   activityId: string;
@@ -60,6 +64,18 @@ export default function TutorChat({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);
+
+  // Voice input for the composer. Transcripts append to the existing
+  // ``input`` state, so the existing send button + Enter-to-send
+  // continue to drive submission. The mic is additive, not the only
+  // path.
+  const [voiceState, voiceControls] = useVoiceInput({
+    childId,
+    onTranscript: (text) => {
+      if (!text) return;
+      setInput((prev) => (prev.trim() ? `${prev.trim()} ${text.trim()}` : text.trim()));
+    },
+  });
 
   // Focus textarea on mount, save opener for focus restore
   useEffect(() => {
@@ -358,6 +374,22 @@ export default function TutorChat({
               style={{ maxHeight: 96 }}
               aria-label="Message to tutor"
             />
+            {/* Voice input. CapReached / PermissionDenied notices
+                replace the mic when those states apply, mirroring
+                the VoiceTextarea behavior used elsewhere. */}
+            {voiceState.status === "cap_reached" ? (
+              <CapReachedNotice />
+            ) : voiceState.status === "permission_denied" ? (
+              <PermissionDeniedNotice />
+            ) : (
+              <MicButton
+                status={voiceState.status}
+                recordingDurationMs={voiceState.recordingDurationMs}
+                onStart={voiceControls.start}
+                onStop={voiceControls.stop}
+                onCancel={voiceControls.cancel}
+              />
+            )}
             <button onClick={() => send()} disabled={!input.trim() || loading || rateLimited}
               className="w-11 h-11 rounded-full flex items-center justify-center shrink-0 text-white disabled:opacity-30"
               style={{ background: accent }}

@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import type { LearningContext } from "@/lib/api";
 import { useSoundCue } from "@/lib/useSoundCue";
+import VoiceTextarea from "@/components/child/VoiceTextarea";
 import TutorChat from "./TutorChat";
 
 interface PracticeItem {
@@ -179,7 +180,13 @@ export default function PracticeView({ context, childId, onComplete }: PracticeV
             <input type="number" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Type your answer..." className="w-full px-4 py-3 rounded-xl border border-(--color-border) bg-(--color-surface) text-(--color-text) text-lg focus:outline-none focus:border-(--color-accent)" onKeyDown={(e) => e.key === "Enter" && answer && checkAnswer()} autoFocus />
           )}
           {item.expected_type === "text" && (
-            <textarea value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Write your answer..." rows={4} className="w-full px-4 py-3 rounded-xl border border-(--color-border) bg-(--color-surface) text-(--color-text) focus:outline-none focus:border-(--color-accent) resize-none" autoFocus />
+            <VoiceTextarea
+              value={answer}
+              onChange={setAnswer}
+              placeholder="Write your answer..."
+              rows={4}
+              autoFocus
+            />
           )}
           {item.expected_type === "multiple_choice" && item.options && (
             <div className="space-y-2">

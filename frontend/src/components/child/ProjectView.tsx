@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { LearningContext } from "@/lib/api";
 import { useSoundCue } from "@/lib/useSoundCue";
+import VoiceTextarea from "@/components/child/VoiceTextarea";
 import TutorChat from "./TutorChat";
 
 interface ProjectViewProps {
@@ -73,11 +74,11 @@ export default function ProjectView({ context, childId, onComplete, onSaveProgre
 
           <div className="mb-6">
             <h3 className="text-sm font-semibold text-(--color-text-secondary) uppercase tracking-wider mb-2">Your work</h3>
-            <textarea
+            <VoiceTextarea
               value={notes}
-              onChange={(e) => setNotes(e.target.value)}
+              onChange={setNotes}
               placeholder="Describe what you're doing, take notes, or record your progress..."
-              className="w-full h-40 px-4 py-3 text-base border border-(--color-border) rounded-2xl resize-none bg-(--color-surface) text-(--color-text) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20"
+              rows={6}
             />
           </div>
 

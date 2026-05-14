@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import type { LearningContext } from "@/lib/api";
 import { useSoundCue } from "@/lib/useSoundCue";
+import VoiceTextarea from "@/components/child/VoiceTextarea";
 
 interface AssessmentItem {
   prompt: string;
@@ -123,10 +124,12 @@ export default function AssessmentView({ context, onComplete }: AssessmentViewPr
           </div>
         )}
         {(item.type === "open_response" || item.type === "text" || !item.type) && (
-          <textarea value={responses[currentIdx] || ""}
-            onChange={e => setResponses(r => ({ ...r, [currentIdx]: e.target.value }))}
-            placeholder="Write your answer..." rows={4}
-            className="w-full px-4 py-3 rounded-xl border border-(--color-border) bg-(--color-page) text-base text-(--color-text) focus:outline-none focus:border-(--color-accent) resize-none" />
+          <VoiceTextarea
+            value={responses[currentIdx] || ""}
+            onChange={(next) => setResponses(r => ({ ...r, [currentIdx]: next }))}
+            placeholder="Write your answer..."
+            rows={4}
+          />
         )}
       </div>
 

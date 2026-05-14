@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { LearningContext } from "@/lib/api";
 import { useSoundCue } from "@/lib/useSoundCue";
+import VoiceTextarea from "@/components/child/VoiceTextarea";
 import TutorChat from "./TutorChat";
 
 interface ReviewViewProps {
@@ -79,11 +80,11 @@ export default function ReviewView({ context, childId, onComplete }: ReviewViewP
           {/* One prompt at a time */}
           <div className="bg-(--color-surface) rounded-2xl p-6 border border-(--color-border) mb-6">
             <p className="text-lg text-(--color-text) leading-relaxed mb-4">{prompts[currentPrompt]}</p>
-            <textarea
+            <VoiceTextarea
               value={responses[currentPrompt] || ""}
-              onChange={(e) => setResponses({ ...responses, [currentPrompt]: e.target.value })}
+              onChange={(next) => setResponses({ ...responses, [currentPrompt]: next })}
               placeholder="What do you remember?"
-              className="w-full h-24 px-4 py-3 text-base border border-(--color-border) rounded-2xl resize-none bg-(--color-page) text-(--color-text) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20"
+              rows={4}
             />
           </div>
 
