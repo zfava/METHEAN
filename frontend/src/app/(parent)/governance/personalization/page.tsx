@@ -409,6 +409,74 @@ export default function PersonalizationPolicyPage() {
               homestead service is unreachable.
             </p>
           </div>
+
+          {/* Voice output (Sprint v2 Prompt 2) */}
+          <div className="pt-3 border-t border-(--color-border)/60 mt-3">
+            <h4 className="text-[11px] font-semibold uppercase tracking-[0.08em] text-(--color-text-secondary) mb-3">
+              Voice output
+            </h4>
+            <div className="space-y-4">
+              <label className="flex items-start justify-between gap-3 cursor-pointer">
+                <span className="min-w-0">
+                  <span className="text-sm text-(--color-text) block">Allow voice output</span>
+                  <span className="text-[11px] text-(--color-text-tertiary) leading-snug">
+                    Companion speaks tutor responses aloud in their persona voice.
+                  </span>
+                </span>
+                <input
+                  type="checkbox"
+                  checked={policy.voice_output_enabled}
+                  onChange={(e) => void updatePolicy({ voice_output_enabled: e.target.checked })}
+                  className="mt-1 w-4 h-4 accent-(--color-accent)"
+                />
+              </label>
+
+              <div className="flex items-center justify-between gap-3">
+                <span className="min-w-0">
+                  <span className="text-sm text-(--color-text) block">Voice output minutes per child per day</span>
+                  <span className="text-[11px] text-(--color-text-tertiary) leading-snug">0 to 600.</span>
+                </span>
+                <input
+                  type="number"
+                  min={0}
+                  max={600}
+                  value={policy.voice_output_minutes_daily_cap}
+                  onChange={(e) => {
+                    const next = Math.max(0, Math.min(600, Number(e.target.value) || 0));
+                    if (next === policy.voice_output_minutes_daily_cap) return;
+                    void updatePolicy({ voice_output_minutes_daily_cap: next });
+                  }}
+                  className="w-20 px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface) text-(--color-text) text-right"
+                  aria-label="Voice output minutes per child per day"
+                />
+              </div>
+
+              <div>
+                <span className="text-sm text-(--color-text) block mb-2">TTS provider</span>
+                <div className="flex gap-2">
+                  {(["openai", "elevenlabs"] as const).map((p) => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => void updatePolicy({ tts_provider: p })}
+                      className={[
+                        "px-3 py-2 text-xs rounded-full border min-h-[36px]",
+                        policy.tts_provider === p
+                          ? "border-(--color-brand-gold) bg-(--color-accent-light) text-(--color-text) font-medium"
+                          : "border-(--color-border) text-(--color-text-secondary)",
+                      ].join(" ")}
+                    >
+                      {p === "openai" ? "OpenAI (cloud)" : "ElevenLabs (premium)"}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-[11px] text-(--color-text-tertiary) mt-1.5 leading-snug">
+                  ElevenLabs requires a premium API key; selecting it without
+                  one falls back to OpenAI for now.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </Card>
 

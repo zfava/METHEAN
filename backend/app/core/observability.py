@@ -133,3 +133,62 @@ def observe_safety_intervention(*, intervention_kind: str) -> None:
 def observe_provider_retry(*, provider: str, outcome: str) -> None:
     voice_provider_retry_total.labels(provider=provider, outcome=outcome).inc()
     _record_counter("voice_provider_retry_total", {"provider": provider, "outcome": outcome})
+
+
+# ── TTS metrics (Sprint v2 Prompt 2) ──────────────────────────────
+
+
+tts_request_total = Counter(
+    "tts_request_total",
+    "TTS requests by provider, persona, and outcome",
+    ["provider", "persona_id", "outcome"],
+)
+tts_first_chunk_latency_ms = Histogram(
+    "tts_first_chunk_latency_ms",
+    "Server-side latency from request to first audio chunk yielded",
+    ["provider", "persona_id"],
+    buckets=(50, 100, 200, 400, 800, 1500, 3000, 6000),
+)
+tts_total_duration_seconds = Histogram(
+    "tts_total_duration_seconds",
+    "Total audio duration generated per request",
+    ["provider", "persona_id"],
+    buckets=(0.25, 0.5, 1.0, 2.0, 5.0, 10.0),
+)
+tts_cache_hit_total = Counter(
+    "tts_cache_hit_total",
+    "Cache hits by phrase key",
+    ["phrase_key"],
+)
+
+
+def observe_tts_request(
+    *,
+    provider: str,
+    persona_id: str,
+    outcome: str,
+    first_chunk_latency_ms: float | None,
+    duration_seconds: float,
+) -> None:
+    labels = {"provider": provider, "persona_id": persona_id, "outcome": outcome}
+    tts_request_total.labels(**labels).inc()
+    if first_chunk_latency_ms is not None:
+        tts_first_chunk_latency_ms.labels(provider=provider, persona_id=persona_id).observe(first_chunk_latency_ms)
+    tts_total_duration_seconds.labels(provider=provider, persona_id=persona_id).observe(duration_seconds)
+    _record_counter("tts_request_total", labels)
+    if first_chunk_latency_ms is not None:
+        _record_histogram(
+            "tts_first_chunk_latency_ms",
+            {"provider": provider, "persona_id": persona_id},
+            first_chunk_latency_ms,
+        )
+    _record_histogram(
+        "tts_total_duration_seconds",
+        {"provider": provider, "persona_id": persona_id},
+        duration_seconds,
+    )
+
+
+def observe_tts_cache_hit(*, phrase_key: str) -> None:
+    tts_cache_hit_total.labels(phrase_key=phrase_key).inc()
+    _record_counter("tts_cache_hit_total", {"phrase_key": phrase_key})

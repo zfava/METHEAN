@@ -286,6 +286,15 @@ class PersonalizationPolicy(Base):
     whisper_provider: Mapped[str] = mapped_column(
         Text, nullable=False, server_default=text("'openai'"), default="openai"
     )
+    # Voice-output governance (migration 045). Default-on; higher
+    # cap than input since output is read passively.
+    voice_output_enabled: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("true"), default=True
+    )
+    voice_output_minutes_daily_cap: Mapped[int] = mapped_column(
+        Integer, nullable=False, server_default=text("120"), default=120
+    )
+    tts_provider: Mapped[str] = mapped_column(Text, nullable=False, server_default=text("'openai'"), default="openai")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
@@ -317,6 +326,8 @@ class VoiceUsageDaily(Base):
     )
     usage_date: Mapped[date] = mapped_column(Date, nullable=False)
     stt_seconds_used: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("0"), default=0)
+    # Voice-output counter (migration 045).
+    tts_seconds_used: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("0"), default=0)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()

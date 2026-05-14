@@ -34,3 +34,20 @@ class VoiceCapErrorDetail(BaseModel):
     minutes_used: int = Field(ge=0)
     cap_minutes: int = Field(ge=0)
     resets_at: str  # ISO-8601 midnight in the household's tz (or UTC)
+
+
+# ── Voice output (Sprint v2 Prompt 2) ─────────────────────────────
+
+
+class TTSRequest(BaseModel):
+    """Body of a POST to ``/children/{id}/tts/stream``.
+
+    ``message_id`` is the kid-side identifier the consumer correlates
+    with the streamed audio (TutorChat sets it to the bubble's
+    server-side message id).
+    """
+
+    text: str = Field(min_length=1, max_length=4000)
+    persona_id: str = Field(min_length=1, max_length=60)
+    voice_mode: bool = False
+    message_id: str | None = None

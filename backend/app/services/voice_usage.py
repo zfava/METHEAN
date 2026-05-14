@@ -108,3 +108,64 @@ async def debit_seconds(
     result = await db.execute(stmt)
     new_total = int(result.scalar_one())
     return new_total, new_total >= cap_seconds
+
+
+# ── Voice-output (TTS) counter ────────────────────────────────────
+
+
+async def get_remaining_tts_seconds(
+    db: AsyncSession,
+    *,
+    child_id: uuid.UUID,
+    household_id: uuid.UUID,
+    policy: PersonalizationPolicy | None,
+    tz: str | None = None,
+) -> UsageSnapshot:
+    """Output counter snapshot, mirroring ``get_remaining_seconds`` but
+    for the TTS cap."""
+    cap_seconds = (policy.voice_output_minutes_daily_cap if policy is not None else 120) * 60
+    today = _today_in_tz(tz)
+    result = await db.execute(
+        select(VoiceUsageDaily).where(
+            VoiceUsageDaily.child_id == child_id,
+            VoiceUsageDaily.usage_date == today,
+        )
+    )
+    row = result.scalar_one_or_none()
+    used = int(row.tts_seconds_used) if row is not None else 0
+    return UsageSnapshot(seconds_used=used, cap_seconds=cap_seconds)
+
+
+async def debit_tts_seconds(
+    db: AsyncSession,
+    *,
+    child_id: uuid.UUID,
+    household_id: uuid.UUID,
+    seconds: float,
+    policy: PersonalizationPolicy | None,
+    tz: str | None = None,
+) -> tuple[int, bool]:
+    """Atomically increment the day's TTS counter."""
+    cap_seconds = (policy.voice_output_minutes_daily_cap if policy is not None else 120) * 60
+    today = _today_in_tz(tz)
+    debit = max(0, round(seconds))
+
+    stmt = (
+        pg_insert(VoiceUsageDaily)
+        .values(
+            child_id=child_id,
+            household_id=household_id,
+            usage_date=today,
+            tts_seconds_used=debit,
+        )
+        .on_conflict_do_update(
+            constraint="uq_voice_usage_daily_child_date",
+            set_={
+                "tts_seconds_used": VoiceUsageDaily.tts_seconds_used + debit,
+            },
+        )
+        .returning(VoiceUsageDaily.tts_seconds_used)
+    )
+    result = await db.execute(stmt)
+    new_total = int(result.scalar_one())
+    return new_total, new_total >= cap_seconds

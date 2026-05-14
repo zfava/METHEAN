@@ -54,6 +54,10 @@ class PersonalizationPolicyRead(BaseModel):
     voice_input_enabled: bool = True
     voice_minutes_daily_cap: int = 60
     whisper_provider: Literal["openai", "local"] = "openai"
+    # Voice-output governance (migration 045).
+    voice_output_enabled: bool = True
+    voice_output_minutes_daily_cap: int = 120
+    tts_provider: Literal["openai", "elevenlabs"] = "openai"
 
 
 class PersonalizationPolicyUpdate(BaseModel):
@@ -76,6 +80,10 @@ class PersonalizationPolicyUpdate(BaseModel):
     voice_input_enabled: bool | None = None
     voice_minutes_daily_cap: int | None = Field(default=None, ge=0, le=480)
     whisper_provider: Literal["openai", "local"] | None = None
+    # Voice-output governance (migration 045).
+    voice_output_enabled: bool | None = None
+    voice_output_minutes_daily_cap: int | None = Field(default=None, ge=0, le=600)
+    tts_provider: Literal["openai", "elevenlabs"] | None = None
 
 
 # ── Library views ─────────────────────────────────────────────────
