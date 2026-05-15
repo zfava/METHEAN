@@ -40,6 +40,8 @@ coverage.json
 coverage.xml
 htmlcov/
 .pytest_cache/
+.ruff_cache/
+.pre-commit-cache/
 
 # Docker volumes
 pgdata/
