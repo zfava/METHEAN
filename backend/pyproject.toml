@@ -40,10 +40,12 @@ ignore = [
 
 [tool.ruff.lint.isort]
 known-first-party = ["app"]
+combine-as-imports = true
 
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
+docstring-code-format = true
 
 [tool.bandit]
 exclude_dirs = ["tests"]
