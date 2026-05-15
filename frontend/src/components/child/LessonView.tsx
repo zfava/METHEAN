@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { LearningContext } from "@/lib/api";
+import { useSoundCue } from "@/lib/useSoundCue";
 import TutorChat from "./TutorChat";
 import { cn } from "@/lib/cn";
 
@@ -20,16 +21,26 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
   const [responses, setResponses] = useState<Record<number, string>>({});
   const [selfAssessment, setSelfAssessment] = useState<number | null>(null);
   const [reflection, setReflection] = useState("");
+  const playCue = useSoundCue();
 
   const { lesson, activity, assessment } = context;
   const steps = lesson.steps || [];
   const prompts = lesson.practice_prompts || [];
+
+  // Activity-start cue. Fires on mount; the hook itself
+  // suppresses if the kid's pack is "off" or before any user
+  // gesture has been recorded.
+  useEffect(() => {
+    playCue("activity_start");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function handleSubmit() {
     const practiceResponses = prompts.map((p, i) => ({
       prompt: p,
       response: responses[i] || "",
     }));
+    playCue("activity_complete");
     onComplete({
       confidence: selfAssessment ?? 0.6,
       responses: practiceResponses,

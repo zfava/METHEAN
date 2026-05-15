@@ -1,7 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
+
 import Button from "@/components/ui/Button";
 import { MetheanMark } from "@/components/Brand";
+import { useSoundCue } from "@/lib/useSoundCue";
 
 interface CompletionStateProps {
   activityTitle: string;
@@ -53,6 +56,14 @@ export default function CompletionState({
   daySummary,
 }: CompletionStateProps) {
   const masteryChanged = masteryLevel && previousMastery && masteryLevel !== previousMastery;
+  const playCue = useSoundCue();
+
+  // End-of-day cue. Slightly louder than the routine cues; this is
+  // the rare warm payoff at the end of a learning day.
+  useEffect(() => {
+    if (allDone) playCue("day_complete", { volume: 0.6 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allDone]);
 
   // ── End-of-day calm ──────────────────────────────────────────────
   if (allDone) {

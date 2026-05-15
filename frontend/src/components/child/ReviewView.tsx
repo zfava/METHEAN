@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { LearningContext } from "@/lib/api";
+import { useSoundCue } from "@/lib/useSoundCue";
 import TutorChat from "./TutorChat";
 
 interface ReviewViewProps {
@@ -24,6 +25,7 @@ export default function ReviewView({ context, childId, onComplete }: ReviewViewP
   const [selfAssessment, setSelfAssessment] = useState<number | null>(null);
   const [phase, setPhase] = useState<"recall" | "reflect">("recall");
   const [currentPrompt, setCurrentPrompt] = useState(0);
+  const playCue = useSoundCue();
 
   const prompts = context.assessment.prompts?.length > 0
     ? context.assessment.prompts
@@ -35,7 +37,13 @@ export default function ReviewView({ context, childId, onComplete }: ReviewViewP
     ? Math.round((Date.now() - new Date(lastStudied).getTime()) / 86400000)
     : null;
 
+  useEffect(() => {
+    playCue("activity_start");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function handleSubmit() {
+    playCue("activity_complete");
     onComplete({
       confidence: selfAssessment ?? 0.6,
       responses: prompts.map((p, i) => ({ prompt: p, response: responses[i] || "" })),

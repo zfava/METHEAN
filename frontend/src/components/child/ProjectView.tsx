@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { LearningContext } from "@/lib/api";
+import { useSoundCue } from "@/lib/useSoundCue";
 import TutorChat from "./TutorChat";
 
 interface ProjectViewProps {
@@ -16,10 +17,17 @@ export default function ProjectView({ context, childId, onComplete, onSaveProgre
   const [showTutor, setShowTutor] = useState(false);
   const [selfAssessment, setSelfAssessment] = useState<number | null>(null);
   const [phase, setPhase] = useState<"work" | "reflect">("work");
+  const playCue = useSoundCue();
 
   const steps = context.lesson.steps || [];
 
+  useEffect(() => {
+    playCue("activity_start");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function handleSubmit() {
+    playCue("activity_complete");
     onComplete({
       confidence: selfAssessment ?? 0.7,
       responses: [{ prompt: "Project work", response: notes }],
