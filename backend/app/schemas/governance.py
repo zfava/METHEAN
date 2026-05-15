@@ -143,6 +143,10 @@ class TutorMessageRequest(BaseModel):
     child_id: uuid.UUID | None = None
     message: str = Field(min_length=1, max_length=2000)
     conversation_history: list[dict] | None = None
+    # Sprint v2 Prompt 3: when true, ask the model for brevity and
+    # enforce a hard 1-2 sentence cap on the response server-side
+    # before streaming back to the client.
+    voice_mode: bool = False
 
 
 class TutorMessageResponse(BaseModel):

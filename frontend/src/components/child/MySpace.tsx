@@ -172,6 +172,44 @@ export function MySpace({ open, onClose }: MySpaceProps) {
             />
           </Section>
 
+          <Section title="Voice mode style">
+            <p className="text-xs text-(--color-text-secondary) leading-relaxed mb-3">
+              How does the talk button work in voice mode?
+            </p>
+            <div className="grid grid-cols-2 gap-2">
+              {([
+                { id: "tap_toggle", label: "Tap to start, tap to stop", subline: "Easier" },
+                { id: "press_hold", label: "Press and hold to talk", subline: "Like a walkie-talkie" },
+              ] as const).map((opt) => {
+                const selected =
+                  ((profile as unknown as { voice_mode_style?: string }).voice_mode_style ?? "tap_toggle") === opt.id;
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() =>
+                      void patch({
+                        ...(profile as Partial<typeof profile>),
+                        // voice_mode_style is a JSONB extension field; the
+                        // backend accepts arbitrary fields in personalization.
+                        voice_mode_style: opt.id,
+                      } as never)
+                    }
+                    className={[
+                      "rounded-2xl border p-3 text-left min-h-[44px]",
+                      selected
+                        ? "ring-2 ring-(--color-brand-gold) border-(--color-brand-gold)"
+                        : "border-(--color-border)",
+                    ].join(" ")}
+                  >
+                    <div className="text-sm font-medium text-(--color-text)">{opt.label}</div>
+                    <div className="text-[11px] text-(--color-text-tertiary)">{opt.subline}</div>
+                  </button>
+                );
+              })}
+            </div>
+          </Section>
+
           <section className="pt-2">
             <button
               type="button"

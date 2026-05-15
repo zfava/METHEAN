@@ -66,6 +66,10 @@ export interface ChildPersonalization {
   interest_tags: string[];
   out_of_policy: string[];
   onboarded: boolean;
+  /** Sprint v2 Prompt 3: tap-toggle (default) or press-and-hold for
+   *  the voice-mode TalkButton. Lives in the personalization JSONB
+   *  so changing it does not require a migration. */
+  voice_mode_style?: "tap_toggle" | "press_hold";
 }
 
 export interface PersonalizationPolicy {

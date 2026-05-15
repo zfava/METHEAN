@@ -179,6 +179,8 @@ def _compute_out_of_policy(profile: dict, allowed: dict[str, set[str]]) -> list[
 
 
 def _profile_to_read(child_id: uuid.UUID, profile: dict, out_of_policy: list[str]) -> ChildPersonalizationRead:
+    raw_style = str(profile.get("voice_mode_style") or "tap_toggle")
+    voice_mode_style = "press_hold" if raw_style == "press_hold" else "tap_toggle"
     return ChildPersonalizationRead(
         child_id=child_id,
         companion_name=str(profile.get("companion_name", "")),
@@ -190,6 +192,7 @@ def _profile_to_read(child_id: uuid.UUID, profile: dict, out_of_policy: list[str
         interest_tags=list(profile.get("interest_tags") or []),
         out_of_policy=out_of_policy,
         onboarded=bool(profile.get("onboarded", False)),
+        voice_mode_style=voice_mode_style,  # type: ignore[arg-type]
     )
 
 
@@ -441,6 +444,10 @@ async def update_child_personalization(
         personalization["sound_pack"] = body.sound_pack
     if body.affirmation_tone is not None:
         personalization["affirmation_tone"] = body.affirmation_tone
+    if body.voice_mode_style is not None:
+        # Sprint v2 Prompt 3: persisted alongside other JSONB fields;
+        # no separate column required.
+        personalization["voice_mode_style"] = body.voice_mode_style
     if body.onboarded is not None:
         personalization["onboarded"] = body.onboarded
 
