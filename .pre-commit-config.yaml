@@ -1,7 +1,21 @@
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.6.9
+    rev: v0.15.13
     hooks:
-      - id: ruff
+      - id: ruff-check
         args: [--fix]
+        files: ^backend/app/.*\.py$
       - id: ruff-format
+        files: ^backend/app/.*\.py$
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^backend/tests/fixtures/
+      - id: end-of-file-fixer
+        exclude: ^backend/tests/fixtures/
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: check-added-large-files
+        args: [--maxkb=10240]

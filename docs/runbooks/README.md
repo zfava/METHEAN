@@ -14,6 +14,7 @@ Step-by-step procedures for common operational scenarios. Each runbook includes 
 | [celery-queue-issues.md](celery-queue-issues.md) | Detect stuck queues, drain safely, replay tasks | 2026-04-17 (beat schedule tested) |
 | [deploy-rollback.md](deploy-rollback.md) | Roll back a Railway deploy or git revert | 2026-04-17 (documented) |
 | [customer-data-request.md](customer-data-request.md) | Fulfill COPPA/FERPA data export and deletion requests | 2026-04-17 (export tested) |
+| [dev-environment.md](dev-environment.md) | Local developer setup: ruff, pre-commit hooks, backend env | 2026-05-15 (documented) |
 
 ## How to Use
 

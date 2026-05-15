@@ -41,6 +41,10 @@ coverage.xml
 htmlcov/
 .pytest_cache/
 
+# Linting and pre-commit caches
+.ruff_cache/
+.pre-commit-cache/
+
 # Docker volumes
 pgdata/
 
