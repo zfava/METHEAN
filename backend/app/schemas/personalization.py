@@ -25,6 +25,7 @@ class ChildPersonalizationRead(BaseModel):
     interest_tags: list[str]
     out_of_policy: list[str]
     onboarded: bool
+    voice_mode_style: Literal["tap_toggle", "press_hold"] = "tap_toggle"
 
 
 class ChildPersonalizationUpdate(BaseModel):
@@ -36,6 +37,9 @@ class ChildPersonalizationUpdate(BaseModel):
     affirmation_tone: str | None = None
     interest_tags: list[str] | None = None
     onboarded: bool | None = None
+    # Sprint v2 Prompt 3: voice-mode TalkButton interaction style.
+    # Stored inside the personalization JSONB, no migration needed.
+    voice_mode_style: Literal["tap_toggle", "press_hold"] | None = None
 
 
 # ── Household policy ──────────────────────────────────────────────

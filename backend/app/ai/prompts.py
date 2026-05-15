@@ -95,7 +95,7 @@ OUTPUT FORMAT: Return valid JSON:
 }}"""
 
 
-def render_tutor_system(ctx: PersonalizationContext) -> str:
+def render_tutor_system(ctx: PersonalizationContext, *, voice_mode: bool = False) -> str:
     """Compose the tutor system prompt with kid-driven personalization.
 
     Personalization is additive: every rule in :data:`TUTOR_SYSTEM`
@@ -106,6 +106,11 @@ def render_tutor_system(ctx: PersonalizationContext) -> str:
     optionally injects an interests block above the rules. An empty
     context degrades to "your learning companion" and a single
     Socratic-tutor mission line above the unchanged rules body.
+
+    When ``voice_mode`` is true, a brevity directive is appended to the
+    intro block. The server also enforces a hard 1-2 sentence cap on
+    the response via :func:`app.services.sentence_truncate.truncate_to_sentences`;
+    this directive is the cooperative half of belt-and-suspenders.
     """
     companion = ctx.companion_name or "your learning companion"
     intro_lines: list[str] = [f"You are {companion}, the child's learning companion in METHEAN."]
@@ -113,6 +118,11 @@ def render_tutor_system(ctx: PersonalizationContext) -> str:
         intro_lines.append(ctx.companion_voice_tone)
     if ctx.affirmation_tone:
         intro_lines.append(ctx.affirmation_tone)
+    if voice_mode:
+        intro_lines.append(
+            "The child is using voice mode; keep responses to one or two "
+            "sentences unless the child explicitly asks for more detail."
+        )
 
     interests_block = ""
     if ctx.interests:

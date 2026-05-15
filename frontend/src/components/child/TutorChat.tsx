@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { streamTutorMessage } from "@/lib/api";
 import { CompanionAvatar } from "@/components/CompanionAvatar";
+import { VoiceModeUI } from "@/components/child/voice/VoiceModeUI";
 import { usePersonalization } from "@/lib/PersonalizationProvider";
 import { useTutorVoice } from "@/lib/useTutorVoice";
+import { useVoiceConversation } from "@/lib/useVoiceConversation";
 
 interface TutorChatProps {
   activityId: string;
@@ -53,6 +55,16 @@ export default function TutorChat({
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
+  const [voiceMode, setVoiceMode] = useState(false);
+  // Voice-mode interaction style. Reads from the kid's
+  // ChildPreferences.personalization JSONB ("voice_mode_style" key);
+  // defaults to tap-toggle, which is the easier path for kids who
+  // can't reliably hold a button.
+  const voiceModeStyle: "press_hold" | "tap_toggle" =
+    ((profile as unknown as { voice_mode_style?: string }).voice_mode_style as
+      | "press_hold"
+      | "tap_toggle"
+      | undefined) ?? "tap_toggle";
   const [revealedHints, setRevealedHints] = useState<Set<number>>(new Set());
   const [userScrolled, setUserScrolled] = useState(false);
   const [sendTimes, setSendTimes] = useState<number[]>([]);
@@ -62,6 +74,58 @@ export default function TutorChat({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const openerRef = useRef<HTMLElement | null>(null);
+
+  // Voice-mode orchestrator. Reuses the existing streamTutorMessage
+  // path via a thin adapter so voice and text mode share one tutor
+  // surface; the message list is updated in-place so switching back
+  // to text mode reveals the full history.
+  const sendToTutor = useCallback(
+    async (transcript: string): Promise<string> => {
+      // Append the kid's transcript and a placeholder tutor message
+      // before kicking off the stream so the text history reflects
+      // the voice exchange.
+      let accumulatedText = "";
+      const childMsg: Message = { role: "child", text: transcript, ts: Date.now() };
+      const tutorMsg: Message = { role: "tutor", text: "", ts: Date.now() };
+      setMessages((prev) => [...prev, childMsg, tutorMsg]);
+      const history = [...messages, childMsg].map((m) => ({ role: m.role, text: m.text }));
+      try {
+        await streamTutorMessage(
+          activityId,
+          childId,
+          transcript,
+          history,
+          (token) => {
+            accumulatedText += token;
+            setMessages((prev) => {
+              const copy = [...prev];
+              const last = copy[copy.length - 1];
+              if (last?.role === "tutor") copy[copy.length - 1] = { ...last, text: accumulatedText };
+              return copy;
+            });
+          },
+          () => {
+            /* completion handled by the orchestrator */
+          },
+          () => {
+            /* error surfaces via the orchestrator's catch path */
+          },
+          { voiceMode: true },
+        );
+      } catch (e) {
+        // Surface as the rejection the orchestrator expects.
+        throw e instanceof Error ? e : new Error(String(e));
+      }
+      return accumulatedText.trim();
+    },
+    [activityId, childId, messages],
+  );
+
+  const [convState, convControls] = useVoiceConversation({
+    childId,
+    sendToTutor,
+    onExit: () => setVoiceMode(false),
+  });
 
   // Focus textarea on mount, save opener for focus restore
   useEffect(() => {
@@ -234,6 +298,21 @@ export default function TutorChat({
           <div className="w-10 h-1 rounded-full bg-(--color-border)" />
         </div>
 
+        {voiceMode ? (
+          <VoiceModeUI
+            companionVoice={companionVoice}
+            companionName={companionName}
+            state={convState}
+            controls={convControls}
+            interactionStyle={voiceModeStyle}
+            onExit={() => {
+              convControls.cancel();
+              setVoiceMode(false);
+            }}
+          />
+        ) : (
+        <>
+
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-2 border-b border-(--color-border)/50">
           <div>
@@ -269,6 +348,23 @@ export default function TutorChat({
                 <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
               </svg>
             )}
+          </button>
+          {/* Voice-mode toggle. Hidden when either cap is fully
+              exhausted; the conversation-state mirror would 403 the
+              first turn anyway. */}
+          <button
+            type="button"
+            onClick={() => setVoiceMode((v) => !v)}
+            aria-pressed={voiceMode}
+            aria-label={voiceMode ? "Exit voice mode" : "Enter voice mode"}
+            className="w-10 h-10 mr-1 rounded-full flex items-center justify-center text-(--color-text-tertiary) hover:bg-(--color-page) min-h-[44px] min-w-[44px]"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+              <path d="M19 10a7 7 0 0 1-14 0" />
+              <line x1="12" y1="19" x2="12" y2="23" />
+              <line x1="8" y1="23" x2="16" y2="23" />
+            </svg>
           </button>
           <button onClick={handleClose}
             className="w-10 h-10 rounded-full flex items-center justify-center text-(--color-text-tertiary) hover:bg-(--color-page) min-h-[44px] min-w-[44px]"
@@ -406,6 +502,8 @@ export default function TutorChat({
             </button>
           </div>
         </div>
+        </>
+        )}
 
         <style>{`
           @keyframes typing-pulse {

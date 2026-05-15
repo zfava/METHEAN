@@ -273,6 +273,7 @@ export async function streamTutorMessage(
   onToken: (text: string) => void,
   onDone: (hints: string[], aiRunId: string) => void,
   onError: (message: string) => void,
+  opts?: { voiceMode?: boolean },
 ): Promise<void> {
   const url = `${API_BASE}/tutor/${activityId}/stream`;
   const csrfToken = getCookie("csrf_token");
@@ -284,7 +285,12 @@ export async function streamTutorMessage(
       "Content-Type": "application/json",
       ...(csrfToken ? { "X-CSRF-Token": csrfToken } : {}),
     },
-    body: JSON.stringify({ child_id: childId, message, conversation_history: conversationHistory }),
+    body: JSON.stringify({
+      child_id: childId,
+      message,
+      conversation_history: conversationHistory,
+      voice_mode: Boolean(opts?.voiceMode),
+    }),
   });
 
   if (!response.ok) {

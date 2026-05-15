@@ -1010,7 +1010,7 @@ Continue the Socratic dialogue. Reference what was discussed earlier if relevant
     # Load personalization once per request so prompt assembly stays
     # synchronous; render_tutor_system never hits the DB itself.
     pctx = await load_personalization_context(db, body.child_id) if body.child_id else None
-    tutor_system = render_tutor_system(pctx) if pctx is not None else TUTOR_SYSTEM
+    tutor_system = render_tutor_system(pctx, voice_mode=body.voice_mode) if pctx is not None else TUTOR_SYSTEM
     result = await call_ai(
         db,
         role=AIRole.tutor,
@@ -1044,8 +1044,13 @@ Continue the Socratic dialogue. Reference what was discussed earlier if relevant
     except Exception:
         pass  # Intelligence recording is advisory, never blocking
 
+    response_message = output.get("message", "Could you tell me more about your thinking?")
+    if body.voice_mode:
+        from app.services.sentence_truncate import truncate_to_sentences
+
+        response_message = truncate_to_sentences(response_message, max_sentences=2)
     return TutorMessageResponse(
-        message=output.get("message", "Could you tell me more about your thinking?"),
+        message=response_message,
         hints=output.get("hints", []),
         encouragement=output.get("encouragement", True),
         ai_run_id=result["ai_run_id"],
@@ -1139,7 +1144,7 @@ Respond in plain text as the Socratic tutor. Do NOT use JSON. Just speak natural
 
     phil = await _get_philosophical_profile(db, user.household_id)
     pctx = await load_personalization_context(db, body.child_id) if body.child_id else None
-    system = render_tutor_system(pctx) if pctx is not None else TUTOR_SYSTEM
+    system = render_tutor_system(pctx, voice_mode=body.voice_mode) if pctx is not None else TUTOR_SYSTEM
     constraints = build_philosophical_constraints(phil)
     if constraints:
         system = system + "\n" + constraints
