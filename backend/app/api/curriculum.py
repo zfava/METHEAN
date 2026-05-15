@@ -521,8 +521,7 @@ async def delete_node(
     await db.flush()
 
     # Remove edges involving this node and rebuild closure
-    from sqlalchemy import delete as sa_delete
-    from sqlalchemy import or_
+    from sqlalchemy import delete as sa_delete, or_
 
     await db.execute(
         sa_delete(LearningEdge).where(
@@ -926,8 +925,7 @@ async def batch_update(
             node = await _get_node_or_404(db, map_id, nid, user.household_id)
             node.is_active = False
             # Remove edges involving this node
-            from sqlalchemy import delete as sa_delete
-            from sqlalchemy import or_ as sa_or
+            from sqlalchemy import delete as sa_delete, or_ as sa_or
 
             await db.execute(
                 sa_delete(LearningEdge).where(

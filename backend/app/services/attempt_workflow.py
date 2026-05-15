@@ -13,8 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.cache import cache_delete
 from app.models.enums import ActivityStatus, AttemptStatus
 from app.models.governance import Activity, Attempt
-from app.services import achievements as achievements_svc
-from app.services import intelligence
+from app.services import achievements as achievements_svc, intelligence
 from app.services.evaluator import mock_evaluator
 from app.services.state_engine import process_review
 

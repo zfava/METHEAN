@@ -32,9 +32,9 @@ from app.api.operations import router as operations_router
 from app.api.personalization import router as personalization_router
 from app.api.resources import router as resources_router
 from app.api.spec_coverage import router as spec_router
-from app.api.transcribe import router as transcribe_router
 from app.api.state import router as state_router
 from app.api.style_vector import router as style_vector_router
+from app.api.transcribe import router as transcribe_router
 from app.api.usage import router as usage_router
 from app.api.wellbeing import router as wellbeing_router
 from app.core.config import settings

@@ -7,9 +7,7 @@ and state event emission. Every state change is immutable and auditable.
 import uuid
 from datetime import UTC, datetime
 
-from fsrs import Card as FSRSCardObj
-from fsrs import Rating, Scheduler
-from fsrs import State as FSRSState
+from fsrs import Card as FSRSCardObj, Rating, Scheduler, State as FSRSState
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 

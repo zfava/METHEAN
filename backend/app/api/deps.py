@@ -126,7 +126,7 @@ def require_child_access(mode: AccessMode = "read"):
     Pattern matches :func:`require_permission`. Wire it onto any
     learner-scoped route::
 
-        child: Child = Depends(require_child_access("read"))   # GET
+        child: Child = Depends(require_child_access("read"))  # GET
         child: Child = Depends(require_child_access("write"))  # POST/PUT/PATCH/DELETE
 
     The returned :class:`Child` row is the validated, household-scoped

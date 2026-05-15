@@ -24,8 +24,15 @@ from app.core.security import (
 from app.models.enums import UserRole
 from app.models.identity import Household, User
 from app.models.operational import RefreshToken
+
+# /auth/invite is the institutional invite endpoint and uses a richer
+# schema. /auth/household/invite is the family invite endpoint and
+# uses the small local InviteRequest below. The two collided on the
+# bare name "InviteRequest" — aliasing the institutional one keeps
+# the local family schema as the canonical InviteRequest.
 from app.schemas.auth import (
     InstitutionalRegisterRequest,
+    InviteRequest as InstitutionalInviteRequest,
     InviteResponse,
     LoginRequest,
     MessageResponse,
@@ -35,13 +42,6 @@ from app.schemas.auth import (
     TokenResponse,
     UserResponse,
 )
-
-# /auth/invite is the institutional invite endpoint and uses a richer
-# schema. /auth/household/invite is the family invite endpoint and
-# uses the small local InviteRequest below. The two collided on the
-# bare name "InviteRequest" — aliasing the institutional one keeps
-# the local family schema as the canonical InviteRequest.
-from app.schemas.auth import InviteRequest as InstitutionalInviteRequest
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
