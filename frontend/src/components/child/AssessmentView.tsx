@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import type { LearningContext } from "@/lib/api";
+import { useSoundCue } from "@/lib/useSoundCue";
+import VoiceTextarea from "@/components/child/VoiceTextarea";
 
 interface AssessmentItem {
   prompt: string;
@@ -25,18 +27,22 @@ export default function AssessmentView({ context, onComplete }: AssessmentViewPr
   const [submitted, setSubmitted] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const playCue = useSoundCue();
 
   const totalItems = items.length;
   const answeredCount = Object.values(responses).filter(r => r.trim().length > 0).length;
 
   useEffect(() => {
     timerRef.current = setInterval(() => setElapsed(e => e + 1), 1000);
+    playCue("activity_start");
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleSubmit() {
     if (timerRef.current) clearInterval(timerRef.current);
     setSubmitted(true);
+    playCue("activity_complete");
     onComplete({
       confidence: 0.7,
       responses: items.map((item, i) => ({ prompt: item.prompt, response: responses[i] || "" })),
@@ -118,10 +124,12 @@ export default function AssessmentView({ context, onComplete }: AssessmentViewPr
           </div>
         )}
         {(item.type === "open_response" || item.type === "text" || !item.type) && (
-          <textarea value={responses[currentIdx] || ""}
-            onChange={e => setResponses(r => ({ ...r, [currentIdx]: e.target.value }))}
-            placeholder="Write your answer..." rows={4}
-            className="w-full px-4 py-3 rounded-xl border border-(--color-border) bg-(--color-page) text-base text-(--color-text) focus:outline-none focus:border-(--color-accent) resize-none" />
+          <VoiceTextarea
+            value={responses[currentIdx] || ""}
+            onChange={(next) => setResponses(r => ({ ...r, [currentIdx]: next }))}
+            placeholder="Write your answer..."
+            rows={4}
+          />
         )}
       </div>
 

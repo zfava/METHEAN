@@ -1,15 +1,18 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import { useRouter } from "next/navigation";
 import {
   auth, attempts, learn, children as childrenApi,
   type LearningContext, type ChildDashboardResponse,
 } from "@/lib/api";
 import { useToast } from "@/components/Toast";
-import { MetheanMark } from "@/components/Brand";
 import { useMobile } from "@/lib/useMobile";
 import { haptic } from "@/lib/haptics";
-import BottomSheet from "@/components/BottomSheet";
+import { usePersonalization } from "@/lib/PersonalizationProvider";
+import { useSoundCue } from "@/lib/useSoundCue";
+import { ActivityIcon, type ActivityType } from "@/components/ActivityIcon";
+import { MySpace } from "@/components/child/MySpace";
 import JourneyMap, { JourneyCarousel } from "@/components/child/JourneyMap";
 import LessonView from "@/components/child/LessonView";
 import PracticeView from "@/components/child/PracticeView";
@@ -24,23 +27,6 @@ import CompletionState from "@/components/child/CompletionState";
 interface ChildInfo { id: string; first_name: string; grade_level: string | null }
 
 type DashActivity = ChildDashboardResponse["today"]["activities"][0];
-
-// ── Theme ──
-
-const bgStyles: Record<string, React.CSSProperties> = {
-  plain: { background: "#FDF6E3" },
-  meadow: { background: "linear-gradient(180deg, #E8F5E9 0%, #C8E6C9 100%)" },
-  ocean: { background: "linear-gradient(180deg, #E3F2FD 0%, #BBDEFB 100%)" },
-  forest: { background: "linear-gradient(180deg, #E8F0E4 0%, #C5D9BA 100%)" },
-  space: { background: "linear-gradient(180deg, #1A1A2E 0%, #16213E 100%)", color: "#E0E0E0" },
-  desert: { background: "linear-gradient(180deg, #FFF3E0 0%, #FFE0B2 100%)" },
-  mountains: { background: "linear-gradient(180deg, #ECEFF1 0%, #CFD8DC 100%)" },
-};
-
-const avatarEmoji: Record<string, string> = {
-  bear: "\uD83D\uDC3B", owl: "\uD83E\uDD89", fox: "\uD83E\uDD8A", rabbit: "\uD83D\uDC30",
-  deer: "\uD83E\uDD8C", eagle: "\uD83E\uDD85", wolf: "\uD83D\uDC3A",
-};
 
 const typeLabels: Record<string, { label: string; icon: string }> = {
   lesson: { label: "Lesson", icon: "\uD83D\uDCD6" },
@@ -115,6 +101,24 @@ function ProgressRing({ completed, total, minutesRemaining, large }: {
 
 export default function ChildPage() {
   const { toast } = useToast();
+  // Personalization is owned by the wrapping layout's
+  // <PersonalizationProvider>; the VibeProvider already applies the
+  // CSS-variable token bag to the subtree, so the page no longer
+  // owns its own background style.
+  const { profile, loading: profileLoading } = usePersonalization();
+  const router = useRouter();
+
+  // First-run gate: unonboarded kids bounce to /child/welcome.
+  // We wait for the profile to load (so we don't redirect on the
+  // default-shape profile the provider serves during fetch) and
+  // we don't gate on the local `loading` flag, which only tracks
+  // the auth + children list.
+  useEffect(() => {
+    if (profileLoading) return;
+    if (!profile.onboarded) {
+      router.replace("/child/welcome");
+    }
+  }, [profileLoading, profile.onboarded, router]);
 
   // Auth state
   const [childrenList, setChildrenList] = useState<ChildInfo[]>([]);
@@ -138,14 +142,23 @@ export default function ChildPage() {
   const [transitionAct, setTransitionAct] = useState<DashActivity | null>(null);
   const [transVisible, setTransVisible] = useState(false);
 
-  // Theme & settings
-  const [theme, setTheme] = useState({ background: "plain", color_accent: "blue", font_size: "normal", avatar: "owl" });
   const [showSettings, setShowSettings] = useState(false);
   const [showJourney, setShowJourney] = useState(false);
   const isMobile = useMobile();
   const [showCelebration, setShowCelebration] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Sound cues. The hook short-circuits when the kid's pack is
+  // "off" or before the first user gesture, so wiring it here is
+  // always safe.
+  const playCue = useSoundCue();
+
+  // Tracks the previous mastery_transitions_up count so a refresh
+  // that brings the number up plays the mastery_up cue exactly
+  // once per transition. Null on first load (don't fire for the
+  // initial value, only for deltas).
+  const prevMasteryUpRef = useRef<number | null>(null);
 
   // ── Init ──
 
@@ -156,6 +169,19 @@ export default function ChildPage() {
   useEffect(() => {
     if (dash) document.title = `${dash.child.first_name}'s Learning | METHEAN`;
   }, [dash]);
+
+  // Fire the mastery_up cue exactly once per upward transition.
+  // First-load value is recorded without firing so refreshing the
+  // page doesn't replay yesterday's celebration.
+  useEffect(() => {
+    if (!dash) return;
+    const next = dash.progress.this_week.mastery_transitions_up;
+    const prev = prevMasteryUpRef.current;
+    if (prev !== null && next > prev) {
+      playCue("mastery_up", { volume: 0.6 });
+    }
+    prevMasteryUpRef.current = next;
+  }, [dash, playCue]);
 
   async function init() {
     setLoading(true);
@@ -175,14 +201,11 @@ export default function ChildPage() {
   async function loadDashboard() {
     setError("");
     try {
-      // Single API call — no waterfall
-      const [d, t] = await Promise.all([
-        childrenApi.dashboard(selectedId),
-        childrenApi.theme(selectedId).catch(() => null),
-      ]);
+      // Theme used to be fetched here. The PersonalizationProvider
+      // now owns canonical vibe/companion state for the subtree.
+      const d = await childrenApi.dashboard(selectedId);
       setDash(d);
-      if (t) setTheme({ background: t.background || "plain", color_accent: t.color_accent || "blue", font_size: t.font_size || "normal", avatar: t.avatar || "owl" });
-    } catch (err: any) {
+    } catch {
       setError("Couldn't load your learning page. Try again in a moment.");
     }
   }
@@ -257,21 +280,17 @@ export default function ChildPage() {
     loadDashboard();
   }
 
-  async function saveTheme(updates: Partial<typeof theme>) {
-    const t = { ...theme, ...updates };
-    setTheme(t);
-    childrenApi.updateTheme(selectedId, t).catch(() => {});
-  }
-
-  const fontSizeClass = theme.font_size === "large" ? "text-lg" : theme.font_size === "extra-large" ? "text-xl" : "";
-  const bg = bgStyles[theme.background] || bgStyles.plain;
-  const avatar = avatarEmoji[theme.avatar] || "\uD83E\uDD89";
+  // Page background comes from the active vibe's CSS variable bag
+  // that VibeProvider applies on the wrapper. The pre-
+  // personalization gradient map is gone; My Space is the single
+  // surface for theming changes.
+  const pageBg: React.CSSProperties = { background: "var(--color-page)" };
 
   // ── Loading ──
 
   if (loading) {
     return (
-      <div className="min-h-screen" style={bg}>
+      <div className="min-h-screen" style={pageBg}>
         <div className="max-w-2xl mx-auto px-8 py-12">
           <div className="h-8 w-48 rounded bg-(--color-border) animate-pulse mb-3" />
           <div className="h-5 w-72 rounded bg-(--color-border) animate-pulse mb-10" />
@@ -287,7 +306,7 @@ export default function ChildPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={bg}>
+      <div className="min-h-screen flex items-center justify-center" style={pageBg}>
         <div className="text-center px-8 max-w-sm">
           <p className="text-lg font-medium text-(--color-text) mb-2">Something went wrong</p>
           <p className="text-sm text-(--color-text-secondary) mb-6">{error}</p>
@@ -308,7 +327,7 @@ export default function ChildPage() {
   if (activeActivity && completed) {
     const isReview = activeActivity.is_review;
     return (
-      <div className={`min-h-screen ${fontSizeClass}`} style={bg}>
+      <div className={`min-h-screen`} style={pageBg}>
         <div className="max-w-xl mx-auto px-8 py-16">
           <CompletionState
             activityTitle={activeActivity.title}
@@ -332,7 +351,7 @@ export default function ChildPage() {
   if (activeActivity && learningContext) {
     const t = activeActivity.type;
     return (
-      <div className={`fixed inset-0 z-50 flex flex-col ${fontSizeClass}`} style={{ ...bg, paddingTop: "var(--safe-top)" }}>
+      <div className={`fixed inset-0 z-50 flex flex-col`} style={{ ...pageBg, paddingTop: "var(--safe-top)" }}>
         {/* Top bar */}
         <div className="flex items-center h-12 px-4 shrink-0 bg-(--color-surface)/80 backdrop-blur border-b border-(--color-border)/50">
           <button onClick={goNext} className="w-11 h-11 flex items-center justify-center press-scale" aria-label="Back">
@@ -364,8 +383,8 @@ export default function ChildPage() {
     <div className="fixed inset-0 z-50 flex items-center justify-center"
       style={{ background: "var(--color-page)", opacity: transVisible ? 1 : 0, transition: "opacity 200ms ease" }}>
       <div className="text-center">
-        <div className="w-16 h-16 rounded-2xl bg-(--color-surface) border border-(--color-border) flex items-center justify-center text-3xl mx-auto mb-4">
-          {typeLabels[transitionAct.type]?.icon || "\uD83D\uDCC4"}
+        <div className="w-16 h-16 rounded-2xl bg-(--color-surface) border border-(--color-border) flex items-center justify-center mx-auto mb-4 text-(--color-text-secondary)">
+          <ActivityIcon type={transitionAct.type as ActivityType} size={28} />
         </div>
         <p className="text-sm font-medium text-(--color-text) mb-4">{transitionAct.title}</p>
         <div className="w-5 h-5 mx-auto border-2 border-(--color-accent) border-t-transparent rounded-full animate-spin" />
@@ -375,13 +394,21 @@ export default function ChildPage() {
 
   // ═══ PHASE 1: MORNING VIEW / PHASE 4: ALL DONE ═══
   return (
-    <div className={`min-h-screen ${fontSizeClass}`} style={bg}>
+    <div className={`min-h-screen`} style={pageBg}>
       {/* Header */}
       <header className="bg-(--color-surface) border-b border-(--color-border) px-8 py-5">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-(--color-accent-light) flex items-center justify-center text-xl" aria-hidden="true">
-              {avatar}
+            {/* Companion identity. Persona-driven avatar lands in
+                Prompt 4; for this wave the slot renders the
+                companion's name (or a generic fallback) so the
+                emoji-avatar pattern is gone everywhere outside
+                the deprecated Settings panel picker. */}
+            <div
+              className="px-3 h-10 rounded-full bg-(--color-accent-light) flex items-center justify-center text-xs font-medium text-(--color-text)"
+              aria-label="Your companion"
+            >
+              {profile.companion_name || "Companion"}
             </div>
             <span className="text-sm font-medium text-(--color-text)">{dash.child.first_name}</span>
             {dash.child.streak.current > 0 && (
@@ -409,80 +436,7 @@ export default function ChildPage() {
         </div>
       </header>
 
-      {/* Settings — BottomSheet on mobile, inline on desktop */}
-      {isMobile ? (
-        <BottomSheet open={showSettings} onClose={() => setShowSettings(false)}>
-          <div className="px-5 pb-6">
-            <h3 className="text-base font-semibold text-(--color-text) mb-5">My Settings</h3>
-            <div className="space-y-5">
-              <div>
-                <label className="text-sm text-(--color-text-secondary) mb-3 block">Background</label>
-                <div className="grid grid-cols-4 gap-2">
-                  {(["plain", "meadow", "ocean", "forest", "space", "desert", "mountains"] as const).map(bg => (
-                    <button key={bg} onClick={() => saveTheme({ background: bg })}
-                      className={`h-14 rounded-xl border-2 text-[11px] font-medium capitalize ${theme.background === bg ? "border-(--color-brand-gold) ring-2 ring-(--color-brand-gold)/20" : "border-(--color-border)"}`}
-                      style={bgStyles[bg]}>{bg}</button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <label className="text-sm text-(--color-text-secondary) mb-3 block">Avatar</label>
-                <div className="flex gap-3 justify-center">
-                  {(["bear", "owl", "fox", "rabbit", "deer", "eagle", "wolf"] as const).map(a => (
-                    <button key={a} onClick={() => saveTheme({ avatar: a })}
-                      className={`w-12 h-12 rounded-full text-2xl border-2 transition-transform ${theme.avatar === a ? "border-(--color-brand-gold) scale-110" : "border-(--color-border)"}`}>{avatarEmoji[a]}</button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <label className="text-sm text-(--color-text-secondary) mb-3 block">Text Size</label>
-                <div className="flex gap-2">
-                  {([["normal", "Normal"], ["large", "Large"], ["extra-large", "Extra Large"]] as const).map(([v, l]) => (
-                    <button key={v} onClick={() => saveTheme({ font_size: v })}
-                      className={`flex-1 py-3 text-sm rounded-xl border-2 ${theme.font_size === v ? "border-(--color-brand-gold) bg-(--color-accent-light) font-medium" : "border-(--color-border)"}`}>{l}</button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </BottomSheet>
-      ) : showSettings && (
-        <div className="max-w-2xl mx-auto px-8 pt-4">
-          <div className="bg-(--color-surface) rounded-2xl border border-(--color-border) p-6 mb-4">
-            <h3 className="text-sm font-semibold text-(--color-text) mb-4">My Settings</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="text-xs text-(--color-text-secondary) mb-2 block">Background</label>
-                <div className="flex gap-2 flex-wrap">
-                  {(["plain", "meadow", "ocean", "forest", "space", "desert", "mountains"] as const).map(bg => (
-                    <button key={bg} onClick={() => saveTheme({ background: bg })}
-                      className={`w-14 h-10 rounded-xl border-2 text-[10px] font-medium capitalize min-h-[44px] ${theme.background === bg ? "border-(--color-accent)" : "border-(--color-border)"}`}
-                      style={bgStyles[bg]}>{bg}</button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <label className="text-xs text-(--color-text-secondary) mb-2 block">Avatar</label>
-                <div className="flex gap-2">
-                  {(["bear", "owl", "fox", "rabbit", "deer", "eagle", "wolf"] as const).map(a => (
-                    <button key={a} onClick={() => saveTheme({ avatar: a })}
-                      className={`w-11 h-11 rounded-full text-xl border-2 min-h-[44px] ${theme.avatar === a ? "border-(--color-accent)" : "border-(--color-border)"}`}>{avatarEmoji[a]}</button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <label className="text-xs text-(--color-text-secondary) mb-2 block">Text Size</label>
-                <div className="flex gap-2">
-                  {([["normal", "Normal"], ["large", "Large"], ["extra-large", "Extra Large"]] as const).map(([v, l]) => (
-                    <button key={v} onClick={() => saveTheme({ font_size: v })}
-                      className={`px-4 py-2 text-xs rounded-lg border-2 min-h-[44px] ${theme.font_size === v ? "border-(--color-accent) bg-(--color-accent-light)" : "border-(--color-border)"}`}>{l}</button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <MySpace open={showSettings} onClose={() => setShowSettings(false)} />
 
       <div className="max-w-2xl mx-auto px-8 py-10">
         {/* Hero: Greeting + Progress Ring */}
@@ -542,7 +496,11 @@ export default function ChildPage() {
         {/* Today's Activities */}
         {activities.length === 0 ? (
           <div className="text-center py-20">
-            <div className="text-5xl mb-4" aria-hidden="true">{avatar}</div>
+            {/* Companion-named callout while the persona avatar
+                is still iterated in Prompt 4. */}
+            <div className="text-sm font-medium text-(--color-text-secondary) mb-4">
+              {profile.companion_name || "Your companion"}
+            </div>
             <h2 className="text-lg font-medium text-(--color-text) mb-2">No learning scheduled today</h2>
             <p className="text-sm text-(--color-text-secondary)">Enjoy your free time, {dash.child.first_name}.</p>
           </div>
@@ -562,10 +520,9 @@ export default function ChildPage() {
                 >
                   <div className="h-[3px] w-full" style={{ background: topColor }} aria-hidden="true" />
                   <div className="p-4 sm:p-5 flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-full flex items-center justify-center text-lg shrink-0"
-                      style={{ background: typeColors[act.type] || "var(--color-accent-light)" }}
-                      aria-hidden="true">
-                      {tl.icon}
+                    <div className="w-11 h-11 rounded-full flex items-center justify-center shrink-0 text-(--color-text-secondary)"
+                      style={{ background: typeColors[act.type] || "var(--color-accent-light)" }}>
+                      <ActivityIcon type={act.type as ActivityType} size={20} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-[15px] font-medium text-(--color-text) truncate">{act.title}</h3>
@@ -607,10 +564,9 @@ export default function ChildPage() {
                 >
                   <div className="h-[3px] w-full" style={{ background: topColor }} aria-hidden="true" />
                   <div className="p-4 sm:p-5 flex items-center gap-4">
-                    <div className="w-11 h-11 rounded-full flex items-center justify-center text-lg shrink-0"
-                      style={{ background: typeColors[act.type] || "var(--color-accent-light)" }}
-                      aria-hidden="true">
-                      {tl.icon}
+                    <div className="w-11 h-11 rounded-full flex items-center justify-center shrink-0 text-(--color-text-secondary)"
+                      style={{ background: typeColors[act.type] || "var(--color-accent-light)" }}>
+                      <ActivityIcon type={act.type as ActivityType} size={20} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h3 className="text-[15px] text-(--color-text-tertiary) line-through truncate">{act.title}</h3>

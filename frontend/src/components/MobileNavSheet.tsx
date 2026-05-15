@@ -1,13 +1,22 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import { usePathname, useRouter } from "next/navigation";
 import BottomSheet from "@/components/BottomSheet";
 import { haptic } from "@/lib/haptics";
+import { auth, type User } from "@/lib/api";
 
 // The sheet now collapses to four canonical groups per the spec.
 // Items inside each group keep the existing routes; we just rewire
 // the labels and group membership.
-const NAV_SECTIONS = [
+interface NavItem {
+  href: string;
+  label: string;
+  guardianOnly?: boolean;
+}
+
+const NAV_SECTIONS: { label: string; items: NavItem[] }[] = [
   {
     label: "Learning",
     items: [
@@ -31,6 +40,8 @@ const NAV_SECTIONS = [
       { href: "/governance/trace", label: "Decision Trace" },
       { href: "/governance/reports", label: "Reports" },
       { href: "/governance/overrides", label: "Overrides" },
+      // Guardian-only: hidden for observers to avoid a 403 dead end.
+      { href: "/governance/personalization", label: "Personalization", guardianOnly: true },
     ],
   },
   {
@@ -54,11 +65,21 @@ const NAV_SECTIONS = [
       { href: "/child", label: "Child View" },
     ],
   },
-] as const;
+];
 
 export default function MobileNavSheet({ open, onClose }: { open: boolean; onClose: () => void }) {
   const pathname = usePathname();
   const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+
+  // The auth call is cheap and cached server-side; we fire it once
+  // when the sheet first becomes available so the guardian-only
+  // filter doesn't flash the personalization link to an observer.
+  useEffect(() => {
+    let cancelled = false;
+    auth.me().then((u) => { if (!cancelled) setUser(u); }).catch(() => {});
+    return () => { cancelled = true; };
+  }, []);
 
   function navigate(href: string) {
     haptic("light");
@@ -69,6 +90,8 @@ export default function MobileNavSheet({ open, onClose }: { open: boolean; onClo
   function isActive(href: string) {
     return pathname === href || pathname.startsWith(href + "/");
   }
+
+  const isGuardian = user ? user.role !== "observer" : false;
 
   return (
     <BottomSheet open={open} onClose={onClose} snapPoints={[0.85]} label="Main navigation">
@@ -84,7 +107,9 @@ export default function MobileNavSheet({ open, onClose }: { open: boolean; onClo
               </span>
             </div>
             <div className="space-y-0.5">
-              {section.items.map((item) => {
+              {section.items
+                .filter((item) => !item.guardianOnly || isGuardian)
+                .map((item) => {
                 const active = isActive(item.href);
                 return (
                   <button

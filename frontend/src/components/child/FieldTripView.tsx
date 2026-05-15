@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { LearningContext } from "@/lib/api";
+import { useSoundCue } from "@/lib/useSoundCue";
+import VoiceTextarea from "@/components/child/VoiceTextarea";
 
 interface FieldTripViewProps {
   context: LearningContext;
@@ -11,6 +13,7 @@ interface FieldTripViewProps {
 export default function FieldTripView({ context, onComplete }: FieldTripViewProps) {
   const [responses, setResponses] = useState<Record<string, string>>({});
   const [phase, setPhase] = useState<"prep" | "reflect">("prep");
+  const playCue = useSoundCue();
 
   const reflectionPrompts = [
     "What did you observe?",
@@ -18,7 +21,13 @@ export default function FieldTripView({ context, onComplete }: FieldTripViewProp
     "How does this connect to what you've been learning?",
   ];
 
+  useEffect(() => {
+    playCue("activity_start");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function handleSubmit() {
+    playCue("activity_complete");
     onComplete({
       confidence: 0.7,
       responses: reflectionPrompts.map((p) => ({ prompt: p, response: responses[p] || "" })),
@@ -73,11 +82,11 @@ export default function FieldTripView({ context, onComplete }: FieldTripViewProp
             {reflectionPrompts.map((prompt) => (
               <div key={prompt} className="bg-(--color-surface) rounded-2xl p-5 border border-(--color-border)">
                 <p className="text-base font-medium text-(--color-text) mb-2">{prompt}</p>
-                <textarea
+                <VoiceTextarea
                   value={responses[prompt] || ""}
-                  onChange={(e) => setResponses({ ...responses, [prompt]: e.target.value })}
+                  onChange={(next) => setResponses({ ...responses, [prompt]: next })}
                   placeholder="Write your thoughts..."
-                  className="w-full h-20 px-4 py-3 text-base border border-(--color-border) rounded-2xl resize-none bg-(--color-page) text-(--color-text) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20"
+                  rows={3}
                 />
               </div>
             ))}

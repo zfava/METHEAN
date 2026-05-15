@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { LearningContext } from "@/lib/api";
+import { useSoundCue } from "@/lib/useSoundCue";
+import VoiceTextarea from "@/components/child/VoiceTextarea";
 import TutorChat from "./TutorChat";
 
 interface PracticeItem {
@@ -31,9 +33,18 @@ export default function PracticeView({ context, childId, onComplete }: PracticeV
   const [showTutor, setShowTutor] = useState(false);
   const [results, setResults] = useState<Array<{ prompt: string; response: string; correct: boolean | null }>>([]);
   const [phase, setPhase] = useState<"work" | "summary">("work");
+  const playCue = useSoundCue();
 
   const item = items[currentIdx];
   const totalItems = items.length;
+
+  // Activity-start cue. The hook gracefully no-ops when the kid's
+  // pack is off, before any user gesture, or under
+  // prefers-reduced-motion for routine cues.
+  useEffect(() => {
+    playCue("activity_start");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const checkAnswer = useCallback(() => {
     if (!item) return;
@@ -46,7 +57,8 @@ export default function PracticeView({ context, childId, onComplete }: PracticeV
     setChecked(true);
     setCorrect(isCorrect);
     setResults((prev) => [...prev, { prompt: item.prompt, response: answer, correct: isAutoCheck ? isCorrect : null }]);
-  }, [item, answer]);
+    if (isCorrect) playCue("correct");
+  }, [item, answer, playCue]);
 
   const nextItem = useCallback(() => {
     if (currentIdx + 1 >= totalItems) {
@@ -63,12 +75,18 @@ export default function PracticeView({ context, childId, onComplete }: PracticeV
   const handleFinish = useCallback(() => {
     const correctCount = results.filter((r) => r.correct === true).length;
     const confidence = totalItems > 0 ? Math.min(0.95, 0.3 + (correctCount / totalItems) * 0.6) : 0.6;
+    playCue("activity_complete");
     onComplete({
       confidence,
       responses: results.map((r) => ({ prompt: r.prompt, response: r.response })),
       self_reflection: `${correctCount}/${totalItems} correct`,
     });
-  }, [results, totalItems, onComplete]);
+  }, [results, totalItems, onComplete, playCue]);
+
+  const revealHint = useCallback(() => {
+    setShowHint((h) => h + 1);
+    playCue("hint_revealed");
+  }, [playCue]);
 
   if (totalItems === 0) {
     return (
@@ -162,7 +180,13 @@ export default function PracticeView({ context, childId, onComplete }: PracticeV
             <input type="number" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Type your answer..." className="w-full px-4 py-3 rounded-xl border border-(--color-border) bg-(--color-surface) text-(--color-text) text-lg focus:outline-none focus:border-(--color-accent)" onKeyDown={(e) => e.key === "Enter" && answer && checkAnswer()} autoFocus />
           )}
           {item.expected_type === "text" && (
-            <textarea value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Write your answer..." rows={4} className="w-full px-4 py-3 rounded-xl border border-(--color-border) bg-(--color-surface) text-(--color-text) focus:outline-none focus:border-(--color-accent) resize-none" autoFocus />
+            <VoiceTextarea
+              value={answer}
+              onChange={setAnswer}
+              placeholder="Write your answer..."
+              rows={4}
+              autoFocus
+            />
           )}
           {item.expected_type === "multiple_choice" && item.options && (
             <div className="space-y-2">
@@ -188,7 +212,7 @@ export default function PracticeView({ context, childId, onComplete }: PracticeV
               Check Answer
             </button>
             {item.hints && item.hints.length > 0 && showHint < item.hints.length && (
-              <button onClick={() => setShowHint((h) => h + 1)} className="px-4 py-3 rounded-xl border border-(--color-border) text-(--color-text-secondary) hover:bg-(--color-surface) transition-colors text-sm">
+              <button onClick={revealHint} className="px-4 py-3 rounded-xl border border-(--color-border) text-(--color-text-secondary) hover:bg-(--color-surface) transition-colors text-sm">
                 Hint ({showHint}/{item.hints.length})
               </button>
             )}

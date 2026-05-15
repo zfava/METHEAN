@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { LearningContext } from "@/lib/api";
+import { useSoundCue } from "@/lib/useSoundCue";
+import VoiceTextarea from "@/components/child/VoiceTextarea";
 import TutorChat from "./TutorChat";
 
 interface ReviewViewProps {
@@ -24,6 +26,7 @@ export default function ReviewView({ context, childId, onComplete }: ReviewViewP
   const [selfAssessment, setSelfAssessment] = useState<number | null>(null);
   const [phase, setPhase] = useState<"recall" | "reflect">("recall");
   const [currentPrompt, setCurrentPrompt] = useState(0);
+  const playCue = useSoundCue();
 
   const prompts = context.assessment.prompts?.length > 0
     ? context.assessment.prompts
@@ -35,7 +38,13 @@ export default function ReviewView({ context, childId, onComplete }: ReviewViewP
     ? Math.round((Date.now() - new Date(lastStudied).getTime()) / 86400000)
     : null;
 
+  useEffect(() => {
+    playCue("activity_start");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function handleSubmit() {
+    playCue("activity_complete");
     onComplete({
       confidence: selfAssessment ?? 0.6,
       responses: prompts.map((p, i) => ({ prompt: p, response: responses[i] || "" })),
@@ -71,11 +80,11 @@ export default function ReviewView({ context, childId, onComplete }: ReviewViewP
           {/* One prompt at a time */}
           <div className="bg-(--color-surface) rounded-2xl p-6 border border-(--color-border) mb-6">
             <p className="text-lg text-(--color-text) leading-relaxed mb-4">{prompts[currentPrompt]}</p>
-            <textarea
+            <VoiceTextarea
               value={responses[currentPrompt] || ""}
-              onChange={(e) => setResponses({ ...responses, [currentPrompt]: e.target.value })}
+              onChange={(next) => setResponses({ ...responses, [currentPrompt]: next })}
               placeholder="What do you remember?"
-              className="w-full h-24 px-4 py-3 text-base border border-(--color-border) rounded-2xl resize-none bg-(--color-page) text-(--color-text) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20"
+              rows={4}
             />
           </div>
 

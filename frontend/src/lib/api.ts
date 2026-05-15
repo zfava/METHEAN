@@ -130,11 +130,59 @@ export const children = {
   today: (childId: string) => request<any[]>(`/children/${childId}/today`),
   dashboard: (childId: string) => request<ChildDashboardResponse>(`/children/${childId}/dashboard`),
   alerts: (childId: string, limit = 5) => request<any>(`/children/${childId}/alerts?limit=${limit}`),
-  theme: (childId: string) => request<any>(`/children/${childId}/theme`),
-  updateTheme: (childId: string, data: object) =>
-    request<any>(`/children/${childId}/theme`, { method: "PUT", body: JSON.stringify(data) }),
   updatePreferences: (childId: string, data: object) =>
     request<any>(`/children/${childId}/preferences`, { method: "PUT", body: JSON.stringify(data) }),
+};
+
+// Personalization
+import type {
+  ChildPersonalization,
+  PersonalizationLibrary,
+  PersonalizationPolicy,
+  TranscribeResponse,
+} from "./personalization-types";
+
+export const personalization = {
+  library: () => request<PersonalizationLibrary>(`/personalization/library`),
+  getForChild: (childId: string) =>
+    request<ChildPersonalization>(`/children/${childId}/personalization`),
+  updateForChild: (childId: string, data: Partial<ChildPersonalization>) =>
+    request<ChildPersonalization>(`/children/${childId}/personalization`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+  getPolicy: () => request<PersonalizationPolicy>(`/personalization/policy`),
+  updatePolicy: (data: Partial<PersonalizationPolicy>) =>
+    request<PersonalizationPolicy>(`/personalization/policy`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+};
+
+// Voice-input transcribe. The audio Blob is sent as multipart form
+// data; the server never persists it. Returns the transcript plus
+// cap and safety metadata.
+export const transcribe = {
+  async submit(childId: string, audio: Blob): Promise<TranscribeResponse> {
+    const form = new FormData();
+    form.append("audio", audio, "audio.webm");
+    const url = `${API_BASE}/children/${childId}/transcribe`;
+    const csrfToken = getCookie("csrf_token");
+    const headers: Record<string, string> = {};
+    if (csrfToken) headers["X-CSRF-Token"] = csrfToken;
+    const resp = await fetch(url, {
+      method: "POST",
+      body: form,
+      credentials: "include",
+      headers,
+    });
+    if (!resp.ok) {
+      let detail: unknown = await resp.text();
+      try { detail = JSON.parse(detail as string); } catch {}
+      throw new ApiError(resp.status, JSON.stringify(detail));
+    }
+    return resp.json();
+  },
 };
 
 // Snapshots

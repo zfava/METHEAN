@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { LearningContext } from "@/lib/api";
+import { useSoundCue } from "@/lib/useSoundCue";
+import VoiceTextarea from "@/components/child/VoiceTextarea";
 import TutorChat from "./TutorChat";
 import { cn } from "@/lib/cn";
 
@@ -20,16 +22,26 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
   const [responses, setResponses] = useState<Record<number, string>>({});
   const [selfAssessment, setSelfAssessment] = useState<number | null>(null);
   const [reflection, setReflection] = useState("");
+  const playCue = useSoundCue();
 
   const { lesson, activity, assessment } = context;
   const steps = lesson.steps || [];
   const prompts = lesson.practice_prompts || [];
+
+  // Activity-start cue. Fires on mount; the hook itself
+  // suppresses if the kid's pack is "off" or before any user
+  // gesture has been recorded.
+  useEffect(() => {
+    playCue("activity_start");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function handleSubmit() {
     const practiceResponses = prompts.map((p, i) => ({
       prompt: p,
       response: responses[i] || "",
     }));
+    playCue("activity_complete");
     onComplete({
       confidence: selfAssessment ?? 0.6,
       responses: practiceResponses,
@@ -237,11 +249,11 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
             <label className="block text-sm text-(--color-text-secondary) mb-2">
               Anything you want to tell your parent about today&apos;s lesson? (optional)
             </label>
-            <textarea
+            <VoiceTextarea
               value={reflection}
-              onChange={(e) => setReflection(e.target.value)}
+              onChange={setReflection}
               placeholder="How did the lesson go? What was interesting or tricky?"
-              className="w-full h-24 px-4 py-3 text-base border border-(--color-border) rounded-2xl resize-none bg-(--color-surface) text-(--color-text) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20"
+              rows={4}
             />
           </div>
 
