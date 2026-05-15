@@ -76,6 +76,10 @@ const NAV_GROUPS = [
       { href: "/governance/trace", label: "Decision Trace" },
       { href: "/governance/reports", label: "Reports" },
       { href: "/governance/overrides", label: "Overrides" },
+      // Guardian-only: observers can't mutate the personalization
+      // policy and the page hides itself for them, so the nav link
+      // is gated here too to avoid a 403-shaped dead end.
+      { href: "/governance/personalization", label: "Personalization", guardianOnly: true },
     ],
   },
 ];
@@ -290,9 +294,11 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
 
               {isExpanded && (
                 <div className="mt-0.5 mb-2">
-                  {group.items.map((item) =>
-                    navItem(item.href, item.label, item.exact, (item as any).badge)
-                  )}
+                  {group.items
+                    .filter((item) => !(item as { guardianOnly?: boolean }).guardianOnly || (user && user.role !== "observer"))
+                    .map((item) =>
+                      navItem(item.href, item.label, item.exact, (item as any).badge),
+                    )}
                 </div>
               )}
             </div>
