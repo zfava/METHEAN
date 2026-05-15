@@ -137,6 +137,7 @@ RLS_TABLES = [
     "learning_maps",
     "learning_nodes",
     "notification_logs",
+    "personalization_policy",
     "plan_weeks",
     "plans",
     "portfolio_entries",

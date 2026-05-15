@@ -510,6 +510,119 @@ async def update_child_preferences(
 
 
 # ══════════════════════════════════════════════════
+# Legacy theme route (deprecated, proxies to personalization)
+# ══════════════════════════════════════════════════
+#
+# Original /theme exposed a flat shape (background / color_accent /
+# font_size / avatar) that predates the personalization system. Older
+# clients still poll these paths; rather than break them we proxy
+# reads against personalization.vibe (mapped through _VIBE_TO_LEGACY)
+# and store writes in personalization.legacy_theme so the modern
+# config is the single source of truth.
+
+# Vibe id  ->  pre-personalization "background" name.
+_VIBE_TO_LEGACY: dict[str, str] = {
+    "calm": "plain",
+    "field": "forest",
+    "orbit": "ocean",
+    "workshop": "sunset",
+    "studio": "lavender",
+    "bold": "ember",
+}
+_LEGACY_TO_VIBE: dict[str, str] = {v: k for k, v in _VIBE_TO_LEGACY.items()}
+
+
+class _LegacyThemeUpdate(BaseModel):
+    background: str | None = None
+    color_accent: str | None = None
+    font_size: str | None = None
+    avatar: str | None = None
+
+
+@router.get(
+    "/children/{child_id}/theme",
+    deprecated=True,
+    tags=["spec-coverage", "deprecated"],
+)
+async def get_child_theme_legacy(
+    child_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
+) -> dict:
+    """Deprecated. Use ``GET /children/{child_id}/personalization``."""
+    result = await db.execute(select(ChildPreferences).where(ChildPreferences.child_id == child_id))
+    prefs = result.scalar_one_or_none()
+    personalization: dict = (prefs.personalization if prefs is not None else {}) or {}
+    legacy: dict = personalization.get("legacy_theme") or {}
+    vibe = str(personalization.get("vibe") or "calm")
+    return {
+        "background": _VIBE_TO_LEGACY.get(vibe, legacy.get("background", "plain")),
+        "color_accent": legacy.get("color_accent", "blue"),
+        "font_size": legacy.get("font_size", "medium"),
+        "avatar": legacy.get("avatar", ""),
+    }
+
+
+@router.put(
+    "/children/{child_id}/theme",
+    deprecated=True,
+    tags=["spec-coverage", "deprecated"],
+)
+async def put_child_theme_legacy(
+    child_id: uuid.UUID,
+    body: _LegacyThemeUpdate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
+) -> dict:
+    """Deprecated. Use ``PUT /children/{child_id}/personalization``.
+
+    The whole payload lands in ``personalization.legacy_theme`` so
+    legacy clients keep their state; if ``background`` is one of the
+    six known names, we also forward it to ``personalization.vibe``
+    so the modern client picks it up. Unknown background values are
+    accepted in the legacy bag but do not touch ``vibe``.
+    """
+    result = await db.execute(select(ChildPreferences).where(ChildPreferences.child_id == child_id))
+    prefs = result.scalar_one_or_none()
+    if prefs is None:
+        prefs = ChildPreferences(
+            child_id=child_id,
+            household_id=user.household_id,
+            personalization={},
+            interests=[],
+        )
+        db.add(prefs)
+    personalization = dict(prefs.personalization or {})
+    legacy = dict(personalization.get("legacy_theme") or {})
+
+    if body.background is not None:
+        legacy["background"] = body.background
+        mapped_vibe = _LEGACY_TO_VIBE.get(body.background)
+        if mapped_vibe is not None:
+            personalization["vibe"] = mapped_vibe
+    if body.color_accent is not None:
+        legacy["color_accent"] = body.color_accent
+    if body.font_size is not None:
+        legacy["font_size"] = body.font_size
+    if body.avatar is not None:
+        legacy["avatar"] = body.avatar
+
+    personalization["legacy_theme"] = legacy
+    prefs.personalization = personalization
+    await db.flush()
+
+    vibe = str(personalization.get("vibe") or "calm")
+    return {
+        "background": _VIBE_TO_LEGACY.get(vibe, legacy.get("background", "plain")),
+        "color_accent": legacy.get("color_accent", "blue"),
+        "font_size": legacy.get("font_size", "medium"),
+        "avatar": legacy.get("avatar", ""),
+    }
+
+
+# ══════════════════════════════════════════════════
 # Today's Activities
 # ══════════════════════════════════════════════════
 

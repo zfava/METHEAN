@@ -5,7 +5,7 @@ Every AI call goes through this single gateway. The gateway:
 2. Calls AI provider (Claude primary, OpenAI fallback, mock last resort)
 3. Validates response against expected schema
 4. Logs full input/output as AIRun record
-5. Returns output as RECOMMENDATION — never writes to state directly
+5. Returns output as RECOMMENDATION, never writes to state directly
 
 AI never writes to state directly. Output queues as recommendations
 through parent governance.
@@ -15,17 +15,99 @@ import json
 import logging
 import time
 import uuid
+from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.content.personalization_library import (
+    InterestTag,
+    get_affirmation_tone,
+    get_interest_tag,
+    get_voice_persona,
+)
 from app.core.config import settings
 from app.models.enums import AIRunStatus
+from app.models.identity import Child, ChildPreferences
 from app.models.operational import AIRun
 
 logger = logging.getLogger("methean.ai.gateway")
+
+
+@dataclass
+class PersonalizationContext:
+    """Resolved personalization signals for a child-facing AI call.
+
+    Loaded once per request via :func:`load_personalization_context`
+    and passed through to prompt-rendering helpers. ``companion_name``
+    is the empty string when the kid has not picked one, in which
+    case the tutor opener falls back to a generic phrase.
+    """
+
+    companion_name: str = ""
+    companion_voice_tone: str = ""
+    affirmation_tone: str = ""
+    interests: list[InterestTag] = field(default_factory=list)
+
+
+async def load_personalization_context(db: AsyncSession, child_id: uuid.UUID) -> PersonalizationContext:
+    """Resolve a child's personalization profile into prompt context.
+
+    Reads ``ChildPreferences.personalization`` and ``interests``,
+    expands library references (voice persona, affirmation tone,
+    interest tags) into their full content, and returns a plain
+    dataclass. Callers should invoke this once per request and pass
+    the result down to prompt-rendering helpers, which never touch
+    the DB themselves.
+
+    Missing rows, missing fields, and unknown library IDs all degrade
+    to empty values rather than raising; personalization is advisory
+    and must never block a child-facing AI call.
+    """
+    result = await db.execute(select(ChildPreferences).where(ChildPreferences.child_id == child_id))
+    prefs = result.scalar_one_or_none()
+    if prefs is None:
+        return PersonalizationContext()
+
+    personalization: dict = prefs.personalization or {}
+    interest_ids: list[str] = list(prefs.interests or [])
+
+    companion_name = str(personalization.get("companion_name") or "")
+    voice_id = str(personalization.get("companion_voice") or "")
+    tone_id = str(personalization.get("affirmation_tone") or "")
+
+    voice_summary = ""
+    if voice_id:
+        persona = get_voice_persona(voice_id)
+        if persona is not None:
+            voice_summary = persona.tone_summary
+
+    tone_summary = ""
+    if tone_id:
+        tone = get_affirmation_tone(tone_id)
+        if tone is not None:
+            tone_summary = tone.tone_summary
+
+    interests: list[InterestTag] = []
+    for tag_id in interest_ids:
+        tag = get_interest_tag(tag_id)
+        if tag is not None:
+            interests.append(tag)
+
+    return PersonalizationContext(
+        companion_name=companion_name,
+        companion_voice_tone=voice_summary,
+        affirmation_tone=tone_summary,
+        interests=interests,
+    )
+
+
+# Keep ``Child`` referenced so the import isn't flagged unused. The
+# load helper does not need it directly (we go through ChildPreferences)
+# but downstream callers usually have a ``Child`` in scope.
+_ = Child
 
 
 class AIProviderUnavailableError(Exception):

@@ -16,11 +16,12 @@ from pydantic import BaseModel, Field
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.ai.gateway import AIRole, call_ai
+from app.ai.gateway import AIRole, call_ai, load_personalization_context
 from app.ai.prompts import (
     ADVISOR_SYSTEM,
     CARTOGRAPHER_SYSTEM,
     TUTOR_SYSTEM,
+    render_tutor_system,
 )
 from app.api.deps import (
     PaginationParams,
@@ -1006,10 +1007,14 @@ Continue the Socratic dialogue. Reference what was discussed earlier if relevant
         pass
 
     phil = await _get_philosophical_profile(db, user.household_id)
+    # Load personalization once per request so prompt assembly stays
+    # synchronous; render_tutor_system never hits the DB itself.
+    pctx = await load_personalization_context(db, body.child_id) if body.child_id else None
+    tutor_system = render_tutor_system(pctx) if pctx is not None else TUTOR_SYSTEM
     result = await call_ai(
         db,
         role=AIRole.tutor,
-        system_prompt=TUTOR_SYSTEM,
+        system_prompt=tutor_system,
         user_prompt=user_prompt,
         household_id=user.household_id,
         triggered_by=user.id,
@@ -1133,7 +1138,8 @@ Respond in plain text as the Socratic tutor. Do NOT use JSON. Just speak natural
         pass
 
     phil = await _get_philosophical_profile(db, user.household_id)
-    system = TUTOR_SYSTEM
+    pctx = await load_personalization_context(db, body.child_id) if body.child_id else None
+    system = render_tutor_system(pctx) if pctx is not None else TUTOR_SYSTEM
     constraints = build_philosophical_constraints(phil)
     if constraints:
         system = system + "\n" + constraints
