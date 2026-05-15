@@ -44,6 +44,7 @@ from app.models.operational import (
 )
 from app.models.state import ChildNodeState, FSRSCard, ReviewLog, StateEvent
 from app.models.style_vector import LearnerStyleVector
+from app.models.tts_cache import TTSCache
 from app.models.wellbeing import WellbeingAnomaly, WellbeingConfig
 
 __all__ = [
@@ -91,6 +92,7 @@ __all__ = [
     "StateEvent",
     "Streak",
     "Subject",
+    "TTSCache",
     "UsageEvent",
     "UsageLedger",
     "User",

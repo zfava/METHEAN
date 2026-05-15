@@ -212,6 +212,7 @@ RLS_COVERED_TABLES = [
     "fitness_logs",
     "fitness_benchmarks",
     "personalization_policy",
+    "voice_usage_daily",
 ]
 
 
@@ -393,4 +394,5 @@ class TestRLSCoverageMatrix:
         # beta_feedback added in migration 032 / 033
         # fitness_logs + fitness_benchmarks added in migration 037
         # personalization_policy added in migration 043
-        assert len(RLS_COVERED_TABLES) == 53
+        # voice_usage_daily added in migration 044
+        assert len(RLS_COVERED_TABLES) == 54

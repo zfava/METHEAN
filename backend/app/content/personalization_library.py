@@ -41,6 +41,13 @@ class VoicePersona:
     default_companion_name: str
     tone_summary: str
     voice_id_placeholder: str
+    # TTS fields (Sprint v2 Prompt 2). voice_id_placeholder predates
+    # the live binding and is retained for back-compat; tts_voice_id
+    # is the authoritative voice the OpenAI/ElevenLabs provider uses.
+    tts_voice_id: str = ""
+    tts_provider: str = "openai"
+    speech_rate: float = 1.0
+    prosody_hints: str = ""
 
 
 @dataclass(frozen=True)
@@ -642,6 +649,10 @@ VOICE_PERSONAS: tuple[VoicePersona, ...] = (
         default_companion_name="Sage",
         tone_summary="Calm, encouraging, slightly older, focuses on effort and growth.",
         voice_id_placeholder="",
+        tts_voice_id="nova",
+        tts_provider="openai",
+        speech_rate=0.95,
+        prosody_hints="warm and unhurried",
     ),
     VoicePersona(
         id="default_bright",
@@ -649,6 +660,10 @@ VOICE_PERSONAS: tuple[VoicePersona, ...] = (
         default_companion_name="Nova",
         tone_summary="Energetic, upbeat, peer-adjacent, celebrates wins audibly.",
         voice_id_placeholder="",
+        tts_voice_id="shimmer",
+        tts_provider="openai",
+        speech_rate=1.05,
+        prosody_hints="bright and energetic",
     ),
     VoicePersona(
         id="default_steady",
@@ -656,6 +671,10 @@ VOICE_PERSONAS: tuple[VoicePersona, ...] = (
         default_companion_name="Atlas",
         tone_summary="Measured, factual, brief, no filler, treats the kid as capable.",
         voice_id_placeholder="",
+        tts_voice_id="onyx",
+        tts_provider="openai",
+        speech_rate=0.92,
+        prosody_hints="measured and clear",
     ),
     VoicePersona(
         id="default_playful",
@@ -663,6 +682,10 @@ VOICE_PERSONAS: tuple[VoicePersona, ...] = (
         default_companion_name="Pip",
         tone_summary="Witty and light, safe jokes, never sarcastic at the child's expense.",
         voice_id_placeholder="",
+        tts_voice_id="fable",
+        tts_provider="openai",
+        speech_rate=1.05,
+        prosody_hints="light and playful",
     ),
     VoicePersona(
         id="default_gentle",
@@ -670,6 +693,10 @@ VOICE_PERSONAS: tuple[VoicePersona, ...] = (
         default_companion_name="Wren",
         tone_summary="Soft, patient, slow to push, validates struggle before asking for next step.",
         voice_id_placeholder="",
+        tts_voice_id="alloy",
+        tts_provider="openai",
+        speech_rate=0.90,
+        prosody_hints="soft and patient",
     ),
 )
 

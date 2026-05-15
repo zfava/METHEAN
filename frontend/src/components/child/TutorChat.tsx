@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { streamTutorMessage } from "@/lib/api";
 import { CompanionAvatar } from "@/components/CompanionAvatar";
 import { usePersonalization } from "@/lib/PersonalizationProvider";
+import { useTutorVoice } from "@/lib/useTutorVoice";
 
 interface TutorChatProps {
   activityId: string;
@@ -32,6 +33,7 @@ export default function TutorChat({
   // refers to a brand-named "Methean" voice now that personas
   // exist.
   const { profile } = usePersonalization();
+  const [voiceState, voiceControls] = useTutorVoice();
   const companionName = profile.companion_name || "Your Companion";
   const companionVoice = profile.companion_voice || "default_warm";
   const dialogLabel = profile.companion_name
@@ -133,18 +135,29 @@ export default function TutorChat({
           });
         },
         (hints) => {
+          let finalText = "";
           setMessages(prev => {
             const copy = [...prev];
             const last = copy[copy.length - 1];
             if (last?.role === "tutor") {
               let cleanText = last.text;
               if (cleanText.includes("HINT:")) cleanText = cleanText.split("HINT:")[0].trim();
+              finalText = cleanText;
               copy[copy.length - 1] = { ...last, text: cleanText, hints };
             }
             return copy;
           });
           setIsStreaming(false);
           setLoading(false);
+          // Fire-and-forget TTS playback. The hook handles
+          // policy/cap/session-mute and silently no-ops if voice
+          // isn't enabled. Use the message timestamp as the
+          // correlation id so the speaking indicator can target the
+          // right bubble.
+          if (finalText) {
+            const messageId = `tutor-${Date.now()}`;
+            void voiceControls.speak(messageId, finalText);
+          }
         },
         (errorMsg) => {
           setMessages(prev => {
@@ -232,6 +245,31 @@ export default function TutorChat({
               </p>
             )}
           </div>
+          {/* Session voice-mute toggle (in-memory; the kid silences
+              TTS for this session without changing policy). */}
+          <button
+            type="button"
+            onClick={() => {
+              if (voiceState.isPlaying) voiceControls.stop();
+              voiceControls.setSessionMuted(!voiceControls.sessionMuted);
+            }}
+            aria-pressed={voiceControls.sessionMuted}
+            aria-label={voiceControls.sessionMuted ? "Turn voice on" : "Turn voice off"}
+            className="w-10 h-10 mr-1 rounded-full flex items-center justify-center text-(--color-text-tertiary) hover:bg-(--color-page) min-h-[44px] min-w-[44px]"
+          >
+            {voiceControls.sessionMuted ? (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <line x1="22" y1="9" x2="16" y2="15" />
+                <line x1="16" y1="9" x2="22" y2="15" />
+              </svg>
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+              </svg>
+            )}
+          </button>
           <button onClick={handleClose}
             className="w-10 h-10 rounded-full flex items-center justify-center text-(--color-text-tertiary) hover:bg-(--color-page) min-h-[44px] min-w-[44px]"
             aria-label="Close tutor">

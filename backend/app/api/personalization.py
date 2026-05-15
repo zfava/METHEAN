@@ -87,6 +87,12 @@ def _default_policy_read() -> "PersonalizationPolicyRead":
         allowed_affirmation_tones=["*"],
         companion_name_requires_review=False,
         max_interest_tags_per_child=_DEFAULT_POLICY_MAX_INTEREST_TAGS,
+        voice_input_enabled=True,
+        voice_minutes_daily_cap=60,
+        whisper_provider="openai",
+        voice_output_enabled=True,
+        voice_output_minutes_daily_cap=120,
+        tts_provider="openai",
     )
 
 
@@ -121,6 +127,12 @@ def _policy_to_read(policy: PersonalizationPolicy | None) -> PersonalizationPoli
         allowed_affirmation_tones=list(policy.allowed_affirmation_tones),
         companion_name_requires_review=policy.companion_name_requires_review,
         max_interest_tags_per_child=policy.max_interest_tags_per_child,
+        voice_input_enabled=policy.voice_input_enabled,
+        voice_minutes_daily_cap=policy.voice_minutes_daily_cap,
+        whisper_provider=policy.whisper_provider,  # type: ignore[arg-type]
+        voice_output_enabled=policy.voice_output_enabled,
+        voice_output_minutes_daily_cap=policy.voice_output_minutes_daily_cap,
+        tts_provider=policy.tts_provider,  # type: ignore[arg-type]
     )
 
 
@@ -532,6 +544,20 @@ async def update_policy(
         policy.companion_name_requires_review = body.companion_name_requires_review
     if body.max_interest_tags_per_child is not None:
         policy.max_interest_tags_per_child = body.max_interest_tags_per_child
+    # Voice-input governance (migration 044).
+    if body.voice_input_enabled is not None:
+        policy.voice_input_enabled = body.voice_input_enabled
+    if body.voice_minutes_daily_cap is not None:
+        policy.voice_minutes_daily_cap = body.voice_minutes_daily_cap
+    if body.whisper_provider is not None:
+        policy.whisper_provider = body.whisper_provider
+    # Voice-output governance (migration 045).
+    if body.voice_output_enabled is not None:
+        policy.voice_output_enabled = body.voice_output_enabled
+    if body.voice_output_minutes_daily_cap is not None:
+        policy.voice_output_minutes_daily_cap = body.voice_output_minutes_daily_cap
+    if body.tts_provider is not None:
+        policy.tts_provider = body.tts_provider
 
     await db.flush()
 

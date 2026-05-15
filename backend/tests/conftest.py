@@ -151,6 +151,7 @@ RLS_TABLES = [
     "usage_ledger",
     "user_permissions",
     "users",
+    "voice_usage_daily",
     "weekly_snapshots",
     "wellbeing_anomalies",
     "wellbeing_configs",

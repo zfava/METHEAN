@@ -26,6 +26,11 @@ export interface InterestTag extends LibraryEntry {
 export interface VoicePersona extends LibraryEntry {
   default_companion_name: string;
   tone_summary: string;
+  // TTS fields (Sprint v2 Prompt 2). Optional for back-compat.
+  tts_voice_id?: string;
+  tts_provider?: "openai" | "elevenlabs";
+  speech_rate?: number;
+  prosody_hints?: string;
 }
 
 export interface IconographyPack extends LibraryEntry {
@@ -72,6 +77,25 @@ export interface PersonalizationPolicy {
   allowed_affirmation_tones: string[];
   companion_name_requires_review: boolean;
   max_interest_tags_per_child: number;
+  // Voice-input governance (Sprint v2 Prompt 1).
+  voice_input_enabled: boolean;
+  voice_minutes_daily_cap: number;
+  whisper_provider: "openai" | "local";
+  // Voice-output governance (Sprint v2 Prompt 2).
+  voice_output_enabled: boolean;
+  voice_output_minutes_daily_cap: number;
+  tts_provider: "openai" | "elevenlabs";
+}
+
+export interface TranscribeResponse {
+  text: string;
+  duration_seconds: number;
+  remaining_minutes: number;
+  is_silent: boolean;
+  safety_intervention: boolean;
+  intervention_kind: string | null;
+  suggested_response: string | null;
+  provider: "openai" | "local";
 }
 
 /**
