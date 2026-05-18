@@ -1,39 +1,87 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Button from "@/components/ui/Button";
+import { HeroOrnament } from "./icons";
 
 export function LandingHero() {
   const router = useRouter();
   return (
-    <section className="fade-up min-h-[92vh] flex items-center justify-center px-6 pt-32 pb-20 bg-(--color-page)">
-      <div className="max-w-[820px] text-center">
-        <p className="text-[13px] uppercase tracking-[0.1em] text-(--color-text-tertiary) mb-8">
-          A learning operating system for families who homeschool
-        </p>
-        <h1 className="text-[40px] sm:text-[64px] lg:text-[80px] font-semibold leading-[1.05] tracking-[-0.04em] text-(--color-text) mb-8">
-          <span className="block">You set the rules.</span>
-          <span className="block">AI follows them.</span>
-          <span className="block">Every decision is yours.</span>
+    <section
+      aria-labelledby="hero-headline"
+      className="parchment-noise min-h-screen flex items-center justify-center px-6 pt-32 pb-28 bg-[var(--parchment)]"
+    >
+      <div className="max-w-[1100px] w-full text-center">
+        {/* Rotating ornament */}
+        <div className="flex justify-center mb-10 text-[var(--gold-deep)]">
+          <span className="animate-subtle-rotate inline-flex">
+            <HeroOrnament size={56} />
+          </span>
+        </div>
+
+        {/* Eyebrow */}
+        <div className="flex items-center justify-center gap-4 mb-12">
+          <span
+            aria-hidden="true"
+            className="hidden sm:block h-[1px] w-7 bg-[var(--gold-deep)] opacity-50"
+          />
+          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.32em] text-[var(--gold-deep)]">
+            Established by Parents · For Parents
+          </p>
+          <span
+            aria-hidden="true"
+            className="hidden sm:block h-[1px] w-7 bg-[var(--gold-deep)] opacity-50"
+          />
+        </div>
+
+        {/* Headline */}
+        <h1
+          id="hero-headline"
+          className="font-[family-name:var(--font-cormorant)] font-medium text-[var(--navy)] leading-[0.92] tracking-[-0.025em] text-[clamp(56px,13vw,156px)] mb-10"
+        >
+          <span className="block mb-1">
+            <span className="gold-em">Your</span> children.
+          </span>
+          <span className="block mb-1">
+            <span className="gold-em">Your</span> rules.
+          </span>
+          <span className="block mb-1">
+            <span className="gold-em">Your</span> operating system.
+          </span>
         </h1>
-        <p className="text-[17px] sm:text-[18px] text-(--color-text-secondary) leading-relaxed max-w-[560px] mx-auto mb-10">
-          METHEAN gives homeschool families a single system for curriculum, mastery tracking, state
-          compliance, and AI tutoring. Built so the family stays in charge.
+
+        {/* Subtitle */}
+        <p className="font-[family-name:var(--font-cormorant)] italic text-[clamp(20px,2.4vw,28px)] leading-[1.45] text-[var(--ink-soft)] max-w-[680px] mx-auto mb-14">
+          METHEAN is the first learning platform built so the family stays sovereign. A full year of
+          curriculum, drafted for your philosophy. Curriculum, mastery, compliance, and AI tutoring,
+          all under your authority. Always.
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
-          <Button variant="gold" size="lg" onClick={() => router.push("/auth?mode=register")}>
-            Start Your Free Trial
-          </Button>
-          <a
-            href="#how-it-works"
-            className="text-[15px] text-(--color-text-secondary) underline underline-offset-4 hover:text-(--color-text) transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--gold) focus-visible:ring-offset-2 rounded-sm"
+
+        {/* CTAs */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-7">
+          <button
+            type="button"
+            onClick={() => router.push("/auth?mode=register")}
+            className="cinematic-focus inline-flex items-center justify-center rounded-[4px] bg-[var(--gold)] px-9 py-[18px] font-[family-name:var(--font-jetbrains)] text-[14px] uppercase tracking-[0.12em] text-white shadow-[0_4px_16px_rgba(198,162,78,0.30)] transition-all duration-200 hover:-translate-y-[1px] hover:bg-[var(--gold-deep)] hover:shadow-[0_8px_28px_rgba(198,162,78,0.40)]"
           >
-            See how it works
+            Start Your Free Trial
+          </button>
+          <a
+            href="#manifesto"
+            className="cinematic-focus font-[family-name:var(--font-jetbrains)] text-[13px] uppercase tracking-[0.16em] text-[var(--ink-soft)] border-b border-[var(--gold-deep)]/40 pb-1 hover:text-[var(--gold-deep)] hover:border-[var(--gold-deep)] transition-colors"
+          >
+            Read the Manifesto
           </a>
         </div>
-        <p className="mt-6 text-[13px] text-(--color-text-tertiary)">
-          30-day free trial. No credit card required. Cancel anytime.
+
+        {/* Trust line */}
+        <p className="mt-14 font-[family-name:var(--font-jetbrains)] text-[10px] uppercase tracking-[0.2em] text-[var(--ink-faint)]">
+          No credit card · 30 day trial · Cancel anytime
         </p>
+
+        {/* Pulsing vertical gold line */}
+        <div className="mt-16 flex justify-center" aria-hidden="true">
+          <span className="animate-pulse-line block w-[1px] bg-[var(--gold-deep)]" />
+        </div>
       </div>
     </section>
   );

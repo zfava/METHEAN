@@ -68,9 +68,23 @@
 
   /* ── Type ── */
   --font-sans: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, "SF Mono", monospace;
+  --font-serif: var(--font-cormorant), "Iowan Old Style", "Palatino", Georgia, serif;
   --tracking-tight: -0.025em;
   --tracking-tighter: -0.035em;
+
+  /* ── Editorial palette (cinematic landing) ── */
+  --gold-deep: #A6843A;
+  --gold-soft: #D9BB6A;
+  --navy-soft: #1A2740;
+  --navy-deep: #0A1320;
+  --parchment: #F5F1E8;
+  --parchment-warm: #EFE8D7;
+  --parchment-deep: #E8DFC9;
+  --cream-warm: #FBF8F1;
+  --ink-soft: #4A4A4A;
+  --ink-mute: #7A7A7A;
+  --ink-faint: #A8A8A8;
 
   /* ── Motion ── */
   --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -357,4 +371,70 @@ input:-webkit-autofill:focus {
   main { margin-left: 0 !important; padding: 20px !important; }
   body { background: white !important; }
   * { break-inside: avoid; }
+}
+
+/* ══════════════════════════════════════════════════
+   Cinematic landing page utilities
+   ══════════════════════════════════════════════════ */
+
+.parchment-noise { position: relative; }
+.parchment-noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.45 0 0 0 0 0.30 0 0 0 0.18 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+.parchment-noise > * { position: relative; z-index: 1; }
+
+.dark-noise { position: relative; }
+.dark-noise::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.78 0 0 0 0 0.63 0 0 0 0 0.30 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.6;
+  pointer-events: none;
+}
+.dark-noise > * { position: relative; z-index: 1; }
+
+/* Gold italic emphasis inside serif headlines. */
+.gold-em {
+  font-style: italic;
+  color: var(--gold-deep);
+}
+
+@keyframes subtle-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-subtle-rotate { animation: subtle-rotate 60s linear infinite; }
+
+@keyframes pulse-line {
+  0%, 100% { height: 48px; opacity: 0.6; }
+  50% { height: 64px; opacity: 1; }
+}
+.animate-pulse-line { animation: pulse-line 2.5s ease-in-out infinite; }
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.9); }
+}
+.animate-pulse-dot { animation: pulse-dot 1.8s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-subtle-rotate,
+  .animate-pulse-line,
+  .animate-pulse-dot {
+    animation: none !important;
+  }
+}
+
+/* Focus ring used across cinematic landing interactive elements. */
+.cinematic-focus:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+  border-radius: 2px;
 }

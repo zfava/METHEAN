@@ -4,19 +4,22 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { auth } from "@/lib/api";
 import { MetheanMark } from "@/components/Brand";
+import { LandingClosing } from "@/components/landing/LandingClosing";
 import { LandingComparison } from "@/components/landing/LandingComparison";
+import { LandingCurriculumBuilder } from "@/components/landing/LandingCurriculumBuilder";
 import { LandingFAQ } from "@/components/landing/LandingFAQ";
 import { LandingFeatures } from "@/components/landing/LandingFeatures";
 import { LandingFooter } from "@/components/landing/LandingFooter";
-import { LandingFounder } from "@/components/landing/LandingFounder";
+import { LandingFounderLetter } from "@/components/landing/LandingFounderLetter";
 import { LandingHeader } from "@/components/landing/LandingHeader";
 import { LandingHero } from "@/components/landing/LandingHero";
 import { LandingHowItWorks } from "@/components/landing/LandingHowItWorks";
+import { LandingPhilosophies } from "@/components/landing/LandingPhilosophies";
 import { LandingPricing } from "@/components/landing/LandingPricing";
 import { LandingPrinciples } from "@/components/landing/LandingPrinciples";
-import { LandingProductPreview } from "@/components/landing/LandingProductPreview";
+import { LandingStats } from "@/components/landing/LandingStats";
 
-export default function LandingPage() {
+export default function HomePage() {
   const router = useRouter();
   const [checking, setChecking] = useState(true);
 
@@ -29,27 +32,34 @@ export default function LandingPage() {
 
   if (checking) {
     return (
-      <div className="min-h-screen bg-(--color-page) flex items-center justify-center">
-        <MetheanMark size={48} color="#0F1B2D" />
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{ background: "var(--parchment)" }}
+      >
+        <MetheanMark size={48} color="#C6A24E" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen" style={{ fontFamily: "var(--font-sans)" }}>
+    <main
+      className="bg-[var(--parchment)] text-[var(--color-text)]"
+      style={{ fontFamily: "var(--font-sans)" }}
+    >
       <LandingHeader />
-      <main>
-        <LandingHero />
-        <LandingPrinciples />
-        <LandingFounder />
-        <LandingHowItWorks />
-        <LandingProductPreview />
-        <LandingComparison />
-        <LandingFeatures />
-        <LandingFAQ />
-        <LandingPricing />
-      </main>
+      <LandingHero />
+      <LandingHowItWorks />
+      <LandingPrinciples />
+      <LandingFounderLetter />
+      <LandingCurriculumBuilder />
+      <LandingStats />
+      <LandingComparison />
+      <LandingPhilosophies />
+      <LandingFeatures />
+      <LandingFAQ />
+      <LandingPricing />
+      <LandingClosing />
       <LandingFooter />
-    </div>
+    </main>
   );
 }

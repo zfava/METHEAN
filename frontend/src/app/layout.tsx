@@ -1,9 +1,25 @@
 import type { Metadata } from "next";
+import { Cormorant_Garamond, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import ClientProviders from "@/components/ClientProviders";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import OfflineBanner from "@/components/OfflineBanner";
 import AppLifecycle from "@/components/AppLifecycle";
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-cormorant",
+  display: "swap",
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-jetbrains",
+  display: "swap",
+});
 
 export const viewport = {
   width: "device-width",
@@ -13,7 +29,7 @@ export const viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "METHEAN — A Learning Operating System for Families",
+  title: "METHEAN, a learning operating system for families",
   description: "AI-powered homeschool platform with parent governance. You set the rules. AI follows them. 51-state compliance. Start free.",
   icons: {
     icon: "/favicon.svg",
@@ -36,7 +52,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${cormorant.variable} ${jetbrains.variable}`}>
       <head>
         <meta name="theme-color" content="#0F1B2D" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />

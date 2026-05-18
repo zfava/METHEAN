@@ -1,4 +1,4 @@
-import { ChevronIcon } from "./icons";
+import { RevealSection } from "./RevealSection";
 
 const FAQS: Array<{ q: string; a: string }> = [
   {
@@ -7,7 +7,11 @@ const FAQS: Array<{ q: string; a: string }> = [
   },
   {
     q: "Can I use METHEAN alongside my existing curriculum?",
-    a: "Yes. If you already use Sonlight, Saxon, My Father's World, Abeka, BJU, or any other curriculum, METHEAN tracks mastery from any source you log and complements rather than replaces your current materials.",
+    a: "Yes. If you already use Sonlight, Saxon, My Father's World, Abeka, BJU, or another curriculum, METHEAN tracks mastery from any source you log and complements rather than replaces your current materials.",
+  },
+  {
+    q: "Walk me through the Curriculum Builder.",
+    a: "Pick a child, a subject, and your educational philosophy. METHEAN drafts thirty-six weeks of lessons, practice, review, and projects, paced Monday through Friday with built-in review weeks. Every activity is generated in your philosophy's voice. Nothing reaches your child until you have approved it. You can refine, swap, lock, or pause any block at any time.",
   },
   {
     q: "What ages does METHEAN support?",
@@ -23,7 +27,7 @@ const FAQS: Array<{ q: string; a: string }> = [
   },
   {
     q: "Is my family's data private?",
-    a: "Yes. We never sell data. We never use child data for advertising. Your family's information stays in your household. Full export and deletion are available at any time.",
+    a: "Yes. We never sell data. We never use child data for advertising. We never train models on your child's work. Your family's information stays in your household. Full export and deletion are available at any time.",
   },
   {
     q: "Do I need to be technically inclined to use METHEAN?",
@@ -43,35 +47,59 @@ const FAQS: Array<{ q: string; a: string }> = [
   },
 ];
 
+function PlusMorph() {
+  return (
+    <span
+      aria-hidden="true"
+      className="relative inline-block w-7 h-7 shrink-0 text-[var(--gold-deep)]"
+    >
+      <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[14px] h-[1.5px] bg-current transition-all duration-300 group-open:w-[18px] group-open:h-[2px]" />
+      <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[14px] w-[1.5px] bg-current transition-all duration-300 group-open:rotate-90 group-open:opacity-0" />
+    </span>
+  );
+}
+
 export function LandingFAQ() {
   return (
-    <section id="faq" className="fade-up py-24 px-6 bg-(--color-page) scroll-mt-24">
-      <div className="max-w-[720px] mx-auto">
-        <p className="text-[13px] uppercase tracking-[0.1em] text-(--color-text-tertiary) text-center mb-3">
-          Frequently Asked
-        </p>
-        <h2 className="text-[28px] sm:text-[32px] font-semibold text-(--color-text) text-center tracking-tight mb-12">
-          Questions families ask before they sign up.
-        </h2>
+    <RevealSection
+      id="faq"
+      ariaLabelledBy="faq-headline"
+      className="parchment-noise bg-[var(--parchment)] py-[120px] sm:py-[160px] px-6 scroll-mt-24"
+    >
+      <div className="max-w-[820px] mx-auto">
+        <div className="text-center mb-12">
+          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold-deep)] mb-6">
+            Before You Begin
+          </p>
+          <h2
+            id="faq-headline"
+            className="font-[family-name:var(--font-cormorant)] font-medium text-[var(--navy)] tracking-[-0.02em] leading-[1.05] text-[clamp(36px,5.4vw,64px)]"
+          >
+            Questions families ask <span className="gold-em">before they sign up.</span>
+          </h2>
+        </div>
+
         <div>
-          {FAQS.map((item) => (
+          {FAQS.map((item, i) => (
             <details
               key={item.q}
-              className="group border-b border-(--color-border) py-5 px-1 focus-within:ring-2 focus-within:ring-(--gold)/40 rounded-sm"
+              className={`group border-t border-[rgba(15,27,45,0.12)] py-7 px-2 ${
+                i === FAQS.length - 1 ? "border-b" : ""
+              }`}
             >
-              <summary className="flex items-center justify-between gap-4 cursor-pointer list-none text-[17px] font-medium text-(--color-text) focus:outline-none">
-                <h3 className="text-[17px] font-medium text-(--color-text)">{item.q}</h3>
-                <span className="text-(--color-text-tertiary) transition-transform duration-200 group-open:rotate-90 shrink-0">
-                  <ChevronIcon size={16} />
-                </span>
+              <summary className="cinematic-focus list-none cursor-pointer flex items-start justify-between gap-6 focus:outline-none">
+                <h3 className="font-[family-name:var(--font-cormorant)] font-medium text-[var(--navy)] text-[22px] sm:text-[24px] leading-snug">
+                  {item.q}
+                </h3>
+                <PlusMorph />
               </summary>
-              <p className="mt-3 text-[15px] text-(--color-text-secondary) leading-relaxed">
+              <p className="mt-4 font-[family-name:var(--font-cormorant)] text-[17px] leading-[1.7] text-[var(--ink-soft)] max-w-[680px]">
                 {item.a}
               </p>
             </details>
           ))}
         </div>
       </div>
-    </section>
+    </RevealSection>
   );
 }
