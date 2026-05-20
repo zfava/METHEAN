@@ -342,6 +342,11 @@ export const attempts = {
       method: "PUT",
       body: JSON.stringify(data),
     }),
+  saveProgress: (attemptId: string, notes: string) =>
+    request<Attempt>(`/attempts/${attemptId}/progress`, {
+      method: "POST",
+      body: JSON.stringify({ notes }),
+    }),
   get: (attemptId: string) => request<Attempt>(`/attempts/${attemptId}`),
 };
 
