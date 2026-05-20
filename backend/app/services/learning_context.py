@@ -59,6 +59,7 @@ async def get_activity_learning_context(
         },
         "lesson": {},
         "assessment": {},
+        "practice": {"items": []},
         "tutor_available": activity.activity_type.value != "assessment",
         "previous_attempts": [],
         "grade_level": grade_level,
@@ -191,5 +192,25 @@ async def get_activity_learning_context(
                 "mastery_criteria": "; ".join(ac.get("mastery_indicators", [])),
                 "methods": ac.get("assessment_methods", ["written work"]),
             }
+
+            # Surface authored practice_items so PracticeView renders
+            # auto-gradeable items instead of degrading to free text.
+            practice_items = content.get("practice_items", []) or []
+            context["practice"] = {"items": practice_items}
+
+            # Derive structured assessment items from the same source.
+            # Hints and worked explanations are intentionally dropped so
+            # assessments do not leak them. "text" maps to "open_response".
+            assessment_items = []
+            for pi in practice_items:
+                expected_type = pi.get("expected_type", "open_response")
+                item = {
+                    "prompt": pi["prompt"],
+                    "type": "open_response" if expected_type == "text" else expected_type,
+                    "options": pi.get("options"),
+                    "correct_answer": pi.get("correct_answer"),
+                }
+                assessment_items.append({k: v for k, v in item.items() if v is not None})
+            context["assessment"]["items"] = assessment_items
 
     return context

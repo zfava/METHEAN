@@ -187,6 +187,272 @@ class TestLearningContext:
         assert len(ctx["assessment"]["prompts"]) > 0
 
     @pytest.mark.asyncio
+    async def test_practice_items_surfaced_in_context(
+        self,
+        db_session,
+        household,
+        child,
+        user,
+        subject,
+        learning_map,
+    ):
+        """A node with authored practice_items exposes them in context["practice"]."""
+        node = LearningNode(
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Counting to Ten",
+            content={
+                "learning_objectives": ["Count to ten", "Recognize number order"],
+                "teaching_guidance": {
+                    "introduction": "Today we count!",
+                    "scaffolding_sequence": ["Count out loud"],
+                    "socratic_questions": ["What comes after five?"],
+                },
+                "assessment_criteria": {
+                    "mastery_indicators": ["Counts to ten reliably"],
+                    "sample_assessment_prompts": ["Count to ten."],
+                    "assessment_methods": ["oral narration"],
+                },
+                "practice_items": [
+                    {
+                        "type": "problem",
+                        "difficulty": 1,
+                        "prompt": "What number comes after 9?",
+                        "expected_type": "number",
+                        "correct_answer": "10",
+                        "hints": ["Count: 7, 8, 9, ..."],
+                        "explanation": "After 9 comes 10.",
+                    },
+                    {
+                        "type": "problem",
+                        "difficulty": 2,
+                        "prompt": "Count backward from 12 to 7.",
+                        "expected_type": "text",
+                        "hints": ["Start at 12 and go down"],
+                        "explanation": "12, 11, 10, 9, 8, 7",
+                    },
+                ],
+            },
+        )
+        db_session.add(node)
+        await db_session.flush()
+
+        plan = Plan(
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Math",
+            status=PlanStatus.active,
+        )
+        db_session.add(plan)
+        await db_session.flush()
+        week = PlanWeek(
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
+        )
+        db_session.add(week)
+        await db_session.flush()
+        activity = Activity(
+            plan_week_id=week.id,
+            household_id=household.id,
+            node_id=node.id,
+            activity_type=ActivityType.practice,
+            title="Counting Practice",
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
+        )
+        db_session.add(activity)
+        await db_session.flush()
+
+        ctx = await get_activity_learning_context(
+            db_session,
+            activity.id,
+            household.id,
+            child.id,
+        )
+
+        items = ctx["practice"]["items"]
+        assert len(items) == 2
+        first = items[0]
+        assert first["expected_type"] == "number"
+        assert first["correct_answer"] == "10"
+
+    @pytest.mark.asyncio
+    async def test_assessment_items_derived_without_hints(
+        self,
+        db_session,
+        household,
+        child,
+        user,
+        subject,
+        learning_map,
+    ):
+        """context["assessment"]["items"] is derived from practice_items.
+
+        The "text" expected_type normalizes to "open_response", and no
+        assessment item carries hints or worked explanations. The legacy
+        prompts list must remain a list of strings.
+        """
+        node = LearningNode(
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Counting to Ten",
+            content={
+                "learning_objectives": ["Count to ten", "Recognize number order"],
+                "teaching_guidance": {
+                    "introduction": "Today we count!",
+                    "scaffolding_sequence": ["Count out loud"],
+                    "socratic_questions": ["What comes after five?"],
+                },
+                "assessment_criteria": {
+                    "mastery_indicators": ["Counts to ten reliably"],
+                    "sample_assessment_prompts": ["Count to ten.", "Count backward."],
+                    "assessment_methods": ["oral narration"],
+                },
+                "practice_items": [
+                    {
+                        "type": "problem",
+                        "difficulty": 1,
+                        "prompt": "What number comes after 9?",
+                        "expected_type": "number",
+                        "correct_answer": "10",
+                        "hints": ["Count: 7, 8, 9, ..."],
+                        "explanation": "After 9 comes 10.",
+                    },
+                    {
+                        "type": "problem",
+                        "difficulty": 2,
+                        "prompt": "Count backward from 12 to 7.",
+                        "expected_type": "text",
+                        "hints": ["Start at 12 and go down"],
+                        "explanation": "12, 11, 10, 9, 8, 7",
+                    },
+                ],
+            },
+        )
+        db_session.add(node)
+        await db_session.flush()
+
+        plan = Plan(
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Math",
+            status=PlanStatus.active,
+        )
+        db_session.add(plan)
+        await db_session.flush()
+        week = PlanWeek(
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
+        )
+        db_session.add(week)
+        await db_session.flush()
+        activity = Activity(
+            plan_week_id=week.id,
+            household_id=household.id,
+            node_id=node.id,
+            activity_type=ActivityType.assessment,
+            title="Counting Assessment",
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
+        )
+        db_session.add(activity)
+        await db_session.flush()
+
+        ctx = await get_activity_learning_context(
+            db_session,
+            activity.id,
+            household.id,
+            child.id,
+        )
+
+        items = ctx["assessment"]["items"]
+        assert len(items) == 2
+        assert items[0]["type"] == "number"
+        assert items[0]["correct_answer"] == "10"
+        # "text" normalizes to "open_response".
+        assert items[1]["type"] == "open_response"
+        # No assessment item leaks hints or worked explanations.
+        for item in items:
+            assert "hints" not in item
+            assert "explanation" not in item
+
+        # Regression: the legacy prompts list is untouched.
+        prompts = ctx["assessment"]["prompts"]
+        assert isinstance(prompts, list)
+        assert all(isinstance(p, str) for p in prompts)
+        assert len(prompts) == 2
+
+    @pytest.mark.asyncio
+    async def test_practice_items_empty_for_unenriched_node(
+        self,
+        db_session,
+        household,
+        child,
+        user,
+        subject,
+        learning_map,
+    ):
+        """An unenriched node yields an empty practice item list, no exception."""
+        node = LearningNode(
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Fractions",
+            content={},  # Not enriched
+        )
+        db_session.add(node)
+        await db_session.flush()
+
+        plan = Plan(
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Math",
+            status=PlanStatus.active,
+        )
+        db_session.add(plan)
+        await db_session.flush()
+        week = PlanWeek(
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
+        )
+        db_session.add(week)
+        await db_session.flush()
+        activity = Activity(
+            plan_week_id=week.id,
+            household_id=household.id,
+            node_id=node.id,
+            activity_type=ActivityType.practice,
+            title="Fractions Practice",
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
+        )
+        db_session.add(activity)
+        await db_session.flush()
+
+        ctx = await get_activity_learning_context(
+            db_session,
+            activity.id,
+            household.id,
+            child.id,
+        )
+
+        assert ctx["practice"]["items"] == []
+
+    @pytest.mark.asyncio
     async def test_learn_no_tutor_for_assessment(
         self,
         db_session,
