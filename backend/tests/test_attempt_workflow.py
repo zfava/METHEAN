@@ -5,12 +5,14 @@ from datetime import date
 
 import pytest
 import pytest_asyncio
+from sqlalchemy import func, select
 
 from app.models.curriculum import LearningMap, LearningNode, Subject
 from app.models.enums import ActivityStatus, ActivityType, AttemptStatus, NodeType
 from app.models.governance import Activity, Plan, PlanWeek
 from app.models.identity import Child, Household
-from app.services.attempt_workflow import start_attempt, submit_attempt
+from app.models.state import ChildNodeState, StateEvent
+from app.services.attempt_workflow import save_attempt_progress, start_attempt, submit_attempt
 
 
 @pytest_asyncio.fixture
@@ -136,3 +138,61 @@ class TestSubmitAttempt:
         att = await start_attempt(db_session, a.id, aw_child.id, aw_household.id)
         result = await submit_attempt(db_session, att.id, aw_household.id, confidence=0.8)
         assert result["mastery_level"] is None
+
+
+@pytest.mark.asyncio
+class TestSaveAttemptProgress:
+    async def test_persists_draft_without_completing(self, db_session, aw_household, aw_child, aw_activity):
+        """Saving progress stores draft notes, keeps the attempt started, and runs no pipeline."""
+        att = await start_attempt(db_session, aw_activity.id, aw_child.id, aw_household.id)
+
+        saved = await save_attempt_progress(
+            db_session,
+            att.id,
+            aw_household.id,
+            notes="Built the model frame, painted two sides.",
+        )
+
+        assert saved.feedback["draft_notes"] == "Built the model frame, painted two sides."
+        assert "draft_saved_at" in saved.feedback
+        assert saved.status == AttemptStatus.started
+        assert saved.completed_at is None
+        assert saved.score is None
+
+        # No StateEvent emitted and no mastery transition recorded.
+        event_count = await db_session.scalar(
+            select(func.count()).select_from(StateEvent).where(StateEvent.household_id == aw_household.id)
+        )
+        assert event_count == 0
+        state_count = await db_session.scalar(
+            select(func.count()).select_from(ChildNodeState).where(ChildNodeState.child_id == aw_child.id)
+        )
+        assert state_count == 0
+
+    async def test_merges_into_existing_feedback(self, db_session, aw_household, aw_child, aw_activity):
+        """Saving progress merges draft notes without dropping prior feedback keys."""
+        att = await start_attempt(db_session, aw_activity.id, aw_child.id, aw_household.id)
+        att.feedback = {"responses": [{"prompt": "Q1", "response": "A1"}]}
+        await db_session.flush()
+
+        saved = await save_attempt_progress(db_session, att.id, aw_household.id, notes="First draft")
+        assert saved.feedback["responses"] == [{"prompt": "Q1", "response": "A1"}]
+        assert saved.feedback["draft_notes"] == "First draft"
+
+        # A second save overwrites the draft but still preserves the prior key.
+        saved = await save_attempt_progress(db_session, att.id, aw_household.id, notes="Second draft")
+        assert saved.feedback["responses"] == [{"prompt": "Q1", "response": "A1"}]
+        assert saved.feedback["draft_notes"] == "Second draft"
+
+    async def test_missing_attempt_raises(self, db_session, aw_household):
+        with pytest.raises(ValueError, match="Attempt not found"):
+            await save_attempt_progress(db_session, uuid.uuid4(), aw_household.id, notes="x")
+
+    async def test_cross_household_attempt_raises(self, db_session, aw_household, aw_child, aw_activity):
+        """An attempt from another household is not reachable and raises ValueError."""
+        att = await start_attempt(db_session, aw_activity.id, aw_child.id, aw_household.id)
+        other = Household(name="Other Household")
+        db_session.add(other)
+        await db_session.flush()
+        with pytest.raises(ValueError, match="Attempt not found"):
+            await save_attempt_progress(db_session, att.id, other.id, notes="x")

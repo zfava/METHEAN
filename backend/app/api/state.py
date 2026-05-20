@@ -27,6 +27,7 @@ from app.models.governance import Attempt
 from app.models.identity import Child, User
 from app.models.state import ChildNodeState, FSRSCard, StateEvent
 from app.schemas.state import (
+    AttemptProgressRequest,
     AttemptResponse,
     AttemptStartRequest,
     AttemptSubmitRequest,
@@ -36,7 +37,7 @@ from app.schemas.state import (
     RetentionSummaryResponse,
     StateEventResponse,
 )
-from app.services.attempt_workflow import start_attempt, submit_attempt
+from app.services.attempt_workflow import save_attempt_progress, start_attempt, submit_attempt
 from app.services.learning_context import get_activity_learning_context
 from app.services.state_engine import compute_retrievability
 
@@ -433,6 +434,31 @@ async def submit_attempt_endpoint(
         state_event_id=result["state_event_id"] or uuid.UUID(int=0),
         nodes_unblocked=result["nodes_unblocked"],
     )
+
+
+@router.post(
+    "/attempts/{attempt_id}/progress",
+    response_model=AttemptResponse,
+)
+async def save_attempt_progress_endpoint(
+    attempt_id: uuid.UUID,
+    body: AttemptProgressRequest,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> AttemptResponse:
+    """Save partial work on an attempt without submitting it."""
+    try:
+        attempt = await save_attempt_progress(
+            db,
+            attempt_id=attempt_id,
+            household_id=user.household_id,
+            notes=body.notes,
+            user_id=user.id,
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
+    return AttemptResponse.model_validate(attempt)
 
 
 @router.get(

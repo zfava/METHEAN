@@ -52,6 +52,40 @@ async def start_attempt(
     return attempt
 
 
+async def save_attempt_progress(
+    db: AsyncSession,
+    attempt_id: uuid.UUID,
+    household_id: uuid.UUID,
+    notes: str,
+    user_id: uuid.UUID | None = None,
+) -> Attempt:
+    """Persist partial, unsubmitted work on an attempt.
+
+    Merges draft notes into Attempt.feedback without touching status,
+    completed_at, or score. Does not trigger the submit or evaluation
+    pipeline. Used for multi-day projects that need to be saved before
+    they are finished.
+    """
+    result = await db.execute(
+        select(Attempt).where(
+            Attempt.id == attempt_id,
+            Attempt.household_id == household_id,
+        )
+    )
+    attempt = result.scalar_one_or_none()
+    if not attempt:
+        raise ValueError("Attempt not found")
+
+    attempt.feedback = {
+        **(attempt.feedback or {}),
+        "draft_notes": notes,
+        "draft_saved_at": datetime.now(UTC).isoformat(),
+    }
+
+    await db.flush()
+    return attempt
+
+
 async def submit_attempt(
     db: AsyncSession,
     attempt_id: uuid.UUID,

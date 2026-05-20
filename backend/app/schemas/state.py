@@ -77,6 +77,10 @@ class AttemptSubmitRequest(BaseModel):
     feedback: dict | None = None
 
 
+class AttemptProgressRequest(BaseModel):
+    notes: str = Field(description="Draft notes for partial, unsubmitted work")
+
+
 class AttemptResponse(BaseModel):
     model_config = {"from_attributes": True}
 
