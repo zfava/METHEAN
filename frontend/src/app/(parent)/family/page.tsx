@@ -13,6 +13,8 @@ import EmptyState from "@/components/ui/EmptyState";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import { cn } from "@/lib/cn";
 import SubjectLevelPicker from "@/components/SubjectLevelPicker";
+import CurriculumPhilosophySelector from "@/components/CurriculumPhilosophySelector";
+import { type CurriculumPhilosophy } from "@/lib/curriculum-philosophy";
 
 
 interface TodayActivity {
@@ -53,6 +55,39 @@ export default function FamilyPage() {
   const [newGrade, setNewGrade] = useState("");
   const [editingProfile, setEditingProfile] = useState<string | null>(null);
   const [profileData, setProfileData] = useState<Record<string, { levels: Record<string, string>; minutes: number; notes: string }>>({});
+  // Per-child optimistic philosophy override; falls back to the
+  // persisted value from the children list when absent.
+  const [philosophyByChild, setPhilosophyByChild] = useState<
+    Record<string, { philosophy: CurriculumPhilosophy; subjects: Record<string, string> }>
+  >({});
+
+  function philosophyFor(child: { id: string; curriculum_philosophy?: string; subject_philosophies?: Record<string, string> }) {
+    return (
+      philosophyByChild[child.id] ?? {
+        philosophy: (child.curriculum_philosophy as CurriculumPhilosophy) || "traditional",
+        subjects: child.subject_philosophies ?? {},
+      }
+    );
+  }
+
+  function savePhilosophy(
+    childId: string,
+    next: { philosophy: CurriculumPhilosophy; subjects: Record<string, string> },
+    prev: { philosophy: CurriculumPhilosophy; subjects: Record<string, string> },
+  ) {
+    // Optimistic update; roll back to the prior value on failure.
+    setPhilosophyByChild((p) => ({ ...p, [childId]: next }));
+    childrenApi
+      .update(childId, {
+        curriculum_philosophy: next.philosophy,
+        subject_philosophies: next.subjects,
+      })
+      .then(() => toast("Philosophy saved", "success"))
+      .catch(() => {
+        setPhilosophyByChild((p) => ({ ...p, [childId]: prev }));
+        toast("Couldn't save philosophy", "error");
+      });
+  }
 
   async function addChild() {
     if (!newName.trim()) return;
@@ -290,6 +325,16 @@ export default function FamilyPage() {
 
                     {editingProfile === child.id && (
                       <div className="mt-2" onClick={(e) => e.stopPropagation()}>
+                        <div className="mb-4 pb-3 border-b border-(--color-border)">
+                          <CurriculumPhilosophySelector
+                            idPrefix={child.id}
+                            value={philosophyFor(child).philosophy}
+                            subjectPhilosophies={philosophyFor(child).subjects}
+                            onChange={(philosophy, subjects) =>
+                              savePhilosophy(child.id, { philosophy, subjects }, philosophyFor(child))
+                            }
+                          />
+                        </div>
                         <SubjectLevelPicker
                           selected={profileData[child.id]?.levels ?? (child as any).preferences?.subject_levels ?? {}}
                           onChange={(levels) => setProfileData(prev => ({
