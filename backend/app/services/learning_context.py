@@ -198,19 +198,32 @@ async def get_activity_learning_context(
             practice_items = content.get("practice_items", []) or []
             context["practice"] = {"items": practice_items}
 
-            # Derive structured assessment items from the same source.
-            # Hints and worked explanations are intentionally dropped so
-            # assessments do not leak them. "text" maps to "open_response".
+            # Assessment items prefer the dedicated authored
+            # assessment_items list (carries rubric and target_concept).
+            # AI-generated nodes that only produce practice_items fall
+            # back to deriving items from those. "text" maps to
+            # "open_response" defensively; None-valued keys are dropped.
+            authored_assessment_items = content.get("assessment_items", []) or []
             assessment_items = []
-            for pi in practice_items:
-                expected_type = pi.get("expected_type", "open_response")
-                item = {
-                    "prompt": pi["prompt"],
-                    "type": "open_response" if expected_type == "text" else expected_type,
-                    "options": pi.get("options"),
-                    "correct_answer": pi.get("correct_answer"),
-                }
-                assessment_items.append({k: v for k, v in item.items() if v is not None})
+            if authored_assessment_items:
+                for ai_item in authored_assessment_items:
+                    item = dict(ai_item)
+                    item_type = ai_item.get("type", "open_response")
+                    item["type"] = "open_response" if item_type == "text" else item_type
+                    assessment_items.append({k: v for k, v in item.items() if v is not None})
+            else:
+                # Fallback: derive from practice_items. Hints and worked
+                # explanations are intentionally dropped so assessments
+                # do not leak them.
+                for pi in practice_items:
+                    expected_type = pi.get("expected_type", "open_response")
+                    item = {
+                        "prompt": pi["prompt"],
+                        "type": "open_response" if expected_type == "text" else expected_type,
+                        "options": pi.get("options"),
+                        "correct_answer": pi.get("correct_answer"),
+                    }
+                    assessment_items.append({k: v for k, v in item.items() if v is not None})
             context["assessment"]["items"] = assessment_items
 
     return context

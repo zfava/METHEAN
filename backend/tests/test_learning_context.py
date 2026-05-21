@@ -453,6 +453,211 @@ class TestLearningContext:
         assert ctx["practice"]["items"] == []
 
     @pytest.mark.asyncio
+    async def test_assessment_items_prefer_authored_field(
+        self,
+        db_session,
+        household,
+        child,
+        user,
+        subject,
+        learning_map,
+    ):
+        """A node with authored assessment_items uses them, with rubric and target_concept."""
+        node = LearningNode(
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Counting to Ten",
+            content={
+                "learning_objectives": ["Count to ten", "Recognize number order"],
+                "teaching_guidance": {
+                    "introduction": "Today we count!",
+                    "scaffolding_sequence": ["Count out loud"],
+                    "socratic_questions": ["What comes after five?"],
+                },
+                "assessment_criteria": {
+                    "mastery_indicators": ["Counts to ten reliably"],
+                    "sample_assessment_prompts": ["Count to ten."],
+                    "assessment_methods": ["oral narration"],
+                },
+                "practice_items": [
+                    {
+                        "type": "problem",
+                        "difficulty": 1,
+                        "prompt": "What number comes after 9?",
+                        "expected_type": "number",
+                        "correct_answer": "10",
+                        "hints": ["Count: 7, 8, 9, ..."],
+                    },
+                ],
+                "assessment_items": [
+                    {
+                        "prompt": "Count from 1 to 10 out loud.",
+                        "type": "open_response",
+                        "target_concept": "rote counting sequence",
+                        "rubric": "Says every number 1 through 10 in order.",
+                    },
+                    {
+                        "prompt": "Which number comes right after 7?",
+                        "type": "text",
+                        "target_concept": "number order",
+                        "rubric": "Identifies 8.",
+                    },
+                ],
+            },
+        )
+        db_session.add(node)
+        await db_session.flush()
+
+        plan = Plan(
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Math",
+            status=PlanStatus.active,
+        )
+        db_session.add(plan)
+        await db_session.flush()
+        week = PlanWeek(
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
+        )
+        db_session.add(week)
+        await db_session.flush()
+        activity = Activity(
+            plan_week_id=week.id,
+            household_id=household.id,
+            node_id=node.id,
+            activity_type=ActivityType.assessment,
+            title="Counting Assessment",
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
+        )
+        db_session.add(activity)
+        await db_session.flush()
+
+        ctx = await get_activity_learning_context(
+            db_session,
+            activity.id,
+            household.id,
+            child.id,
+        )
+
+        items = ctx["assessment"]["items"]
+        assert len(items) == 2
+        # Authored items are used, not the practice_items-derived ones.
+        assert items[0]["prompt"] == "Count from 1 to 10 out loud."
+        assert items[0]["rubric"] == "Says every number 1 through 10 in order."
+        assert items[0]["target_concept"] == "rote counting sequence"
+        # "text" normalizes to "open_response".
+        assert items[1]["type"] == "open_response"
+        assert items[1]["rubric"] == "Identifies 8."
+        # The practice_items-derived fallback is not used here.
+        assert all(i["prompt"] != "What number comes after 9?" for i in items)
+
+    @pytest.mark.asyncio
+    async def test_assessment_items_fall_back_to_practice_items(
+        self,
+        db_session,
+        household,
+        child,
+        user,
+        subject,
+        learning_map,
+    ):
+        """A node with practice_items but no assessment_items still yields assessment items.
+
+        The practice_items-derived fallback fills assessment.items, and
+        assessment.prompts plus practice.items remain intact.
+        """
+        node = LearningNode(
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Counting to Ten",
+            content={
+                "learning_objectives": ["Count to ten", "Recognize number order"],
+                "teaching_guidance": {
+                    "introduction": "Today we count!",
+                    "scaffolding_sequence": ["Count out loud"],
+                    "socratic_questions": ["What comes after five?"],
+                },
+                "assessment_criteria": {
+                    "mastery_indicators": ["Counts to ten reliably"],
+                    "sample_assessment_prompts": ["Count to ten.", "Count backward."],
+                    "assessment_methods": ["oral narration"],
+                },
+                "practice_items": [
+                    {
+                        "type": "problem",
+                        "difficulty": 1,
+                        "prompt": "What number comes after 9?",
+                        "expected_type": "number",
+                        "correct_answer": "10",
+                        "hints": ["Count: 7, 8, 9, ..."],
+                    },
+                ],
+                # No assessment_items key.
+            },
+        )
+        db_session.add(node)
+        await db_session.flush()
+
+        plan = Plan(
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Math",
+            status=PlanStatus.active,
+        )
+        db_session.add(plan)
+        await db_session.flush()
+        week = PlanWeek(
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
+        )
+        db_session.add(week)
+        await db_session.flush()
+        activity = Activity(
+            plan_week_id=week.id,
+            household_id=household.id,
+            node_id=node.id,
+            activity_type=ActivityType.assessment,
+            title="Counting Assessment",
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
+        )
+        db_session.add(activity)
+        await db_session.flush()
+
+        ctx = await get_activity_learning_context(
+            db_session,
+            activity.id,
+            household.id,
+            child.id,
+        )
+
+        items = ctx["assessment"]["items"]
+        assert len(items) == 1
+        assert items[0]["prompt"] == "What number comes after 9?"
+        assert items[0]["type"] == "number"
+        assert items[0]["correct_answer"] == "10"
+
+        # Regression: prompts stays a list of strings; practice.items intact.
+        prompts = ctx["assessment"]["prompts"]
+        assert isinstance(prompts, list)
+        assert all(isinstance(p, str) for p in prompts)
+        assert len(prompts) == 2
+        assert len(ctx["practice"]["items"]) == 1
+        assert ctx["practice"]["items"][0]["prompt"] == "What number comes after 9?"
+
+    @pytest.mark.asyncio
     async def test_learn_no_tutor_for_assessment(
         self,
         db_session,
