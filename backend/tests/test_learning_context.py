@@ -832,6 +832,170 @@ class TestLearningContext:
         assert ctx["reading"]["passages"] == []
 
     @pytest.mark.asyncio
+    async def test_widgets_surfaced_in_context(
+        self,
+        db_session,
+        household,
+        child,
+        user,
+        subject,
+        learning_map,
+    ):
+        """A node with widgets surfaces them at context.lesson.widgets intact."""
+        node = LearningNode(
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Counting Objects",
+            content={
+                "learning_objectives": ["Count objects to ten"],
+                "teaching_guidance": {
+                    "introduction": "Count the apples.",
+                    "scaffolding_sequence": ["Touch each one"],
+                    "socratic_questions": ["How many are left?"],
+                },
+                "assessment_criteria": {
+                    "mastery_indicators": ["Counts accurately"],
+                    "sample_assessment_prompts": ["Count these."],
+                    "assessment_methods": ["demonstration"],
+                },
+                "widgets": [
+                    {
+                        "id": "w1",
+                        "widget": "counting_objects",
+                        "params": {"count": 7, "object": "apple"},
+                        "prompt": "Tap each apple as you count.",
+                        "target": 7,
+                    },
+                    {
+                        "id": "w2",
+                        "widget": "number_line",
+                        "params": {"min": 0, "max": 10},
+                    },
+                ],
+            },
+        )
+        db_session.add(node)
+        await db_session.flush()
+
+        plan = Plan(
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Math",
+            status=PlanStatus.active,
+        )
+        db_session.add(plan)
+        await db_session.flush()
+        week = PlanWeek(
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
+        )
+        db_session.add(week)
+        await db_session.flush()
+        activity = Activity(
+            plan_week_id=week.id,
+            household_id=household.id,
+            node_id=node.id,
+            activity_type=ActivityType.lesson,
+            title="Counting Lesson",
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
+        )
+        db_session.add(activity)
+        await db_session.flush()
+
+        ctx = await get_activity_learning_context(
+            db_session,
+            activity.id,
+            household.id,
+            child.id,
+        )
+
+        widgets = ctx["lesson"]["widgets"]
+        assert len(widgets) == 2
+        assert widgets[0]["id"] == "w1"
+        assert widgets[0]["widget"] == "counting_objects"
+        assert widgets[0]["params"] == {"count": 7, "object": "apple"}
+        assert widgets[0]["prompt"] == "Tap each apple as you count."
+        assert widgets[1]["widget"] == "number_line"
+
+    @pytest.mark.asyncio
+    async def test_legacy_node_yields_empty_widgets(
+        self,
+        db_session,
+        household,
+        child,
+        user,
+        subject,
+        learning_map,
+    ):
+        """A node with no widgets yields context.lesson.widgets == [], raises nothing."""
+        node = LearningNode(
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Double-Digit Addition",
+            content={
+                "learning_objectives": ["Add two-digit numbers"],
+                "teaching_guidance": {
+                    "introduction": "Add bigger numbers.",
+                    "scaffolding_sequence": ["Start without carrying"],
+                    "socratic_questions": ["What happens past 9?"],
+                },
+                "assessment_criteria": {
+                    "mastery_indicators": ["Adds with carrying"],
+                    "sample_assessment_prompts": ["What is 48 + 35?"],
+                    "assessment_methods": ["written work"],
+                },
+            },
+        )
+        db_session.add(node)
+        await db_session.flush()
+
+        plan = Plan(
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Math",
+            status=PlanStatus.active,
+        )
+        db_session.add(plan)
+        await db_session.flush()
+        week = PlanWeek(
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
+        )
+        db_session.add(week)
+        await db_session.flush()
+        activity = Activity(
+            plan_week_id=week.id,
+            household_id=household.id,
+            node_id=node.id,
+            activity_type=ActivityType.lesson,
+            title="Addition Lesson",
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
+        )
+        db_session.add(activity)
+        await db_session.flush()
+
+        ctx = await get_activity_learning_context(
+            db_session,
+            activity.id,
+            household.id,
+            child.id,
+        )
+
+        assert ctx["lesson"]["widgets"] == []
+
+    @pytest.mark.asyncio
     async def test_learn_no_tutor_for_assessment(
         self,
         db_session,

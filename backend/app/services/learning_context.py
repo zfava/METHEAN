@@ -57,7 +57,7 @@ async def get_activity_learning_context(
             "estimated_minutes": activity.estimated_minutes or 30,
             "instructions": activity.instructions or {},
         },
-        "lesson": {},
+        "lesson": {"widgets": []},
         "assessment": {},
         "practice": {"items": []},
         "reading": {"passages": []},
@@ -198,6 +198,10 @@ async def get_activity_learning_context(
             # unchanged; legacy nodes without these keys yield [].
             context["lesson"]["media"] = content.get("media", [])
             context["reading"]["passages"] = content.get("passages", [])
+
+            # Surface interactive widgets. Passed through unchanged;
+            # legacy nodes without the key yield [].
+            context["lesson"]["widgets"] = content.get("widgets", [])
 
             # Surface authored practice_items so PracticeView renders
             # auto-gradeable items instead of degrading to free text.
