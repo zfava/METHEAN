@@ -1364,10 +1364,113 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Exaggerate each sound in the blend, then speed up until blended.",
         },
         "philosophy_specific": {
-            "classical": "Systematic blend instruction by type (l-blends, r-blends, s-blends).",
-            "charlotte_mason": "Blends met in real words from real reading. Short, focused lessons.",
-            "montessori": "Green series: blend word cards and matching objects.",
-            "traditional": "Blend worksheets. Fill-in-the-blend exercises.",
+            "traditional": {
+                "introduction": "A consonant blend is two or three consonants whose sounds you still hear each of: the bl in black is /b/ and /l/, both heard. That is different from a digraph like sh, where two letters make one new sound. Today we read words with initial and final blends, spell them, and tell blends apart from digraphs.",
+                "gradual_release": {
+                    "i_do": "Model reading black: stretch the blend, /b/ /l/, hear both consonants, then read the whole word. Build a blend word with letter tiles. Contrast a blend, st in stop, with a digraph, sh in ship, naming the difference.",
+                    "we_do": "Read blend words together by family, the l-blends, then the r-blends, then the s-blends, then the final blends. Spell a blend word with tiles together, and sort words into blends and digraphs.",
+                    "you_do": "Child reads words with initial and final blends, spells blend words with tiles, and sorts blends from digraphs.",
+                },
+                "guided_practice": [
+                    "Read blend words by family with letter tiles, hearing each consonant",
+                    "Read words with final blends such as nd, mp, st, nk",
+                    "Sort a set of words into blends and digraphs",
+                ],
+                "independent_practice": [
+                    "Read blend words inside simple sentences",
+                    "Spell blend words from dictation with tiles or by writing",
+                ],
+                "mastery_check": [
+                    "Read words with initial and with final consonant blends",
+                    "Spell a word that contains a blend",
+                    "Explain how a blend differs from a digraph",
+                ],
+                "spiral_review": [
+                    "Revisit CVC blending and the single consonant sounds before practicing harder blend words",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "A blend is a meeting of consonants in which each keeps its own sound. Learn the blends in their orderly families, the l-blends, the r-blends, the s-blends, and the final blends, and harder words open themselves to be read.",
+                "memory_work": {
+                    "chants": [
+                        "Chant a blend family in rhythm: bl, cl, fl, gl, pl, sl",
+                        "Chant blend words that share a blend: stop, step, star, stem",
+                        "Chant the distinction: a blend keeps both sounds, a digraph makes one new sound",
+                    ],
+                    "recitations": [
+                        "Recite the blend families learned so far before a new family is added",
+                    ],
+                },
+                "copywork": [
+                    "Copy blend words neatly while sounding the blend aloud, so each consonant of the cluster is heard and written",
+                ],
+                "recitation_routine": "Begin each lesson by re-reading the blends and blend words mastered so far before adding the next family; the work is cumulative and never assumed.",
+                "history_integration": "Tell, simply, that these clusters of consonants were carried into our spelling from older forms of the language; the blends are a small piece of the long history of words.",
+                "read_aloud_suggestions": [
+                    "A rich read-aloud for the ear, and decodable books that bring blend words into real sentences",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "Simple decodable books in which blend words appear in real sentences, alongside the family's current living read-aloud",
+                ],
+                "short_lesson_flow": "In a book read together, meet a word that holds a blend. Say it slowly, and hear that both consonants of the blend are sounded. Attend to a single blend, gently, and stop while the child is still interested.",
+                "narration_prompt": "Tell me the blend word we read today, and another word of your own that begins or ends the same way.",
+                "real_world_objects": [
+                    "Blend words noticed on signs and labels, such as stop and exit",
+                    "Blend sounds in the names of people and places the child knows",
+                    "Words in the current read-aloud that hold a blend",
+                ],
+                "nature_connection": "On a nature walk, notice the blend words for things that are found, frog, snail, crab, stem, and note one in the nature notebook.",
+                "habit_focus": "The habit of careful listening for every sound: hearing each consonant of a cluster rather than dropping one.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The large movable alphabet for building blend words",
+                    "The green series object boxes, objects matched to words with blends and longer patterns",
+                    "The green series word cards and picture cards",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a built blend word and its object: this says flag; show me flag; what does this say? The word built, the blend sounded, and then read.",
+                    "steps": [
+                        "Build a blend word with the movable alphabet, sounding each consonant of the blend as it is laid down",
+                        "Sweep beneath the word to blend the sounds and read it",
+                        "Match the green series word cards to their objects, sounding each blend out to check",
+                    ],
+                },
+                "control_of_error": "Each green series word card has its own object or picture, so a word that does not match its pair reveals a dropped consonant or a misread to the child.",
+                "abstraction_pathway": "From building the blend word with the movable alphabet (each consonant of the cluster sounded by the hand), to reading the green series cards, toward reading blend words in any text.",
+                "extensions": [
+                    "Work through longer green series word lists and final-blend words",
+                    "Sort words into blends and digraphs with the materials",
+                ],
+                "observation_focus": "Watch that the child sounds every consonant of a blend rather than dropping one, and returns to the green series work by choice.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep letter tiles within reach, including ones that make building blend words easy",
+                    "Leave decodable books that hold blend words on a low shelf",
+                    "Set out word-building games and post a few blend words where they will be seen",
+                ],
+                "real_world_contexts": [
+                    "Reading blend words that appear on signs, such as stop and exit",
+                    "Blend sounds in the names of people, pets, and places the child loves",
+                    "Building and reading blend words with magnetic letters in play",
+                ],
+                "conversation_starters": [
+                    "That word has two sounds pushed together at the start. Can you hear them both, /s/ and /t/?",
+                    "What other words start the same way as stop?",
+                    "Is ship two sounds blended, or two letters making one new sound?",
+                ],
+                "resource_bank": [
+                    "Magnetic letters and letter tiles",
+                    "Decodable readers that include blend words, kept available",
+                    "Word-building games",
+                ],
+                "parent_role": "When a blend word comes up in real reading, sound the cluster slowly together so each consonant is heard, and follow the words the child wants to read. Let real reading attempts do the teaching rather than a drill.",
+                "observation_documentation": "Over time, note whether the child reads initial and final blends, hears every consonant of a cluster, tells a blend apart from a digraph, and spells words with blends. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Blending sounds is like adding groups: two sounds combined",

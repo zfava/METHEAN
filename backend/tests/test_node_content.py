@@ -7,7 +7,7 @@ Covers:
 - validate_philosophy warns on legacy strings and hard-fails an
   unschooling variant carrying a lesson/sequence/assessment key.
 - The authored reference nodes mf-01, mf-02, mf-03, mf-04, mf-05, mf-06,
-  mf-07, rf-01, rf-02, rf-03, rf-04, rf-05
+  mf-07, rf-01, rf-02, rf-03, rf-04, rf-05, rf-06
   carry native variants for all five philosophies.
 """
 
@@ -305,7 +305,21 @@ class TestValidatePhilosophy:
 class TestAuthoredPhilosophyContent:
     @pytest.mark.parametrize(
         "node_key",
-        ["mf-01", "mf-02", "mf-03", "mf-04", "mf-05", "mf-06", "mf-07", "rf-01", "rf-02", "rf-03", "rf-04", "rf-05"],
+        [
+            "mf-01",
+            "mf-02",
+            "mf-03",
+            "mf-04",
+            "mf-05",
+            "mf-06",
+            "mf-07",
+            "rf-01",
+            "rf-02",
+            "rf-03",
+            "rf-04",
+            "rf-05",
+            "rf-06",
+        ],
     )
     def test_node_has_all_five_native_variants(self, node_key):
         """Each reference node carries a native variant for every philosophy."""
@@ -320,7 +334,21 @@ class TestAuthoredPhilosophyContent:
 
     @pytest.mark.parametrize(
         "node_key",
-        ["mf-01", "mf-02", "mf-03", "mf-04", "mf-05", "mf-06", "mf-07", "rf-01", "rf-02", "rf-03", "rf-04", "rf-05"],
+        [
+            "mf-01",
+            "mf-02",
+            "mf-03",
+            "mf-04",
+            "mf-05",
+            "mf-06",
+            "mf-07",
+            "rf-01",
+            "rf-02",
+            "rf-03",
+            "rf-04",
+            "rf-05",
+            "rf-06",
+        ],
     )
     def test_unschooling_variant_has_no_lesson_keys(self, node_key):
         """Each unschooling variant carries no lesson/sequence/assessment key."""
