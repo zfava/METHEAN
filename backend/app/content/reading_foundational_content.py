@@ -624,10 +624,113 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Pure auditory drills: hear the sound, name the letter. Sound discrimination games.",
         },
         "philosophy_specific": {
-            "classical": "Systematic phonics: one sound per lesson, mastered before moving on.",
-            "charlotte_mason": "Consonant sounds learned through real words in living books.",
-            "montessori": "Sandpaper letters: trace while saying the sound. I Spy with letter sounds.",
-            "traditional": "Letter-sound flashcards. Daily drill and practice.",
+            "traditional": {
+                "introduction": "Each consonant letter stands for a sound: B says /b/, M says /m/, T says /t/. Today we learn to see a consonant and say its sound cleanly, to hear that sound at the start and the end of words, and to tell apart sounds that are easily confused.",
+                "gradual_release": {
+                    "i_do": "Model with a letter-sound card: name the sound cleanly, /m/, not muh, and give example words, mom, map, milk. Contrast a confusable pair by mouth position: hand on the throat, /b/ hums, /p/ is only a puff of air.",
+                    "we_do": "Name the sounds together from cards in small groups of three or four. Sort picture cards by their beginning sound together, then listen for ending sounds, then swap roles.",
+                    "you_do": "Child produces the clean sound for each consonant card, names the beginning and the ending consonant sound in spoken words, and tells apart a confused pair such as /b/ and /p/.",
+                },
+                "guided_practice": [
+                    "Letter-sound card drills in small sets",
+                    "Picture sorts by beginning consonant sound",
+                    "Sound-to-letter matching: hear a sound, point to the letter that makes it",
+                ],
+                "independent_practice": [
+                    "Trace each consonant while saying its clean sound",
+                    "Beginning-sound hunt: find and record consonant sounds in real print",
+                ],
+                "mastery_check": [
+                    "Produce the correct, clean sound for each consonant letter, with no added vowel",
+                    "Identify the beginning consonant sound in ten spoken words",
+                    "Identify the ending consonant sound in ten spoken words",
+                ],
+                "spiral_review": [
+                    "Return regularly to the easily confused voiced and unvoiced pairs, b and p, d and t, f and v",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Every consonant letter is a fixed sign for a fixed sound. Learn each sound surely, one at a time and mastered before the next, and the letters become a key that will unlock every word.",
+                "memory_work": {
+                    "chants": [
+                        "Chant each consonant letter joined to its sound: B, /b/; D, /d/; M, /m/",
+                        "Chant a string of example words for a sound, all beginning alike, so the ear fixes the sound to the letter",
+                    ],
+                    "recitations": [
+                        "Recite the consonant sounds learned so far, in order, before each new one is added",
+                    ],
+                },
+                "copywork": [
+                    "Copy each consonant letter, uppercase and lowercase, while saying its sound aloud, so the hand, the eye, and the ear learn the letter together",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the sounds already mastered before introducing the next; one sound is taught at a time, cumulatively, and never assumed.",
+                "history_integration": "Tell, simply, the old story that letters were invented so that the sounds of speech could be written down and kept; learning each letter-sound joins the child to that long human work.",
+                "read_aloud_suggestions": [
+                    "A beautifully illustrated alphabet or sound book, read aloud, dwelling on the sound each letter makes",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "The family's current living book and a lovely alphabet picture book, where real, worthy words carry the consonant sounds, never a busy phonics workbook",
+                ],
+                "short_lesson_flow": "In a book being read together, pause on one good word. Say it slowly, listen for its first sound, and look at the letter that makes it. Notice the same sound at the end of another word. Attend to one or two letters only, gently, and stop while interest is high.",
+                "narration_prompt": "Tell me the sound we found today, and a word of your own that begins with it.",
+                "real_world_objects": [
+                    "Words on signs and labels noticed on a walk",
+                    "The child's own name and the names of family members",
+                    "Letters in the title of the current read-aloud",
+                ],
+                "nature_connection": "On a nature walk, name the things that are found and listen for their beginning sounds and the letters that make them; note one found word in the nature notebook.",
+                "habit_focus": "The habit of careful listening and careful looking: hearing the true, clean sound and matching it to the letter that makes it.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The sandpaper consonant letters, traced while the sound is voiced",
+                    "Object and picture cards gathered for initial and final sounds",
+                    "The large movable alphabet",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the sandpaper letters, voicing the sound and never the letter name: this says /m/, traced this way; show me /m/; what does this say? Move slowly and lightly.",
+                    "steps": [
+                        "Trace the sandpaper consonant in its writing direction while voicing its clean sound",
+                        "Match small objects or picture cards to the letter of their beginning sound, and later their ending sound",
+                        "Play the I Spy sound game, finding things by the sound a letter makes",
+                    ],
+                },
+                "control_of_error": "The sandpaper texture guides the finger along the letter's true path, and the matching object and picture cards carry a control set, so a wrong match shows itself to the child.",
+                "abstraction_pathway": "From tracing the textured letter while voicing its sound (the sound, the shape, and the writing movement joined in the hand), toward seeing a consonant in any printed word and saying its sound at once.",
+                "extensions": [
+                    "Build short, familiar words with the movable alphabet",
+                    "Sort a basket of objects by their ending consonant sound",
+                ],
+                "observation_focus": "Watch that the child voices the clean sound rather than adding a vowel, that the letter sound and the letter name are kept distinct, and that the child returns to the sandpaper letters by choice.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep magnetic or foam letters on the fridge and letter-sound picture books on a low shelf",
+                    "Post the child's name large where they will see it daily",
+                    "Leave a label maker or letter stamps out for free play",
+                ],
+                "real_world_contexts": [
+                    "Sounding out the first letter of signs, labels, and names that catch the child's eye",
+                    "The first sound of the child's own name and the names of people they love",
+                    "Letters and their sounds met on packaging, screens, and street signs",
+                    "Typing letters on a keyboard and hearing the sounds they spell",
+                ],
+                "conversation_starters": [
+                    "That sign starts with the same sound as your name. Can you hear it?",
+                    "What sound do you think this letter makes?",
+                    "I am thinking of something here that starts with the /s/ sound.",
+                ],
+                "resource_bank": [
+                    "Alphabet and letter-sound picture books, kept available",
+                    "Magnetic and foam letters",
+                    "A label maker or letter stamps, and the child's name in big letters",
+                ],
+                "parent_role": "Point out letters and the sounds they make as they arise in real print, saying the clean sound rather than adding a vowel. Answer what does that say naturally, and follow the child's interest in the letters and sounds that matter to them first.",
+                "observation_documentation": "Over time, note which consonant sounds the child produces cleanly, whether they hear consonant sounds at the start and the end of real words, and whether they connect letters to sounds in the print they care about. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Letters and numbers are both symbols that represent something",
