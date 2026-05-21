@@ -1117,10 +1117,113 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Exaggerated blending: stretch each sound, then snap together.",
         },
         "philosophy_specific": {
-            "classical": "Systematic phonics: master CVC before any other pattern. Daily decoding drill.",
-            "charlotte_mason": "Real words from real books. Decodable sentences about real things.",
-            "montessori": "Movable alphabet for word building. Pink series word cards and objects.",
-            "traditional": "CVC worksheets. Word family lists. Timed word reading.",
+            "traditional": {
+                "introduction": "CVC words are the first real words a child reads: three known sounds blended in order, so c, a, t becomes cat. Today we blend three sounds to read CVC words with all five short vowels, take words apart into sounds to spell them, and build smooth, fluent reading.",
+                "gradual_release": {
+                    "i_do": "Model blending with letter tiles: lay c, a, t, say each sound, push the tiles together, sweep a finger underneath, and read cat. Then model segmenting: hear map, say each sound, and build it with tiles.",
+                    "we_do": "Blend with support, the child saying each sound and then blending the whole word. Together, segment a spoken word and spell it with tiles, and read a CVC word inside a simple phrase.",
+                    "you_do": "Child blends CVC word cards independently, segments spoken words into sounds to spell them, and reads a short CVC word list smoothly.",
+                },
+                "guided_practice": [
+                    "Blend CVC words by pushing letter tiles together",
+                    "Read word families together: cat, hat, mat, sat",
+                    "Segment a spoken word and spell it with tiles",
+                ],
+                "independent_practice": [
+                    "Read CVC word cards and simple decodable phrases",
+                    "Reread a familiar CVC list to build smoothness and speed",
+                ],
+                "mastery_check": [
+                    "Blend any CVC word with any of the five short vowels",
+                    "Segment a CVC word into its three sounds to spell it",
+                    "Read a short CVC word list fluently",
+                ],
+                "spiral_review": [
+                    "Revisit the short vowel sounds and the consonant sounds before building harder CVC fluency",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The CVC word is the first true brick of reading: three sounds, blended in their order, become a word. Master this pattern surely, before any other, and every later pattern of reading is built upon it.",
+                "memory_work": {
+                    "chants": [
+                        "Chant word families in rhythm: cat, hat, mat, sat, pat",
+                        "Chant the blending sweep: /c/, /a/, /t/, cat",
+                        "Chant short lists of CVC words gathered by their vowel",
+                    ],
+                    "recitations": [
+                        "Read aloud a short list of CVC words each day, cleanly and without rushing, until the pattern is sure",
+                    ],
+                },
+                "copywork": [
+                    "Copy CVC words neatly while sounding them out, joining the reading of a word to the writing of it",
+                ],
+                "recitation_routine": "Begin each lesson by re-reading the CVC words and word families learned so far before adding new ones; the pattern is rehearsed cumulatively, never assumed.",
+                "history_integration": "Tell, simply, that writing a word by joining its letter-sounds is an old human craft; reading these first words joins the child to that long story.",
+                "read_aloud_suggestions": [
+                    "A rich read-aloud above the child's level for the ear, and simple, worthy decodable books for the child's own first reading",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "Simple, worthy decodable books whose short sentences tell of real things, alongside the family's current living read-aloud",
+                ],
+                "short_lesson_flow": "Read a few CVC words, or one short decodable sentence, together and attentively, blending each word with care. Talk for a moment about what it says. Take one short turn only, and stop while the child is still glad to be reading.",
+                "narration_prompt": "Tell me what the words said, and which word you are most proud of having read.",
+                "real_world_objects": [
+                    "The child's own name and short names of family members",
+                    "Short words on labels and signs",
+                    "The words in a simple decodable book about real things",
+                ],
+                "nature_connection": "Read or write little CVC words for things found on a walk, bug, cat, hen, sun, and note one of them in the nature notebook.",
+                "habit_focus": "The habit of careful, unhurried reading: sounding each word truly through, rather than guessing it from its first letter.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The large movable alphabet, vowels in blue and consonants in red",
+                    "The pink series object boxes, small objects matched to short-vowel CVC words",
+                    "The pink series word cards and picture cards",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a built word and its object: this says cat; show me cat; what does this say? The word built, sounded, and then read.",
+                    "steps": [
+                        "Build a CVC word with the movable alphabet, sounding each letter as it is laid down",
+                        "Sweep beneath the word to blend the sounds and read it",
+                        "Match the pink series word cards to their objects, sounding each word out to check",
+                    ],
+                },
+                "control_of_error": "Each pink series word card has its own object or picture, so a word that does not match the object it is paired with reveals a misread to the child without an adult's word.",
+                "abstraction_pathway": "From building the word with the movable alphabet (the word made by the hand, sound by sound), to reading the pink series cards, toward reading CVC words in any book with no material at all.",
+                "extensions": [
+                    "Work through longer pink series word lists and read pink series phrases",
+                    "Write CVC words from the objects in the pink series boxes",
+                ],
+                "observation_focus": "Watch for the moment blending clicks into reading, for the child reading the word rather than only building it, and for free return to the pink series work.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep letter tiles and magnetic letters within reach for free word building",
+                    "Leave simple decodable books and picture books on a low shelf",
+                    "Post the child's name and a few short, meaningful words where they will be seen",
+                ],
+                "real_world_contexts": [
+                    "Reading the first short words a child wants to read, on signs, labels, and in a loved book",
+                    "Building and reading little words with magnetic letters in play",
+                    "Short words in the names of people and pets the child loves",
+                ],
+                "conversation_starters": [
+                    "Can you sound that word out with me? /c/, /a/, /t/.",
+                    "What little word could you make with these letters?",
+                    "You read sun. What other word has that sound in the middle?",
+                ],
+                "resource_bank": [
+                    "Magnetic letters and letter tiles",
+                    "Simple decodable readers and picture books, kept available",
+                    "Word-building games and the child's name in big letters",
+                ],
+                "parent_role": "When a child wants to read a word, sound it slowly alongside them and let them blend it themselves. Follow the words the child cares about, celebrate the moment reading clicks, and let real reading attempts do the teaching rather than a drill.",
+                "observation_documentation": "Over time, note whether the child blends three sounds into a word, segments words to spell them, reads CVC words across all five short vowels, and whether the reading is growing smooth. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Three parts (C-V-C) like three addends",
