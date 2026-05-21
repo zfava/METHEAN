@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import type { LearningContext } from "@/lib/api";
 import { useSoundCue } from "@/lib/useSoundCue";
 import VoiceTextarea from "@/components/child/VoiceTextarea";
+import MediaBlock from "@/components/child/MediaBlock";
+import PassageReader from "@/components/child/PassageReader";
 import TutorChat from "./TutorChat";
 import { cn } from "@/lib/cn";
 
@@ -27,6 +29,8 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
   const { lesson, activity, assessment } = context;
   const steps = lesson.steps || [];
   const prompts = lesson.practice_prompts || [];
+  const media = lesson.media || [];
+  const passages = context.reading?.passages || [];
 
   // Activity-start cue. Fires on mount; the hook itself
   // suppresses if the kid's pack is "off" or before any user
@@ -79,6 +83,14 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
             </div>
           )}
 
+          {media.length > 0 && (
+            <div className="mb-6">
+              {media.map((block) => (
+                <MediaBlock key={block.id} block={block} />
+              ))}
+            </div>
+          )}
+
           <button onClick={() => setPhase("intro")}
             className="w-full max-w-xs py-4 text-lg font-semibold text-white bg-(--color-accent) rounded-2xl hover:opacity-90 transition-opacity">
             Begin
@@ -99,6 +111,16 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
             <div className="bg-(--color-accent-light) rounded-2xl p-5 mb-6">
               <h3 className="text-sm font-semibold text-(--color-accent) mb-1">Why this matters</h3>
               <p className="text-sm text-(--color-text)">{lesson.real_world_connection}</p>
+            </div>
+          )}
+          {passages.length > 0 && (
+            <div className="mb-6">
+              <h3 className="text-sm font-semibold text-(--color-text-secondary) uppercase tracking-wider mb-2">
+                Reading
+              </h3>
+              {passages.map((passage) => (
+                <PassageReader key={passage.id} passage={passage} />
+              ))}
             </div>
           )}
           <button onClick={() => setPhase("guided")}
