@@ -84,6 +84,40 @@ class TestChildUpdate:
         assert resp.status_code == 200
         assert resp.json()["daily_duration_minutes"] == 120
 
+    @pytest.mark.asyncio
+    async def test_patch_child_accepts_curriculum_philosophy(self, auth_client, db_session, household, child):
+        """The child-update endpoint accepts a valid curriculum philosophy."""
+        resp = await auth_client.patch(
+            f"/api/v1/children/{child.id}",
+            json={"curriculum_philosophy": "montessori"},
+        )
+        assert resp.status_code == 200
+        assert resp.json()["curriculum_philosophy"] == "montessori"
+
+    @pytest.mark.asyncio
+    async def test_patch_child_accepts_eclectic_subject_philosophies(self, auth_client, db_session, household, child):
+        """Eclectic selection accepts per-subject overrides."""
+        resp = await auth_client.patch(
+            f"/api/v1/children/{child.id}",
+            json={
+                "curriculum_philosophy": "eclectic",
+                "subject_philosophies": {"Mathematics": "montessori"},
+            },
+        )
+        assert resp.status_code == 200
+        body = resp.json()
+        assert body["curriculum_philosophy"] == "eclectic"
+        assert body["subject_philosophies"] == {"Mathematics": "montessori"}
+
+    @pytest.mark.asyncio
+    async def test_patch_child_rejects_invalid_philosophy(self, auth_client, db_session, household, child):
+        """An unknown curriculum philosophy is rejected with 422."""
+        resp = await auth_client.patch(
+            f"/api/v1/children/{child.id}",
+            json={"curriculum_philosophy": "waldorf"},
+        )
+        assert resp.status_code == 422
+
 
 # ══════════════════════════════════════════════════
 # Today's Activities

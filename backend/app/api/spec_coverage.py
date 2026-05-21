@@ -30,7 +30,14 @@ from app.models.enums import (
     ActivityStatus,
 )
 from app.models.governance import Activity, Plan, PlanWeek
-from app.models.identity import Child, ChildPreferences, Household, User, UserPermission
+from app.models.identity import (
+    CURRICULUM_PHILOSOPHIES,
+    Child,
+    ChildPreferences,
+    Household,
+    User,
+    UserPermission,
+)
 from app.models.operational import DeviceToken, NotificationLog
 from app.models.state import ChildNodeState
 
@@ -150,6 +157,15 @@ class ChildUpdate(BaseModel):
     last_name: str | None = None
     date_of_birth: date | None = None
     grade_level: str | None = None
+    curriculum_philosophy: str | None = None
+    subject_philosophies: dict | None = None
+
+    @field_validator("curriculum_philosophy")
+    @classmethod
+    def _validate_philosophy(cls, v: str | None) -> str | None:
+        if v is not None and v not in CURRICULUM_PHILOSOPHIES:
+            raise ValueError(f"curriculum_philosophy must be one of {sorted(CURRICULUM_PHILOSOPHIES)}, got {v!r}")
+        return v
 
 
 class ChildCreate(BaseModel):
@@ -460,12 +476,18 @@ async def update_child(
         child.date_of_birth = body.date_of_birth
     if body.grade_level is not None:
         child.grade_level = body.grade_level
+    if body.curriculum_philosophy is not None:
+        child.curriculum_philosophy = body.curriculum_philosophy
+    if body.subject_philosophies is not None:
+        child.subject_philosophies = body.subject_philosophies
     await db.flush()
     return {
         "id": str(child.id),
         "first_name": child.first_name,
         "last_name": child.last_name,
         "grade_level": child.grade_level,
+        "curriculum_philosophy": child.curriculum_philosophy,
+        "subject_philosophies": child.subject_philosophies,
     }
 
 
