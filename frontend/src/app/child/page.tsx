@@ -12,6 +12,7 @@ import { haptic } from "@/lib/haptics";
 import { usePersonalization } from "@/lib/PersonalizationProvider";
 import { useSoundCue } from "@/lib/useSoundCue";
 import { ActivityIcon, type ActivityType } from "@/components/ActivityIcon";
+import { CompanionAvatar } from "@/components/CompanionAvatar";
 import { MySpace } from "@/components/child/MySpace";
 import JourneyMap, { JourneyCarousel } from "@/components/child/JourneyMap";
 import LessonView from "@/components/child/LessonView";
@@ -59,6 +60,10 @@ const typeTopBorder: Record<string, string> = {
   project: "var(--color-success)",
   field_trip: "var(--color-constitutional)",
 };
+
+// Mastery levels, lowest to highest. A transition is "upward" when
+// the new level's index exceeds the previous level's index.
+const MASTERY_ORDER = ["not_started", "emerging", "developing", "proficient", "mastered"];
 
 // ── Progress Ring ──
 
@@ -134,8 +139,22 @@ export default function ChildPage() {
   const [attemptId, setAttemptId] = useState("");
   const [learningContext, setLearningContext] = useState<LearningContext | null>(null);
   const [completed, setCompleted] = useState(false);
-  const [completionData, setCompletionData] = useState<{ mastery?: string; prevMastery?: string }>({});
+  const [completionData, setCompletionData] = useState<{
+    mastery?: string;
+    prevMastery?: string;
+    durationMinutes?: number;
+  }>({});
   const startTimeRef = useRef(0);
+
+  // Session-scoped totals for the end-of-day CompletionState payoff.
+  // Reset on fresh init / child switch, never between activities, so
+  // the day summary reflects the whole session rather than stale
+  // dashboard counters.
+  const [sessionCompleted, setSessionCompleted] = useState(0);
+  const [sessionSubjects, setSessionSubjects] = useState<string[]>([]);
+  const [dayMasteryGains, setDayMasteryGains] = useState<
+    Array<{ subject: string; from: string; to: string }>
+  >([]);
 
   // Transition
   const [transitioning, setTransitioning] = useState(false);
@@ -164,7 +183,12 @@ export default function ChildPage() {
 
   useEffect(() => { init(); }, []);
   useEffect(() => {
-    if (selectedId) loadDashboard();
+    if (selectedId) {
+      setSessionCompleted(0);
+      setSessionSubjects([]);
+      setDayMasteryGains([]);
+      loadDashboard();
+    }
   }, [selectedId]);
   useEffect(() => {
     if (dash) document.title = `${dash.child.first_name}'s Learning | METHEAN`;
@@ -260,9 +284,30 @@ export default function ChildPage() {
         confidence: data.confidence, duration_minutes: dur,
         feedback: { responses: data.responses, self_reflection: data.self_reflection },
       });
+
+      // Accumulate session totals for the end-of-day summary.
+      const subject = activeActivity?.subject || "";
+      setSessionCompleted((n) => n + 1);
+      setSessionSubjects((subs) => [...subs, subject]);
+
+      const fromIdx = MASTERY_ORDER.indexOf(result.previous_mastery);
+      const toIdx = MASTERY_ORDER.indexOf(result.mastery_level);
+      if (
+        result.mastery_level &&
+        result.previous_mastery &&
+        result.mastery_level !== result.previous_mastery &&
+        toIdx > fromIdx
+      ) {
+        setDayMasteryGains((gains) => [
+          ...gains,
+          { subject, from: result.previous_mastery, to: result.mastery_level },
+        ]);
+      }
+
       setCompletionData({
-        mastery: result.mastery_level?.replace(/_/g, " "),
-        prevMastery: result.previous_mastery?.replace(/_/g, " "),
+        mastery: result.mastery_level,
+        prevMastery: result.previous_mastery,
+        durationMinutes: dur,
       });
       haptic("success");
       setShowCelebration(true);
@@ -335,6 +380,13 @@ export default function ChildPage() {
             previousMastery={completionData.prevMastery}
             onNext={goNext}
             allDone={remaining.length <= 1}
+            childName={dash.child.first_name}
+            durationMinutes={completionData.durationMinutes}
+            daySummary={{
+              activitiesCompleted: sessionCompleted,
+              subjectsPracticed: new Set(sessionSubjects).size,
+              masteryGains: dayMasteryGains,
+            }}
           />
           {isReview && !completionData.mastery?.includes("mastered") && (
             <p className="text-center text-sm text-(--color-text-secondary) mt-4 italic">Your memory is getting stronger.</p>
@@ -370,7 +422,19 @@ export default function ChildPage() {
             {t === "practice" && <PracticeView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
             {t === "review" && <ReviewView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
             {t === "assessment" && <AssessmentView context={learningContext} onComplete={handleComplete} />}
-            {t === "project" && <ProjectView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
+            {t === "project" && (
+              <ProjectView
+                context={learningContext}
+                childId={selectedId}
+                onComplete={handleComplete}
+                onSaveProgress={(notes) =>
+                  attemptId &&
+                  attempts.saveProgress(attemptId, notes)
+                    .then(() => toast("Progress saved"))
+                    .catch(() => toast("Couldn't save progress", "error"))
+                }
+              />
+            )}
             {t === "field_trip" && <FieldTripView context={learningContext} onComplete={handleComplete} />}
           </div>
         </div>
@@ -399,17 +463,8 @@ export default function ChildPage() {
       <header className="bg-(--color-surface) border-b border-(--color-border) px-8 py-5">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {/* Companion identity. Persona-driven avatar lands in
-                Prompt 4; for this wave the slot renders the
-                companion's name (or a generic fallback) so the
-                emoji-avatar pattern is gone everywhere outside
-                the deprecated Settings panel picker. */}
-            <div
-              className="px-3 h-10 rounded-full bg-(--color-accent-light) flex items-center justify-center text-xs font-medium text-(--color-text)"
-              aria-label="Your companion"
-            >
-              {profile.companion_name || "Companion"}
-            </div>
+            {/* Persona-driven companion avatar. */}
+            <CompanionAvatar personaId={profile.companion_voice || "default_warm"} size={36} />
             <span className="text-sm font-medium text-(--color-text)">{dash.child.first_name}</span>
             {dash.child.streak.current > 0 && (
               <span className="text-xs text-(--color-warning) font-medium flex items-center gap-1" aria-label={`${dash.child.streak.current} day streak`}>
@@ -496,10 +551,8 @@ export default function ChildPage() {
         {/* Today's Activities */}
         {activities.length === 0 ? (
           <div className="text-center py-20">
-            {/* Companion-named callout while the persona avatar
-                is still iterated in Prompt 4. */}
-            <div className="text-sm font-medium text-(--color-text-secondary) mb-4">
-              {profile.companion_name || "Your companion"}
+            <div className="flex justify-center mb-4">
+              <CompanionAvatar personaId={profile.companion_voice || "default_warm"} size={48} />
             </div>
             <h2 className="text-lg font-medium text-(--color-text) mb-2">No learning scheduled today</h2>
             <p className="text-sm text-(--color-text-secondary)">Enjoy your free time, {dash.child.first_name}.</p>
