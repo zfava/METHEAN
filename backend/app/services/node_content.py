@@ -26,12 +26,69 @@ NODE_CONTENT_SCHEMA = {
     "resource_guidance": {
         "required": ["what's needed (never brand names, always types)"],
         "recommended": ["nice to have"],
-        "philosophy_specific": {"philosophy id": "guidance specific to that teaching philosophy"},
     },
     "connections": {
         "prerequisite_skills_from_other_subjects": [],
         "feeds_into": [],
         "parallel_topics": [],
+    },
+    # philosophy_specific holds one variant per pedagogical philosophy.
+    # Each philosophy has its OWN native shape (below); the shapes are
+    # intentionally different. A variant may also be a plain string,
+    # which is a legacy, un-upgraded form: valid, not an error. This
+    # block is the source of truth for the five native shapes.
+    "philosophy_specific": {
+        "traditional": {
+            "introduction": "What the skill is and what today covers",
+            "gradual_release": {
+                "i_do": "Teacher models the skill explicitly",
+                "we_do": "Teacher and child practice together",
+                "you_do": "Child practices independently",
+            },
+            "guided_practice": ["practice done with support"],
+            "independent_practice": ["practice done alone"],
+            "mastery_check": ["observable checks the child can do the skill"],
+            "spiral_review": ["earlier skills revisited to confirm retention"],
+        },
+        "classical": {
+            "narrative_introduction": "An introduction framed as a story or idea",
+            "memory_work": {
+                "chants": ["sequences chanted to commit to memory"],
+                "recitations": ["passages or rhymes recited from memory"],
+            },
+            "copywork": ["text or numerals copied neatly by hand"],
+            "recitation_routine": "How prior memory work is reviewed cumulatively",
+            "history_integration": "How the skill ties to the chronological spine",
+            "read_aloud_suggestions": ["well-written texts to read aloud"],
+        },
+        "charlotte_mason": {
+            "lesson_length_minutes": 0,
+            "living_book_suggestions": ["beautiful, real books, never workbooks"],
+            "short_lesson_flow": "The calm flow of a single short lesson",
+            "narration_prompt": "A prompt inviting the child to tell back",
+            "real_world_objects": ["real objects the lesson uses"],
+            "nature_connection": "How the skill connects to nature study",
+            "habit_focus": "The habit of mind this lesson cultivates",
+        },
+        "montessori": {
+            "prepared_materials": ["concrete materials, ordered concrete to abstract"],
+            "presentation": {
+                "three_period_lesson": "Naming, recognition, recall",
+                "steps": ["the ordered steps of the presentation"],
+            },
+            "control_of_error": "How the material reveals an error to the child",
+            "abstraction_pathway": "The path from concrete material to abstraction",
+            "extensions": ["further work that deepens the concept"],
+            "observation_focus": "What the adult watches for instead of grading",
+        },
+        "unschooling": {
+            "invitations": ["materials left out to invite, never assign"],
+            "real_world_contexts": ["where the skill already lives in real life"],
+            "conversation_starters": ["genuine questions that spark curiosity"],
+            "resource_bank": ["resources kept available, not assigned"],
+            "parent_role": "How the parent supports without turning it into a lesson",
+            "observation_documentation": "How learning is noticed over time, not tested",
+        },
     },
     "practice_items": [
         {
@@ -181,3 +238,60 @@ def validate_widgets(content: dict) -> list[str]:
             warnings.append(f"widget[{i}] params is not a dict")
 
     return warnings
+
+
+# Lesson, sequence, and assessment keys that must never appear in an
+# unschooling philosophy variant: their presence contradicts the
+# philosophy, which has no lessons, no fixed sequence, and no tests.
+_UNSCHOOLING_FORBIDDEN_KEYS: frozenset[str] = frozenset(
+    {
+        "gradual_release",
+        "i_do",
+        "we_do",
+        "you_do",
+        "guided_practice",
+        "independent_practice",
+        "mastery_check",
+        "spiral_review",
+        "scaffolding",
+        "assessment",
+        "lesson",
+        "sequence",
+    }
+)
+
+
+def validate_philosophy(content: dict) -> list[str]:
+    """Return warnings and hard-fail errors for philosophy_specific.
+
+    Mirrors validate_content and validate_media: it returns a list of
+    strings and never raises. Entries prefixed "warning:" are advisory;
+    entries prefixed "error:" are hard failures the authoring pipeline
+    must not ship.
+
+    - A plain-string variant is a legacy, un-upgraded form. It is
+      valid, but flagged with a warning so it can be upgraded to its
+      native per-philosophy shape.
+    - An unschooling variant must never carry a lesson, sequence, or
+      assessment key. That contradicts the philosophy, so it is a hard
+      failure that protects the philosophy's integrity.
+    """
+    issues: list[str] = []
+
+    philosophy_specific = content.get("philosophy_specific", {})
+    if not isinstance(philosophy_specific, dict):
+        return issues
+
+    for philosophy, variant in philosophy_specific.items():
+        if isinstance(variant, str):
+            issues.append(f"warning: philosophy_specific[{philosophy}] is a legacy string variant")
+            continue
+        if philosophy == "unschooling" and isinstance(variant, dict):
+            forbidden = sorted(_UNSCHOOLING_FORBIDDEN_KEYS.intersection(variant.keys()))
+            if forbidden:
+                issues.append(
+                    "error: unschooling variant must not contain lesson, sequence, or "
+                    f"assessment keys (found: {', '.join(forbidden)})"
+                )
+
+    return issues
