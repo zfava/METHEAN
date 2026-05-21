@@ -869,10 +869,116 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Counting songs. Rhythmic chanting at decade transitions.",
         },
         "philosophy_specific": {
-            "classical": "Daily recitation. Speed and accuracy drills.",
-            "charlotte_mason": "Count real things: 100 pennies, 100 steps. Concrete and purposeful.",
-            "montessori": "Hundred chain (10 bars of 10 beads). Bead counting to 100.",
-            "traditional": "Fill-in-the-blank hundred charts. Timed exercises.",
+            "traditional": {
+                "introduction": "Counting to one hundred follows a pattern that repeats every ten: after 29 comes 30, after 39 comes 40. Today we count to one hundred by ones and by tens, and we learn to start counting from any number, not only from one.",
+                "gradual_release": {
+                    "i_do": "Model counting on the hundred chart, pointing to each number, and name the pattern aloud at each decade: twenty-eight, twenty-nine, and a new ten begins, thirty. Then model counting by tens down the final column.",
+                    "we_do": "Count the chart together, the child pointing while you both say the numbers, rehearsing the hard transitions 29 to 30 and 39 to 40. Count by tens together, then start from a number you name and count on.",
+                    "you_do": "Child counts 1 to 100 independently, counts by tens from 10 to 100, and counts forward from a given starting number to a given end.",
+                },
+                "guided_practice": [
+                    "Hundred chart fill-in puzzles with missing numbers",
+                    "Rehearse the decade transitions 29 to 30, 39 to 40, 49 to 50",
+                    "Count by tens down a column of the hundred chart",
+                ],
+                "independent_practice": [
+                    "Complete a blank hundred chart from memory",
+                    "Write the missing numbers along a counting strip",
+                ],
+                "mastery_check": [
+                    "Count 1 to 100 aloud with no stall at the decade transitions",
+                    "Count by tens from 10 to 100 fluently",
+                    "Count forward from any given number to 100",
+                ],
+                "spiral_review": [
+                    "Re-count within 30 and rehearse the decade transitions before extending the count again",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The count to one hundred has a hidden order: it is ten tens, and each ten repeats the same pattern of ones. Learn the whole count by heart, and the structure of number stands ready for everything that follows.",
+                "memory_work": {
+                    "chants": [
+                        "Forward chant 1 to 100 daily, clear and rhythmic",
+                        "A count-by-tens chant: ten, twenty, thirty, all the way to one hundred",
+                        "Chant the decade transitions with a lift of the voice: twenty-eight, twenty-nine, THIRTY",
+                    ],
+                    "recitations": [
+                        "A counting verse or rhyme that carries the count toward one hundred, recited at the start of math time",
+                    ],
+                },
+                "copywork": [
+                    "Copy the hundred chart numerals in rows of ten, the neat columns making the repeating pattern of the ones place visible to the eye and the hand",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the count reached so far, cumulatively, before extending it; the sequence is rehearsed in full, never assumed.",
+                "history_integration": "Count the years along a century timeline and read that one hundred years is a century, binding the count to one hundred to the chronological spine.",
+                "read_aloud_suggestions": [
+                    "A well-made read-aloud that plays with hundreds and large numbers, chosen for rich and rhythmic language",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A single beautifully illustrated picture book that journeys toward one hundred, with real artwork and never a workbook in disguise",
+                ],
+                "short_lesson_flow": "Read a few pages of the chosen book attentively, then close it. Bring out one hundred real things, pennies or beans or buttons, or a real hundred chart. Count a stretch of them together, calmly, grouping by tens, and pausing at the decade transitions. Stop while the child is still attentive.",
+                "narration_prompt": "Tell me what you noticed about the numbers as they climbed toward one hundred. What happened each time you reached a new ten?",
+                "real_world_objects": [
+                    "One hundred pennies counted into stacks of ten",
+                    "The days of school marked one by one toward a hundredth day",
+                    "Steps counted on a long walk",
+                ],
+                "nature_connection": "Gather a large nature collection, count it toward one hundred in groups of ten, and record the total with a small drawing in the nature notebook.",
+                "habit_focus": "The habit of steady, accurate attention: holding the count carefully through its whole length, especially at the decade transitions where it is easy to slip.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The hundred board with its loose numeral tiles and its control chart",
+                    "The hundred chain, ten ten-bars joined, and the shorter bead chains for skip counting",
+                    "Large numeral cards for the tens landmarks",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the tens landmarks on the hundred board: this is forty; show me sixty; what is this? Then let the child build and count freely.",
+                    "steps": [
+                        "Lay the hundred board tiles in order against the frame, one to one hundred",
+                        "Count the hundred chain bead by bead, laying a numeral ticket at each ten so the pattern of tens is seen",
+                        "Choose any tile and count on from it, so counting is freed from always starting at one",
+                    ],
+                },
+                "control_of_error": "The hundred board control chart and the fixed length of the bead chain make a misplaced tile or a miscount show as a gap or a mismatch, which the child sees and corrects without an adult's word.",
+                "abstraction_pathway": "From the hundred chain held and counted bead by bead (the count felt in its full length), to the hundred board (the pattern of ten tens seen at once), toward counting to one hundred from any starting point with no chart at all.",
+                "extensions": [
+                    "Skip-count the longer bead chains and lay numeral tickets at the landmarks",
+                    "Build the whole hundred board independently and check it against its control chart",
+                ],
+                "observation_focus": "Watch for the child grasping that each new ten repeats the same run of ones, and for free, repeated work with the hundred board and chains by choice.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave a real hundred chart or a jar of one hundred interesting objects within reach",
+                    "Keep a coin jar going and count it together when it is full",
+                    "Set out board games whose paths run toward one hundred spaces",
+                ],
+                "real_world_contexts": [
+                    "Counting pennies into stacks of ten to make a dollar",
+                    "Marking the days of school toward the hundredth day",
+                    "Counting steps, stairs, or laps",
+                    "Reading the calendar and counting down to an awaited day",
+                    "Counting spaces around a long board game",
+                ],
+                "conversation_starters": [
+                    "How high do you think you can count today? Want to find out together?",
+                    "We are at thirty-nine. I wonder what comes next.",
+                    "Why do you think a new ten always starts right after a nine?",
+                ],
+                "resource_bank": [
+                    "A hundred chart kept available, not assigned",
+                    "A coin jar and real money",
+                    "A wall calendar the child can reach",
+                    "Counting and big-number picture books, and board games with long counted paths",
+                ],
+                "parent_role": "Count aloud through the day wherever counting naturally reaches toward one hundred, pennies, days, steps, and follow the child's own interest in how high they can go. Answer real questions about the pattern of the tens, and let collections and countdowns do the teaching rather than a drill.",
+                "observation_documentation": "Over time, note how high the child counts confidently, whether the decade transitions trip them, whether they can count on from a number rather than only from one, and whether they have noticed the repeating pattern of tens. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Counting syllables in longer words",
