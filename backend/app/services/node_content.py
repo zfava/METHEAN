@@ -73,6 +73,15 @@ NODE_CONTENT_SCHEMA = {
             "questions": ["optional comprehension questions"],
         }
     ],
+    "widgets": [
+        {
+            "id": "instance id, unique within the node",
+            "widget": "widget type, e.g. counting_objects or number_line",
+            "params": {"widget-specific configuration": "..."},
+            "prompt": "optional instruction shown above the widget",
+            "target": "optional expected value used by the widget for success feedback",
+        }
+    ],
     "accommodations": {
         "dyslexia": "",
         "adhd": "",
@@ -138,5 +147,37 @@ def validate_media(content: dict) -> list[str]:
             if passage_id in seen_passage_ids:
                 warnings.append(f"duplicate passage id: {passage_id}")
             seen_passage_ids.add(passage_id)
+
+    return warnings
+
+
+def validate_widgets(content: dict) -> list[str]:
+    """Return non-fatal warnings about interactive widget blocks.
+
+    This never raises and never rejects content. Legacy nodes without
+    widgets produce no warnings. Flags widgets missing an id or widget
+    type, duplicate instance ids, and params that are present but not
+    a dict. The set of widget types is intentionally open: the
+    frontend widget registry is the source of truth for renderable
+    types, and unknown types degrade gracefully there.
+    """
+    warnings: list[str] = []
+
+    seen_ids: set[str] = set()
+    for i, widget in enumerate(content.get("widgets", []) or []):
+        widget_id = widget.get("id")
+        if not widget_id:
+            warnings.append(f"widget[{i}] missing id")
+        elif widget_id in seen_ids:
+            warnings.append(f"duplicate widget id: {widget_id}")
+        else:
+            seen_ids.add(widget_id)
+
+        if not widget.get("widget"):
+            warnings.append(f"widget[{i}] missing widget type")
+
+        params = widget.get("params")
+        if params is not None and not isinstance(params, dict):
+            warnings.append(f"widget[{i}] params is not a dict")
 
     return warnings

@@ -10,6 +10,7 @@ from app.services.node_content import (
     NODE_CONTENT_SCHEMA,
     validate_content,
     validate_media,
+    validate_widgets,
 )
 
 
@@ -27,6 +28,13 @@ class TestNodeContentSchema:
     def test_passage_schema_entry_has_text(self):
         passage_example = NODE_CONTENT_SCHEMA["passages"][0]
         assert "text" in passage_example
+
+    def test_schema_documents_widgets_key(self):
+        assert "widgets" in NODE_CONTENT_SCHEMA
+        widget_example = NODE_CONTENT_SCHEMA["widgets"][0]
+        assert "id" in widget_example
+        assert "widget" in widget_example
+        assert "params" in widget_example
 
 
 class TestValidateContent:
@@ -108,6 +116,55 @@ class TestValidateMedia:
                 "passages": [
                     {"id": "r1", "text": "Sam ran.", "decodable_focus": ["short a"]},
                 ],
+            }
+        )
+        assert warnings == []
+
+
+class TestValidateWidgets:
+    def test_legacy_content_yields_no_warnings(self):
+        """A node with no widgets produces no warnings, no raise."""
+        assert validate_widgets({}) == []
+        assert validate_widgets({"learning_objectives": ["x"]}) == []
+
+    def test_flags_widget_missing_type(self):
+        warnings = validate_widgets(
+            {
+                "widgets": [
+                    {"id": "w1", "widget": "counting_objects", "params": {"count": 7}},
+                    {"id": "w2", "params": {}},
+                ]
+            }
+        )
+        assert any("widget[1]" in w and "widget type" in w for w in warnings)
+        assert not any("widget[0]" in w for w in warnings)
+
+    def test_flags_widget_missing_id(self):
+        warnings = validate_widgets({"widgets": [{"widget": "number_line", "params": {"min": 0, "max": 10}}]})
+        assert any("widget[0]" in w and "missing id" in w for w in warnings)
+
+    def test_flags_duplicate_widget_ids(self):
+        warnings = validate_widgets(
+            {
+                "widgets": [
+                    {"id": "dup", "widget": "counting_objects", "params": {}},
+                    {"id": "dup", "widget": "number_line", "params": {}},
+                ]
+            }
+        )
+        assert any("duplicate widget id: dup" in w for w in warnings)
+
+    def test_flags_non_dict_params(self):
+        warnings = validate_widgets({"widgets": [{"id": "w1", "widget": "counting_objects", "params": "seven"}]})
+        assert any("widget[0]" in w and "params is not a dict" in w for w in warnings)
+
+    def test_clean_widgets_yield_no_warnings(self):
+        warnings = validate_widgets(
+            {
+                "widgets": [
+                    {"id": "w1", "widget": "counting_objects", "params": {"count": 5}},
+                    {"id": "w2", "widget": "number_line", "params": {"min": 0, "max": 20}},
+                ]
             }
         )
         assert warnings == []
