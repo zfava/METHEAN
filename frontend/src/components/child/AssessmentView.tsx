@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import type { LearningContext } from "@/lib/api";
 import { useSoundCue } from "@/lib/useSoundCue";
+import { usePersonalization } from "@/lib/PersonalizationProvider";
+import VoiceTextarea from "@/components/child/VoiceTextarea";
 
 interface AssessmentItem {
   prompt: string;
@@ -27,6 +29,10 @@ export default function AssessmentView({ context, onComplete }: AssessmentViewPr
   const [showConfirm, setShowConfirm] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const playCue = useSoundCue();
+  // AssessmentView receives only context, not childId; source the
+  // active learner from personalization so transcription usage is
+  // attributed correctly. page.tsx is out of scope for this change.
+  const { profile } = usePersonalization();
 
   const totalItems = items.length;
   const answeredCount = Object.values(responses).filter(r => r.trim().length > 0).length;
@@ -123,8 +129,9 @@ export default function AssessmentView({ context, onComplete }: AssessmentViewPr
           </div>
         )}
         {(item.type === "open_response" || item.type === "text" || !item.type) && (
-          <textarea value={responses[currentIdx] || ""}
-            onChange={e => setResponses(r => ({ ...r, [currentIdx]: e.target.value }))}
+          <VoiceTextarea value={responses[currentIdx] || ""}
+            onChange={(next) => setResponses(r => ({ ...r, [currentIdx]: next }))}
+            childId={profile.child_id}
             placeholder="Write your answer..." rows={4}
             className="w-full px-4 py-3 rounded-xl border border-(--color-border) bg-(--color-page) text-base text-(--color-text) focus:outline-none focus:border-(--color-accent) resize-none" />
         )}
