@@ -381,10 +381,93 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Pure strength area. Rhyming games, songs, chants.",
         },
         "philosophy_specific": {
+            "traditional": {
+                "introduction": "Phonemic awareness is hearing the separate sounds inside spoken words. It is done with the ears and the voice, never with letters. Today we listen for the sounds in words, push them together to blend, and pull them apart to segment.",
+                "gradual_release": {
+                    "i_do": "Model with the word sun: say it slowly, stretching each sound, /s/ /u/ /n/, tapping one finger for each. Then push the three fingers together while saying sun. Name the first, middle, and last sound aloud.",
+                    "we_do": "Segment and blend together on short three-sound words: the child pushes a counter for each sound heard while you both say it, then swap, you say the separate sounds and the child blends the word. Play beginning-sound I Spy together.",
+                    "you_do": "Child segments three-sound words into their separate sounds, blends three sounds you say into a word, and changes the first sound of a word to make a new one, all out loud.",
+                },
+                "guided_practice": [
+                    "Sound boxes: push one counter into a box for each sound heard in a spoken word",
+                    "Rhyme sorting: decide aloud whether two spoken words rhyme",
+                    "Beginning-sound match: group spoken picture names by their first sound",
+                ],
+                "independent_practice": [
+                    "Say it slow then say it fast: the child stretches a word into its sounds, then blends it back together",
+                    "Sound swap: the child changes the first or last sound of a spoken word and says the new word",
+                ],
+                "mastery_check": [
+                    "Segment a three-sound word into its three sounds with no help",
+                    "Blend three spoken sounds into the correct word",
+                    "Substitute a beginning sound to make a new word",
+                ],
+                "spiral_review": [
+                    "Return to rhyming and beginning-sound isolation before practicing the harder middle-sound and manipulation work",
+                ],
+            },
             "classical": "Systematic phonemic awareness drills before phonics instruction.",
-            "charlotte_mason": "Nursery rhymes and poetry build phonemic awareness naturally.",
-            "montessori": "I Spy game: 'I spy something beginning with /b/.' Sound games.",
-            "traditional": "Structured phonemic awareness program with daily practice.",
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A treasury of traditional nursery rhymes and a book of well-made children's poetry, chosen for true rhyme, strong rhythm, and lovely language, to be read and said aloud",
+                ],
+                "short_lesson_flow": "Say a familiar nursery rhyme together, delighting in it first. Then play gently with its sounds for a few minutes: find the words that rhyme, say one word slowly to hear its separate sounds, change a first sound to make a funny new word. Stop while the child is still enjoying it.",
+                "narration_prompt": "Tell me the rhyming words you heard. Can you say me another word that would rhyme with them?",
+                "real_world_objects": [
+                    "A small basket of familiar objects whose names are played with sound by sound",
+                    "The names of family members, said slowly and listened to one sound at a time",
+                ],
+                "nature_connection": "On a walk, listen for and name the sounds that are heard, and play with the sounds in the names of found things: a bird, a leaf, a stone, each said slowly to hear every sound.",
+                "habit_focus": "The habit of attentive listening: hearing a word fully and exactly, and the habit of delight in the music and rhyme of words.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Baskets of small, familiar objects or miniatures gathered for the sound games",
+                    "A quiet, unhurried space where the guide and child can listen closely together",
+                    "No letters or print: the sound games precede the sandpaper letters and stay purely oral",
+                ],
+                "presentation": {
+                    "three_period_lesson": "Adapted for the sound game. Naming: I spy, with my little eye, something that begins with /m/. Recognition: can you find something that begins with /m/? Recall: you found the mat; what sound does mat begin with? Spoken sounds only, never letter names.",
+                    "steps": [
+                        "Begin the I Spy sound game with beginning sounds the child hears most easily",
+                        "Move to ending sounds, and then to the harder middle vowel sounds",
+                        "Later, say a word in its separate sounds for the child to blend, and say a whole word for the child to break apart",
+                    ],
+                },
+                "control_of_error": "These are oral games, so the control of error lives in the shared listening: the guide says the sound clearly, and the chosen object either does or does not begin with it, which the child hears for themselves. The guide stays light and never turns it into a drill.",
+                "abstraction_pathway": "From hearing whole spoken words, to hearing and isolating the single sounds inside them, toward (in the work that follows this node) joining each sound to its sandpaper letter. This node stays in the purely oral phase.",
+                "extensions": [
+                    "Play the sound game with the names of family members and favorite things",
+                    "Move to four and five sound words, and to taking a sound away to leave a new word",
+                ],
+                "observation_focus": "Watch which sound positions the child hears with ease and which are still hard, usually the middle vowel, and watch for the child asking to play the game again. Note: Montessori teaches these sound games before the sandpaper letters, so this work is deliberately kept free of print.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Sing and say nursery rhymes, jump-rope rhymes, and silly songs together, often",
+                    "Play rhyming and sound games in the car, in a line, at bath time, whenever a moment opens",
+                    "Make up nonsense words and silly rhymes together and laugh at them",
+                ],
+                "real_world_contexts": [
+                    "Rhymes and repeated sounds in songs, picture books, and poems",
+                    "Clapping or singing the syllables and sounds in the child's own name and family names",
+                    "Tongue twisters and alliteration noticed in everyday talk",
+                    "I Spy by sound, played on a walk or a drive",
+                ],
+                "conversation_starters": [
+                    "That word sounds a lot like another word, can you hear it?",
+                    "What does your name start with if you say it really slowly?",
+                    "I am thinking of something in this room that starts with /b/. Can you guess it?",
+                ],
+                "resource_bank": [
+                    "A treasury of nursery rhymes and a book of children's poetry, kept available",
+                    "Songs, chants, and recordings of rhymes and stories",
+                    "Picture books with strong rhyme and rhythm, read again and again because the child loves them",
+                ],
+                "parent_role": "Fill the day with rhyme, song, and sound play, and follow the child's delight in it. Say words slowly and playfully when a child is curious, answer real questions about how words sound, and let silly word play be its own reward rather than turning it into a lesson.",
+                "observation_documentation": "Over time, notice whether the child enjoys and produces rhymes, can hear a word's first sound, and begins to pull words apart and push sounds together in play. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Counting sounds in words is like counting objects",
