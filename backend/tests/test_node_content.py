@@ -4,21 +4,111 @@ Covers:
 - NODE_CONTENT_SCHEMA documents the full content shape.
 - validate_media flags media and passage warnings without raising.
 - validate_content keeps its required-field behavior.
+- validate_philosophy warns on legacy strings and hard-fails an
+  unschooling variant carrying a lesson/sequence/assessment key.
+- The authored reference nodes mf-01, mf-02, rf-01 carry native
+  variants for all five philosophies.
 """
 
+import pytest
+
+from app.content.math_foundational_content import MATH_FOUNDATIONAL_CONTENT
+from app.content.reading_foundational_content import READING_FOUNDATIONAL_CONTENT
 from app.services.node_content import (
     NODE_CONTENT_SCHEMA,
     validate_content,
     validate_media,
+    validate_philosophy,
     validate_widgets,
 )
+
+PHILOSOPHIES = ("traditional", "classical", "charlotte_mason", "montessori", "unschooling")
+
+# The distinctive native top-level keys each philosophy variant carries.
+NATIVE_KEYS: dict[str, set[str]] = {
+    "traditional": {
+        "introduction",
+        "gradual_release",
+        "guided_practice",
+        "independent_practice",
+        "mastery_check",
+        "spiral_review",
+    },
+    "classical": {
+        "narrative_introduction",
+        "memory_work",
+        "copywork",
+        "recitation_routine",
+        "history_integration",
+        "read_aloud_suggestions",
+    },
+    "charlotte_mason": {
+        "lesson_length_minutes",
+        "living_book_suggestions",
+        "short_lesson_flow",
+        "narration_prompt",
+        "real_world_objects",
+        "nature_connection",
+        "habit_focus",
+    },
+    "montessori": {
+        "prepared_materials",
+        "presentation",
+        "control_of_error",
+        "abstraction_pathway",
+        "extensions",
+        "observation_focus",
+    },
+    "unschooling": {
+        "invitations",
+        "real_world_contexts",
+        "conversation_starters",
+        "resource_bank",
+        "parent_role",
+        "observation_documentation",
+    },
+}
+
+# Lesson, sequence, and assessment keys an unschooling variant must
+# never carry.
+UNSCHOOLING_FORBIDDEN: set[str] = {
+    "gradual_release",
+    "i_do",
+    "we_do",
+    "you_do",
+    "guided_practice",
+    "independent_practice",
+    "mastery_check",
+    "spiral_review",
+    "scaffolding",
+    "assessment",
+    "lesson",
+    "sequence",
+}
+
+
+def _node_content(node_key: str) -> dict:
+    if node_key in MATH_FOUNDATIONAL_CONTENT:
+        return MATH_FOUNDATIONAL_CONTENT[node_key]
+    return READING_FOUNDATIONAL_CONTENT[node_key]
 
 
 class TestNodeContentSchema:
     def test_schema_documents_new_and_existing_keys(self):
         """The schema is the single source of truth for content keys."""
-        for key in ("media", "passages", "practice_items", "assessment_items"):
+        for key in ("media", "passages", "practice_items", "assessment_items", "philosophy_specific"):
             assert key in NODE_CONTENT_SCHEMA, f"{key} missing from NODE_CONTENT_SCHEMA"
+
+    def test_schema_documents_native_philosophy_shapes(self):
+        """The schema documents a distinct native shape per philosophy."""
+        ps = NODE_CONTENT_SCHEMA["philosophy_specific"]
+        for philosophy in PHILOSOPHIES:
+            assert philosophy in ps, f"{philosophy} missing from philosophy_specific schema"
+        assert "gradual_release" in ps["traditional"]
+        assert "memory_work" in ps["classical"]
+        assert "short_lesson_flow" in ps["charlotte_mason"]
+        assert "presentation" in ps["montessori"]
+        assert "invitations" in ps["unschooling"]
 
     def test_media_schema_entry_has_alt(self):
         media_example = NODE_CONTENT_SCHEMA["media"][0]
@@ -168,3 +258,67 @@ class TestValidateWidgets:
             }
         )
         assert warnings == []
+
+
+class TestValidatePhilosophy:
+    def test_legacy_content_yields_no_issues(self):
+        """Content with no philosophy_specific produces nothing, no raise."""
+        assert validate_philosophy({}) == []
+        assert validate_philosophy({"learning_objectives": ["x"]}) == []
+
+    def test_legacy_string_variant_warns(self):
+        """A plain-string variant is valid but flagged with a warning."""
+        issues = validate_philosophy({"philosophy_specific": {"classical": "Chant number sequences daily."}})
+        assert any(i.startswith("warning:") and "classical" in i for i in issues)
+        assert not any(i.startswith("error:") for i in issues)
+
+    def test_unschooling_with_lesson_key_hard_fails(self):
+        """An unschooling variant carrying a lesson/assessment key hard-fails."""
+        issues = validate_philosophy(
+            {"philosophy_specific": {"unschooling": {"invitations": ["x"], "mastery_check": ["bad"]}}}
+        )
+        errors = [i for i in issues if i.startswith("error:")]
+        assert errors
+        assert "mastery_check" in errors[0]
+
+    def test_unschooling_with_gradual_release_hard_fails(self):
+        issues = validate_philosophy({"philosophy_specific": {"unschooling": {"gradual_release": {"i_do": "x"}}}})
+        assert any(i.startswith("error:") for i in issues)
+
+    def test_clean_unschooling_variant_has_no_error(self):
+        """A native unschooling variant raises no hard-fail."""
+        issues = validate_philosophy(
+            {
+                "philosophy_specific": {
+                    "unschooling": {
+                        "invitations": ["leave objects out"],
+                        "parent_role": "follow the child's interests",
+                    }
+                }
+            }
+        )
+        assert not any(i.startswith("error:") for i in issues)
+
+
+class TestAuthoredPhilosophyContent:
+    @pytest.mark.parametrize("node_key", ["mf-01", "mf-02", "rf-01"])
+    def test_node_has_all_five_native_variants(self, node_key):
+        """Each reference node carries a native variant for every philosophy."""
+        content = _node_content(node_key)
+        ps = content["philosophy_specific"]
+        for philosophy in PHILOSOPHIES:
+            assert philosophy in ps, f"{node_key} missing {philosophy} variant"
+            variant = ps[philosophy]
+            assert isinstance(variant, dict), f"{node_key}/{philosophy} is not a native dict"
+            missing = NATIVE_KEYS[philosophy] - set(variant.keys())
+            assert not missing, f"{node_key}/{philosophy} missing native keys: {sorted(missing)}"
+
+    @pytest.mark.parametrize("node_key", ["mf-01", "mf-02", "rf-01"])
+    def test_unschooling_variant_has_no_lesson_keys(self, node_key):
+        """Each unschooling variant carries no lesson/sequence/assessment key."""
+        content = _node_content(node_key)
+        unschooling = content["philosophy_specific"]["unschooling"]
+        forbidden = UNSCHOOLING_FORBIDDEN.intersection(unschooling.keys())
+        assert not forbidden, f"{node_key} unschooling has forbidden keys: {sorted(forbidden)}"
+        # validate_philosophy must report no hard-fail for the authored node.
+        assert not [i for i in validate_philosophy(content) if i.startswith("error:")]

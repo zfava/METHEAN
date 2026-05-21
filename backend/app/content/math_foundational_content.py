@@ -175,10 +175,114 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Chant counting sequences rhythmically. Sing counting songs.",
         },
         "philosophy_specific": {
-            "classical": "Chant number sequences daily as math memory work.",
-            "charlotte_mason": "Count real objects in nature: acorns, leaves, birds. Short lessons.",
-            "montessori": "Sandpaper numerals. Golden bead material. Spindle boxes.",
-            "traditional": "Structured counting worksheets with graduated difficulty.",
+            "traditional": {
+                "introduction": "Counting is matching one number word to one object. Today we count to twenty, read and write the numerals, and count backward.",
+                "gradual_release": {
+                    "i_do": "Model counting twelve counters aloud, touching each once, then say the last number, twelve, tells how many in all. Write 12.",
+                    "we_do": "Count sixteen together, child touching while you say the words, then swap. Build sets to a target numeral card together.",
+                    "you_do": "Child counts sets of 14, 18, 20 independently and writes the numeral for each.",
+                },
+                "guided_practice": [
+                    "Match numeral cards 0 to 20 to the correct quantity",
+                    "Fill in missing numbers on a 1 to 20 track",
+                ],
+                "independent_practice": [
+                    "Worksheet: write numerals 0 to 20",
+                    "Count and label five sets of objects",
+                ],
+                "mastery_check": [
+                    "Count 18 objects with one-to-one correspondence",
+                    "Write 0 to 20 from memory",
+                    "Count backward from 14",
+                ],
+                "spiral_review": [
+                    "Re-count within 10 to confirm retention before extending to 20",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Numbers march in a fixed and beautiful order. Once we know the order by heart, all of arithmetic stands on it. We will learn the count to twenty so well we could say it in our sleep.",
+                "memory_work": {
+                    "chants": [
+                        "Forward chant 1 to 20, clear and rhythmic, daily",
+                        "Backward chant 20 to 1",
+                        "Seed skip-counting chants: by twos and by fives to twenty",
+                    ],
+                    "recitations": [
+                        "A short counting rhyme committed to memory, recited at the start of each math time",
+                    ],
+                },
+                "copywork": [
+                    "Copy the numerals 0 to 20 in order, neatly, building the hand-eye memory of their forms",
+                ],
+                "recitation_routine": "Begin each lesson by reciting yesterday's count before adding today's; the sequence is reviewed cumulatively, never assumed.",
+                "history_integration": "Count along a simple timeline of the child's own life, one mark per year, tying number order to the chronological spine.",
+                "read_aloud_suggestions": [
+                    "A rhythmic, well-written counting book read aloud with expression",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 12,
+                "living_book_suggestions": [
+                    "A single beautiful counting picture book with real, lovely illustrations; never a busy workbook-style book",
+                ],
+                "short_lesson_flow": "Read the counting book once, attentively, then close it. Bring out a small basket of real objects (acorns, buttons, shells). Count a set together, calmly, stopping while interest is still high.",
+                "narration_prompt": "Tell me about the counting we just did. What did you count, and how many were there?",
+                "real_world_objects": [
+                    "Acorns or leaves gathered on a walk",
+                    "Place settings at the family table",
+                    "Stairs counted on the way up",
+                ],
+                "nature_connection": "On the next nature walk, count a set of found things and add the number to the nature notebook with a small drawing.",
+                "habit_focus": "The habit of attention: count carefully, once, all the way through, without rushing or losing track.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Number rods (length embodies quantity)",
+                    "Sandpaper numerals 0 to 9 then teens",
+                    "Spindle boxes (quantity, the concept of zero, one-to-one to nine)",
+                    "Cards and counters (one-to-one and odd/even to ten, then teen board to twenty)",
+                ],
+                "presentation": {
+                    "three_period_lesson": "Naming: place a numeral and its quantity, this is fourteen. Recognition: show me fourteen. Recall: what is this? Move slowly; never rush to the third period.",
+                    "steps": [
+                        "Trace the sandpaper numeral while saying its name",
+                        "Lay out the matching quantity of counters beneath the numeral",
+                        "Self-check by pairing counters; an unpaired or extra counter reveals the error",
+                    ],
+                },
+                "control_of_error": "The counters and spindle box quantities are fixed, so a miscount leaves a leftover or a gap that the child sees and corrects without being told.",
+                "abstraction_pathway": "From rods and counters (quantity felt), to sandpaper numerals (symbol), to pairing symbol with quantity, toward writing the numeral from the held idea.",
+                "extensions": [
+                    "Build the numbers eleven to nineteen on the teen board with bead bars",
+                    "Count a long bead chain and lay numeral tickets at each landmark",
+                ],
+                "observation_focus": "Watch for sustained concentration and free repetition; the child returning to the work by choice is the signal of construction, not a grade.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave a bowl of interesting objects (smooth stones, coins, buttons) within reach",
+                    "Put an abacus or a set of blocks on a low shelf and say nothing",
+                    "Bake together where the recipe needs counted scoops, cups, and cookies",
+                ],
+                "real_world_contexts": [
+                    "Sharing snacks fairly among everyone present",
+                    "Counting stairs every time they are climbed",
+                    "Counting and trading coins during real or pretend shopping",
+                    "Tallying a collection the child already loves: dinosaurs, cars, rocks",
+                ],
+                "conversation_starters": [
+                    "How many do you think are in here? Want to find out?",
+                    "If everyone gets the same, how many does each person get?",
+                    "I wonder which pile has more.",
+                ],
+                "resource_bank": [
+                    "Counting and number picture books left available, not assigned",
+                    "Board games involving counting spaces or collecting",
+                    "A real or play cash register and coins",
+                ],
+                "parent_role": "Notice where counting already lives in the child's actual interests and join it there. Answer real questions, model counting aloud in daily life, and resist turning a moment of curiosity into a lesson.",
+                "observation_documentation": "Over days, jot where counting arose naturally, how high the child counts confidently, whether they hold one-to-one correspondence, and whether they self-correct. This replaces any test.",
+            },
         },
         "connections": {
             "reading": "Number words as sight words",
@@ -309,10 +413,116 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Say number names aloud while pointing. Partner quizzing.",
         },
         "philosophy_specific": {
-            "classical": "Systematic drill with the hundred chart. Memorize decades.",
-            "charlotte_mason": "Find numbers in real life: addresses, page numbers, prices.",
-            "montessori": "Hundred board with tiles. Teen board and ten board.",
-            "traditional": "Number writing practice sheets. Fill-in-the-blank sequences.",
+            "traditional": {
+                "introduction": "A numeral is the symbol we write for a number. We will read every numeral to one hundred on sight, and learn that a two-digit numeral is built from tens and ones: 63 is six tens and three ones.",
+                "gradual_release": {
+                    "i_do": "Read numerals across a hundred chart, pointing and naming. Build 63 with base-ten rods: six ten-rods, three unit cubes, saying six tens, three ones, sixty-three.",
+                    "we_do": "Read a row of the chart together; cover a numeral and deduce it from neighbors; build two or three numbers with tens-and-ones blocks and read them aloud together.",
+                    "you_do": "Child reads a mixed set (47, 82, 15, 63, 90), writes sixty-three, and shows the tens and ones in 40.",
+                },
+                "guided_practice": [
+                    "Hundred chart fill-in puzzles",
+                    "Build a given two-digit number with base-ten blocks, then read it",
+                ],
+                "independent_practice": [
+                    "Write numerals to 50 from memory",
+                    "Numeral scavenger sheet: record numbers found on signs and packages",
+                ],
+                "mastery_check": [
+                    "Read any numeral 0 to 100 on sight",
+                    "Write sixty-three correctly",
+                    "State how many tens and ones are in 40",
+                ],
+                "spiral_review": [
+                    "Re-read numerals 0 to 20 to confirm retention before extending",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The numerals are an alphabet for quantity. There are only ten symbols, yet with place they name every number to a hundred and beyond. We learn to read them all, and the secret of place: where a digit sits tells how much it is worth.",
+                "memory_work": {
+                    "chants": [
+                        "Count by tens to one hundred as a rhythmic chant",
+                        "Recite the decade names: twenty, thirty, forty, fifty",
+                        "Read the hundred chart aloud, one row a day, then cumulatively",
+                    ],
+                    "recitations": [
+                        "A short place-value verse memorized: two tens and three, that's twenty-three",
+                    ],
+                },
+                "copywork": [
+                    "Copy the numerals in rows of ten (0 to 9, 10 to 19, and so on), the neat columns revealing the repeating pattern of the ones place",
+                ],
+                "recitation_routine": "Open each lesson by reciting the count-by-tens and the prior decades before adding today's, so the sequence is always cumulative.",
+                "history_integration": "Number a simple century timeline and read the years aloud in order, binding numeral reading to the chronological spine.",
+                "read_aloud_suggestions": [
+                    "A well-written read-aloud that plays with hundreds and large numbers, chosen for rich language",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A single beautifully illustrated picture book that explores numbers toward one hundred; real artwork, never a workbook in disguise",
+                ],
+                "short_lesson_flow": "Read the chosen book once, attentively, then close it. Bring out a jar of one hundred real things (beans, buttons) or a real hundred chart. Read a handful of numerals together, and group a small pile into tens and ones. Stop while interest is still high.",
+                "narration_prompt": "Tell me what you noticed about the numbers as they grew. What happened each time we reached a new ten?",
+                "real_world_objects": [
+                    "House numbers noticed on a walk",
+                    "Page numbers in the current family read-aloud",
+                    "Prices at the market",
+                ],
+                "nature_connection": "Gather a nature collection, group it into tens and ones, and record the two-digit total with a small drawing in the nature notebook.",
+                "habit_focus": "Accuracy and attention: read each numeral carefully and fully, rather than guessing from the first digit.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Golden bead material: unit beads, ten-bars, hundred-square, for felt place value",
+                    "The hundred board with its control chart",
+                    "Large place-value number cards that overlay to show tens and ones",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the ten cards and bead quantities: this is forty, four tens; show me sixty; what is this? Always pair the written symbol with the bead quantity.",
+                    "steps": [
+                        "Build a quantity with ten-bars and unit beads",
+                        "Lay the matching large numeral cards beside it",
+                        "Compose a two-digit number by sliding the units card over the zero of the tens card, so 60 with 3 overlaid becomes 63, showing place value physically",
+                    ],
+                },
+                "control_of_error": "The hundred board control chart and the fixed bead quantities make a misplacement visible as a gap or mismatch, which the child corrects without an adult verdict.",
+                "abstraction_pathway": "From golden beads (quantity felt), to the overlaid place-value cards (structure of tens and ones made visible), toward reading and writing any numeral from the held idea with no chart needed.",
+                "extensions": [
+                    "Build the hundred board independently against its control",
+                    "Skip-count the bead chains and lay numeral tickets at the landmarks",
+                    "Choose a two-digit number, build it in beads, and label it",
+                ],
+                "observation_focus": "Watch for the child grasping that a digit's position carries its value, and for free, repeated work with the hundred board by choice.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave a real hundred chart or a jar of one hundred interesting objects within reach",
+                    "Set out a calendar at child height, a tape measure, a ruler, and real coins",
+                    "Keep a deck of cards and a couple of two-digit-scoring games accessible",
+                ],
+                "real_world_contexts": [
+                    "Reading house numbers and bus numbers",
+                    "Finding the page they are on in a loved book",
+                    "Reading prices and totals while shopping",
+                    "Keeping score in a game",
+                    "Reading ages, the calendar, channel and jersey numbers",
+                ],
+                "conversation_starters": [
+                    "What number is our house? What about next door?",
+                    "How many pages does this book have, and what page are we on?",
+                    "I wonder how they write the prices here.",
+                ],
+                "resource_bank": [
+                    "Number and big-number picture books, available not assigned",
+                    "Board games with two-digit scoring",
+                    "Real money and a calculator left accessible",
+                    "A wall calendar the child can reach",
+                ],
+                "parent_role": "Read numerals aloud naturally through the day (prices, addresses, page numbers), answer what number is that without turning it into a drill, and follow the child's own number interests.",
+                "observation_documentation": "Over time, note which numerals the child reads confidently, whether they read the tens correctly (sixty-three, not six-three), and whether place-value language is emerging. No test; mastery inferred from real reading.",
+            },
         },
         "connections": {
             "reading": "Reading number words and matching to numerals",

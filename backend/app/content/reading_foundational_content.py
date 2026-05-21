@@ -133,10 +133,114 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Alphabet song variations. Say letter name while tracing.",
         },
         "philosophy_specific": {
-            "classical": "Systematic letter instruction with daily review and recitation.",
-            "charlotte_mason": "Letters discovered in living books and the natural environment.",
-            "montessori": "Sandpaper letters for tactile learning. Movable alphabet.",
-            "traditional": "Letter-of-the-week curriculum. Worksheets and tracing.",
+            "traditional": {
+                "introduction": "Every letter has a name and two shapes, uppercase and lowercase. Today we learn to name all twenty-six in both cases, starting with the letters in your own name.",
+                "gradual_release": {
+                    "i_do": "Name letter cards aloud, beginning with the child's name letters; explicitly contrast easily confused pairs like b and d by their forms.",
+                    "we_do": "Name letters together in small groups of three or four; sort magnetic letters into uppercase and lowercase; match pairs together.",
+                    "you_do": "Child names all twenty-six in random order, both cases, and matches the pairs independently.",
+                },
+                "guided_practice": [
+                    "Letter-card drills in small sets",
+                    "Uppercase-to-lowercase matching games",
+                ],
+                "independent_practice": [
+                    "Trace and name each letter",
+                    "Letter-hunt worksheet in real print",
+                ],
+                "mastery_check": [
+                    "Name all 26 uppercase and all 26 lowercase in random order",
+                    "Match every uppercase to its lowercase",
+                ],
+                "spiral_review": [
+                    "Return regularly to previously confused pairs (b/d, p/q, m/w)",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The alphabet is the first great memory work of reading: twenty-six letters, each with a name and a form, learned in order and held by heart. Once known cold, they carry everything that follows.",
+                "memory_work": {
+                    "chants": [
+                        "Recite or sing the alphabet A to Z daily, clearly and unrushed, pointing to each letter as it is named",
+                    ],
+                    "recitations": [
+                        "A short alphabet rhyme committed to memory",
+                    ],
+                },
+                "copywork": [
+                    "Copy the letters in order, uppercase then lowercase, forming each carefully; this is the beginning of penmanship",
+                ],
+                "recitation_routine": "Recite the full alphabet at the start of each lesson, then dwell on the names and forms of a few letters.",
+                "history_integration": "Tell, simply and age-appropriately, that our letters are an old human invention passed down over a very long time, tying the alphabet to the narrative of history.",
+                "read_aloud_suggestions": [
+                    "A beautifully illustrated classic alphabet book, read aloud for its language and pictures",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "One lovely alphabet picture book with real artwork, not a busy phonics workbook",
+                ],
+                "short_lesson_flow": "Look together at a single beautiful alphabet page. Find the letters of the child's own name on it. Form one or two letters in a sand tray or with a finger. Stop while interest is still high.",
+                "narration_prompt": "Which letters did you find today, and where did you see them?",
+                "real_world_objects": [
+                    "Letters on signs during a walk",
+                    "The child's own name on their belongings",
+                    "Letters in the title of the current read-aloud",
+                ],
+                "nature_connection": "Look for letter shapes in nature, such as a forked branch shaped like Y, and note a found letter or word in the nature notebook.",
+                "habit_focus": "Careful attention to one letter at a time, building the habit of looking closely.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Sandpaper letters (lowercase introduced first, traced while voicing the sound)",
+                    "The large movable alphabet",
+                    "Object and picture cards for initial sounds",
+                    "Metal insets for the hand control that supports letter formation",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the sandpaper letters, trace and voice (this says mmm); show me the m; what is this? Montessori introduces lowercase and the sound before the name and the capital.",
+                    "steps": [
+                        "Trace the textured letter in its writing direction while voicing it",
+                        "Match small objects or picture cards to their initial letter",
+                        "Compose the child's own name with the movable alphabet",
+                    ],
+                },
+                "control_of_error": "The sandpaper texture guides the finger along the correct path, and the matching cards carry a control set, so a mismatch is visible to the child.",
+                "abstraction_pathway": "From tracing the textured form (muscular memory of the shape), to composing with the movable alphabet, toward recognizing and naming letters in any print.",
+                "extensions": [
+                    "Build short, familiar words with the movable alphabet",
+                    "Sort a basket of objects by their initial letter",
+                ],
+                "observation_focus": "Note sustained tracing and the child's spontaneous return to the letters, and watch that letter sounds and letter names are kept distinct. Note: authentic Montessori teaches lowercase and sounds first, deliberately diverging from an uppercase-first, letter-names framing; fidelity to the philosophy is intended.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Magnetic or foam letters on the fridge",
+                    "Letter stamps, blocks, and a chalkboard left out",
+                    "The child's name posted large where they will see it",
+                    "Alphabet books available on a low shelf",
+                ],
+                "real_world_contexts": [
+                    "The child's own name on their things",
+                    "Letters on signs, packaging, and screens",
+                    "Typing letters on a keyboard or tablet",
+                    "Letters in the names of people they love",
+                ],
+                "conversation_starters": [
+                    "That sign starts with the same letter as your name, see it?",
+                    "What letter do you feel like making?",
+                    "Whose name starts with B?",
+                ],
+                "resource_bank": [
+                    "Alphabet books",
+                    "Magnetic and foam letters",
+                    "A label maker or letter stamps",
+                    "A keyboard or a drawing app",
+                    "The child's name in big letters",
+                ],
+                "parent_role": "Point out the letters that matter to the child first, their own initial and family names, answer what letter is that naturally, model writing in front of them, and follow their interests.",
+                "observation_documentation": "Note which letters the child recognizes and writes spontaneously, especially the personally meaningful ones, and whether they tell letters apart from numbers in real print. No test; recognition emerges through meaningful print over time.",
+            },
         },
         "connections": {
             "math": "Alphabetical order is sequential like number order",
