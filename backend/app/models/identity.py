@@ -137,6 +137,13 @@ class PasswordResetToken(Base):
     user_agent: Mapped[str | None] = mapped_column(String(500))
 
 
+# Canonical pedagogical philosophies a family may choose. "eclectic"
+# means per-subject overrides apply (see Child.subject_philosophies).
+CURRICULUM_PHILOSOPHIES: frozenset[str] = frozenset(
+    {"traditional", "classical", "charlotte_mason", "montessori", "unschooling", "eclectic"}
+)
+
+
 class Child(Base):
     __tablename__ = "children"
 
@@ -150,6 +157,15 @@ class Child(Base):
     grade_level: Mapped[str | None] = mapped_column(String(20))
     avatar_url: Mapped[str | None] = mapped_column(Text)
     fsrs_weights: Mapped[list | None] = mapped_column(JSONB)  # Personalized FSRS weights (21 params)
+    # Pedagogical philosophy. curriculum_philosophy is the family's
+    # chosen approach; subject_philosophies holds per-subject overrides
+    # used only when curriculum_philosophy == "eclectic".
+    curriculum_philosophy: Mapped[str] = mapped_column(
+        String(32), nullable=False, server_default=text("'traditional'"), default="traditional"
+    )
+    subject_philosophies: Mapped[dict | None] = mapped_column(
+        JSONB, nullable=True, server_default=text("'{}'::jsonb"), default=dict
+    )
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
