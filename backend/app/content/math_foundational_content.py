@@ -1109,10 +1109,116 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Chant fact families. Partner quizzing. Doubles songs.",
         },
         "philosophy_specific": {
-            "classical": "Systematic memorization. Daily oral drill. Flashcards.",
-            "charlotte_mason": "Discover through combining real object groups. Concrete first.",
-            "montessori": "Addition strip board. Golden beads. Addition charts.",
-            "traditional": "Graduated worksheets. Timed tests after mastery.",
+            "traditional": {
+                "introduction": "Addition is putting groups together; the total tells how many there are in all. Today we combine groups, write the number sentence that records it, find a missing part, and build quick, sure recall of the sums within ten.",
+                "gradual_release": {
+                    "i_do": "Model with counters: take a group of three and a group of four, slide them together, count the whole, seven. Write the number sentence, 3 + 4 = 7. Model counting on from the larger group rather than counting all.",
+                    "we_do": "Combine groups together and write the number sentence together. Practice the doubles and the near-doubles, and find a missing addend by hiding part of a known whole.",
+                    "you_do": "Child solves the sums within ten, first with counters and then without, writes the matching number sentences, and solves missing-addend problems such as blank plus 4 equals 9.",
+                },
+                "guided_practice": [
+                    "Combine two groups of counters and count the total, then write the number sentence",
+                    "Build the doubles with two-color counters: 3 and 3, 4 and 4",
+                    "Find the missing addend when part of a known whole is hidden",
+                ],
+                "independent_practice": [
+                    "Fact practice through dice, dominoes, and card games rather than timed drill",
+                    "Write the number sentence for each combined group",
+                ],
+                "mastery_check": [
+                    "Recall any sum within ten quickly and correctly",
+                    "Write a correct addition number sentence",
+                    "Solve a missing-addend problem within ten",
+                ],
+                "spiral_review": [
+                    "Revisit the doubles and the combinations within five before extending recall toward ten",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Addition is the joining of numbers, and the small sums within ten are the bricks of all arithmetic. Learned by heart, so they answer at once, every later calculation rests upon them.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the doubles in rhythm: one and one are two, two and two are four, on to five and five",
+                        "Chant the pairs that make ten: nine and one, eight and two, seven and three",
+                        "Chant a fact family together: three, four, seven; seven, four, three",
+                    ],
+                    "recitations": [
+                        "Recite the addition combinations within ten in order, a few each day, until the whole set is held in memory",
+                    ],
+                },
+                "copywork": [
+                    "Copy addition number sentences neatly, such as 3 + 4 = 7, so the written form of each fact is sure and familiar to the hand",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the sums learned so far before adding new ones; the facts are reviewed cumulatively, never assumed.",
+                "history_integration": "Add the years between two dates on a simple timeline to find the span between them, applying the joining of numbers to the chronological spine.",
+                "read_aloud_suggestions": [
+                    "A well-told story in which groups of things are gathered and combined, read aloud for its language and its quiet arithmetic",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 12,
+                "living_book_suggestions": [
+                    "A beautifully illustrated picture book in which real things are gathered and combined, chosen for lovely artwork and never a busy workbook",
+                ],
+                "short_lesson_flow": "Set out two small groups of real objects. Ask the child to put the groups together and find how many there are now, letting them discover the total by counting the combined group. Do two or three such combinings, calmly, and stop while the child is still interested.",
+                "narration_prompt": "Tell me how you found the total. What did you do with the two groups, and how did you know how many there were in all?",
+                "real_world_objects": [
+                    "Acorns or shells brought from two pockets and combined",
+                    "Coins from two small piles counted together",
+                    "Pieces of fruit or crackers shared into one group at the table",
+                ],
+                "nature_connection": "On a walk, gather two small handfuls of found things, combine them, and tell the total; record the little sum with a drawing in the nature notebook.",
+                "habit_focus": "The habit of careful and honest work: counting the combined group exactly, and trusting a sum only when it has truly been found.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The addition strip board with its numbered strips",
+                    "Golden bead bars for combining quantities and counting the whole",
+                    "The addition charts for the later memorization stage",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a known sum: this is seven, three and four make seven; show me another way to make seven; what do three and four make? Spoken with the materials in hand.",
+                    "steps": [
+                        "Combine two golden bead bars and count the whole quantity they make",
+                        "Lay two strips on the addition strip board to build a sum and read the total",
+                        "Record the number sentence, then check the sum against the addition control chart",
+                    ],
+                },
+                "control_of_error": "The fixed length of the strips on the addition strip board, and the addition control chart, let a wrong sum show itself as a mismatch the child sees and corrects without an adult's verdict.",
+                "abstraction_pathway": "From combining golden beads (the sum felt in the hand), to the strip board (the sum built and seen), to the addition charts (the sum committed to memory), toward writing and recalling the fact with no material at all.",
+                "extensions": [
+                    "Find every way to make a chosen number and lay them out together",
+                    "Work the addition snake game, exchanging colored bead bars for golden tens",
+                ],
+                "observation_focus": "Watch for the child moving from counting all, to counting on, to simply knowing the sum, and for free, repeated return to the addition work by choice.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave dice, dominoes, and a deck of cards on a low shelf and say nothing",
+                    "Bake or cook together where scoops, cups, and pieces are combined and counted",
+                    "Keep a coin jar and a set of board games with scoring within reach",
+                ],
+                "real_world_contexts": [
+                    "Combining snacks or treats and finding how many there are altogether",
+                    "Keeping a running score in a game",
+                    "Adding coins while saving or shopping",
+                    "Putting two groups of toys together and asking how many now",
+                    "Setting the table and adding the places for guests",
+                ],
+                "conversation_starters": [
+                    "You have four and I have three. How many do we have if we put them together?",
+                    "Is there a way to find the total without counting them all over again?",
+                    "We made eight last time with three and five. What other two numbers make eight?",
+                ],
+                "resource_bank": [
+                    "Dice, dominoes, and playing cards kept available, not assigned",
+                    "Board games that involve scoring and combining",
+                    "A coin jar and real money",
+                    "Math picture books left on a low shelf",
+                ],
+                "parent_role": "Notice the many daily moments of combining, snacks, coins, scores, toys, and count the totals aloud alongside the child. Ask genuine how-many-altogether questions, model counting on from the larger group, and let games and real combining build the facts rather than a drill.",
+                "observation_documentation": "Over time, note whether the child counts all or counts on, which sums they simply know, whether they write or say number sentences in play, and whether they see that the order of two groups does not change the total. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Addition word problems need reading comprehension",
