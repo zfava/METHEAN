@@ -1353,10 +1353,115 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Chant fact families. Subtraction songs. Partner quizzing.",
         },
         "philosophy_specific": {
-            "classical": "Memorize all facts through daily drill. Fact families connect operations.",
-            "charlotte_mason": "Real sharing situations. Concrete before abstract, always.",
-            "montessori": "Subtraction strip board. Golden bead taking away.",
-            "traditional": "Worksheets. Timed drills after conceptual understanding.",
+            "traditional": {
+                "introduction": "Subtraction is taking some away and finding how many are left, or finding how many more one group holds than another. Today we take away with objects, write the number sentence that records it, and use the addition facts we know to find differences.",
+                "gradual_release": {
+                    "i_do": "Model with objects: here are eight grapes, eat three, physically remove them and count the five that remain. Write the number sentence, 8 - 3 = 5, and show its addition partner, 3 + 5 = 8.",
+                    "we_do": "Remove objects from a group together and write the number sentence. Practice counting back from the larger number, and practice think-addition together: for 9 - 4, think four and what make nine.",
+                    "you_do": "Child solves the subtraction facts within ten, first with objects and then without, writes the matching number sentences, and uses think-addition to find a difference.",
+                },
+                "guided_practice": [
+                    "Take objects away from a group and count what remains",
+                    "Fact-family triangles that link an addition and its two subtractions",
+                    "Count back from the larger number on a number line",
+                ],
+                "independent_practice": [
+                    "Subtraction fact practice through dice and card games rather than timed drill",
+                    "Write the subtraction number sentence for each take-away",
+                ],
+                "mastery_check": [
+                    "Recall any subtraction fact within ten quickly and correctly",
+                    "Write a correct subtraction number sentence",
+                    "Explain subtraction as the inverse of addition with a fact family",
+                ],
+                "spiral_review": [
+                    "Revisit the addition facts and their fact families before extending subtraction recall",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Subtraction is the undoing of addition: what has been joined can be parted again. Learn the differences within ten by heart, and see that every subtraction is an addition turned around.",
+                "memory_work": {
+                    "chants": [
+                        "Chant a fact family in full: three and five are eight; eight take five is three; eight take three is five",
+                        "Chant counting back from a number: nine, eight, seven, six",
+                        "Chant the differences from ten: ten take one is nine, ten take two is eight",
+                    ],
+                    "recitations": [
+                        "Recite the subtraction facts within ten in order, a few each day, until the whole set is held in memory",
+                    ],
+                },
+                "copywork": [
+                    "Copy subtraction number sentences neatly, such as 8 - 3 = 5, so the written form of each fact is sure and familiar to the hand",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the differences learned so far, with their addition partners, before adding new ones; the facts are reviewed cumulatively, never assumed.",
+                "history_integration": "Subtract one year from another on a simple timeline to find how long ago an event was, applying the parting of numbers to the chronological spine.",
+                "read_aloud_suggestions": [
+                    "A well-told story in which things are eaten, given away, or shared out, read aloud for its language and its quiet arithmetic",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 12,
+                "living_book_suggestions": [
+                    "A beautifully illustrated picture book in which real things are shared, eaten, or given away, chosen for lovely artwork and never a busy workbook",
+                ],
+                "short_lesson_flow": "Set out a small group of real objects. Ask the child to take some away and find how many are left, letting them discover the difference by counting what remains. Do two or three such takings-away, calmly, and stop while the child is still interested.",
+                "narration_prompt": "Tell me what you did to find how many were left. How did you know your answer was right?",
+                "real_world_objects": [
+                    "Grapes or crackers, some eaten and the rest counted",
+                    "Coins, some spent and the rest counted",
+                    "A small group of toys, some given away and the rest counted",
+                ],
+                "nature_connection": "On a walk, gather a small handful of found things, give some away, and tell how many remain; record the little difference with a drawing in the nature notebook.",
+                "habit_focus": "The habit of honest and careful work: counting exactly what remains, and trusting a difference only when it has truly been found.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The subtraction strip board with its numbered strips",
+                    "Golden bead bars for laying out a quantity and taking a part away",
+                    "The subtraction charts for the later memorization stage",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a known difference: this is the difference, eight take three leaves five; show me a take-away that leaves five; what does eight take three leave? Spoken with the materials in hand.",
+                    "steps": [
+                        "Lay out a quantity in golden beads, take a part away, and count the quantity that remains",
+                        "Use the subtraction strip board to build a difference and read it",
+                        "Record the number sentence, then check the difference against the subtraction control chart",
+                    ],
+                },
+                "control_of_error": "The fixed length of the strips on the subtraction strip board, and the subtraction control chart, let a wrong difference show itself as a mismatch the child sees and corrects without an adult's verdict.",
+                "abstraction_pathway": "From taking beads away (the difference felt in the hand), to the strip board (the difference built and seen), to the charts (the differences committed to memory), toward recalling a difference and seeing subtraction as addition reversed with no material at all.",
+                "extensions": [
+                    "Find every way to take a part from a chosen whole and lay them out together",
+                    "Work the subtraction snake game with the colored bead bars",
+                ],
+                "observation_focus": "Watch for the child connecting each subtraction to its addition partner, moving from counting back to thinking the addition, and returning to the subtraction work by choice.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave dice, dominoes, and a deck of cards on a low shelf and say nothing",
+                    "Cook or bake together where pieces are eaten or taken away as you go",
+                    "Keep a coin jar and a set of board games within reach",
+                ],
+                "real_world_contexts": [
+                    "Eating some of a snack and counting what is left",
+                    "Spending coins and counting the change that remains",
+                    "Giving some toys away and counting those still on the shelf",
+                    "Asking how many more one pile or one score holds than another",
+                ],
+                "conversation_starters": [
+                    "You had seven and ate two. How many are left now?",
+                    "We know three and four make seven. Could that help you take four from seven?",
+                    "How many more grapes do I have than you?",
+                ],
+                "resource_bank": [
+                    "Dice, dominoes, and playing cards kept available, not assigned",
+                    "Board games that involve scoring and losing points",
+                    "A coin jar and real money",
+                    "Math picture books left on a low shelf",
+                ],
+                "parent_role": "Notice the daily moments of taking away, snacks eaten, coins spent, toys given, and count what remains aloud with the child. Ask genuine how-many-are-left and how-many-more questions, show how a known addition fact answers a subtraction, and let games and real life build the facts rather than a drill.",
+                "observation_documentation": "Over time, note whether the child counts back or thinks the addition, which differences they simply know, whether they write or say subtraction sentences in play, and whether they see subtraction and addition as two sides of one fact. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Subtraction word problems need comprehension",
