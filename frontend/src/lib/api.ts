@@ -3,6 +3,8 @@
  * All calls go through this module for consistent error handling.
  */
 
+import type { WidgetSpec } from "@/components/child/widgets/types";
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
 
 export class ApiError extends Error {
@@ -374,6 +376,8 @@ export interface PassageData {
   questions?: string[];
 }
 
+export type { WidgetSpec };
+
 export interface LearningContext {
   activity: {
     id: string; title: string; description: string;
@@ -386,6 +390,7 @@ export interface LearningContext {
     resources_needed: string[]; real_world_connection: string;
     estimated_time: { introduction: number; guided_work: number; independent_practice: number };
     media?: MediaBlockData[];
+    widgets?: WidgetSpec[];
   };
   assessment: { prompts: string[]; mastery_criteria: string; methods: string[] };
   reading?: { passages: PassageData[] };

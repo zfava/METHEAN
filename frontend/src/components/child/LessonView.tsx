@@ -6,6 +6,7 @@ import { useSoundCue } from "@/lib/useSoundCue";
 import VoiceTextarea from "@/components/child/VoiceTextarea";
 import MediaBlock from "@/components/child/MediaBlock";
 import PassageReader from "@/components/child/PassageReader";
+import WidgetHost from "@/components/child/widgets/WidgetHost";
 import TutorChat from "./TutorChat";
 import { cn } from "@/lib/cn";
 
@@ -31,6 +32,7 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
   const prompts = lesson.practice_prompts || [];
   const media = lesson.media || [];
   const passages = context.reading?.passages || [];
+  const widgets = lesson.widgets || [];
 
   // Activity-start cue. Fires on mount; the hook itself
   // suppresses if the kid's pack is "off" or before any user
@@ -127,6 +129,16 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
             className="w-full max-w-xs mx-auto block py-3.5 text-base font-semibold text-white bg-(--color-accent) rounded-2xl hover:opacity-90 transition-opacity">
             Continue
           </button>
+        </div>
+      )}
+
+      {/* Phase: Guided Learning — interactive widgets */}
+      {phase === "guided" && widgets.length > 0 && (
+        <div className="pt-6">
+          <h2 className="text-lg font-semibold text-(--color-text) mb-2">Try it</h2>
+          {widgets.map((spec) => (
+            <WidgetHost key={spec.id} spec={spec} />
+          ))}
         </div>
       )}
 
