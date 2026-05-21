@@ -60,6 +60,7 @@ async def get_activity_learning_context(
         "lesson": {},
         "assessment": {},
         "practice": {"items": []},
+        "reading": {"passages": []},
         "tutor_available": activity.activity_type.value != "assessment",
         "previous_attempts": [],
         "grade_level": grade_level,
@@ -192,6 +193,11 @@ async def get_activity_learning_context(
                 "mastery_criteria": "; ".join(ac.get("mastery_indicators", [])),
                 "methods": ac.get("assessment_methods", ["written work"]),
             }
+
+            # Surface visual media and reading passages. Passed through
+            # unchanged; legacy nodes without these keys yield [].
+            context["lesson"]["media"] = content.get("media", [])
+            context["reading"]["passages"] = content.get("passages", [])
 
             # Surface authored practice_items so PracticeView renders
             # auto-gradeable items instead of degrading to free text.

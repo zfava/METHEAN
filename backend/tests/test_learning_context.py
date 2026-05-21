@@ -658,6 +658,180 @@ class TestLearningContext:
         assert ctx["practice"]["items"][0]["prompt"] == "What number comes after 9?"
 
     @pytest.mark.asyncio
+    async def test_media_and_passages_surfaced_in_context(
+        self,
+        db_session,
+        household,
+        child,
+        user,
+        subject,
+        learning_map,
+    ):
+        """A node with media and passages surfaces them with all fields intact."""
+        node = LearningNode(
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Counting on a Number Line",
+            content={
+                "learning_objectives": ["Place numbers on a number line"],
+                "teaching_guidance": {
+                    "introduction": "A number line shows numbers in order.",
+                    "scaffolding_sequence": ["Find zero first"],
+                    "socratic_questions": ["Where does 5 sit?"],
+                },
+                "assessment_criteria": {
+                    "mastery_indicators": ["Places numbers accurately"],
+                    "sample_assessment_prompts": ["Place 7 on the line."],
+                    "assessment_methods": ["demonstration"],
+                },
+                "media": [
+                    {
+                        "id": "nl1",
+                        "kind": "number_line",
+                        "alt": "A number line from 0 to 10",
+                        "caption": "Count each step",
+                        "params": {"min": 0, "max": 10, "ticks": 11, "highlight": 7},
+                    },
+                ],
+                "passages": [
+                    {
+                        "id": "p1",
+                        "title": "Sam and the Map",
+                        "text": "Sam ran to the map. The map had a path.",
+                        "level": "early-decodable",
+                        "decodable_focus": ["short a", "consonant blends"],
+                        "questions": ["Where did Sam run?"],
+                    },
+                ],
+            },
+        )
+        db_session.add(node)
+        await db_session.flush()
+
+        plan = Plan(
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Math",
+            status=PlanStatus.active,
+        )
+        db_session.add(plan)
+        await db_session.flush()
+        week = PlanWeek(
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
+        )
+        db_session.add(week)
+        await db_session.flush()
+        activity = Activity(
+            plan_week_id=week.id,
+            household_id=household.id,
+            node_id=node.id,
+            activity_type=ActivityType.lesson,
+            title="Number Line Lesson",
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
+        )
+        db_session.add(activity)
+        await db_session.flush()
+
+        ctx = await get_activity_learning_context(
+            db_session,
+            activity.id,
+            household.id,
+            child.id,
+        )
+
+        media = ctx["lesson"]["media"]
+        assert len(media) == 1
+        assert media[0]["kind"] == "number_line"
+        assert media[0]["alt"] == "A number line from 0 to 10"
+        assert media[0]["params"]["highlight"] == 7
+
+        passages = ctx["reading"]["passages"]
+        assert len(passages) == 1
+        assert passages[0]["text"] == "Sam ran to the map. The map had a path."
+        assert passages[0]["decodable_focus"] == ["short a", "consonant blends"]
+        assert passages[0]["questions"] == ["Where did Sam run?"]
+
+    @pytest.mark.asyncio
+    async def test_legacy_node_yields_empty_media_and_passages(
+        self,
+        db_session,
+        household,
+        child,
+        user,
+        subject,
+        learning_map,
+    ):
+        """A node with no media or passages yields empty lists, raises nothing."""
+        node = LearningNode(
+            learning_map_id=learning_map.id,
+            household_id=household.id,
+            node_type=NodeType.skill,
+            title="Double-Digit Addition",
+            content={
+                "learning_objectives": ["Add two-digit numbers"],
+                "teaching_guidance": {
+                    "introduction": "Add bigger numbers.",
+                    "scaffolding_sequence": ["Start without carrying"],
+                    "socratic_questions": ["What happens past 9?"],
+                },
+                "assessment_criteria": {
+                    "mastery_indicators": ["Adds with carrying"],
+                    "sample_assessment_prompts": ["What is 48 + 35?"],
+                    "assessment_methods": ["written work"],
+                },
+            },
+        )
+        db_session.add(node)
+        await db_session.flush()
+
+        plan = Plan(
+            household_id=household.id,
+            child_id=child.id,
+            created_by=user.id,
+            name="Math",
+            status=PlanStatus.active,
+        )
+        db_session.add(plan)
+        await db_session.flush()
+        week = PlanWeek(
+            plan_id=plan.id,
+            household_id=household.id,
+            week_number=1,
+            start_date=date(2026, 9, 1),
+            end_date=date(2026, 9, 5),
+        )
+        db_session.add(week)
+        await db_session.flush()
+        activity = Activity(
+            plan_week_id=week.id,
+            household_id=household.id,
+            node_id=node.id,
+            activity_type=ActivityType.lesson,
+            title="Addition Lesson",
+            status=ActivityStatus.scheduled,
+            governance_approved=True,
+        )
+        db_session.add(activity)
+        await db_session.flush()
+
+        ctx = await get_activity_learning_context(
+            db_session,
+            activity.id,
+            household.id,
+            child.id,
+        )
+
+        assert ctx["lesson"]["media"] == []
+        assert ctx["reading"]["passages"] == []
+
+    @pytest.mark.asyncio
     async def test_learn_no_tutor_for_assessment(
         self,
         db_session,
