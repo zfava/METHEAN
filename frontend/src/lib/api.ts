@@ -120,6 +120,24 @@ export const children = {
   list: () => request<ChildListItem[]>("/children"),
   create: (data: { first_name: string; last_name?: string; grade_level?: string; date_of_birth?: string }) =>
     request<{ id: string; first_name: string }>("/children", { method: "POST", body: JSON.stringify(data) }),
+  update: (
+    childId: string,
+    data: {
+      first_name?: string;
+      last_name?: string;
+      grade_level?: string;
+      curriculum_philosophy?: string;
+      subject_philosophies?: Record<string, string>;
+    },
+  ) =>
+    request<{
+      id: string;
+      first_name: string;
+      last_name: string | null;
+      grade_level: string | null;
+      curriculum_philosophy: string;
+      subject_philosophies: Record<string, string> | null;
+    }>(`/children/${childId}`, { method: "PATCH", body: JSON.stringify(data) }),
   state: (childId: string) => request<ChildState>(`/children/${childId}/state`),
   mapState: (childId: string, mapId: string) =>
     request<MapState>(`/children/${childId}/map-state/${mapId}`),
@@ -1001,6 +1019,8 @@ export interface ChildListItem {
   date_of_birth: string | null;
   grade_level: string | null;
   enrollment_count: number;
+  curriculum_philosophy?: string;
+  subject_philosophies?: Record<string, string>;
 }
 
 export interface User {

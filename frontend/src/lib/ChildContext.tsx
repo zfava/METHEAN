@@ -8,6 +8,8 @@ interface ChildInfo {
   last_name: string | null;
   grade_level: string | null;
   enrollment_count: number;
+  curriculum_philosophy?: string;
+  subject_philosophies?: Record<string, string>;
   preferences?: {
     subject_levels?: Record<string, string>;
     daily_duration_minutes?: number;

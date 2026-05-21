@@ -430,6 +430,8 @@ async def list_children(
                 "date_of_birth": c.date_of_birth.isoformat() if c.date_of_birth else None,
                 "grade_level": c.grade_level,
                 "enrollment_count": enrollment_count,
+                "curriculum_philosophy": c.curriculum_philosophy,
+                "subject_philosophies": c.subject_philosophies or {},
             }
         )
     return items
