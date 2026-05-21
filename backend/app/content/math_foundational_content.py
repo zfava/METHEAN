@@ -640,10 +640,116 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Say each number aloud with emphasis. Tap table with each count.",
         },
         "philosophy_specific": {
-            "classical": "Systematic practice with increasing set sizes.",
-            "charlotte_mason": "Count objects from nature walks. Real objects, not worksheets.",
-            "montessori": "Number rods, spindle boxes, cards-and-counters.",
-            "traditional": "Counting mats with printed objects to cross off.",
+            "traditional": {
+                "introduction": "Counting means giving each object exactly one number word. We touch or move each object as we say its number, and the last number we say tells how many there are in all. Today we also see that moving the objects around never changes how many there are.",
+                "gradual_release": {
+                    "i_do": "Model counting nine counters in a line: touch each one once, saying one number per touch, then say nine, that is how many in all. Slide the nine into a pile and count again to show it is still nine.",
+                    "we_do": "Count a scattered set of twelve together: the child slides each object into a counted pile while you both say the numbers, then swap roles. Rearrange the set and count again together to confirm the total holds.",
+                    "you_do": "Child counts sets of 8, 13, and 15 independently, moving each object aside as it is counted, and states the total for each.",
+                },
+                "guided_practice": [
+                    "Count a line of objects, touching each exactly once",
+                    "Count a scattered set by sliding each object into a counted pile",
+                    "Count one set, rearrange it, and count again to check the total stays the same",
+                ],
+                "independent_practice": [
+                    "Counting mat: cross off each printed object as it is counted",
+                    "Count five small sets of objects and write the total for each",
+                ],
+                "mastery_check": [
+                    "Count 15 scattered objects with no double-count and no skip",
+                    "Explain why moving the objects does not change the count",
+                    "State the total without recounting after the last object",
+                ],
+                "spiral_review": [
+                    "Briefly re-count sets within 10 to confirm the careful touch-count habit before working with larger sets",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Counting has a law: every thing gets one number, and no thing gets two. When each has been given its one number, the last number said is the answer; it tells how many. Learn the law, and the careful habit of it, and counting becomes sure.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the touch-and-count rhythm, one number for each touch, never letting the voice race ahead of the hand",
+                        "A short rule chanted daily: one thing, one number; the last number tells how many",
+                    ],
+                    "recitations": [
+                        "Recite the rule of counting from memory before each counting task: each object gets exactly one number, and moving the objects never changes how many there are",
+                    ],
+                },
+                "copywork": [
+                    "Copy the numerals 1 to 15 in order, neatly, so the symbol for each count is sure and ready to the hand",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the rule of counting and counting one familiar set aloud, slowly and exactly, before any new work; the careful habit is rehearsed cumulatively, never assumed.",
+                "history_integration": "Count the years along a simple timeline, one careful touch per year mark, so the discipline of one number per thing is practiced on the chronological spine.",
+                "read_aloud_suggestions": [
+                    "A rhythmic, well-made counting book, read aloud with a finger touching each pictured thing as its number is said",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 12,
+                "living_book_suggestions": [
+                    "A single beautiful counting picture book with real, lovely illustrations and one clear set of things to a page; never a busy or cartoonish workbook-style book",
+                ],
+                "short_lesson_flow": "Look together at one or two pages of the counting book, touching each pictured thing as its number is said. Then set the book aside and bring out a small basket of real objects gathered earlier. Count a set together, slowly, the child touching each object once and sliding it aside. Stop while the child is still attentive and content.",
+                "narration_prompt": "Tell me how you counted. How did you make sure each thing got one number, and that none was counted twice or missed?",
+                "real_world_objects": [
+                    "Acorns, shells, or smooth stones gathered on a walk",
+                    "One napkin set at each place at the family table",
+                    "Eggs settled one to each cup of a carton",
+                ],
+                "nature_connection": "On the next nature walk, the child counts a small set of found things, touching each one, and records the number with a little drawing in the nature notebook.",
+                "habit_focus": "The habit of attention: count once, slowly, touching each thing as its number is said, never letting the voice race ahead of the hand.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Cards and counters: numeral cards 1 to 10 with loose counters laid one by one beneath each",
+                    "Spindle boxes, where a fixed number of spindles is gathered into each numbered compartment so the hand feels the quantity",
+                    "Number rods, where each rod's length embodies its count",
+                    "A counting tray with a set of identical objects for free counting work",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a counted set: this is how many, nine; show me when you have given each one its own number; what is this, how many in all? Move slowly, and let the child do the touching.",
+                    "steps": [
+                        "Lay the counters beneath a numeral one at a time, one counter to one place, saying one number for each counter",
+                        "Place the counters in pairs so the layout itself shows when a set is even or odd, and so a missing or extra counter is plain to see",
+                        "Slide a counted set into a new arrangement and count again, letting the child discover for themselves that the total is unchanged",
+                    ],
+                },
+                "control_of_error": "The counters are a fixed set and each has its place, so a counter left over or a space left empty shows the child directly that a number was skipped or doubled. The material corrects, not the adult.",
+                "abstraction_pathway": "From the spindles and counters held in the hand (the quantity felt and the one-to-one match made physical), to laying counters beneath the written numeral (quantity joined to symbol), toward counting any set with the eyes and a light touch alone.",
+                "extensions": [
+                    "Count a longer bead chain, touching each bead, and lay a numeral ticket at its end",
+                    "Bring a set of objects from the room, count it freely on the counting tray, then rearrange it and confirm the total",
+                ],
+                "observation_focus": "Watch whether the hand and the voice move together, one number to one object, and whether the child returns to the cards and counters by choice; the unforced repetition is the sign the idea is being built.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave a basket of interesting objects beside a muffin tin or egg carton, so a child can drop one thing into each cup",
+                    "Set out a small pitcher and several cups for free pouring and table-setting play",
+                    "Keep dot dominoes, dice, and a deck of cards on a low shelf and say nothing",
+                ],
+                "real_world_contexts": [
+                    "Setting the table, one plate, one fork, and one cup to each seat",
+                    "Feeding the pets, one scoop into each bowl",
+                    "Handing out one snack, sticker, or crayon to each person present",
+                    "Loading an egg carton, one egg to each cup",
+                    "Watching the elevator buttons light one at a time, one for each floor",
+                ],
+                "conversation_starters": [
+                    "Everyone needs one fork. How will you know you have given each person theirs?",
+                    "Did the number of cookies change when we moved them onto the plate?",
+                    "How do you keep from counting the same one twice?",
+                ],
+                "resource_bank": [
+                    "Counting picture books left available, not assigned",
+                    "Muffin tins, ice cube trays, and egg cartons for matching one thing to one space",
+                    "Dominoes, dice, and board games that move one space per count",
+                    "A real or play set of dishes for table-setting",
+                ],
+                "parent_role": "Notice the many daily moments when a child is already matching one thing to one place, setting a table, sharing treats, loading a carton, and simply count aloud alongside them. Answer real questions, model touching each thing as you count, and let an occasional miscount stand as something the child can notice, rather than correcting it into a lesson.",
+                "observation_documentation": "Over days, jot where one-to-one counting arose on its own, whether the child's touch keeps pace with the words, whether they can say the total without recounting, and whether they trust that a rearranged set holds its number. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Tracking words while reading one at a time",

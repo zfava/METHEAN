@@ -6,8 +6,8 @@ Covers:
 - validate_content keeps its required-field behavior.
 - validate_philosophy warns on legacy strings and hard-fails an
   unschooling variant carrying a lesson/sequence/assessment key.
-- The authored reference nodes mf-01, mf-02, rf-01 carry native
-  variants for all five philosophies.
+- The authored reference nodes mf-01, mf-02, mf-03, rf-01 carry
+  native variants for all five philosophies.
 """
 
 import pytest
@@ -301,7 +301,7 @@ class TestValidatePhilosophy:
 
 
 class TestAuthoredPhilosophyContent:
-    @pytest.mark.parametrize("node_key", ["mf-01", "mf-02", "rf-01"])
+    @pytest.mark.parametrize("node_key", ["mf-01", "mf-02", "mf-03", "rf-01"])
     def test_node_has_all_five_native_variants(self, node_key):
         """Each reference node carries a native variant for every philosophy."""
         content = _node_content(node_key)
@@ -313,7 +313,7 @@ class TestAuthoredPhilosophyContent:
             missing = NATIVE_KEYS[philosophy] - set(variant.keys())
             assert not missing, f"{node_key}/{philosophy} missing native keys: {sorted(missing)}"
 
-    @pytest.mark.parametrize("node_key", ["mf-01", "mf-02", "rf-01"])
+    @pytest.mark.parametrize("node_key", ["mf-01", "mf-02", "mf-03", "rf-01"])
     def test_unschooling_variant_has_no_lesson_keys(self, node_key):
         """Each unschooling variant carries no lesson/sequence/assessment key."""
         content = _node_content(node_key)
