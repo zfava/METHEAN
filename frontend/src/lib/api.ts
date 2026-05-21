@@ -356,6 +356,24 @@ export const learn = {
     request<LearningContext>(`/activities/${activityId}/learn${childId ? `?child_id=${childId}` : ""}`),
 };
 
+export interface MediaBlockData {
+  id: string;
+  kind: "image" | "number_line" | "diagram" | "figure" | string;
+  src?: string;
+  alt: string;
+  caption?: string;
+  params?: Record<string, unknown>;
+}
+
+export interface PassageData {
+  id: string;
+  title?: string;
+  text: string;
+  level?: string;
+  decodable_focus?: string[];
+  questions?: string[];
+}
+
 export interface LearningContext {
   activity: {
     id: string; title: string; description: string;
@@ -367,8 +385,10 @@ export interface LearningContext {
     key_questions: string[]; practice_prompts: string[];
     resources_needed: string[]; real_world_connection: string;
     estimated_time: { introduction: number; guided_work: number; independent_practice: number };
+    media?: MediaBlockData[];
   };
   assessment: { prompts: string[]; mastery_criteria: string; methods: string[] };
+  reading?: { passages: PassageData[] };
   tutor_available: boolean;
   previous_attempts: Array<{ date: string; status: string; duration_minutes: number; score: number | null }>;
   grade_level: string | null;
