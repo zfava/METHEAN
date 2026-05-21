@@ -1583,10 +1583,115 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Verbalize: 'Eight needs two to make ten. Five is two and three. Thirteen.'",
         },
         "philosophy_specific": {
-            "classical": "Systematic mastery. Name strategies: doubles, near-doubles, make-ten.",
-            "charlotte_mason": "Discover strategies through exploration. Child finds the pattern.",
-            "montessori": "Bead bars. Snake game for making tens. Addition charts.",
-            "traditional": "Strategy worksheets. Fact family houses. Timed after mastery.",
+            "traditional": {
+                "introduction": "Now we add beyond ten. The key strategy is making ten: to add 8 + 5, give 8 the 2 it needs to make 10, then add the 3 that are left, 13. Today we use the strategies, counting on, doubles, doubles plus one, and making ten, and solve word problems within 20.",
+                "gradual_release": {
+                    "i_do": "Model making ten on two ten-frames: for 8 + 5, slide 2 counters across to fill the first frame to ten, then count the 3 that remain, 13. Model a double, 7 + 7, and a doubles-plus-one, 7 + 8.",
+                    "we_do": "Build sums on the ten-frames together, naming the strategy aloud each time. Practice the doubles to twenty together, then solve a word problem within twenty together.",
+                    "you_do": "Child adds two numbers with sums to twenty, choosing and naming a strategy, and solves addition word problems within twenty.",
+                },
+                "guided_practice": [
+                    "Make ten on two ten-frames to add a single-digit pair past ten",
+                    "Practice the doubles and doubles-plus-one to twenty",
+                    "Sort facts by the strategy that fits them best",
+                ],
+                "independent_practice": [
+                    "Strategy practice through dice and card games with sums to twenty",
+                    "Solve written addition word problems within twenty",
+                ],
+                "mastery_check": [
+                    "Add any two numbers with a sum to twenty",
+                    "Name and use a strategy: counting on, doubles, doubles plus one, or making ten",
+                    "Solve an addition word problem within twenty",
+                ],
+                "spiral_review": [
+                    "Revisit the facts within ten and the make-ten strategy before practicing the harder sums to twenty",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Beyond ten, addition rests on a few clear strategies and on the doubles. Learn the doubles to twenty by heart and the way to make a ten, and any sum to twenty comes within easy reach.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the doubles to twenty: six and six are twelve, seven and seven are fourteen, on to nine and nine",
+                        "Chant the make-ten pairs: eight needs two, seven needs three, six needs four",
+                        "Chant the doubles-plus-one facts: six and seven are thirteen",
+                    ],
+                    "recitations": [
+                        "Recite the names of the strategies and what each one does: counting on, doubles, doubles plus one, making ten",
+                    ],
+                },
+                "copywork": [
+                    "Copy number sentences for sums to twenty, neatly, noting beside each the strategy that solved it",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the doubles and the facts within ten before extending to the sums past ten; the work is cumulative and never assumed.",
+                "history_integration": "Add quantities and spans of years larger than ten along a timeline, carrying addition past the ten onto the chronological spine.",
+                "read_aloud_suggestions": [
+                    "A well-told story in which larger groups of things are gathered and combined, read aloud for its language",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 12,
+                "living_book_suggestions": [
+                    "A beautifully illustrated picture book in which larger groups of real things are gathered and joined, chosen for lovely artwork",
+                ],
+                "short_lesson_flow": "Give the child real objects and a sum that reaches past ten. Let them find a way to the total in their own time, often by making a ten, and let them show you the way they found. Do one or two such sums, calmly, and stop while interest is high.",
+                "narration_prompt": "Tell me the way you found the total. What did you do to make it easier than counting them all?",
+                "real_world_objects": [
+                    "Two groups of more than ten objects combined",
+                    "Two game scores added together",
+                    "Eggs counted across two cartons",
+                ],
+                "nature_connection": "On a walk, gather two nature collections that together pass ten, combine them, and tell the total; record it with a small drawing in the nature notebook.",
+                "habit_focus": "The habit of thinking before counting: pausing to look for a clever way to the answer rather than counting every object from one.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The colored bead bars, one through ten, each length its own color",
+                    "The addition snake game with its golden ten bars for exchanging",
+                    "The teen boards and the addition charts",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the snake game: this is a ten, made and exchanged; show me where a new ten is made; what have we made here? Spoken with the beads in hand.",
+                    "steps": [
+                        "Lay a snake of colored bead bars end to end",
+                        "Count along the snake, and each time ten is reached, exchange the colored bars for a golden ten bar, so making ten is done by the hand",
+                        "Record the sums reached, and check them against the addition control chart",
+                    ],
+                },
+                "control_of_error": "The exchange in the snake game only works when a true ten is gathered, and the addition control chart confirms each sum, so a miscount shows itself to the child without an adult's verdict.",
+                "abstraction_pathway": "From the snake game (making ten felt as a real exchange in the hand), to the addition charts (the sums to twenty committed to memory), toward adding to twenty by chosen strategy with no beads at all.",
+                "extensions": [
+                    "Lay longer snakes and exchange several tens",
+                    "Build the teen quantities on the teen board and find the doubles among the bead bars",
+                ],
+                "observation_focus": "Watch for the child reaching for a ten by choice rather than counting all, and for free, repeated return to the snake game and the bead work.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave two or three dice, dominoes, and a deck of cards within reach",
+                    "Keep board games with two-digit scoring and an egg carton or ten-frame tray accessible",
+                    "Cook or bake together where amounts past ten are gathered and counted",
+                ],
+                "real_world_contexts": [
+                    "Adding game scores that climb past ten",
+                    "Combining two groups of more than ten things",
+                    "Adding two prices while shopping",
+                    "Counting eggs or objects across two cartons or trays",
+                ],
+                "conversation_starters": [
+                    "You have eight and you want five more. Is there a quick way to get there?",
+                    "What is seven and seven? So what would seven and eight be?",
+                    "We are at fourteen. How many more to reach twenty?",
+                ],
+                "resource_bank": [
+                    "Dice, dominoes, and playing cards kept available, not assigned",
+                    "Board games with two-digit scoring",
+                    "Egg cartons or ten-frame trays for grouping by ten",
+                    "Math picture books left on a low shelf",
+                ],
+                "parent_role": "Combine and count aloud past ten wherever it arises in real life, scores, prices, collections, and ask genuine how-many-altogether questions. Notice and name the strategies the child invents, and let games and real combining build the strategies rather than a drill.",
+                "observation_documentation": "Over time, note whether the child counts on, makes a ten, or uses the doubles, which sums to twenty they simply know, and whether they can solve a real word problem. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Two-step word problems to 20",
