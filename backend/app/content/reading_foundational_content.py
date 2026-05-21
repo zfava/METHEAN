@@ -870,10 +870,113 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Vowel songs. Echo games: teacher says sound, child repeats with a word.",
         },
         "philosophy_specific": {
-            "classical": "Systematic vowel instruction: one vowel mastered before the next.",
-            "charlotte_mason": "Vowels discovered in words from reading. Short focused lessons.",
-            "montessori": "Blue vowels vs red consonants in movable alphabet. Sandpaper vowels.",
-            "traditional": "Short vowel worksheets. Circle-the-vowel exercises.",
+            "traditional": {
+                "introduction": "Every word needs a vowel. The five vowels each have a short sound, heard in apple, egg, igloo, octopus, and umbrella. Today we produce each short vowel sound, hear it in the middle of CVC words, and read words that follow the short vowel pattern.",
+                "gradual_release": {
+                    "i_do": "Model with a key-word picture: show apple, say short a, /a/, then read cat, hat, map, stretching the middle sound. Contrast the hardest pair, short e and short i, by exaggerating the mouth position in bed and bid.",
+                    "we_do": "Produce the short vowel sounds together with the key-word pictures. Build words with letter tiles, changing only the vowel, bat to bit to but, and sort picture cards by their middle vowel sound.",
+                    "you_do": "Child produces all five short vowel sounds on demand, names the middle vowel in spoken CVC words, and reads short vowel words independently.",
+                },
+                "guided_practice": [
+                    "Vowel sorts: sort picture cards by their middle vowel sound",
+                    "Word building with letter tiles, changing the vowel to make a new word",
+                    "Read CVC words with a key-word picture available as a cue",
+                ],
+                "independent_practice": [
+                    "Read a short list of CVC words aloud",
+                    "Sort a set of written words by their vowel sound",
+                ],
+                "mastery_check": [
+                    "Produce all five short vowel sounds on demand",
+                    "Identify the short vowel in ten spoken CVC words",
+                    "Distinguish short e from short i in paired words",
+                ],
+                "spiral_review": [
+                    "Return regularly to the short e and short i contrast, the hardest pair to tell apart",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The five vowels are the voices of our words; no word can be spoken without one. Learn each short sound surely, one vowel mastered before the next, and the short vowel words open themselves to be read.",
+                "memory_work": {
+                    "chants": [
+                        "Chant each vowel with its key word and short sound: a, apple, /a/; e, egg, /e/",
+                        "Chant a string of short vowel words that share a sound: cat, hat, map, ran",
+                    ],
+                    "recitations": [
+                        "Recite the five vowels and their short sounds in order, a few practiced each day until all are held",
+                    ],
+                },
+                "copywork": [
+                    "Copy the vowels and short vowel CVC words neatly while saying their sounds aloud, so the written word and its sounds are learned together",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the vowels and short sounds mastered so far before introducing the next vowel; the work is cumulative and never assumed.",
+                "history_integration": "Tell, simply, that every written language has needed vowels to carry the voice of its words; the five short sounds join the child to that universal work of writing speech.",
+                "read_aloud_suggestions": [
+                    "A rich read-aloud above the child's level for the ear, and simple, worthy short vowel readers for the child's own first reading",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "The family's current living book and a lovely picture book built on simple words, gentle and real, never a busy phonics workbook",
+                ],
+                "short_lesson_flow": "In a book read together, pause on one short CVC word. Say it slowly, hear the vowel resting in the middle, and look at the letter that makes it. Attend to a single vowel, gently, and stop while the child is still interested.",
+                "narration_prompt": "Tell me the vowel sound we heard in the middle today, and another little word of your own that has it.",
+                "real_world_objects": [
+                    "Short vowel words in the child's name and family names",
+                    "Simple words on labels: milk, egg, jam",
+                    "Words in the title of the current read-aloud",
+                ],
+                "nature_connection": "On a nature walk, name the small creatures and things that are found, cat, bug, hen, fox, and listen for the short vowel resting in the middle; note one in the nature notebook.",
+                "habit_focus": "The habit of careful attention to the middle of a word, the vowel that is easiest to rush past and miss.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The sandpaper vowels, traced while the short sound is voiced",
+                    "The large movable alphabet, with the vowels in blue and the consonants in red",
+                    "Object and picture cards for short vowel CVC words",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the sandpaper vowels, voicing the short sound: this says /a/; show me /a/; what does this say? Slowly, and with the short sound, not the letter name.",
+                    "steps": [
+                        "Trace the sandpaper vowel in its writing direction while voicing its short sound",
+                        "Build a CVC word with the movable alphabet, the blue vowel set between two red consonants so its place is plain",
+                        "Change the blue vowel for another and read the new word the change has made",
+                    ],
+                },
+                "control_of_error": "The blue and red coloring of the movable alphabet makes the vowel's place in the word visible, and the object and picture cards carry a control set, so sounding the word out reveals a mismatch to the child.",
+                "abstraction_pathway": "From tracing and voicing the sandpaper vowel, to building and changing the colored vowel in the movable alphabet (the vowel's role in the word made visible), toward reading short vowel words in any printed text.",
+                "extensions": [
+                    "Build many CVC words for one vowel, then for another, with the movable alphabet",
+                    "Work through the object boxes of short vowel words, one box for each vowel",
+                ],
+                "observation_focus": "Watch whether the child hears the middle vowel, especially the close pair of short e and short i, and whether the child returns to the movable alphabet and the word building by choice.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep magnetic letters and letter tiles within reach for free word building",
+                    "Leave simple short vowel picture books and readers on a low shelf",
+                    "Post the child's name and a few short, meaningful words where they will be seen",
+                ],
+                "real_world_contexts": [
+                    "Short vowel sounds in the family's own names",
+                    "Simple words met on labels, packaging, and signs",
+                    "Building and changing little words with magnetic letters in play",
+                    "Reading the first short words the child wants to read in a loved book",
+                ],
+                "conversation_starters": [
+                    "What sound do you hear right in the middle of cat?",
+                    "Do sit and set sound the same in the middle, or different?",
+                    "Can you change bat into bit? What did you change?",
+                ],
+                "resource_bank": [
+                    "Magnetic letters and letter tiles",
+                    "Simple short vowel readers and picture books, kept available",
+                    "Word-building games and the child's name in big letters",
+                ],
+                "parent_role": "When a child wants to build or read a word, say its sounds slowly, including the short vowel resting in the middle, and follow the words the child cares about. Answer real questions about how words sound, and let the child's own attempts to read do the teaching rather than a drill.",
+                "observation_documentation": "Over time, note which short vowels the child produces and hears, whether they catch the middle vowel of a CVC word, whether short e and short i are still blurred, and whether they are beginning to read short vowel words. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Vowels appear in number words: five has long i, ten has short e",
