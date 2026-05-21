@@ -24,6 +24,68 @@ from app.models.governance import Activity, Attempt, Plan, PlanWeek
 from app.services.learning_context import get_activity_learning_context
 
 
+def _enriched_content(extra: dict) -> dict:
+    """A minimally enriched content dict (skips on-the-fly enrichment)."""
+    base = {
+        "learning_objectives": ["Learn the topic"],
+        "teaching_guidance": {
+            "introduction": "Intro",
+            "scaffolding_sequence": ["Step one"],
+            "socratic_questions": ["Why?"],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": ["Knows it"],
+            "sample_assessment_prompts": ["Show it"],
+            "assessment_methods": ["written work"],
+        },
+    }
+    base.update(extra)
+    return base
+
+
+async def _make_philosophy_activity(db_session, household, child, user, learning_map, content):
+    """Create an enriched node plus a lesson activity bound to it."""
+    node = LearningNode(
+        learning_map_id=learning_map.id,
+        household_id=household.id,
+        node_type=NodeType.skill,
+        title="Topic",
+        content=content,
+    )
+    db_session.add(node)
+    await db_session.flush()
+    plan = Plan(
+        household_id=household.id,
+        child_id=child.id,
+        created_by=user.id,
+        name="Math",
+        status=PlanStatus.active,
+    )
+    db_session.add(plan)
+    await db_session.flush()
+    week = PlanWeek(
+        plan_id=plan.id,
+        household_id=household.id,
+        week_number=1,
+        start_date=date(2026, 9, 1),
+        end_date=date(2026, 9, 5),
+    )
+    db_session.add(week)
+    await db_session.flush()
+    activity = Activity(
+        plan_week_id=week.id,
+        household_id=household.id,
+        node_id=node.id,
+        activity_type=ActivityType.lesson,
+        title="Lesson",
+        status=ActivityStatus.scheduled,
+        governance_approved=True,
+    )
+    db_session.add(activity)
+    await db_session.flush()
+    return activity
+
+
 class TestLearningContext:
     @pytest.mark.asyncio
     async def test_learn_returns_lesson_content(
@@ -994,6 +1056,93 @@ class TestLearningContext:
         )
 
         assert ctx["lesson"]["widgets"] == []
+
+    @pytest.mark.asyncio
+    async def test_philosophy_direct_resolution(self, db_session, household, child, user, subject, learning_map):
+        """A non-eclectic child gets the variant for the chosen philosophy."""
+        child.curriculum_philosophy = "montessori"
+        await db_session.flush()
+        content = _enriched_content({"philosophy_specific": {"montessori": {"approach": "Use the golden beads."}}})
+        activity = await _make_philosophy_activity(db_session, household, child, user, learning_map, content)
+
+        ctx = await get_activity_learning_context(db_session, activity.id, household.id, child.id)
+
+        assert ctx["philosophy"]["approach"] == "montessori"
+        assert ctx["philosophy"]["is_native"] is True
+        assert ctx["philosophy"]["content"] == {"approach": "Use the golden beads."}
+
+    @pytest.mark.asyncio
+    async def test_philosophy_eclectic_with_subject_override(
+        self, db_session, household, child, user, subject, learning_map
+    ):
+        """Eclectic resolves to the per-subject override for the node's subject."""
+        child.curriculum_philosophy = "eclectic"
+        child.subject_philosophies = {"Mathematics": "montessori"}
+        await db_session.flush()
+        content = _enriched_content({"philosophy_specific": {"montessori": "Montessori math guidance."}})
+        activity = await _make_philosophy_activity(db_session, household, child, user, learning_map, content)
+
+        ctx = await get_activity_learning_context(db_session, activity.id, household.id, child.id)
+
+        assert ctx["philosophy"]["approach"] == "montessori"
+        assert ctx["philosophy"]["is_native"] is True
+        assert ctx["philosophy"]["content"] == "Montessori math guidance."
+
+    @pytest.mark.asyncio
+    async def test_philosophy_eclectic_without_override_falls_back_to_traditional(
+        self, db_session, household, child, user, subject, learning_map
+    ):
+        """Eclectic with no override for the node's subject resolves to traditional."""
+        child.curriculum_philosophy = "eclectic"
+        child.subject_philosophies = {"Science": "montessori"}  # no Mathematics key
+        await db_session.flush()
+        content = _enriched_content(
+            {
+                "philosophy_specific": {
+                    "montessori": "Montessori guidance.",
+                    "traditional": "Traditional guidance.",
+                }
+            }
+        )
+        activity = await _make_philosophy_activity(db_session, household, child, user, learning_map, content)
+
+        ctx = await get_activity_learning_context(db_session, activity.id, household.id, child.id)
+
+        assert ctx["philosophy"]["approach"] == "traditional"
+        assert ctx["philosophy"]["content"] == "Traditional guidance."
+
+    @pytest.mark.asyncio
+    async def test_philosophy_neutral_fallback_when_no_variant(
+        self, db_session, household, child, user, subject, learning_map
+    ):
+        """A node with no variant for the chosen philosophy yields neutral content."""
+        child.curriculum_philosophy = "montessori"
+        await db_session.flush()
+        # No philosophy_specific key at all.
+        content = _enriched_content({})
+        activity = await _make_philosophy_activity(db_session, household, child, user, learning_map, content)
+
+        ctx = await get_activity_learning_context(db_session, activity.id, household.id, child.id)
+
+        assert ctx["philosophy"]["approach"] == "montessori"
+        assert ctx["philosophy"]["is_native"] is False
+        assert ctx["philosophy"]["content"] is None
+
+    @pytest.mark.asyncio
+    async def test_philosophy_legacy_string_variant_passes_through(
+        self, db_session, household, child, user, subject, learning_map
+    ):
+        """A legacy one-line string variant passes through under content."""
+        child.curriculum_philosophy = "classical"
+        await db_session.flush()
+        content = _enriched_content({"philosophy_specific": {"classical": "Use copywork from quality literature."}})
+        activity = await _make_philosophy_activity(db_session, household, child, user, learning_map, content)
+
+        ctx = await get_activity_learning_context(db_session, activity.id, household.id, child.id)
+
+        assert ctx["philosophy"]["approach"] == "classical"
+        assert ctx["philosophy"]["is_native"] is True
+        assert ctx["philosophy"]["content"] == "Use copywork from quality literature."
 
     @pytest.mark.asyncio
     async def test_learn_no_tutor_for_assessment(

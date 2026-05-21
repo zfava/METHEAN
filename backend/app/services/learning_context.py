@@ -10,7 +10,7 @@ import uuid
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.curriculum import LearningNode
+from app.models.curriculum import LearningMap, LearningNode, Subject
 from app.models.governance import Activity, Attempt
 from app.models.identity import Child
 from app.services.content_engine import enrich_single_node
@@ -39,13 +39,20 @@ async def get_activity_learning_context(
     if not activity:
         raise ValueError("Activity not found")
 
-    # Fetch child's grade level for age-appropriate adaptation
+    # Fetch child's grade level for age-appropriate adaptation, plus
+    # the pedagogical philosophy selection used to surface philosophy
+    # content with a clean fallback to neutral content.
     grade_level = None
+    curriculum_philosophy = "traditional"
+    subject_philosophies: dict = {}
     if child_id:
         child_result = await db.execute(select(Child).where(Child.id == child_id))
         child = child_result.scalar_one_or_none()
         if child:
             grade_level = child.grade_level
+            curriculum_philosophy = child.curriculum_philosophy or "traditional"
+            if isinstance(child.subject_philosophies, dict):
+                subject_philosophies = child.subject_philosophies
 
     # Base activity data
     context: dict = {
@@ -61,6 +68,11 @@ async def get_activity_learning_context(
         "assessment": {},
         "practice": {"items": []},
         "reading": {"passages": []},
+        "philosophy": {
+            "approach": curriculum_philosophy if curriculum_philosophy != "eclectic" else "traditional",
+            "content": None,
+            "is_native": False,
+        },
         "tutor_available": activity.activity_type.value != "assessment",
         "previous_attempts": [],
         "grade_level": grade_level,
@@ -235,5 +247,33 @@ async def get_activity_learning_context(
                     }
                     assessment_items.append({k: v for k, v in item.items() if v is not None})
             context["assessment"]["items"] = assessment_items
+
+            # Resolve the pedagogical philosophy for this node and
+            # surface its variant. Shape-agnostic: a native variant is
+            # passed through as-is (a legacy one-line string included);
+            # when there is none the child keeps the neutral content.
+            chosen = curriculum_philosophy
+            if curriculum_philosophy == "eclectic":
+                chosen = "traditional"
+                subject_result = await db.execute(
+                    select(Subject.name)
+                    .join(LearningMap, LearningMap.subject_id == Subject.id)
+                    .where(LearningMap.id == node.learning_map_id)
+                )
+                subject_name = subject_result.scalar_one_or_none()
+                if subject_name:
+                    override = subject_philosophies.get(subject_name) or subject_philosophies.get(
+                        subject_name.lower().replace(" ", "_")
+                    )
+                    if isinstance(override, str) and override:
+                        chosen = override
+
+            phil_specific = content.get("philosophy_specific", {})
+            variant = phil_specific.get(chosen) if isinstance(phil_specific, dict) else None
+            context["philosophy"] = {
+                "approach": chosen,
+                "content": variant or None,
+                "is_native": variant is not None,
+            }
 
     return context
