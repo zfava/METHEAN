@@ -406,7 +406,25 @@ READING_FOUNDATIONAL_CONTENT = {
                     "Return to rhyming and beginning-sound isolation before practicing the harder middle-sound and manipulation work",
                 ],
             },
-            "classical": "Systematic phonemic awareness drills before phonics instruction.",
+            "classical": {
+                "narrative_introduction": "Spoken words are built of small sounds, and the trained ear can hear them one by one. Before a single letter is met, the grammar stage trains that ear through chant, rhyme, and recitation said aloud, until the sounds of language are familiar and sure.",
+                "memory_work": {
+                    "chants": [
+                        "Chant alliterative lines daily, the same beginning sound repeated, so the ear learns to catch the first sound of a word",
+                        "Clap and chant the syllables, and then the separate sounds, of short and familiar words",
+                        "Chant rhyming pairs in a steady rhythm so the matching end sounds are felt as well as heard",
+                    ],
+                    "recitations": [
+                        "Memorize and recite traditional nursery rhymes, said aloud daily, for their true rhyme and rhythm",
+                        "Learn a few tongue twisters by heart and say them slowly, then quickly, to feel the repeated sounds on the tongue",
+                    ],
+                },
+                "recitation_routine": "Begin each lesson by reciting a rhyme already known by heart, listening together for its rhyming words and its repeated sounds, before adding a new one; the ear's training is cumulative, never assumed.",
+                "history_integration": "These rhymes and verses are an old inheritance, passed down by ear from one generation of children to the next long before they were ever written; learning them by listening joins the child to that oral tradition.",
+                "read_aloud_suggestions": [
+                    "A well-made collection of children's poetry, rich in rhyme and rhythm, read aloud with relish and a little above the child's own level so the ear is fed on the music of language",
+                ],
+            },
             "charlotte_mason": {
                 "lesson_length_minutes": 10,
                 "living_book_suggestions": [

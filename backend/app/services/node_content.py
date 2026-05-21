@@ -36,7 +36,9 @@ NODE_CONTENT_SCHEMA = {
     # Each philosophy has its OWN native shape (below); the shapes are
     # intentionally different. A variant may also be a plain string,
     # which is a legacy, un-upgraded form: valid, not an error. This
-    # block is the source of truth for the five native shapes.
+    # block is the source of truth for the five native shapes. The
+    # classical copywork field is optional: it is omitted for oral or
+    # pre-print skills that have no authentic copywork.
     "philosophy_specific": {
         "traditional": {
             "introduction": "What the skill is and what today covers",
@@ -56,7 +58,7 @@ NODE_CONTENT_SCHEMA = {
                 "chants": ["sequences chanted to commit to memory"],
                 "recitations": ["passages or rhymes recited from memory"],
             },
-            "copywork": ["text or numerals copied neatly by hand"],
+            "copywork": ["optional: text or numerals copied neatly by hand; omit for oral or pre-print skills"],
             "recitation_routine": "How prior memory work is reviewed cumulatively",
             "history_integration": "How the skill ties to the chronological spine",
             "read_aloud_suggestions": ["well-written texts to read aloud"],
@@ -275,6 +277,11 @@ def validate_philosophy(content: dict) -> list[str]:
     - An unschooling variant must never carry a lesson, sequence, or
       assessment key. That contradicts the philosophy, so it is a hard
       failure that protects the philosophy's integrity.
+
+    Field completeness is not enforced here: the per-philosophy shapes
+    are advisory, so an optional field (the classical copywork field,
+    for example, is omitted for oral or pre-print skills) is never
+    treated as missing.
     """
     issues: list[str] = []
 

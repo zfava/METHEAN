@@ -6,8 +6,8 @@ Covers:
 - validate_content keeps its required-field behavior.
 - validate_philosophy warns on legacy strings and hard-fails an
   unschooling variant carrying a lesson/sequence/assessment key.
-- The authored reference nodes mf-01, mf-02, mf-03, rf-01 carry
-  native variants for all five philosophies.
+- The authored reference nodes mf-01, mf-02, mf-03, rf-01, rf-02
+  carry native variants for all five philosophies.
 """
 
 import pytest
@@ -34,10 +34,11 @@ NATIVE_KEYS: dict[str, set[str]] = {
         "mastery_check",
         "spiral_review",
     },
+    # copywork is optional: omitted for oral or pre-print skills that
+    # have no authentic copywork, so it is not a required native key.
     "classical": {
         "narrative_introduction",
         "memory_work",
-        "copywork",
         "recitation_routine",
         "history_integration",
         "read_aloud_suggestions",
@@ -301,7 +302,7 @@ class TestValidatePhilosophy:
 
 
 class TestAuthoredPhilosophyContent:
-    @pytest.mark.parametrize("node_key", ["mf-01", "mf-02", "mf-03", "rf-01"])
+    @pytest.mark.parametrize("node_key", ["mf-01", "mf-02", "mf-03", "rf-01", "rf-02"])
     def test_node_has_all_five_native_variants(self, node_key):
         """Each reference node carries a native variant for every philosophy."""
         content = _node_content(node_key)
@@ -313,7 +314,7 @@ class TestAuthoredPhilosophyContent:
             missing = NATIVE_KEYS[philosophy] - set(variant.keys())
             assert not missing, f"{node_key}/{philosophy} missing native keys: {sorted(missing)}"
 
-    @pytest.mark.parametrize("node_key", ["mf-01", "mf-02", "mf-03", "rf-01"])
+    @pytest.mark.parametrize("node_key", ["mf-01", "mf-02", "mf-03", "rf-01", "rf-02"])
     def test_unschooling_variant_has_no_lesson_keys(self, node_key):
         """Each unschooling variant carries no lesson/sequence/assessment key."""
         content = _node_content(node_key)
@@ -321,38 +322,4 @@ class TestAuthoredPhilosophyContent:
         forbidden = UNSCHOOLING_FORBIDDEN.intersection(unschooling.keys())
         assert not forbidden, f"{node_key} unschooling has forbidden keys: {sorted(forbidden)}"
         # validate_philosophy must report no hard-fail for the authored node.
-        assert not [i for i in validate_philosophy(content) if i.startswith("error:")]
-
-
-class TestRf02PhilosophyContent:
-    """rf-02 (phonemic awareness) is purely oral and pre-print.
-
-    The classical native schema requires a copywork field, and copywork
-    is print, so classical is intentionally left to the neutral
-    fallback rather than shipped off-target. Four philosophies are
-    authored natively.
-    """
-
-    AUTHORED = ("traditional", "charlotte_mason", "montessori", "unschooling")
-
-    def test_authored_variants_have_native_fields(self):
-        ps = READING_FOUNDATIONAL_CONTENT["rf-02"]["philosophy_specific"]
-        for philosophy in self.AUTHORED:
-            variant = ps[philosophy]
-            assert isinstance(variant, dict), f"rf-02/{philosophy} is not a native dict"
-            missing = NATIVE_KEYS[philosophy] - set(variant.keys())
-            assert not missing, f"rf-02/{philosophy} missing native keys: {sorted(missing)}"
-
-    def test_classical_left_to_neutral_fallback(self):
-        ps = READING_FOUNDATIONAL_CONTENT["rf-02"]["philosophy_specific"]
-        # A plain string is the legacy form; the system falls back to
-        # neutral content for it. This is deliberate, not an omission.
-        assert isinstance(ps["classical"], str)
-
-    def test_unschooling_variant_has_no_lesson_keys(self):
-        content = READING_FOUNDATIONAL_CONTENT["rf-02"]
-        unschooling = content["philosophy_specific"]["unschooling"]
-        forbidden = UNSCHOOLING_FORBIDDEN.intersection(unschooling.keys())
-        assert not forbidden, f"rf-02 unschooling has forbidden keys: {sorted(forbidden)}"
-        # The legacy classical string yields a warning, never a hard-fail.
         assert not [i for i in validate_philosophy(content) if i.startswith("error:")]
