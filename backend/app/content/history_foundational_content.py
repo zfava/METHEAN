@@ -3915,11 +3915,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "audio recorder or phone for recording interviews",
                 "family photo albums to prompt memories during interview",
             ],
-            "philosophy_specific": {
-                "classical": "Interview as historical method. The child practices being a historian. Retelling the interview story is oral composition.",
-                "charlotte_mason": "The child as historian: listening, recording, and retelling real stories from real people. This IS narration applied to primary sources.",
-                "montessori": "Interview preparation as practical life. The child plans, executes, and reflects independently. Family history project as self-directed work.",
-            },
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 30, "assessment": 10},
         "accommodations": {
@@ -3929,6 +3924,119 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Use family photos during the interview to prompt stories. Draw scenes from the stories heard.",
             "kinesthetic_learner": "The act of interviewing IS active learning. Assemble a physical family history book afterward.",
             "auditory_learner": "Natural strength: listening to stories. Record the interview and play it back. Retelling is an oral performance.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "History is not found only in books; it lives in the memories of the people around us. Grandparents and elders remember what life was like decades ago, and those personal stories are real history. Oral history turns the child into a historian: they prepare good questions, listen carefully, and retell what they heard. Today we prepare at least five thoughtful interview questions, conduct an interview with a grandparent or elder, retell their story, explain why personal memories matter, and compare oral history with written history.",
+                "gradual_release": {
+                    "i_do": "Model an interview: ask the child open questions about a memory of their own, and show how a good open question, what was it like, what happened next, brings out a real story, while a yes-or-no question does not. Then write a few model questions and retell a short story honestly, just as it was told.",
+                    "we_do": "Prepare interview questions together for a grandparent or elder, practice listening and asking follow-up questions, and retell a story afterward.",
+                    "you_do": "Child prepares at least five thoughtful, open-ended questions, conducts an interview with an elder, retells their story, explains why personal memories are valuable history, and compares oral and written history.",
+                },
+                "guided_practice": [
+                    "Write open-ended interview questions that invite a story rather than a yes or no",
+                    "Practice listening well: ask follow-up questions and do not interrupt",
+                    "Retell a story heard in an interview, faithfully, in the teller's spirit",
+                ],
+                "independent_practice": [
+                    "Conduct a real interview with a grandparent or elder and record or write their answers",
+                    "Compile interview stories into a simple family history book",
+                ],
+                "mastery_check": [
+                    "Prepare at least five thoughtful, open-ended interview questions",
+                    "Conduct an interview with an elder and retell their story coherently",
+                    "Explain why personal memories are valuable history, and compare the strengths of oral and written history",
+                ],
+                "spiral_review": [
+                    "Revisit retelling a story faithfully and in order, the skill the interview retelling depends on",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Before there were books, all of history was oral: stories carried from voice to voice, from the old to the young. Oral history is that ancient practice still alive today. To interview an elder is to gather a primary source with one's own ears, to hear what it felt like to live through a time from the person who was there. The written record and the spoken memory each have their strengths, and the honest historian values both.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the work of the oral historian: prepare good questions, listen with care, and retell the story true",
+                        "Chant the marks of a good question: it asks not yes or no, but tell me, and what was it like",
+                    ],
+                    "recitations": [
+                        "Recite that oral history is gathered from those who were there, and that the spoken memory and the written record each have their own strengths",
+                    ],
+                },
+                "copywork": [
+                    "Copy the interview questions neatly before the interview, and a saying on how memory and the spoken word carry history",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the work of the oral historian and recalling the story from the last interview before preparing the next.",
+                "history_integration": "Mark that oral history reaches the most recent stretch of the chronological spine, the living memory of grandparents and elders, and that it joins the child's own family to the long story of history the spine records.",
+                "read_aloud_suggestions": [
+                    "A living account drawn from oral history, the remembered words of people who lived through an age, read aloud",
+                    "A book in which an elder tells the story of their own life and times, read aloud for narration",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A living book in which a real person tells the story of their own life and times, the kind that shows what a remembered life sounds like",
+                ],
+                "short_lesson_flow": "The real lesson is a real conversation. Help the child prepare a few open questions, then sit them down with a grandparent or elder, unhurried, and let them ask and listen. Afterward, the child narrates the story they heard. Charlotte Mason's narration here is applied to a living primary source: a real person, remembering.",
+                "narration_prompt": "Tell me the story you heard from your interview. What was the most surprising or moving thing the person remembered?",
+                "real_world_objects": [
+                    "A grandparent, elder, or community member willing to be interviewed",
+                    "Paper for the child's prepared questions, and a recorder for the elder's own words",
+                    "Family photo albums to bring out memories during the interview",
+                    "A notebook for the family history the interviews build",
+                ],
+                "nature_connection": "Among the interview questions, include some about the natural world of the elder's childhood: the weather, the animals, the land, and how it has changed, so that memory becomes a record of nature too.",
+                "habit_focus": "The habit of attention: listening so closely and respectfully to a person's story that it can be carried and told again.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A space and materials for preparing written interview questions",
+                    "A recorder for capturing an elder's words",
+                    "Family photographs to prompt memories",
+                    "A family history notebook the child builds and keeps",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With question cards: this is an open question, it invites a story; show me an open question; is this question open or a yes-or-no question?",
+                    "steps": [
+                        "The child prepares open-ended interview questions and arranges them in order",
+                        "The child conducts the interview, listening with care and asking follow-up questions",
+                        "The child retells the elder's story and records it in the family history notebook",
+                    ],
+                },
+                "control_of_error": "The interview itself is the control: a yes-or-no question is answered in a word and the child hears that it brought no story, so the child learns to ask the open question that does; the elder's own words, recorded, are the measure of a faithful retelling.",
+                "abstraction_pathway": "From preparing and asking concrete questions of a real person, to retelling and recording their story, toward grasping oral history as a way of knowing the past that stands beside the written record.",
+                "extensions": [
+                    "Interview several people about the same time or event and compare what each remembers",
+                    "Build an ongoing family history from many interviews",
+                    "Compare an elder's memory of an event with a written account of it",
+                ],
+                "observation_focus": "Watch for the child asking open questions, listening without interrupting, and retelling the elder's story faithfully and with respect.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep recordings, photo albums, and a notebook handy for capturing family stories",
+                    "Let real conversations with grandparents and elders be a welcome part of family life",
+                    "Have books and podcasts of people telling their own life stories available",
+                ],
+                "real_world_contexts": [
+                    "Asking grandparents and elders about their childhoods and the times they lived through",
+                    "Listening to the family's own stories told at the table and on visits",
+                    "Hearing neighbors and community elders tell of the local past",
+                    "Meeting oral history in podcasts and documentaries where people tell their own stories",
+                ],
+                "conversation_starters": [
+                    "What would you love to know about Grandma's life that no book could tell you?",
+                    "Why might one person's memory of a day differ from a history book's account, and does that make it less worth hearing?",
+                    "What would be lost if no one ever asked the elders to tell their stories?",
+                ],
+                "resource_bank": [
+                    "Willing grandparents, elders, and community members",
+                    "A recorder, photo albums, and a family history notebook",
+                    "Podcasts and documentaries built from oral history",
+                ],
+                "parent_role": "Welcome the child into the family's real storytelling, and help them prepare good questions and sit with an elder to listen. Treat memory as the precious and human thing it is, gather the stories before they are lost, and let real interviews, rather than a worksheet, teach the child to be a historian.",
+                "observation_documentation": "Over time, note whether the child asks open questions, listens with care, retells an elder's story faithfully, and understands why personal memory is a valuable kind of history. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Interview preparation builds writing skills. Retelling an oral story is narration. Transcribing an interview is a literacy activity.",
