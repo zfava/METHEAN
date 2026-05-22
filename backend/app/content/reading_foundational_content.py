@@ -2419,10 +2419,113 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Spell words aloud rhythmically. Create mnemonics: 'said — S-A-I-D, silly ants in dirt.' Sing sight word songs.",
         },
         "philosophy_specific": {
-            "classical": "Systematic memorization: 5 new words per week with daily cumulative review. Oral spelling drill. Copywork sentences featuring sight words.",
-            "charlotte_mason": "Meet sight words in real reading. Short daily sessions (5-10 minutes). Words encountered in living books become natural sight words through repeated exposure.",
-            "montessori": "Puzzle words: acknowledge that these words don't follow the rules. Sandpaper sight words. Sight word booklets the child assembles.",
-            "traditional": "Weekly sight word lists. Daily flash card practice. Sight word assessments every two weeks.",
+            "traditional": {
+                "introduction": "Sight words are the glue of sentences: the, was, said, there appear on nearly every page but do not follow the regular phonics rules. We learn to recognize them instantly by sight, so decoding energy is free for the content words. Today we learn new sight words, read them in text, and tell sight words from decodable words.",
+                "gradual_release": {
+                    "i_do": "Model with a sight word card: see the word, say the word, trace the word with a finger. Read it inside a short phrase. Model the look, say, cover, write, check routine for spelling it.",
+                    "we_do": "Read new sight words together inside simple phrases. Do the look-say-cover-write-check routine together, and read the sight words inside a decodable sentence.",
+                    "you_do": "Child reads the learned sight words instantly, spells the most common ones from memory, and reads them accurately in connected text.",
+                },
+                "guided_practice": [
+                    "Flash-card review aiming for instant recognition within two seconds",
+                    "Sight word memory matching with the accumulated cards",
+                    "Read sight words inside simple phrases and sentences",
+                ],
+                "independent_practice": [
+                    "Cumulative review: read through the whole accumulated sight word stack daily",
+                    "Spell sight words from dictation",
+                ],
+                "mastery_check": [
+                    "Read the learned sight words instantly within about two seconds each",
+                    "Spell the most common sight words from memory",
+                    "Read sight words accurately within connected text",
+                ],
+                "spiral_review": [
+                    "Shuffle and reread all learned sight words daily so earlier words are not lost",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Some of the most common words in English will not yield to the phonics rules. The, said, was, of must simply be known by heart. Learn a few each week and review them cumulatively, and these words become instant and sure.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the spelling of a common sight word letter by letter: s, a, i, d, said",
+                        "Chant small groups of sight words together until they are firm",
+                        "Chant the trickiest words, the ones the phonics rules will not explain",
+                    ],
+                    "recitations": [
+                        "Read aloud the accumulated sight words daily, cumulatively, before adding three to five new ones",
+                    ],
+                },
+                "copywork": [
+                    "Copy the sight words, and copy short sentences that feature them, neatly and while reading them",
+                ],
+                "recitation_routine": "Begin each lesson by reading through the whole accumulated stack of sight words before any new words are added; the set is rehearsed cumulatively, never assumed.",
+                "history_integration": "Tell, simply, that these little words are old and worn smooth by long use, their spellings kept from an earlier English even as their sounds drifted away from the rules.",
+                "read_aloud_suggestions": [
+                    "A rich read-aloud for the ear, and simple readers thick with the common sight words for the child's own reading",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 8,
+                "living_book_suggestions": [
+                    "The family's current living read-aloud and simple, worthy readers in which the common words recur naturally on every page",
+                ],
+                "short_lesson_flow": "In a book read together, the child meets the same small words again and again. Gently point to one, this little word is the, and let the repeated reading of real text do most of the work. Take one short turn, and stop while the child is still glad to be reading.",
+                "narration_prompt": "After reading, tell me one little word that you saw many times on the page.",
+                "real_world_objects": [
+                    "The common words on signs, labels, and simple instructions",
+                    "The little connecting words in the current read-aloud",
+                    "The common words in a note or list written at home",
+                ],
+                "nature_connection": "In a short caption the child writes under a nature-notebook drawing, notice together the little connecting words they used.",
+                "habit_focus": "The habit of attentive reading: letting the eye learn the common words by truly attending to real and worthy text.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Puzzle word cards, the words that do not follow the rules, presented honestly as puzzle words",
+                    "Sight word booklets that the child assembles and keeps",
+                    "The large movable alphabet for building the puzzle words",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a puzzle word card: this word is said; show me said; what is this word? Presented honestly as a word to be known whole, not sounded out.",
+                    "steps": [
+                        "Present a puzzle word, naming it and explaining that it is a word we come to know by sight",
+                        "The child traces or builds the word with the movable alphabet",
+                        "The child adds the word to a small sight word booklet they assemble and keep",
+                    ],
+                },
+                "control_of_error": "These words are known by memory, so the control is gentle: it lies in the child's own assembled booklet and in re-reading, and above all in meeting the word again in real text. There is no self-correcting material, and the guide names this honestly.",
+                "abstraction_pathway": "From handling and tracing the puzzle word, to assembling it into the booklet, toward recognizing it instantly in any text with no card at all.",
+                "extensions": [
+                    "Grow the sight word booklet as new puzzle words are met",
+                    "Read the puzzle words within the reading series and in real books",
+                ],
+                "observation_focus": "Watch for instant recognition, and for the child meeting the puzzle words calmly as known wholes rather than trying to sound them out.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave simple readers thick with the common words on a low shelf",
+                    "Keep magnetic letters and word cards within reach",
+                    "Post a few of the most common words where the child will see them daily",
+                ],
+                "real_world_contexts": [
+                    "The common words everywhere in real print: signs, labels, instructions, recipes",
+                    "The same small words met again and again in a loved book read many times",
+                    "The connecting words in notes and lists written at home",
+                ],
+                "conversation_starters": [
+                    "Can you sound out the word said? What makes this word tricky?",
+                    "You already know the word the. How many times can you find it on this page?",
+                    "Which words can you sound out, and which ones do you just know by heart?",
+                ],
+                "resource_bank": [
+                    "Simple readers and favorite books read again and again",
+                    "Magnetic letters and word cards",
+                    "The most common words posted where they are seen",
+                ],
+                "parent_role": "Read aloud often and follow the child's finger to the small words that recur. When a child wants a word, simply tell them, and let the repeated reading of real, loved text make the common words familiar rather than drilling them.",
+                "observation_documentation": "Over time, note which common words the child recognizes instantly, whether they meet them calmly as known words rather than sounding them out, and whether their reading of real text is growing smooth. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Sight words in math: 'more,' 'less,' 'than,' 'equal,' 'and' are all high-frequency words",
