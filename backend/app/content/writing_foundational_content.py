@@ -4073,11 +4073,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["sentences for adjective identification", "lined paper for descriptive writing"],
             "recommended": ["adjective word wall organized by category", "five-senses graphic organizer"],
-            "philosophy_specific": {
-                "classical": "Adjective as the third part of speech formally taught and identified. Sentence diagramming shows adjectives modifying nouns. Descriptive copywork highlights excellent adjective use.",
-                "charlotte_mason": "Descriptive language absorbed from living books: the child encounters rich adjectives in quality literature and begins using them naturally. Nature journal descriptions are the best adjective practice.",
-                "montessori": "Grammar symbols: blue triangle for adjective placed above the noun it modifies. Adjective cards matched to noun cards. Descriptive classification activities.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -4087,6 +4082,115 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Adjective word wall organized by category with color coding. Illustrated adjective cards. Highlight adjectives in different colors in sample sentences.",
             "kinesthetic_learner": "Touch objects and describe what they feel like (rough, smooth, cold, heavy). Act out adjective-noun pairs: 'sleepy cat,' 'excited dog.'",
             "auditory_learner": "Describe things aloud first. Read adjective-rich passages aloud. Play oral description games.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Adjectives are the words that describe nouns. They tell what kind, how many, or which one. They turn a plain sentence into one that paints a picture. Today we define the adjective, find adjectives in sentences and name the nouns they describe, add adjectives to plain sentences to make them vivid, and use at least three adjectives in a descriptive paragraph.",
+                "gradual_release": {
+                    "i_do": "Read a sentence aloud, 'The small gray kitten played with a red ball', and think aloud: 'kitten' is a noun; 'small' and 'gray' tell what kind of kitten, those are adjectives; 'ball' is a noun and 'red' tells what kind, another adjective.",
+                    "we_do": "Find the adjectives in sentences together, drawing an arrow from each adjective to the noun it describes, and then add a fresh adjective to a plain sentence to make it more vivid.",
+                    "you_do": "Child identifies adjectives in sentences, names the noun each describes, expands plain sentences with adjectives, and writes a descriptive paragraph using at least three adjectives.",
+                },
+                "guided_practice": [
+                    "Find each adjective in a sentence and draw an arrow to the noun it describes",
+                    "Add one or two adjectives to a plain sentence to make it more vivid",
+                    "Write a sentence about a real object using two or three precise adjectives",
+                ],
+                "independent_practice": [
+                    "Identify all the adjectives in a short paragraph and name the nouns they describe",
+                    "Write a descriptive paragraph about a person, place, or thing with at least three adjectives",
+                ],
+                "mastery_check": [
+                    "Define the adjective as a word that describes a noun",
+                    "Identify adjectives in sentences and name the nouns they describe",
+                    "Use at least three adjectives in a descriptive paragraph",
+                ],
+                "spiral_review": [
+                    "Review noun and verb each time adjectives are practiced, so the three parts of speech are kept together in mind",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "After the noun and the verb come the adjectives, the words that describe. By them, a plain naming becomes a fuller picture: not merely a tree, but a tall, ancient, gnarled tree; not merely a sea, but a wide, gray, stormy sea. The adjective is a small word with great power, for it is the writer's chief means of making the reader truly see.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the definition of the adjective: an adjective describes a noun, telling what kind, how many, or which one",
+                    ],
+                    "recitations": [
+                        "Recite that the adjective stands beside the noun and adds to it, giving the reader a picture clearer than naming alone",
+                    ],
+                },
+                "copywork": [
+                    "Copy a sentence rich in well-chosen adjectives and mark each adjective with a small line to the noun it describes",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the definition of the adjective and what it tells, before any identification or writing is done.",
+                "history_integration": "Tell that the parts of speech were named and ordered by the ancient grammarians, and that the adjective took its place beside the noun because no naming alone could carry all the picture the writer wished to give.",
+                "read_aloud_suggestions": [
+                    "A passage of fine description, read aloud so the ear hears how a careful writer uses adjectives sparingly and exactly",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A living book of vivid description, where the child has already met countless adjectives in real reading",
+                ],
+                "short_lesson_flow": "Keep the lesson short, ten to fifteen minutes. The child has heard adjectives in living books from the cradle and uses them in speech. Read a few sentences from a familiar book, let the child find the describing words, and name them gently, adjectives. Then let the child describe something they truly love, aloud first and then on paper, choosing exact words rather than many.",
+                "narration_prompt": "Describe this thing to me with three exact words, and tell me which noun each word describes.",
+                "real_world_objects": [
+                    "A favorite living book to draw example sentences from",
+                    "Real objects worth describing closely: a stone, a leaf, a familiar tool",
+                    "A nature notebook where descriptions are written from life",
+                ],
+                "nature_connection": "Nature description is the natural home of the adjective: the child describes a found leaf or a watched bird in the nature notebook with adjectives drawn from real looking rather than from a list.",
+                "habit_focus": "The habit of attention: choosing the one true adjective that names what the child really saw, rather than reaching for many vague ones.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The Montessori grammar symbol for the adjective: the medium blue triangle, set beside the noun's large black triangle",
+                    "Adjective and noun word cards for matching",
+                    "Object cards or real objects to be described with adjective cards",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the grammar symbols: this blue triangle marks an adjective, which describes a noun, and stands beside the noun's black triangle; you place a blue triangle over an adjective; show me an adjective and the noun it describes.",
+                    "steps": [
+                        "The child reads a sentence strip and finds the words that describe a noun",
+                        "The child places the blue triangle over each adjective and connects it visually to the noun's symbol",
+                        "The child writes a few sentences of their own with adjectives and marks them with the symbols",
+                    ],
+                },
+                "control_of_error": "A blue triangle resting over a verb or a naked noun is plainly out of place beside the larger black noun-triangle, so the child sees the mismatch and corrects it without being told.",
+                "abstraction_pathway": "From marking adjectives with concrete grammar symbols on sentence strips, to writing sentences with adjectives well placed, toward describing things with exact adjectives in independent writing.",
+                "extensions": [
+                    "Match adjective cards to real objects, choosing one true adjective for each",
+                    "Build a sentence card chain with several adjectives describing one noun",
+                    "Find and mark all the adjectives in a short printed passage",
+                ],
+                "observation_focus": "Watch for the child distinguishing describing words from naming and action words, choosing exact adjectives, and joining adjective to noun rather than scattering describing words at random.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep paper, cards, and good pens out for whoever wants to describe",
+                    "Leave out books, comics, and recipes rich in description for browsing",
+                    "Welcome the child's descriptions of meals, weather, pets, and projects whenever they share them",
+                ],
+                "real_world_contexts": [
+                    "Describing a lost item so someone can find it: a small, red, leather wallet",
+                    "Describing a meal at the table: warm, salty, crispy",
+                    "Describing a pet, a friend, or a place to someone who has not met it",
+                    "Reading restaurant menus and noticing how adjectives make foods sound delicious",
+                ],
+                "conversation_starters": [
+                    "How would you describe this so someone who is not here could picture it?",
+                    "Which word fits better, big or enormous? Why?",
+                    "Without using its name, can you describe it in three words?",
+                ],
+                "resource_bank": [
+                    "A growing list of favorite adjectives the child collects from books, menus, and ads",
+                    "Real things worth describing: pets, places, foods, weather",
+                    "Books, poems, and stories full of vivid description",
+                ],
+                "parent_role": "Use vivid, exact adjectives in your own speech and writing where the child can hear and see them, and welcome the child's descriptions with genuine interest. When the child writes, point out a place where one well-chosen adjective would do more than several vague ones, treating word choice as a craft rather than a rule.",
+                "observation_documentation": "Over time, notice whether the child reaches for exact describing words, names what kind, how many, and which one when it matters, and writes with growing vividness about things they care about. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Noticing adjectives in reading builds vocabulary and comprehension: adjectives create the imagery that makes stories come alive",
