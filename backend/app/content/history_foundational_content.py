@@ -2277,11 +2277,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "living biographies of American historical figures",
                 "pictures of historical events and figures",
             ],
-            "philosophy_specific": {
-                "classical": "Patriotic narrative and biographical virtue. Memorize key dates and figures. Timeline drill. Primary source excerpts read aloud (Declaration of Independence opening).",
-                "charlotte_mason": "Living biographies: tell each figure's story as a compelling narrative. Narration after each biography. Timeline entries and map work for every event.",
-                "montessori": "American history timeline with movable cards. Flag study. Cultural artifacts from different periods. Biography cards with portraits.",
-            },
         },
         "time_estimates": {"first_exposure": 30, "practice_session": 20, "assessment": 15},
         "accommodations": {
@@ -2291,6 +2286,121 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Portraits of historical figures. Maps of colonies, exploration routes, and the Underground Railroad. Illustrated timelines.",
             "kinesthetic_learner": "Build models (log cabin, colonial village). Act out scenes. Walk the Underground Railroad route on a floor map.",
             "auditory_learner": "Stories told dramatically. Discuss motivations and character. Listen to historical speeches (simplified). Debate historical decisions.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "American history is a long story with both courage and cruelty in it, and an honest telling holds both. Native peoples lived across North America for many thousands of years before Europeans arrived. Europeans came, explored, and settled, and the Native peoples were displaced from the land they had long lived on. The colonists later won independence and founded a nation on the words that all are created equal, even as many of its founders held enslaved people, and slavery was a brutal wrong ended only by a vast and deadly Civil War. Today we narrate the key stories of American history, meet its central figures, and place its events in order, telling the hard parts truthfully.",
+                "gradual_release": {
+                    "i_do": "Tell the story in order, plainly and truthfully: the Native peoples here for thousands of years; the European explorers and settlers, and the displacement of the Native peoples from their land; the colonists' fight for independence; the founding on the words of equality, beside the reality of slavery; and the Civil War that ended slavery at a terrible cost. Name what is fact, and say where people still reason differently about what it means.",
+                    "we_do": "Retell the key stories together and place them on a timeline, naming the people in each, and talk over the hard questions honestly: who was here first, and who was free and who was not.",
+                    "you_do": "Child narrates at least five key stories of American history, identifies the central figures, places the events in chronological order, and can speak honestly about both the courage and the wrongs in the story.",
+                },
+                "guided_practice": [
+                    "Retell the key stories of American history in order: the Native peoples, exploration and settlement, the Revolution, slavery, the Civil War",
+                    "Identify the central historical figures and what each one did",
+                    "Place the major events on a timeline in correct chronological order",
+                ],
+                "independent_practice": [
+                    "Narrate a chosen figure's life, including both what they achieved and the hard truths of their time",
+                    "Build an American history timeline and add each person and event studied",
+                ],
+                "mastery_check": [
+                    "Narrate at least five key stories of American history truthfully, including the hard parts",
+                    "Identify the central historical figures and place major events in chronological order",
+                    "Describe courage, freedom, and character through real lives, without leaving out the wrongs",
+                ],
+                "spiral_review": [
+                    "Revisit the timeline often, so the child holds the order of events, from the Native peoples through exploration, the Revolution, and the Civil War",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The classical mind studies history through narration and through the lives of real people, and it does not flinch from the truth. American history is told here as it was: the Native peoples who lived across the land for thousands of years; the Europeans who came and settled, displacing the Native peoples from that land; the colonists who won independence and wrote that all are created equal; and the great and painful contradiction that slavery, a true and brutal wrong, lived on within a nation founded on liberty, until a vast Civil War ended it. The classical study weighs both the courage and the wrong, and asks the hard questions honestly.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the order of the story: the Native peoples, the explorers and settlers, the colonies, the Revolution, and the Civil War",
+                        "Chant the great contradiction to be reasoned with: a nation founded on the words that all are created equal, while many were not free",
+                    ],
+                    "recitations": [
+                        "Recite the opening words of the Declaration of Independence, that all are created equal, and recite that the nation did not at first live up to them",
+                        "Recite that Native peoples lived across the land for thousands of years before Europeans came, and that they were displaced from it as the newcomers settled",
+                    ],
+                },
+                "copywork": [
+                    "Copy the words from the Declaration of Independence that all men are created equal, and the names and dates of the central figures and events",
+                ],
+                "recitation_routine": "Begin each lesson by retelling the previous portion of the story, in order, and reciting the central contradiction before reasoning further about it.",
+                "history_integration": "Place American history on the chronological spine far down from the ancient civilizations, recent in the long story of humankind, and mark that its struggle over freedom and equality reaches forward from the spine into the present day, a story not yet finished.",
+                "read_aloud_suggestions": [
+                    "A living biography of an American historical figure, told honestly, with both the achievements and the flaws of the person and their age",
+                    "A children's account of the lives of the enslaved and of those who resisted slavery, read aloud truthfully and with care",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "Living biographies of American historical figures, told honestly, including both their courage and the hard truths of their time",
+                    "A living book that tells the story of Native peoples, of the enslaved, and of those who sought freedom, written with truth and care, never a sanitized version",
+                ],
+                "short_lesson_flow": "Read a portion of a living biography or a true account aloud, told with feeling and without flinching, and let the child narrate it back in their own words. Charlotte Mason held that children can meet real history, including its sorrows; the parent does not preach a verdict but tells the truth and lets the child form their own response in the narration. Keep it warm, honest, and unhurried.",
+                "narration_prompt": "Tell me the story we just heard. What was hard about it, and what was brave? What does it make you wonder?",
+                "real_world_objects": [
+                    "Living biographies and true accounts of American history",
+                    "A Book of Centuries and a timeline the child adds figures and events to",
+                    "Maps of North America: the Native nations, the colonies, the routes of the Underground Railroad",
+                    "Museums, historic sites, and memorials, where the real past can be met",
+                ],
+                "nature_connection": "Notice the land itself, the rivers, forests, and plains that the Native peoples knew intimately for thousands of years, and that shaped where settlers went and how the nation grew, geography woven through the whole story.",
+                "habit_focus": "The habit of attention and of truthfulness: hearing hard history closely and honestly, neither looking away from it nor being told what to conclude.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "An American history timeline with movable cards for the people and events",
+                    "Living biographies and true accounts told honestly, with portraits",
+                    "Maps of the Native nations, the colonies, and the Underground Railroad",
+                    "A research and presentation space for the child to study a chosen figure",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the timeline cards: this is the founding of the nation, this the Civil War that ended slavery; show me the Civil War; which event is this?",
+                    "steps": [
+                        "The child places the people and events of American history on the timeline in order",
+                        "The child studies a figure or a story through an honest biography or account, including its hard truths",
+                        "The child narrates or presents what they have learned and adds it to the timeline",
+                    ],
+                },
+                "control_of_error": "The timeline and the true record are the control: an event set out of order does not match the dates, and an account that leaves out the Native peoples, or slavery, or the cost of the Civil War is checked against the honest record and found incomplete.",
+                "abstraction_pathway": "From handling the concrete timeline cards and biographies, to placing the people and events in order, toward grasping American history as one long, connected, and unfinished story of freedom sought and freedom denied.",
+                "extensions": [
+                    "Compare how a Pilgrim, a Wampanoag person, an enslaved person, and a modern historian would each tell the same event",
+                    "Trace a route of the Underground Railroad on a map",
+                    "Research a figure, famous or little-known, and present their life honestly",
+                ],
+                "observation_focus": "Watch for the child holding the whole story, the courage and the wrong together, placing events truly in time, and asking honest questions rather than reaching for a tidy verdict.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep honest, well-told books about American history and its many peoples within reach",
+                    "Leave out maps, a long timeline strip, and materials for the child's own projects",
+                    "Have documentaries, historic sites, and museums available to explore",
+                ],
+                "real_world_contexts": [
+                    "Visiting historic sites, museums, and memorials where the real past is preserved",
+                    "Noticing the history in holidays, the Fourth of July, Presidents' Day, and asking what each one truly marks",
+                    "Hearing the family's own history, who came from where, and when, and why",
+                    "Meeting American history in biographies, historical fiction, and documentaries",
+                ],
+                "conversation_starters": [
+                    "Native peoples lived here for thousands of years before Columbus; what does it mean to say he discovered America?",
+                    "The Declaration says all are created equal, yet many people were enslaved and not free; how do you make sense of that?",
+                    "Harriet Tubman risked her life again and again to free others; what kind of courage is that?",
+                ],
+                "resource_bank": [
+                    "Honest, varied books and documentaries about American history",
+                    "Historic sites, museums, and memorials",
+                    "Maps and a timeline, and the family's own stories and elders",
+                ],
+                "parent_role": "Follow the child's curiosity about the American past into books, documentaries, and historic places, and tell the story truthfully, the courage and the cruelty alike, without softening the hard parts. Share the facts honestly and the contested questions openly, and let the child reason about what it all means rather than handing them a conclusion.",
+                "observation_documentation": "Over time, note whether the child can narrate the key stories of American history, knows its central figures, places events in order, and can speak honestly about both its courage and its wrongs. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Historical fiction and biographies build both reading skills and historical knowledge. American history vocabulary: liberty, independence, constitution, democracy.",
