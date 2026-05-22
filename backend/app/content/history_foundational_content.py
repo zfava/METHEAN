@@ -5002,11 +5002,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "paper for drawing maps",
             ],
             "recommended": ["physical/topographic globe", "atlas showing trade routes"],
-            "philosophy_specific": {
-                "classical": "Geography as the indispensable companion to history. Every history lesson begins with 'where on the map?' Memorize key geographic features and their historical significance.",
-                "charlotte_mason": "Map drawing from memory is the core method. After studying a civilization, the child draws its geographic setting from memory. Geography and history are never separated.",
-                "montessori": "Physical geography materials: land and water forms. Pin maps marking civilizations on geographic features. Hands-on topographic models.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -5016,6 +5011,118 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Physical feature maps with color-coded terrain. Satellite images showing real geography. Illustrated trade route maps.",
             "kinesthetic_learner": "Build 3D terrain models. Walk trade routes on a floor map. Use sand and water to simulate rivers and barriers.",
             "auditory_learner": "Discuss geographic connections in conversation. Explain map features aloud. Debate whether geography determines history or people overcome geography.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Geography is the stage on which all of history happens. Every civilization the child has studied arose where it did for reasons of geography: rivers for water and farming, harbors and seas for trade, mountains and deserts for defense or isolation. A geographic feature can be a highway, like a river or a sea, that carries people and goods, or a barrier, like a mountain range or a desert, that blocks them. Today we explain how geography shaped at least two civilizations, draw and explain trade routes, sort features into barriers and highways, and connect every history topic to its place on the map.",
+                "gradual_release": {
+                    "i_do": "Take a civilization and think aloud through its geography: Egypt arose along the Nile because the river gave water, fertile soil, and a route for travel. Show the Mediterranean as a highway connecting Greece, Rome, and Egypt, and a desert or mountain range as a barrier. Trace a trade route and name the features it followed and avoided.",
+                    "we_do": "For the civilizations studied, locate each on the map and name the geographic features that shaped it, sort features into barriers and highways, and draw a trade route together with its reasons.",
+                    "you_do": "Child explains how geography shaped at least two civilizations, draws a map of trade routes with the geographic logic, sorts features into barriers and highways, and connects each history topic to its location.",
+                },
+                "guided_practice": [
+                    "Locate each studied civilization on the map and name the geographic features that shaped it",
+                    "Sort geographic features into barriers and highways for human movement",
+                    "Draw a trade route and explain why it followed that path",
+                ],
+                "independent_practice": [
+                    "Draw a map showing two trade routes and the geographic reasons behind each",
+                    "Given a blank map of physical features, predict where civilizations would arise, then check against history",
+                ],
+                "mastery_check": [
+                    "Explain how geography shaped at least two ancient civilizations",
+                    "Draw a map of ancient trade routes and explain why trade followed those paths",
+                    "Identify geographic features as barriers or highways and connect each history topic to its location",
+                ],
+                "spiral_review": [
+                    "Revisit the world map and the continents, locating again every civilization studied across the year",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Geography is the indispensable companion of history: every event the child has studied happened in a place, and the place helps explain the event. The classical mind begins every history lesson with the question, where on the map. Rivers and seas are the highways of history, carrying people, goods, and ideas; mountains and deserts are its barriers, dividing and defending. To know why history happened where it did is to understand history more deeply.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the highways of history, the rivers and the seas, and the barriers, the mountains and the deserts",
+                        "Chant the geographer's question for every event: where on the map, and why there",
+                    ],
+                    "recitations": [
+                        "Recite that geography is the stage of history, that rivers and seas connect peoples and mountains and deserts divide them",
+                    ],
+                },
+                "copywork": [
+                    "Copy the names of the great geographic features studied, each marked as a highway or a barrier of history",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the highways and barriers of history and locating on the map the civilization to be studied.",
+                "history_integration": "Geography underlies the whole chronological spine: set every civilization the child has placed on the timeline also upon the map, and see that the spine of history runs always across a real and shaping landscape.",
+                "read_aloud_suggestions": [
+                    "A living book of historical geography that journeys along the rivers, seas, and trade routes of the ancient world, read aloud",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book of geography and history, with true maps and artwork, that shows how the land shaped the lives of peoples",
+                ],
+                "short_lesson_flow": "After studying a civilization, study a good map of its land, quietly and closely, the rivers, the coasts, the mountains. Then put it away, and let the child draw the geographic setting from memory and tell why the civilization grew where it did. Charlotte Mason joins geography and history always: the map drawn from memory carries both.",
+                "narration_prompt": "Tell me where this civilization grew and why. What did the rivers, the seas, or the mountains give them or keep from them?",
+                "real_world_objects": [
+                    "A physical world map and a topographic globe showing rivers, mountains, and deserts",
+                    "A blank notebook for drawing the geographic setting of each civilization from memory",
+                    "An atlas showing the ancient trade routes",
+                    "The child's own region, its rivers, hills, and roads, walked and noticed",
+                ],
+                "nature_connection": "Geography is itself nature study: the rivers, mountains, coasts, and deserts the child studies are the living features of the Earth, and the same land study turned upon the child's own region shows why their town grew where it did.",
+                "habit_focus": "The habit of attention: studying a map closely enough to see how the land itself shaped the story of a people.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The Montessori physical geography materials: the land and water form models",
+                    "A physical world map and globe showing the features of the Earth",
+                    "Pin maps for marking civilizations on their geographic features",
+                    "Materials for building topographic models and tracing trade routes",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the land and water forms, or the physical map: this feature is a river, a highway of history; this is a mountain range, a barrier; show me a barrier; is this feature a barrier or a highway?",
+                    "steps": [
+                        "The child works the physical geography materials and locates the studied civilizations on the physical map",
+                        "The child names, for each civilization, the geographic features that shaped it",
+                        "The child traces trade routes and sorts the features along them into barriers and highways",
+                    ],
+                },
+                "control_of_error": "The physical map is the control: a river runs where the map shows it and a mountain range stands where the map shows it, so a trade route drawn through an impassable barrier, or a civilization placed where no water is, does not match the real geography.",
+                "abstraction_pathway": "From handling the concrete land and water forms and the physical map, to locating civilizations and tracing trade routes, toward grasping that geography shapes where and how history unfolds.",
+                "extensions": [
+                    "Build a topographic model of a civilization's homeland",
+                    "Trace the full length of a great trade route such as the Silk Road",
+                    "Investigate how geography shapes the child's own region and its towns and roads",
+                ],
+                "observation_focus": "Watch for the child connecting a civilization's location to real geographic features, and telling a barrier from a highway by how it helps or hinders movement.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a physical world map, a topographic globe, and an atlas where the child can pore over them",
+                    "Leave out materials for building terrain models with sand, clay, or salt dough",
+                    "Have books about explorers, trade routes, and the lands of the world available",
+                ],
+                "real_world_contexts": [
+                    "Noticing why the family's own town sits where it does, near a river, a harbor, a crossroads, or a resource",
+                    "Following the route of a real journey on a map and seeing the rivers, mountains, and coasts along it",
+                    "Wondering, on a trip or in a book, why a city, a road, or a border lies where it does",
+                    "Seeing that modern highways and railways often follow the paths of ancient routes",
+                ],
+                "conversation_starters": [
+                    "Every ancient civilization grew up near a river; do you think that is a coincidence?",
+                    "Is a mountain range a help or a hindrance to a people, or both?",
+                    "If you were founding a city, where on this map would you build it, and why?",
+                ],
+                "resource_bank": [
+                    "A physical world map, a topographic globe, and atlases",
+                    "Materials for building terrain models",
+                    "Books about trade routes, explorers, and the lands of the world",
+                ],
+                "parent_role": "Keep good maps around the home and use them in real life, on trips, with the news, when a far place comes up, and wonder aloud about why peoples settled, traded, and traveled where they did. Let real maps, real journeys, and the geography of the child's own region, rather than a worksheet, teach how the land has shaped history.",
+                "observation_documentation": "Over time, note whether the child connects civilizations to their geography, tells barriers from highways, understands why trade followed certain paths, and locates the history they study on a map. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Understanding geographic setting enriches reading comprehension — knowing WHY a story is set where it is deepens understanding",
