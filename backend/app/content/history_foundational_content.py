@@ -4457,11 +4457,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["historical fiction picture books or chapter books at the child's level"],
             "recommended": ["fact vs fiction chart template", "companion nonfiction book about the same time period"],
-            "philosophy_specific": {
-                "classical": "Historical fiction as narrative vehicle for absorbing historical facts. Compare fiction to primary sources. The story makes the facts memorable.",
-                "charlotte_mason": "Living books ARE historical fiction (and narrative nonfiction). The best historical fiction teaches history through compelling story. Narration after reading is the primary response.",
-                "montessori": "Historical fiction books organized by time period in the reading area. The child selects books that connect to civilizations being studied. Reading cards with fact/fiction sorting.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -4471,6 +4466,120 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Illustrated historical fiction. Look at pictures for historical details. Draw scenes from the book.",
             "kinesthetic_learner": "Act out scenes from historical fiction. Build or create something from the time period depicted.",
             "auditory_learner": "Audiobooks of historical fiction. Read-aloud with discussion. Retell the story emphasizing the historical elements.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Historical fiction is a made-up story set in a real time and place. A well-written historical novel makes the reader feel what it was like to live in another age. The key skill is telling apart what is real history from what the author invented: the setting, the customs, the technology are usually researched to be accurate, while the particular characters and plot are made up. A careful reader also remembers that even researched fiction can carry mistakes or a modern view. Today we read historical fiction, sort the real history from the invention, describe what the book taught about the period, and tell historical fiction from fantasy and modern fiction.",
+                "gradual_release": {
+                    "i_do": "Read a passage of historical fiction aloud and think aloud: the long dresses and the horse and wagon are real history, researched to be accurate; the girl named Sarah and her exact adventure are the author's invention. Name what the book teaches about the time, and notice anything that might be the author's guess or modern view.",
+                    "we_do": "Read a work of historical fiction together, sort its parts into real history and the author's invention, and name what it taught about the period.",
+                    "you_do": "Child reads or hears historical fiction, identifies which parts are historically accurate and which are invented, describes what the book taught about the period, and tells historical fiction from fantasy and modern fiction.",
+                },
+                "guided_practice": [
+                    "Sort the elements of a historical fiction story into real history and the author's invention",
+                    "Describe what a work of historical fiction taught about daily life, customs, and challenges of its period",
+                    "Tell historical fiction apart from fantasy and from modern realistic fiction",
+                ],
+                "independent_practice": [
+                    "Make a two-column chart, real history and made up by the author, for a historical fiction book",
+                    "Compare a historical fiction book with a nonfiction account of the same period",
+                ],
+                "mastery_check": [
+                    "Identify which parts of a work of historical fiction are historically accurate and which are invented",
+                    "Describe what the book taught about the historical period",
+                    "Distinguish historical fiction from fantasy and from modern fiction",
+                ],
+                "spiral_review": [
+                    "Revisit telling fact from fiction, the same careful reading used with primary sources",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Historical fiction is a story invented and set within a real and researched past. It is a powerful teacher, for it lets the reader feel another age from the inside. Yet the classical reader keeps a clear mind: the setting and the customs are drawn from real history, while the characters and the plot are the author's making, and even careful fiction may hold a mistake or a modern view. To read historical fiction well is to enjoy the story and weigh its history both.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the parts of historical fiction: the setting and customs are real history, the characters and plot are the author's invention",
+                        "Chant the reader's caution: even a researched story may carry a mistake or a modern view",
+                    ],
+                    "recitations": [
+                        "Recite that historical fiction is an invented story in a real and researched past, and that the wise reader weighs its history while enjoying its tale",
+                    ],
+                },
+                "copywork": [
+                    "Copy the distinction between real history and an author's invention, and a vivid sentence from a work of historical fiction",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the parts of historical fiction, the real and the invented, before reading a new book.",
+                "history_integration": "Set each work of historical fiction on the chronological spine by its period, so the child sees where a colonial tale or a story of ancient Rome falls in the long order of history.",
+                "read_aloud_suggestions": [
+                    "A finely written work of historical fiction set in a period the child has studied, read aloud for narration",
+                    "A companion account of the same period, read alongside the story so the child can weigh the fiction against the history",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A living work of historical fiction that carries the child fully into another time, with a real and researched setting and a story worth narrating",
+                    "A well-told historical novel honest about its period, not one that flatters or sanitizes the age it portrays",
+                ],
+                "short_lesson_flow": "Read a portion of a living work of historical fiction aloud, and let the child narrate it back. Afterward, wonder together: what here was real history, and what did the author invent? Let the story carry the child into the age and build empathy for the people who lived then, and let the narration show what was understood.",
+                "narration_prompt": "Tell me the part of the story we just heard. What did it show you about life in that time, and how do you think the people felt?",
+                "real_world_objects": [
+                    "Living works of historical fiction at the child's level",
+                    "A companion nonfiction book or pictures of the same period",
+                    "A Book of Centuries for placing the story's period",
+                    "A simple two-column record of real history and the author's invention",
+                ],
+                "nature_connection": "Notice the natural world inside a historical story: the crops, the weather, the animals, the unlit nights, and how the people of that age lived close to nature in ways a modern child may not.",
+                "habit_focus": "The habit of attention and of sympathy: entering another age through a story closely enough to feel what its people felt.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Historical fiction books organized by time period in the reading area",
+                    "Companion nonfiction books about the same periods",
+                    "Fact-and-fiction sorting cards for the elements of a story",
+                    "A timeline for placing each story's period",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With story-element cards: this element is real history, the clothing of the time; this element is the author's invention, the main character; show me an element of real history; is this element real history or invention?",
+                    "steps": [
+                        "The child reads or hears a work of historical fiction set in a studied period",
+                        "The child sorts the story's elements into real history and the author's invention",
+                        "The child places the story's period on the timeline and names what the book taught about the age",
+                    ],
+                },
+                "control_of_error": "The companion nonfiction and the studied history are the control: an element sorted as real history can be checked against the record, and the child sees when something the author invented has been mistaken for fact.",
+                "abstraction_pathway": "From reading a concrete story and sorting its elements with the cards, to checking them against the historical record, toward reading any historical fiction with both enjoyment and a discerning eye.",
+                "extensions": [
+                    "Compare two works of historical fiction set in the same period",
+                    "Check which of a story's details the historical record confirms",
+                    "Write a short historical fiction scene using accurate details of a studied period",
+                ],
+                "observation_focus": "Watch for the child separating the researched setting from the invented characters and plot, and growing in empathy for the people of the age the story portrays.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a rich shelf of historical fiction for many periods within reach",
+                    "Have audiobooks of historical fiction available",
+                    "Leave out companion nonfiction and pictures about the periods the stories are set in",
+                ],
+                "real_world_contexts": [
+                    "Reading or hearing historical fiction simply for the love of the story",
+                    "Noticing that films and shows set in the past are historical fiction too, and asking what is real and what is invented",
+                    "Visiting a museum or a historic site and recognizing it from a story",
+                    "Wondering, after a story, what it would truly have been like to live then",
+                ],
+                "conversation_starters": [
+                    "The character wore long dresses and rode a horse; do you think that part is real history or made up?",
+                    "What did this story show you about life in that time that you did not know before?",
+                    "How can a made-up character teach us something true about the past?",
+                ],
+                "resource_bank": [
+                    "A wide shelf of historical fiction and audiobooks",
+                    "Companion nonfiction about the periods",
+                    "Films, museums, and historic sites that bring the periods to life",
+                ],
+                "parent_role": "Follow the child's love of a good story into historical fiction, and read it together for the pleasure of it. Wonder aloud about what is real history and what the author invented, note that even careful authors can be mistaken, and let real stories, rather than a worksheet, carry the child into other ages.",
+                "observation_documentation": "Over time, note whether the child enjoys historical fiction, can tell its real history from its invention, describes what a book taught about its period, and feels empathy for people of other times. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Historical fiction builds reading comprehension while teaching history — two subjects in one book",
