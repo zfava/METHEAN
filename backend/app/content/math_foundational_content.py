@@ -5024,10 +5024,115 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Count aloud by fives: 'Five, ten, fifteen, and two is seventeen.'",
         },
         "philosophy_specific": {
-            "classical": "Systematic observation. Formal tally chart structure.",
-            "charlotte_mason": "Nature tallies: birds of each type. Real data, real observation.",
-            "montessori": "Sort and count materials. Graph daily weather.",
-            "traditional": "Tally worksheets. Pre-made data sets to organize.",
+            "traditional": {
+                "introduction": "Data is information we collect to answer a question. To find out how many of each kind there are, we count and keep a tally, marking each in groups of five, four marks and a fifth struck across. Then we organize the tallies into a chart by category. Today we collect data with tallies, build a tally chart, read it, and answer questions like which has the most and how many more.",
+                "gradual_release": {
+                    "i_do": "Pose a question, then count a collection, making a tally mark for each, gathering them into groups of five. Show plainly that the sixth mark begins a new group. Organize the tallies into a chart by category, then read it aloud and answer: which has the most, and how many more.",
+                    "we_do": "Count and tally a collection together, organize the marks into a chart with clear categories, count the tallies by fives, and answer comparison questions from the chart.",
+                    "you_do": "Child collects data by counting and tallying in groups of five, builds a tally chart, reads it, and answers questions about the data.",
+                },
+                "guided_practice": [
+                    "Make tally marks in groups of five for given counts",
+                    "Count a collection and record it in a tally chart by category",
+                    "Read a tally chart and answer which has the most, the least, and how many more",
+                ],
+                "independent_practice": [
+                    "Survey the family on a question and build a tally chart of the answers",
+                    "Read a finished tally chart and write the answers to questions about it",
+                ],
+                "mastery_check": [
+                    "Make correct tally marks, in groups of five, for a count",
+                    "Build a tally chart from collected data with clear categories",
+                    "Read a tally chart and answer comparison questions about it",
+                ],
+                "spiral_review": [
+                    "Revisit skip counting by fives, used to total the tally groups quickly",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "When a thing must be counted, the mind soon needs help to keep its place. The tally is that help: one mark for each, gathered four together and a fifth struck across, so the eye can read fives at a glance. Set the tallies in order by kind, and a plain chart is made, and from the chart the truth of the count can be read and questioned.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the tally: one, two, three, four, and the fifth strikes across to close the group",
+                        "Count a chart of tallies aloud by fives: five, ten, fifteen, and the ones that are left",
+                    ],
+                    "recitations": [
+                        "Recite the rule of the tally: gather the marks in fives, keep each kind apart, and the count is easily read",
+                    ],
+                },
+                "copywork": [
+                    "Copy a small tally chart neatly, the categories named and the tally marks ruled in even groups of five",
+                ],
+                "recitation_routine": "Begin each lesson by chanting the count of a tally group by fives and reciting the rule of the tally before any new collecting.",
+                "history_integration": "Tell that the tally is one of the oldest of all records, that people kept counts by scratching marks on bone, wood, and stone long before numerals were written, and that counting heads and goods, the census, is among the oldest uses of number.",
+                "read_aloud_suggestions": [
+                    "A story or true account in which something is counted up and recorded, read aloud so the child hears a count being kept",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated book about birds, weather, or the seasons that invites the child to count and notice, never a workbook",
+                ],
+                "short_lesson_flow": "Choose a real question worth answering, perhaps the birds at the window or the weather each day. Watch, and keep a tally calmly as things are observed. After some days, look at the tallies together, count them by fives, and see what the gathered marks tell. Stop while interest is fresh.",
+                "narration_prompt": "Tell me what our tally chart shows. Which kind did we see the most, and how do you know?",
+                "real_world_objects": [
+                    "Real coins, buttons, or shells counted and tallied",
+                    "A bird feeder or window where birds may be watched and tallied",
+                    "A simple weather record kept day by day with tally marks",
+                ],
+                "nature_connection": "On a nature walk, keep a tally of what is seen, the birds, the kinds of tree, the colors of leaf, and bring the count home to the nature notebook to read together.",
+                "habit_focus": "The habit of careful observation: watching truly and recording each thing honestly, one mark at a time.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Baskets of sortable objects, beads, counters, small natural items, to count and tally",
+                    "Tally cards or strips for recording marks in groups of five",
+                    "A simple category chart the child fills and reads",
+                    "A daily weather chart the child keeps over time",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a tally group: this is a group of five, four marks and one struck across; show me a group of five; how many is this group?",
+                    "steps": [
+                        "Choose a question and sort a collection into its categories",
+                        "Count each category, making a tally mark for each and gathering them into groups of five",
+                        "Set the tallies into the chart by category, count them by fives, and read the chart to answer questions",
+                    ],
+                },
+                "control_of_error": "The objects themselves are the control: the tally marks for a category can be checked back against the counted objects, and a recount that does not match the chart shows the child plainly where the error lies.",
+                "abstraction_pathway": "From counting concrete objects one by one, to recording each as a tally mark gathered in fives, toward reading a finished chart and answering its questions without recounting.",
+                "extensions": [
+                    "Keep a weather tally over a month and read the gathered result",
+                    "Survey the family or friends on a question and chart the answers",
+                    "Carry the tally chart on toward a simple bar graph or pictograph",
+                ],
+                "observation_focus": "Watch for the child closing each group at the fifth mark, keeping the categories apart, and reading the chart by fives rather than recounting by ones.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep paper and pencil handy for tallying whatever the child wants to count",
+                    "Put up a wall chart for tracking something real, the weather, birds, or daily reading",
+                    "Leave out collections, buttons, coins, cards, that invite sorting and counting",
+                ],
+                "real_world_contexts": [
+                    "Tallying the birds, cars, or dogs seen on a walk or a drive",
+                    "Keeping a weather chart through a week or a month",
+                    "Counting votes when the family decides something together",
+                    "Sorting and counting a collection: rocks, cards, toy animals",
+                ],
+                "conversation_starters": [
+                    "How could we keep count of all of these without losing our place?",
+                    "Which one did we see the most of? How can you tell from the marks?",
+                    "How many more sunny days than rainy days were there?",
+                ],
+                "resource_bank": [
+                    "Paper, pencils, and a wall chart kept available",
+                    "Collections of things to sort and count",
+                    "Real questions worth answering by counting",
+                ],
+                "parent_role": "When a real question of how many comes up, reach for paper and tally it together, and show how marks gathered in fives keep the count. Follow the child's own curiosity about what to count, and let the gathered chart answer the question that started it.",
+                "observation_documentation": "Over time, note whether the child counts and tallies in groups of five, organizes the marks into a chart, reads it, and answers questions from the data. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Reading chart titles and labels",
