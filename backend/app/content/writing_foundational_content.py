@@ -149,11 +149,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "chalkboard or whiteboard for large letter practice",
                 "sandpaper letters or textured letter cards",
             ],
-            "philosophy_specific": {
-                "classical": "Systematic handwriting instruction: one letter group per week. Daily practice with correct formation as non-negotiable. Handwriting as the physical foundation of all written work.",
-                "charlotte_mason": "Careful, beautiful handwriting from the very first lesson. Never allow sloppy formation — better to write one perfect letter than ten rushed ones. Short daily lessons (5-10 minutes).",
-                "montessori": "Metal insets for pencil control before letter formation. Sandpaper letters traced with fingers. Movable alphabet for word building alongside handwriting practice.",
-            },
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 10},
         "accommodations": {
@@ -163,6 +158,116 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Letter formation charts posted at the writing area. Color-coded lines on paper (red baseline, blue top line). Watch letter formation videos.",
             "kinesthetic_learner": "Sand tray writing. Playdough letter forming. Air writing. Chalkboard before paper. Whole-body letter formation (walk the shape of a letter on the floor).",
             "auditory_learner": "Verbal stroke descriptions while writing: 'Start at the top, pull straight down, then curve around.' Letter formation songs.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Writing is first a physical skill: before the hand can carry a thought, it must learn to hold the pencil and form each letter the same correct way every time. Today we settle the tripod grip, form all 26 manuscript letters with the correct stroke order, and write them at a consistent size with even spacing on lined paper.",
+                "gradual_release": {
+                    "i_do": "Show the tripod grip, the pencil resting on the middle finger and held by thumb and index. Form a letter aloud, naming each stroke: capital B, start at the top, pull straight down, lift, back to the top, around for the upper curve, around for the lower. Write it on lined paper at the right height, a tall letter reaching the top line.",
+                    "we_do": "Form letters together, the parent naming the strokes while the child copies, checking grip, stroke order, letter height, and a finger-width space between words.",
+                    "you_do": "Child forms a group of letters independently with the correct grip and stroke order, keeping the size consistent on the lines and the spacing even.",
+                },
+                "guided_practice": [
+                    "Sky-write a letter with the whole arm, then form it on lined paper with the correct stroke order",
+                    "Form a group of letters that share a stroke (l, t, i, then o, c, a) and check each against the model",
+                    "Copy a familiar word, the child's own name, watching tall, short, and tail letters sit correctly on the line",
+                ],
+                "independent_practice": [
+                    "Daily handwriting practice of a few letters, focusing on correct formation rather than speed",
+                    "Write all 26 lowercase letters and check size and spacing against a model",
+                ],
+                "mastery_check": [
+                    "Hold the pencil with a correct tripod grip without reminding",
+                    "Form all 26 uppercase and lowercase manuscript letters with the correct stroke order",
+                    "Write letters at a consistent size with even spacing between words",
+                ],
+                "spiral_review": [
+                    "Begin each session by reviewing the grip and re-forming any letters from earlier sessions that still need work",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Long before a scribe could set down a great thought, his hand was trained to make each letter cleanly and well. The forming of letters is the first craft of the writer, and a steady hand, taught patiently, becomes the faithful servant of the mind. We learn to hold the pencil rightly and to shape every letter with care, for fair handwriting is the courtesy a writer pays his reader.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the handwriting rule: hold the pencil with three fingers, start each letter at the top, and let every letter sit upon the line",
+                        "Chant the three letter heights: tall letters reach the top, short letters fill the middle, tail letters drop below the line",
+                    ],
+                    "recitations": [
+                        "Recite that careful handwriting is the first discipline of the writer, and that one letter formed well is worth ten formed in haste",
+                    ],
+                },
+                "copywork": [
+                    "Copy a single letter, then a short familiar word, formed slowly and exactly after the model, the careful formation itself being the lesson",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the handwriting rule and naming the three letter heights before the pencil touches the paper.",
+                "history_integration": "Tell of the scribes and copyists who, before the printing press, set down every book by hand, and whose patient, beautiful letter-forming preserved the learning of the world.",
+                "read_aloud_suggestions": [
+                    "A short account of how writing and the alphabet came to be, and of the scribes who copied books by hand, read aloud so the child meets handwriting as an old and honored craft",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A beautifully lettered alphabet book, with letterforms genuinely worth imitating, rather than a cluttered workbook",
+                ],
+                "short_lesson_flow": "Keep the lesson very short, five to ten minutes, while the hand is fresh. Show one letter, formed slowly and beautifully, and let the child study it. The child then forms that one letter a few times, with full attention, aiming for one truly fine letter rather than a row of careless ones. Stop the moment the writing begins to tire or slip.",
+                "narration_prompt": "Look at the letter you just made and the model beside it. Tell me what is the same, and what you would like to make more like the model next time.",
+                "real_world_objects": [
+                    "Lined paper suited to the child's hand and a comfortable pencil",
+                    "A chalkboard or slate for large, free letter practice",
+                    "A sand or salt tray for tracing letters with a finger",
+                ],
+                "nature_connection": "Let some handwriting practice serve the nature notebook: the child labels a drawn leaf or flower, so that careful letters do real and worthy work.",
+                "habit_focus": "The habit of best work: forming each letter as well as the child can, never letting a careless or sloppy letter pass.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The metal insets, traced and filled to steady the hand and refine pencil control before letter formation",
+                    "The sandpaper letters, for tracing each letterform with two fingers in the correct stroke order",
+                    "The movable alphabet, lined paper, and small chalkboards graded for letter practice",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the sandpaper letters: this is how we form 'm', traced in the correct stroke order; you trace 'm'; show me how 'm' is formed.",
+                    "steps": [
+                        "The child works with the metal insets, tracing the outline and filling it with even strokes, building pencil control and a relaxed grip",
+                        "The child traces the sandpaper letters with two fingers, feeling the correct stroke order until the movement is remembered",
+                        "The child carries the remembered movement to the pencil, forming the letter on the chalkboard and then on lined paper",
+                    ],
+                },
+                "control_of_error": "The sandpaper letter carries its own control: fingers that stray off the rough shape feel the smooth board at once, so the child senses an incorrect stroke without being told.",
+                "abstraction_pathway": "From the muscular control built by the metal insets, to the stroke order felt in the sandpaper letters, toward forming letters freely with the pencil on lined paper.",
+                "extensions": [
+                    "Form letters in a sand tray, in salt, or on a chalkboard before writing on paper",
+                    "Build familiar words with the movable alphabet, then write them by hand",
+                    "Practice the letters grouped by their stroke families",
+                ],
+                "observation_focus": "Watch for a relaxed tripod grip, fingers tracing the sandpaper letters in the correct order, and letters that begin to keep a consistent size upon the line.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep good pencils, varied paper, chalk, and a chalkboard within easy reach",
+                    "Leave out a sand or salt tray and textured letter cards to trace whenever the child likes",
+                    "Put the child's name, in clear letters, somewhere they can copy it",
+                ],
+                "real_world_contexts": [
+                    "Signing a drawing or a card so the artwork is truly the child's own",
+                    "Writing a name on belongings, lunch bags, and library lists",
+                    "Adding items to a shared grocery or to-do list",
+                    "Writing a short note or letter to a grandparent or friend",
+                ],
+                "conversation_starters": [
+                    "Want me to show you how this letter is built? It starts at the top.",
+                    "Which letters feel tricky to your hand? Let's practice those together.",
+                    "Your name is yours to write: shall we make it look just how you want?",
+                ],
+                "resource_bank": [
+                    "Pencils, crayons, chalk, and paper of different sizes kept handy",
+                    "A chalkboard or whiteboard for big, free letter practice",
+                    "Alphabet books and letter cards to look at and copy",
+                ],
+                "parent_role": "Write often where the child can see you, grocery lists, notes, cards, so handwriting looks like a useful thing grownups really do. When the child wants to write, show the grip and the stroke gently, offer a model, and let real purposes, a card, a label, a sign, give the practice its reason.",
+                "observation_documentation": "Over time, notice whether the grip is growing comfortable, whether more letters are formed the same way each time, and whether the child writes with greater ease for real purposes. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Letter formation reinforces letter recognition — writing a letter deepens the reading connection",
