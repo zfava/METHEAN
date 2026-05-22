@@ -2003,11 +2003,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["map of the Mediterranean world", "pictures of Roman roads, aqueducts, and the Colosseum"],
             "recommended": ["living books about ancient Rome", "building supplies for road/aqueduct models"],
-            "philosophy_specific": {
-                "classical": "Rome is core classical content. Memorize key dates, emperors, and contributions. Timeline mastery. Latin roots introduced here.",
-                "charlotte_mason": "Living books about Roman heroes and daily life. Narration of the full Roman story. Map of the Empire drawn from memory. Book of Centuries entry.",
-                "montessori": "Rome continent folder. Aqueduct building as engineering. Roman numeral work connects math and history. Cultural artifacts study.",
-            },
         },
         "time_estimates": {"first_exposure": 30, "practice_session": 20, "assessment": 15},
         "accommodations": {
@@ -2017,6 +2012,121 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Photographs of Roman ruins, roads, aqueducts. Maps showing the Empire's growth. Illustrated timelines.",
             "kinesthetic_learner": "Build Roman roads, aqueducts, and arches. Act out the Senate. Walk a Roman road pattern on the floor.",
             "auditory_learner": "Listen to the story of Rome told as a dramatic narrative. Discuss and debate Roman decisions. Roman Senate role play.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Rome grew from a small village on seven hills to an empire ruling the whole Mediterranean world. It began as a republic, where citizens elected leaders called consuls and a Senate debated the laws; later it became an empire ruled by one man, the emperor. Rome grew by conquest and was built in part by enslaved people, and it left the world roads, aqueducts, law, and lasting architecture. Today we narrate Rome from its founding through Republic, Empire, and Fall, explain republic and empire, name Rome's contributions, and see how Rome borrowed from Greece.",
+                "gradual_release": {
+                    "i_do": "Tell the story of Rome in order: the founding myth of Romulus, the Republic with its consuls and Senate, Julius Caesar and the turn to one-man rule, Augustus the first emperor, the empire spread by conquest, and the slow fall. Think aloud about the difference between a republic and an empire, and note that Rome's grandeur rested also on conquest and on enslaved labor.",
+                    "we_do": "Retell the story of Rome together, name the contributions Rome left the world, compare a republic and an empire, and trace what Rome borrowed from Greece.",
+                    "you_do": "Child narrates Rome from founding through Republic, Empire, and Fall, explains republic versus empire, names four Roman contributions, and describes how Rome borrowed from Greece.",
+                },
+                "guided_practice": [
+                    "Retell the story of Rome: founding, Republic, Empire, and Fall",
+                    "Explain the difference between a republic and an empire",
+                    "Name Roman contributions, the roads, aqueducts, law, and architecture, and trace what Rome took from Greece",
+                ],
+                "independent_practice": [
+                    "Narrate the full story of Rome from founding to fall",
+                    "Build a model Roman road or aqueduct and explain the engineering",
+                ],
+                "mastery_check": [
+                    "Narrate Rome from its founding through the Republic, the Empire, and the Fall",
+                    "Explain the difference between a republic and an empire",
+                    "Name at least four Roman contributions and describe how Rome borrowed from Greece",
+                ],
+                "spiral_review": [
+                    "Revisit ancient Greece, and set Rome beside it on the timeline, the heir that borrowed and built on what Greece began",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Rome is one of the grandest stories in all of history: a village that became an empire ruling the known world. It began as a republic, where citizens chose their leaders, and became an empire under one ruler. Rome was a borrower of genius, taking the gods, the art, and the philosophy of Greece and adding its own: the road, the aqueduct, the law, the legion. Its empire was won by conquest and worked in part by the enslaved, and its long rise and fall is a lesson that no power, however great, endures forever.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the ages of Rome: the founding, the Republic, the Empire, and the Fall",
+                        "Chant the gifts of Rome: the roads, the aqueducts, the law, and the lasting architecture",
+                    ],
+                    "recitations": [
+                        "Recite that a republic is ruled by leaders the citizens elect, and an empire by one ruler with supreme power",
+                        "Recite that Rome borrowed much from Greece, and that the fall of Rome shows that no empire lasts forever",
+                    ],
+                },
+                "copywork": [
+                    "Copy the four ages of Rome and the Roman numerals, and a Latin word or two with the English words descended from it",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the ages of Rome and narrating yesterday's portion of the story before adding the next.",
+                "history_integration": "Place Rome on the chronological spine directly after Greece, and mark it as the great bridge of the spine: it carried the inheritance of Greece across a thousand years and handed it, when it fell, to the Europe that came after.",
+                "read_aloud_suggestions": [
+                    "A living account of the story of Rome, the founding, the Republic, the Caesars, and the fall, read aloud for narration",
+                    "A children's retelling of a Roman tale, of a soldier, a senator, or a citizen, read aloud so the child meets the age through a story",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautifully told living book about the story of Rome, written with knowledge and wonder, never a dry textbook",
+                    "A living book of Roman daily life, seen through the eyes of a child or a soldier of the time",
+                ],
+                "short_lesson_flow": "Read a portion of the story of Rome aloud, told with all its drama, and let the child narrate it back. The child may build a Roman road or arch, or draw the empire's reach onto a map in the Book of Centuries. Let the long story unfold portion by portion. Be honest about conquest and the enslaved, and let the child consider it. Stop while interest holds.",
+                "narration_prompt": "Tell me the part of the Roman story we just heard. How did Rome change as it grew?",
+                "real_world_objects": [
+                    "A living book about ancient Rome",
+                    "Materials for building a model Roman road, arch, or aqueduct",
+                    "A map of the Mediterranean for the empire's reach, and a Book of Centuries",
+                    "Pictures of real Roman roads, aqueducts, and the Colosseum",
+                ],
+                "nature_connection": "Consider how Roman engineers worked with nature rather than against it: aqueducts carried water downhill by the gentlest of slopes for many miles, the steady pull of gravity harnessed by careful observation.",
+                "habit_focus": "The habit of attention: following the long story of Rome closely enough to narrate its rise and its fall, and weighing its grandeur and its hardness with a fair mind.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A Rome folder in the continent collection, with photographs and fact cards",
+                    "Materials for building a Roman road, arch, and aqueduct",
+                    "Roman numeral materials connecting math and history",
+                    "A timeline of Rome with movable cards for the Republic, the Empire, and the Fall",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the timeline cards: this is the Republic, when citizens elected their leaders; show me the Republic; which age of Rome is this?",
+                    "steps": [
+                        "The child explores the Rome folder and locates Rome and the Mediterranean on the map",
+                        "The child builds a Roman road, arch, or aqueduct, the hands learning the engineering",
+                        "The child sets the ages of Rome on the timeline and traces what Rome borrowed from Greece",
+                    ],
+                },
+                "control_of_error": "The aqueduct built with too steep or too flat a slope will not carry its water, an exact engineering control; the fact cards and timeline confirm the rest, matching and ordering in one true way.",
+                "abstraction_pathway": "From handling the concrete Rome folder and building the real engineering, to ordering the ages of Rome on the timeline, toward narrating the whole story of Rome and grasping the difference between a republic and an empire.",
+                "extensions": [
+                    "Compare the Roman Republic with the government of the child's own country",
+                    "Investigate how Rome's roads and aqueducts were engineered",
+                    "Trace what Rome borrowed from Greece and what it added of its own",
+                ],
+                "observation_focus": "Watch for the child grasping the turn from republic to empire, and seeing Rome whole, its engineering and its law alongside its conquest and its enslaved.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep illustrated books about ancient Rome within reach",
+                    "Leave out building materials for Roman roads, arches, and aqueducts",
+                    "Have documentaries and films about Rome, the Caesars, and the Colosseum available",
+                ],
+                "real_world_contexts": [
+                    "Noticing Roman numerals on clocks, in book chapters, and at the end of films",
+                    "Hearing the Latin roots inside everyday English words",
+                    "Visiting a museum with Roman artifacts, or seeing photographs of Roman ruins still standing",
+                    "Wondering, while reading or watching, how a small city came to rule a whole sea",
+                ],
+                "conversation_starters": [
+                    "Rome changed from a republic, where citizens chose their leaders, to an empire under one ruler; why might a people give that up?",
+                    "Roman roads still exist after two thousand years; what does that tell you about how they were built?",
+                    "Rome grew rich and great, partly through conquest and the work of enslaved people; how do you hold those two things together?",
+                ],
+                "resource_bank": [
+                    "Illustrated books and documentaries about ancient Rome",
+                    "Building materials for Roman roads, arches, and aqueducts",
+                    "Museums with Roman artifacts",
+                ],
+                "parent_role": "Follow the child's interest in Rome, the engineering, the Caesars, the legions, into books, documentaries, and building, and wonder aloud at how Rome rose and why it fell. Tell the hard parts honestly, the conquest, the enslaved, the games, and let the child reason about them rather than handing them a verdict.",
+                "observation_documentation": "Over time, note whether the child can narrate the story of Rome, tell a republic from an empire, name Rome's contributions, and see both Rome's achievements and its hard truths. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Latin is the root of many English words. Roman mythology (borrowed from Greece) appears throughout Western literature.",
