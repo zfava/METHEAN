@@ -1457,11 +1457,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "materials for homemade weather station (jar for rain gauge, straw/pencil for wind vane)",
                 "cloud identification chart",
             ],
-            "philosophy_specific": {
-                "classical": "Systematic daily recording. Memorize cloud types and weather vocabulary. Structured observation logs with correct terminology.",
-                "charlotte_mason": "Daily weather observation is a cornerstone of Charlotte Mason nature study. The child records weather in their nature notebook alongside seasonal observations. Weather calendar posted in the learning space.",
-                "montessori": "Weather station as practical life: the child checks instruments, records data, and reports to the family. Weather cards for classification. Hands-on instrument building.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 10, "assessment": 10},
         "accommodations": {
@@ -1471,6 +1466,118 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Cloud identification charts with photographs. Weather symbols. Graphing temperature data over time.",
             "kinesthetic_learner": "Build weather instruments. Go outside for every observation. Feel the wind, catch rain, hold a thermometer.",
             "auditory_learner": "Oral weather reports: 'Today's weather is...' Listen to weather forecasts and compare to own observations.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Weather is science a child can do every day simply by stepping outside. Is it sunny or cloudy, warm or cold, windy or still, wet or dry? Today we observe and record the daily weather, temperature, clouds, wind, and precipitation, in a journal; we learn to name three cloud types, cumulus, stratus, and cirrus; we use simple instruments like a thermometer and a wind vane; and over two weeks we look for patterns in our data.",
+                "gradual_release": {
+                    "i_do": "Step outside and observe the weather aloud: I read the thermometer, I name the puffy clouds as cumulus, I watch a tossed leaf to find the wind's direction, I note that it is dry. Record each in the journal. Show how, after several days, the recorded numbers begin to show a pattern.",
+                    "we_do": "Observe and record the weather together each day, reading the thermometer, naming the clouds, judging the wind, and after a week looking over the journal for patterns.",
+                    "you_do": "Child observes and records the daily weather, identifies cloud types, uses simple instruments, and describes the patterns in their data.",
+                },
+                "guided_practice": [
+                    "Record the day's temperature, clouds, wind, and precipitation in a weather journal",
+                    "Identify cumulus, stratus, and cirrus clouds in the sky",
+                    "Read a thermometer and find the wind's direction with a vane or a tossed leaf",
+                ],
+                "independent_practice": [
+                    "Keep a daily weather journal with data and drawings for two weeks",
+                    "Examine the two weeks of data and describe the patterns and trends",
+                ],
+                "mastery_check": [
+                    "Record daily weather observations consistently for at least two weeks",
+                    "Identify the three basic cloud types correctly",
+                    "Describe patterns in the recorded weather data",
+                ],
+                "spiral_review": [
+                    "Revisit recording observations in a notebook and reading measurements, the daily habits weather study depends on",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The sky is a book that turns its page every day, and weather is the reading of it. For all of history people have watched the heavens to know what was coming, and the patient watcher learns that the weather is not mere chance but moves in patterns that may be observed, recorded, and even foretold. To keep a weather journal is to do what the first meteorologists did.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the three cloud types: cumulus the puffy, stratus the layered, cirrus the wispy",
+                        "Chant the four things to record: the temperature, the clouds, the wind, and the rain",
+                    ],
+                    "recitations": [
+                        "Recite that weather is the sky on a single day, while climate is the pattern of many years, and that the watcher learns the difference",
+                    ],
+                },
+                "copywork": [
+                    "Copy the names of the three cloud types, each with a few words of description, and the weather words: temperature, precipitation, forecast",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the cloud types and the four things to record before the day's observation.",
+                "history_integration": "Tell that weather has shaped the whole story of mankind, that droughts brought famine, storms scattered fleets, and hard winters turned back armies, and that people have watched and recorded the sky since the most ancient times.",
+                "read_aloud_suggestions": [
+                    "A vivid account of a storm, a season, or a sky, read aloud so the child hears weather described with care and wonder",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A beautifully illustrated book about clouds, the sky, and the seasons, with true artwork and never a workbook",
+                ],
+                "short_lesson_flow": "Step outside together each morning, just for a few minutes, and simply attend to the weather: look up at the clouds, feel the wind and the warmth, notice the wet or the dry. The child records it in the nature notebook, often with a drawing of the sky. Day after day, the journal fills, and the patterns reveal themselves. Keep it brief and faithful.",
+                "narration_prompt": "Tell me about today's weather. What kind of clouds are in the sky, and how is the day different from yesterday?",
+                "real_world_objects": [
+                    "A nature notebook for the daily weather record",
+                    "An outdoor thermometer read at the same hour each day",
+                    "A flag, a windsock, or a tossed leaf for the wind",
+                    "The sky itself, the day's true subject",
+                ],
+                "nature_connection": "Daily weather observation is a cornerstone of nature study: the child records the weather in the nature notebook beside the seasonal changes, and learns to read the sky as part of knowing the living world around them.",
+                "habit_focus": "The habit of faithful attention: stepping out each day to observe the sky truly and record it without fail.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A weather station with an outdoor thermometer, a wind vane, and a rain gauge, some of them child-built",
+                    "Cloud classification cards with photographs",
+                    "A daily weather chart and a weather journal",
+                    "Weather symbol cards for recording conditions",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the cloud cards: these puffy clouds are cumulus; show me the cumulus clouds; which kind of cloud is this?",
+                    "steps": [
+                        "The child goes out to the weather station and reads the thermometer, the wind vane, and the rain gauge",
+                        "The child observes the sky and matches the clouds to the classification cards",
+                        "The child records the day's weather in the journal and, over time, reads the chart for patterns",
+                    ],
+                },
+                "control_of_error": "The instruments are the control: the thermometer gives one true reading, the rain gauge one true level, and the cloud cards match the sky in one way, so a careless record can be checked against the instrument and corrected.",
+                "abstraction_pathway": "From reading concrete instruments and matching cloud cards each day, to gathering the daily records into a chart, toward seeing the patterns in the data and predicting from them.",
+                "extensions": [
+                    "Build more weather instruments: a barometer, a windsock",
+                    "Graph the temperature data over the weeks",
+                    "Compare the home observations with the official forecast",
+                ],
+                "observation_focus": "Watch for the child observing and recording faithfully each day, reading the instruments accurately, and beginning to see the patterns in the gathered data.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep an outdoor thermometer, a journal, and materials for building weather instruments available",
+                    "Leave out a cloud chart and books about weather and the sky",
+                    "Let weather-watching belong to the daily rhythm of going outside",
+                ],
+                "real_world_contexts": [
+                    "Checking the weather to decide what to wear and what to do each day",
+                    "Watching a storm roll in, or the clouds change, and wondering what comes next",
+                    "Building a rain gauge or wind vane and checking it after a storm",
+                    "Comparing the family's own weather-watching with the forecast on a screen",
+                ],
+                "conversation_starters": [
+                    "What is the weather doing today? How is it different from yesterday?",
+                    "Look at those clouds, what do you think they will bring?",
+                    "We have watched the weather all week, what pattern do you notice?",
+                ],
+                "resource_bank": [
+                    "A thermometer, a journal, and simple weather instruments",
+                    "Cloud charts and books about weather",
+                    "The sky itself, free and changing every day",
+                ],
+                "parent_role": "Let weather-watching be part of ordinary days, dressing for it, planning around it, marveling at a storm, and wonder aloud about clouds, wind, and what tomorrow may bring. Build a rain gauge together if the child is keen, and let the real, changing sky, rather than a worksheet, be the teacher.",
+                "observation_documentation": "Over time, note whether the child observes and records the weather, names the cloud types, uses simple instruments, and notices the patterns over days and weeks. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Weather vocabulary builds scientific literacy: precipitation, temperature, cumulus, barometric, forecast",
