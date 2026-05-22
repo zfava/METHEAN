@@ -1889,10 +1889,114 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Chant vowel team sounds: 'ai says /ā/, ay says /ā/.' Read vowel team words aloud in pairs.",
         },
         "philosophy_specific": {
-            "classical": "Systematic instruction: master one vowel team pair before introducing the next. Daily phonogram drill cards for ai, ay, ee, ea, oa, ow.",
-            "charlotte_mason": "Discover vowel teams in living books during read-alouds. Point them out naturally. Keep explicit lessons short (10 minutes).",
-            "montessori": "Phonogram cards with matching objects: 'rain' with a toy raindrop, 'boat' with a toy boat. Green series word lists.",
-            "traditional": "Vowel team worksheets with word families. Fill-in-the-vowel-team exercises.",
+            "traditional": {
+                "introduction": "Vowel teams are two vowels that work together to make one sound. The old rhyme, when two vowels go walking the first one does the talking, holds for many of them: ai and ay say long a, ee and ea often say long e, oa says long o. Today we read and spell words with the common vowel teams.",
+                "gradual_release": {
+                    "i_do": "Model building rain and play with letter tiles, naming the team and its sound each time, and pointing out that ay usually comes at a word's end while ai sits in the middle.",
+                    "we_do": "Sort ai and ay words together, then ee and ea, then oa and ow. Build and read vowel-team words together, and spell one from dictation, choosing the right team.",
+                    "you_do": "Child reads vowel-team words, names the team and its sound, spells vowel-team words from dictation, and applies the generalization that the first vowel usually says its name.",
+                },
+                "guided_practice": [
+                    "Vowel-team sorting: sort word cards into ai, ay, ee, ea, oa, ow piles",
+                    "Word building with letter tiles, swapping vowel teams to see what changes",
+                    "Identify the vowel team and its sound within a written word",
+                ],
+                "independent_practice": [
+                    "Read vowel-team words in sentences and short passages",
+                    "Spell vowel-team words from dictation, choosing the correct team",
+                ],
+                "mastery_check": [
+                    "Read words with the common vowel teams accurately",
+                    "Identify the vowel team and its sound in a word",
+                    "Spell vowel-team words from dictation and state the first-vowel generalization",
+                ],
+                "spiral_review": [
+                    "Revisit the silent-e long vowels alongside the vowel teams so the two ways of spelling a long vowel stay distinct",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "There is more than one way to spell a long vowel. The vowel teams are pairs of vowels that walk together so that the first one may speak. Learn the teams in their order, one pair mastered before the next, and a wide class of words opens to be read.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the old rhyme as the rule: when two vowels go walking, the first one does the talking",
+                        "Chant each team with its sound: ai says long a, ay says long a, ee says long e, oa says long o",
+                        "Chant word sets gathered by their vowel team",
+                    ],
+                    "recitations": [
+                        "Recite the vowel teams and their sounds in order, mastering one pair before the next is added",
+                    ],
+                },
+                "copywork": [
+                    "Copy vowel-team words neatly in their family groups while reading them, so the team is written as carefully as it is read",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the rhyme and the teams learned so far before adding the next pair; the work is cumulative and never assumed.",
+                "history_integration": "Tell, simply, that English keeps several spellings for one sound because it gathered its words from many older languages; the vowel teams are a piece of that long inheritance.",
+                "read_aloud_suggestions": [
+                    "A rich read-aloud for the ear, and readers that bring vowel-team words into real sentences",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "The family's current living read-aloud and simple readers in which vowel-team words appear in real, worthy sentences",
+                ],
+                "short_lesson_flow": "In a book read together, meet a word that holds a vowel team. Notice the two vowels walking side by side and the single sound they make together. Attend to one team, gently, and stop while the child is still interested.",
+                "narration_prompt": "Tell me the two vowels you found walking together, and the one sound they made.",
+                "real_world_objects": [
+                    "Vowel-team words on signs and in the names of people and places",
+                    "Weather words such as rain, hail, snow, and sleet",
+                    "Nature words such as leaf, stream, toad, oak, and seed",
+                ],
+                "nature_connection": "On a nature walk, find vowel-team words for things that are seen, leaf, stream, toad, oak, and write one of them in the nature notebook.",
+                "habit_focus": "The habit of careful looking: seeing two vowels together as one team that makes one sound, rather than sounding each vowel apart.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The green series phonogram cards for ai, ay, ee, ea, oa, and ow, each with matching objects or pictures",
+                    "The large movable alphabet for building vowel-team words",
+                    "Phonogram folders, one for each vowel team, holding its word cards",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a phonogram and a word: this team, ai, says long a; show me a word with ai; what does this team say? The phonogram handled, sounded, and read.",
+                    "steps": [
+                        "Introduce a phonogram, such as ai, with the sound it makes",
+                        "Build words with the movable alphabet that use the phonogram, and read them",
+                        "Match the green series phonogram word cards to their objects, sounding each team out to check",
+                    ],
+                },
+                "control_of_error": "The green series object and card pairs, and the phonogram folders, carry a control, so a misread or a wrong sort reveals itself to the child without an adult's verdict.",
+                "abstraction_pathway": "From handling the phonogram and building words with it (the team made physical in the hand), to reading the green series cards, toward reading and spelling vowel-team words in any text.",
+                "extensions": [
+                    "Work through a phonogram folder for each vowel team and read green series phrases",
+                    "Sort words by their vowel team with the materials",
+                ],
+                "observation_focus": "Watch for the child reading a vowel team as a single sound, and choosing the right team when spelling a word.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep letter tiles within reach for free word building with vowel teams",
+                    "Leave readers that use vowel-team words on a low shelf",
+                    "Let vowel-team words show up naturally on a weather chart or on nature labels at child height",
+                ],
+                "real_world_contexts": [
+                    "Vowel-team words met in everyday life: rain, day, tree, road, snow, play",
+                    "Reading recipe and weather words such as beat, cream, hail, and breeze",
+                    "Nature words during outdoor time: leaf, stream, toad, snail, oak, seed",
+                    "Reading vowel-team words in loved books",
+                ],
+                "conversation_starters": [
+                    "There are two vowels next to each other in rain. Which vowel sound do you hear?",
+                    "What sound do these two vowels make when they are together?",
+                    "Can you find two vowel letters sitting side by side in this word?",
+                ],
+                "resource_bank": [
+                    "Magnetic letters and letter tiles",
+                    "Readers that include vowel-team words, kept available",
+                    "Word-building games",
+                ],
+                "parent_role": "When a vowel-team word comes up in real reading, point out the team and the sound it makes, and follow the words the child cares about. Let real reading attempts do the teaching rather than a drill.",
+                "observation_documentation": "Over time, note whether the child reads the common vowel teams, identifies the team and its sound, spells vowel-team words, and is beginning to use the generalization that the first vowel usually talks. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Pairs of vowels making one sound is like pairs of digits making one number (tens and ones)",
