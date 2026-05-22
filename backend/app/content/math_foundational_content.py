@@ -5950,10 +5950,114 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Think-alouds: verbalize every step. Partner sharing.",
         },
         "philosophy_specific": {
-            "classical": "Name each strategy. Practice each systematically before mixing.",
-            "charlotte_mason": "Daily warm-up. Short, focused, oral mathematics.",
-            "montessori": "Mental math from extensive concrete work. Abstraction follows.",
-            "traditional": "Strategy sheets. Timed mental math challenges.",
+            "traditional": {
+                "introduction": "Mental math is solving in the head, with no pencil and no fingers. It is not a race; it rests on strategies. There are several: counting on from the larger number, making ten, using a known doubles fact, and breaking a number apart. A strong mental mathematician does not only know the answer, they know how they found it and can choose the best way. Today we name and use these strategies, choose the one that fits each problem, and explain our thinking.",
+                "gradual_release": {
+                    "i_do": "Solve a problem aloud each way: for 8 plus 7, make ten, 8 and 2 is 10, then 5 more is 15, or use doubles, 7 and 7 is 14, one more is 15. For 14 minus 6, think addition: 6 and what makes 14. Name each strategy as I use it.",
+                    "we_do": "Solve addition and subtraction problems within twenty in our heads together, naming the strategy each time, and talking about which strategy fits best.",
+                    "you_do": "Child solves addition and subtraction within twenty mentally, chooses an appropriate strategy, and explains the strategy used.",
+                },
+                "guided_practice": [
+                    "Practice each strategy in turn: counting on, making ten, doubles, breaking apart",
+                    "Match problems to the strategy that suits them best",
+                    "Solve a problem and say aloud, I solved it by",
+                ],
+                "independent_practice": [
+                    "Solve a mixed set of problems mentally, naming the strategy for each",
+                    "Solve one problem two different ways and compare the strategies",
+                ],
+                "mastery_check": [
+                    "Solve addition and subtraction within twenty mentally, using a named strategy",
+                    "Choose a strategy that fits the particular problem",
+                    "Explain the strategy used clearly",
+                ],
+                "spiral_review": [
+                    "Revisit the make-ten facts and doubles facts, the known facts the strategies build upon",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The mind itself is the first and best instrument of arithmetic. To reckon in the head is no mere trick of speed; it is the having of strategies and the choosing well among them. Counting on, making ten, calling on a known double, breaking a number apart: these are the tools of mental reckoning, and the trained mind knows each, and knows which to take up for the task at hand.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the four strategies: count on, make ten, use a double, break apart",
+                        "Chant the make-ten and doubles facts daily, the known facts on which mental reckoning stands",
+                    ],
+                    "recitations": [
+                        "Recite that mental math is not speed but strategy, and that the reckoner must know how the answer was found",
+                    ],
+                },
+                "copywork": [
+                    "Copy the names of the four mental strategies, and beside each a problem it suits",
+                ],
+                "recitation_routine": "Begin each lesson with a short oral warm-up: a few problems solved in the head, each with its strategy named, the known facts rehearsed cumulatively.",
+                "history_integration": "Tell that before there was paper to spare or any machine to reckon, all arithmetic was done in the head or aloud, and that merchants, builders, and navigators carried their sums in the mind, as the trained reckoner still can.",
+                "read_aloud_suggestions": [
+                    "A story in which a character must reckon something quickly in their head, read aloud so the child hears mental arithmetic put to use",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A beautifully illustrated story in which a character works something out in their head, with real artwork and never a worksheet",
+                ],
+                "short_lesson_flow": "Begin the morning with a few minutes of oral, mental arithmetic, calm and unhurried. Pose a problem; let the child solve it in their head and tell not only the answer but how they found it. A few problems are plenty. Stop while the mind is still fresh and willing.",
+                "narration_prompt": "Tell me how you worked that out in your head. Which way did you choose, and why was it the good way?",
+                "real_world_objects": [
+                    "No materials at all, for mental math is done in the head",
+                    "The real small sums of the day, prices, scores, minutes, worked out aloud",
+                    "A quiet moment at the start of the day kept for oral reckoning",
+                ],
+                "nature_connection": "On a walk, pose small real sums in the head, how many birds if three more join the five, how many petals on two flowers, and let the child reckon them aloud in the open air.",
+                "habit_focus": "The habit of mental effort: holding numbers in the mind and working with them there, without reaching for pencil or fingers.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "No new material, the child draws on long work with the bead bars, the golden beads, and the strip boards",
+                    "Strategy reference cards naming counting on, making ten, doubles, and breaking apart",
+                    "Problem cards the child may choose and solve in the head",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the strategy cards: this strategy is making ten, this is using a double; show me the making-ten strategy; which strategy is this?",
+                    "steps": [
+                        "The child solves a problem in the head, having met the quantities long before in the concrete materials",
+                        "The child names the strategy used: counting on, making ten, a double, or breaking apart",
+                        "The child meets a new problem and chooses the strategy that best fits it",
+                    ],
+                },
+                "control_of_error": "The long concrete work is the control: a child who has built these quantities many times with the beads carries an inner sense of them, and a mental answer that does not feel right is checked back against the known facts and the materials.",
+                "abstraction_pathway": "From building every quantity with the concrete materials, to picturing those materials in the mind, toward reckoning addition and subtraction with no material and no picture, by strategy alone.",
+                "extensions": [
+                    "Solve a problem by two different strategies and compare them",
+                    "Take up mental math with larger, two-digit quantities",
+                    "Hold a number talk, sharing different strategies for one problem",
+                ],
+                "observation_focus": "Watch for the child reckoning without reaching for the materials or fingers, choosing a strategy that fits, and able to say how the answer was found.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Pose small math puzzles aloud as part of ordinary talk",
+                    "Keep games that call for quick scoring and adding within reach",
+                    "Let the child be the one to work out real sums: the change, the total, the score",
+                ],
+                "real_world_contexts": [
+                    "Adding up prices in the head while shopping",
+                    "Working out the change from a purchase",
+                    "Keeping a running score in a game without paper",
+                    "Figuring how many minutes until something, or how many of something are needed",
+                ],
+                "conversation_starters": [
+                    "How could you work that out in your head?",
+                    "You got the answer fast, how did you do it? Tell me your way.",
+                    "Is there another way you could have figured that out?",
+                ],
+                "resource_bank": [
+                    "Games that involve scoring and quick adding",
+                    "The countless real sums of shopping, cooking, and daily life",
+                    "An adult who thinks aloud through their own mental math",
+                ],
+                "parent_role": "Do your own mental math out loud so the child hears that there are many ways to reach an answer, and pose small real sums as a natural part of talk. Ask how the child worked it out, with genuine interest, and never push for speed over understanding.",
+                "observation_documentation": "Over time, note whether the child solves small sums in the head, draws on strategies like making ten and doubles, and can say how the answer was reached. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Mental math while reading: estimating pages",
