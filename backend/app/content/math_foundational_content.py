@@ -2490,10 +2490,114 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Say: 'Seven tens is more than four tens. Seventy-four is greater.'",
         },
         "philosophy_specific": {
-            "classical": "Memorize rules: compare tens first, then ones. Systematic drill.",
-            "charlotte_mason": "Compare real quantities: which bag has more? Real before abstract.",
-            "montessori": "Greater than/less than with golden bead material.",
-            "traditional": "Comparison worksheets with >, <, = exercises.",
+            "traditional": {
+                "introduction": "Comparing answers the question, which is more. We set two groups side by side. For two-digit numbers we compare the tens first, and only if the tens are equal do we compare the ones. Today we use the symbols for greater than, less than, and equal to, and we order numbers from least to greatest.",
+                "gradual_release": {
+                    "i_do": "Model with two groups of objects, matching them one to one to see which has more. Write the comparison with the symbol, its open side facing the larger number. Build 34 and 43 with base-ten blocks and compare the tens first.",
+                    "we_do": "Compare numbers together, placing the greater-than, less-than, or equal sign. Build both numbers and compare them, and order three numbers from least to greatest together.",
+                    "you_do": "Child compares any two numbers within one hundred, places the correct symbol, explains the comparison using place value, and orders five numbers from least to greatest.",
+                },
+                "guided_practice": [
+                    "Comparison war: each player turns a card, the higher number wins",
+                    "Build both numbers with blocks and compare the tens, then the ones",
+                    "Place the greater-than, less-than, or equal sign between number pairs",
+                ],
+                "independent_practice": [
+                    "Order sets of numbers from least to greatest",
+                    "Comparison practice pages with the three symbols",
+                ],
+                "mastery_check": [
+                    "Correctly compare any two numbers within one hundred",
+                    "Explain a comparison using place value",
+                    "Order five numbers from least to greatest",
+                ],
+                "spiral_review": [
+                    "Revisit tens and ones place value before harder two-digit comparisons",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Numbers stand in an unbroken order, each one greater than the one before it. To compare two numbers is to find their places in that order. Learn the rule, compare the tens first and then the ones, and any two numbers can be set rightly side by side.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the rule of comparing: compare the tens first; if the tens are equal, compare the ones",
+                        "Chant the count, so the order of the numbers is sure and ready",
+                        "Chant the sign rule: the open side of the sign faces the greater number",
+                    ],
+                    "recitations": [
+                        "Recite the rule of comparing, and read comparisons aloud, such as forty-five is less than fifty-four",
+                    ],
+                },
+                "copywork": [
+                    "Copy comparisons neatly with their symbols, such as 45 < 54, and copy short lists set in order from least to greatest",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the rule of comparing and the count before new comparisons; the rule is rehearsed cumulatively, never assumed.",
+                "history_integration": "Order the years of events along a timeline from earliest to latest, applying least-to-greatest to the chronological spine.",
+                "read_aloud_suggestions": [
+                    "A well-told story in which things are measured, weighed, and compared, read aloud for its language",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 12,
+                "living_book_suggestions": [
+                    "A beautifully illustrated picture book in which amounts of real things are compared, chosen for lovely artwork and never a busy workbook",
+                ],
+                "short_lesson_flow": "Set out two groups of real things, two bags or two baskets. Ask the child which has more, and let them tell you how they know. Introduce the words greater and less as they are needed. Compare one or two pairs, calmly, and stop while interest is high.",
+                "narration_prompt": "Tell me which group had more, and how you knew it was the greater one.",
+                "real_world_objects": [
+                    "Two bags or baskets of objects set side by side",
+                    "Two stacks of coins compared",
+                    "Two groups of nature finds gathered on a walk",
+                ],
+                "nature_connection": "Gather two nature collections, compare them to see which holds more, and set three or four collections in order from least to greatest; record the comparison in the nature notebook.",
+                "habit_focus": "The habit of fair and careful judgment: looking truly to see which is the greater rather than guessing at a glance.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The golden bead material for building two quantities side by side",
+                    "The large numeral cards",
+                    "A small set of comparison symbol cards for greater than, less than, and equal to",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With two built quantities: this is the greater; show me the greater; which of these is greater? Always with the quantities in view.",
+                    "steps": [
+                        "Build two two-digit quantities with golden beads, set side by side",
+                        "Compare the tens first and then the ones, and lay the symbol card between them so its open side faces the greater quantity",
+                        "Order three or more built quantities from least to greatest",
+                    ],
+                },
+                "control_of_error": "The bead quantities are concrete and fully visible, so a wrong comparison shows itself plainly when the two quantities stand side by side.",
+                "abstraction_pathway": "From comparing the bead quantities (which is more, seen and felt), to comparing the numeral cards by their places, toward comparing written numbers with no material at all.",
+                "extensions": [
+                    "Order longer sets of built numbers from least to greatest",
+                    "Compare numbers all the way to ninety-nine",
+                ],
+                "observation_focus": "Watch for the child comparing the tens first by choice, and for free, repeated work with the comparing material.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave a deck of cards within reach for a comparison war game",
+                    "Keep two jars or collections side by side, inviting a which-has-more question",
+                    "Set out board games whose scores are compared at the end",
+                ],
+                "real_world_contexts": [
+                    "Comparing ages, heights, and shoe sizes in the family",
+                    "Comparing prices while shopping",
+                    "Comparing game scores to see who is ahead",
+                    "Lining up collections and asking which group is the largest",
+                ],
+                "conversation_starters": [
+                    "Which pile do you think has more? How could we be sure?",
+                    "Is thirty-four more or less than forty-three? How can you tell?",
+                    "Who has the higher score so far?",
+                ],
+                "resource_bank": [
+                    "A deck of cards for comparison games",
+                    "Board games with scores to compare",
+                    "Number picture books on a low shelf",
+                ],
+                "parent_role": "Compare and order things aloud wherever it arises in real life, prices, ages, scores, and ask genuine which-is-more questions. Talk about looking at the tens first when two-digit numbers come up, and let games and real comparisons do the teaching.",
+                "observation_documentation": "Over time, note whether the child compares two numbers accurately, looks at the tens first for two-digit numbers, uses the comparison symbols, and can put a set of numbers in order. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Comparing word lengths or page counts",
