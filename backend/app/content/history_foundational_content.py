@@ -140,11 +140,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["long strip of paper for timeline", "family photos or drawings of key events"],
             "recommended": ["timeline cards with historical events", "Book of Centuries notebook"],
-            "philosophy_specific": {
-                "classical": "Timeline cards with key dates chanted as memory work. Wall timeline that grows throughout the year. Memorize major era names.",
-                "charlotte_mason": "Century book begun: the child draws and writes entries for their own life and historical events studied. Timeline as a living, growing document.",
-                "montessori": "Timeline of life: the long black strip showing Earth's history. Personal timeline with movable event cards. Concrete to abstract progression.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -154,6 +149,117 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Color-coded timeline with different colors for different eras. Illustrated events. Large wall display.",
             "kinesthetic_learner": "Floor timeline you can walk along. Movable event cards. Build timeline with blocks or LEGOs.",
             "auditory_learner": "Narrate the timeline aloud as you build it. Family storytelling sessions. Chant era names in order.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "History is the story of people who came before us, and it begins with time itself. Things happen in order: some long ago, some recently, some yet to come. Before a child can study ancient Egypt or any far-off age, they must grasp that events fall in sequence, past, present, and future. Today we build a personal timeline of the child's own life, place events in their true order, and use the words of time: yesterday, last year, long ago, before, after, ancient.",
+                "gradual_release": {
+                    "i_do": "Lay out a few family photos and think aloud, sorting them by when they happened: this was first, this came after. Mark a strip of paper, birth on the left, today on the right, and place events along it. Use the words of time plainly: this was long ago, this was recent.",
+                    "we_do": "Build a personal timeline together: gather the child's life events, decide the order of each, place them on the strip, and name each with the right word of time.",
+                    "you_do": "Child builds a personal timeline of at least eight events, places events in correct chronological order, and uses time vocabulary accurately.",
+                },
+                "guided_practice": [
+                    "Sort family photos or event cards by when each happened",
+                    "Place events on a timeline strip from long ago on the left to today on the right",
+                    "Use the words of time, before and after, long ago and recently, in describing events",
+                ],
+                "independent_practice": [
+                    "Build a personal timeline of eight or more events from the child's own life",
+                    "Place a set of historical events in order on a longer timeline",
+                ],
+                "mastery_check": [
+                    "Build a personal timeline with at least eight events from the child's life",
+                    "Place events in correct chronological order on a timeline",
+                    "Use past, present, and future and the words of time accurately",
+                ],
+                "spiral_review": [
+                    "Revisit ordering the events of a single day, the smallest timeline, before working with longer spans",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "All of history is laid upon one foundation: time, and the order of events within it. Before the child can be told the story of any age, they must hold the great truth that events fall in sequence, the one before, the next after, stretching from the ancient past, through the present moment, toward the future. The timeline is the spine on which every later story of history will be hung.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the order of time: the past behind, the present now, the future yet to come",
+                        "Chant the words of time: long ago and ancient, before and after, yesterday and last year",
+                    ],
+                    "recitations": [
+                        "Recite that events fall in sequence, each in its own place, and that the timeline runs from long ago on the left to today on the right",
+                    ],
+                },
+                "copywork": [
+                    "Copy the words of time, before and after, long ago and ancient, and a few dated events set in their order",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the order of time and the words of time before any new work, so the foundation is rehearsed before the building.",
+                "history_integration": "This is the first stone of the chronological spine itself: the personal timeline the child builds now will grow, year by year, to hold the pyramids, the empires, and the whole story of humankind, each event placed in its true and ordered spot.",
+                "read_aloud_suggestions": [
+                    "A story that moves clearly through time, from a character's early days to later ones, read aloud so the child hears events fall in order",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated book that follows a life or a family across the years, with true artwork, the kind that makes the passage of time felt",
+                ],
+                "short_lesson_flow": "Gather real family photographs and look through them together, unhurried, wondering when each one happened and what came before and after. Begin a Book of Centuries or a simple timeline, and let the child add an event of their own life, drawn in their own hand. A few minutes is enough; the timeline grows slowly, over the years.",
+                "narration_prompt": "Tell me about your life so far, in order. What happened first, what came after, and what is happening now?",
+                "real_world_objects": [
+                    "Real family photographs, sorted and ordered",
+                    "A Book of Centuries or a long timeline strip the child adds to over time",
+                    "A calendar and the turning seasons, time felt in the living year",
+                ],
+                "nature_connection": "The seasons are a timeline the child can watch: last winter's snowman, this spring's buds, the summer to come, the year itself teaching that events fall in order and time moves on.",
+                "habit_focus": "The habit of attention: noticing the order in which things happen, in a day, a year, and a life.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A long timeline strip, the personal timeline, with movable event cards",
+                    "Family photographs the child orders by hand",
+                    "The Montessori timeline of life, the long strip showing Earth's vast history",
+                    "Cards of time vocabulary: before, after, long ago, ancient",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the event cards on the timeline: this event came before, this one after; show me the event that came before; did this event come before or after?",
+                    "steps": [
+                        "The child handles real photographs and event cards and orders them by when each happened",
+                        "The child places the ordered events along the personal timeline strip, left to right",
+                        "The child names each event with the right word of time and may set their life against the long timeline of life",
+                    ],
+                },
+                "control_of_error": "The true order of events is the control: the child checks each placement against what really happened, and an event set out of order is felt at once to be wrong, for a baby cannot crawl after they walk.",
+                "abstraction_pathway": "From handling and ordering concrete photographs and event cards, to placing them on the timeline strip, toward grasping time as an ordered line stretching far beyond the child's own life.",
+                "extensions": [
+                    "Extend the timeline back before the child's birth, to parents and grandparents",
+                    "Place historical events on a longer timeline",
+                    "Work with the timeline of life and the vastness of deep time",
+                ],
+                "observation_focus": "Watch for the child ordering events by when they truly happened rather than by how exciting they were, and using the words of time with growing precision.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep family photo albums and a box of photographs within easy reach to look through",
+                    "Leave out a long strip of paper and markers for a timeline the child may build",
+                    "Have books and documentaries about long-ago times available",
+                ],
+                "real_world_contexts": [
+                    "Looking through family photos and wondering when each was taken",
+                    "Marking time by birthdays, holidays, and the turning seasons",
+                    "Hearing grandparents and elders tell of the days before the child was born",
+                    "Using the calendar and the clock, the everyday tools of time",
+                ],
+                "conversation_starters": [
+                    "What happened in your life before you can remember? Who could tell us?",
+                    "Was that a long time ago, or just recently? How can you tell?",
+                    "Do you think the pyramids were built before or after Grandma was born?",
+                ],
+                "resource_bank": [
+                    "Family photo albums and old photographs",
+                    "A long roll of paper for a timeline kept available",
+                    "Books, documentaries, and grandparents' stories about times past",
+                ],
+                "parent_role": "Look through old photographs with the child and tell the family stories, wondering aloud about when things happened and what came before and after. Let the child build a timeline if they wish, and let real photos, real memories, and real elders, rather than a worksheet, give them a feel for time.",
+                "observation_documentation": "Over time, note whether the child orders events by when they happened, uses the words of time, and senses that the past stretches far back beyond their own life. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Sequence and chronological order in stories — beginning, middle, end is a timeline of a story",
