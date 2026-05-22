@@ -3771,10 +3771,113 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Strong natural fit. Record narrations and play them back. Narrate to different audiences for variety.",
         },
         "philosophy_specific": {
-            "classical": "Narration as oral composition — the foundation for all written work. Daily narration across all subjects, not just reading.",
-            "charlotte_mason": "THE cornerstone practice. One reading, then the child tells it back. No interrupting, no prompting, no re-reading. Trust the child's mind.",
-            "montessori": "Story cards with picture prompts for narration. Child-selected books for independent narration. Self-paced progression.",
-            "traditional": "Structured retelling with guiding questions. Comprehension check through oral Q&A after reading.",
+            "traditional": {
+                "introduction": "Narration is retelling. After hearing or reading a passage one time, the child tells it back in their own words. Because the passage is heard only once, narration trains attentive listening; because it must be retold, it trains comprehension, memory, and clear speech. Today we retell a passage in our own words, including the key details, the characters, the setting, and the major events, and we keep the events in the order they happened.",
+                "gradual_release": {
+                    "i_do": "Read a short passage aloud once, pause to think, then narrate it back: name the characters and the setting, tell the events in order, and keep to the key details rather than every word. Say plainly that the passage is not re-read.",
+                    "we_do": "Read a short passage together once, then build the narration together: who was in it, where it happened, and what happened first, next, and last.",
+                    "you_do": "Child listens to or reads a passage once, then retells it in their own words, unprompted, including the characters, setting, and major events in the order they occurred.",
+                },
+                "guided_practice": [
+                    "Retell a two or three sentence passage immediately after a single reading",
+                    "Retell a one-paragraph passage, naming the characters and setting",
+                    "Retell with the events kept in the order they happened, beginning to end",
+                ],
+                "independent_practice": [
+                    "Narrate a longer passage or a full page after a single reading, without prompting",
+                    "Narrate daily after each read-aloud, lengthening the passage over time",
+                ],
+                "mastery_check": [
+                    "Retell a passage in own words after a single reading, with no prompting",
+                    "Include the characters, the setting, and the major events in the retelling",
+                    "Keep the events of the retelling in correct chronological order",
+                ],
+                "spiral_review": [
+                    "Revisit identifying a story's beginning, middle, and end, which gives the narration its order",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Long before writing, all knowledge was carried by the telling: a tale heard once was held in the mind and told again. Narration is that ancient art. To hear a passage a single time, attend to it closely, and then tell it back faithfully in one's own words is the first and truest test of knowing, and it is the seed of all later composition.",
+                "memory_work": {
+                    "chants": [
+                        "Chant what a good narration carries: the characters, the place, and the events in their right order",
+                        "Chant the narrator's rule: listen once, listen well, then tell it true",
+                    ],
+                    "recitations": [
+                        "Recite a short, well-told tale committed to memory, the recited word and the narrated word both being the practice of telling",
+                    ],
+                },
+                "recitation_routine": "Begin each lesson by having the child narrate the previous reading from memory before any new passage is read; yesterday's telling is rehearsed before today's.",
+                "history_integration": "Tell that the long poems and histories of old were composed and carried entirely by memory and the spoken voice, passed from teller to teller, and that narration keeps that art alive.",
+                "read_aloud_suggestions": [
+                    "A well-told tale with a clear line of events, read aloud once and then narrated back",
+                    "A passage of fine narrative prose, read for its order and its language, then retold",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A living book of real literary worth, its language and its events both worth holding in the mind, never a dull reader",
+                ],
+                "short_lesson_flow": "Read a single passage of a living book aloud, once, calmly and with no interruption. Close the book. Wait quietly while the child gathers their thoughts, giving them unhurried silence. Then the child tells it back in their own words while you listen without correcting or prompting. Stop while attention is still whole.",
+                "narration_prompt": "Tell me about the passage we just heard. Take your time, I am listening, and I will not stop you.",
+                "real_world_objects": [
+                    "The living book, read from once and then closed before the telling",
+                    "A narration notebook in which the child may draw the scene they told",
+                ],
+                "nature_connection": "After a nature walk, ask the child to narrate what they saw, the same telling-back turned upon the living book of the outdoors: the bird, the weather, the small creature watched.",
+                "habit_focus": "The habit of attention: listening so fully the first time that the passage is truly the child's own and can be told back whole.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A shelf of child-selected storybooks for independent reading and narration",
+                    "Story picture cards a child may lay in order to support an early narration",
+                    "A narration journal for drawing or, later, writing the retold scene",
+                    "A quiet, prepared spot where a child may narrate to a listener without interruption",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With story picture cards from a known tale: this picture shows what happened first, this what happened next; show me what happened first; what part of the story is this?",
+                    "steps": [
+                        "The child reads or hears a passage once, in a quiet, prepared place",
+                        "The child pauses, then retells the passage in their own words to a listener, uninterrupted",
+                        "The child may lay the story picture cards in order or draw the scene in the narration journal to confirm the retelling",
+                    ],
+                },
+                "control_of_error": "The story picture cards are the control of error for an early narrator: laid out of order, the story will not run true, and reordering them sets the retelling right. As the child grows, the book itself is the control, reopened only after the telling to check what was held.",
+                "abstraction_pathway": "From retelling with picture cards in hand, to retelling a heard passage with no aid, toward narrating a long chapter after a single hearing and, in time, writing the narration down.",
+                "extensions": [
+                    "Narrate to a younger child or to a small group",
+                    "Narrate across subjects, retelling a passage of history or a nature observation",
+                    "Move from oral narration toward written narration in the journal",
+                ],
+                "observation_focus": "Watch for the child narrating unprompted, keeping the events in order, and including characters and setting, and watch whether attention during the single reading is whole.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep audiobooks and read-aloud time available so good stories are always within reach",
+                    "Leave out drawing materials so a child may picture a story after hearing it",
+                    "Have a cozy listening spot where telling and being told are part of daily life",
+                ],
+                "real_world_contexts": [
+                    "Telling a parent all about a playdate, an outing, or a film, real-life narration",
+                    "Recounting a nature walk: telling what bird or creature was watched",
+                    "Retelling a favorite book to a sibling, a grandparent, or a stuffed animal",
+                    "Passing on a family story heard from a grandparent",
+                ],
+                "conversation_starters": [
+                    "Tell me about the part of the book we just read, I would love to hear it",
+                    "What happened on your adventure today? Start at the beginning.",
+                    "Could you tell that story to your little brother? He has not heard it.",
+                    "What was the best part, and what happened right before it?",
+                ],
+                "resource_bank": [
+                    "A wide home library, audiobooks, and library visits for stories worth retelling",
+                    "Drawing materials for picturing a story after hearing it",
+                    "Willing listeners: family, friends, and even a favorite toy",
+                ],
+                "parent_role": "Be a genuine, delighted listener whenever the child wants to tell about a book, a day, or an adventure, without quizzing or correcting. Tell stories yourself so retelling is simply part of how the family talks, and let the child's own eagerness to share carry the skill.",
+                "observation_documentation": "Over time, note whether the child retells stories and events in their own words, keeps them in order, and includes who, where, and what happened, listening well enough the first time to tell it back. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Narrating the steps of a math solution: 'First I added, then I...' — oral explanation of process",

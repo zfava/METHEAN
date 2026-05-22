@@ -337,6 +337,7 @@ class TestAuthoredPhilosophyContent:
             "rf-12",
             "rf-13",
             "rf-14",
+            "rf-15",
         ],
     )
     def test_node_has_all_five_native_variants(self, node_key):
@@ -385,6 +386,7 @@ class TestAuthoredPhilosophyContent:
             "rf-12",
             "rf-13",
             "rf-14",
+            "rf-15",
         ],
     )
     def test_unschooling_variant_has_no_lesson_keys(self, node_key):
