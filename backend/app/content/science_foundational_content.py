@@ -4664,11 +4664,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "science notebook for bird observations",
             ],
             "recommended": ["bird field guide for your region", "binoculars for distance observation"],
-            "philosophy_specific": {
-                "classical": "Bird classification and anatomy memorized. 10 local species identified by name and features. Vocabulary: ornithology, plumage, migration, adaptation, fledgling.",
-                "charlotte_mason": "Bird watching IS Charlotte Mason nature study at its best. Weekly bird observation. Drawing birds from life. Identifying songs. The child becomes a genuine birdwatcher.",
-                "montessori": "Bird cards with photographs for identification. Parts-of-a-bird puzzle. Bird feeder as a practical life station the child maintains.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -4678,6 +4673,118 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Bird identification is visual. Detailed drawings from life. Photographs for comparison. Color-coded field notes.",
             "kinesthetic_learner": "Build and maintain a bird feeder. Walk outdoors for bird observation. Mimic bird movements and behaviors.",
             "auditory_learner": "Bird song identification is a natural strength. Listen to recorded bird songs and match to species. Early morning birding (dawn chorus) is the best listening time.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Birds are found nearly everywhere, which makes them the easiest wild animals to observe. Every bird shares four marks: feathers, hollow bones, warm blood, and eggs. A bird's beak reveals its diet, a thick beak for cracking seeds, a thin beak for probing insects, a long beak for catching fish. Today we identify local birds by sight and sound, connect beak shape to diet, describe the bird life cycle, and learn the characteristics of birds.",
+                "gradual_release": {
+                    "i_do": "Watch a bird at the feeder and think aloud: feathers, so it is a bird; a thick cone-shaped beak, so it eats seeds. Name a few local birds by their color, size, and behavior, and trace the life cycle: the nest, the eggs, the hatching, the parents feeding, the fledging.",
+                    "we_do": "Watch birds together and identify the local ones, match beak shapes to diets, and describe the bird life cycle from egg to flying adult.",
+                    "you_do": "Child identifies at least five local birds by sight or sound, explains how beak shape relates to diet, describes the bird life cycle, and names the characteristics of birds.",
+                },
+                "guided_practice": [
+                    "Identify local birds by their color, size, shape, and behavior",
+                    "Match beak shapes to the diets they suit: seeds, insects, fish, meat",
+                    "Describe the bird life cycle: nesting, eggs, hatching, feeding, fledging",
+                ],
+                "independent_practice": [
+                    "Keep a daily bird-feeder log of which birds visit and when",
+                    "Draw a bird from life and label its beak, wings, tail, and feet",
+                ],
+                "mastery_check": [
+                    "Identify at least five local birds by sight or sound",
+                    "Explain how beak shape relates to diet with three examples",
+                    "Describe the bird life cycle and name the key characteristics of birds",
+                ],
+                "spiral_review": [
+                    "Revisit how an animal is adapted to its habitat, since the beak is an adaptation to a bird's food",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Birds are the masters of the air, and they are known by one sure mark above all: feathers, which no other creature wears. Light hollow bones, warm blood, and eggs complete the kind. Look closely and a bird reveals its life in its very shape: the beak tells what it eats, the foot tells where it lives. To study birds is to read the fitness of a creature to its world.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the marks of a bird: feathers and hollow bones, warm blood and eggs",
+                        "Chant the beaks and their food: thick for seeds, thin for insects, long for fish, hooked for meat",
+                    ],
+                    "recitations": [
+                        "Recite that not every bird flies, the ostrich and the penguin do not, but every bird wears feathers, and that the beak is shaped to the food",
+                    ],
+                },
+                "copywork": [
+                    "Copy the four characteristics of birds, and the names of the local birds the child has come to know",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the marks of a bird and the beaks and their foods before any new observation.",
+                "history_integration": "Tell that people have always watched the birds, that sailors followed them to land and farmers read the seasons by their coming and going, and that the keeping of the domestic fowl has fed humankind for thousands of years.",
+                "read_aloud_suggestions": [
+                    "A living account of the life of a particular bird, its nesting, its feeding, its long migration, read aloud so the child hears the bird's story told",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book about birds, written by one who clearly loves and knows them, never a dry reader",
+                ],
+                "short_lesson_flow": "Set a feeder where it can be seen from a window, and let watching the birds become a quiet, glad habit. The child observes who comes and what they do, learns a few by name, and draws one from life in the nature notebook. Outdoors, the child listens for bird song. Over weeks the child becomes, simply, a birdwatcher.",
+                "narration_prompt": "Tell me about the birds you watched today. Which ones came, what were they doing, and how did you know them?",
+                "real_world_objects": [
+                    "A bird feeder or birdbath set where it can be watched",
+                    "Binoculars for watching birds at a distance",
+                    "A nature notebook for drawing birds from life",
+                    "A field guide for naming the local birds",
+                ],
+                "nature_connection": "Bird-watching is nature study at its finest: the child comes to know the birds of their own place by patient watching and listening, season upon season, and marks the year by their nesting and their migration.",
+                "habit_focus": "The habit of attention: watching and listening patiently until a bird is truly known by its look, its song, and its ways.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A parts-of-a-bird puzzle with the features labeled",
+                    "Bird identification cards with photographs of local species",
+                    "Beak-and-diet matching cards",
+                    "A bird feeder the child tends as a practical-life work, and binoculars",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the bird cards: this beak is thick and strong, a seed-cracker; show me a seed-cracking beak; what does a bird with this beak eat?",
+                    "steps": [
+                        "The child tends the bird feeder and observes which birds come, identifying them with the cards",
+                        "The child works the parts-of-a-bird puzzle and the beak-and-diet matching cards",
+                        "The child draws a bird from life and records its features and behavior",
+                    ],
+                },
+                "control_of_error": "The puzzle and the matching cards carry their own control, fitting and pairing in one true way, and the real birds at the feeder are the deeper control: the field guide and the living bird confirm or correct an identification.",
+                "abstraction_pathway": "From handling the bird puzzle and matching beaks to foods, to identifying real birds at the feeder, toward reading a bird's diet and habits from its shape without the materials.",
+                "extensions": [
+                    "Keep a long bird-feeder log and look for the patterns across the seasons",
+                    "Learn the songs and calls of the local birds",
+                    "Study migration, and which birds stay and which depart",
+                ],
+                "observation_focus": "Watch for the child connecting a bird's beak and feet to its diet and home, and identifying local birds by sight and by sound.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Set up a bird feeder or birdbath the child can watch from a window",
+                    "Keep binoculars, a bird field guide, and a notebook within reach",
+                    "Have recordings of bird songs available to listen to",
+                ],
+                "real_world_contexts": [
+                    "Watching the birds that come to the feeder, the yard, and the park",
+                    "Noticing birds and their songs on walks and outings",
+                    "Marking the seasons by the birds: the robins of spring, the geese of autumn",
+                    "Meeting birds up close, the family's chickens, the ducks at the pond",
+                ],
+                "conversation_starters": [
+                    "That bird has a long thin beak, what do you think it eats?",
+                    "Which birds come to our feeder most? What time of day?",
+                    "Can you tell which bird is singing without looking?",
+                ],
+                "resource_bank": [
+                    "A bird feeder, binoculars, and a field guide",
+                    "Recordings of bird songs and books about birds",
+                    "The yard, the park, and the pond, full of real birds to watch",
+                ],
+                "parent_role": "Make bird-watching a shared pleasure: keep the feeder filled, notice aloud who comes, and follow the child's interest in the birds they grow to love. Wonder together about beaks, songs, and migration, and let the real, watched birds, rather than a worksheet, teach their science.",
+                "observation_documentation": "Over time, note whether the child knows several local birds by sight or sound, connects a beak to a diet, and understands the bird life cycle and the marks of a bird. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Bird vocabulary: ornithology, plumage, migration, raptor, songbird, waterfowl, fledgling, incubation",
