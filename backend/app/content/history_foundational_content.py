@@ -3640,11 +3640,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["world map or globe", "books about daily life in other cultures"],
             "recommended": ["cooking supplies for international recipes", "music from different cultures"],
-            "philosophy_specific": {
-                "classical": "Systematic study of world cultures as part of geography. Memorize key facts about each culture studied. Cultural literacy as foundational knowledge.",
-                "charlotte_mason": "Living geography: books, pictures, and objects from around the world. Cook foods, listen to music, and read stories from each culture. The child experiences, not just reads about, other ways of life.",
-                "montessori": "Continent folders with photographs, flags, and cultural artifacts. Cultural celebration days. International food tasting. Flag work and map pinning.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -3654,6 +3649,120 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Photographs of daily life worldwide. Illustrated books. Cultural artifact pictures.",
             "kinesthetic_learner": "Cook, dance, build models of different types of housing. Hands-on cultural experiences.",
             "auditory_learner": "Listen to music and stories from each culture. Discuss cultural practices. Audio documentaries.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "People around the world eat different foods, build different homes, wear different clothes, and keep different customs, yet every culture is meeting the same human needs: to feed and shelter its people, to raise its children, to live together, and to make meaning. Studying world cultures builds both knowledge and respect. Each culture has its own beauty and wisdom, and each is made of real people; none stands above or below another. Today we describe daily life in at least three cultures, name the universal human needs all cultures share, locate the cultures on a world map, and meet unfamiliar ways of life with curiosity and respect.",
+                "gradual_release": {
+                    "i_do": "Start with our own culture and think aloud: our food, our home, our customs. Then describe daily life in a culture from another continent, the food, the housing, the clothing, the customs, plainly and respectfully. Name the universal need beneath each, and locate the culture on the map. Show that different does not mean wrong.",
+                    "we_do": "Describe daily life in cultures together, build a comparison chart of food, housing, clothing, and customs, name the universal needs all share, and locate each culture on the world map.",
+                    "you_do": "Child describes daily life in at least three cultures, identifies the universal human needs all cultures share, locates the cultures on a world map, and discusses unfamiliar traditions with curiosity and respect.",
+                },
+                "guided_practice": [
+                    "Describe daily life in a culture: food, housing, clothing, and customs",
+                    "Name the universal human need beneath a custom from another culture",
+                    "Locate the cultures studied on a world map",
+                ],
+                "independent_practice": [
+                    "Make a comparison chart of daily life across three cultures",
+                    "Cook a meal, read a folktale, or learn a custom from another culture, and describe what it shows about that culture",
+                ],
+                "mastery_check": [
+                    "Describe daily life in at least three cultures, with specific details of food, housing, clothing, and customs",
+                    "Identify the universal human needs shared across all cultures",
+                    "Locate the cultures studied on a world map and discuss unfamiliar traditions with curiosity and respect",
+                ],
+                "spiral_review": [
+                    "Revisit the world map and the continents, placing each culture studied in its true location",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The world holds a great many cultures, and the classical mind studies them with both knowledge and a fair and curious eye. Beneath all the variety of food, dress, shelter, and custom, every culture is answering the same human questions: how to feed its people, how to shelter and raise them, how to live together, and how to make meaning. Each culture has its own beauty and its own wisdom, and each is made of real people; the honest student ranks none above another and idealizes none.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the universal human needs every culture meets: food and shelter, family and community, and stories that carry meaning",
+                        "Chant the fair-minded rule: different is not wrong, and every culture has both beauty and wisdom",
+                    ],
+                    "recitations": [
+                        "Recite that all cultures share the same human needs, and that each one meets them in its own way, none above and none below",
+                    ],
+                },
+                "copywork": [
+                    "Copy the universal human needs all cultures share, and the names of the cultures studied beside their continents",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the universal human needs before studying a new culture.",
+                "history_integration": "Place the cultures studied across both the map and the chronological spine, and mark that the great civilizations the child has met, Egypt, China, Greece, Rome, were themselves cultures meeting these same human needs, each in its own way and its own age.",
+                "read_aloud_suggestions": [
+                    "A living book that shows the daily life of a family in another culture, told with knowledge and respect",
+                    "A collection of folktales from around the world, read aloud so the child meets each culture through its own stories",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book about the daily life of a family in another culture, with true artwork and real respect",
+                    "A finely told collection of folktales from the cultures studied, each culture met through its own stories",
+                ],
+                "short_lesson_flow": "Let the child meet a culture, not merely read about it: cook one of its foods, hear its music, read one of its folktales, look long at pictures of its homes and daily life. Then the child narrates what they have learned. Wonder together at what is the same and what is different, and meet every custom with curiosity and respect.",
+                "narration_prompt": "Tell me about the daily life of a child in the culture we met. What is the same as your life, and what is different?",
+                "real_world_objects": [
+                    "A globe or world map for locating each culture",
+                    "Real foods, music, and objects from the cultures studied",
+                    "Living books and folktale collections from around the world",
+                    "A Book of Centuries or notebook for the child's drawn records of each culture",
+                ],
+                "nature_connection": "Notice how the land and climate shape a culture: the homes, foods, and clothing of a desert people, a mountain people, an Arctic people, each fitted to the natural world they live in.",
+                "habit_focus": "The habit of attention and of respect: looking closely and kindly at a way of life unlike one's own, with curiosity rather than judgment.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Continent folders with photographs, flags, and cultural artifacts",
+                    "Real objects, foods, and music from the cultures studied",
+                    "A globe and pin map for locating each culture",
+                    "A comparison work for daily life across cultures: food, housing, clothing, customs",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the continent folders: this is a home from this culture; show me a home from this culture; which culture's daily life is this?",
+                    "steps": [
+                        "The child explores a culture's continent folder and its real objects, foods, and music",
+                        "The child locates the culture on the globe and pin map",
+                        "The child compares the daily life of several cultures and names the universal needs each one meets",
+                    ],
+                },
+                "control_of_error": "The globe and the continent folders are the control: a culture pinned to the wrong place does not match the map, and the comparison work shows the child plainly when a universal need has been left out of an account.",
+                "abstraction_pathway": "From handling the concrete continent folders and real cultural objects, to comparing the daily life of several cultures, toward grasping that all cultures meet the same human needs, each in its own way.",
+                "extensions": [
+                    "Study a single culture in depth: its language, art, geography, and history",
+                    "Compare how several cultures each meet one human need, such as welcoming a new baby",
+                    "Investigate how cultures borrow from and influence one another over time",
+                ],
+                "observation_focus": "Watch for the child describing a culture with specific, accurate detail, meeting unfamiliar customs with curiosity rather than judgment, and seeing the shared human needs beneath the variety.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep books, folktales, music, and films from many cultures within reach",
+                    "Leave out cooking materials for trying foods from around the world",
+                    "Have a globe and an atlas available for the curious",
+                ],
+                "real_world_contexts": [
+                    "Eating foods from many cultures, the family's own and others', and learning where each comes from",
+                    "Hearing music and stories from around the world",
+                    "Meeting people of different backgrounds in the neighborhood and community",
+                    "Noticing the customs of friends, neighbors, and relatives, and asking about them with interest",
+                ],
+                "conversation_starters": [
+                    "A custom from another culture can seem strange to us; how do you think one of our customs might seem to them?",
+                    "People everywhere need food, shelter, family, and stories; why do you think they meet those needs so differently?",
+                    "What is something you have learned from another culture that you would like to try?",
+                ],
+                "resource_bank": [
+                    "Books, folktales, music, and films from many cultures",
+                    "Cooking materials for foods from around the world",
+                    "A globe and atlas, and the family's own and neighbors' traditions",
+                ],
+                "parent_role": "Follow the child's curiosity about other ways of life into food, music, stories, and real friendships, and wonder aloud at both the variety and the shared humanity. Meet every culture with respect, neither ranking one above another nor idealizing any, and let real experience, rather than a worksheet, teach the child about the wider world.",
+                "observation_documentation": "Over time, note whether the child can describe daily life in different cultures, sees the universal needs all cultures share, locates them on a map, and meets unfamiliar ways of life with curiosity and respect. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Folktales from around the world build reading and comprehension. Cultural vocabulary expands language.",
