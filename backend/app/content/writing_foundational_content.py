@@ -677,11 +677,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["lined paper", "word list at the child's phonics level"],
             "recommended": ["magnetic letters for pre-writing word building", "self-check word cards"],
-            "philosophy_specific": {
-                "classical": "Systematic dictation at every phonics level. Daily drill. Perfect spelling as the standard. Word lists organized by pattern.",
-                "charlotte_mason": "Studied dictation: the child studies the word VISUALLY before it is dictated. Never guess — always study first. The eye trains the hand.",
-                "montessori": "Movable alphabet for word building before pencil writing. Sound-by-sound encoding with physical letter tiles. Self-correcting word cards.",
-            },
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 10},
         "accommodations": {
@@ -691,6 +686,115 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Study the word visually before dictation (Charlotte Mason method). After writing, compare visually to the model.",
             "kinesthetic_learner": "Build the word with magnetic letters first, then write. Tap each sound on the table.",
             "auditory_learner": "Say each sound aloud while writing the letter. Repeat the word before and after writing.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Dictation is encoding: the parent speaks a word, the child hears each sound, and writes the letter that matches it. It is the reverse of reading and the proof that phonics has truly been learned. Today we segment spoken words into their sounds, write 10 CVC words correctly from dictation, attempt longer words by writing each sound heard, and self-correct by comparing to a model.",
+                "gradual_release": {
+                    "i_do": "Say a CVC word, 'map', slowly, and think aloud: I hear three sounds, /m/ /a/ /p/; /m/ is written m, /a/ is written a, /p/ is written p; I write m-a-p, then check it against the word list.",
+                    "we_do": "Take dictation together: the parent says a word, child and parent each segment it sound by sound and write a letter for each sound, then check both against the model.",
+                    "you_do": "Child writes a set of dictated words independently, segmenting each into sounds, then checks every word against the model and corrects errors.",
+                },
+                "guided_practice": [
+                    "Tap out the sounds of a dictated word, then write a letter for each tap",
+                    "Take dictation of CVC words and check each one immediately against the model",
+                    "Attempt a longer word by writing each sound heard, then compare to the correct spelling",
+                ],
+                "independent_practice": [
+                    "Daily dictation of five words at the child's phonics level, followed by self-checking",
+                    "Write 10 CVC words from dictation and correct any errors against the word list",
+                ],
+                "mastery_check": [
+                    "Write 10 CVC words correctly from dictation",
+                    "Segment a spoken word into its sounds and match each sound to a letter",
+                    "Self-correct a written word by comparing it to a model",
+                ],
+                "spiral_review": [
+                    "Revisit phonics patterns already learned, blends and silent e, by including a familiar pattern in each dictation set",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "To hear a word and set it down rightly is the test of a trained ear and a trained hand together. Dictation requires the writer to hold the spoken word in mind, to divide it into its very sounds, and to render each sound by its true letter. It is exacting work, and by it the spelling of the language is mastered word by word, with perfect accuracy as the standard.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the encoder's rule: hear the whole word, divide it into sounds, write a letter for each sound, then check it",
+                    ],
+                    "recitations": [
+                        "Recite that dictation is the reverse of reading, the turning of sounds into letters, and that careful spelling is the writer's plain duty to the reader",
+                    ],
+                },
+                "copywork": [
+                    "Copy the spelling words for the lesson first, studying each one closely, so the eye has met every word before the ear must write it from dictation",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the encoder's rule and reviewing the phonics pattern of the day before any word is dictated.",
+                "history_integration": "Tell that the spelling of English settled slowly over many centuries, and that earlier writers spelled words in several different ways before dictionaries fixed one correct form for each word.",
+                "read_aloud_suggestions": [
+                    "A short, clearly written passage read aloud, the child invited to notice how each spoken word is built of sounds that letters record",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A well-written living book whose short, clear sentences supply real words and phrases for studied dictation",
+                ],
+                "short_lesson_flow": "Keep the lesson short, five to ten minutes. This is studied dictation: the child first studies the words visually, looking at each one until it can be pictured with eyes closed. Only then does the parent dictate, and the child writes from the remembered picture. Never let the child guess at a word; if it is not yet known, return to studying it. The eye trains the hand.",
+                "narration_prompt": "Before I dictate, study these words and tell me which ones you can already picture with your eyes closed, and which need a longer look.",
+                "real_world_objects": [
+                    "Word or phrase cards drawn from the family's living book",
+                    "Good lined paper and a comfortable pencil",
+                    "A small card to cover a studied word before it is written",
+                ],
+                "nature_connection": "Words for studied dictation can be drawn from a nature-notebook entry, the names of birds, trees, or weather, so spelling practice and nature study meet.",
+                "habit_focus": "The habit of attention: studying a word closely enough to hold its picture in the mind, so it can be written truly from memory.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The movable alphabet, for building words sound by sound before they are written with a pencil",
+                    "Self-correcting word cards, the picture or word on one side and the spelling for checking on the other",
+                    "Lined paper and a comfortable pencil",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the movable alphabet and a dictated word: this word is 'cat', built /c/ /a/ /t/; you build 'cat'; tell me how 'cat' is built sound by sound.",
+                    "steps": [
+                        "The parent says a word, and the child builds it with the movable alphabet, choosing a letter for each sound heard",
+                        "The child writes the built word on lined paper with a pencil",
+                        "The child turns the self-correcting word card to check the spelling and corrects any difference",
+                    ],
+                },
+                "control_of_error": "The self-correcting word card carries the control: the child turns it to compare their spelling to the model and corrects without being told.",
+                "abstraction_pathway": "From building words with the concrete letters of the movable alphabet, to writing them with a pencil, toward spelling words from dictation with accuracy and self-correction.",
+                "extensions": [
+                    "Take dictation of word families, building or writing five words that share a pattern",
+                    "Build and write longer words: blends, then words with a silent e",
+                    "Dictate short phrases, the child building or writing each word in turn",
+                ],
+                "observation_focus": "Watch for the child segmenting words into all their sounds, choosing the right letter for each, and using the word card to find and correct errors independently.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep paper, pencils, and a small whiteboard handy for writing words down",
+                    "Leave magnetic letters on the refrigerator for building words sound by sound",
+                    "Offer a notebook the child can use as their own list of words they want to spell",
+                ],
+                "real_world_contexts": [
+                    "Writing a grocery list as a parent names the items aloud",
+                    "Taking down a phone message: hearing words and writing them",
+                    "Writing labels for jars, bins, or a collection as someone says the words",
+                    "Writing the words of a sign, a card, or a game from someone speaking them",
+                ],
+                "conversation_starters": [
+                    "Want me to say the words while you write the list?",
+                    "Let's stretch that word out slow: what sounds do you hear?",
+                    "Does that word look right to you? Let's check it together.",
+                ],
+                "resource_bank": [
+                    "Magnetic letters and a whiteboard for building and writing words",
+                    "Picture dictionaries and word lists to check spellings against",
+                    "Real lists, messages, and labels that need writing down",
+                ],
+                "parent_role": "When the child wants something written, offer to say the words aloud while they write, so dictation happens inside real tasks. Stretch words out slowly when asked, welcome phonetic attempts warmly, and show the correct spelling gently afterward, letting the child check their own words against a model.",
+                "observation_documentation": "Over time, notice whether the child hears more of the sounds in a word, writes a letter for each, attempts longer words with confidence, and checks their own spelling. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Dictation is the reverse of reading: reading decodes (letters to sounds), dictation encodes (sounds to letters). Both reinforce each other.",
