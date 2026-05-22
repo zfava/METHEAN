@@ -1978,11 +1978,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["lined paper", "picture prompts or topic cards"],
             "recommended": ["sentence expansion templates", "self-editing checklist"],
-            "philosophy_specific": {
-                "classical": "Sentence writing as the first act of formal composition. Sentence expansion taught systematically: subject + verb → add object → add prepositional phrase → add adjectives/adverbs.",
-                "charlotte_mason": "Oral composition first: the child TELLS the sentence before writing it. Short writing sessions (10 minutes). Quality over quantity. The child's own thoughts in the child's own words.",
-                "montessori": "Sentence building with word cards on a sentence strip. The child physically adds words to expand. Independent sentence writing during journaling time.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -1992,6 +1987,115 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Picture prompts for writing. Sentence expansion shown visually: arrows pointing to where details are added. Color-code added words.",
             "kinesthetic_learner": "Build sentences with physical word cards before writing. Stand up and act out the sentence before writing it down.",
             "auditory_learner": "Say the sentence aloud 2-3 times before writing. Read the written sentence aloud to check if it sounds right. Discuss the topic orally before writing.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Now the child moves from copying others' sentences to composing their own. Today we write five original simple sentences with correct subject-verb structure, capitalization, and end punctuation, expand a short sentence into a longer one by adding where, when, and how, and vary how our sentences begin.",
+                "gradual_release": {
+                    "i_do": "Say a complete sentence aloud, 'The dog ran', then think aloud: this is a sentence, subject and verb; now I add where, 'in the yard', when, 'after lunch', and how, 'happily'. I write the expanded sentence, beginning with a capital and ending with a period.",
+                    "we_do": "Compose sentences together, the child saying a short sentence and the parent helping add a detail of where, when, or how, then writing the result and checking capital and end mark.",
+                    "you_do": "Child writes five original simple sentences independently, expands one of them with added details, and varies the beginnings.",
+                },
+                "guided_practice": [
+                    "Say a sentence aloud, confirm it is complete, then write it with a capital and end mark",
+                    "Expand a three-word sentence by adding where, when, and how",
+                    "Rewrite a sentence to begin with a different word than 'I' or 'The'",
+                ],
+                "independent_practice": [
+                    "Write five original simple sentences on one topic, varying the beginnings",
+                    "Expand a short sentence into an eight to ten word sentence",
+                ],
+                "mastery_check": [
+                    "Write five original simple sentences with correct structure, capitalization, and end punctuation",
+                    "Expand a simple sentence by adding details of where, when, and how",
+                    "Vary sentence beginnings rather than starting every sentence the same way",
+                ],
+                "spiral_review": [
+                    "Review subject and predicate, capitalization, and end punctuation when checking each sentence written",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Composition begins with the single sentence well made. Having copied excellent sentences and learned their parts, the young writer now frames thoughts of their own. The art is twofold: to build a sentence sound in its structure, and then to enrich it, adding the where, the when, and the how, so that a bare statement becomes a vivid one.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the expansion order: begin with the subject and verb, then add where, then add when, then add how",
+                    ],
+                    "recitations": [
+                        "Recite that a sentence is first made complete, with its subject and predicate, and then made vivid, with well-chosen detail",
+                    ],
+                },
+                "copywork": [
+                    "Copy a finely expanded sentence from good writing, then compose one of your own in imitation of its pattern",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the order of expansion before any sentence is composed.",
+                "history_integration": "Tell that the rhetoricians of old taught composition by imitation, the pupil first copying the patterns of master writers, then framing their own thoughts in the same well-proven forms.",
+                "read_aloud_suggestions": [
+                    "A passage whose sentences vary in length and beginning, read aloud so the ear hears how a skilled writer avoids sameness",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A living book of vivid, varied sentences that gives the child a worthy ear for how good sentences sound",
+                ],
+                "short_lesson_flow": "Keep the lesson short, ten to fifteen minutes. Composition begins on the tongue, not the pencil: the child first says the sentence aloud, and only when it is whole and right is it written down. Let the child tell a sentence about something real and dear to them, help them add a true detail, and write a few. Never demand quantity; a few sentences in the child's own words, fully their own thought, are the lesson.",
+                "narration_prompt": "Say your sentence aloud first. Does it sound complete and true? Now tell me one detail of where, when, or how you could add.",
+                "real_world_objects": [
+                    "A nature notebook or journal for the child's own sentences",
+                    "Picture prompts drawn from real places the child knows",
+                    "Good lined paper and a comfortable pencil",
+                ],
+                "nature_connection": "The child composes original sentences about what was truly observed outdoors, so that sentence-writing records real seeing and is never empty exercise.",
+                "habit_focus": "The habit of best work: saying a sentence until it is right, then writing it carefully as the child's own genuine thought.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Word cards and a long sentence strip for building and expanding sentences",
+                    "Picture cards to prompt original sentences",
+                    "A journal and lined paper for independent writing",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With word cards on a strip: here is a sentence, 'the cat sleeps'; you add a card telling where; show me where you added a detail to the sentence.",
+                    "steps": [
+                        "The child builds a simple subject-verb sentence with word cards on the strip",
+                        "The child adds cards that tell where, when, and how, watching the sentence grow",
+                        "The child writes the expanded sentence in their journal, beginning with a capital and ending with a mark",
+                    ],
+                },
+                "control_of_error": "A sentence missing its subject or verb does not read as a finished thought, and an added card placed where it does not belong reads awkwardly, so the child hears and corrects the sentence themselves.",
+                "abstraction_pathway": "From building and expanding sentences with concrete word cards, to writing expanded sentences in a journal, toward composing varied original sentences without the cards.",
+                "extensions": [
+                    "Expand one sentence as far as it will sensibly go, then read it aloud",
+                    "Build several sentences on one topic, each beginning with a different word",
+                    "Write a few journal sentences about the day's work or a chosen picture",
+                ],
+                "observation_focus": "Watch for the child building complete sentences, adding meaningful detail, varying beginnings, and moving from the cards toward independent writing.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep notebooks, paper, cards, and good pens out where the child can reach them",
+                    "Leave interesting photographs or objects around that might invite a sentence or a caption",
+                    "Offer a journal or a message thread the child can write in freely",
+                ],
+                "real_world_contexts": [
+                    "Writing a journal entry about a real day",
+                    "Captioning drawings or photographs",
+                    "Writing a note, a card, or a message to someone the child cares about",
+                    "Writing the rules or the story for a game the child is inventing",
+                ],
+                "conversation_starters": [
+                    "You said that out loud beautifully: want to write it down so it keeps?",
+                    "Where did the dog run? When? Want to add that to your sentence?",
+                    "All three of these start with 'I'. What is another way you could begin one?",
+                ],
+                "resource_bank": [
+                    "Notebooks, journals, cards, and devices for real writing",
+                    "Photographs, objects, and outings that spark things to write about",
+                    "Books with vivid, varied sentences to read and enjoy",
+                ],
+                "parent_role": "Write alongside the child for your own real purposes and welcome whatever they write without grading it. When they want it, help shape a sentence by asking a genuine question about where or when, and let the wish to be understood, by a reader who matters, draw out clearer and more varied sentences.",
+                "observation_documentation": "Over time, notice whether the child writes complete original sentences, adds true detail, varies how sentences begin, and writes to express their own thoughts. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Writing sentences deepens reading comprehension: the child understands sentence structure from BOTH directions",
