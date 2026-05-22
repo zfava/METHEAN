@@ -3857,11 +3857,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["blank science notebook or journal", "pencils (regular and colored)"],
             "recommended": ["magnifying glass for close-up observation", "field guide for local plants and animals"],
-            "philosophy_specific": {
-                "classical": "Nature journaling as systematic scientific recording. Date, weather, location, and observation on every entry. Structured format with labeled diagrams.",
-                "charlotte_mason": "The nature notebook is THE central tool of Charlotte Mason science education. Draw from life, never from photos. Weekly outdoor observation is non-negotiable. The journal grows into a beautiful personal record of the natural world.",
-                "montessori": "Nature journal as independent work: the child goes outdoors with their journal and chooses what to observe. The journal is the child's own project, reviewed periodically with the teacher.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 20, "assessment": 10},
         "accommodations": {
@@ -3871,6 +3866,118 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Core strength area: observation and drawing. Detailed, colorful illustrations. Close-up views with magnifying glass.",
             "kinesthetic_learner": "The outdoor walk TO the observation spot is movement. Collecting specimens (leaves, seeds) to draw later. Building a nature collection alongside the journal.",
             "auditory_learner": "Describe what you see aloud before drawing. Discuss observations with a partner. Listen to birdsong and try to identify the species.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "A nature journal is a notebook in which the child draws and writes what they observe in the natural world. The drawing is made from life, looking at the real thing, not from memory. Beside the drawing go the date, the weather, and observations in specific words. Kept faithfully week by week, the journal records both the natural world and the child's growing power of careful attention. Today we begin and build this habit.",
+                "gradual_release": {
+                    "i_do": "Go outside, choose one thing, a leaf or a flower, sit down, and draw it slowly while looking at the real thing, thinking aloud: I keep looking back, and each time I see something new, a vein, a notch, a spot. Add the date, the weather, and a few exact describing words.",
+                    "we_do": "Make a journal entry side by side: choose something to observe, draw it from life, add the date and weather, and write observations together, pressing for specific words.",
+                    "you_do": "Child makes a nature journal entry, drawing from direct observation, recording the date and weather, and writing observations in specific descriptive language.",
+                },
+                "guided_practice": [
+                    "Draw one natural object from life, looking closely at the real thing",
+                    "Record the date and weather, and add specific describing words to the drawing",
+                    "Visit the same outdoor spot and note what has changed since the last entry",
+                ],
+                "independent_practice": [
+                    "Keep a weekly nature journal entry for several weeks running",
+                    "Make a close-up entry, drawing something small observed through a magnifying glass",
+                ],
+                "mastery_check": [
+                    "Maintain a nature journal with weekly entries for at least six weeks",
+                    "Draw from direct observation with increasing detail and accuracy",
+                    "Write observations in specific descriptive language alongside the drawings",
+                ],
+                "spiral_review": [
+                    "Revisit multi-sense observation, the careful looking the journal records",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The naturalists of old, before the camera, knew the world by drawing it. To set down a leaf or a bird truly on the page, the eye must look long and the hand must be honest. A nature journal is the discipline of that looking. Kept faithfully, it becomes both a record of the living world and a record of a mind being trained to attend.",
+                "memory_work": {
+                    "chants": [
+                        "Chant what every entry must carry: the date, the weather, a drawing from life, and observations in true words",
+                        "Chant the naturalist's rule: draw the thing before you, not the thing in your memory",
+                    ],
+                    "recitations": [
+                        "Recite that careful observation drawn and described is the beginning of natural knowledge, and that the journal is kept faithfully, week upon week",
+                    ],
+                },
+                "copywork": [
+                    "Copy a sentence of fine naturalist's description into the journal, and a list of exact words for color, shape, and texture",
+                ],
+                "recitation_routine": "Begin each session by looking back over the past entries and recalling what was observed before, so the journal is reviewed as it grows.",
+                "history_integration": "Tell that the great naturalists, Darwin aboard the Beagle, Audubon among the birds, kept just such journals, that their notebooks of drawings and observations were the seed of their discoveries, and that the child keeping a nature journal follows in their hand.",
+                "read_aloud_suggestions": [
+                    "A passage from a naturalist's own journal or writing, read aloud so the child hears how a careful observer sets down what they see",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautiful nature book or a naturalist's illustrated journal, with true artwork that shows the child what loving observation looks like",
+                ],
+                "short_lesson_flow": "Go out of doors unhurried and let the child choose what to attend to. They sit before the real thing, a flower, a beetle, a branch, and draw it from life, taking all the time it asks. The date, the weather, and a few true words are added. Week by week the journal fills. This is not an exercise but a way of meeting the world.",
+                "narration_prompt": "Tell me about what you drew today. What did you notice that you would have missed if you had not looked so closely?",
+                "real_world_objects": [
+                    "A blank nature notebook and pencils, plain and colored",
+                    "The whole out-of-doors, the journal's only subject",
+                    "A magnifying glass for close looking",
+                    "One spot returned to week after week, watched through the seasons",
+                ],
+                "nature_connection": "The nature notebook is the very heart of this lesson and of nature study itself: the child goes out, observes a living thing, and records it with love and care, building a personal record of their own corner of the natural world.",
+                "habit_focus": "The habit of attention: the slow, faithful, loving looking at a real thing that nature journaling cultivates above all.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A nature journal kept as the child's own ongoing work",
+                    "Pencils, colored pencils, and a magnifying glass on a prepared shelf",
+                    "A field guide for naming what is observed",
+                    "A basket for specimens, leaves and seeds, gathered to draw",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a journal entry: this is an observation drawn from life, looking at the real thing; show me a drawing made from life; was this drawn from life or from memory?",
+                    "steps": [
+                        "The child goes outdoors with the journal and chooses, freely, what to observe",
+                        "The child draws the chosen thing from life and adds the date, the weather, and observations",
+                        "The child reviews the journal periodically, seeing their own observation grow more careful over time",
+                    ],
+                },
+                "control_of_error": "The real object is the control: the child checks every drawn detail against the thing itself, and a field guide confirms a name, so the journal is corrected by nature, not by an adult.",
+                "abstraction_pathway": "From drawing a single object from life with care, to recording detailed observations week upon week, toward the settled habit of careful, sustained attention to the natural world.",
+                "extensions": [
+                    "Keep a year-long study of one tree, one garden, or one bird feeder",
+                    "Add measurements and labeled diagrams to the entries",
+                    "Use the field guide to name and research what is observed",
+                ],
+                "observation_focus": "Watch for the child drawing from life rather than memory, recording specific detail, and choosing their own subjects with growing care.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a lovely blank notebook and good pencils where the child can reach them",
+                    "Leave out a magnifying glass and field guides beside the door",
+                    "Let drawing and noting the natural world be a free, welcome thing, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Drawing a flower, a bug, or a cloud simply because it caught the child's eye",
+                    "Recording a treasure found on a walk: a feather, a shell, an interesting leaf",
+                    "Noting the weather or the season's change because it is worth remembering",
+                    "Keeping a record of a beloved place, a tree, a creek, a garden corner",
+                ],
+                "conversation_starters": [
+                    "That is beautiful, would you like to draw it so we can remember it?",
+                    "What do you notice about it when you look really closely?",
+                    "How has our tree changed since you drew it last?",
+                ],
+                "resource_bank": [
+                    "A blank notebook and good drawing materials, kept available",
+                    "A magnifying glass and field guides for the curious",
+                    "The out-of-doors itself, free and full of things worth drawing",
+                ],
+                "parent_role": "Keep a nature journal of your own and draw with the child for the pleasure of it, never as a task. Welcome whatever they choose to record, marvel at what they notice, and let the journal be the child's own loved keepsake of the natural world rather than an exercise.",
+                "observation_documentation": "Over time, note whether the child draws from life with growing care, records what they observe in specific words, and is forming the habit of attending closely to the natural world. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Nature journal writing builds descriptive language: specific vocabulary for colors, shapes, textures, and behaviors observed in nature",
