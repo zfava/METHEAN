@@ -370,6 +370,7 @@ class TestAuthoredPhilosophyContent:
             "sf-05",
             "sf-06",
             "sf-07",
+            "sf-08",
         ],
     )
     def test_node_has_all_five_native_variants(self, node_key):
@@ -448,6 +449,7 @@ class TestAuthoredPhilosophyContent:
             "sf-05",
             "sf-06",
             "sf-07",
+            "sf-08",
         ],
     )
     def test_unschooling_variant_has_no_lesson_keys(self, node_key):

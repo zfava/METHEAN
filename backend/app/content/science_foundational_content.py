@@ -1989,11 +1989,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "science notebook",
             ],
             "recommended": ["chalk for puddle marking", "kettle or pot for demonstrating steam (parent-supervised)"],
-            "philosophy_specific": {
-                "classical": "Water cycle memorized as a three-stage process. Vocabulary drilled: evaporation, condensation, precipitation. Diagram drawn and labeled from memory.",
-                "charlotte_mason": "Direct observation: the child watches puddles evaporate, sees dew form, feels rain fall. The science notebook records real observations of the water cycle happening around them.",
-                "montessori": "Water cycle experiment tray: the child sets up and observes the zip-lock bag experiment independently. Three-part nomenclature cards for water cycle stages.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -2003,6 +1998,118 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Water cycle diagram is the core visual tool. Watch water cycle videos. Observe real evaporation and condensation. Color-coded diagram.",
             "kinesthetic_learner": "All experiments are hands-on. Go outside to observe puddles, dew, and rain. Act out the water cycle: be a water droplet traveling through each stage.",
             "auditory_learner": "Narrate the water cycle as a story. Discuss each experiment: 'What happened? Why?' Listen to the sounds of rain and running water.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Water moves in a never-ending cycle. The sun heats water and it rises as invisible vapor: that is evaporation. High up, the vapor cools and gathers into clouds of tiny droplets: that is condensation. The droplets grow heavy and fall as rain or snow: that is precipitation. Then the cycle begins again. Today we learn the three stages, show evaporation and condensation with simple experiments, and explain where rain comes from and where it goes.",
+                "gradual_release": {
+                    "i_do": "Mark the edge of a puddle and think aloud about where the water goes as it dries: it evaporates. Hold a cold plate over steam and watch droplets form: that is condensation. Draw the cycle, naming each stage, and tell the journey of a single water droplet from the ocean to the cloud and back.",
+                    "we_do": "Set up the water-cycle-in-a-bag experiment together, watch evaporation and condensation happen, name each stage, and draw and label the full cycle.",
+                    "you_do": "Child names the three stages of the water cycle in order, demonstrates evaporation and condensation, and explains where rain comes from in their own words.",
+                },
+                "guided_practice": [
+                    "Watch a puddle evaporate, or set up the water-cycle-in-a-bag experiment",
+                    "Name the three stages in order: evaporation, condensation, precipitation",
+                    "Draw and label the water cycle with arrows showing the direction water moves",
+                ],
+                "independent_practice": [
+                    "Demonstrate evaporation and condensation with a household experiment and explain each",
+                    "Narrate the journey of a water droplet through the whole cycle",
+                ],
+                "mastery_check": [
+                    "Describe the three stages of the water cycle with correct vocabulary",
+                    "Demonstrate evaporation and condensation with a simple experiment",
+                    "Explain where rain comes from and where it goes",
+                ],
+                "spiral_review": [
+                    "Revisit the daily weather and the clouds, which the water cycle forms and fills",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The same water has been upon the Earth since the beginning, never lost, never made anew, but forever moving in a circle. The sun lifts it unseen from the sea, the cold air gathers it into clouds, the clouds let it fall again as rain, and the rivers carry it back to the sea. To know the water cycle is to know one of the great unbroken patterns that keep the world.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the water cycle in order: evaporation, condensation, precipitation, and round again",
+                        "Chant what each stage means: evaporation rises, condensation gathers, precipitation falls",
+                    ],
+                    "recitations": [
+                        "Recite that water is never lost but only changes its form, rising as vapor, gathering as cloud, and falling as rain",
+                    ],
+                },
+                "copywork": [
+                    "Copy the three stages of the water cycle in order, each with a few words of meaning",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the three stages of the water cycle in order before any new work or experiment.",
+                "history_integration": "Tell that whole civilizations rose and fell by the water cycle, that the yearly flood of the Nile, fed by far-off rain, made Egypt rich, and that people have always settled where the cycle brings water to the land.",
+                "read_aloud_suggestions": [
+                    "A living account that follows a drop of water on its journey from sea to cloud to rain and back, read aloud so the child hears the cycle told as a story",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book that tells the journey of water through its cycle, with true artwork and never a workbook",
+                ],
+                "short_lesson_flow": "Let the lesson be the real water cycle, met out of doors and about the house. Watch a puddle shrink in the sun, find dew on the morning grass, see a cold glass grow wet, notice the steam from the kettle. Each is a stage of the cycle, observed and quietly named. The child records what they truly see in the nature notebook.",
+                "narration_prompt": "Tell me about the puddle, or the dew, or the wet glass. What happened to the water, and which stage of the cycle was it?",
+                "real_world_objects": [
+                    "A real puddle, marked and watched as it evaporates",
+                    "A cold glass that gathers condensation, the morning dew, the kettle's steam",
+                    "A nature notebook for recording the cycle observed",
+                    "A sealed bag of water at a sunny window, a small water cycle to watch",
+                ],
+                "nature_connection": "The water cycle is met directly in nature: the rain, the dew, the fog, the drying puddle, the river running to the sea, and the child learns it by watching the real water moving around them.",
+                "habit_focus": "The habit of attention: noticing the water cycle quietly at work in the puddle, the dew, and the rain of ordinary days.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A water cycle experiment tray: sealed bags, a glass, and water, for the child to set up alone",
+                    "Three-part nomenclature cards for the stages of the water cycle",
+                    "A water cycle diagram for the child to build and label",
+                    "A magnifying glass for observing droplets of condensation",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the water cycle cards: this stage is evaporation, the water rises as vapor; show me evaporation; which stage of the cycle is this?",
+                    "steps": [
+                        "The child sets up the water-cycle-in-a-bag experiment on the tray and observes it over hours",
+                        "The child names each stage as it appears: evaporation, condensation, precipitation",
+                        "The child works the nomenclature cards and builds the labeled water cycle diagram",
+                    ],
+                },
+                "control_of_error": "The experiment is the control: in the sealed bag the child sees evaporation, condensation, and precipitation happen for themselves, and the three-part cards match the stages in one true way, so a misnamed stage does not fit.",
+                "abstraction_pathway": "From watching the real cycle in the sealed-bag experiment, to matching the nomenclature cards and building the diagram, toward explaining the whole cycle and the journey of water without the materials.",
+                "extensions": [
+                    "Connect the cycle to the three states of water: solid, liquid, and gas",
+                    "Measure how long a puddle takes to evaporate",
+                    "Compare the water cycle in a warm climate and a cold one",
+                ],
+                "observation_focus": "Watch for the child naming the stages in correct order and understanding that water is not lost when it evaporates but only changed in form.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep sealed bags, a clear glass, and chalk available for water cycle experiments",
+                    "Leave out books about water, rain, and weather",
+                    "Let the cycle be noticed in the everyday: the kettle, the puddle, the dew",
+                ],
+                "real_world_contexts": [
+                    "Watching puddles shrink and dry on a sunny day",
+                    "Noticing dew on the morning grass and fog on a cool morning",
+                    "Seeing the kettle steam, and water beads on a cold drink",
+                    "Watching rain fall, run into drains, and feed the rivers",
+                ],
+                "conversation_starters": [
+                    "The puddle was here this morning, where did the water go?",
+                    "There is no water in the bag but droplets on the side, where did they come from?",
+                    "Where do you think the rain goes after it falls?",
+                ],
+                "resource_bank": [
+                    "Sealed bags and a clear glass for simple experiments",
+                    "Books about water, weather, and rivers",
+                    "The everyday water cycle: kettles, puddles, dew, and rain",
+                ],
+                "parent_role": "Wonder aloud at the water cycle wherever it shows itself, the drying puddle, the steaming kettle, the wet cold glass, the falling rain, and follow the child's questions into a simple experiment if they wish. Let the real, everyday movement of water, rather than a worksheet, do the teaching.",
+                "observation_documentation": "Over time, note whether the child can tell the stages of the water cycle, recognizes evaporation and condensation when they see them, and understands where rain comes from and where it goes. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Water cycle vocabulary builds science literacy: evaporation, condensation, precipitation, vapor, cycle",
