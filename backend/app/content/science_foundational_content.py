@@ -1722,11 +1722,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "science notebook for seasonal observations",
             ],
             "recommended": ["seasonal nature photographs", "calendar for tracking daylight hours"],
-            "philosophy_specific": {
-                "classical": "Memorize seasonal characteristics and the Earth's tilt explanation. Vocabulary: equinox, solstice, hemisphere, axis. Structured seasonal observation records.",
-                "charlotte_mason": "Seasonal nature study is CENTRAL to Charlotte Mason science. Visit the same outdoor spot monthly and draw what you see. The child's nature notebook becomes a year-long seasonal record.",
-                "montessori": "Seasonal table: a display that changes with the season, with natural objects collected by the child. Globe work: physical demonstration of Earth's tilt and seasons.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -1736,6 +1731,118 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Season wheel with detailed drawings. Photographs of the same place in different seasons. Globe and flashlight demonstration.",
             "kinesthetic_learner": "Globe demonstration with physical movement (the child IS Earth, walking around a lamp while tilting). Outdoor observation. Collect seasonal nature objects.",
             "auditory_learner": "Discuss seasonal changes in conversation. Listen to sounds that differ by season (bird songs in spring, crickets in summer, wind in fall). Oral descriptions of each season.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "The year turns through four seasons, and each has its own character: spring's new growth, summer's warmth and abundance, autumn's harvest and falling leaves, winter's cold and rest. Today we describe each season by its temperature, daylight, weather, and changes in nature; we learn how plants and animals respond to the seasons; and we learn the great cause behind them all, the tilt of the Earth as it orbits the sun.",
+                "gradual_release": {
+                    "i_do": "Name the current season and think aloud through its signs: the temperature, the length of the day, what the trees are doing, what the animals are doing. Then, with a globe and a flashlight, tilt the globe and show how the half tilted toward the light gets summer and the half tilted away gets winter.",
+                    "we_do": "Describe each of the four seasons together, listing its temperature, daylight, weather, and changes in nature, and demonstrate the Earth's tilt with the globe and flashlight.",
+                    "you_do": "Child describes all four seasons by their characteristics, explains how plants and animals respond to them, and shows with the globe why the seasons change.",
+                },
+                "guided_practice": [
+                    "Describe each season's temperature, daylight, weather, and changes in nature",
+                    "Name how plants and animals respond to each season: budding, migration, hibernation",
+                    "Demonstrate the Earth's tilt with a globe and flashlight",
+                ],
+                "independent_practice": [
+                    "Keep a seasonal nature journal, revisiting the same outdoor spot each month",
+                    "Make a four-part season wheel showing the same place across the year",
+                ],
+                "mastery_check": [
+                    "Describe all four seasons with their temperature, daylight, weather, and nature changes",
+                    "Explain how plants and animals respond to seasonal change",
+                    "Connect the seasons to the Earth's tilted axis and its orbit around the sun",
+                ],
+                "spiral_review": [
+                    "Revisit recording observations in a notebook, the monthly habit the seasonal journal depends on",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The year moves in a great and certain circle, and the four seasons are its quarters. People in every age have lived by this rhythm, planting in spring, harvesting in autumn, resting in winter. Behind the turning lies a quiet cause: the Earth leans on its axis, and as it journeys round the sun, first one half and then the other is given the fuller light.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the four seasons in their order: spring, summer, autumn, winter, and round to spring again",
+                        "Chant the cause of the seasons: the Earth is tilted, and the half that leans toward the sun has summer",
+                    ],
+                    "recitations": [
+                        "Recite that seasons come from the tilt of the Earth, not its distance from the sun, and that the angle of the light, direct or slanting, makes the warmth or the cold",
+                    ],
+                },
+                "copywork": [
+                    "Copy the names of the four seasons in order, each with a few words of its character, and the words equinox, solstice, axis, hemisphere",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the four seasons in order and the cause of their turning before any new study.",
+                "history_integration": "Tell that the seasons have governed human life since the beginning, that the first calendars were made to mark them, and that the harvest festivals and the solstice celebrations of every people are the year's turning kept as feast.",
+                "read_aloud_suggestions": [
+                    "A living account of the year passing through its four seasons, read aloud so the child hears the great rhythm told",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book that follows the turning year through its seasons, with true artwork and never a workbook",
+                ],
+                "short_lesson_flow": "Choose one spot out of doors, a tree, a garden corner, a stretch of hedge, and visit it together each month. Look quietly at how it has changed since the last visit, and the child draws it as it now is in the nature notebook. Across a year, the notebook itself becomes the lesson, the seasons told in the child's own drawings.",
+                "narration_prompt": "Tell me how our spot has changed since we last visited it. What season are we in now, and how can you tell?",
+                "real_world_objects": [
+                    "One outdoor spot, a tree or garden corner, returned to month by month",
+                    "A nature notebook holding a year of seasonal drawings",
+                    "A globe and a flashlight for the tilt of the Earth",
+                    "A seasonal nature table holding what the child gathers each season",
+                ],
+                "nature_connection": "Seasonal nature study is at the very heart of this lesson: the whole turning year is the subject, and the child comes to know the seasons not from a book but from a beloved place watched through all of them.",
+                "habit_focus": "The habit of attention sustained over time: returning faithfully to the same place and noticing its slow, seasonal change.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A seasonal nature table that the child changes with each season's gathered objects",
+                    "A globe and a light source for demonstrating the Earth's tilt",
+                    "Season classification cards showing the year's quarters",
+                    "A four-part season wheel the child completes",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the season cards: this is autumn, the leaves turn and fall; show me autumn; which season is this?",
+                    "steps": [
+                        "The child observes the current season out of doors and tends the seasonal nature table with what they gather",
+                        "The child works the season cards, naming each season by its characteristics",
+                        "The child uses the globe and light to discover how the Earth's tilt brings the seasons in turn",
+                    ],
+                },
+                "control_of_error": "The real, turning year is the control: the seasonal nature table and the season cards are checked against what the child sees out of doors, and a season misnamed does not match the world beyond the window.",
+                "abstraction_pathway": "From observing and gathering the real, present season, to classifying all four with the cards, toward grasping the unseen cause, the tilted Earth orbiting the sun.",
+                "extensions": [
+                    "Track the daylight hours through the year and see them lengthen and shorten",
+                    "Study how a chosen animal lives through each season",
+                    "Compare the seasons of the Northern and Southern Hemispheres",
+                ],
+                "observation_focus": "Watch for the child reading the season from real signs out of doors, and grasping that the tilt of the Earth, not its distance, brings the seasons.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a seasonal nature table for the treasures the child gathers as the year turns",
+                    "Leave out a globe and a flashlight for free exploring of the Earth and sun",
+                    "Have beautiful books about the seasons and the year within reach",
+                ],
+                "real_world_contexts": [
+                    "Dressing for the season and noticing the temperature change through the year",
+                    "Eating the foods of each season: summer berries, autumn apples, winter squash",
+                    "Watching the trees bud, leaf, color, and bare across the year",
+                    "Keeping the family's holidays and celebrations, which follow the seasons",
+                ],
+                "conversation_starters": [
+                    "What season is it now? How can you tell?",
+                    "Why do you think the leaves fall in autumn? What is the tree doing?",
+                    "When it is summer here, what season do you think it is on the other side of the world?",
+                ],
+                "resource_bank": [
+                    "A globe and flashlight kept available",
+                    "Beautiful books about the seasons and the turning year",
+                    "The out-of-doors itself, changing through every season",
+                ],
+                "parent_role": "Live the seasons gladly with the child, the foods, the clothes, the festivals, the changing weather, and wonder aloud at the signs each season brings. Bring out the globe when the child asks why, and let the real, turning year, rather than a worksheet, teach its rhythm.",
+                "observation_documentation": "Over time, note whether the child can describe each season, sees how plants and animals respond to it, and understands that the Earth's tilt brings the seasons. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Seasonal vocabulary enriches reading: equinox, solstice, migration, hibernation, deciduous, evergreen",
