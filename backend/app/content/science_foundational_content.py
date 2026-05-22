@@ -3585,11 +3585,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["household items for experiments (balls, paper, water)", "science notebook for recording"],
             "recommended": ["measuring tape or ruler", "timer or clock for timed experiments"],
-            "philosophy_specific": {
-                "classical": "The scientific method memorized as a formal sequence. Structured experiment reports with each step labeled. Vocabulary: hypothesis, variable, control, observation, conclusion.",
-                "charlotte_mason": "The child as natural scientist: wondering, guessing, testing, discovering. Science notebook records the process. The method is learned through DOING, not memorizing steps.",
-                "montessori": "Experiment trays set up for the child to work through independently. The child records observations in a science journal. Self-directed inquiry with teacher guidance.",
-            },
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 15},
         "accommodations": {
@@ -3599,6 +3594,117 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Experiment charts and diagrams. Before/after photographs. Visual recording of results.",
             "kinesthetic_learner": "The entire scientific method is hands-on at this level. Build, test, measure, compare. Physical experiments are the core activity.",
             "auditory_learner": "Discuss predictions and results as conversations. 'What do you think will happen? Why?' Verbal experiment reports.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "The scientific method is the orderly way of answering a question about the world. It runs through steps: observe something, ask a question you can test, predict what you think will happen, test it with an experiment, and describe the results. Then compare the results to the prediction. A wrong prediction is not a failure; it is something learned. Today we learn the steps, ask a testable question, make a prediction, and record and compare our results.",
+                "gradual_release": {
+                    "i_do": "Take three balls and think aloud through the method: I observe them, I ask which bounces highest, I predict the tennis ball and say why, I test by dropping each from the same height, and I describe what happened. Show that comparing the result to the prediction, even when the prediction was wrong, is where the learning is.",
+                    "we_do": "Work through a simple experiment together, naming each step as we reach it: observe, question, predict, test, and describe the results, then compare them to the prediction.",
+                    "you_do": "Child names the steps of the scientific method, asks a testable question, makes a prediction, conducts the test, and records and compares the results.",
+                },
+                "guided_practice": [
+                    "Name the steps of the scientific method in order",
+                    "Turn a real observation into a testable question and a prediction",
+                    "Conduct a simple experiment and record the results in the science notebook",
+                ],
+                "independent_practice": [
+                    "Design and carry out a complete mini-experiment, testing it more than once",
+                    "Plan a fair test: change only one thing and keep the rest the same",
+                ],
+                "mastery_check": [
+                    "Describe the steps of the scientific method: observe, question, predict, test, describe results",
+                    "Ask a testable question and make a prediction before an experiment",
+                    "Record results accurately and compare them to the prediction",
+                ],
+                "spiral_review": [
+                    "Revisit careful observation, the first step on which every later step of the method depends",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "How does anyone come to know a thing for certain about the world? Not by guessing and not merely by being told, but by a disciplined way of reasoning: to observe carefully, to ask a clear question, to form a supposition, to put that supposition to the test of experiment, and to judge it honestly by what truly happens. This is the scientific method, the great instrument by which knowledge of nature is won.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the steps of the method: observe, question, predict, test, and describe the results",
+                        "Chant the honest rule: a prediction proven wrong is not a failure but a thing discovered",
+                    ],
+                    "recitations": [
+                        "Recite that a prediction is a supposition put to the test, and that the careful reasoner judges it by the evidence, not by hope",
+                    ],
+                },
+                "copywork": [
+                    "Copy the steps of the scientific method in order, and the form of a hypothesis: if this, then that, because",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the steps of the scientific method in order before any new experiment is undertaken.",
+                "history_integration": "Tell that the scientific method was forged over many centuries, that Aristotle observed, that Ibn al-Haytham of old insisted on experiment, that Galileo tested and Bacon set down the method in words, and that to follow these steps is to take up the great inheritance of natural philosophy.",
+                "read_aloud_suggestions": [
+                    "An account of a famous experiment and the question it answered, read aloud so the child hears the scientific method at work in history",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A living book that tells the story of a scientist's discovery, the wondering, the trying, the finding out, never a dry method textbook",
+                ],
+                "short_lesson_flow": "There is no method to memorize first. Begin with a real wondering, the child's own or one you share, and follow it: what do we notice, what do we want to know, what do we think, let us try and see. Do the simple experiment together, gladly, and let the child tell what happened. The method is learned by living it, not by reciting it.",
+                "narration_prompt": "Tell me what we wondered and what we did to find out. What did you think would happen, and what really happened?",
+                "real_world_objects": [
+                    "Simple household things for real experiments: balls, water, paper, ramps",
+                    "A science notebook for recording the wondering and the result",
+                    "The whole world, full of things that prompt a genuine question",
+                ],
+                "nature_connection": "Out of doors the child's wonderings come thick and fast, why does the moss grow on one side, which seeds float, and each is a question to try, so that nature study itself becomes the practice of the method.",
+                "habit_focus": "The habit of attention and of an honest mind: observing truly, supposing thoughtfully, and accepting gladly what the experiment shows.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Experiment trays the child sets up and works through independently: a sink-or-float tray, a ball-bounce tray, a ramp tray",
+                    "A science journal for recording the question, the prediction, and the result",
+                    "Prediction-and-result recording sheets",
+                    "Simple, repeatable materials so a test may be run more than once",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With an experiment tray: this is the prediction, what we think will happen before we test; show me the prediction; which part of the experiment is this?",
+                    "steps": [
+                        "The child observes the materials on the tray and frames a question they can test",
+                        "The child writes a prediction, then carries out the experiment, repeating it to be sure",
+                        "The child records the result and compares it honestly to the prediction",
+                    ],
+                },
+                "control_of_error": "The experiment is the control: the result is what it is, plain for the child to see, and it confirms or corrects the prediction with no need of an adult's word.",
+                "abstraction_pathway": "From working a prepared experiment tray with the question and prediction supplied, to framing one's own question and prediction, toward conducting independent inquiry and judging it by the evidence.",
+                "extensions": [
+                    "Design an original experiment and carry it through",
+                    "Plan a fair test, changing only one thing at a time",
+                    "Keep an ongoing journal of questions, predictions, and results",
+                ],
+                "observation_focus": "Watch for the child predicting before testing, repeating a test rather than trusting one result, and accepting the evidence even when it surprises them.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a rich supply of stuff to tinker with, things to drop, float, mix, build, and take apart",
+                    "Leave out a notebook and let the child record their wonderings and findings however they wish",
+                    "Let questions and experiments arise freely, with no fixed time or procedure",
+                ],
+                "real_world_contexts": [
+                    "The child's own constant experiments: what happens if I mix these, drop this, build it taller",
+                    "Cooking, where a guess is made, tried, and tasted, and changed next time",
+                    "Tinkering and building, testing what works and what does not",
+                    "Wondering aloud at everyday puzzles and trying things to find out",
+                ],
+                "conversation_starters": [
+                    "That is a good question, what do you think the answer is? How could we find out?",
+                    "Before we try it, what do you think will happen? Why?",
+                    "You changed two things at once, how will we know which one made the difference?",
+                ],
+                "resource_bank": [
+                    "Open-ended materials for tinkering and experimenting",
+                    "A notebook, kept available, for recording wonderings and discoveries",
+                    "Books about scientists, inventions, and curious questions",
+                ],
+                "parent_role": "Treat the child as the natural scientist they already are: welcome their endless what-if questions, and rather than teaching steps, wonder alongside them, ask what they predict before they try, and help them notice when a test was muddled. Let real curiosity and real tinkering, never a worksheet, be where the method is lived.",
+                "observation_documentation": "Over time, note whether the child asks questions they can test, makes a guess before trying, observes honestly what happens, and learns gladly from a surprise. This lived noticing of a curious mind at work replaces any test.",
+            },
         },
         "connections": {
             "reading": "Scientific method vocabulary: observe, hypothesis, predict, experiment, variable, control, conclusion, evidence",
