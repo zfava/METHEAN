@@ -668,11 +668,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "ruler for measuring growth",
                 "fast-growing flower seeds (sunflower, marigold)",
             ],
-            "philosophy_specific": {
-                "classical": "Plant life cycle memorized as a sequence. Vocabulary drilled: germination, photosynthesis, dispersal. Structured observation logs.",
-                "charlotte_mason": "The child plants seeds, tends them daily, draws what they see in their nature notebook. Direct observation is primary — textbooks are secondary. The garden IS the classroom.",
-                "montessori": "Botany nomenclature cards: parts of a plant with three-part matching. Seed sprouting trays. Practical life: watering and caring for classroom/home plants.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -682,6 +677,118 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Drawings of each stage are the core activity. Time-lapse videos of plant growth. Colorful life cycle posters.",
             "kinesthetic_learner": "Planting, watering, and tending plants. Seed collecting outdoors. Building a mini-greenhouse from a plastic bottle.",
             "auditory_learner": "Narrate observations aloud before drawing. Discuss predictions: 'What do you think will happen next?' Listen to audiobooks about plants.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "A plant's life runs in a cycle: a seed sprouts, grows into a seedling and then a mature plant, flowers, makes fruit, and the fruit holds new seeds, and the cycle begins again. Today we plant a seed and watch it grow, recording each week; we draw and label every stage of the life cycle; we learn what a plant needs to live, sunlight, water, soil, and air; and we learn how seeds travel to new places.",
+                "gradual_release": {
+                    "i_do": "Plant a bean seed against the side of a clear cup and think aloud about each stage as it comes: the root pushes down, the stem pushes up, the first leaves unfurl. Draw the stage in the notebook. Name what the plant needs, and show how a dandelion's seed is built to ride the wind.",
+                    "we_do": "Tend the growing plant together, record its weekly changes in the notebook, draw the life-cycle stages, and sort a handful of seeds by how they travel.",
+                    "you_do": "Child grows a plant from seed and records it weekly, draws and labels the full life cycle, explains what plants need, and describes seed dispersal.",
+                },
+                "guided_practice": [
+                    "Plant a seed and record its changes in the science notebook each week",
+                    "Draw and label the stages of the plant life cycle in a circle",
+                    "Sort seeds by how they travel: wind, water, animals, explosion",
+                ],
+                "independent_practice": [
+                    "Keep a weekly plant journal with drawings and measurements for several weeks",
+                    "Design a simple experiment to show what a plant needs to grow",
+                ],
+                "mastery_check": [
+                    "Draw and label all stages of the plant life cycle",
+                    "Explain what plants need to survive: sunlight, water, soil, and air",
+                    "Describe at least two ways seeds are dispersed",
+                ],
+                "spiral_review": [
+                    "Revisit recording observations in the science notebook, the weekly habit the plant journal depends on",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "There is no plainer picture of order in nature than the life of a plant, which moves in a circle that never ends. The seed holds a sleeping plant; given water and warmth it wakes, roots downward, rises, leafs, flowers, and fruits, and the fruit yields seeds again. To know this cycle is to know one of the great recurring patterns of the living world.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the plant life cycle in order: seed, sprout, seedling, plant, flower, fruit, and seed once more",
+                        "Chant what a plant needs: sunlight and water, soil and air",
+                    ],
+                    "recitations": [
+                        "Recite the four ways seeds travel: by the wind, by the water, by the animals, and by the bursting of the pod",
+                    ],
+                },
+                "copywork": [
+                    "Copy the stages of the plant life cycle in order, neatly, and the list of what a plant needs to live",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the stages of the plant life cycle before tending the growing plant or beginning new work.",
+                "history_integration": "Tell that the understanding of the plant life cycle changed the course of human history, for when people learned to plant and harvest seeds on purpose they could settle, build, and grow, and farming itself is the plant life cycle put to work.",
+                "read_aloud_suggestions": [
+                    "A living account of a plant growing through the seasons, from seed to flower to seed, read aloud so the child hears the cycle told",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book about a plant's growth or a garden, with true botanical artwork and never a workbook",
+                ],
+                "short_lesson_flow": "Plant a seed together and set it where the child can watch it. Each day, a brief, glad visit: what has changed. Once a week, the child draws the plant as it now is in the nature notebook. Tend it faithfully, with no rush, and let the slow unfolding of the cycle be the lesson. The garden, indoors or out, is the classroom.",
+                "narration_prompt": "Tell me how your plant has changed since last week. What do you think it will do next?",
+                "real_world_objects": [
+                    "A bean seed growing in a clear cup, watched daily",
+                    "A nature notebook for weekly drawings of the plant",
+                    "A real garden bed, or pots, the child helps tend",
+                    "Seeds gathered on a walk: dandelion fluff, burrs, maple keys",
+                ],
+                "nature_connection": "The plant life cycle is nature study itself: the child watches their own seed, and also the trees and flowers around the home, flowering in spring, fruiting in summer, seeding in fall, and draws the seasons of growth in the nature notebook.",
+                "habit_focus": "The habit of attention and of faithful care: tending a living plant daily and noticing its quiet, steady change.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The botany nomenclature cards: parts of a plant and stages of the life cycle, with three-part matching",
+                    "Seed-sprouting trays and clear cups for watching germination",
+                    "Real plants in the prepared environment for the child to water and tend",
+                    "A magnifying glass for examining seeds",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the life-cycle cards: this stage is the seedling; show me the seedling; which stage of the life cycle is this?",
+                    "steps": [
+                        "The child opens and examines real seeds, finding the tiny plant within",
+                        "The child plants a seed and tends it, watching and recording each stage of germination and growth",
+                        "The child works the botany nomenclature cards, matching each stage of the life cycle in order",
+                    ],
+                },
+                "control_of_error": "The three-part nomenclature cards carry their own control, matching label to picture in one true way, and the growing plant is the deeper control: a plant denied water or light shows the child plainly what was missing.",
+                "abstraction_pathway": "From handling real seeds and tending a real plant, to matching the life-cycle nomenclature cards, toward drawing and explaining the full cycle and a plant's needs without the materials.",
+                "extensions": [
+                    "Tend the classroom or home plants as practical-life care",
+                    "Compare the life cycles and seeds of different plants",
+                    "Investigate seed dispersal by sorting and examining many kinds of seed",
+                ],
+                "observation_focus": "Watch for the child tending the plant faithfully, recording its stages accurately, and grasping that the plant makes its own food while the soil gives water and minerals.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep seeds, pots, soil, and clear cups available for planting whenever the child wishes",
+                    "Leave out a notebook and a magnifying glass beside the growing plants",
+                    "Have nature books about plants and gardens within reach",
+                ],
+                "real_world_contexts": [
+                    "Growing food or flowers in a real garden or in pots",
+                    "Noticing the fruits and vegetables in the kitchen and the seeds inside them",
+                    "Watching the neighborhood trees flower, fruit, and seed through the year",
+                    "Collecting and wondering at seeds on a walk: dandelion fluff, burrs, acorns",
+                ],
+                "conversation_starters": [
+                    "What do you think this seed will do if we plant it and water it?",
+                    "Why do you think a dandelion wants its seeds to blow away?",
+                    "What does our plant need that we have to give it?",
+                ],
+                "resource_bank": [
+                    "Seeds, soil, pots, and a sunny windowsill or garden bed",
+                    "Nature books and field guides about plants",
+                    "The neighborhood trees and gardens, a plant cycle to watch all year",
+                ],
+                "parent_role": "Plant things alongside the child for the real joy and use of it, food to eat, flowers to enjoy, and let them tend what they plant. Wonder aloud about seeds, growth, and what the plant needs, and let the garden and the kitchen, rather than a worksheet, teach the cycle.",
+                "observation_documentation": "Over time, note whether the child can tell the stages of a plant's life, knows what a plant needs, watches a plant grow with care, and understands how seeds travel. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Plant vocabulary builds reading comprehension: germination, photosynthesis, dispersal, seedling, dormant",
