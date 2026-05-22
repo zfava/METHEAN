@@ -2153,10 +2153,113 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Listen for digraph sounds in a read-aloud and clap when you hear one. Digraph chants: 'sh says /sh/, ch says /ch/.'",
         },
         "philosophy_specific": {
-            "classical": "Systematic digraph instruction: one digraph mastered before introducing the next. Phonogram drill cards with daily review.",
-            "charlotte_mason": "Digraphs discovered in living books. During read-alouds, pause at digraph words: 'See these two letters? They make one sound.'",
-            "montessori": "Digraph sandpaper letters (both letters on one board). Green series: digraph word cards with matching objects.",
-            "traditional": "Digraph worksheets: circle the digraph, sort by digraph, fill in the missing digraph.",
+            "traditional": {
+                "introduction": "A consonant digraph is two letters that team up to make one new sound, a sound neither letter makes alone. The sh in ship is not /s/ or /h/; it is one /sh/ sound. That is different from a blend, where both letter sounds are heard. Today we read and spell words with sh, ch, th, wh, and ck.",
+                "gradual_release": {
+                    "i_do": "Model reading ship, the sh making a single /sh/ sound. Build a digraph word with letter tiles, treating the digraph as one unit on one tile. Contrast a digraph, sh with one sound, against a blend, sl with two sounds.",
+                    "we_do": "Read digraph words together by digraph, then sort picture and word cards into digraph columns. Spell a digraph word together, and sort digraphs from blends.",
+                    "you_do": "Child reads words with all five digraphs in initial and final position, spells digraph words, and tells digraphs apart from blends.",
+                },
+                "guided_practice": [
+                    "Digraph picture sorts into five columns, one per digraph",
+                    "Build digraph words with letter tiles, the digraph as a single unit",
+                    "Sort a set of words into digraphs and blends",
+                ],
+                "independent_practice": [
+                    "Read sentences containing several digraphs",
+                    "Spell digraph words from dictation, choosing the correct digraph",
+                ],
+                "mastery_check": [
+                    "Read words with sh, ch, th, wh, and ck accurately",
+                    "Spell digraph words in initial and final position",
+                    "Explain how a digraph differs from a blend",
+                ],
+                "spiral_review": [
+                    "Revisit consonant blends so the digraph and blend distinction stays clear",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "A digraph is a pair of letters that, joined, make a single new sound that neither could make alone. Learn the five common digraphs in order, one mastered before the next, and many words come within reach of reading.",
+                "memory_work": {
+                    "chants": [
+                        "Chant each digraph with its sound: sh says /sh/, ch says /ch/, th says /th/",
+                        "Chant digraph words that share a digraph, hearing the one sound the pair makes",
+                        "Chant the distinction: a digraph makes one new sound, a blend keeps both",
+                    ],
+                    "recitations": [
+                        "Recite the digraphs and their sounds learned so far before a new one is added",
+                    ],
+                },
+                "copywork": [
+                    "Copy digraph words neatly while sounding the digraph as one sound, the two letters written and read as one",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the digraphs mastered so far before adding the next; one digraph is mastered before the next, cumulatively.",
+                "history_integration": "Tell, simply, that these letter pairs were one way older writers found to spell sounds the single letters could not; the digraphs are part of the long history of our spelling.",
+                "read_aloud_suggestions": [
+                    "A rich read-aloud for the ear, and readers that bring the digraphs into real sentences",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "The family's current living read-aloud and simple readers in which digraph words appear in real, worthy sentences",
+                ],
+                "short_lesson_flow": "In a book read together, pause at a digraph word. Notice the two letters that join to make one new sound. Attend to a single digraph, gently, and stop while the child is still interested.",
+                "narration_prompt": "Tell me the two letters that made one sound today, and another word of your own that has them.",
+                "real_world_objects": [
+                    "Digraph words at mealtimes: cheese, chips, fish, mash",
+                    "Digraph words in the home: chair, shelf, bath, kitchen",
+                    "Digraph words outdoors: path, shell, bench, bush",
+                ],
+                "nature_connection": "On a nature walk, notice digraph words for things that are found, shell, thistle, bush, path, and write one of them in the nature notebook.",
+                "habit_focus": "The habit of careful listening and looking: hearing the one new sound the letter pair makes, rather than two.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The digraph sandpaper letters, both letters on one board, traced while the single sound is voiced",
+                    "The green series digraph word cards with their matching objects",
+                    "The large movable alphabet, the digraph treated as one unit",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a digraph sandpaper board: this says /sh/, traced this way; show me /sh/; what does this say? The one sound, never the two letter names.",
+                    "steps": [
+                        "Trace the digraph board while voicing its single sound",
+                        "Build digraph words with the movable alphabet, treating the digraph as one unit",
+                        "Match the green series digraph word cards to their objects, sounding each digraph out to check",
+                    ],
+                },
+                "control_of_error": "Each green series digraph word card has its own object or picture, so a word that does not match its pair reveals a misread to the child without an adult's word.",
+                "abstraction_pathway": "From tracing the digraph board while voicing its one sound (the pair made one in the hand), to reading the green series cards, toward reading digraph words in any text.",
+                "extensions": [
+                    "Work through green series digraph word lists and read digraph phrases",
+                    "Sort words into digraphs and blends with the materials",
+                ],
+                "observation_focus": "Watch that the child reads the digraph as a single sound and does not split it into two.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep letter tiles within reach, including digraph tiles that hold the pair as one unit",
+                    "Leave readers that use digraph words on a low shelf",
+                    "Let digraph words show up naturally on kitchen and household labels",
+                ],
+                "real_world_contexts": [
+                    "Digraph words met at meals and in the home: cheese, dish, chair, bath",
+                    "Digraph words outdoors: shell, path, bush",
+                    "Digraph sounds in family words such as mother, father, and child",
+                ],
+                "conversation_starters": [
+                    "In ship, how many sounds do you hear at the start, one or two? How is it different from slip?",
+                    "Put your hand in front of your mouth and say thin, then say fin. Do you feel the difference?",
+                    "Can you think of a word that starts with ch? Now one that starts with sh?",
+                ],
+                "resource_bank": [
+                    "Magnetic letters and letter tiles",
+                    "Decodable readers that include digraph words, kept available",
+                    "Word-building games",
+                ],
+                "parent_role": "When a digraph word comes up in real reading, point out the pair of letters and the one sound they make, and follow the words the child wants to read. Let real reading attempts do the teaching rather than a drill.",
+                "observation_documentation": "Over time, note whether the child reads the five digraphs, hears one new sound for each, tells a digraph apart from a blend, and spells digraph words. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Two digits can make one number (place value), two letters can make one sound (digraph)",
