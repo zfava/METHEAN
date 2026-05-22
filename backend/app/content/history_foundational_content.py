@@ -1206,11 +1206,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["world map or globe", "pictures of the Great Wall, Chinese inventions"],
             "recommended": ["living books about ancient China", "compass for hands-on exploration"],
-            "philosophy_specific": {
-                "classical": "Memorize the four inventions, key dynasty names, and Confucius quotes. Timeline cards. Map drill of China.",
-                "charlotte_mason": "Living books about ancient China read aloud with narration. Chinese brush painting as art connection. Map drawn from memory into Book of Centuries.",
-                "montessori": "China continent folder with photographs and fact cards. Compass work as practical geography. Paper-making as a sensorial experience.",
-            },
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 10},
         "accommodations": {
@@ -1220,6 +1215,119 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Photographs of the Great Wall, terracotta warriors, Chinese calligraphy. Map drawing with colors.",
             "kinesthetic_learner": "Build the Great Wall. Make paper. Practice calligraphy with a brush. Use a compass on a nature walk.",
             "auditory_learner": "Listen to stories about Confucius and ancient Chinese legends. Discuss inventions and their impact.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Ancient China is the oldest civilization that has continued unbroken to the present day. It began along the Yellow River, was ruled by a succession of dynasties, and built the Great Wall over centuries to guard its northern border. China gave the world four great inventions, paper, printing, the compass, and gunpowder, and a teacher named Confucius whose lessons on respect, order, and duty shaped the culture for over two thousand years. Today we narrate ancient China, name the four inventions, describe Confucius's teaching, and locate China and the Yellow River.",
+                "gradual_release": {
+                    "i_do": "Tell the story of ancient China in order: the Yellow River and its first farmers, the dynasties that rose and fell, the Great Wall built over centuries, the four great inventions and what each changed, and Confucius and his teaching on respect and duty. Point to China and the Yellow River on the map.",
+                    "we_do": "Retell the story of ancient China together, name and explain the four great inventions, and locate China and the Yellow River on the map.",
+                    "you_do": "Child narrates ancient China, names the four great inventions and why each mattered, describes Confucius's teaching, and locates China and the Yellow River.",
+                },
+                "guided_practice": [
+                    "Retell the story of ancient China: the Yellow River, the dynasties, the Great Wall",
+                    "Name the four great inventions and explain why each one mattered",
+                    "Locate China and the Yellow River on a map",
+                ],
+                "independent_practice": [
+                    "Narrate the full story of ancient China from memory",
+                    "Explain how one of the four great inventions changed the world",
+                ],
+                "mastery_check": [
+                    "Narrate ancient China including the Yellow River, the Great Wall, and the dynasties",
+                    "Name the four great inventions of ancient China and why each mattered",
+                    "Describe Confucius's teaching and locate China and the Yellow River on a map",
+                ],
+                "spiral_review": [
+                    "Revisit the other river valley civilizations, and set ancient China beside them on the timeline",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Ancient China is the oldest of the living civilizations, unbroken from its beginning on the Yellow River to the present day. Ruled by dynasties that rose and fell in turn, it guarded itself with the Great Wall, raised over centuries of labor. It gave the world four inventions that changed all of history, paper and printing, the compass and gunpowder, and a teacher, Confucius, whose words on respect and duty have guided a people for more than two thousand years.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the four great inventions of China: paper, printing, the compass, and gunpowder",
+                        "Chant the way of Confucius: respect your parents, be honest, and do your duty to family and community",
+                    ],
+                    "recitations": [
+                        "Recite that ancient China began on the Yellow River, was ruled by dynasties, and is the oldest civilization living still",
+                    ],
+                },
+                "copywork": [
+                    "Copy the four great inventions of China, and a short saying of Confucius on respect or honesty",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the four great inventions and a saying of Confucius before narrating the next portion of the story.",
+                "history_integration": "Place ancient China on the chronological spine beside Egypt, Mesopotamia, and India, all begun at the dawn of civilization, and mark that while those others ended, China endures, its dynasties an unbroken thread along the spine to the present day.",
+                "read_aloud_suggestions": [
+                    "A living account of life in ancient China, the farmer by the Yellow River, the builder of the Wall, the scholar of Confucius, read aloud for narration",
+                    "A retelling of an ancient Chinese legend or a story of Confucius, read aloud",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book about ancient China, written with knowledge and wonder, never a dry fact reader",
+                ],
+                "short_lesson_flow": "Read a portion of a living book about ancient China aloud, unhurried, and let the child narrate it back. The child may try Chinese brush painting, or draw the map and the Great Wall into the Book of Centuries. Let the river, the Wall, the inventions, and Confucius come alive through the story. Stop while interest holds.",
+                "narration_prompt": "Tell me the part of the China story we just heard. Which of the inventions do you think changed the world the most?",
+                "real_world_objects": [
+                    "A living book about ancient China",
+                    "A brush and water for trying Chinese calligraphy",
+                    "A real compass, a Chinese invention, to use",
+                    "A Book of Centuries and a map for the child's drawn work",
+                ],
+                "nature_connection": "Consider the Yellow River, named for the yellow silt it carries, and how, like the Nile and the Tigris, a river of nature gave a people their farmland and their beginning.",
+                "habit_focus": "The habit of attention: hearing the story of ancient China closely enough to narrate it, and forming, with Confucius, the habits of respect and duty.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A China folder in the continent collection, with photographs and fact cards",
+                    "A real compass for practical geography",
+                    "Materials for paper-making and Chinese brush painting",
+                    "The fundamental needs of humans chart applied to ancient China",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the invention cards: this is paper, a great invention of China; show me paper; which of the four great inventions is this?",
+                    "steps": [
+                        "The child explores the China folder and locates China and the Yellow River on the map",
+                        "The child meets the four great inventions, making paper, using the compass, by hand",
+                        "The child studies ancient China through the fundamental needs of humans and narrates its story",
+                    ],
+                },
+                "control_of_error": "The compass is a vivid self-checking control, always finding the north for the child to verify; the fact cards and map confirm the rest, matching and locating in one true way.",
+                "abstraction_pathway": "From handling the concrete China folder and working the real inventions, the paper, the compass, to studying China through the fundamental needs of humans, toward narrating the civilization and its long, unbroken history.",
+                "extensions": [
+                    "Trace how the four inventions spread along the Silk Road to the wider world",
+                    "Compare how ancient China met the fundamental needs of humans with another civilization",
+                    "Investigate the dynasties and the long building of the Great Wall",
+                ],
+                "observation_focus": "Watch for the child grasping why each invention mattered, and connecting Confucius's teaching of respect and duty to how a society holds together.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep illustrated books about ancient China within reach",
+                    "Leave out a compass, brushes, and paper-making materials to explore",
+                    "Have documentaries about the Great Wall, the dynasties, and the inventions available",
+                ],
+                "real_world_contexts": [
+                    "Using a compass and discovering how this Chinese invention finds the north",
+                    "Noticing paper everywhere, in every book and box, a Chinese invention",
+                    "Watching fireworks and connecting them to Chinese gunpowder",
+                    "Sharing a meal of Chinese food, or marking the Chinese New Year, living traditions thousands of years old",
+                ],
+                "conversation_starters": [
+                    "China invented paper, what did people write on before there was paper?",
+                    "Why would a whole civilization spend centuries building one wall?",
+                    "Confucius said children should respect their parents, what do you think of that?",
+                ],
+                "resource_bank": [
+                    "Illustrated books and documentaries about ancient China",
+                    "A compass, brushes, and paper-making materials",
+                    "Chinese food, festivals, and museums with Chinese artifacts",
+                ],
+                "parent_role": "Follow the child's curiosity about ancient China into books, documentaries, and the inventions themselves, and wonder aloud at how paper, printing, the compass, and gunpowder changed the world. Let real inventions, real stories, and living Chinese traditions, rather than a worksheet, bring ancient China to life.",
+                "observation_documentation": "Over time, note whether the child can narrate the story of ancient China, name the four great inventions, describe Confucius's teaching, and find China on a map. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Chinese invented paper and printing — the two technologies that make books possible",
