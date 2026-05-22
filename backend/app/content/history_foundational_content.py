@@ -2826,11 +2826,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["globe or world map", "blank world map for labeling", "compass"],
             "recommended": ["atlas for children", "large paper for drawing maps"],
-            "philosophy_specific": {
-                "classical": "Memorize continents, oceans, and directions through chanting and drill. Map drawing from memory weekly. Geography bee games.",
-                "charlotte_mason": "Map drawing from memory is THE Charlotte Mason geography method. The child studies a map, puts it away, and draws it from memory. Grows more detailed over time.",
-                "montessori": "Puzzle maps of the world and each continent. Pin maps marking places studied. Globe work with sandpaper continents for tactile learning.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -2840,6 +2835,118 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Core strength area. Color-coded maps. Large wall maps for reference. Atlas browsing.",
             "kinesthetic_learner": "Puzzle maps to assemble physically. Outdoor compass work. Floor-sized world map to walk on.",
             "auditory_learner": "Continent and ocean songs/chants. Verbal direction games. Discuss maps while pointing.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Maps are the language of geography, and geography is the ground on which all of history happens. A map shows the world from above. The seven continents and five oceans divide the world; a compass rose shows direction, north, south, east, and west; and a map key explains what the map's symbols mean. Today we label the continents and oceans from memory, use a compass rose, read a map key, and make a map of our own.",
+                "gradual_release": {
+                    "i_do": "On the globe and the map, name the seven continents and five oceans, pointing to each. Show the compass rose and read the four directions. Read a map key aloud, this symbol is a river, this a city. Then draw a small map of a familiar place with a key and a compass rose.",
+                    "we_do": "Name and locate the continents and oceans together, practice giving directions with the compass rose, and read a simple map's key as a pair.",
+                    "you_do": "Child labels the seven continents and five oceans from memory, uses a compass rose for the four directions, reads a map key, and creates a simple map of a familiar place with a key and compass rose.",
+                },
+                "guided_practice": [
+                    "Label the seven continents and five oceans on a blank map",
+                    "Use a compass rose to name the four cardinal directions and give directions",
+                    "Read a simple map key and explain what its symbols mean",
+                ],
+                "independent_practice": [
+                    "Draw a world map from memory, labeling all continents and oceans",
+                    "Create a map of a familiar place with a key and a compass rose",
+                ],
+                "mastery_check": [
+                    "Label all seven continents and five oceans from memory on a world map",
+                    "Use a compass rose to identify the four cardinal directions",
+                    "Read a map key and create a simple map with a key and compass rose",
+                ],
+                "spiral_review": [
+                    "Revisit the locations of the ancient civilizations and their rivers, found again on the map",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Geography is the handmaid of history: every story the child will study happened in a place, and the map is how a place is known. To carry the shape of the world in the mind, the seven continents and the five oceans, the directions and the symbols, is to hold the stage on which all of history is played. The classical scholar draws the map until it is known by heart.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the seven continents: North America, South America, Europe, Asia, Africa, Australia, Antarctica",
+                        "Chant the five oceans, and the four directions: north, south, east, and west",
+                    ],
+                    "recitations": [
+                        "Recite that a map shows the world from above, that the compass rose gives direction, and that the key explains the symbols",
+                    ],
+                },
+                "copywork": [
+                    "Copy the names of the seven continents and five oceans, and the four cardinal directions",
+                ],
+                "recitation_routine": "Begin each lesson by chanting the continents and oceans and reciting the cardinal directions before any new map work.",
+                "history_integration": "Geography underlies the whole chronological spine: place every civilization the child has studied, Egypt, Mesopotamia, Greece, Rome, on the map, and see that to know history one must first know the world it happened in.",
+                "read_aloud_suggestions": [
+                    "A living book of geography that journeys across the continents and oceans, read aloud so the child travels the world in the mind",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated book of geography or travel, with true artwork that makes the child long to see the wide world",
+                ],
+                "short_lesson_flow": "Study a map together, quietly, for a few minutes, noticing its continents, its oceans, its shapes. Then put it away, and let the child draw it from memory, as well as they can. This is the heart of the Charlotte Mason geography method: the map drawn from memory grows truer and fuller week by week. Keep it short and unhurried.",
+                "narration_prompt": "Tell me about the world map. Which continents did you draw, and which oceans lie between them?",
+                "real_world_objects": [
+                    "A globe, handled and turned",
+                    "A beautiful wall map and an atlas to study",
+                    "A blank notebook for drawing maps from memory",
+                    "A real compass, used out of doors to find north",
+                ],
+                "nature_connection": "Carry the compass outdoors and find north by the real sun and the real land, and notice the lie of the local geography, the hills, the streams, the way the ground itself can be mapped.",
+                "habit_focus": "The habit of attention: studying a map closely enough to carry it in the mind and draw it true from memory.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The Montessori puzzle maps of the world and of each continent",
+                    "A globe, including the sandpaper globe for tactile learning of land and water",
+                    "Pin maps for marking the places the child has studied",
+                    "A compass and materials for the child to draw a map with a key and compass rose",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the puzzle map: this continent is Africa; show me Africa; which continent is this?",
+                    "steps": [
+                        "The child works the puzzle maps of the world and the continents, learning each by hand",
+                        "The child names the oceans and uses the compass rose for the four directions",
+                        "The child reads a map key and draws a map of a familiar place with a key and a compass rose",
+                    ],
+                },
+                "control_of_error": "The puzzle map is the control: each continent piece fits only its own place, so a piece set wrongly will not seat, and the child corrects it without a word from the adult.",
+                "abstraction_pathway": "From handling the concrete puzzle maps and the globe, to naming and locating the continents and oceans, toward carrying the map of the world in the mind and drawing one of the child's own.",
+                "extensions": [
+                    "Use pin maps to mark every place studied in history",
+                    "Introduce latitude and longitude",
+                    "Compare different map projections and how each one distorts the round Earth",
+                ],
+                "observation_focus": "Watch for the child placing the continents and oceans truly, using the compass rose without confusing east and west, and reading a key with understanding.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a globe, a world map, and an atlas where the child can pore over them freely",
+                    "Leave out a compass and good paper for drawing maps",
+                    "Have puzzle maps and books of travel and geography available",
+                ],
+                "real_world_contexts": [
+                    "Following the route on a map during a real car trip, as the family navigator",
+                    "Using the maps on a phone or a screen and noticing their symbols and directions",
+                    "Tracking a package, a storm, or a journey across the real geography of the world",
+                    "Finding on the globe the places that come up in books, news, and family stories",
+                ],
+                "conversation_starters": [
+                    "If you sailed from our continent to Africa, which way would you go and which ocean would you cross?",
+                    "What symbols would you use to draw a map of our neighborhood?",
+                    "Why do you think everyone reading a map needs to agree on what the symbols mean?",
+                ],
+                "resource_bank": [
+                    "A globe, a world map, an atlas, and puzzle maps",
+                    "A compass and paper for map-making",
+                    "The real maps of daily life: road maps, phone maps, weather maps",
+                ],
+                "parent_role": "Keep maps and a globe around the house and use them in real life, on trips, with the weather, when a far place comes up, and wonder aloud about the continents, the oceans, and the way. Let the child be the family navigator, and let real maps put to real use, rather than a worksheet, teach geography.",
+                "observation_documentation": "Over time, note whether the child knows the continents and oceans, uses a compass rose and a map key, and can draw a map of their own. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Map keys use symbols that represent words — reading a map is a form of reading. Geography vocabulary: continent, ocean, hemisphere, equator.",

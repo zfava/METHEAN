@@ -396,6 +396,7 @@ class TestAuthoredPhilosophyContent:
             "hf-08",
             "hf-09",
             "hf-10",
+            "hf-11",
         ],
     )
     def test_node_has_all_five_native_variants(self, node_key):
@@ -497,6 +498,7 @@ class TestAuthoredPhilosophyContent:
             "hf-08",
             "hf-09",
             "hf-10",
+            "hf-11",
         ],
     )
     def test_unschooling_variant_has_no_lesson_keys(self, node_key):
