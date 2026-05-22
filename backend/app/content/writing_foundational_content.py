@@ -5133,11 +5133,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "editing passage with intentional errors",
             ],
             "recommended": ["writing portfolio folder", "celebration supplies for author's reading"],
-            "philosophy_specific": {
-                "classical": "Comprehensive skills demonstration: handwriting, copywork, dictation, grammar identification, and original composition. Clear criteria for advancement. The child proves readiness through performance.",
-                "charlotte_mason": "Examination by demonstration: the child shows their best work, narrates their growth, and writes an original piece with care. No standardized testing — the quality of the work IS the assessment.",
-                "montessori": "Observation-based assessment: the teacher reviews the child's work portfolio, noting growth in all areas. The child participates in self-assessment. Readiness is demonstrated through daily work, not a single test.",
-            },
         },
         "time_estimates": {"first_exposure": 30, "practice_session": 20, "assessment": 30},
         "accommodations": {
@@ -5147,6 +5142,113 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Portfolio review is a visual strength. Comparison of early and late samples shows growth visually. Neat presentation of best work.",
             "kinesthetic_learner": "Author's reading is a performance — stand up and read aloud. Portfolio assembly is a physical organizing task.",
             "auditory_learner": "Reading compositions aloud is a natural assessment mode. Discussing growth and goals is conversational. Author's reading to family audience.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "This is the capstone of foundational writing. The child brings together every skill built across this level, letter formation, copywork, dictation, sentence structure, capitalization, punctuation, parts of speech, and original composition, and demonstrates readiness for the developing writing level. It is a celebration of growth, not a high-stakes test. Today we observe and confirm what the child can do, and we name what will continue to grow at the next level.",
+                "gradual_release": {
+                    "i_do": "Show the demonstration as a calm, ordered routine: write the alphabet, copy a passage, take a brief dictation, identify parts of speech, write a few original sentences, find errors to correct. Show that each piece reveals one strand of what has been learned.",
+                    "we_do": "Walk through the demonstration together once on a calm day, the parent supporting where needed and naming each skill as it is shown, so the child knows the parts of the work and approaches the assessment without anxiety.",
+                    "you_do": "Child demonstrates the full set of foundational writing skills, showing legible letter formation for all 52 letters, accurate copywork, original sentences with correct conventions, identification of nouns, verbs, and adjectives, and an editing correction, with the parent observing and recording what is solid and what will continue to grow.",
+                },
+                "guided_practice": [
+                    "Warm up by writing the full alphabet in upper and lowercase",
+                    "Copy a multi-sentence passage with attention to every detail",
+                    "Identify nouns, verbs, and adjectives in a short set of sentences",
+                ],
+                "independent_practice": [
+                    "Write three to five original sentences on a chosen topic with correct conventions",
+                    "Find and correct three errors in a short editing passage",
+                ],
+                "mastery_check": [
+                    "Form all 52 upper and lowercase letters legibly with correct stroke order",
+                    "Copy a multi-sentence passage with zero errors in spelling, capitalization, and punctuation",
+                    "Write three to five original sentences on a topic with correct conventions",
+                    "Demonstrate readiness for the developing writing level across handwriting, spelling, grammar, and composition",
+                ],
+                "spiral_review": [
+                    "Set the child's earliest writing samples beside today's work and name aloud what has grown",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "A capstone is rightly named, for it is the stone that completes the arch, finishing what came before and making it whole. The foundational years of writing have given the young scholar a hand that can form the letters, an ear that can hear the sounds, a mind that knows the parts of speech, and a tongue and pencil that can frame a thought. Today the scholar demonstrates the whole work, that all who watch may see the arch closed and stand it ready to bear the weight of the years to come.",
+                "memory_work": {
+                    "chants": [
+                        "Recite the skills demonstrated at this capstone, in order: the alphabet formed, the passage copied, the words spelled, the parts of speech named, the sentences composed, the errors corrected",
+                    ],
+                    "recitations": [
+                        "Recite that this capstone marks readiness, not perfection, and that writing is a craft pursued for life",
+                    ],
+                },
+                "recitation_routine": "Begin the demonstration by reciting the list of skills that will be shown, so child and parent share a clear order for the work.",
+                "history_integration": "Tell that for as long as there have been schools, the demonstration of learning at the close of a stage of study has been a moment of honor, not of fear, and that this capstone takes its place in that long, kind tradition.",
+                "read_aloud_suggestions": [
+                    "A short, fitting passage of fine prose or verse, read aloud as the demonstration begins, so the child enters the work with worthy language in the ear",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 30,
+                "living_book_suggestions": [
+                    "A loved living book whose passages have been the source of the child's copywork through the year, used once more at the capstone",
+                ],
+                "short_lesson_flow": "Keep the demonstration calm and unhurried, paced gently across thirty minutes or split across two short sittings if needed. The child writes the alphabet, copies a short passage from a living book, takes a brief dictation of words and a sentence, names a few nouns, verbs, and adjectives, and writes a few original sentences on a chosen topic. There is no examination room; the child works in the usual place, with the usual tools, and the parent watches the work without correction during the demonstration itself.",
+                "narration_prompt": "Tell me, in your own words, what you are proud of in your writing this year, and what you still want to grow.",
+                "real_world_objects": [
+                    "A bound portfolio of the child's writing from across the year",
+                    "A loved living book to draw the capstone passage from",
+                    "Good lined paper and a comfortable pencil, set out as for any ordinary lesson",
+                ],
+                "nature_connection": "The capstone may include a short nature-notebook entry the child has made, or a fresh one written from the day's observation, so the demonstration includes living writing about the real world.",
+                "habit_focus": "The habit of best work, brought to a small moment of recognition: writing as well as the child can write today, on work they have helped to choose.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The child's writing portfolio, arranged chronologically",
+                    "Materials for the demonstration: lined paper, a chosen copywork passage, a dictation list, sentence strips for grammar identification, an editing passage",
+                    "Self-reflection cards prompting the child to name what has grown and what is still in progress",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the portfolio and the demonstration materials: this is your capstone, where you show all that the foundational year has given you; you choose the order of the work and show me each part; tell me which piece you are most proud of and which you still wish to grow.",
+                    "steps": [
+                        "The child reviews their writing portfolio with the parent, naming growth across the year",
+                        "The child works through the capstone tasks at their own pace: alphabet, copywork, dictation, grammar identification, original sentences, editing",
+                        "The child completes a self-reflection on what has grown and what they want to take further at the next level",
+                    ],
+                },
+                "control_of_error": "The portfolio itself is the truest control: the earliest samples and the most recent ones stand side by side, and the difference between them is the visible record of the year's work, plain to the child without grading.",
+                "abstraction_pathway": "From demonstrating each foundational skill in turn at the capstone, to bringing those skills together in longer original work, toward writing freely with the foundations no longer demanding conscious attention.",
+                "extensions": [
+                    "Choose three pieces from the portfolio that best show growth and explain why each was chosen",
+                    "Set personal goals for the next level in handwriting, spelling, grammar, and composition",
+                    "Present the best piece to the family as the close of the foundational year",
+                ],
+                "observation_focus": "Watch for the child working through the capstone independently, naming their own growth, and approaching the move to the developing level as a continuation of their work rather than as a fresh beginning.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "At a natural pause near the end of the year, set out the child's notebooks, letters, journals, and drawings together where they can be looked through",
+                    "Welcome the child to choose which pieces of their own writing best show what they can do now",
+                    "Leave room in family conversation for the child to reflect on how their writing has grown",
+                ],
+                "real_world_contexts": [
+                    "Reading aloud favorite pieces from the year's own writing to a family audience",
+                    "Choosing a few finished pieces to keep, to send, or to bind together into a small book",
+                    "Comparing an early letter or journal page to a recent one over a quiet shared moment",
+                    "Sharing a piece of writing with a real reader, a grandparent, a friend, an online community, that the child wants to be seen",
+                ],
+                "conversation_starters": [
+                    "Which of your own pieces do you love best now, and why?",
+                    "What can you write today that would have been hard a year ago?",
+                    "What do you want to grow into next, with your writing?",
+                ],
+                "resource_bank": [
+                    "The child's own notebooks, letters, journals, and stories from across the year",
+                    "A quiet shared time to look through them together",
+                    "Family members and friends who will receive the child's writing with genuine interest",
+                ],
+                "parent_role": "An unschooling life does not stage a capstone examination, so no test is set here. Instead, the parent helps the child notice their own growth by setting earlier writing beside recent writing, listening to favorite pieces read aloud, and asking real questions about what the child wants to grow into next. The transition to the next level is a noticing, not a passing.",
+                "observation_documentation": "Over time, notice whether the child writes more readily for real purposes, holds correct conventions in their own writing without prompting, names what they can now do that was once hard, and looks forward to what their writing might become. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Writing assessment reveals reading connections: spelling reflects phonics knowledge, copywork accuracy reflects reading accuracy, and composition reflects comprehension",

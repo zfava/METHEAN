@@ -428,6 +428,7 @@ class TestAuthoredPhilosophyContent:
             "wf-17",
             "wf-18",
             "wf-19",
+            "wf-20",
         ],
     )
     def test_node_has_all_five_native_variants(self, node_key):
@@ -558,6 +559,7 @@ class TestAuthoredPhilosophyContent:
             "wf-17",
             "wf-18",
             "wf-19",
+            "wf-20",
         ],
     )
     def test_unschooling_variant_has_no_lesson_keys(self, node_key):
