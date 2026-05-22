@@ -5971,10 +5971,116 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Discuss predictions verbally before, during, and after reading. Think-aloud predictions: 'I'm thinking that...'",
         },
         "philosophy_specific": {
-            "classical": "Prediction as hypothesis: the scientific method applied to reading. Make a prediction, read to test it, revise based on evidence.",
-            "charlotte_mason": "'What do you think will happen next?' asked naturally during read-alouds. No formal prediction worksheets — just engaged conversation about the story.",
-            "montessori": "Prediction cards: the child writes or draws a prediction and checks it after reading. Self-directed prediction habits.",
-            "traditional": "Structured prediction graphic organizers: My Prediction / Clues I Used / What Actually Happened. Prediction questions on comprehension assessments.",
+            "traditional": {
+                "introduction": "Predicting is thinking ahead while reading. A good prediction is not a wild guess; it uses clues, the title, the cover, the pictures, the events so far, joined with what the reader already knows, to make an educated guess about what is coming. Predictions are checked as reading goes on, and revised when the story brings new information. Today we predict before and during reading, verify or revise our predictions, and explain the reasoning behind them.",
+                "gradual_release": {
+                    "i_do": "Study a cover and think aloud: the picture and the title make me predict this book is about a dog's adventure, those are my clues. Pause at a tense moment and predict what comes next, naming the clues. Read on and check; when the story surprises me, revise the prediction aloud.",
+                    "we_do": "Before and during a story, make predictions together, name the clues each rests on, read on to check them, and revise them when new information changes things.",
+                    "you_do": "Child makes reasonable predictions before and during reading using clues, verifies or revises them as the text reveals more, and explains the reasoning behind each.",
+                },
+                "guided_practice": [
+                    "Study a cover and title and predict what the book is about, naming the clues",
+                    "Pause at a key moment and predict what happens next, using story clues",
+                    "Read on, check a prediction, and revise it if new information contradicts it",
+                ],
+                "independent_practice": [
+                    "Make and check predictions at marked stopping points while reading",
+                    "Keep a prediction journal, predicting at the end of each chapter",
+                ],
+                "mastery_check": [
+                    "Make reasonable predictions before and during reading using specific clues",
+                    "Verify or revise predictions as new information is revealed",
+                    "Explain the reasoning behind a prediction with evidence and prior knowledge",
+                ],
+                "spiral_review": [
+                    "Revisit using picture and text clues, the same clue-reading that drawing conclusions depends on",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "To read well is to read with the mind running ahead. A prediction is a small hypothesis: from the clues given, the title, the picture, the turn of events, joined to what is already known, the reader supposes what is to come. Then reading on, the supposition is tried against the truth and either confirmed or, honestly, set right. A prediction proven wrong but well reasoned is no failure; it is the mind at work.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the predictor's way: gather the clues, suppose what comes, read on, and check",
+                        "Chant the honest rule: a prediction well reasoned is good, whether it proves right or wrong",
+                    ],
+                    "recitations": [
+                        "Recite that a prediction rests on clues and prior knowledge, and is revised, not defended, when the text reveals more",
+                    ],
+                },
+                "copywork": [
+                    "Copy a prediction beside the clues it rests upon, neatly, the supposition and its evidence joined",
+                ],
+                "recitation_routine": "Begin each lesson by recalling yesterday's reading and whether its predictions proved true, before predicting the next portion.",
+                "history_integration": "Tell that to predict from evidence is the very method by which knowledge advances, that the careful supposing of what follows from what is known, then tried against the truth, is the work of every scholar and every scientist.",
+                "read_aloud_suggestions": [
+                    "A story with clear clues and turns, read aloud and paused upon so predictions may be made and tried",
+                    "A tale of mystery, where prediction from clues is the heart of the reading",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A living book with a strong, clear story whose events invite the child to wonder what comes next, never a contrived reader",
+                ],
+                "short_lesson_flow": "Read a living book aloud, and at a natural, suspenseful pause, simply wonder together: what do you think will happen next, and why? Let the child suppose, then read on to see. Keep it a warm, genuine conversation, never a worksheet, and let the curiosity itself carry the reading forward.",
+                "narration_prompt": "Tell me what you thought would happen, and what made you think it. Did the story go as you supposed?",
+                "real_world_objects": [
+                    "The living book itself, paused upon at its turning points",
+                    "The sky and weather, read for clues of what the day will bring",
+                    "A reading or nature notebook where a prediction may be set down before reading on",
+                ],
+                "nature_connection": "Outdoors, predict from nature's clues: those dark clouds, will it rain; that bud, will it open; these tracks, where do they lead; then watch to see, the same predicting turned upon the living world.",
+                "habit_focus": "The habit of attention: reading and watching closely enough to catch the clues that tell what may come.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A shelf of storybooks with engaging covers and clear plots",
+                    "Prediction cards on which the child writes or draws a prediction before reading on",
+                    "Sticky markers for marking the stopping points where a prediction is made",
+                    "A prediction journal for chapter-book work",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With prediction cards: this is a prediction before reading, from the cover, this is a prediction during reading, from the events; show me a prediction made during reading; which kind of prediction is this?",
+                    "steps": [
+                        "Before reading, the child studies the cover and title and records a prediction with its clues",
+                        "At marked stopping points during reading, the child predicts what comes next from the story's events",
+                        "The child reads on, checks each prediction against the text, and revises it, noting what new information changed",
+                    ],
+                },
+                "control_of_error": "The text is the control: reading on reveals what truly happens, and the child sees plainly whether a prediction held or must be revised, so the story itself confirms or corrects without an adult's marking.",
+                "abstraction_pathway": "From predicting aloud at a single marked stop, to predicting and checking throughout a story, toward pausing of one's own accord to predict, verify, and revise while reading.",
+                "extensions": [
+                    "Keep a prediction journal across a whole chapter book",
+                    "Predict in mystery stories, where clues are deliberately planted",
+                    "Track which clues led to predictions that proved true",
+                ],
+                "observation_focus": "Watch for the child predicting from real clues rather than guessing, and revising a prediction calmly when the text reveals more.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep books with engaging covers and strong stories within reach",
+                    "Have mystery stories and audiobooks available",
+                    "Leave room in reading time to stop, wonder, and guess",
+                ],
+                "real_world_contexts": [
+                    "Guessing what happens next in a film or show from the clues so far",
+                    "Predicting the weather from the look of the sky",
+                    "Predicting how a cooking or building project will turn out",
+                    "Guessing what a person will say or do from knowing them well",
+                ],
+                "conversation_starters": [
+                    "Look at the cover, what do you think this book is about? What makes you think so?",
+                    "What do you think happens next? Why?",
+                    "That is not what you expected, what surprised you, and what do you think now?",
+                ],
+                "resource_bank": [
+                    "A wide home library, including mysteries",
+                    "Films and shows whose turns can be guessed at",
+                    "The everyday world, full of clues to read",
+                ],
+                "parent_role": "Wonder aloud about what comes next, in books, in films, in the weather, in the day, and welcome every reasoned guess whether it proves right or wrong. Show by your own example that a surprised prediction is happily revised, and let curiosity rather than correctness lead.",
+                "observation_documentation": "Over time, note whether the child predicts from real clues, before and during reading, checks predictions against what happens, and revises them gladly. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Estimation in math IS prediction: 'I predict the answer will be about 50' before calculating",
