@@ -1464,11 +1464,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["world map or globe", "pictures of Mohenjo-daro and Indian artifacts"],
             "recommended": ["living books about ancient India", "simple Hindu myth collections for children"],
-            "philosophy_specific": {
-                "classical": "Memorize key Indian contributions. Timeline placement. Map drill. Character study of the Buddha as virtue example.",
-                "charlotte_mason": "Living books: myths and legends from India told with wonder. Narration. Map drawn from memory. The Buddha's story as a living biography.",
-                "montessori": "India continent folder with photographs. Zero and decimal system as math-history connection. Build Mohenjo-daro with blocks.",
-            },
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 10},
         "accommodations": {
@@ -1478,6 +1473,118 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Photographs of Indus Valley ruins. Illustrated Hindu myths. Map drawing.",
             "kinesthetic_learner": "Build Indus Valley cities. Practice yoga poses (ancient Indian origin). Use blocks to demonstrate place value with zero.",
             "auditory_learner": "Listen to Hindu myths told as stories. Discuss the Buddha's journey. Verbal math games with zero.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Ancient India holds one of history's most remarkable civilizations. In the Indus Valley, the cities of Mohenjo-daro and Harappa had grid-planned streets, brick houses, and indoor plumbing four and a half thousand years ago. India became the birthplace of Hinduism and Buddhism, and it gave the world the number zero and the decimal system, without which modern mathematics could not exist. Today we narrate the Indus Valley civilization, retell a Hindu myth and the Buddha's story, explain the gift of zero, and locate the Indus River and India.",
+                "gradual_release": {
+                    "i_do": "Tell the story of ancient India in order: the advanced cities of the Indus Valley with their planned streets and plumbing, the great stories of Hinduism, the prince Siddhartha who became the Buddha, and the invention of zero. Think aloud about why zero matters, and point to India and the Indus River on the map.",
+                    "we_do": "Retell the story of ancient India together, retell a Hindu myth and the Buddha's story, and try writing numbers with and without zero to feel its importance.",
+                    "you_do": "Child narrates the Indus Valley civilization, retells a Hindu myth and the Buddha's life, explains why zero was important, and locates the Indus River and India.",
+                },
+                "guided_practice": [
+                    "Retell the story of the Indus Valley cities and what made them advanced",
+                    "Retell a Hindu myth and the story of the Buddha's life",
+                    "Locate India and the Indus River on a map",
+                ],
+                "independent_practice": [
+                    "Narrate the full story of ancient India from memory",
+                    "Explain why the invention of zero was so important to mathematics",
+                ],
+                "mastery_check": [
+                    "Narrate the Indus Valley civilization and its advanced cities",
+                    "Retell a Hindu myth and the story of the Buddha's life",
+                    "Explain India's contribution of zero and the decimal system, and locate India on a map",
+                ],
+                "spiral_review": [
+                    "Revisit the other river valley civilizations, and set ancient India beside them on the timeline",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Ancient India was a civilization of quiet wonders. In the Indus Valley, the cities of Mohenjo-daro and Harappa were laid out in planned streets, with brick houses and running water, an age before most of the world had dreamed of such order. From this land came two great religions, Hinduism with its vast store of stories, and Buddhism, founded by a prince who sought the end of suffering, and from this land came the number zero, the small sign that made all of mathematics possible.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the gifts of ancient India: the planned cities of the Indus, the great religions, and the number zero",
+                        "Chant the marvel of Mohenjo-daro: straight streets, brick houses, and water running indoors, four and a half thousand years ago",
+                    ],
+                    "recitations": [
+                        "Recite that India gave the world the number zero and the decimal system, without which modern mathematics could not stand",
+                    ],
+                },
+                "copywork": [
+                    "Copy the contributions of ancient India, and the names Mohenjo-daro, Indus, Hinduism, and Buddhism",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the gifts of ancient India and narrating yesterday's portion of the story before adding the next.",
+                "history_integration": "Place ancient India on the chronological spine among the four river valley civilizations, all begun together, and mark that India's gifts, its religions and its zero, reach down the whole length of the spine to shape the mathematics and the faith of the present day.",
+                "read_aloud_suggestions": [
+                    "A retelling of a Hindu myth or epic, the Ramayana or a tale of the gods, read aloud for narration",
+                    "A living account of the life of the Buddha, the prince who left his palace to seek the end of suffering, read aloud",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book about ancient India, or a finely told collection of Hindu myths for children, never a dry fact reader",
+                ],
+                "short_lesson_flow": "Read a Hindu myth or a portion of the Buddha's story aloud, told with wonder, and let the child narrate it back. Another day, read of the planned cities of the Indus Valley. The child may draw a scene or a map into the Book of Centuries. Let the great stories of India, told well, be the lesson. Stop while interest is high.",
+                "narration_prompt": "Tell me the story we just heard. What happened to the prince who became the Buddha?",
+                "real_world_objects": [
+                    "A living book of Hindu myths and a living book about ancient India",
+                    "A Book of Centuries and a map for the child's drawn work",
+                    "Pictures of the Indus Valley ruins and Indian artifacts",
+                ],
+                "nature_connection": "Consider the Indus River, like the Nile and the Yellow River, a river of nature that gave a people their farmland, and notice how the Indus cities planned their streets and water with the care of careful observers of the natural world.",
+                "habit_focus": "The habit of attention: hearing the great stories of India closely enough to retell them as living tales.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "An India folder in the continent collection, with photographs and fact cards",
+                    "Materials for building Mohenjo-daro with its grid streets",
+                    "Number materials for exploring zero and the decimal system",
+                    "The fundamental needs of humans chart applied to ancient India",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the fact cards: this is Mohenjo-daro, a planned city of the Indus Valley; show me Mohenjo-daro; which ancient city is this?",
+                    "steps": [
+                        "The child explores the India folder and locates India and the Indus River on the map",
+                        "The child builds Mohenjo-daro with its grid streets and studies India through the fundamental needs of humans",
+                        "The child explores zero and the decimal system with the number materials, and retells a story of India",
+                    ],
+                },
+                "control_of_error": "The number materials are a precise control: a child trying to write or build numbers without zero finds plainly that the system breaks, and the fact cards and map confirm the rest in one true way.",
+                "abstraction_pathway": "From handling the concrete India folder, building Mohenjo-daro, and working the number materials, to studying India through the fundamental needs of humans, toward narrating the civilization and grasping the power of its gift of zero.",
+                "extensions": [
+                    "Trace how the decimal system and zero spread from India to the wider world",
+                    "Compare how ancient India met the fundamental needs of humans with another civilization",
+                    "Follow the spread of Buddhism from India across Asia",
+                ],
+                "observation_focus": "Watch for the child grasping how advanced the Indus cities were for their age, and why zero, far from being nothing, made all later mathematics possible.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep illustrated books of Hindu myths and books about ancient India within reach",
+                    "Leave out blocks for building the planned cities of the Indus Valley",
+                    "Have documentaries about ancient India and simple math materials for exploring zero available",
+                ],
+                "real_world_contexts": [
+                    "Hearing and retelling the great Hindu myths as stories",
+                    "Noticing that every number written uses the zero and the digits India gave the world",
+                    "Trying yoga, which began in ancient India and is practiced everywhere today",
+                    "Sharing Indian food, or marking a festival like Diwali, living traditions of an ancient land",
+                ],
+                "conversation_starters": [
+                    "Mohenjo-daro had running water indoors four and a half thousand years ago, what does that tell you about the people who built it?",
+                    "The Buddha was a rich prince who gave everything away, what would make someone do that?",
+                    "How would you write the number one hundred and five without using zero?",
+                ],
+                "resource_bank": [
+                    "Illustrated Hindu myth collections and books about ancient India",
+                    "Documentaries about the Indus Valley and the Buddha",
+                    "Indian food, festivals, yoga, and museums with Indian artifacts",
+                ],
+                "parent_role": "Follow the child's curiosity about ancient India into its great stories, its planned cities, and its gift of zero, and wonder aloud at a people so far ahead of their age. Let vivid myths, real documentaries, and living Indian traditions, rather than a worksheet, bring ancient India to life.",
+                "observation_documentation": "Over time, note whether the child can narrate the Indus Valley civilization, retell a Hindu myth and the Buddha's story, explain the importance of zero, and find India on a map. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Hindu myths are rich stories with heroes, villains, and moral lessons — perfect for narration practice",
