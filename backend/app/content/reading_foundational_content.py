@@ -2692,10 +2692,113 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Record and play back reading for self-assessment. Listen to audiobooks at natural speed to internalize fluent pacing. Echo reading with the parent.",
         },
         "philosophy_specific": {
-            "classical": "Daily oral reading practice. Recitation of passages from memory to build expression and phrasing. Graduated text difficulty.",
-            "charlotte_mason": "Daily reading aloud from living books chosen for beautiful language. No rushed reading — quality over speed. Narration after reading builds comprehension alongside fluency.",
-            "montessori": "Child-selected reading material at independent level. Reading corner with a variety of texts. Self-paced progression through reading levels.",
-            "traditional": "Timed fluency drills with progress charts. Repeated reading of grade-level passages. Fluency benchmarking each quarter.",
+            "traditional": {
+                "introduction": "Fluency is the bridge between decoding and understanding. A fluent reader recognizes words at once, groups them into phrases, and reads with expression, so the mind is free to think about meaning. Today we build accuracy, smoothness, and expression with text at the child's own reading level.",
+                "gradual_release": {
+                    "i_do": "Read a passage aloud as a model, grouping words into phrases and letting the voice rise for a question and lift for an exclamation. Then mark a sentence into natural phrases with light pencil slashes.",
+                    "we_do": "Read a passage together at one pace, then echo a sentence the child reads back. Read a marked sentence phrase by phrase together, and practice making a question and a statement sound different.",
+                    "you_do": "Child reads a short familiar passage three times, growing smoother each time, reads with expression that matches the text, and self-corrects errors that change the meaning.",
+                },
+                "guided_practice": [
+                    "Echo and choral reading of a short passage with the parent",
+                    "Phrase-cued reading: read a marked sentence phrase by phrase",
+                    "Repeated reading of a fifty to one hundred word passage, smoother each time",
+                ],
+                "independent_practice": [
+                    "Read familiar books independently, building stamina from five minutes toward fifteen",
+                    "One-minute reads of familiar text, celebrating personal bests, never comparing to others",
+                ],
+                "mastery_check": [
+                    "Read grade-level decodable text at forty or more words per minute with high accuracy",
+                    "Self-correct meaning-changing errors without prompting",
+                    "Read with natural phrasing, appropriate pauses, and fitting expression",
+                ],
+                "spiral_review": [
+                    "Return to easier, familiar passages to keep accuracy and expression strong before harder text",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "To read aloud well is an art the grammar stage prizes. The reader makes the words sound as living speech, phrased and expressive, so a listener understands. Practiced daily, reading aloud becomes smooth, sure, and a pleasure to hear.",
+                "memory_work": {
+                    "chants": [
+                        "Chant a marked sentence in its natural phrases, so the ear learns to group words rather than read them one by one",
+                        "Chant the marks of expression: a question lifts at its end, an exclamation carries energy, a period comes to rest",
+                    ],
+                    "recitations": [
+                        "Memorize and recite short, worthy poems and passages, performing them with phrasing and expression so that fluency is built by heart",
+                    ],
+                },
+                "copywork": [
+                    "Copy a short passage that is being read for fluency, attending to its punctuation, so the marks that guide the voice are known by the hand",
+                ],
+                "recitation_routine": "Begin each lesson by reciting a memorized passage from a former day, then read aloud the current passage; the reader's repertoire grows cumulatively.",
+                "history_integration": "Read aloud and recite passages drawn from history and from the great stories, so that fluency is practiced on texts worth the time, along the chronological spine.",
+                "read_aloud_suggestions": [
+                    "Well-written prose and poetry, a little above the child's own reading level, read aloud daily for the music and rhythm of the language",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "Living books chosen for truly beautiful language, never twaddle, that the child will want to read aloud well",
+                ],
+                "short_lesson_flow": "Read aloud together from a living book, unhurried, caring for the sound of the language rather than for speed. Let the child read a passage attentively, once and well, and then tell it back. Stop while the reading is still a pleasure.",
+                "narration_prompt": "Tell me back the passage you just read. What happened, and which part did you most enjoy reading aloud?",
+                "real_world_objects": [
+                    "A recipe read aloud smoothly while cooking together",
+                    "A picture book read aloud to a younger sibling",
+                    "Signs and labels read at a glance during the day",
+                ],
+                "nature_connection": "Read aloud a short nature passage or poem outdoors, and copy a favorite line into the nature notebook.",
+                "habit_focus": "The habit of attention and of reading well: one careful, expressive reading rather than a hurried or careless one.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A reading corner holding a variety of texts at and just above the child's independent level",
+                    "Familiar books and short passages the child may choose and reread freely",
+                    "Poetry and reader's-theater pieces for expressive reading",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a marked passage: this is a phrase, read as one group; show me where this phrase ends; how should this phrase sound? Reading modeled, then handed to the child.",
+                    "steps": [
+                        "The guide reads a passage aloud as a model of phrasing and expression",
+                        "The child chooses a text at their independent level and reads it, returning to reread it freely",
+                        "The child reads aloud to a small listener or records and listens back to their own reading",
+                    ],
+                },
+                "control_of_error": "The child reading aloud and listening, to a listener or to a recording, hears for themselves where the reading stumbled or fell flat, and rereads to mend it without an adult's correction.",
+                "abstraction_pathway": "From echoing a modeled reading, to rereading a chosen text freely, toward reading any new text smoothly and with expression at the first attempt.",
+                "extensions": [
+                    "Prepare and perform a reader's-theater piece with character voices",
+                    "Choose and progress through richer texts as fluency grows",
+                ],
+                "observation_focus": "Watch for the child grouping words into phrases, reading with expression, self-correcting freely, and choosing to read for sustained, contented stretches.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a generous shelf of inviting books at and around the child's reading level within reach",
+                    "Leave audiobooks alongside their printed books, so a fluent voice can be heard and followed",
+                    "Make a cozy reading nook where long, uninterrupted reading is easy",
+                ],
+                "real_world_contexts": [
+                    "Reading favorite stories aloud to younger siblings, pets, or stuffed animals",
+                    "Reading a recipe aloud smoothly enough to cook from it",
+                    "Reading the lines of a play or a game's instructions aloud",
+                    "Reading signs, comics, and captions met through the day",
+                ],
+                "conversation_starters": [
+                    "Would you read me that part again? It sounded wonderful the way you said it.",
+                    "How do you think this character would say that line?",
+                    "Want to read this story to your little brother tonight?",
+                ],
+                "resource_bank": [
+                    "Many inviting books at and around the child's reading level",
+                    "Audiobooks paired with their printed texts",
+                    "Comics, poetry, and play scripts kept available",
+                ],
+                "parent_role": "Read aloud to and with the child often, give them real reasons and real audiences to read aloud for, and let abundant time with loved books build fluency. Never time or rank the reading; follow what the child wants to read.",
+                "observation_documentation": "Over time, note whether the child's reading is growing smoother and more expressive, whether they self-correct meaning-changing errors, and whether they can sustain contented independent reading. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Fluency in reading is like fluency in math facts — automatic recall frees the mind for harder thinking",
