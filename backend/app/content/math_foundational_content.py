@@ -4792,10 +4792,114 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Narrate: 'Folding in HALF. TWO EQUAL parts. Each ONE HALF.'",
         },
         "philosophy_specific": {
-            "classical": "Fraction vocabulary: numerator, denominator introduced visually.",
-            "charlotte_mason": "Fractions through cooking: half a cup, quarter recipe.",
-            "montessori": "Fraction skittles. Fraction circles. Metal insets.",
-            "traditional": "Fraction worksheets: shade half, shade quarter.",
+            "traditional": {
+                "introduction": "A fraction is an equal part of a whole. When a whole is split into two equal parts, each part is one half; into four equal parts, each is one quarter. The word that matters most is equal: if the parts are not the same size, they are not halves or quarters at all. Today we divide shapes and objects into halves and quarters, use the words half, quarter, whole, and equal parts, and learn that two halves and four quarters each make one whole.",
+                "gradual_release": {
+                    "i_do": "Fold a sheet of paper exactly in half, matching the edges, and name the two equal parts halves. Fold it again into four equal parts and name them quarters. Show plainly that two pieces of different sizes are not halves: the parts must be equal.",
+                    "we_do": "Fold and cut paper into halves and then quarters together, naming the parts, and check by laying the pieces on each other that they are equal.",
+                    "you_do": "Child folds or cuts a whole into equal halves and quarters, names the parts with the right words, and tells whether given parts are equal.",
+                },
+                "guided_practice": [
+                    "Fold paper into halves, then into quarters, matching the edges so the parts are equal",
+                    "Color one half, then one quarter, of simple shapes",
+                    "Sort pictures into shapes split into equal parts and shapes split into unequal parts",
+                ],
+                "independent_practice": [
+                    "Divide real objects into halves and quarters: a sandwich, an apple, a cracker",
+                    "Draw a shape and split it into equal halves, and another into equal quarters",
+                ],
+                "mastery_check": [
+                    "Divide a shape or object into equal halves and into equal quarters",
+                    "Tell whether parts are truly equal, and so whether they are halves or quarters",
+                    "State that two halves make one whole and four quarters make one whole",
+                ],
+                "spiral_review": [
+                    "Revisit fair sharing, splitting a set of objects equally, the same equal-parts idea applied to numbers",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "A whole thing may be broken into parts, but only when the parts are equal does the breaking give a fraction. Cut a loaf in two equal pieces and each is a half; cut it in four equal pieces and each is a quarter. The fraction is the language of fair division: it answers the old question of how to share a whole so that each share is just.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the parts: two equal parts are halves, four equal parts are quarters",
+                        "Chant the wholes: two halves make a whole, four quarters make a whole",
+                    ],
+                    "recitations": [
+                        "Recite the rule of fractions: the parts must be equal, or they are no fraction at all",
+                    ],
+                },
+                "copywork": [
+                    "Copy the fraction words, whole, half, quarter, and equal parts, neatly, beside a drawing of each",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the fraction words and the rule of equal parts before any new folding or cutting.",
+                "history_integration": "Tell that fractions arose from the everyday need to divide things fairly, land, bread, and grain, and that for as long as people have shared, they have needed the language of halves and quarters.",
+                "read_aloud_suggestions": [
+                    "A story in which something is shared or divided fairly, read aloud so the child hears the question of equal parts",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 12,
+                "living_book_suggestions": [
+                    "A beautifully illustrated picture book about sharing or about cooking, with real artwork and never a worksheet",
+                ],
+                "short_lesson_flow": "At a real moment of sharing, perhaps an apple or a sandwich at snack time, cut it together into two equal parts and name them halves. Another day, cut into quarters. Let the child do the cutting and the naming, calmly, for a real purpose. Stop while interest is high.",
+                "narration_prompt": "Tell me how we shared the apple. How many equal parts did we make? What is each part called?",
+                "real_world_objects": [
+                    "An apple, a sandwich, or an orange cut into halves and quarters at a real meal",
+                    "Folded paper or cloth divided into equal parts",
+                    "A clock face, whose half hour and quarter hour the child may begin to notice",
+                ],
+                "nature_connection": "Outdoors, notice the halves nature makes: a leaf with its two matching sides about the midrib, a seed split in two, and wonder whether the halves are truly equal.",
+                "habit_focus": "The habit of fair dealing: dividing a whole so that each part is honestly equal.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The fraction circles, a whole and its halves and quarters as inset pieces",
+                    "The fraction skittles for halving and quartering",
+                    "Real objects to fold and cut: paper, and food at snack time",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the fraction circle pieces: this is one half, two of these fill the whole; show me one half; what is this piece called?",
+                    "steps": [
+                        "Lift the whole circle, then the two halves, then the four quarters from their frames, naming each",
+                        "Fit the halves and then the quarters back into the whole, seeing that they fill it exactly",
+                        "Fold and cut paper, or share real food, into equal halves and quarters",
+                    ],
+                },
+                "control_of_error": "The fraction inset is the control: only equal pieces will fit the frame and fill the whole, so a piece cut or chosen unequal will not seat, showing the child plainly that the parts must be equal.",
+                "abstraction_pathway": "From handling the equal inset pieces and fitting them into the whole, to folding and cutting real objects into equal parts, toward naming halves and quarters and knowing how many make a whole without the material.",
+                "extensions": [
+                    "Divide the fraction circles into thirds, sixths, and eighths",
+                    "Compare the pieces: see that a half is larger than a quarter",
+                    "Find halves and quarters in the day: half an hour, a quarter of a dollar",
+                ],
+                "observation_focus": "Watch for the child insisting on equal parts, naming halves and quarters with the right words, and noticing that more parts means smaller parts.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Let the child do real cutting and sharing at snack and meal times",
+                    "Leave out paper for folding and play dough for dividing",
+                    "Keep play food that comes apart into halves and quarters within reach",
+                ],
+                "real_world_contexts": [
+                    "Cutting a sandwich, a pizza, or an apple to share fairly",
+                    "Halving a recipe, or measuring half a cup and a quarter cup while cooking",
+                    "Sharing a treat equally between friends or siblings",
+                    "Noticing the half hour and quarter hour on a clock, and the quarter in a handful of coins",
+                ],
+                "conversation_starters": [
+                    "If we cut this in two so it is fair, what do we call each piece?",
+                    "Which would you rather have, half of the cookie or a quarter of it? Why?",
+                    "How many quarters do you think it takes to make the whole thing?",
+                ],
+                "resource_bank": [
+                    "Real food and a child-safe knife for sharing",
+                    "Paper, play dough, and play food that divides",
+                    "A measuring cup set used in real cooking",
+                ],
+                "parent_role": "Hand the child the real job of cutting and sharing fairly, and use the words half, quarter, and equal parts as it naturally comes up at meals and in cooking. Wonder aloud about whether a cut is fair, and let real sharing, where unfair parts are quickly noticed, do the teaching.",
+                "observation_documentation": "Over time, note whether the child divides wholes into equal halves and quarters, uses the fraction words, insists that parts be equal, and knows how many parts make a whole. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Half-hour in time. 'Half' as vocabulary.",
