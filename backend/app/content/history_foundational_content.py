@@ -945,11 +945,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["map of the Middle East", "clay or playdough for cuneiform activity"],
             "recommended": ["living books about Mesopotamia", "pictures of ziggurats and cuneiform tablets"],
-            "philosophy_specific": {
-                "classical": "Memorize key Mesopotamian achievements. Hammurabi's Code as first encounter with legal thinking. Timeline placement drill.",
-                "charlotte_mason": "Living books about Mesopotamia with narration. Clay cuneiform as hands-on connection. Map drawn from memory into Book of Centuries.",
-                "montessori": "Mesopotamia folder in continent collection. Clay tablet making as practical life meets history. Ziggurat model building.",
-            },
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 10},
         "accommodations": {
@@ -959,6 +954,119 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Photographs of cuneiform tablets and ziggurat ruins. Map drawing. Comparison charts with illustrations.",
             "kinesthetic_learner": "Clay cuneiform writing. Ziggurat building with blocks. Act out Mesopotamian daily life.",
             "auditory_learner": "Listen to the Epic of Gilgamesh retold. Discuss Hammurabi's laws as a conversation. Oral comparisons between civilizations.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Mesopotamia means the land between the rivers, the Tigris and the Euphrates. Here, many hold, civilization began: the first cities of Sumer, the first writing in cuneiform, the first written laws in Hammurabi's Code. The rivers flooded unpredictably, so the people built irrigation canals and learned to work together. Today we narrate the story of Mesopotamia, learn what cuneiform was and why writing changed history, learn Hammurabi's Code and why written law was revolutionary, and compare Mesopotamia to Egypt.",
+                "gradual_release": {
+                    "i_do": "Tell the story of Mesopotamia in order: the two rivers and their hard floods, the first cities of Sumer, cuneiform pressed into wet clay, Hammurabi's two hundred and eighty-two written laws, the ziggurats. Think aloud about why writing things down changes everything, and compare Mesopotamia point by point with Egypt.",
+                    "we_do": "Retell the story of Mesopotamia together, press cuneiform marks into clay, talk through why written law mattered, and fill a chart comparing Mesopotamia and Egypt.",
+                    "you_do": "Child narrates the story of Mesopotamia, explains cuneiform and why writing changed history, describes Hammurabi's Code, and compares Mesopotamia to Egypt on three characteristics.",
+                },
+                "guided_practice": [
+                    "Retell the story of Mesopotamia: the rivers, Sumer, cuneiform, Hammurabi's Code, ziggurats",
+                    "Press cuneiform marks into clay and explain why writing mattered",
+                    "Compare Mesopotamia and Egypt on a chart of their characteristics",
+                ],
+                "independent_practice": [
+                    "Narrate the full story of Mesopotamia from memory",
+                    "Write a comparison of Mesopotamia and Egypt, alike and different",
+                ],
+                "mastery_check": [
+                    "Narrate Mesopotamia including the rivers, Sumer, Babylon, cuneiform, and ziggurats",
+                    "Explain what cuneiform was, and why writing and written law changed history",
+                    "Compare Mesopotamian civilization to Egypt on at least three characteristics",
+                ],
+                "spiral_review": [
+                    "Revisit the story of Egypt, set beside Mesopotamia, so the two are held and compared",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "In the land between two rivers, the Tigris and the Euphrates, civilization took some of its first and greatest steps. Here rose the cities of Sumer, and here a people pressed the first writing, cuneiform, into wet clay, and here a king named Hammurabi set down his laws in writing for all to see. Writing made memory permanent; written law made justice public. Mesopotamia gave the world both.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the land between the rivers: the Tigris and the Euphrates, and the cities of Sumer between them",
+                        "Chant the gifts of Mesopotamia: the wheel, the first writing, the first written laws",
+                    ],
+                    "recitations": [
+                        "Recite that cuneiform was the first writing, pressed into clay, and that Hammurabi was first to set the laws in writing for all to see",
+                    ],
+                },
+                "copywork": [
+                    "Copy a simple law in the manner of Hammurabi's Code, and the words cuneiform, ziggurat, Sumer, and Babylon",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the gifts of Mesopotamia and narrating yesterday's portion of the story before adding the next.",
+                "history_integration": "Place Mesopotamia on the chronological spine beside Egypt, among the very first river valley civilizations, and mark it as the point where writing itself begins, the invention that turns the unrecorded past into history that can be read.",
+                "read_aloud_suggestions": [
+                    "A living account of life in Sumer or Babylon, the scribe at the clay tablet, the king and his laws, read aloud for narration",
+                    "The Epic of Gilgamesh retold for children, one of the oldest stories ever written, read aloud",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book about ancient Mesopotamia, written with knowledge and wonder, never a dry fact reader",
+                ],
+                "short_lesson_flow": "Read a portion of a living book about Mesopotamia aloud, unhurried, and let the child narrate it back. Then let the child press cuneiform marks into a flattened ball of clay, feeling for themselves what a Sumerian scribe did. The map and a Book of Centuries entry may follow. Let the story and the clay, not a list of facts, teach Mesopotamia.",
+                "narration_prompt": "Tell me the part of the Mesopotamia story we just heard. What was it like to be a scribe pressing words into clay?",
+                "real_world_objects": [
+                    "A living book about ancient Mesopotamia",
+                    "Clay or playdough for pressing cuneiform marks by hand",
+                    "A Book of Centuries and a map of the Tigris and Euphrates",
+                    "Pictures of real cuneiform tablets and ziggurat ruins",
+                ],
+                "nature_connection": "Consider the two rivers as nature itself shaping a people: their unpredictable floods, so unlike the gentle Nile, forced the Mesopotamians to read the water, dig canals, and work together against nature's uncertainty.",
+                "habit_focus": "The habit of attention: hearing the story of Mesopotamia closely enough to narrate it, and pressing the clay carefully enough to feel the scribe's craft.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A Mesopotamia folder in the continent collection, with photographs and fact cards",
+                    "Clay tablets and a stylus for cuneiform work",
+                    "A map of the Tigris and Euphrates and materials for a ziggurat model",
+                    "The fundamental needs of humans chart applied to Mesopotamia",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the fact cards: this is cuneiform, the first writing, pressed into clay; show me cuneiform; what is this writing called?",
+                    "steps": [
+                        "The child explores the Mesopotamia folder and locates the two rivers on the map",
+                        "The child presses cuneiform into a clay tablet, the hands learning the scribe's work",
+                        "The child studies Mesopotamia through the fundamental needs of humans and narrates its story",
+                    ],
+                },
+                "control_of_error": "The clay tablet is a vivid control: marks pressed carelessly cannot be read back, so the child sees the scribe's need for care; the fact cards and map confirm the rest in one true way.",
+                "abstraction_pathway": "From pressing real cuneiform into clay and handling the concrete folder, to studying Mesopotamia through the fundamental needs of humans, toward narrating the civilization and grasping why writing and written law changed history.",
+                "extensions": [
+                    "Compare how Mesopotamia and Egypt each met the fundamental needs of humans",
+                    "Read and weigh a few of Hammurabi's laws",
+                    "Investigate the wheel, the canal, and the other Sumerian inventions",
+                ],
+                "observation_focus": "Watch for the child grasping that writing made records permanent, and that written law made the rules public and the same for all to see.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep illustrated books about ancient Mesopotamia within reach",
+                    "Leave out clay and a stylus for pressing cuneiform whenever the child wishes",
+                    "Have documentaries and retold tales like the Epic of Gilgamesh available",
+                ],
+                "real_world_contexts": [
+                    "Pressing marks into clay and discovering how hard early writing was",
+                    "Visiting a museum with cuneiform tablets or Mesopotamian artifacts",
+                    "Noticing the written rules and laws all around in daily life",
+                    "Wondering at the wheel, a Mesopotamian invention, on every car and bike",
+                ],
+                "conversation_starters": [
+                    "The Mesopotamians wrote their laws on a great stone for everyone to see, why did that matter?",
+                    "What happens when there are no written rules, and whoever is strongest decides?",
+                    "If you could make one written rule for our family, what would it be?",
+                ],
+                "resource_bank": [
+                    "Illustrated books and documentaries about Mesopotamia",
+                    "Clay and a stylus for cuneiform play",
+                    "Museums with Mesopotamian artifacts, and retellings of the Epic of Gilgamesh",
+                ],
+                "parent_role": "Follow the child's curiosity about the land between the rivers into books, clay, and museums, and wonder aloud at why writing and written law were such powerful inventions. Let real clay tablets, real artifacts, and vivid stories, rather than a worksheet, bring Mesopotamia to life.",
+                "observation_documentation": "Over time, note whether the child can narrate the story of Mesopotamia, explain why writing and written law mattered, and compare Mesopotamia with Egypt. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Cuneiform was one of the first writing systems — compare to hieroglyphics and our alphabet",
