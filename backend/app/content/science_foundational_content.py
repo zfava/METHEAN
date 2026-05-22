@@ -3051,11 +3051,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "tuning fork for visualizing vibration in water",
                 "variety of materials for sound experiments",
             ],
-            "philosophy_specific": {
-                "classical": "Sound properties memorized: vibration, pitch, volume, medium. Vocabulary drill. Structured experiment recording.",
-                "charlotte_mason": "Hands-on sound experiments: the child discovers vibration, pitch, and volume through building and playing instruments. Nature sounds during outdoor time. Drawing instruments in the science notebook.",
-                "montessori": "Sound cylinders for pitch discrimination. Instrument-building as practical work. Sound experiment tray: rubber bands, cups, strings, water glasses.",
-            },
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 10},
         "accommodations": {
@@ -3065,6 +3060,118 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "See vibrations: rubber band moving, water rippling from tuning fork. Draw sound wave diagrams.",
             "kinesthetic_learner": "Build instruments. Feel vibrations on throat, table, and rubber band. String telephone construction.",
             "auditory_learner": "Core strength area — the entire topic is about hearing. Sound walks. Instrument playing. Listening to pitch differences.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Every sound is made by something vibrating, moving quickly back and forth. The vibration travels out through the air as invisible waves and reaches the ear, which the brain hears as sound. A faster vibration makes a higher pitch; a stronger vibration makes a louder sound. Today we learn that sound comes from vibration, change pitch by changing a vibrating object, trace how sound travels to the ear, and build a simple instrument.",
+                "gradual_release": {
+                    "i_do": "Pluck a stretched rubber band and think aloud: I can see it vibrating and I can hear the sound, the vibration is the sound. Stretch it tighter and pluck again, the pitch rises. Hum with a hand on my throat to feel the vibration, and trace the sound from the band, through the air, to the ear.",
+                    "we_do": "Make sounds with a rubber band and water glasses together, watching and feeling the vibration, and change the pitch by changing the tension, length, or thickness.",
+                    "you_do": "Child explains that sound is caused by vibration, demonstrates a change in pitch, describes how sound travels to the ear, and builds a simple instrument.",
+                },
+                "guided_practice": [
+                    "Pluck a rubber band and feel the throat while humming to connect vibration and sound",
+                    "Change the pitch of a sound by changing tension, length, or thickness",
+                    "Trace how sound travels from a vibrating object through the air to the ear",
+                ],
+                "independent_practice": [
+                    "Build a simple instrument, a rubber band guitar or water glass xylophone, and explain how it makes sound",
+                    "Take a sound walk and name what is vibrating to make each sound heard",
+                ],
+                "mastery_check": [
+                    "Explain that sound is caused by vibration",
+                    "Demonstrate how pitch changes with the length, tension, or thickness of a vibrating object",
+                    "Describe how sound travels from its source through the air to the ear",
+                ],
+                "spiral_review": [
+                    "Revisit careful listening and observation, the attentive senses sound study depends on",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Listen, and every sound you hear, the voice, the bell, the wind, the drum, is born of one thing: something is trembling, vibrating swiftly back and forth. That trembling stirs the air, and the stir travels out in unseen waves until it reaches the ear. Sound is motion made audible, and to study it is to learn that even the music of the world obeys the laws of nature.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the first law of sound: every sound is made by something vibrating",
+                        "Chant the rule of pitch: a faster vibration makes a higher sound, a slower one a lower sound",
+                    ],
+                    "recitations": [
+                        "Recite that sound travels in waves through a medium, air, water, or solid, and that without a medium, as in the empty void of space, there is no sound",
+                    ],
+                },
+                "copywork": [
+                    "Copy the first law of sound and the rule of pitch, and the words vibration, pitch, volume, and medium",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the first law of sound and the rule of pitch before any new experiment.",
+                "history_integration": "Tell that music is among the most ancient of human arts, that flutes of bone were carved tens of thousands of years ago, and that every people on Earth has made instruments that sing by vibration.",
+                "read_aloud_suggestions": [
+                    "A living account of how an instrument or the human voice makes its sound, read aloud so the child hears the science of sound told",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book about sound, music, or instruments, with true artwork and never a dry reader",
+                ],
+                "short_lesson_flow": "Let the lesson be hands and ears. The child plucks a rubber band and watches it blur with vibration, hums with a hand on the throat, taps water glasses, and listens. Build one simple instrument together, gladly, and let the child play it. Then a quiet minute outdoors, listening to the sounds of the day. Keep it short and full of doing.",
+                "narration_prompt": "Tell me what you saw and felt when the rubber band made its sound. What was moving?",
+                "real_world_objects": [
+                    "A stretched rubber band, to see vibration",
+                    "Water glasses and a spoon, a simple xylophone",
+                    "Two cups and a string for a telephone",
+                    "The whole out-of-doors, full of sounds to listen for",
+                ],
+                "nature_connection": "On a quiet listening walk the child attends to the sounds of nature, the birdsong, the wind in the leaves, the running water, and for each one wonders what is vibrating to make it.",
+                "habit_focus": "The habit of attention: listening closely to a sound and noticing what is vibrating to make it.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The sound cylinders for refining the discrimination of pitch and loudness",
+                    "A sound experiment tray: rubber bands, cups and string, water glasses",
+                    "Materials for building a simple instrument",
+                    "A tuning fork for making vibration visible in water",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With two plucked rubber bands: this one sounds higher, this one lower; show me the higher sound; is this sound higher or lower?",
+                    "steps": [
+                        "The child explores the sound cylinders, matching and grading them by their sound",
+                        "The child makes sounds with the rubber bands and water glasses, watching and feeling the vibration",
+                        "The child changes the pitch by changing tension, length, or thickness, and builds a simple instrument",
+                    ],
+                },
+                "control_of_error": "The sound cylinders pair and grade in one true order, audible to the attentive ear, and the rubber band is its own control: a child can both see it vibrate and hear the sound, so the link of vibration and sound checks itself.",
+                "abstraction_pathway": "From refining the ear with the sound cylinders and seeing vibration in the rubber band, to changing pitch and building an instrument, toward understanding sound as vibration traveling in waves to the ear.",
+                "extensions": [
+                    "Compare how sound travels through air, water, and a solid",
+                    "Build a fuller set of tuned instruments",
+                    "Investigate how different instruments make their sound",
+                ],
+                "observation_focus": "Watch for the child connecting the seen and felt vibration to the heard sound, and keeping pitch and volume distinct.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep rubber bands, cups and string, and materials for instruments within reach",
+                    "Leave out real instruments to play and explore",
+                    "Let making sound and music be a welcome part of ordinary days",
+                ],
+                "real_world_contexts": [
+                    "Playing instruments and making music",
+                    "Feeling the throat vibrate while singing and humming",
+                    "Tapping, drumming, and plucking household objects to hear their sounds",
+                    "Listening, on a walk, for all the sounds of the world and what makes them",
+                ],
+                "conversation_starters": [
+                    "When you plucked it you heard a sound, what did you see it doing?",
+                    "How could you make that sound higher? What about lower?",
+                    "Put your hand on your throat and hum, what do you feel?",
+                ],
+                "resource_bank": [
+                    "Rubber bands, cups, string, and water glasses for sound play",
+                    "Real instruments to explore and play",
+                    "The whole world of everyday sound to listen to",
+                ],
+                "parent_role": "Make and enjoy sound and music with the child, and wonder aloud at what is vibrating whenever a sound is heard. Welcome the child's homemade instruments and noisy experiments, and let real playing, listening, and building, rather than a worksheet, teach the science of sound.",
+                "observation_documentation": "Over time, note whether the child understands that sound comes from vibration, can change a sound's pitch, and knows that sound travels through the air to the ear. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Sound vocabulary: vibration, pitch, volume, frequency, medium, wave. Onomatopoeia in reading: words that sound like sounds (buzz, crash, whisper).",
