@@ -14,6 +14,7 @@ import pytest
 
 from app.content.math_foundational_content import MATH_FOUNDATIONAL_CONTENT
 from app.content.reading_foundational_content import READING_FOUNDATIONAL_CONTENT
+from app.content.science_foundational_content import SCIENCE_FOUNDATIONAL_CONTENT
 from app.services.node_content import (
     NODE_CONTENT_SCHEMA,
     validate_content,
@@ -91,7 +92,9 @@ UNSCHOOLING_FORBIDDEN: set[str] = {
 def _node_content(node_key: str) -> dict:
     if node_key in MATH_FOUNDATIONAL_CONTENT:
         return MATH_FOUNDATIONAL_CONTENT[node_key]
-    return READING_FOUNDATIONAL_CONTENT[node_key]
+    if node_key in READING_FOUNDATIONAL_CONTENT:
+        return READING_FOUNDATIONAL_CONTENT[node_key]
+    return SCIENCE_FOUNDATIONAL_CONTENT[node_key]
 
 
 class TestNodeContentSchema:
@@ -360,6 +363,7 @@ class TestAuthoredPhilosophyContent:
             "rf-23",
             "rf-24",
             "rf-25",
+            "sf-01",
         ],
     )
     def test_node_has_all_five_native_variants(self, node_key):
@@ -431,6 +435,7 @@ class TestAuthoredPhilosophyContent:
             "rf-23",
             "rf-24",
             "rf-25",
+            "sf-01",
         ],
     )
     def test_unschooling_variant_has_no_lesson_keys(self, node_key):

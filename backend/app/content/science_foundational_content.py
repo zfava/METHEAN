@@ -138,11 +138,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "natural objects for observation (rocks, leaves, shells)",
             ],
             "recommended": ["magnifying glass", "collection of objects with interesting textures and smells"],
-            "philosophy_specific": {
-                "classical": "Structured observation with scientific vocabulary: classify observations by sense, record systematically, memorize the five senses and their functions.",
-                "charlotte_mason": "Nature study begins here: the child learns to LOOK at the world with attention and wonder. Original drawings from life in the nature notebook. Outdoor observation is primary.",
-                "montessori": "Sensorial materials refine each sense: rough/smooth boards, color tablets, sound cylinders, smelling bottles. Then apply refined senses to nature observation.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -152,6 +147,116 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Magnifying glass work. Detailed drawings. Color comparisons. Close-up photography of natural objects.",
             "kinesthetic_learner": "Touch-based exploration is primary. Nature walks with physical collection. Sorting objects by texture. Building with natural materials.",
             "auditory_learner": "Sound walks and listening exercises. Describe observations aloud before drawing. Discuss observations as a conversation.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Science begins with observation: paying close, careful attention to what is really there. A scientist's first tools are the five senses, sight, hearing, touch, smell, and, with safe foods, taste. Today we observe objects and the natural world with all five senses, describe what we find in specific, accurate words, and record our observations in a science notebook with both words and drawings.",
+                "gradual_release": {
+                    "i_do": "Hold an object, an apple or a pinecone, and observe it aloud sense by sense: I see deep red with a few green streaks; I feel a smooth, cool, firm skin; I hear a faint tap when I flick it. Show that plain red becomes deep red with green streaks when looked at closely, and record the observation in the notebook with a drawing.",
+                    "we_do": "Observe an object together, naming what each sense tells us, pressing for specific words rather than vague ones, and recording the observations side by side in our notebooks.",
+                    "you_do": "Child observes an object using at least three senses, describes each observation in specific language, and records it in the science notebook with words and a drawing.",
+                },
+                "guided_practice": [
+                    "Describe a familiar object using sight, then add touch, then hearing and smell",
+                    "Turn a vague description into a specific one: brown into reddish-brown with darker speckles",
+                    "Record an observation in the science notebook with a labeled drawing",
+                ],
+                "independent_practice": [
+                    "Observe a natural object outdoors with all applicable senses and record it in the notebook",
+                    "Build a multi-sense observation entry for several different objects",
+                ],
+                "mastery_check": [
+                    "Describe an object using at least three senses with specific, accurate words",
+                    "Record an observation in the science notebook with both words and a drawing",
+                    "Explain that science begins with careful observation",
+                ],
+                "spiral_review": [
+                    "Revisit the five senses and the body part each uses, naming them before each new observation",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Before a single law of nature can be learned, the eye and the ear must be taught to attend. The natural philosophers of old made their discoveries first by looking, long and closely, at the world as it truly is. The five senses are the mind's windows onto creation, and to observe well, to see precisely and name exactly, is the first discipline of every science.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the five senses and their organs: sight with the eyes, hearing with the ears, touch with the skin, smell with the nose, taste with the tongue",
+                        "Chant the observer's rule: look closely, name exactly, and write it down",
+                    ],
+                    "recitations": [
+                        "Recite that science begins with careful observation, the attentive use of all the senses upon the world as it really is",
+                    ],
+                },
+                "copywork": [
+                    "Copy a sentence of fine, exact natural description and a list of precise sense words: smooth, rough, translucent, pungent, brittle",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the five senses and the observer's rule before any new observation is made.",
+                "history_integration": "Tell that the great naturalists, who first described the plants, the animals, and the heavens, built all their knowledge upon patient observation, and that careful looking has always come before careful explaining.",
+                "read_aloud_suggestions": [
+                    "A passage of fine nature writing, rich in exact and vivid description, read aloud so the ear meets the language of careful observation",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautifully illustrated nature book with real artwork that invites close looking, never a dry textbook",
+                ],
+                "short_lesson_flow": "Go outdoors, unhurried, and let the child choose one thing to attend to, a leaf, a stone, a beetle. Look at it long and quietly, with no rush to name or explain. Then the child draws it from life in the nature notebook, as truly as they can, and tells you what they noticed with each sense. Stop while wonder is still fresh.",
+                "narration_prompt": "Tell me everything you noticed about the thing you observed. What did your eyes see, your hands feel, your nose smell?",
+                "real_world_objects": [
+                    "A nature notebook for drawing from life",
+                    "Natural objects gathered on a walk: leaves, stones, feathers, seed pods",
+                    "A magnifying glass for looking closely",
+                ],
+                "nature_connection": "Nature study is the heart of this lesson: the whole out-of-doors is the object of observation, and the child returns to the same tree, the same patch of ground, again and again, learning to see it truly.",
+                "habit_focus": "The habit of attention: looking at a real thing long enough and closely enough to see what is truly there.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The sensorial materials that refine each sense: the rough and smooth boards, the color tablets, the sound cylinders, the smelling bottles",
+                    "Natural objects on an observation tray with a magnifying glass",
+                    "A science notebook for recording observations",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the smelling bottles or the rough and smooth boards: this surface is rough, this one is smooth; show me the rough one; is this rough or smooth?",
+                    "steps": [
+                        "The child refines a sense with its sensorial material, sorting rough from smooth, matching the sound cylinders, pairing the smelling bottles",
+                        "The child carries the refined sense to a real natural object, observing it closely with eyes, hands, and nose",
+                        "The child records the observation in the science notebook with a careful drawing and describing words",
+                    ],
+                },
+                "control_of_error": "The sensorial materials carry their own control: the sound cylinders pair exactly, the color tablets grade in one true order, and a mismatch is plain to the trained sense, so the child corrects without being told.",
+                "abstraction_pathway": "From isolating and refining each sense with the sensorial materials, to turning the sharpened senses upon the real natural world, toward observing precisely and recording what is truly there.",
+                "extensions": [
+                    "Observe the same object across the day, or the seasons, noting what changes",
+                    "Sort natural objects by a sensory quality: by texture, by color, by smell",
+                    "Use the magnifying glass for close, detailed observation",
+                ],
+                "observation_focus": "Watch for the child observing with more than the eyes alone, choosing precise describing words, and attending closely before reaching to name.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a basket of interesting natural objects, with varied textures and smells, within reach",
+                    "Leave out a magnifying glass, a notebook, and good drawing materials",
+                    "Let observation belong to ordinary outings: walks, the garden, the kitchen",
+                ],
+                "real_world_contexts": [
+                    "Noticing the world on a walk: the smell of rain, the sound of birds, the feel of bark",
+                    "Observing in the kitchen: how dough feels, how bread smells baking, how fruit tastes",
+                    "Watching the weather and the sky change with the senses",
+                    "Examining a found treasure, a shell, a feather, a stone, closely",
+                ],
+                "conversation_starters": [
+                    "What do you notice about this? Use more than just your eyes.",
+                    "Close your eyes, what does it feel like, smell like, sound like?",
+                    "Can you describe that more exactly? What kind of brown is it?",
+                ],
+                "resource_bank": [
+                    "A magnifying glass and a notebook kept handy",
+                    "The whole out-of-doors, full of things to observe",
+                    "Beautiful nature books and field guides to browse",
+                ],
+                "parent_role": "Wonder aloud at what you notice, the smell of the air, the sound of the wind, and invite the child to look closer with you. Welcome their observations with genuine interest, ask gently for more exact words, and let the child's own curiosity choose what to attend to.",
+                "observation_documentation": "Over time, note whether the child observes with all the senses, describes things in specific words, records what they notice, and understands that paying close attention is where science starts. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Descriptive language in science builds vocabulary used in reading and writing: smooth, rough, translucent, pungent, brittle",
