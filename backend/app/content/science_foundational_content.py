@@ -1191,11 +1191,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["large paper for body tracing", "pictures or model of human body"],
             "recommended": ["stethoscope (toy or real) for listening to heartbeat", "anatomy poster"],
-            "philosophy_specific": {
-                "classical": "Memorize major organs and their functions. Vocabulary: skeleton, cardiac, respiratory, digestive. Systematic body systems study.",
-                "charlotte_mason": "The child's own body as the subject of wonder. Outdoor play IS body science. Living books about the body read with fascination, not clinical detachment.",
-                "montessori": "Human body puzzle with removable organs. Nomenclature cards for body parts. Practical life: nutrition preparation, hygiene routines as body care.",
-            },
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -1205,6 +1200,117 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Anatomy diagrams and posters. Body tracing project. Cross-section illustrations of organs.",
             "kinesthetic_learner": "Feel your own bones, heartbeat, and breathing. Body tracing. Exercise experiments. Act out how blood flows through the body.",
             "auditory_learner": "Listen to your heartbeat with a stethoscope. Discuss body functions in conversation. Songs about body parts and organs.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "The human body is a remarkable machine, and the child carries it everywhere. The skeleton holds it up, the heart pumps blood without ever resting, the lungs take in air, the stomach digests food, and the brain commands all of it. Today we name and locate the major organs, learn what the skeleton, heart, and lungs do, and learn the ways, good food, exercise, and sleep, that keep the body healthy.",
+                "gradual_release": {
+                    "i_do": "Place a hand on my chest and think aloud: I feel my heart beating, it pumps blood everywhere; I feel my ribs, the skeleton that shields my heart and lungs; I take a deep breath and feel my lungs fill. Name and point to each organ, and say plainly that they work together as systems.",
+                    "we_do": "Find and name each major organ on our own bodies together, say what the skeleton, heart, and lungs do, and talk over the ways we keep the body healthy.",
+                    "you_do": "Child names and locates the five major organs, explains what the skeleton, heart, and lungs do, and describes ways to keep the body healthy.",
+                },
+                "guided_practice": [
+                    "Locate and name the brain, heart, lungs, stomach, and skeleton on the body",
+                    "Explain in simple terms what the skeleton, heart, and lungs do",
+                    "Trace a body outline and label the major organs inside",
+                ],
+                "independent_practice": [
+                    "Make a labeled body map showing the major organs and their jobs",
+                    "Keep a healthy-habits tracker of sleep, food, and exercise for a week",
+                ],
+                "mastery_check": [
+                    "Name and locate the five major organs on a body diagram",
+                    "Explain what the skeleton, heart, and lungs do",
+                    "Describe at least three ways to keep the body healthy",
+                ],
+                "spiral_review": [
+                    "Revisit the characteristics and needs of living things, since the body's systems serve those very needs",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Of all the things a person may study, none is nearer than the body in which they live. It is a wonder of order: the bony frame that upholds it, the tireless heart, the breathing lungs, the brain that governs all. To know the names and the offices of its chief parts, and to keep it well by good food, movement, and rest, is knowledge every person should carry.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the major organs and their offices: the brain commands, the heart pumps, the lungs breathe, the stomach digests, the skeleton upholds and shields",
+                        "Chant the keepers of health: good food, daily movement, and sound sleep",
+                    ],
+                    "recitations": [
+                        "Recite that the body is made of systems that work together, no organ alone, but all serving the whole",
+                    ],
+                },
+                "copywork": [
+                    "Copy the names of the major organs, each beside its office, neatly set down",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the major organs and their offices before any new study of the body.",
+                "history_integration": "Tell that the study of the body is very old, that the Egyptians, the Greek physician Hippocrates, and the healers of China each sought to understand how the body works, and that medicine itself grew from this long and patient inquiry.",
+                "read_aloud_suggestions": [
+                    "A living account of how the heart, the lungs, or the skeleton does its work, read aloud with wonder rather than dry detachment",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A living book about the human body written with wonder and beauty, never a clinical or dull textbook",
+                ],
+                "short_lesson_flow": "Begin with the child's own body as the object of wonder: feel the heartbeat, feel the ribs, watch the chest rise with a breath, wiggle the fingers and feel the bones. Name one organ and what it does, simply and gladly. Vigorous outdoor play is itself the lesson in a strong, healthy body. Keep it short and full of wonder.",
+                "narration_prompt": "Tell me what you felt when you put your hand on your chest. What is your heart doing, and why does it never stop?",
+                "real_world_objects": [
+                    "The child's own body: heartbeat, breath, bones felt through the skin",
+                    "A balloon for feeling the lungs' work, a stopwatch for counting heartbeats",
+                    "Good food, the outdoors for play, a bed for rest, the real keepers of health",
+                ],
+                "nature_connection": "Outdoor play, running, climbing, breathing deep of fresh air, is the body's own nature study: the child feels the heart quicken and the lungs work, and learns health through living well out of doors.",
+                "habit_focus": "The habit of wonder and of care: marveling at the body's tireless work and tending it with good food, movement, and rest.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A human body puzzle with removable organs",
+                    "Body and organ nomenclature cards for three-part matching",
+                    "A model of the skeleton, and a body outline to label",
+                    "Practical-life materials for body care: nutrition preparation and hygiene routines",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the body puzzle or organ cards: this organ is the heart, it pumps the blood; show me the heart; which organ is this, and what does it do?",
+                    "steps": [
+                        "The child works the human body puzzle, lifting and replacing each organ in its place",
+                        "The child matches the body nomenclature cards, organ to name to office",
+                        "The child traces a body outline and places the organs, then carries body care into practical life, preparing food and keeping clean",
+                    ],
+                },
+                "control_of_error": "The body puzzle and the three-part nomenclature cards carry their own control: each organ piece fits only its own place, and each card matches in one true way, so a wrong placement does not fit and the child corrects it.",
+                "abstraction_pathway": "From handling the body puzzle and the organ models, to matching the nomenclature cards, toward naming the organs, their offices, and the systems they form without the materials.",
+                "extensions": [
+                    "Study the body systems: the circulatory, respiratory, digestive, and skeletal",
+                    "Carry body care into daily practical life: preparing healthy food, hygiene routines",
+                    "Examine how the organs work together as one whole",
+                ],
+                "observation_focus": "Watch for the child placing and naming the organs accurately, grasping each organ's office, and beginning to see the body as systems that work together.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep books, models, and puzzles of the human body within reach",
+                    "Leave out a stethoscope, real or toy, and a stopwatch for exploring heartbeat and breath",
+                    "Have large paper and pens available for body-tracing whenever the child wishes",
+                ],
+                "real_world_contexts": [
+                    "Feeling the heart pound and the breath quicken after running and active play",
+                    "Preparing and eating real food and talking about how it fuels the body",
+                    "Noticing the body's need for sleep, and how rest restores it",
+                    "Visits to the doctor or dentist, where the body's workings come up naturally",
+                ],
+                "conversation_starters": [
+                    "Put your hand on your chest, what do you feel? Why does it never stop?",
+                    "Where do you think your lunch is right now? What is happening to it?",
+                    "What do you think your body needs to stay strong and well?",
+                ],
+                "resource_bank": [
+                    "Body books, models, and puzzles",
+                    "A stethoscope and stopwatch for exploring the body",
+                    "Real food, active play, and rest, the everyday keepers of health",
+                ],
+                "parent_role": "Let the body's wonders come up in real life, the pounding heart after a run, the sleepiness at bedtime, the hunger before a meal, and wonder at them aloud together. Answer the child's questions about how the body works, and let healthy living, good food, movement, and rest, be lived rather than lectured.",
+                "observation_documentation": "Over time, note whether the child can name and locate the major organs, say what they do, and understands the ways, food, movement, and rest, that keep the body healthy. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Body vocabulary (skeleton, organ, muscle, cardiac) builds scientific reading comprehension",
