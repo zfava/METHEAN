@@ -3299,11 +3299,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["blank journal or notebook", "pencils and colored pencils or crayons"],
             "recommended": ["date stamp for entries", "journal prompts for days when the child can't think of a topic"],
-            "philosophy_specific": {
-                "classical": "Daily journal as writing discipline. Consistent practice builds the habit. Content drawn from daily life and studies. Quality of handwriting maintained even in informal journal.",
-                "charlotte_mason": "Nature journal is THE Charlotte Mason journal: draw what you observe in nature with careful detail, then write labels and descriptions. The journal is a personal record of learning across all subjects.",
-                "montessori": "The child's personal work journal: records of activities, observations, and creations. Self-selected topics. The journal belongs to the child and is treated with respect.",
-            },
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 5},
         "accommodations": {
@@ -3313,6 +3308,115 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "The drawing-first approach is a natural strength. Detailed drawings with careful labels. Beautiful journal presentation.",
             "kinesthetic_learner": "Draw and write about physical activities: 'What I built today,' 'Where I explored,' 'What I cooked.'",
             "auditory_learner": "Talk about the drawing before writing: 'Tell me what you drew. Now write what you just told me.'",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "A journal is where drawing meets writing: a daily, low-pressure habit that turns thinking on paper into writing on paper. Today we begin a daily journal that combines drawing and writing, with at least two weeks of consistent entries, progressing from word labels to captions and short sentences about the drawing.",
+                "gradual_release": {
+                    "i_do": "Draw a small picture in a journal and label aloud: this is a pine tree; I write 'tree' beside it; today I am also writing one short caption, 'tall pine tree'. Show that the drawing names what we noticed and the writing names what we want to remember.",
+                    "we_do": "Make a journal entry together: each of us draws and labels a small picture, then writes a caption or short sentence about it, and we set the journals beside each other when we are done.",
+                    "you_do": "Child makes a daily journal entry independently, drawing then labeling, then captioning, and after a week or two writing a short sentence about the drawing.",
+                },
+                "guided_practice": [
+                    "Label a drawing with one or two words for the main objects",
+                    "Add a caption of two or three words describing the drawing",
+                    "Write a short sentence about the drawing once labels and captions are easy",
+                ],
+                "independent_practice": [
+                    "Make a daily journal entry for at least two weeks, drawing and writing each day",
+                    "Review past journal entries together and notice how the writing has grown",
+                ],
+                "mastery_check": [
+                    "Maintain a daily journal for at least two weeks",
+                    "Label drawings with readable words and progress to captions and short sentences",
+                    "Sustain the habit without daily reminding",
+                ],
+                "spiral_review": [
+                    "Revisit handwriting, spacing, and end punctuation in each journal entry",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The keeping of a journal is an old discipline of the educated mind. Naturalists, scholars, and statesmen alike have kept books in which they drew what they saw and wrote what they noticed, that the day's observations might not be lost. We begin such a journal, that drawing and writing may grow together as the daily work of a careful mind.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the journal habit: every day a drawing, every day a word, every day a line",
+                    ],
+                    "recitations": [
+                        "Recite that what is not set down is soon forgotten, and the journal is the keeper of the day's seeing",
+                    ],
+                },
+                "copywork": [
+                    "Copy a short sentence from a fine nature journal or a great naturalist's notebook and let it sit beside the day's own drawing",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the journal habit before the drawing begins.",
+                "history_integration": "Tell that the great naturalists, explorers, and inventors of past centuries kept careful journals, drawing and writing side by side, and that those journals are among the treasures we still read today.",
+                "read_aloud_suggestions": [
+                    "A short passage from a naturalist's journal or a child's published nature notebook, read aloud so the ear meets what a good journal sounds like",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated nature notebook or a real naturalist's journal, used as the model for the child's own",
+                ],
+                "short_lesson_flow": "Keep the lesson short, ten to fifteen minutes. The journal is unhurried: the child chooses one thing observed today, draws it from life with attention, then writes its name beneath it. As weeks pass, labels grow into captions and captions into a short sentence. Never demand quantity, never correct spelling here. The journal is the child's own record, kept beautifully because it is loved.",
+                "narration_prompt": "Tell me about your drawing. What did you notice that made you want to draw this thing?",
+                "real_world_objects": [
+                    "A blank nature notebook, set apart for the child's daily journal",
+                    "Good pencils and watercolor or colored pencils",
+                    "Real natural objects gathered on a walk to draw from life",
+                ],
+                "nature_connection": "This is the nature notebook itself: the child observes something out of doors, draws it from life, and writes a label or short note about it, so journal-keeping and nature study are one work.",
+                "habit_focus": "The habit of attention: looking long enough at a real thing to draw it truly and find a word for it.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A bound nature notebook or journal, prepared as the child's own",
+                    "Good pencils, fine pens, and watercolor materials kept ready on a tray",
+                    "Natural objects and a magnifying glass on a shelf the child can reach",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the journal: this is your journal, where we draw and write each day; you choose what to draw today; show me your journal entry for today.",
+                    "steps": [
+                        "The child chooses an object or scene to observe and arranges paper, pencils, and any object on a small mat",
+                        "The child draws the object with care and adds a label or caption beneath the drawing",
+                        "The child returns the materials to their place and adds the dated entry to the journal",
+                    ],
+                },
+                "control_of_error": "A journal entry without a date or a label can be set beside earlier entries to show the difference, and the child completes any missing piece for the journal to feel finished.",
+                "abstraction_pathway": "From drawing the object and labeling it with one word, to writing a caption, toward writing a true sentence beneath the drawing.",
+                "extensions": [
+                    "Keep a themed journal: a tree journal, a sky journal, a kitchen journal",
+                    "Add a date and the weather to each entry",
+                    "Revisit and add to an earlier entry as the child notices more",
+                ],
+                "observation_focus": "Watch for the child returning to the journal each day on their own, drawing with care, and adding words that say true things about the drawing.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave out a blank book the child may claim as their own, with good drawing materials nearby",
+                    "Tape a few finished journal pages somewhere the child can admire them",
+                    "Welcome any way the child wants to fill the book, drawing, words, taped-in objects, or all three",
+                ],
+                "real_world_contexts": [
+                    "Drawing and writing about a real day or trip in a notebook",
+                    "Keeping a sketchbook of things noticed on walks",
+                    "Adding a drawing and a line to a shared family journal or scrapbook",
+                    "Captioning photographs the child took",
+                ],
+                "conversation_starters": [
+                    "What did you notice today that you might want to keep?",
+                    "Want to write a word beside your drawing, so you remember what it is?",
+                    "Want me to add the date for now while your hand learns to do it?",
+                ],
+                "resource_bank": [
+                    "A growing pile of blank notebooks, journals, and good paper",
+                    "Drawing and writing tools the child enjoys",
+                    "Other people's nature notebooks and sketchbooks to flip through",
+                ],
+                "parent_role": "Keep your own little notebook visible and use it without performance, so the child sees journaling as a real grown-up thing. Welcome any entry the child makes, ask a genuine question about it, and leave the choice of what to draw or write entirely to the child.",
+                "observation_documentation": "Over time, notice whether the child returns to the journal of their own accord, writes more beside their drawings, and looks back on earlier entries with pleasure. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Journal writing reinforces reading skills: the child reads their own entries, building fluency with familiar words",
