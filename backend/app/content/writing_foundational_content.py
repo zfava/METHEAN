@@ -3814,11 +3814,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["sentences with missing commas for practice", "lined paper"],
             "recommended": ["comma rule poster", "list sentence examples"],
-            "philosophy_specific": {
-                "classical": "Comma rules memorized and drilled. Sentence correction as a formal exercise. The serial comma taught as standard practice.",
-                "charlotte_mason": "Commas absorbed through copywork before rules are named: the child has copied hundreds of list sentences with commas before learning the rule formally. The rule confirms what the hand already knows.",
-                "montessori": "Punctuation marks as physical objects. The child places comma cards between items in sentence strips. Grammar as a concrete, manipulative activity.",
-            },
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 5},
         "accommodations": {
@@ -3828,6 +3823,115 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Color-code each list item in a different color to show the commas separating them. Comma placement shown visually with arrows.",
             "kinesthetic_learner": "Physical comma cards placed between word cards. Stand up and take a step for each item — the pause between steps is the comma.",
             "auditory_learner": "Read list sentences aloud, pausing at each comma. 'Hear' the comma as a brief pause. Clap for each item in the list.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "A comma in a list separates each item from the next so the reader can tell where one ends and another begins. Today we use commas to separate three or more items in a list, write original list sentences correctly, and explain why the commas matter.",
+                "gradual_release": {
+                    "i_do": "Write a list sentence aloud: 'I packed shirts, pants, and socks.' Show that with three items the commas keep them straight, and with only two items, 'shirts and pants', no comma is needed.",
+                    "we_do": "Add commas to list sentences together, counting the items, placing a comma between each pair, and reading the result aloud to hear the pauses.",
+                    "you_do": "Child writes original list sentences with three or more items and places the commas correctly, and reads them aloud with natural pauses.",
+                },
+                "guided_practice": [
+                    "Count the items in a written list and add commas in the correct places",
+                    "Write a sentence listing three things and check the commas",
+                    "Read a list sentence aloud with a small pause at each comma",
+                ],
+                "independent_practice": [
+                    "Add commas to a set of unpunctuated list sentences",
+                    "Write original list sentences about real items in the child's day",
+                ],
+                "mastery_check": [
+                    "Place commas correctly in list sentences with three or more items",
+                    "Write original sentences with lists using correct commas",
+                    "Explain why commas in a list prevent confusion",
+                ],
+                "spiral_review": [
+                    "Check commas in copywork, journal entries, and letters when a list appears",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Among the smallest of the punctuation marks, the comma may be the most useful. In a list of things it sets each item apart from its neighbors, that the reader may not mistake two for one. The rule is plain: where three or more things stand together, the comma stands between them, and a careful writer never withholds it.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the comma rule for lists: three things or more, a comma between each, and one before the 'and'",
+                    ],
+                    "recitations": [
+                        "Recite that the comma keeps the items of a list distinct, and that without it the reader may join what the writer meant to separate",
+                    ],
+                },
+                "copywork": [
+                    "Copy a sentence whose list contains items of two or more words each, with the commas carefully placed, so the eye sees how they keep meaning clear",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the comma rule for lists before any sentence work is done.",
+                "history_integration": "Tell that punctuation as we know it was developed slowly by printers and grammarians of the past centuries, and that the comma in a list is among the earliest and steadiest of these conventions.",
+                "read_aloud_suggestions": [
+                    "A passage rich in list sentences, read aloud with care for the small pause at each comma, so the ear hears what the eye is to mark",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A familiar living book whose pages already contain many correctly punctuated list sentences the child has copied",
+                ],
+                "short_lesson_flow": "Keep the lesson very short, five to ten minutes. The child has copied list sentences in copywork for a long time and has already met the comma in real reading. Read a list sentence aloud with small natural pauses, ask the child where they hear the pauses, and let them place commas on a written copy. When the rule is named, it only confirms what reading and copywork have already shown.",
+                "narration_prompt": "Read this list sentence aloud and tell me where you naturally paused. Now we will mark each pause with a comma.",
+                "real_world_objects": [
+                    "A favorite living book where list sentences may be found",
+                    "A grocery list or a packing list written by the family",
+                    "Good lined paper and a comfortable pencil",
+                ],
+                "nature_connection": "Nature-notebook entries often list features observed, the leaf was small, oval, and bright green, and the child uses the comma there in real recording rather than as a drill.",
+                "habit_focus": "The habit of best work: writing the comma where it belongs, in every list, in every piece of the child's own writing.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Sentence strips that contain lists, some correctly punctuated and some not, for comparison",
+                    "Small comma cards the child can physically place between items on a sentence strip",
+                    "A reference card with one clear example of a list sentence",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a sentence strip: here is a list of three items, the commas go between them; you place comma cards in the right spots on this strip; show me where each comma belongs and tell me why.",
+                    "steps": [
+                        "The child reads a sentence strip and counts the items in the list",
+                        "The child places comma cards between the items, including before the final 'and'",
+                        "The child writes the same sentence on lined paper with the commas in place and compares it to the correctly punctuated reference",
+                    ],
+                },
+                "control_of_error": "The reference strip with correct commas stands beside the child's, so a missing or extra comma is plain when the two are set together, and the child corrects without being told.",
+                "abstraction_pathway": "From placing concrete comma cards between item cards on a strip, to writing list sentences with correct commas on paper, toward using the comma rule fluently in the child's own writing.",
+                "extensions": [
+                    "Find list sentences in a printed passage and mark the commas",
+                    "Sort sentence strips into those that need commas and those that do not",
+                    "Take a real family list and write it as a sentence with commas",
+                ],
+                "observation_focus": "Watch for the child counting items, placing a comma between each pair, and including the comma before the final 'and' as a steady habit.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep grocery pads, list paper, and good pens out for whoever wants to make a list",
+                    "Leave a few familiar books open at pages where list sentences appear, with the commas visible",
+                    "Welcome the child's lists, of toys, of friends, of foods, however long",
+                ],
+                "real_world_contexts": [
+                    "Writing a grocery list as a sentence, 'we need milk, eggs, bread, and butter', for someone to read",
+                    "Writing a friend list for a party invitation in one sentence",
+                    "Listing ingredients for a recipe the child wants to make",
+                    "Writing the rules of a game the child is inventing",
+                ],
+                "conversation_starters": [
+                    "You have three things in that list: want to see where the commas go?",
+                    "Read this list to me. Do you hear yourself pausing slightly between the things?",
+                    "Without the commas, this list reads strangely: can you see why?",
+                ],
+                "resource_bank": [
+                    "Notepads, paper, and pens for real lists",
+                    "Familiar books, recipes, and shopping circulars full of list sentences",
+                    "A small example sentence taped where the child can glance at it",
+                ],
+                "parent_role": "Write your own list sentences where the child can see, on grocery pads, family lists, and notes, and let the comma do its real work. When the child writes a list, read it back together and ask where it would be clearest to pause, letting the comma show up as a small useful tool rather than a drill.",
+                "observation_documentation": "Over time, notice whether the child reaches for the comma when writing real lists, places it correctly between items, and notices when a list reads awkwardly because a comma is missing. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Commas in reading create natural pauses — reading list sentences aloud with pauses builds fluency and comprehension",
