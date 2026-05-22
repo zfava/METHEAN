@@ -5498,10 +5498,115 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Categorize: 'Take-away, comparison, or missing-part story?'",
         },
         "philosophy_specific": {
-            "classical": "Classify types explicitly. Identify type before solving.",
-            "charlotte_mason": "Real stories from daily life. Concrete and meaningful.",
-            "montessori": "Subtraction stories with bead material.",
-            "traditional": "Problem-type worksheets. Key word identification.",
+            "traditional": {
+                "introduction": "Subtraction word problems are math stories that come in three kinds. Take away: you had some, some went, how many are left. Comparison: one group has more than another, how many more. Missing part: the whole is known and one part is known, how many are in the other part. All three are solved by subtraction. Today we read each kind, draw it, and write a number sentence with a minus and an equals sign.",
+                "gradual_release": {
+                    "i_do": "Read a take-away story and act it out, removing counters. Read a comparison story and line two groups up to see the gap. Read a missing-part story and cover one part. Think aloud that each is subtraction, draw the picture, and write the number sentence with minus and equals.",
+                    "we_do": "Read each kind of subtraction problem together, name its type, act it out, draw the picture, and write the number sentence.",
+                    "you_do": "Child reads a subtraction word problem, names its type, draws a picture, writes a number sentence, and solves it.",
+                },
+                "guided_practice": [
+                    "Act out take-away, comparison, and missing-part problems with counters",
+                    "Sort word problems by type: take away, comparison, missing part",
+                    "Draw a picture for a subtraction problem and write its number sentence",
+                ],
+                "independent_practice": [
+                    "Solve subtraction word problems of all three types by drawing and writing the number sentence",
+                    "Write a subtraction word problem of your own and solve it",
+                ],
+                "mastery_check": [
+                    "Solve single-step subtraction word problems of all three types",
+                    "Name whether a problem is take away, comparison, or missing part",
+                    "Write a correct subtraction number sentence with minus and equals",
+                ],
+                "spiral_review": [
+                    "Revisit subtraction facts within twenty, the computation these problems rest on",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Subtraction wears three faces, and the reasoner must know each. Sometimes a thing is taken away, and we ask what remains. Sometimes two groups are set side by side, and we ask how much greater is the one. Sometimes the whole and a part are known, and we ask after the missing part. Three different stories, one operation: to read the story rightly is to know it calls for subtraction.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the three faces of subtraction: take away, compare, and find the missing part",
+                        "Chant the steps: read the story, name its kind, write the sentence, and check",
+                    ],
+                    "recitations": [
+                        "Recite that take away, comparison, and missing part are all answered by subtraction, the finding of what is left, what is more, or what is hidden",
+                    ],
+                },
+                "copywork": [
+                    "Copy a subtraction word problem and the number sentence that solves it, neatly, one beneath the other",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the three faces of subtraction before any new problem is met.",
+                "history_integration": "Tell that the arithmetic of trade and account has always asked these three questions, what is left after spending, how much one has more than another, how much of a known whole is still owing, and that naming the kind of problem is the reasoner's first task.",
+                "read_aloud_suggestions": [
+                    "A story in which something is spent, lost, or compared, read aloud so the child hears a real question of what remains or how many more",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated story in which things are eaten, given away, or compared, with real artwork and never a worksheet",
+                ],
+                "short_lesson_flow": "Take a real, small situation, perhaps grapes at snack time, and tell it as a little story with true numbers: some were eaten, how many are left. Another day tell a comparing story. Let the child act it out with the real things, draw it, and say the number sentence. Keep it short and calm.",
+                "narration_prompt": "Tell me the story of the problem in your own words. Was something taken away, or were two groups compared?",
+                "real_world_objects": [
+                    "Real things to take from and to compare: grapes, crackers, blocks, coins",
+                    "Two real groups set side by side to see which has more",
+                    "The child's own day, full of real moments of some being used up",
+                ],
+                "nature_connection": "Outdoors, compare two real groups, the acorns under one tree and the acorns under another, and ask the true question of how many more there are under the one.",
+                "habit_focus": "The habit of attention: reading a story closely enough to know which of its kinds it is.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The golden bead material for representing the quantities in a story",
+                    "Counters and small objects for acting a problem out",
+                    "Word problem cards sorted into the three kinds of subtraction",
+                    "Paper for drawing the problem and writing the number sentence",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With problems acted in beads: this story takes away, this one compares, this one finds a missing part; show me a take-away story; which kind of subtraction is this?",
+                    "steps": [
+                        "The child reads or hears a subtraction problem and acts it out with golden beads or counters",
+                        "The child names the kind of problem, take away, comparison, or missing part",
+                        "The child draws the problem and writes the number sentence, then checks the answer against the beads",
+                    ],
+                },
+                "control_of_error": "The golden beads are the control: the answer written in the number sentence must match the beads that remain, the gap between the groups, or the hidden part, so a wrong sentence is revealed by the material itself.",
+                "abstraction_pathway": "From acting each kind of story out with golden beads, to drawing it, toward reading a subtraction problem, naming its kind, and writing its number sentence with no material at hand.",
+                "extensions": [
+                    "Solve subtraction problems with larger quantities using the golden beads",
+                    "Write original problems of each of the three kinds",
+                    "Sort a set of mixed word problems by operation and by kind",
+                ],
+                "observation_focus": "Watch for the child naming the kind of problem before solving, and recognizing comparison and missing-part stories as subtraction, not only take-away.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Let the child help with real counting at moments when things are used up or compared",
+                    "Keep counters, coins, and small toys handy for acting out questions of how many",
+                    "Leave out paper for drawing and writing the math of a real situation",
+                ],
+                "real_world_contexts": [
+                    "Eating part of a snack and asking how many are left",
+                    "Spending some coins and asking how much money remains",
+                    "Comparing two collections and asking who has more, and how many more",
+                    "Knowing a whole and one part, and asking about the missing part",
+                ],
+                "conversation_starters": [
+                    "You had some, and some are gone now. How many are left?",
+                    "You have more than I do. How many more?",
+                    "We know how many there are altogether, and how many are red. How many are blue?",
+                ],
+                "resource_bank": [
+                    "Counters, coins, blocks, and toys for acting out",
+                    "Paper and pencils for drawing and writing",
+                    "The countless real moments of using up and comparing in daily life",
+                ],
+                "parent_role": "Notice the real moments when something is taken away or two groups are compared, and wonder the question aloud together. Let the child act it out with real things, and put the math into words and a number sentence only as far as the child enjoys.",
+                "observation_documentation": "Over time, note whether the child makes sense of take-away, comparison, and missing-part stories, draws or acts them out, and can express them as subtraction number sentences. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Comparison language: more, fewer, less",
