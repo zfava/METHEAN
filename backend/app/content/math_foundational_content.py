@@ -3397,10 +3397,114 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Say: 'Short hand THREE. Long hand TWELVE. THREE O'CLOCK.'",
         },
         "philosophy_specific": {
-            "classical": "Systematic instruction. Short hand = hour, long on 12 = o'clock.",
-            "charlotte_mason": "Daily rhythm: what time wake up, eat lunch, go to bed?",
-            "montessori": "Clock stamps. Time cards analog to digital. Schedule following.",
-            "traditional": "Clock worksheets. Draw-the-hands exercises.",
+            "traditional": {
+                "introduction": "Time tells us when things happen. On an analog clock the short hand points to the hour and the long hand tells the minutes. Today we read clocks to the hour and the half hour, read a digital clock, learn what AM and PM mean, and tie clock times to the routines of the day.",
+                "gradual_release": {
+                    "i_do": "Model with a clock that has movable hands: the short hand points to the hour; when the long hand points to twelve it is an o'clock time; when it points to six it is half past. Show the same time on a digital display.",
+                    "we_do": "Read o'clock and half-past times together on the analog clock, and set the hands to match a time. Match an analog clock to its digital display together.",
+                    "you_do": "Child reads o'clock and half-past times on an analog clock, reads a digital clock, tells AM from PM, and names what the family does at given times.",
+                },
+                "guided_practice": [
+                    "Set a play clock to match a given time",
+                    "Draw the hands on blank clock faces for o'clock and half-past times",
+                    "Match analog clocks to their digital displays",
+                ],
+                "independent_practice": [
+                    "Make a daily schedule with a small clock drawing beside each event",
+                    "Read clocks around the home and name the time",
+                ],
+                "mastery_check": [
+                    "Read any o'clock and half-past time on an analog clock",
+                    "Read a digital clock and tell AM from PM",
+                    "Relate a given time to a routine of the day",
+                ],
+                "spiral_review": [
+                    "Revisit which hand is the hour hand before reading half-past times again",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The clock is a small, faithful machine that marks the turning of the day. Its short hand keeps the hours and its long hand the minutes. Learn its few clear rules by heart, and the clock can be read at a glance.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the rule of the hands: the short hand tells the hour, the long hand tells the minutes",
+                        "Chant the hours around the clock face in order, one through twelve",
+                        "Chant the two marks: long hand on twelve is o'clock, long hand on six is half past",
+                    ],
+                    "recitations": [
+                        "Recite the rules of the clock, and recite that the morning hours are AM and the afternoon and evening hours are PM",
+                    ],
+                },
+                "copywork": [
+                    "Copy the hours one through twelve as they sit around the clock face, and copy a few written times such as 7 o'clock and half past 8",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the rules of the clock before reading any times; the rules are rehearsed cumulatively, never assumed.",
+                "history_integration": "Tell that people once kept time by the sun and by water and sand glasses long before clocks with hands, and that the dividing of the day into hours is an old human ordering of time.",
+                "read_aloud_suggestions": [
+                    "A well-told story shaped by the hours of a day, or an account of how people have kept time",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 12,
+                "living_book_suggestions": [
+                    "A beautifully illustrated picture book that follows the hours of a day, with real artwork and never a busy workbook",
+                ],
+                "short_lesson_flow": "Sit with a real clock that has movable hands. Tie it to the rhythm the child already knows, breakfast time, lunch time, bedtime. Set the hands to one or two familiar times together, and read them. Stop while the child is still interested.",
+                "narration_prompt": "Tell me what the clock looked like at lunch time today, and where each hand was pointing.",
+                "real_world_objects": [
+                    "The real clocks in the home, read at the moments of the day",
+                    "A clock with movable hands set to familiar times",
+                    "The family's daily rhythm of waking, meals, and rest",
+                ],
+                "nature_connection": "Notice the sun's place in the sky at different hours, and note in the nature notebook what time the morning birds sing or the shadows grow long.",
+                "habit_focus": "The habit of punctuality and order: noticing the time and meeting the rhythm of the day faithfully.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A clock with movable hands, the hour hand and minute hand clearly different",
+                    "Time cards pairing an analog clock face with its digital time",
+                    "A picture schedule of the day's events with their times",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the movable clock: this is three o'clock; show me three o'clock; what time is this? The hands set and read together.",
+                    "steps": [
+                        "Name the hour hand and the minute hand and what each one tells",
+                        "Set the movable hands to o'clock and half-past times and read them",
+                        "Match each analog clock card to its digital time, and place the day's events on the schedule",
+                    ],
+                },
+                "control_of_error": "The time cards pair each analog clock with one digital time, so a wrong match is plain to the child, and the movable clock can be checked against a card.",
+                "abstraction_pathway": "From setting and reading the movable clock by hand, to matching analog and digital faces, toward reading any clock in the room at a glance.",
+                "extensions": [
+                    "Follow the picture schedule through a real day",
+                    "Read clocks and note the time of each work chosen during the day",
+                ],
+                "observation_focus": "Watch for the child telling the hour hand from the minute hand reliably, and reading time as part of the real day by choice.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep both an analog clock and a digital clock visible at child height",
+                    "Leave a clock with movable hands and a play clock within reach",
+                    "Let a timer be available for the child to set for things they care about",
+                ],
+                "real_world_contexts": [
+                    "Reading the clock to know when a favorite show or activity begins",
+                    "Noticing the time of waking, meals, and bedtime",
+                    "Setting a timer for baking or for a turn",
+                    "Counting how long until an awaited event",
+                ],
+                "conversation_starters": [
+                    "It is almost time for your show. Can you find what the clock looks like now?",
+                    "Which hand do you think tells the hour? How can you tell?",
+                    "What time do you think we will have dinner?",
+                ],
+                "resource_bank": [
+                    "An analog clock and a digital clock kept visible",
+                    "A clock with movable hands and a play clock",
+                    "A timer the child may set, and picture books that follow a day",
+                ],
+                "parent_role": "Read the time aloud through the day as it matters, before a show, before a meal, and let the child read the clock alongside you. Answer real questions about the hands and the hours, and let the rhythm of the day do the teaching.",
+                "observation_documentation": "Over time, note whether the child reads o'clock and half-past times, reads a digital clock, tells AM from PM, and ties clock times to the events of the day. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Time words: morning, afternoon, evening in stories",
