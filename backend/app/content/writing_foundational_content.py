@@ -4330,11 +4330,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["transition word reference card", "lined paper"],
             "recommended": ["scrambled sentence strips for ordering practice", "how-to writing template"],
-            "philosophy_specific": {
-                "classical": "Sequence writing as ordered composition: logically arranging thoughts is the foundation of rhetoric. How-to writing teaches clear, systematic thinking.",
-                "charlotte_mason": "Narration naturally teaches sequence: the child retells events in order. Written sequence follows oral sequence. Short, careful writing sessions.",
-                "montessori": "Sequence cards in practical life: the child arranges picture cards in order, then writes the steps. How-to writing connects to real practical skills.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -4344,6 +4339,115 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Sequence graphic organizers with numbered boxes. Color-code transition words. Flow charts as pre-writing tools.",
             "kinesthetic_learner": "ACT OUT the steps before writing them. Scrambled sentence strips to physically arrange. Write how-to instructions for physical activities.",
             "auditory_learner": "Tell the sequence aloud first. Record yourself telling the steps, then write them down. Read the finished sequence aloud to check if it flows.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Sequence writing organizes thought in time order. Today we write a five-step sequence using transition words, first, next, then, after that, finally; a how-to paragraph in correct chronological order; and a personal narrative arranged in the order events happened.",
+                "gradual_release": {
+                    "i_do": "Tell aloud the steps for making toast: first I take a slice of bread; next I drop it in the toaster; then I push the lever down; after that I wait and watch; finally I spread butter on the warm toast. Show that each step depends on the one before it and that the transition words mark the order.",
+                    "we_do": "Build a five-step sequence together for a familiar task, the parent and child alternating steps and choosing a different transition word for each.",
+                    "you_do": "Child writes a five-step how-to paragraph with varied transition words and a short personal narrative arranged in correct time order.",
+                },
+                "guided_practice": [
+                    "List the steps of a familiar task in order and put a transition word in front of each",
+                    "Reorder a scrambled set of steps into their correct sequence",
+                    "Write a short personal narrative in proper chronological order",
+                ],
+                "independent_practice": [
+                    "Write a five-step how-to paragraph on a task the child knows well",
+                    "Write a short personal narrative about a recent event in correct order",
+                ],
+                "mastery_check": [
+                    "Write a five-step sequence using varied transition words",
+                    "Write a how-to paragraph with steps in correct chronological order",
+                    "Write a personal narrative with events in the order they happened",
+                ],
+                "spiral_review": [
+                    "Use complete sentences, correct capitalization, and end punctuation in every sequence written",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "To set thought in true order is the first task of the writer. A sequence well written is a small example of right reasoning: each step in its place, and the whole moving from beginning to end. The transition words, first, next, then, after that, finally, are the road signs by which the reader is led from one step to the next.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the five common transition words in order: first, next, then, after that, finally",
+                    ],
+                    "recitations": [
+                        "Recite that a sequence well written follows true time order, and that the writer leads the reader step by step from beginning to end",
+                    ],
+                },
+                "copywork": [
+                    "Copy a short, well-ordered how-to paragraph and underline each transition word, so the eye sees how the steps are marked",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the transition words in order before any sequence is composed.",
+                "history_integration": "Tell that ancient cookbooks, builders' notes, and craftsmen's manuals were among the earliest written sequences, and that being able to write down a process clearly has shaped the spread of every craft and art.",
+                "read_aloud_suggestions": [
+                    "A simple, well-written how-to passage or a clear narrative, read aloud so the ear hears how each step follows the one before",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A living book or simple how-to text whose clear chronological order shows the child how a sequence reads when it is right",
+                ],
+                "short_lesson_flow": "Keep the lesson short, ten to fifteen minutes. Sequence writing follows narration, which the child already does. Let the child first tell a short account aloud in proper order, asking 'and then?' gently if a step is dropped. Then write a few of the sentences down, using transition words drawn from the telling. The order of thought is shaped on the tongue before the pencil is asked to write it.",
+                "narration_prompt": "Tell me how you do this, from the very first thing to the very last. Then we will write it down, in your order.",
+                "real_world_objects": [
+                    "A familiar real task the child knows well: tying shoes, feeding a pet, making toast",
+                    "A favorite living book or instruction the child has heard often",
+                    "Lined paper and a comfortable pencil",
+                ],
+                "nature_connection": "A sequence may record a real nature process: how a seed was planted and what happened week by week, so the nature notebook gathers ordered observations as well as drawings.",
+                "habit_focus": "The habit of attention: noticing what comes first and what comes after, and refusing to leap over a needed step.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Sequence picture cards that show the steps of a real task or natural process",
+                    "Transition-word cards to lay beside each step",
+                    "Lined paper and a comfortable pencil for writing the steps",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With sequence cards: these cards show the steps of a task; you put them in order; tell me each step in turn, beginning with 'first'.",
+                    "steps": [
+                        "The child arranges sequence picture cards in their proper time order on a mat",
+                        "The child lays a transition-word card beside each picture and reads the sequence aloud",
+                        "The child writes the steps as a paragraph on lined paper, keeping the same order and transition words",
+                    ],
+                },
+                "control_of_error": "Sequence cards placed out of order make the process plainly impossible, the seed sprouts before being planted, so the child sees the mistake at once and reorders the cards before writing.",
+                "abstraction_pathway": "From arranging concrete sequence cards and lining up transition words, to writing the steps as a paragraph on lined paper, toward composing original how-to writing and narratives without the cards.",
+                "extensions": [
+                    "Write the sequence for a real task the child performs in practical life",
+                    "Record a science process, how seeds grow, how butter is churned, as a written sequence",
+                    "Compose a personal narrative of a real day in correct chronological order",
+                ],
+                "observation_focus": "Watch for the child holding the steps in true time order, choosing varied transition words, and including the steps a reader would actually need to follow.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep recipe cards, blank paper, and a small whiteboard out where the child can write steps",
+                    "Leave out a game whose rules the child might want to write up",
+                    "Welcome any how-to the child wants to teach, in writing or in speech",
+                ],
+                "real_world_contexts": [
+                    "Writing a recipe the child wants to keep or share",
+                    "Writing the rules of a game the child has invented",
+                    "Writing directions to a friend's house or a familiar place",
+                    "Telling someone how to do a craft, a chore, or a trick",
+                ],
+                "conversation_starters": [
+                    "Tell me the whole thing in order: what is the very first step?",
+                    "If someone tried this just from your writing, would it work?",
+                    "Did you skip a step? What did you do between this and that?",
+                ],
+                "resource_bank": [
+                    "Recipe cards, game rules, and how-to books in real use around the house",
+                    "A whiteboard or paper for drafting steps",
+                    "A friendly reader who will try the instructions and report back",
+                ],
+                "parent_role": "Write your own real sequences where the child can see, recipes, directions, lists of steps for a project, and let the child help. When the child writes a how-to or a story, try following it as written and notice together where a step is missing or out of order, so real readers shape the writing.",
+                "observation_documentation": "Over time, notice whether the child orders steps in true time order, uses varied transition words, and writes sequences clear enough for a real reader to follow. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Recognizing sequence in reading (reading comprehension) is the mirror skill of writing in sequence — both use the same transition words",
