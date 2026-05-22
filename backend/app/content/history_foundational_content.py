@@ -3099,11 +3099,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "costume props for living biography presentations",
                 "portrait prints of historical figures",
             ],
-            "philosophy_specific": {
-                "classical": "Biography as moral instruction: study virtues and vices in historical lives. Memorize key facts about each figure. Character study as formal exercise.",
-                "charlotte_mason": "Living biographies are the BEST way to teach history to young children. Read compelling life stories and narrate. The child connects to real people, not abstract events.",
-                "montessori": "Biography cards with portraits and key facts. Timeline figures placed chronologically. The child researches and presents a chosen figure.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -3113,6 +3108,120 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Portraits and illustrations. Illustrated biographies. Timeline with pictures.",
             "kinesthetic_learner": "Living biography costume presentations. Act out scenes. Place physical cards on timeline.",
             "auditory_learner": "Listen to biographies told as stories. Discuss character traits in conversation. Present biographies orally.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "History is not only dates and events; it is the story of people. Every event was shaped by individuals who made choices. A biography is the story of one real person's life. An honest biography tells both what a person achieved and where they fell short, for historical figures were real people, with courage and flaws together. Today we narrate biographies of figures from different times and cultures, name their character traits with evidence, and see how one person's choices can shape history.",
+                "gradual_release": {
+                    "i_do": "Tell a short biography aloud: who the person was, what obstacles they faced, what they chose to do, and why they are remembered. Name a character trait, courage or perseverance, and point to the evidence in their life. Say plainly where the person also fell short, for an honest biography holds both.",
+                    "we_do": "Read a short biography together, narrate it back, name the person's traits with evidence, and place them on the timeline.",
+                    "you_do": "Child narrates biographies of at least three figures from different periods and cultures, identifies their character traits with evidence, explains how their choices shaped events, and places them on a timeline.",
+                },
+                "guided_practice": [
+                    "Narrate a short biography: who the person was, what they faced, what they did, why they are remembered",
+                    "Name a character trait of a figure and give evidence from their life",
+                    "Place each figure studied on a timeline",
+                ],
+                "independent_practice": [
+                    "Prepare and present a living biography of a chosen figure, honestly told",
+                    "Compare two figures from different times: their traits, their choices, their impact",
+                ],
+                "mastery_check": [
+                    "Narrate at least three biographies from different periods and cultures",
+                    "Identify character traits in historical figures using evidence from their lives",
+                    "Explain how individual choices shaped historical events, and place figures on a timeline",
+                ],
+                "spiral_review": [
+                    "Revisit the figures already studied across history, placing them together on the timeline",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The classical tradition has always taught history through the lives of real people, for a life well told carries more than any list of dates. Biography is moral instruction: in it the child meets both virtue and vice, courage and its failures, and learns by the example of others. An honest biography never makes its subject perfect; it tells the whole person, and lets the child weigh the good and the ill.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the questions of a biography: who was the person, what did they face, what did they choose, and why are they remembered",
+                        "Chant a list of character traits: courage and curiosity, perseverance and kindness, honesty and wisdom",
+                    ],
+                    "recitations": [
+                        "Recite that a historical figure was a real person, with both virtues and faults, and that an honest biography tells both",
+                    ],
+                },
+                "copywork": [
+                    "Copy a memorable saying of a historical figure studied, and a list of the character traits a worthy life shows",
+                ],
+                "recitation_routine": "Begin each lesson by recalling the figures studied before and the trait each one showed, so the gallery of lives is rehearsed cumulatively.",
+                "history_integration": "Place each figure studied on the chronological spine, so the child sees when each person lived in relation to the others, and grasps that the great lives are threaded all along the spine of history.",
+                "read_aloud_suggestions": [
+                    "A living biography of a worthy figure, read aloud honestly, with both achievements and flaws",
+                    "Plutarch's lives, or another classic collection of biographies, retold for children and read aloud",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A living biography written with vividness and truth, the kind that makes a historical figure feel like a real person met",
+                    "An honest biography that includes its subject's flaws as well as their greatness, never a flattering, sanitized portrait",
+                ],
+                "short_lesson_flow": "Read a portion of a living biography aloud, told as a real and compelling life, and let the child narrate it back. Charlotte Mason held biography to be the finest way to teach young children history, for it gives them a real person to know. Tell the life honestly, flaws and all, and let the child form their own judgment in the telling-back.",
+                "narration_prompt": "Tell me about the life we just heard. What was this person like, what did they do, and what do you think of the choices they made?",
+                "real_world_objects": [
+                    "Living biographies of figures from many times and places",
+                    "A Book of Centuries and a timeline for placing each figure",
+                    "Portraits of the historical figures studied",
+                    "Simple costume props for a living biography presentation",
+                ],
+                "nature_connection": "Notice that many historical figures were close observers of nature, the inventor, the explorer, the scientist, and that their curiosity about the natural world is itself a thread of nature study within their lives.",
+                "habit_focus": "The habit of attention and of fair judgment: knowing a historical person by the whole of their life, their courage and their failings together.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Biography cards with portraits and key facts of historical figures",
+                    "A timeline for placing the figures chronologically",
+                    "Living biographies told honestly, including their subjects' flaws",
+                    "A research and presentation space for the child to study a chosen figure",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the trait cards and a figure's biography: this person showed perseverance, see how they kept on; show me a figure who showed perseverance; what trait did this person show?",
+                    "steps": [
+                        "The child studies a figure through an honest biography and a biography card",
+                        "The child names the figure's character traits and finds the evidence in their life",
+                        "The child places the figure on the timeline and presents their life, the achievements and the flaws together",
+                    ],
+                },
+                "control_of_error": "The biography itself is the control: a trait claimed for a figure must be supported by something they truly did, and the timeline checks the placement, so the child's account is held to the evidence of the real life.",
+                "abstraction_pathway": "From studying concrete biography cards and portraits, to naming traits with evidence and placing figures on the timeline, toward grasping how the choices of individuals shape the whole course of history.",
+                "extensions": [
+                    "Compare figures from different times and cultures and the traits they share",
+                    "Research a lesser-known figure and present their life",
+                    "Weigh a figure who did both great and harmful things, and discuss the complexity honestly",
+                ],
+                "observation_focus": "Watch for the child supporting a named trait with real evidence, and seeing a historical figure whole, neither idol nor villain but a real and complicated person.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a rich shelf of biographies of all sorts of people, from many times and places",
+                    "Leave out costume props and materials for the child to act out or present a life",
+                    "Have documentaries and films about real historical figures available",
+                ],
+                "real_world_contexts": [
+                    "Hearing the life stories of grandparents and elders, the family's own historical figures",
+                    "Meeting real people whose work the child admires, and learning their stories",
+                    "Discovering, in books, films, and museums, the lives behind the famous names",
+                    "Noticing the same character traits, courage, perseverance, kindness, in real people the child knows",
+                ],
+                "conversation_starters": [
+                    "What character trait best describes this person? What did they do that shows it?",
+                    "This person faced a hard choice; what would you have done?",
+                    "This person did both admirable things and harmful things; how do you hold both together?",
+                ],
+                "resource_bank": [
+                    "A wide shelf of honest biographies for children",
+                    "Documentaries and films about historical figures",
+                    "The family's own elders and their life stories",
+                ],
+                "parent_role": "Follow the child's admiration for particular people into their life stories, told honestly, the courage and the flaws together, and wonder aloud about the choices each one made. Welcome the child's own judgments, and let real lives, honestly met, rather than a worksheet, teach what character is.",
+                "observation_documentation": "Over time, note whether the child can narrate biographies, name character traits with evidence, see how a person's choices shaped events, and meet historical figures honestly as whole people. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Biographies build reading comprehension, vocabulary, and narrative skills simultaneously",
