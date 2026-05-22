@@ -4324,10 +4324,116 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Listen to audio recordings of poets. Emphasize the musical quality of language. Sing-song recitation is fine — let the rhythm take over.",
         },
         "philosophy_specific": {
-            "classical": "Weekly poetry memorization as part of language arts memory work. Build a growing repertoire of great poems. Recitation is a performance skill.",
-            "charlotte_mason": "Poetry teatime: weekly time with tea, treats, and poetry. Read beautiful poems aloud. Memorize naturally through repeated exposure. The child selects favorites.",
-            "montessori": "Poetry cards the child can read and select independently. Copy favorite poems into a personal anthology. Poetry as a choice during independent work time.",
-            "traditional": "Weekly poem assigned for memorization. Recitation grade based on accuracy and expression. Poetry workbooks with analysis questions.",
+            "traditional": {
+                "introduction": "Poetry is language at its most musical, made to be heard. A poem is shorter than a story, but every word is chosen, and it works by rhythm, by rhyme, and by images that paint a picture in the mind. Today we memorize and recite a poem with rhythm, expression, and feeling, identify the rhyme and rhythm in poems, tell which poems we like and why, and notice how a poem's language differs from a story's.",
+                "gradual_release": {
+                    "i_do": "Read a short poem aloud, tapping the beat, then recite a line with expression, louder and softer, to match its feeling. Point out a pair of rhyming words and an image the poem paints. Model memorizing: say a line, then say it again from memory.",
+                    "we_do": "Read a poem together and tap its rhythm, find the rhyming pairs, and memorize it line by line, the adult saying a line and the child echoing it, building up the whole.",
+                    "you_do": "Child recites a memorized poem of four or more lines with rhythm and expression, identifies its rhyme and rhythm, and says which poems they like and why.",
+                },
+                "guided_practice": [
+                    "Clap or tap the rhythm of a poem while reading it aloud",
+                    "Find and name the rhyming pairs in a short poem",
+                    "Memorize a four-line poem line by line by echoing the adult",
+                ],
+                "independent_practice": [
+                    "Recite the memorized poem with expression for a family member",
+                    "Choose a favorite poem and tell, with reasons, why it appeals",
+                ],
+                "mastery_check": [
+                    "Recite a memorized poem of four or more lines with appropriate rhythm and expression",
+                    "Identify the rhyme and rhythm patterns in a poem",
+                    "Express a poetry preference and explain it with specific reasons",
+                ],
+                "spiral_review": [
+                    "Revisit hearing rhyming words and syllable beats, the ear-training that poetry rests on",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Before books were common, the great things were said in verse, for verse is easy to remember and beautiful to hear. To memorize a poem is to make it your own forever, a possession of the mind no one can take. The poet says much in few words, with rhythm and rhyme and images, and to recite a poem well is to give that beauty back aloud.",
+                "memory_work": {
+                    "chants": [
+                        "Recite the day's poem aloud together, line upon line, until it is held by heart",
+                        "Chant the marks of a poem: rhythm to walk by, rhyme to ring, and images to see",
+                    ],
+                    "recitations": [
+                        "Recite the memorized poem with rhythm, expression, and feeling, adding it to a growing repertoire that is reviewed cumulatively",
+                    ],
+                },
+                "copywork": [
+                    "Copy a favorite poem, or a verse of it, neatly into a personal poetry notebook, the hand learning the lines as it writes",
+                ],
+                "recitation_routine": "Begin each lesson by reciting poems learned before, oldest first and then the newest, so the repertoire of poems is rehearsed cumulatively and never lost.",
+                "history_integration": "Tell that for most of history poems and long verse were carried entirely in memory, recited by heart, and that to memorize a poem is to join that long tradition of keeping words alive by voice.",
+                "read_aloud_suggestions": [
+                    "A poem of real beauty, well within the child's liking, read aloud for its music before it is memorized",
+                    "An anthology of fine children's poems, dipped into often and read aloud for delight",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A beautiful, well-chosen anthology of real poetry for children, never a watered-down or twaddly verse collection",
+                ],
+                "short_lesson_flow": "Read a poem aloud, beautifully and unhurried, perhaps more than once because it is loved. Do not pull it apart. Over days, the poem is heard again and again until it is known by heart almost without effort. Let the child recite it when it is ready. Keep it short and joyful.",
+                "narration_prompt": "Tell me about the poem we have been hearing. What pictures does it put in your mind, and how does it make you feel?",
+                "real_world_objects": [
+                    "A beautiful poetry anthology, returned to again and again",
+                    "A personal poetry notebook where the child copies and keeps loved poems",
+                    "A pot of tea and a small treat for a weekly poetry teatime",
+                ],
+                "nature_connection": "Choose poems about the season, the rain, the trees, or a bird, and read them outdoors or just after a nature walk, so the poem and the living thing it sings of are met together.",
+                "habit_focus": "The habit of attention: hearing a poem so fully that it settles into memory of its own accord.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Poetry cards, each a single poem beautifully printed, that the child may choose and read independently",
+                    "A personal poetry anthology the child copies favorite poems into",
+                    "A quiet recitation corner where a poem may be performed for a listener",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the poetry cards: this poem rhymes, hear star and are; show me a poem that rhymes; does this poem rhyme?",
+                    "steps": [
+                        "The child chooses a poetry card and reads or hears the poem, tapping its rhythm",
+                        "The child memorizes the poem at their own pace, returning to the card as often as needed",
+                        "The child recites the poem to a listener and copies a loved poem into the personal anthology",
+                    ],
+                },
+                "control_of_error": "The printed poetry card is the control: the child checks their recitation against the card and sees at once any line dropped or word changed, correcting it themselves without an adult marking it wrong.",
+                "abstraction_pathway": "From reading a poem off the card and tapping its beat, to holding the poem in memory, toward reciting it with rhythm and feeling and choosing freely the poems that speak to them.",
+                "extensions": [
+                    "Build a personal anthology of self-chosen poems over time",
+                    "Sort poetry cards by those that rhyme and those that do not",
+                    "Recite a poem to a younger child or a small group",
+                ],
+                "observation_focus": "Watch for the child returning to the card to check accuracy, choosing poems with genuine preference, and reciting with rhythm rather than a flat monotone.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep beautiful poetry anthologies and illustrated poem books within reach",
+                    "Leave out a notebook and good pens for copying or writing poems",
+                    "Have audio recordings of poems and poets available to listen to freely",
+                ],
+                "real_world_contexts": [
+                    "Singing songs, whose lyrics are poetry set to music",
+                    "Jump rope rhymes, clapping games, and playground chants",
+                    "Reading the verse inside a greeting card",
+                    "Making up silly rhymes and tongue twisters for fun",
+                ],
+                "conversation_starters": [
+                    "Does this poem have a beat? Can you feel it when you say it?",
+                    "Which words rhyme here? Can you hear them?",
+                    "Which poem is your favorite? What do you love about it?",
+                    "What pictures come into your mind when you hear this poem?",
+                ],
+                "resource_bank": [
+                    "A home shelf of varied poetry, funny, beautiful, and strange",
+                    "Recordings of poems and of songs",
+                    "A notebook for copying or writing poems, kept available",
+                ],
+                "parent_role": "Read and recite poems aloud for the pure pleasure of them, share the poems you love, and follow the child's own taste, including the silly and the funny. Let poems be memorized because they are loved and worth keeping, never assigned, and recite them together when the mood is right.",
+                "observation_documentation": "Over time, note whether the child recites poems they have taken to heart, feels the rhythm and hears the rhyme, has favorites they can speak about, and senses that a poem's language is its own kind. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Rhythm in poetry is pattern, just like patterns in mathematics. Counting syllables is counting.",
