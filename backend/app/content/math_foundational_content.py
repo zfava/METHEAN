@@ -2263,10 +2263,115 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Rhythmic chanting. Whisper skipped, shout counted. Songs.",
         },
         "philosophy_specific": {
-            "classical": "Daily chanting of sequences. This IS pre-multiplication memory work.",
-            "charlotte_mason": "Count real groups: shoe pairs, grape bunches, penny stacks.",
-            "montessori": "Bead chains: short for skip counting, long for extended.",
-            "traditional": "Skip-counting worksheets. Fill-in-the-sequence.",
+            "traditional": {
+                "introduction": "Skip counting is counting by groups instead of by ones. It is faster, it reveals patterns, and it lays the ground for multiplication. Today we count by twos, fives, and tens, and we find the pattern in each.",
+                "gradual_release": {
+                    "i_do": "Model grouping objects in pairs and counting them by twos. Color every fifth number on a hundred chart and read the count by fives. Count ten-rods by tens, and name the pattern aloud.",
+                    "we_do": "Group objects and skip-count them together. Color the hundred-chart patterns for twos, fives, and tens together, and name what each pattern is: fives end in zero or five, tens end in zero.",
+                    "you_do": "Child skip-counts by twos to thirty, by fives and tens to one hundred, and describes the pattern of each.",
+                },
+                "guided_practice": [
+                    "Count grouped objects by twos, fives, and tens",
+                    "Color the hundred-chart patterns for twos, fives, and tens in different colors",
+                    "Fill in the missing numbers of a skip-count sequence",
+                ],
+                "independent_practice": [
+                    "Skip-count practice through movement and counting games",
+                    "Complete skip-count strips for twos, fives, and tens",
+                ],
+                "mastery_check": [
+                    "Skip-count by twos to thirty fluently",
+                    "Skip-count by fives and by tens to one hundred fluently",
+                    "Describe the pattern in a skip-count sequence",
+                ],
+                "spiral_review": [
+                    "Revisit counting by tens and counting to one hundred before extending the skip counts",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Skip counting is the first music of multiplication. Chanted until they are sure, the twos, the fives, and the tens become a foundation that all later arithmetic stands upon.",
+                "memory_work": {
+                    "chants": [
+                        "Chant by twos to thirty, daily and rhythmic",
+                        "Chant by fives to one hundred, and chant by tens to one hundred",
+                        "Chant the patterns: the fives end in zero or five, the tens end in zero",
+                    ],
+                    "recitations": [
+                        "Recite the skip-count sequences in order, cumulatively, before each new one is extended",
+                    ],
+                },
+                "copywork": [
+                    "Copy the skip-count sequences neatly in rows, the columns making the repeating pattern plain to the eye",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the skip counts learned so far before extending them; the sequences are rehearsed in full, never assumed.",
+                "history_integration": "Count along a timeline by tens, marking the decades, so skip counting is practiced on the chronological spine.",
+                "read_aloud_suggestions": [
+                    "A rhythmic, well-made counting book that plays with groups of things, read aloud with expression",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A lovely picture book in which real things come in groups, pairs and bunches and stacks, chosen for beautiful artwork",
+                ],
+                "short_lesson_flow": "Bring out real things that naturally come in groups, pairs of shoes, stacks of pennies, and count them together by twos or by fives. Notice the pattern as it unfolds. Count one such set, calmly, and stop while the child is still interested.",
+                "narration_prompt": "Tell me how you counted them. What did you count by, and what did you notice about the numbers?",
+                "real_world_objects": [
+                    "Pairs of shoes or socks counted by twos",
+                    "Nickels counted by fives and dimes counted by tens",
+                    "Stacks or bunches of small things",
+                ],
+                "nature_connection": "On a walk, count found things that come in groups, the petals of flowers, the legs of insects, and add a skip count to the nature notebook with a small drawing.",
+                "habit_focus": "The habit of noticing: attending to the pattern as it unfolds and holding the count steady without losing it midway.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The colored bead chains, the short chains for skip counting and the long chains for extended work",
+                    "Numeral tickets and arrows for marking the landmark numbers",
+                    "The hundred board for seeing the skip-count patterns",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a bead chain: this is counting by fives; show me where twenty falls on the chain; what number is this landmark? Spoken with the beads in hand.",
+                    "steps": [
+                        "Lay out a bead chain and count along it, touching each bead bar in turn",
+                        "Lay a numeral ticket at the end of each bar, five, ten, fifteen, so the skip count is built and labeled",
+                        "Read the landmark numbers back, and find the same pattern on the hundred board",
+                    ],
+                },
+                "control_of_error": "The fixed length of each bead bar and the numeral tickets make a miscount show itself as a mismatch the child sees and corrects without an adult's word.",
+                "abstraction_pathway": "From counting the bead chain bar by bar (the skip count built and felt in the hand), toward chanting and writing the twos, fives, and tens from memory.",
+                "extensions": [
+                    "Count the longer bead chains and mark their landmarks",
+                    "Color the patterns of twos, fives, and tens on the hundred board",
+                ],
+                "observation_focus": "Watch for the child counting by the group rather than by ones, and for noticing the landmark patterns by choice.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a coin jar of nickels and dimes within reach",
+                    "Leave a hundred chart and pairs of things to count where the child will find them",
+                    "Set out board games whose pieces or scores move in groups",
+                ],
+                "real_world_contexts": [
+                    "Counting nickels by fives and dimes by tens",
+                    "Counting pairs of shoes, socks, or gloves by twos",
+                    "Counting fingers and toes by fives",
+                    "Scoring by twos or fives in a game",
+                ],
+                "conversation_starters": [
+                    "These come in twos. Is there a faster way to count them than one at a time?",
+                    "We are counting nickels: five, ten, what comes next?",
+                    "Why do you think counting dimes is so easy?",
+                ],
+                "resource_bank": [
+                    "A coin jar of nickels and dimes",
+                    "A hundred chart kept available, not assigned",
+                    "Board games that move or score in groups",
+                    "Counting picture books on a low shelf",
+                ],
+                "parent_role": "Count by groups aloud wherever it arises in real life, coins, pairs, stacks, and follow the child's own noticing of the patterns. Answer real questions, and let counting coins and games do the teaching rather than a worksheet.",
+                "observation_documentation": "Over time, note whether the child counts by twos, fives, and tens, whether they see and use the patterns, and whether they begin each count at the skip number rather than at zero. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Rhythm in poetry connects to skip counting rhythm",
