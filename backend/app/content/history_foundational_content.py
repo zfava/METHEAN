@@ -1745,23 +1745,23 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         },
         "philosophy_specific": {
             "traditional": {
-                "introduction": "Ancient Greece was not one country but many independent city-states, each with its own government and character. Athens prized education, art, and democracy, where citizens voted directly on the laws, though only free adult men were counted as citizens; women, foreigners, and the enslaved were not. Sparta prized military strength and discipline. The Greeks told myths of gods and heroes to explain the world and to teach, and they held the Olympic Games every four years. Today we compare Athens and Sparta, explain democracy, retell Greek myths, and describe the Olympics.",
+                "introduction": "Ancient Greece was not one country but many independent city-states, and an honest telling shows both their brilliance and their hard sides. Athens prized education, art, and democracy, where citizens voted directly on the laws, though only free adult men counted as citizens; women, foreigners, and the enslaved did not. Sparta prized military strength, and its way of life rested on a large enslaved population, the helots, held down by force. The city-states often warred on one another, and Greek life across the land relied in part on enslaved labor. Greece also gave the world democracy, philosophy, theater, the Olympic Games, and the myths of gods and heroes. Today we compare Athens and Sparta, explain democracy, retell Greek myths, and describe the Olympics.",
                 "gradual_release": {
-                    "i_do": "Set Athens and Sparta side by side and think aloud: Athens, democracy and art and learning; Sparta, the army and discipline. Tell a Greek myth in order and name what it taught the Greeks. Describe the Olympic Games. Note plainly that Athenian democracy let only free men vote, not women or the enslaved.",
-                    "we_do": "Compare Athens and Sparta on a chart together, retell a myth and name its lesson, and describe the Olympic Games and their place in Greek life.",
-                    "you_do": "Child compares Athens and Sparta, explains what democracy means and how Athens practiced it, retells three Greek myths with their lessons, and describes the Olympic Games.",
+                    "i_do": "Set Athens and Sparta side by side and think aloud, telling the whole truth of each: Athens, democracy and art and learning, but a democracy only for free men; Sparta, discipline and courage, but a society resting on the enslaved helots. Note that the city-states warred on one another. Tell a Greek myth in order and name what it taught, and describe the Olympic Games.",
+                    "we_do": "Compare Athens and Sparta on a chart together, the achievements and the hard facts of each, retell a myth and name its lesson, and describe the Olympic Games and their place in Greek life.",
+                    "you_do": "Child compares Athens and Sparta truthfully, explains what democracy means and how Athens practiced it and whom it left out, retells three Greek myths with their lessons, and describes the Olympic Games.",
                 },
                 "guided_practice": [
-                    "Compare Athens and Sparta on a chart: government, values, education",
+                    "Compare Athens and Sparta on a chart: government, values, education, and whom each left unfree",
                     "Retell a Greek myth and name the lesson it taught the Greeks",
-                    "Describe the Olympic Games and explain why the Greeks paused wars for them",
+                    "Describe the Olympic Games and explain why the Greeks paused their wars with one another for them",
                 ],
                 "independent_practice": [
                     "Retell three Greek myths from memory with their lessons",
-                    "Hold a family vote to experience Athenian democracy, then describe how it worked and who it left out",
+                    "Hold a family vote to experience Athenian democracy, then describe how it worked and whom it left out",
                 ],
                 "mastery_check": [
-                    "Compare Athens and Sparta on government, values, and education",
+                    "Compare Athens and Sparta on government, values, education, and the unfree people each relied on",
                     "Explain what democracy means and how Athens practiced it, including who could and could not vote",
                     "Retell three Greek myths and describe the Olympic Games",
                 ],
@@ -1770,7 +1770,7 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 ],
             },
             "classical": {
-                "narrative_introduction": "Ancient Greece is the birthplace of much that the classical mind treasures: democracy, philosophy, the theater, and the Olympic Games. Greece was many city-states, and two stand out: Athens, which gave the world the rule of citizens and the love of wisdom, and Sparta, which gave it discipline and the soldier's courage. The Greeks were a people of stories, and their myths of gods and heroes carried their understanding of pride, courage, and fate.",
+                "narrative_introduction": "Ancient Greece is the birthplace of much that the classical mind treasures: democracy, philosophy, the theater, and the Olympic Games. Greece was many city-states, and two stand out: Athens, which gave the world the rule of citizens and the love of wisdom, and Sparta, which gave it discipline and the soldier's courage. The honest student holds the whole of Greece: its democracy was for free men only; its city-states warred on one another; and Greek life, in Athens and above all in Sparta with its helots, rested on the labor of the enslaved. Greece is to be admired and reckoned with truthfully, both at once.",
                 "memory_work": {
                     "chants": [
                         "Chant the two great city-states and their gifts: Athens of democracy and learning, Sparta of discipline and arms",
@@ -1778,14 +1778,14 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                     ],
                     "recitations": [
                         "Recite that democracy means rule by the citizens, and that in Athens only free men were citizens, while women, foreigners, and the enslaved were not",
-                        "Recite a memorable line from a Greek myth, and the lesson the Greeks drew from it",
+                        "Recite that the Greek city-states warred on one another, and that Greek life, and Sparta most of all with its helots, rested on the labor of enslaved people",
                     ],
                 },
                 "copywork": [
                     "Copy the names of the chief Greek gods and heroes, and a line from a Greek myth that carries its lesson",
                 ],
                 "recitation_routine": "Begin each lesson by reciting the gifts of Greece and retelling the previous myth before a new one is met, so the gallery of myths grows cumulatively.",
-                "history_integration": "Place ancient Greece on the chronological spine after Egypt and Mesopotamia and before Rome, and mark it as the source from which Rome, and the long Western tradition after Rome, would draw their philosophy, their stories, and the idea of the citizen.",
+                "history_integration": "Place ancient Greece on the chronological spine after Egypt and Mesopotamia and before Rome, and mark it as the source from which Rome, and the long Western tradition after Rome, would draw their philosophy, their stories, and the idea of the citizen, an inheritance both brilliant and, in its slavery and its wars, deeply flawed.",
                 "read_aloud_suggestions": [
                     "A fine collection of Greek myths for children, read aloud for narration",
                     "A children's retelling of the Odyssey, the long journey of Odysseus home, read aloud for its language and its story",
@@ -1795,9 +1795,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "lesson_length_minutes": 20,
                 "living_book_suggestions": [
                     "A beautifully told collection of Greek myths, the kind that has delighted children for generations, never a dry summary",
-                    "A living book about daily life in Athens and Sparta, written with knowledge and wonder",
+                    "A living book about daily life in Athens and Sparta, honest about both their achievements and the enslaved people their life depended on",
                 ],
-                "short_lesson_flow": "Read a Greek myth aloud, told with all its drama, and let the child narrate it back and draw the most striking scene. Another day, read of Athens and Sparta and wonder together which city the child would choose, and why. Let the great stories carry the lesson. Stop while interest is high.",
+                "short_lesson_flow": "Read a Greek myth aloud, told with all its drama, and let the child narrate it back and draw the most striking scene. Another day, read of Athens and Sparta, their brilliance and their hard truths together, and wonder with the child which city they would choose, and why. Tell the whole truth, the democracy and the slavery, and let the child weigh it. Stop while interest is high.",
                 "narration_prompt": "Tell me the myth we just heard. What happened, and what did it teach the Greeks who told it?",
                 "real_world_objects": [
                     "A living book of Greek myths, returned to again and again",
@@ -1806,7 +1806,7 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                     "A real or improvised set of Olympic events to run outdoors",
                 ],
                 "nature_connection": "Notice how the mountains and the sea of Greece shaped its people: the mountains divided the land into separate city-states, and the sea made the Greeks sailors and traders, geography itself a teacher of history.",
-                "habit_focus": "The habit of attention: hearing a myth closely enough to retell it whole, and weighing Athens against Sparta with a fair and thoughtful mind.",
+                "habit_focus": "The habit of attention: hearing a myth closely enough to retell it whole, and weighing Athens and Sparta, their gifts and their wrongs, with a fair and thoughtful mind.",
             },
             "montessori": {
                 "prepared_materials": [
@@ -1820,17 +1820,17 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                     "steps": [
                         "The child explores the Greece folder and locates Greece on the map",
                         "The child works the mythology cards, matching each god or hero to their story and its lesson",
-                        "The child compares Athens and Sparta on a chart and learns how each was governed and who could take part",
+                        "The child compares Athens and Sparta on a chart: how each was governed, who could take part, and the enslaved people each relied on",
                     ],
                 },
-                "control_of_error": "The matched mythology and fact cards are the control, pairing in one true way, and the comparison chart checks the child's reasoning: a trait set under the wrong city-state does not match the cards' evidence.",
+                "control_of_error": "The matched mythology and fact cards are the control, pairing in one true way, and the comparison chart checks the child's reasoning: a trait or a hard fact set under the wrong city-state does not match the cards' evidence.",
                 "abstraction_pathway": "From handling the concrete Greece folder and the mythology cards, to comparing Athens and Sparta, toward grasping democracy as an idea and Greece's place in the larger story of history.",
                 "extensions": [
-                    "Investigate the Peloponnesian War between Athens and Sparta",
+                    "Investigate the Peloponnesian War, when Athens and Sparta warred on each other",
                     "Compare Athenian democracy with the government of the child's own country",
                     "Study the Greek philosophers and the Socratic way of questioning",
                 ],
-                "observation_focus": "Watch for the child comparing Athens and Sparta fairly, neither cast as simply good or bad, and grasping both the achievement and the limits of Athenian democracy.",
+                "observation_focus": "Watch for the child comparing Athens and Sparta fairly, neither cast as simply good or bad, grasping both the achievement of Athenian democracy and its limits, and the courage of Sparta and the enslaved helots its life rested on.",
             },
             "unschooling": {
                 "invitations": [
@@ -1845,17 +1845,17 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                     "Holding a real family vote and feeling what direct democracy is like",
                 ],
                 "conversation_starters": [
-                    "Athens let its citizens vote on the laws, but only free men were citizens; what do you think of that?",
-                    "Spartan boys left home at seven for army training; would you have wanted to be Spartan?",
-                    "Greek myths often warn against being too proud; why do you think the Greeks feared pride?",
+                    "Athens let its citizens vote on the laws, but only free men were citizens, and Greek life relied on enslaved people; what do you think of that?",
+                    "Spartan boys left home at seven for army training, and Sparta held the helots unfree by force; would you have wanted to be Spartan?",
+                    "The Greek city-states often warred on one another; what might it have been like to live in a land of rival cities?",
                 ],
                 "resource_bank": [
                     "Illustrated collections of Greek myths and books about ancient Greece",
                     "Documentaries and films about Greece, and the modern Olympic Games",
                     "Museums with Greek art and pottery",
                 ],
-                "parent_role": "Follow the child's delight in the Greek myths into books, films, and play, and wonder aloud about Athens and Sparta and what each got right and wrong. Be honest that Athenian democracy left out women and the enslaved, and let the child weigh it; let real stories and real conversation, rather than a worksheet, teach ancient Greece.",
-                "observation_documentation": "Over time, note whether the child can compare Athens and Sparta, explain what democracy is and whom Athens included and excluded, retell Greek myths, and describe the Olympics. This noticing replaces any test.",
+                "parent_role": "Follow the child's delight in the Greek myths into books, films, and play, and wonder aloud about Athens and Sparta and what each got right and wrong. Be honest about the whole of Greece, its democracy and philosophy alongside its slavery, its wars, and the people it left unfree, and let the child weigh it; let real stories and real conversation, rather than a worksheet, teach ancient Greece.",
+                "observation_documentation": "Over time, note whether the child can compare Athens and Sparta, explain what democracy is and whom Athens included and excluded, recognize that Greek life rested in part on the enslaved, retell Greek myths, and describe the Olympics. This noticing replaces any test.",
             },
         },
         "connections": {
@@ -2015,47 +2015,47 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         },
         "philosophy_specific": {
             "traditional": {
-                "introduction": "Rome grew from a small village on seven hills to an empire ruling the whole Mediterranean world. It began as a republic, where citizens elected leaders called consuls and a Senate debated the laws; later it became an empire ruled by one man, the emperor. Rome grew by conquest and was built in part by enslaved people, and it left the world roads, aqueducts, law, and lasting architecture. Today we narrate Rome from its founding through Republic, Empire, and Fall, explain republic and empire, name Rome's contributions, and see how Rome borrowed from Greece.",
+                "introduction": "Rome grew from a small village on seven hills to an empire ruling the whole Mediterranean world. It began as a republic, where leaders called consuls were elected and a Senate debated the laws, though only free men had a vote, not women or the enslaved. Later it became an empire ruled by one emperor. An honest telling holds all of Rome: it grew by conquest, held many people in slavery, and staged games in which captives and the enslaved were forced to fight for the crowd, and it also left the world roads, aqueducts, law, and lasting architecture. Today we narrate Rome from founding through Republic, Empire, and Fall, explain republic and empire, name Rome's contributions, and see how Rome borrowed from Greece.",
                 "gradual_release": {
-                    "i_do": "Tell the story of Rome in order: the founding myth of Romulus, the Republic with its consuls and Senate, Julius Caesar and the turn to one-man rule, Augustus the first emperor, the empire spread by conquest, and the slow fall. Think aloud about the difference between a republic and an empire, and note that Rome's grandeur rested also on conquest and on enslaved labor.",
-                    "we_do": "Retell the story of Rome together, name the contributions Rome left the world, compare a republic and an empire, and trace what Rome borrowed from Greece.",
-                    "you_do": "Child narrates Rome from founding through Republic, Empire, and Fall, explains republic versus empire, names four Roman contributions, and describes how Rome borrowed from Greece.",
+                    "i_do": "Tell the story of Rome in order and whole: the founding myth of Romulus, the Republic with its elected consuls and Senate in which only free men voted, Julius Caesar and the turn to one-man rule, Augustus the first emperor, the empire spread by conquest and worked by the enslaved, and the slow fall. Name the contributions and the cruelties together, the law and the roads beside the conquest, the slavery, and the games.",
+                    "we_do": "Retell the story of Rome together, name the contributions Rome left the world and the hard truths beside them, compare a republic and an empire, and trace what Rome borrowed from Greece.",
+                    "you_do": "Child narrates Rome from founding through Republic, Empire, and Fall, explains republic versus empire, names four Roman contributions, describes how Rome borrowed from Greece, and tells the hard truths of conquest and slavery honestly.",
                 },
                 "guided_practice": [
                     "Retell the story of Rome: founding, Republic, Empire, and Fall",
-                    "Explain the difference between a republic and an empire",
-                    "Name Roman contributions, the roads, aqueducts, law, and architecture, and trace what Rome took from Greece",
+                    "Explain the difference between a republic and an empire, and note who could vote in the Republic",
+                    "Name Roman contributions, the roads, aqueducts, law, and architecture, beside the conquest and slavery the empire rested on",
                 ],
                 "independent_practice": [
-                    "Narrate the full story of Rome from founding to fall",
+                    "Narrate the full story of Rome from founding to fall, the achievements and the wrongs together",
                     "Build a model Roman road or aqueduct and explain the engineering",
                 ],
                 "mastery_check": [
                     "Narrate Rome from its founding through the Republic, the Empire, and the Fall",
                     "Explain the difference between a republic and an empire",
-                    "Name at least four Roman contributions and describe how Rome borrowed from Greece",
+                    "Name at least four Roman contributions and tell honestly the conquest and slavery the empire also rested on",
                 ],
                 "spiral_review": [
                     "Revisit ancient Greece, and set Rome beside it on the timeline, the heir that borrowed and built on what Greece began",
                 ],
             },
             "classical": {
-                "narrative_introduction": "Rome is one of the grandest stories in all of history: a village that became an empire ruling the known world. It began as a republic, where citizens chose their leaders, and became an empire under one ruler. Rome was a borrower of genius, taking the gods, the art, and the philosophy of Greece and adding its own: the road, the aqueduct, the law, the legion. Its empire was won by conquest and worked in part by the enslaved, and its long rise and fall is a lesson that no power, however great, endures forever.",
+                "narrative_introduction": "Rome is one of the grandest stories in all of history: a village that became an empire ruling the known world. It began as a republic, where free male citizens chose their leaders, and became an empire under one ruler. Rome was a borrower of genius, taking the gods, the art, and the philosophy of Greece and adding its own: the road, the aqueduct, the law, the legion. The honest student holds all of Rome at once: its empire was won by conquest and worked by the enslaved, and its games forced captives and the enslaved to fight for the crowd, even as it gave the world its law and its engineering. Its long rise and fall is a lesson that no power, however great, endures forever.",
                 "memory_work": {
                     "chants": [
                         "Chant the ages of Rome: the founding, the Republic, the Empire, and the Fall",
-                        "Chant the gifts of Rome: the roads, the aqueducts, the law, and the lasting architecture",
+                        "Chant the gifts of Rome, and the hard truths beside them: the roads, the aqueducts, and the law, and the conquest, the slavery, and the games",
                     ],
                     "recitations": [
                         "Recite that a republic is ruled by leaders the citizens elect, and an empire by one ruler with supreme power",
-                        "Recite that Rome borrowed much from Greece, and that the fall of Rome shows that no empire lasts forever",
+                        "Recite that Rome's grandeur was won by conquest and rested on the enslaved, and that an honest history tells the gifts and the wrongs together",
                     ],
                 },
                 "copywork": [
                     "Copy the four ages of Rome and the Roman numerals, and a Latin word or two with the English words descended from it",
                 ],
                 "recitation_routine": "Begin each lesson by reciting the ages of Rome and narrating yesterday's portion of the story before adding the next.",
-                "history_integration": "Place Rome on the chronological spine directly after Greece, and mark it as the great bridge of the spine: it carried the inheritance of Greece across a thousand years and handed it, when it fell, to the Europe that came after.",
+                "history_integration": "Place Rome on the chronological spine directly after Greece, and mark it as the great bridge of the spine: it carried the inheritance of Greece, brilliant and flawed alike, across a thousand years and handed it, when it fell, to the Europe that came after.",
                 "read_aloud_suggestions": [
                     "A living account of the story of Rome, the founding, the Republic, the Caesars, and the fall, read aloud for narration",
                     "A children's retelling of a Roman tale, of a soldier, a senator, or a citizen, read aloud so the child meets the age through a story",
@@ -2065,9 +2065,9 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "lesson_length_minutes": 20,
                 "living_book_suggestions": [
                     "A beautifully told living book about the story of Rome, written with knowledge and wonder, never a dry textbook",
-                    "A living book of Roman daily life, seen through the eyes of a child or a soldier of the time",
+                    "A living book of Roman daily life, honest about both its grandeur and the enslaved people the city depended on",
                 ],
-                "short_lesson_flow": "Read a portion of the story of Rome aloud, told with all its drama, and let the child narrate it back. The child may build a Roman road or arch, or draw the empire's reach onto a map in the Book of Centuries. Let the long story unfold portion by portion. Be honest about conquest and the enslaved, and let the child consider it. Stop while interest holds.",
+                "short_lesson_flow": "Read a portion of the story of Rome aloud, told with all its drama, and let the child narrate it back. The child may build a Roman road or arch, or draw the empire's reach onto a map in the Book of Centuries. Let the long story unfold portion by portion. Tell the conquest, the slavery, and the games as honestly as the law and the engineering, and let the child weigh them. Stop while interest holds.",
                 "narration_prompt": "Tell me the part of the Roman story we just heard. How did Rome change as it grew?",
                 "real_world_objects": [
                     "A living book about ancient Rome",
@@ -2076,7 +2076,7 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                     "Pictures of real Roman roads, aqueducts, and the Colosseum",
                 ],
                 "nature_connection": "Consider how Roman engineers worked with nature rather than against it: aqueducts carried water downhill by the gentlest of slopes for many miles, the steady pull of gravity harnessed by careful observation.",
-                "habit_focus": "The habit of attention: following the long story of Rome closely enough to narrate its rise and its fall, and weighing its grandeur and its hardness with a fair mind.",
+                "habit_focus": "The habit of attention: following the long story of Rome closely enough to narrate its rise and its fall, and weighing its grandeur and its cruelty with a fair mind.",
             },
             "montessori": {
                 "prepared_materials": [
@@ -2086,21 +2086,21 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                     "A timeline of Rome with movable cards for the Republic, the Empire, and the Fall",
                 ],
                 "presentation": {
-                    "three_period_lesson": "With the timeline cards: this is the Republic, when citizens elected their leaders; show me the Republic; which age of Rome is this?",
+                    "three_period_lesson": "With the timeline cards: this is the Republic, when free male citizens elected their leaders; show me the Republic; which age of Rome is this?",
                     "steps": [
                         "The child explores the Rome folder and locates Rome and the Mediterranean on the map",
                         "The child builds a Roman road, arch, or aqueduct, the hands learning the engineering",
-                        "The child sets the ages of Rome on the timeline and traces what Rome borrowed from Greece",
+                        "The child sets the ages of Rome on the timeline and traces both what Rome built and what its empire rested on, conquest and slavery alike",
                     ],
                 },
-                "control_of_error": "The aqueduct built with too steep or too flat a slope will not carry its water, an exact engineering control; the fact cards and timeline confirm the rest, matching and ordering in one true way.",
+                "control_of_error": "The aqueduct built with too steep or too flat a slope will not carry its water, an exact engineering control; the fact cards and timeline confirm the rest, matching and ordering in one true way, and an account that tells only Rome's glory or only its cruelty is checked against the record and found one-sided.",
                 "abstraction_pathway": "From handling the concrete Rome folder and building the real engineering, to ordering the ages of Rome on the timeline, toward narrating the whole story of Rome and grasping the difference between a republic and an empire.",
                 "extensions": [
                     "Compare the Roman Republic with the government of the child's own country",
                     "Investigate how Rome's roads and aqueducts were engineered",
-                    "Trace what Rome borrowed from Greece and what it added of its own",
+                    "Trace what Rome borrowed from Greece, the brilliance and the slavery alike, and what it added of its own",
                 ],
-                "observation_focus": "Watch for the child grasping the turn from republic to empire, and seeing Rome whole, its engineering and its law alongside its conquest and its enslaved.",
+                "observation_focus": "Watch for the child grasping the turn from republic to empire, and seeing Rome whole, its engineering and its law alongside its conquest, its slavery, and its games.",
             },
             "unschooling": {
                 "invitations": [
@@ -2115,17 +2115,17 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                     "Wondering, while reading or watching, how a small city came to rule a whole sea",
                 ],
                 "conversation_starters": [
-                    "Rome changed from a republic, where citizens chose their leaders, to an empire under one ruler; why might a people give that up?",
+                    "Rome changed from a republic, where free men chose their leaders, to an empire under one ruler; why might a people give that up?",
                     "Roman roads still exist after two thousand years; what does that tell you about how they were built?",
-                    "Rome grew rich and great, partly through conquest and the work of enslaved people; how do you hold those two things together?",
+                    "Rome gave the world its law and its roads, and it also conquered other peoples, held many in slavery, and forced captives to fight in its games; how do you hold all of that together?",
                 ],
                 "resource_bank": [
                     "Illustrated books and documentaries about ancient Rome",
                     "Building materials for Roman roads, arches, and aqueducts",
                     "Museums with Roman artifacts",
                 ],
-                "parent_role": "Follow the child's interest in Rome, the engineering, the Caesars, the legions, into books, documentaries, and building, and wonder aloud at how Rome rose and why it fell. Tell the hard parts honestly, the conquest, the enslaved, the games, and let the child reason about them rather than handing them a verdict.",
-                "observation_documentation": "Over time, note whether the child can narrate the story of Rome, tell a republic from an empire, name Rome's contributions, and see both Rome's achievements and its hard truths. This noticing replaces any test.",
+                "parent_role": "Follow the child's interest in Rome, the engineering, the Caesars, the legions, into books, documentaries, and building, and wonder aloud at how Rome rose and why it fell. Tell the hard parts honestly, the conquest, the slavery, the games, beside the achievements, and let the child reason about them rather than handing them a verdict.",
+                "observation_documentation": "Over time, note whether the child can narrate the story of Rome, tell a republic from an empire, name Rome's contributions, and see both Rome's achievements and the conquest and slavery it rested on. This noticing replaces any test.",
             },
         },
         "connections": {
@@ -2289,117 +2289,117 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         },
         "philosophy_specific": {
             "traditional": {
-                "introduction": "American history is a long story with both courage and cruelty in it, and an honest telling holds both. Native peoples lived across North America for many thousands of years before Europeans arrived. Europeans came, explored, and settled, and the Native peoples were displaced from the land they had long lived on. The colonists later won independence and founded a nation on the words that all are created equal, even as many of its founders held enslaved people, and slavery was a brutal wrong ended only by a vast and deadly Civil War. Today we narrate the key stories of American history, meet its central figures, and place its events in order, telling the hard parts truthfully.",
+                "introduction": "American history is a long story, and an honest telling shows every people in it as fully human, with both noble deeds and cruel ones. Native peoples lived across North America for many thousands of years, in hundreds of nations with their own languages, governments, cultures, and deep knowledge of the land; those nations also made war on and raided one another and took captives in war. Europeans came, explored, and settled. As settlers pushed onto Native land there was violence both ways: Native warriors raided settler families, and settlers and soldiers attacked and destroyed Native villages. The new nation signed many treaties with Native nations and broke many of them, forcing whole peoples from their lands. And many Africans were carried to America in chains and enslaved, a brutal wrong ended only by a vast and deadly Civil War. Today we narrate these key stories truthfully, name the central figures, and place the events in order.",
                 "gradual_release": {
-                    "i_do": "Tell the story in order, plainly and truthfully: the Native peoples here for thousands of years; the European explorers and settlers, and the displacement of the Native peoples from their land; the colonists' fight for independence; the founding on the words of equality, beside the reality of slavery; and the Civil War that ended slavery at a terrible cost. Name what is fact, and say where people still reason differently about what it means.",
-                    "we_do": "Retell the key stories together and place them on a timeline, naming the people in each, and talk over the hard questions honestly: who was here first, and who was free and who was not.",
-                    "you_do": "Child narrates at least five key stories of American history, identifies the central figures, places the events in chronological order, and can speak honestly about both the courage and the wrongs in the story.",
+                    "i_do": "Tell the story in order, plainly and truthfully, and show every people in full: the Native nations with their cultures and deep knowledge, and also their wars and raids against one another and against settlers; the settlers and the new nation with their ideals and their founding of a republic, and also their broken treaties, their massacres of Native villages, the forced removals, and their holding of enslaved people. State what is documented fact, and say plainly where people still reason differently about what it means.",
+                    "we_do": "Retell the key stories together and place them on a timeline, naming the people in each. For each conflict, ask what each side actually did, the brave and the cruel alike, so that no people is left a cartoon hero or a cartoon villain.",
+                    "you_do": "Child narrates at least five key stories of American history, identifies the central figures, places the events in chronological order, and can speak honestly about the deeds, noble and cruel, of every people in the story.",
                 },
                 "guided_practice": [
-                    "Retell the key stories of American history in order: the Native peoples, exploration and settlement, the Revolution, slavery, the Civil War",
-                    "Identify the central historical figures and what each one did",
-                    "Place the major events on a timeline in correct chronological order",
+                    "Retell the key stories of American history in order: the Native nations, exploration and settlement, the Revolution, slavery, the Civil War",
+                    "For a conflict on the frontier, name what each side, Native and settler, actually did",
+                    "Place the major events and figures on a timeline in correct chronological order",
                 ],
                 "independent_practice": [
                     "Narrate a chosen figure's life, including both what they achieved and the hard truths of their time",
-                    "Build an American history timeline and add each person and event studied",
+                    "Build an American history timeline and add each people, person, and event studied",
                 ],
                 "mastery_check": [
-                    "Narrate at least five key stories of American history truthfully, including the hard parts",
+                    "Narrate at least five key stories of American history truthfully, showing every people in full",
                     "Identify the central historical figures and place major events in chronological order",
-                    "Describe courage, freedom, and character through real lives, without leaving out the wrongs",
+                    "Speak honestly about both the achievements and the wrongs of Native nations and of settlers, casting no people as wholly noble or wholly villainous",
                 ],
                 "spiral_review": [
-                    "Revisit the timeline often, so the child holds the order of events, from the Native peoples through exploration, the Revolution, and the Civil War",
+                    "Revisit the timeline often, so the child holds the order of events, from the Native nations through exploration, the Revolution, and the Civil War",
                 ],
             },
             "classical": {
-                "narrative_introduction": "The classical mind studies history through narration and through the lives of real people, and it does not flinch from the truth. American history is told here as it was: the Native peoples who lived across the land for thousands of years; the Europeans who came and settled, displacing the Native peoples from that land; the colonists who won independence and wrote that all are created equal; and the great and painful contradiction that slavery, a true and brutal wrong, lived on within a nation founded on liberty, until a vast Civil War ended it. The classical study weighs both the courage and the wrong, and asks the hard questions honestly.",
+                "narrative_introduction": "The classical mind studies history through narration and through the lives of real people, and it does not flinch from the truth, nor does it make any people wholly noble or wholly wicked. American history is told here as it was. Native peoples lived across the land for thousands of years in hundreds of nations, with rich cultures and deep knowledge of the land, and those nations also warred upon and raided one another and took captives in war. Europeans came and settled, founding a nation on the words that all are created equal, and that same nation broke many of its treaties with the Native nations, drove whole peoples from their lands, and held millions in slavery, until a vast Civil War ended it. The classical study weighs the courage and the cruelty of every people, and asks the hard questions honestly.",
                 "memory_work": {
                     "chants": [
-                        "Chant the order of the story: the Native peoples, the explorers and settlers, the colonies, the Revolution, and the Civil War",
-                        "Chant the great contradiction to be reasoned with: a nation founded on the words that all are created equal, while many were not free",
+                        "Chant the order of the story: the Native nations, the explorers and settlers, the colonies, the Revolution, and the Civil War",
+                        "Chant the even-handed rule of history: every people has done both noble and cruel things, and the honest student tells both",
                     ],
                     "recitations": [
                         "Recite the opening words of the Declaration of Independence, that all are created equal, and recite that the nation did not at first live up to them",
-                        "Recite that Native peoples lived across the land for thousands of years before Europeans came, and that they were displaced from it as the newcomers settled",
+                        "Recite that no child today is to blame for what their ancestors did, and that the student's task is to know the truth, not to carry guilt",
                     ],
                 },
                 "copywork": [
                     "Copy the words from the Declaration of Independence that all men are created equal, and the names and dates of the central figures and events",
                 ],
-                "recitation_routine": "Begin each lesson by retelling the previous portion of the story, in order, and reciting the central contradiction before reasoning further about it.",
-                "history_integration": "Place American history on the chronological spine far down from the ancient civilizations, recent in the long story of humankind, and mark that its struggle over freedom and equality reaches forward from the spine into the present day, a story not yet finished.",
+                "recitation_routine": "Begin each lesson by retelling the previous portion of the story, in order, and reciting the even-handed rule of history before reasoning further about it.",
+                "history_integration": "Place American history on the chronological spine far down from the ancient civilizations, recent in the long story of humankind, and mark that the meeting of Native nations, European settlers, and enslaved Africans, with all the courage and all the wrong of each, set in motion a struggle over freedom and land that reaches forward from the spine into the present day.",
                 "read_aloud_suggestions": [
                     "A living biography of an American historical figure, told honestly, with both the achievements and the flaws of the person and their age",
-                    "A children's account of the lives of the enslaved and of those who resisted slavery, read aloud truthfully and with care",
+                    "Honest children's accounts told from more than one side: of a Native nation, of a settler family, and of the enslaved and those who freed them",
                 ],
             },
             "charlotte_mason": {
                 "lesson_length_minutes": 20,
                 "living_book_suggestions": [
-                    "Living biographies of American historical figures, told honestly, including both their courage and the hard truths of their time",
-                    "A living book that tells the story of Native peoples, of the enslaved, and of those who sought freedom, written with truth and care, never a sanitized version",
+                    "Living biographies and accounts told honestly from more than one side: the Native nations, the settler families, the enslaved and those who resisted slavery, never a version that makes one people all good and another all bad",
+                    "A living book that shows a Native nation's culture, knowledge, and grievances, and also, truthfully, the wars and raids between nations and on the frontier",
                 ],
-                "short_lesson_flow": "Read a portion of a living biography or a true account aloud, told with feeling and without flinching, and let the child narrate it back in their own words. Charlotte Mason held that children can meet real history, including its sorrows; the parent does not preach a verdict but tells the truth and lets the child form their own response in the narration. Keep it warm, honest, and unhurried.",
-                "narration_prompt": "Tell me the story we just heard. What was hard about it, and what was brave? What does it make you wonder?",
+                "short_lesson_flow": "Read a portion of a living biography or a true account aloud, told with feeling and without flinching, and let the child narrate it back. Charlotte Mason held that children can meet real history, including its sorrows; the parent tells the truth about every people in it, the noble and the cruel alike, preaches no verdict, and lets the child form their own response in the narration. Keep it warm, honest, and unhurried.",
+                "narration_prompt": "Tell me the story we just heard. What did each people in it do that was brave, and what did each do that was cruel? What does it make you wonder?",
                 "real_world_objects": [
-                    "Living biographies and true accounts of American history",
-                    "A Book of Centuries and a timeline the child adds figures and events to",
-                    "Maps of North America: the Native nations, the colonies, the routes of the Underground Railroad",
+                    "Living biographies and true accounts of American history, told from more than one side",
+                    "A Book of Centuries and a timeline the child adds peoples, figures, and events to",
+                    "Maps of North America: the lands of the Native nations, the colonies, the routes of the Underground Railroad and of the forced removals",
                     "Museums, historic sites, and memorials, where the real past can be met",
                 ],
-                "nature_connection": "Notice the land itself, the rivers, forests, and plains that the Native peoples knew intimately for thousands of years, and that shaped where settlers went and how the nation grew, geography woven through the whole story.",
-                "habit_focus": "The habit of attention and of truthfulness: hearing hard history closely and honestly, neither looking away from it nor being told what to conclude.",
+                "nature_connection": "Notice the land itself, the rivers, forests, and plains that the Native nations knew and tended with deep skill for thousands of years, that settlers also farmed and changed, and that whole peoples were forced across when their lands were taken, geography woven through the whole story.",
+                "habit_focus": "The habit of attention and of truthfulness: hearing hard history closely and honestly about every people, neither looking away from it nor being told what to conclude.",
             },
             "montessori": {
                 "prepared_materials": [
-                    "An American history timeline with movable cards for the people and events",
-                    "Living biographies and true accounts told honestly, with portraits",
-                    "Maps of the Native nations, the colonies, and the Underground Railroad",
-                    "A research and presentation space for the child to study a chosen figure",
+                    "An American history timeline with movable cards for the peoples and events",
+                    "Living biographies and true accounts told honestly from more than one side",
+                    "Maps of the Native nations, the colonies, the Underground Railroad, and the routes of forced removal",
+                    "A research and presentation space for the child to study a chosen people or figure",
                 ],
                 "presentation": {
                     "three_period_lesson": "With the timeline cards: this is the founding of the nation, this the Civil War that ended slavery; show me the Civil War; which event is this?",
                     "steps": [
-                        "The child places the people and events of American history on the timeline in order",
-                        "The child studies a figure or a story through an honest biography or account, including its hard truths",
+                        "The child places the peoples and events of American history on the timeline in order",
+                        "The child studies a people or a story through honest accounts that show both achievement and wrong, the Native nations' cultures and their wars, the settlers' ideals and their broken treaties and slavery",
                         "The child narrates or presents what they have learned and adds it to the timeline",
                     ],
                 },
-                "control_of_error": "The timeline and the true record are the control: an event set out of order does not match the dates, and an account that leaves out the Native peoples, or slavery, or the cost of the Civil War is checked against the honest record and found incomplete.",
-                "abstraction_pathway": "From handling the concrete timeline cards and biographies, to placing the people and events in order, toward grasping American history as one long, connected, and unfinished story of freedom sought and freedom denied.",
+                "control_of_error": "The documented record is the control: an event set out of order does not match the dates, and an account that leaves out a people's achievements, or its wrongs, the Native nations' warfare, the settlers' broken treaties and massacres, the brutality of slavery, is checked against the honest record and found incomplete or one-sided.",
+                "abstraction_pathway": "From handling the concrete timeline cards and the honest accounts, to placing the peoples and events in order, toward grasping American history as one long, connected story in which every people acted with both nobility and cruelty.",
                 "extensions": [
-                    "Compare how a Pilgrim, a Wampanoag person, an enslaved person, and a modern historian would each tell the same event",
-                    "Trace a route of the Underground Railroad on a map",
-                    "Research a figure, famous or little-known, and present their life honestly",
+                    "Compare how a Native nation, a settler family, an enslaved person, and a modern historian would each tell the same event",
+                    "Trace on the map both a route of the Underground Railroad and a route of a forced removal",
+                    "Research a people or a figure, famous or little-known, and present them honestly, the achievements and the wrongs together",
                 ],
-                "observation_focus": "Watch for the child holding the whole story, the courage and the wrong together, placing events truly in time, and asking honest questions rather than reaching for a tidy verdict.",
+                "observation_focus": "Watch for the child holding the whole story, the courage and the wrong of every people together, placing events truly in time, and asking honest questions rather than reaching for a tidy verdict or a single villain.",
             },
             "unschooling": {
                 "invitations": [
-                    "Keep honest, well-told books about American history and its many peoples within reach",
+                    "Keep honest, well-told books about American history and its many peoples, told from more than one side, within reach",
                     "Leave out maps, a long timeline strip, and materials for the child's own projects",
                     "Have documentaries, historic sites, and museums available to explore",
                 ],
                 "real_world_contexts": [
-                    "Visiting historic sites, museums, and memorials where the real past is preserved",
-                    "Noticing the history in holidays, the Fourth of July, Presidents' Day, and asking what each one truly marks",
+                    "Visiting historic sites, museums, and memorials, those of the Native nations, of the colonists, and of the enslaved alike",
+                    "Noticing the history in holidays, the Fourth of July, Presidents' Day, Thanksgiving, and asking what each one truly marks, and for whom",
                     "Hearing the family's own history, who came from where, and when, and why",
-                    "Meeting American history in biographies, historical fiction, and documentaries",
+                    "Meeting American history in biographies, historical fiction, and documentaries that show more than one side",
                 ],
                 "conversation_starters": [
-                    "Native peoples lived here for thousands of years before Columbus; what does it mean to say he discovered America?",
-                    "The Declaration says all are created equal, yet many people were enslaved and not free; how do you make sense of that?",
-                    "Harriet Tubman risked her life again and again to free others; what kind of courage is that?",
+                    "Native nations lived here for thousands of years before Columbus, and they had wars and raids among themselves too; what does it mean to say he discovered America?",
+                    "On the frontier, Native warriors raided settler families and settlers and soldiers destroyed Native villages; how do you make sense of violence on both sides?",
+                    "The Declaration says all are created equal, yet many people were enslaved and the nation broke many treaties; how do you hold the ideals and the wrongs together?",
                 ],
                 "resource_bank": [
-                    "Honest, varied books and documentaries about American history",
-                    "Historic sites, museums, and memorials",
+                    "Honest, varied books and documentaries told from more than one side",
+                    "Historic sites, museums, and memorials of every people in the story",
                     "Maps and a timeline, and the family's own stories and elders",
                 ],
-                "parent_role": "Follow the child's curiosity about the American past into books, documentaries, and historic places, and tell the story truthfully, the courage and the cruelty alike, without softening the hard parts. Share the facts honestly and the contested questions openly, and let the child reason about what it all means rather than handing them a conclusion.",
-                "observation_documentation": "Over time, note whether the child can narrate the key stories of American history, knows its central figures, places events in order, and can speak honestly about both its courage and its wrongs. This noticing replaces any test.",
+                "parent_role": "Follow the child's curiosity about the American past into books, documentaries, and historic places, and tell the story truthfully, the courage and the cruelty of every people alike, without softening the hard parts or turning any people into the sole hero or the sole villain of the tale. Share the facts honestly and the contested questions openly, make plain that no child is to blame for what their ancestors did, and let the child reason about what it all means rather than handing them a conclusion.",
+                "observation_documentation": "Over time, note whether the child can narrate the key stories of American history, knows its central figures, places events in order, and can speak honestly about the achievements and the wrongs of every people in the story. This noticing replaces any test.",
             },
         },
         "connections": {
