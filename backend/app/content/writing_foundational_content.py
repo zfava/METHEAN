@@ -2772,11 +2772,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["lined paper", "word family lists for reference"],
             "recommended": ["word family flip books", "letter tiles for word building"],
-            "philosophy_specific": {
-                "classical": "Systematic spelling by pattern. One word family mastered before moving to the next. Daily dictation drill. Spelling as ordered knowledge.",
-                "charlotte_mason": "Spelling through visual study: the child LOOKS at the word carefully, then writes from memory. Never guess, always study first. Word families noticed through reading, not isolated lists.",
-                "montessori": "Movable alphabet for building CVC words. Word family boxes with objects and word cards. Self-correcting spelling materials.",
-            },
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 10},
         "accommodations": {
@@ -2786,6 +2781,116 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Word family charts with color-coded patterns. Write the family ending in one color and the changing first letter in another.",
             "kinesthetic_learner": "Build words with letter tiles. Word family flip books. Write in sand or on a whiteboard.",
             "auditory_learner": "Say each sound while writing the letter. Chant word families: 'cat, bat, hat, mat, sat!' Rhyming games reinforce families.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "CVC spelling is the first systematic spelling pattern. If the child can hear the three sounds of a consonant-vowel-consonant word, they can write the three letters. Word families make this powerful: knowing 'cat' unlocks bat, hat, mat, and sat. Today we spell 20 CVC words from dictation, group words into families, and use the patterns to spell new words.",
+                "gradual_release": {
+                    "i_do": "Say 'cat' slowly, /c/ /a/ /t/, and write c-a-t. Then show the family: keep -at and change the first letter, bat, hat, mat, sat. One pattern spells many words.",
+                    "we_do": "Spell CVC words together, segmenting each into sounds, writing a letter for each, and building a word family from a shared ending.",
+                    "you_do": "Child spells CVC words from dictation, groups words into families, uses a pattern to spell an unfamiliar word, and self-corrects against a model.",
+                },
+                "guided_practice": [
+                    "Segment a CVC word into three sounds and write a letter for each",
+                    "Build a word family by keeping the ending and changing the first letter",
+                    "Use a known family pattern to spell an unfamiliar word",
+                ],
+                "independent_practice": [
+                    "Spell a set of CVC words from dictation and self-check against a model",
+                    "Complete a word family chart of several families",
+                ],
+                "mastery_check": [
+                    "Spell 20 CVC words correctly from dictation",
+                    "Group words into word families and use the pattern to spell new words",
+                    "Self-correct CVC spelling by comparing written words to a model",
+                ],
+                "spiral_review": [
+                    "Review earlier word families before each new dictation, spelling a few words from each",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Spelling, rightly taught, is not a thousand words memorized one by one but a set of patterns learned and applied. The CVC word, the simplest in English, shows the principle plainly: hear the three sounds, write the three letters. And the word family shows the economy of pattern, that to learn one ending is to gain command of a whole company of words.",
+                "memory_work": {
+                    "chants": [
+                        "Chant a word family in turn: cat, bat, hat, mat, sat, the ending held, the first sound changed",
+                        "Chant the five short vowels and a CVC word for each: a as in cat, e as in bed, i as in pig, o as in dog, u as in sun",
+                    ],
+                    "recitations": [
+                        "Recite that spelling proceeds by pattern, and that the word family lets one known ending spell many words",
+                    ],
+                },
+                "copywork": [
+                    "Copy a word family in a neat column, the shared ending aligned, so the eye sees the pattern hold",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the short vowels and the day's word family before any word is dictated.",
+                "history_integration": "Tell that English spelling, though full of exceptions, rests on patterns inherited from older tongues, and that the CVC word is among the oldest and steadiest patterns in the language.",
+                "read_aloud_suggestions": [
+                    "A simple rhyming text read aloud, the child invited to catch the word families in the rhymes",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A simple, well-made rhyming book whose word families the child meets first as music and pleasure",
+                ],
+                "short_lesson_flow": "Keep the lesson very short, five to ten minutes. Spelling is built by the eye: show the child a CVC word, let them look at it until they can picture it with eyes closed, then have them write it from that picture and check. Word families are noticed, not drilled, from the rhymes the child already loves. A few words, studied well and written truly, are the whole lesson.",
+                "narration_prompt": "Picture the word in your mind with your eyes closed. Tell me each letter you see, then write it.",
+                "real_world_objects": [
+                    "Word cards bearing single CVC words for visual study",
+                    "A small card to cover a studied word before it is written",
+                    "Magnetic letters for building word families by hand",
+                ],
+                "nature_connection": "Many short, plain nature words are CVC, bug, log, mud, web, sun, and the child may study and spell these from real things found out of doors.",
+                "habit_focus": "The habit of attention: looking at a word closely enough to hold its picture in the mind before writing it.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The movable alphabet for building CVC words sound by sound",
+                    "Word family boxes holding small objects and matching word cards",
+                    "Self-correcting CVC word cards for checking",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the movable alphabet: this word is 'pig', built /p/ /i/ /g/; you build 'pig'; change the first letter to make a word from the same family.",
+                    "steps": [
+                        "The child builds a CVC word with the movable alphabet, choosing a letter for each sound",
+                        "The child changes the first letter again and again to build a whole word family",
+                        "The child writes the words on paper and checks them with the self-correcting cards",
+                    ],
+                },
+                "control_of_error": "The self-correcting word cards let the child check each spelling against the model, and a CVC word missing its vowel plainly has only two letters where three are needed, so errors show themselves.",
+                "abstraction_pathway": "From building CVC words and families with the concrete movable alphabet, to writing them on paper, toward spelling CVC words and applying family patterns from dictation alone.",
+                "extensions": [
+                    "Sort objects from a word family box and label each with its word card",
+                    "Build a spelling stair, changing one letter at a time from word to word",
+                    "Apply a known family to build and write an unfamiliar word",
+                ],
+                "observation_focus": "Watch for the child segmenting all three sounds, holding the family ending steady while changing the first letter, and checking spellings independently.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep magnetic letters on the fridge and letter tiles in a basket for building words",
+                    "Leave out simple rhyming books and rhyme games the child enjoys",
+                    "Offer a notebook and good pens for the child's own writing",
+                ],
+                "real_world_contexts": [
+                    "Writing a short note, label, or list, where CVC words appear in nearly every line",
+                    "Building rhyming words for fun while playing with magnetic letters",
+                    "Writing the words of a sign or a game the child is making",
+                    "Noticing rhyme and word families in songs and picture books",
+                ],
+                "conversation_starters": [
+                    "You can spell 'cat': want to see how many rhyming words you can make from it?",
+                    "Stretch that word out slow. What sounds do you hear in the middle?",
+                    "Does that word look right to you? Want to check it together?",
+                ],
+                "resource_bank": [
+                    "Magnetic letters, letter tiles, and a whiteboard for building words",
+                    "Rhyming books, songs, and word games",
+                    "Word lists and picture dictionaries to check against when wanted",
+                ],
+                "parent_role": "Be the child's ready spelling helper when they write for real reasons, stretching words out slowly and welcoming phonetic tries. Play with rhymes and magnetic letters when the child is interested, letting word families surface as a game rather than a drill, and show the correct spelling gently when it is wanted.",
+                "observation_documentation": "Over time, notice whether the child spells more short words confidently in real writing, hears the middle vowel, uses rhyme and pattern to reach new words, and checks spellings that look wrong. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "CVC spelling reinforces CVC reading: encoding and decoding are mirror skills that strengthen each other",
