@@ -5286,11 +5286,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "the child's Book of Centuries or history notebook for reference during review",
                 "drawing supplies for map work",
             ],
-            "philosophy_specific": {
-                "classical": "Comprehensive assessment through narration, timeline review, map drill, and comparison. The child demonstrates command of the chronological framework and key facts.",
-                "charlotte_mason": "Examination by narration: the child tells everything they know, in their own words, without prompting. No multiple-choice tests. The quality of narration IS the assessment.",
-                "montessori": "Observation-based assessment: the child demonstrates knowledge through daily work with timelines, maps, and cultural materials. No formal test — the teacher observes mastery in practice.",
-            },
         },
         "time_estimates": {"first_exposure": 30, "practice_session": 20, "assessment": 30},
         "accommodations": {
@@ -5300,6 +5295,117 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Use the timeline and maps as visual aids during narration. Drawing maps from memory as part of assessment.",
             "kinesthetic_learner": "Walk along the wall timeline. Point to maps. Handle timeline cards. Move around during the assessment.",
             "auditory_learner": "Oral narration is the natural assessment mode. Discussion-based comparison. Verbal timeline tour.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "This is the capstone of the foundational history year. It is not a test to fear but a celebration of all the child has learned. The child tells the story of the ancient world in their own words, using the timeline and the maps as reference: narrating at least three civilizations, placing events in order, locating each on the map, and explaining how geography shaped it. An honest narration tells each civilization whole, its achievements and its hard truths alike. It should feel like a conversation, a glad sharing of a year's study.",
+                "gradual_release": {
+                    "i_do": "Explain warmly that this is a showing of all that has been learned, not a trial, and model the spirit of it by narrating a civilization fully and honestly, placing it on the timeline and the map, and naming the geography that shaped it.",
+                    "we_do": "Walk the timeline and the map together, warming up the child's memory, and rehearse what each part of the review will involve so nothing is a surprise.",
+                    "you_do": "Child narrates at least three ancient civilizations from memory, places major events and civilizations on the timeline in order, locates them on the world map, explains how geography shaped each, and tells each civilization honestly and whole.",
+                },
+                "guided_practice": [
+                    "Narrate a studied civilization, covering its government, daily life, and contributions, honestly and whole",
+                    "Walk the timeline and place the major events and civilizations in chronological order",
+                    "Locate the civilizations on the world map and name the geography that shaped each",
+                ],
+                "independent_practice": [
+                    "Give a grand narration of the ancient world, from the earliest civilizations to the most recent topic studied",
+                    "Compare two civilizations on several characteristics and present the comparison to the family",
+                ],
+                "mastery_check": [
+                    "Narrate at least three ancient civilizations from memory, each told honestly and whole",
+                    "Place major events and civilizations on a timeline in correct chronological order",
+                    "Locate the studied civilizations on a world map and explain how geography shaped each",
+                ],
+                "spiral_review": [
+                    "Revisit any civilization, timeline stretch, or map region found not yet secure before moving to the developing level",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Every stage of learning ends with a gathering-up of what has been won, and this is that moment for foundational history. It is no trial to be feared but a gateway: the child narrates the ancient civilizations, walks the chronological spine they have built, locates each people on the map, and shows how geography shaped them, and an honest judgment is made that the child stands ready for the developing level. Each civilization is told whole, its glory and its wrongs together.",
+                "memory_work": {
+                    "chants": [
+                        "Recite again the civilizations of the foundational year: Egypt and Mesopotamia, India and China, Greece and Rome",
+                        "Recite the marks of the historian: to narrate truly, to order the timeline, and to read the geography of the past",
+                    ],
+                    "recitations": [
+                        "Recite, from memory, the story of an ancient civilization, told whole and honestly, the gathered fruit of a year of study",
+                    ],
+                },
+                "recitation_routine": "Make the capstone itself a cumulative recitation: the child narrates and walks the timeline, drawing on every civilization and every event studied across the foundational year.",
+                "history_integration": "This capstone is the chronological spine entire: the child walks it from the first river valley civilizations to the most recent topic, seeing the whole order of history they have built across the year.",
+                "read_aloud_suggestions": [
+                    "A living account that surveys the sweep of the ancient world, read aloud as the child completes the foundational level",
+                    "A richer history book held ready, the first reward of the developing level to come",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "The child's own Book of Centuries and history notebook, looked through together as the year's true record",
+                    "A beautiful history book held ready as the first of the developing level",
+                ],
+                "short_lesson_flow": "There is no formal test. On an ordinary day, sit together with the timeline and the maps, and let the child narrate the civilizations they have studied, in their own words and without prompting. You will hear at once, in the fullness and order of the narration, whether the child is ready. Frame the whole as a glad telling, and celebrate it together.",
+                "narration_prompt": "Tell me the story of the ancient world, in your own words. Walk the timeline, point to the map, and tell each civilization honestly and whole.",
+                "real_world_objects": [
+                    "The child's own timeline or Book of Centuries, the year's record of history",
+                    "The world map, for the child's narrated tour of the civilizations",
+                    "The child's history notebook and drawings from the year",
+                    "A new and beautiful history book, the first of the level to come",
+                ],
+                "nature_connection": "Let part of the narration turn on geography, the rivers, seas, and mountains that shaped each civilization, so the child shows their history set firmly in the living land.",
+                "habit_focus": "The habit of attention and of narration, shown now in full: the child who can tell the story of the ancient world whole has formed the habit on which all further history rests.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The child's timeline, maps, and cultural materials from the year's study",
+                    "The child's history work portfolio and Book of Centuries",
+                    "The familiar history materials, used now as the child works, not as a test",
+                    "A world map and the continent folders for the child's narrated review",
+                ],
+                "presentation": {
+                    "three_period_lesson": "There is no new naming here; instead the adult watches the child in the third period of every lesson long since given, recalling and narrating the civilizations and events studied across the year in real work.",
+                    "steps": [
+                        "The adult and child review the timeline, the maps, and the work portfolio together, seeing the year's growth",
+                        "The child narrates the civilizations, places events on the timeline, and locates each people on the map",
+                        "The adult observes the child's command of narration, chronology, and geography and confirms the foundational level is complete",
+                    ],
+                },
+                "control_of_error": "The child's own work is the control: the timeline, the maps, and the year's portfolio show plainly what is secure and what is not, with no test required, so the adult's judgment rests on what the child actually does.",
+                "abstraction_pathway": "From the concrete timelines, maps, and materials of the foundational year, the child has reached connected historical thinking; this review simply confirms that the foundation is complete and the next stage may begin.",
+                "extensions": [
+                    "Move into the developing level's history work without delay once readiness is observed",
+                    "Carry the timeline and the Book of Centuries forward into the next stage",
+                    "Let the child set their own historical questions and goals for the level to come",
+                ],
+                "observation_focus": "Watch, across the child's work, for connected narration of the civilizations told honestly and whole, sound chronological order, and geography joined to history, the signs that the foundational level is truly complete.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep the child's timeline, history books, and the year's finds and projects where they can be revisited",
+                    "Leave out richer, more challenging history books for when the child reaches for them",
+                    "Let history stay woven into ordinary life: stories, films, museums, family history, and maps",
+                ],
+                "real_world_contexts": [
+                    "Recognizing the ancient civilizations when they come up in books, films, games, and conversation",
+                    "Visiting museums and historic sites and connecting them to what the child has studied",
+                    "Telling family and friends, gladly, about a civilization or a figure the child has come to love",
+                    "Reaching, of the child's own accord, for harder history books and bigger questions",
+                ],
+                "conversation_starters": [
+                    "Which civilization that we have met would you most want to visit, and why?",
+                    "What is the biggest idea you have learned about history this year, not a fact, but a big idea?",
+                    "What in the past do you most want to chase down and learn next?",
+                ],
+                "resource_bank": [
+                    "The child's timeline, history books, and projects from the year",
+                    "Richer history books and materials kept within reach",
+                    "Museums, historic sites, documentaries, and the family's own history",
+                ],
+                "parent_role": "There is no test. You already know the history your child carries, because you hear them tell it, place it in time, find it on the map, and recognize it in the world around them. Notice that historical thinking as it shows itself in real life, follow the child into richer history as their own curiosity grows, and trust what you have watched unfold across the year.",
+                "observation_documentation": "Over time, simply note the history the child lives: whether they narrate the civilizations whole and honestly, hold their order in time, connect them to the map and to geography, and reach for more. This lived noticing, not any test, shows that the foundational history is sound and the child is ready for whatever comes next.",
+            },
         },
         "connections": {
             "reading": "Historical knowledge enriches reading comprehension. The child can now understand historical references in literature.",
