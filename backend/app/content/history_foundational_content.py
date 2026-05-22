@@ -1733,11 +1733,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "living books about ancient Greece",
                 "pictures of the Parthenon, Greek pottery, and Olympic events",
             ],
-            "philosophy_specific": {
-                "classical": "Greek history IS classical education's home territory. Memorize myth names, city-states, and key figures. Timeline cards. Begin Socratic questioning as a method.",
-                "charlotte_mason": "Living books: D'Aulaire's Greek Myths, children's Iliad and Odyssey retellings. Narration after each myth. Map of Greece drawn from memory.",
-                "montessori": "Greece continent folder. Mythology cards with matching. Olympic Games role play. Clay Greek pottery making.",
-            },
         },
         "time_estimates": {"first_exposure": 30, "practice_session": 20, "assessment": 15},
         "accommodations": {
@@ -1747,6 +1742,121 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Photographs of Greek ruins and pottery. Illustrated myth books. Maps of city-states.",
             "kinesthetic_learner": "Family Olympics. Act out myths. Build the Parthenon with blocks. Sculpt with clay.",
             "auditory_learner": "Listen to myths told as stories. Discuss and debate Athens vs Sparta. Oral retelling of myths is the primary activity.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Ancient Greece was not one country but many independent city-states, each with its own government and character. Athens prized education, art, and democracy, where citizens voted directly on the laws, though only free adult men were counted as citizens; women, foreigners, and the enslaved were not. Sparta prized military strength and discipline. The Greeks told myths of gods and heroes to explain the world and to teach, and they held the Olympic Games every four years. Today we compare Athens and Sparta, explain democracy, retell Greek myths, and describe the Olympics.",
+                "gradual_release": {
+                    "i_do": "Set Athens and Sparta side by side and think aloud: Athens, democracy and art and learning; Sparta, the army and discipline. Tell a Greek myth in order and name what it taught the Greeks. Describe the Olympic Games. Note plainly that Athenian democracy let only free men vote, not women or the enslaved.",
+                    "we_do": "Compare Athens and Sparta on a chart together, retell a myth and name its lesson, and describe the Olympic Games and their place in Greek life.",
+                    "you_do": "Child compares Athens and Sparta, explains what democracy means and how Athens practiced it, retells three Greek myths with their lessons, and describes the Olympic Games.",
+                },
+                "guided_practice": [
+                    "Compare Athens and Sparta on a chart: government, values, education",
+                    "Retell a Greek myth and name the lesson it taught the Greeks",
+                    "Describe the Olympic Games and explain why the Greeks paused wars for them",
+                ],
+                "independent_practice": [
+                    "Retell three Greek myths from memory with their lessons",
+                    "Hold a family vote to experience Athenian democracy, then describe how it worked and who it left out",
+                ],
+                "mastery_check": [
+                    "Compare Athens and Sparta on government, values, and education",
+                    "Explain what democracy means and how Athens practiced it, including who could and could not vote",
+                    "Retell three Greek myths and describe the Olympic Games",
+                ],
+                "spiral_review": [
+                    "Revisit the earlier civilizations and set ancient Greece beside them on the timeline, after Egypt, before Rome",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Ancient Greece is the birthplace of much that the classical mind treasures: democracy, philosophy, the theater, and the Olympic Games. Greece was many city-states, and two stand out: Athens, which gave the world the rule of citizens and the love of wisdom, and Sparta, which gave it discipline and the soldier's courage. The Greeks were a people of stories, and their myths of gods and heroes carried their understanding of pride, courage, and fate.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the two great city-states and their gifts: Athens of democracy and learning, Sparta of discipline and arms",
+                        "Chant the Greek gifts to the world: democracy, philosophy, the theater, and the Olympic Games",
+                    ],
+                    "recitations": [
+                        "Recite that democracy means rule by the citizens, and that in Athens only free men were citizens, while women, foreigners, and the enslaved were not",
+                        "Recite a memorable line from a Greek myth, and the lesson the Greeks drew from it",
+                    ],
+                },
+                "copywork": [
+                    "Copy the names of the chief Greek gods and heroes, and a line from a Greek myth that carries its lesson",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the gifts of Greece and retelling the previous myth before a new one is met, so the gallery of myths grows cumulatively.",
+                "history_integration": "Place ancient Greece on the chronological spine after Egypt and Mesopotamia and before Rome, and mark it as the source from which Rome, and the long Western tradition after Rome, would draw their philosophy, their stories, and the idea of the citizen.",
+                "read_aloud_suggestions": [
+                    "A fine collection of Greek myths for children, read aloud for narration",
+                    "A children's retelling of the Odyssey, the long journey of Odysseus home, read aloud for its language and its story",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautifully told collection of Greek myths, the kind that has delighted children for generations, never a dry summary",
+                    "A living book about daily life in Athens and Sparta, written with knowledge and wonder",
+                ],
+                "short_lesson_flow": "Read a Greek myth aloud, told with all its drama, and let the child narrate it back and draw the most striking scene. Another day, read of Athens and Sparta and wonder together which city the child would choose, and why. Let the great stories carry the lesson. Stop while interest is high.",
+                "narration_prompt": "Tell me the myth we just heard. What happened, and what did it teach the Greeks who told it?",
+                "real_world_objects": [
+                    "A living book of Greek myths, returned to again and again",
+                    "A map of Greece, its mountains and islands traced by hand",
+                    "A Book of Centuries for the child's drawn scenes of Greece",
+                    "A real or improvised set of Olympic events to run outdoors",
+                ],
+                "nature_connection": "Notice how the mountains and the sea of Greece shaped its people: the mountains divided the land into separate city-states, and the sea made the Greeks sailors and traders, geography itself a teacher of history.",
+                "habit_focus": "The habit of attention: hearing a myth closely enough to retell it whole, and weighing Athens against Sparta with a fair and thoughtful mind.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A Greece folder in the continent collection, with photographs and fact cards",
+                    "Greek mythology cards for matching gods, heroes, and their stories",
+                    "An Athens-and-Sparta comparison work",
+                    "Materials for Greek pottery and an Olympic Games role play",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the city-state cards: this is Athens, the city of democracy; show me Athens; which city-state is this, and what did it prize?",
+                    "steps": [
+                        "The child explores the Greece folder and locates Greece on the map",
+                        "The child works the mythology cards, matching each god or hero to their story and its lesson",
+                        "The child compares Athens and Sparta on a chart and learns how each was governed and who could take part",
+                    ],
+                },
+                "control_of_error": "The matched mythology and fact cards are the control, pairing in one true way, and the comparison chart checks the child's reasoning: a trait set under the wrong city-state does not match the cards' evidence.",
+                "abstraction_pathway": "From handling the concrete Greece folder and the mythology cards, to comparing Athens and Sparta, toward grasping democracy as an idea and Greece's place in the larger story of history.",
+                "extensions": [
+                    "Investigate the Peloponnesian War between Athens and Sparta",
+                    "Compare Athenian democracy with the government of the child's own country",
+                    "Study the Greek philosophers and the Socratic way of questioning",
+                ],
+                "observation_focus": "Watch for the child comparing Athens and Sparta fairly, neither cast as simply good or bad, and grasping both the achievement and the limits of Athenian democracy.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep beautifully illustrated collections of Greek myths within reach",
+                    "Leave out clay for Greek pottery and materials for staging an Olympic Games",
+                    "Have documentaries and films about ancient Greece available",
+                ],
+                "real_world_contexts": [
+                    "Watching the modern Olympic Games and tracing them back to ancient Greece",
+                    "Meeting Greek myths in books, films, and games, and recognizing the old stories",
+                    "Noticing Greek words in English: democracy, philosophy, athletics",
+                    "Holding a real family vote and feeling what direct democracy is like",
+                ],
+                "conversation_starters": [
+                    "Athens let its citizens vote on the laws, but only free men were citizens; what do you think of that?",
+                    "Spartan boys left home at seven for army training; would you have wanted to be Spartan?",
+                    "Greek myths often warn against being too proud; why do you think the Greeks feared pride?",
+                ],
+                "resource_bank": [
+                    "Illustrated collections of Greek myths and books about ancient Greece",
+                    "Documentaries and films about Greece, and the modern Olympic Games",
+                    "Museums with Greek art and pottery",
+                ],
+                "parent_role": "Follow the child's delight in the Greek myths into books, films, and play, and wonder aloud about Athens and Sparta and what each got right and wrong. Be honest that Athenian democracy left out women and the enslaved, and let the child weigh it; let real stories and real conversation, rather than a worksheet, teach ancient Greece.",
+                "observation_documentation": "Over time, note whether the child can compare Athens and Sparta, explain what democracy is and whom Athens included and excluded, retell Greek myths, and describe the Olympics. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Greek myths are foundational stories in Western literature — references appear in books throughout life",
