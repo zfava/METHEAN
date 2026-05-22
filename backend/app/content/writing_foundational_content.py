@@ -938,11 +938,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["lined paper", "sentence/fragment example cards"],
             "recommended": ["subject and predicate matching cards", "picture prompts for sentence writing"],
-            "philosophy_specific": {
-                "classical": "The sentence as the fundamental unit of composition. Formal identification of subject and predicate. Sentence diagramming begins here at its simplest level.",
-                "charlotte_mason": "Grammar caught before it is taught: the child recognizes complete sentences from years of hearing and copying excellent prose. Formal terms introduced gently.",
-                "montessori": "Sentence building with word cards on a mat. The child physically arranges subject and predicate cards. Grammar symbols (black triangle for noun, red circle for verb) introduced.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -952,6 +947,115 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Color-code subject (blue) and predicate (red) in sample sentences. Use cards for visual sorting.",
             "kinesthetic_learner": "Physical sentence-building with word cards. Stand up for sentences, sit down for fragments.",
             "auditory_learner": "Read sentences and fragments aloud — complete sentences 'sound finished.' Oral sentence creation before writing.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "A sentence is a complete thought. It has a subject, who or what the sentence is about, and a predicate, what the subject does or is. 'The dog ran' is a sentence; 'the big brown' is not. Today we learn to tell a complete sentence from a fragment, name the subject and predicate, and write complete simple sentences that begin with a capital and end with punctuation.",
+                "gradual_release": {
+                    "i_do": "Read a group of words aloud, 'The bird sang', and think aloud: who is this about? The bird, that is the subject. What did the bird do? Sang, that is the predicate. It has both parts, so it is a complete sentence; it begins with a capital and ends with a period.",
+                    "we_do": "Sort groups of words together into sentences and fragments, naming the subject and predicate of each complete sentence and saying what each fragment is missing.",
+                    "you_do": "Child identifies sentences and fragments independently, names the subject and predicate in the complete ones, and writes three complete simple sentences.",
+                },
+                "guided_practice": [
+                    "Read groups of words and decide sentence or fragment, explaining what is missing from each fragment",
+                    "Name the subject and the predicate in simple sentences",
+                    "Turn a fragment into a complete sentence by supplying the missing part",
+                ],
+                "independent_practice": [
+                    "Write three complete simple sentences, each with a subject and a verb, a capital, and end punctuation",
+                    "Sort a mixed set of sentences and fragments and correct the fragments",
+                ],
+                "mastery_check": [
+                    "Identify whether a group of words is a complete sentence or a fragment",
+                    "Name the subject and predicate in a simple sentence",
+                    "Write three complete sentences with correct capitalization and punctuation",
+                ],
+                "spiral_review": [
+                    "Review capitalization of sentence beginnings and end punctuation each time a sentence is written",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The sentence is the fundamental unit of all composition, the smallest whole in which a thought is completely expressed. Every sentence joins two parts: the subject, naming that of which something is said, and the predicate, saying it. To know these two parts, and to tell a true sentence from a mere fragment, is the beginning of the writer's grammar and the foundation of all later composition.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the sentence rule: a complete sentence has a subject and a predicate, begins with a capital, and ends with a mark",
+                    ],
+                    "recitations": [
+                        "Recite that the subject names who or what the sentence is about, and the predicate tells what the subject does or is",
+                    ],
+                },
+                "copywork": [
+                    "Copy a short, well-built sentence and underline its subject once and its predicate twice",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the sentence rule and the definitions of subject and predicate before any sentence work is done.",
+                "history_integration": "Tell that the study of grammar, the naming of the parts of the sentence, comes down from the schools of ancient Greece and Rome, where the well-built sentence was the first lesson of the educated.",
+                "read_aloud_suggestions": [
+                    "A passage of clear, well-formed prose read aloud, the child invited to hear where one complete thought ends and the next begins",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A well-written living book whose clear, complete sentences the child has heard and copied many times before grammar is named",
+                ],
+                "short_lesson_flow": "Keep the lesson short, ten to fifteen minutes. Grammar is caught before it is taught: the child has heard and copied complete sentences for a long time and already feels when a thought is finished. Read a few groups of words aloud and let the child tell which ones sound finished and which leave you waiting. Then gently name the parts, the who part and the what part. Let the child make complete sentences orally before writing a few.",
+                "narration_prompt": "Tell me a complete sentence about something you did today, then tell me which part says who and which part says what they did.",
+                "real_world_objects": [
+                    "A favorite living book to draw example sentences from",
+                    "Word cards for the who part and the what part, to arrange by hand",
+                    "Good lined paper and a comfortable pencil",
+                ],
+                "nature_connection": "The child writes complete sentences in the nature notebook about what was observed, so that sentence-building serves the real work of recording nature.",
+                "habit_focus": "The habit of attention: listening to a group of words closely enough to feel whether the thought is truly complete.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Word cards on a mat for building sentences, the subject part and the predicate part",
+                    "The Montessori grammar symbols, the black triangle for the noun and the red circle for the verb",
+                    "Sentence strips and a folder for the child's own written sentences",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With subject and predicate cards: this card is a subject, 'the cat', this card is a predicate, 'sat on the mat'; you join a subject to a predicate; show me the subject and the predicate in your sentence.",
+                    "steps": [
+                        "The child arranges a subject card and a predicate card on the mat to build a complete sentence, reading it aloud",
+                        "The child places the grammar symbols above the words, the black triangle over the noun and the red circle over the verb",
+                        "The child writes a few complete sentences of their own and checks that each has both parts",
+                    ],
+                },
+                "control_of_error": "A sentence built from only a subject card or only a predicate card plainly does not read as a finished thought, so the child hears at once that a part is missing.",
+                "abstraction_pathway": "From physically joining subject and predicate cards on the mat, to marking the noun and verb with grammar symbols, toward writing complete sentences and recognizing their parts without the cards.",
+                "extensions": [
+                    "Mix and match subject and predicate cards to make many sentences, some sensible and some silly",
+                    "Expand a short sentence by adding describing words while keeping its two parts",
+                    "Sort strips into complete sentences and fragments and complete each fragment",
+                ],
+                "observation_focus": "Watch for the child building sentences with both parts, naming the subject and predicate, and noticing when a group of words is not yet a finished thought.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep paper, pencils, and word cards within easy reach for making and arranging sentences",
+                    "Leave out a set of cards with who parts and what parts to mix into silly and sensible sentences",
+                    "Offer a notebook for the child's own sentences, jokes, or captions",
+                ],
+                "real_world_contexts": [
+                    "Writing a clear note or message so another person understands it",
+                    "Giving written directions for a game or a chore in complete instructions",
+                    "Writing captions under drawings or photographs",
+                    "Sending a written message to a family member in complete thoughts",
+                ],
+                "conversation_starters": [
+                    "If I just said 'the big red', would you know what I mean? What is missing?",
+                    "Tell me a whole thought about your day: who, and what they did.",
+                    "This note says 'under the tree'. Under the tree, what? Let's finish it.",
+                ],
+                "resource_bank": [
+                    "Word cards and paper for building and writing sentences",
+                    "Books and comics where complete sentences can be noticed",
+                    "Real notes, captions, and messages that need writing",
+                ],
+                "parent_role": "When the child writes a note or caption, read it back and wonder aloud whether it tells a whole thought, who, and what they do. Play with mixing who parts and what parts into funny sentences, and let real messages, ones that must be understood, show why a complete sentence matters.",
+                "observation_documentation": "Over time, notice whether the child writes in complete thoughts, can say who a sentence is about and what they do, and notices when a group of words is unfinished. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Recognizing sentences helps reading comprehension: the child reads phrase by phrase, not word by word",
