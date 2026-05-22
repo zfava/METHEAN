@@ -6418,10 +6418,114 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Chant: 'Ten is five and five, six and four, seven and three.'",
         },
         "philosophy_specific": {
-            "classical": "Memorize all bonds for 10 and 20. These unlock everything.",
-            "charlotte_mason": "Discover through real objects: ways to split 15 acorns.",
-            "montessori": "Strip boards reveal bonds. Teen bead bars for bonds to 20.",
-            "traditional": "Bond worksheets. Fill-in-missing-part. Flashcards.",
+            "traditional": {
+                "introduction": "A number bond shows how a whole number breaks into two parts. Eight breaks into 3 and 5, into 4 and 4, into 6 and 2: each is a bond of eight. Knowing every bond for the key numbers, ten above all, makes both addition and subtraction quick, since each bond holds an addition fact and a subtraction fact at once. Today we learn the number bonds to twenty, draw them, and use them to add and subtract.",
+                "gradual_release": {
+                    "i_do": "Take ten counters and break them into two parts again and again, naming each bond: 6 and 4, 7 and 3, 5 and 5. Draw the three-part bond diagram, the whole above, the two parts below. Show that the bond of 7 and 3 within ten solves both 7 plus 3 and 10 minus 7.",
+                    "we_do": "Break key numbers into all their bonds together, draw the bond diagrams, and use a known bond to solve an addition and a subtraction.",
+                    "you_do": "Child states the bonds for ten and other key numbers, draws bond diagrams, and uses bonds to solve addition and subtraction.",
+                },
+                "guided_practice": [
+                    "Break a whole into all its two-part bonds with counters",
+                    "Draw number bond diagrams, the whole above and two parts below",
+                    "Use a known bond to solve a subtraction: the whole and one part are given, find the other",
+                ],
+                "independent_practice": [
+                    "Write all the number bonds for the key numbers up to twenty",
+                    "Use bonds to solve mixed addition and subtraction problems",
+                ],
+                "mastery_check": [
+                    "State all the bonds for ten from memory",
+                    "Use a number bond to solve addition and subtraction",
+                    "Draw a number bond diagram correctly, the whole and two parts",
+                ],
+                "spiral_review": [
+                    "Revisit the make-ten addition facts, which are the number bonds for ten",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Every whole number is made of parts, and to know a number truly is to know the parts that make it. This is the part-whole law: a whole and its two parts are bound together, and the bond holds three facts at once, for if any two are known the third is found. Hold all the bonds of ten and twenty firmly, and addition and subtraction both lie open.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the bonds of ten: ten is one and nine, two and eight, three and seven, four and six, five and five",
+                        "Chant the part-whole law: the whole is the two parts joined, and a part is the whole less the other part",
+                    ],
+                    "recitations": [
+                        "Recite that a number bond holds an addition fact and a subtraction fact together, and that to know the whole and one part is to know the other",
+                    ],
+                },
+                "copywork": [
+                    "Copy a number and all its bonds beneath it, neatly, the whole and each pair of parts set in order",
+                ],
+                "recitation_routine": "Begin each lesson by chanting the bonds of ten before any new bond is learned, so the key bonds are rehearsed cumulatively.",
+                "history_integration": "Tell that the breaking of a whole into its parts is among the first truths of arithmetic, and that reckoners have always built swift calculation on the firm knowing of these small, sure facts.",
+                "read_aloud_suggestions": [
+                    "A story in which a whole group is split into two parts in different ways, read aloud so the child hears a number bond at work",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated counting or sharing book in which a group is split into two parts, with real artwork and never a worksheet",
+                ],
+                "short_lesson_flow": "Take a small handful of real things, perhaps ten acorns, and split them into two parts on the table. Name the bond: six and four. Gather them and split them another way. Let the child find, calmly, all the ways one number breaks in two. A few minutes is enough. Stop while interest holds.",
+                "narration_prompt": "Tell me the ways we split the ten acorns. How many pairs of parts did you find?",
+                "real_world_objects": [
+                    "Ten or more real things to split into two parts: acorns, beads, buttons, shells",
+                    "A ten-frame, or a board with ten spaces, to fill and see how many are empty",
+                    "Two small bowls into which a whole is parted",
+                ],
+                "nature_connection": "Outdoors, gather a small number of like things and split the heap into two parts in every way it will go, finding all the bonds of that number among real leaves or stones.",
+                "habit_focus": "The habit of attention: noticing that one whole holds many pairs of parts within it.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The addition strip board, on which a whole appears as two colored strips",
+                    "The colored bead bars, joined with a golden ten-bar for the bonds beyond ten",
+                    "Number bond diagram cards, a whole and its two parts",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the bead bars making a whole: this is a bond of ten, six and four; show me a bond of ten; what bond is this?",
+                    "steps": [
+                        "Build a whole number with the bead bars or the strip board, then show its two parts",
+                        "Find every way the whole breaks into two parts, naming each bond",
+                        "Use a known bond to solve a subtraction: set the whole and one part, find the part that completes it",
+                    ],
+                },
+                "control_of_error": "The materials are the control: the two part-strips must together exactly match the whole on the strip board, and the bead bars laid against the whole reveal at once when a pair of parts does not make it, so a wrong bond will not fit.",
+                "abstraction_pathway": "From building a whole and breaking it into parts with the beads and strips, to drawing the bond diagram, toward holding all the bonds of ten and twenty in the mind and using them to reckon.",
+                "extensions": [
+                    "Find the bonds for the teen numbers and for twenty with the teen beads",
+                    "Use bonds to solve subtraction by finding the missing part",
+                    "Explore three-part bonds of a single whole",
+                ],
+                "observation_focus": "Watch for the child finding all the bonds of a number, not only one, and seeing that the whole and one part give the other.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep collections of small countable things, beads, coins, buttons, within reach for free splitting",
+                    "Leave out a ten-frame or an egg carton trimmed to ten spaces to fill and split",
+                    "Have paper handy for drawing the part-whole diagrams a child invents",
+                ],
+                "real_world_contexts": [
+                    "Splitting a handful of snacks or toys into two shares",
+                    "Making change: a thing costs seven, you pay ten, the change is three",
+                    "Working out how many more are needed: ten cups in the recipe, six already in, four to go",
+                    "Noticing the two parts of a full set, the eaten and the left",
+                ],
+                "conversation_starters": [
+                    "You have ten. If some are here, how many are there?",
+                    "What are all the ways you could split these into two groups?",
+                    "If the whole is fifteen and this part is nine, what is the other part?",
+                ],
+                "resource_bank": [
+                    "Collections of small things to split and combine",
+                    "A ten-frame or egg carton for filling and parting",
+                    "The real splitting and sharing of snacks, coins, and toys",
+                ],
+                "parent_role": "Notice the everyday moments when a whole is split into two parts, sharing, change, what is left, and wonder aloud about the parts and the whole. Let the child discover the many ways a number breaks in two by handling real things, rather than memorizing a table.",
+                "observation_documentation": "Over time, note whether the child knows the parts that make ten and other numbers, sees that the whole and one part give the other, and uses these bonds to add and subtract. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Word families are like number bonds",
