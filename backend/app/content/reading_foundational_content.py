@@ -2962,10 +2962,112 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Oral retelling: 'Tell me in one sentence what that was about.' Discuss before writing. Think-aloud modeling by the parent.",
         },
         "philosophy_specific": {
-            "classical": "Teach main idea identification as a tool for extracting truth from text. Practice with Aesop's fables — the moral IS the main idea.",
-            "charlotte_mason": "Narration is the primary tool: after reading, the child retells in their own words. The narration naturally reveals whether they grasped the main idea.",
-            "montessori": "Use reading cards with short passages and matching main idea cards. Self-correcting material: the child checks their answer against a control card.",
-            "traditional": "Main idea worksheets with multiple-choice and short-answer questions. Structured practice with leveled passages.",
+            "traditional": {
+                "introduction": "Comprehension is the whole point of reading. The main idea is what a passage is mostly about, the big umbrella that covers all the details. Today we find the main idea, state it in one sentence, and tell it apart from the supporting details.",
+                "gradual_release": {
+                    "i_do": "Read a short three-sentence paragraph aloud, then model finding its heart: this paragraph is mostly about. Use the hand metaphor, the palm for the main idea and the fingers for the details, and contrast the topic, a word or two, with the main idea, a whole thought.",
+                    "we_do": "Read a short passage together, name its main idea and its details with the hand metaphor, and choose the best title from a few options together.",
+                    "you_do": "Child reads a passage, states its main idea in one sentence, names two or three key supporting details, and tells a main idea apart from a detail.",
+                },
+                "guided_practice": [
+                    "Main idea in a hand: write the main idea on the palm and a detail on each finger",
+                    "Title match: read a passage and choose the best title from three",
+                    "Sort sentence strips into a main-idea pile and a detail pile",
+                ],
+                "independent_practice": [
+                    "Write the main idea of a passage in one sentence",
+                    "Retell in one sentence what a passage was mostly about, after reading it",
+                ],
+                "mastery_check": [
+                    "State the main idea of a short passage in one sentence",
+                    "Distinguish the main idea from the supporting details",
+                    "Name two or three key details that explain or prove the main idea",
+                ],
+                "spiral_review": [
+                    "Revisit the difference between a topic and a main idea on familiar passages",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "A passage, like a building, rests on one central truth, with many details set upon it. To find the main idea is to find that central truth. The fable, which states its moral plainly, is the clearest school of this skill.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the distinction: the topic is a word or two; the main idea is a whole thought",
+                    ],
+                    "recitations": [
+                        "Memorize and recite short fables, and recite each fable's moral, which is its main idea distilled into a sentence",
+                    ],
+                },
+                "copywork": [
+                    "Copy the one-sentence main idea of a passage neatly, and copy the moral of a fable",
+                ],
+                "recitation_routine": "Begin each lesson by reciting a memorized fable and naming its moral as its main idea before turning to new passages; the repertoire of fables grows cumulatively.",
+                "history_integration": "Find and state the main idea of short narrative passages drawn from history, so the skill is practiced on texts along the chronological spine.",
+                "read_aloud_suggestions": [
+                    "Fables and well-made short passages, read aloud and paused over to name what each one is mostly about",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "Living books and well-told short passages worth narrating, in language beautiful enough to hold the child's full attention",
+                ],
+                "short_lesson_flow": "Read a short passage aloud once, attentively. The child then narrates it back in their own words. In the telling, the heart of the passage comes out on its own; name it gently as the main idea. Stop while the child is still interested.",
+                "narration_prompt": "Tell me back what you read, and then, in just one sentence, tell me what it was mostly about.",
+                "real_world_objects": [
+                    "A nature walk summarized in a sentence afterward",
+                    "A book told to a parent, sharing the heart of it and not every word",
+                    "Headlines that capture a story in a few words",
+                ],
+                "nature_connection": "After a nature walk, the child says in one sentence what the walk was mostly about, and writes that sentence in the nature notebook.",
+                "habit_focus": "The habit of attention: reading or listening once, fully, so that the whole passage can be told back truly.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Reading cards holding short passages",
+                    "Main-idea cards and detail cards for matching and sorting",
+                    "Control cards that carry the answer for self-checking",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a passage and the main-idea cards: this is the main idea of the passage; show me the main idea; what is this passage mostly about?",
+                    "steps": [
+                        "Read a passage card",
+                        "Choose the main-idea card that fits the passage, then check it against the control card",
+                        "Sort the detail cards beneath the main idea they support",
+                    ],
+                },
+                "control_of_error": "The control card carries the answer, so the child checks the main idea they chose for themselves and corrects it without an adult's word.",
+                "abstraction_pathway": "From matching a passage to a given main-idea card, to sorting its details beneath it, toward stating a passage's main idea in one's own sentence with no cards at all.",
+                "extensions": [
+                    "Work with passages where the main idea must be inferred from the details",
+                    "Write the main idea of a chosen passage in one sentence",
+                ],
+                "observation_focus": "Watch for the child distinguishing the central idea of a passage from a striking but secondary detail.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep varied reading within reach: storybooks, magazines, comics, and nonfiction the child is drawn to",
+                    "Talk often and naturally about stories, books, and films the family shares",
+                    "Leave news headlines and book blurbs where the child will notice their brief summaries",
+                ],
+                "real_world_contexts": [
+                    "Telling someone what a book or a film was mostly about",
+                    "Reading headlines, which capture a story's main idea in a few words",
+                    "Summing up a day or an outing in a sentence",
+                    "Describing to a friend what a game or a show is about",
+                ],
+                "conversation_starters": [
+                    "If you had to tell me in just one sentence what that was about, what would you say?",
+                    "What would be a good title for that? A title usually catches the main idea.",
+                    "Was the brown dog the main thing the story was about, or just a detail?",
+                ],
+                "resource_bank": [
+                    "Varied storybooks, magazines, and nonfiction kept available",
+                    "Films and shows the family discusses together",
+                    "Picture books and short articles for talking over",
+                ],
+                "parent_role": "After stories, walks, and films, ask naturally what it was mostly about, and model summing things up in one sentence. Follow what the child chooses to read, and treat the conversation as real talk rather than a quiz.",
+                "observation_documentation": "Over time, note whether the child can say what something is mostly about in one sentence, tells the main idea apart from the details, and can name the details that support it. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Main idea is like finding the total in a word problem — what is the BIG question being asked?",
