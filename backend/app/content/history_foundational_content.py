@@ -415,11 +415,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "timeline cards for ancient civilizations",
                 "picture books or living books about ancient civilizations",
             ],
-            "philosophy_specific": {
-                "classical": "Memorize the 5 characteristics of civilization. Chant the four river valley civilizations and their locations. Wall map with labels.",
-                "charlotte_mason": "Living geography: the child draws the world map from memory, adding river valleys. Living books about each civilization read aloud with narration.",
-                "montessori": "Continent folders with photographs. Timeline of civilizations with movable cards. Globe work: locating river valleys physically.",
-            },
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -429,6 +424,117 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Map work is a natural strength. Use illustrated timelines. Picture books with photographs of ancient sites.",
             "kinesthetic_learner": "Build a river valley in a sandbox. Create clay tablets like Mesopotamian scribes. Construct miniature pyramids.",
             "auditory_learner": "Listen to stories about ancient civilizations. Discuss and debate: 'Which civilization would you want to live in?' Chant civilization names and rivers.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "A civilization is what arises when people settle in one place and build a shared life: a steady food supply, a social order, a government, a religion and culture, and the arts, technology, and writing. The first civilizations all grew beside great rivers, the Nile, the Tigris and Euphrates, the Indus, and the Yellow River, because water meant farming, and farming meant people could stay. Today we define a civilization by its characteristics, locate the four river valleys, explain why rivers mattered, and compare two civilizations.",
+                "gradual_release": {
+                    "i_do": "Name the characteristics of a civilization and give a plain example of each. Point on the map to the four river valleys and think aloud: water for farming, farming for a steady food supply, a steady food supply so people could stay and build. Compare two civilizations on a chart.",
+                    "we_do": "List the characteristics of a civilization together, locate the four river valleys on the map, and fill in a chart comparing two of them.",
+                    "you_do": "Child defines a civilization by at least five characteristics, names and locates the four river valley civilizations, explains why they grew near rivers, and compares two of them.",
+                },
+                "guided_practice": [
+                    "List the characteristics of a civilization and give an example of each",
+                    "Locate the four river valley civilizations on a map",
+                    "Compare two civilizations on a chart of their characteristics",
+                ],
+                "independent_practice": [
+                    "Draw a world map from memory, marking the four river valley civilizations",
+                    "Write a comparison of two ancient civilizations, alike and different",
+                ],
+                "mastery_check": [
+                    "Define a civilization using at least five characteristics",
+                    "Name and locate the four river valley civilizations on a map",
+                    "Explain why early civilizations grew near rivers and compare two of them",
+                ],
+                "spiral_review": [
+                    "Revisit placing events and ages on the timeline, since the four civilizations are set there together",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "There came a turning in the long story of humankind: people who had wandered as hunters learned to farm, and farming let them settle, and settling let them build. From this rose civilization, marked by a steady food supply, a social order, a government, a faith, and the arts and writing. And it rose first, remarkably, in four river valleys at once, the Nile, the Tigris and Euphrates, the Indus, the Yellow River, each unknown to the others.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the characteristics of a civilization: a food supply, a social order, a government, a religion, and the arts and writing",
+                        "Chant the four river valleys: the Nile, the Tigris and Euphrates, the Indus, and the Yellow River",
+                    ],
+                    "recitations": [
+                        "Recite that civilization rose where rivers gave water for farming, so that people could settle, gather, and build",
+                    ],
+                },
+                "copywork": [
+                    "Copy the characteristics of a civilization and the names of the four great rivers and their lands",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the characteristics of a civilization and the four river valleys before any new study.",
+                "history_integration": "Place the four river valley civilizations together on the chronological spine, near the dawn of recorded history, and see that Egypt, Mesopotamia, India, and China all begin at roughly the same point, the gateway through which all later history flows.",
+                "read_aloud_suggestions": [
+                    "A living account of how a wandering people first settled, farmed, and built a city, read aloud so the child hears civilization begin",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book about how the first civilizations arose along their rivers, with true artwork and never a dry textbook",
+                ],
+                "short_lesson_flow": "Read a living portion about the first civilizations aloud, unhurried, and let the child narrate it back. Spread a map and let the child trace the four great rivers with a finger. The child may draw the map into a Book of Centuries. Wonder together why people chose to settle by water. Keep it warm and unhurried.",
+                "narration_prompt": "Tell me about the first civilizations. Why did people settle by the rivers, and what did they build there?",
+                "real_world_objects": [
+                    "A globe or world map, the four river valleys traced by hand",
+                    "A Book of Centuries for the child's own drawn map",
+                    "Living books about the ancient civilizations",
+                ],
+                "nature_connection": "Notice the rivers and water of the child's own region, and how a town grows where water flows, the very reason the first civilizations rose where they did, observed close to home.",
+                "habit_focus": "The habit of attention: listening to the story of a far-off people closely enough to tell it back and to wonder why they lived as they did.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A globe and map of the world for locating the river valleys",
+                    "Continent folders with photographs of the ancient civilizations",
+                    "The fundamental needs of humans chart, applied to each civilization",
+                    "Timeline cards of the civilizations with movable pieces",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the river valley cards: this is the Nile, the river of Egypt; show me the Nile; which river valley civilization is this?",
+                    "steps": [
+                        "The child locates the four river valleys on the globe and map",
+                        "The child explores each civilization through its continent folder and the fundamental needs of humans, food, shelter, government, and the rest",
+                        "The child sets the four civilizations on the timeline and compares two of them",
+                    ],
+                },
+                "control_of_error": "The map and globe are the control for location, and the fundamental needs framework is the control for the definition: a settlement that lacks a food supply, an order, or a government is felt not yet to be a civilization, so the framework checks the child's reasoning.",
+                "abstraction_pathway": "From locating the concrete river valleys on the globe and exploring real photographs, to checking each against the fundamental needs of humans, toward grasping civilization as a pattern of shared life that may be defined and compared.",
+                "extensions": [
+                    "Apply the fundamental needs of humans to all four civilizations",
+                    "Compare what became of each civilization over time",
+                    "Investigate why all four rose by rivers at the same point in history",
+                ],
+                "observation_focus": "Watch for the child connecting a civilization to the river that fed it, and defining civilization by its characteristics rather than by a single city or building.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a globe and world map within reach for free exploring",
+                    "Leave out richly illustrated books about the ancient civilizations",
+                    "Have documentaries about ancient Egypt, Mesopotamia, India, and China available",
+                ],
+                "real_world_contexts": [
+                    "Noticing how the child's own town depends on water, food, rules, and shared work",
+                    "Visiting a museum with artifacts from the ancient civilizations",
+                    "Finding the great rivers and their lands on a map or globe",
+                    "Wondering, while reading or watching, why people long ago lived as they did",
+                ],
+                "conversation_starters": [
+                    "Why do you think the first cities all grew up next to rivers?",
+                    "What does our town need to keep everyone fed and safe? Did ancient cities need the same?",
+                    "If you were starting a new place to live, what would you build first?",
+                ],
+                "resource_bank": [
+                    "A globe, a world map, and atlases",
+                    "Illustrated books and documentaries about the ancient civilizations",
+                    "Museums with ancient artifacts",
+                ],
+                "parent_role": "Follow the child's curiosity about the ancient world into books, documentaries, and museums, and wonder aloud about why people settled where they did and what makes a civilization. Let real maps, real artifacts, and real stories, rather than a worksheet, teach how civilization began.",
+                "observation_documentation": "Over time, note whether the child can say what makes a civilization, locate the great river valleys, explain why rivers mattered, and compare two ancient civilizations. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Living books about ancient civilizations build both reading skills and historical knowledge simultaneously",
