@@ -4131,11 +4131,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "paper for creating classification charts",
             ],
             "recommended": ["animal picture cards", "button collection for sorting practice"],
-            "philosophy_specific": {
-                "classical": "Classification as the foundational scientific thinking skill. Memorize major taxonomic groups. Systematic sorting with proper terminology. Linnaeus as the father of classification.",
-                "charlotte_mason": "Classification discovered through nature walks: the child sorts what they collect and discovers groupings naturally. Formal classification confirms what observation reveals.",
-                "montessori": "Sorting trays with natural objects. Classification cards with multiple sorting criteria. The child works independently to discover grouping systems.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -4145,6 +4140,118 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Color-coded sorting mats. Classification charts with pictures. Visual dichotomous keys.",
             "kinesthetic_learner": "Sort physical objects by moving them into groups. Nature collecting walks. Handle specimens.",
             "auditory_learner": "Discuss sorting criteria before sorting. Explain groupings aloud. Debate classification choices.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Classification is sorting things into groups by their observable characteristics. The same collection can be classified in more than one way: leaves sorted by color make different groups than leaves sorted by shape, and both are correct. What matters is choosing a clear rule, a criterion, and being able to explain it. Today we sort fifteen or more items by various criteria, explain our reasoning, and learn that classification is how scientists organize knowledge of the natural world.",
+                "gradual_release": {
+                    "i_do": "Take a mixed collection and sort it by one characteristic, thinking aloud: my criterion is color. Then re-sort the very same collection by shape, and by size. Show that the groups change with the criterion, and that scientists sort all living things into groups in just this way.",
+                    "we_do": "Sort a collection together by one criterion, name and explain the rule, then re-sort the same collection by a different criterion, and build a simple classification key.",
+                    "you_do": "Child sorts fifteen or more items by several criteria, explains the reasoning behind each grouping, and recognizes that the same items can be classified in different ways.",
+                },
+                "guided_practice": [
+                    "Sort a collection of fifteen or more items by an observable characteristic",
+                    "Re-sort the same collection by a different criterion and explain both",
+                    "Build a simple yes-or-no classification key",
+                ],
+                "independent_practice": [
+                    "Classify a real collection three ways, recording the criterion and groups each time",
+                    "Make a classification key that sorts a set of animals into their groups",
+                ],
+                "mastery_check": [
+                    "Sort fifteen or more items into categories by observable characteristics",
+                    "Explain the reasoning behind the chosen grouping criteria",
+                    "Recognize that the same objects can be classified in different ways, and that classification organizes scientific knowledge",
+                ],
+                "spiral_review": [
+                    "Revisit careful observation, since classification rests on the characteristics observed",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The natural world holds a bewildering multitude of things, and the mind cannot hold a multitude. So it does what the ordered mind always does: it divides, it groups, it classifies. To classify is to find the kinds within the many, and it is the foundation of all systematic knowledge. The scholar who sorts wisely has begun to understand.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the classifier's question: by what characteristic shall these be grouped",
+                        "Chant the great kingdoms of living things: the plants, the animals, the fungi, and the rest",
+                    ],
+                    "recitations": [
+                        "Recite that one collection may be truly classified in many ways, each by its own criterion, and that classification is how knowledge is set in order",
+                    ],
+                },
+                "copywork": [
+                    "Copy the major groups of living things in order, and the words classify, criterion, characteristic, category",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the classifier's question and the great groups of living things before any new sorting.",
+                "history_integration": "Tell that Aristotle of old first set the animals into their kinds, that Linnaeus in later centuries built the great system of classification still used today, and that to classify is to join a labor of ordering the world that has gone on for thousands of years.",
+                "read_aloud_suggestions": [
+                    "An account of how Linnaeus, or another great classifier, brought order to the multitude of living things, read aloud so the child hears classification as a great work of the mind",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book about the variety of the natural world, animals or plants in their kinds, with true artwork and never a workbook",
+                ],
+                "short_lesson_flow": "Let the lesson grow out of a real collection, the leaves, stones, or shells the child has gathered on a walk. Spread them out and let the child group them however they see fit, then ask gently what the rule was. Wonder together whether they could be grouped another way. The child discovers classification by doing it with things they have loved enough to gather.",
+                "narration_prompt": "Tell me how you grouped your collection, and what your rule was. Could the same things be grouped a different way?",
+                "real_world_objects": [
+                    "A real collection gathered on a nature walk: leaves, stones, shells, seeds",
+                    "Sorting trays or small bowls to hold the groups",
+                    "A nature notebook for recording the groupings",
+                    "Living things observed out of doors, sorted into their kinds",
+                ],
+                "nature_connection": "Classification is met directly in nature study: the child notices that the trees, the birds, the flowers fall into kinds, and the sorting of a gathered collection is simply that noticing made deliberate.",
+                "habit_focus": "The habit of attention and of order: looking closely enough to see how things are alike and unlike, and arranging them thoughtfully.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Sorting trays and baskets of natural objects to classify",
+                    "Classification cards offering several sorting criteria",
+                    "Animal picture cards for sorting into the vertebrate groups",
+                    "Materials for building a classification key",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a sorted collection: this group is sorted by texture; show me a group sorted by texture; by what criterion is this group sorted?",
+                    "steps": [
+                        "The child sorts a collection of fifteen or more objects by a single criterion",
+                        "The child names and explains the criterion, then re-sorts the same collection a different way",
+                        "The child builds a classification key, a chain of yes-or-no questions that sorts a set into its groups",
+                    ],
+                },
+                "control_of_error": "The collection is the control: an object that does not share the group's chosen characteristic stands out plainly, and a classification key tested against the real objects reveals at once any question that does not sort them truly.",
+                "abstraction_pathway": "From sorting concrete objects by one plain criterion, to classifying by several criteria and seeing the groups change, toward grasping classification as the system by which scientific knowledge is ordered.",
+                "extensions": [
+                    "Sort living things through the levels: vertebrate and invertebrate, then the vertebrate classes",
+                    "Build a dichotomous key like a biologist's",
+                    "Investigate how a surprising creature, the whale, is truly classified",
+                ],
+                "observation_focus": "Watch for the child holding to one criterion through a whole sort, explaining the rule, and seeing that the same collection can be classified in many true ways.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep the child's own collections, rocks, shells, cards, figures, where they can be sorted and re-sorted freely",
+                    "Leave out trays, bowls, and bins that invite grouping",
+                    "Have books and picture cards about animals and the kinds of living things available",
+                ],
+                "real_world_contexts": [
+                    "Organizing a beloved collection in whatever way makes sense to the child",
+                    "Sorting the household: the cutlery drawer, the recycling, the bookshelf, the toy bins",
+                    "Noticing the kinds of things in the world: kinds of birds, kinds of trees, kinds of trucks",
+                    "Finding how shops, libraries, and apps group things to make them findable",
+                ],
+                "conversation_starters": [
+                    "How did you decide which things go together? What is your rule?",
+                    "Could you group these a completely different way?",
+                    "A whale lives in the sea and looks like a fish, but scientists call it a mammal, why might that be?",
+                ],
+                "resource_bank": [
+                    "The child's own collections, kept where they can be sorted",
+                    "Trays, bowls, and bins for grouping",
+                    "Books and cards about the kinds of animals and living things",
+                ],
+                "parent_role": "Welcome the child's own ways of grouping their collections and their world, and ask about their reasoning with genuine curiosity rather than correcting it. Wonder aloud about other ways the same things could be sorted, and let real collections and the real ordering of daily life, rather than a worksheet, teach classification.",
+                "observation_documentation": "Over time, note whether the child sorts things by observable characteristics, can explain the rule, sees that one collection may be grouped many ways, and understands that classification brings order. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Classification vocabulary: classify, category, criteria, characteristics, group, sort, organize, kingdom, species",
