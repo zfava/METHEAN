@@ -5723,10 +5723,114 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Verbalize: '7 and 3 make ten. Ten plus 5 is fifteen.'",
         },
         "philosophy_specific": {
-            "classical": "Associative property named. Look for tens systematically.",
-            "charlotte_mason": "Real three-group addition: apples from three trees.",
-            "montessori": "Three bead bar groups on addition strip board.",
-            "traditional": "Three-addend worksheets. Strategy identification.",
+            "traditional": {
+                "introduction": "Adding three numbers is just adding two, and then adding the third. But the order is the adder's to set, since addition may be grouped any way and the sum does not change. So look first for a pair that makes ten, or a pair of doubles, add those, and the third number is easy. Today we add three single-digit numbers, use the make-ten and doubles strategies, and rearrange the addends to make the work easier.",
+                "gradual_release": {
+                    "i_do": "Take three numbers, say 7, 5, and 3, and think aloud: 7 and 3 make ten, so I add those first, then 10 and 5 is 15. Show plainly that grouping the numbers differently gives the same sum, so it is wise to choose the easiest pair first.",
+                    "we_do": "Add three numbers together: hunt for a make-ten pair or a doubles pair, add it first, then add the third, and check that a different grouping gives the same total.",
+                    "you_do": "Child adds three single-digit numbers, rearranges them to add the easiest pair first, and uses the make-ten or doubles strategy.",
+                },
+                "guided_practice": [
+                    "Add three numbers by finding and adding a make-ten pair first",
+                    "Add three numbers by finding and adding a doubles pair first",
+                    "Add the same three numbers in two different groupings and see the sum is the same",
+                ],
+                "independent_practice": [
+                    "Roll three dice and find the sum, choosing the easiest pair to add first",
+                    "Solve word problems that add three quantities",
+                ],
+                "mastery_check": [
+                    "Add three single-digit numbers correctly",
+                    "Find a make-ten or doubles pair and add it first",
+                    "Explain that grouping the addends differently does not change the sum",
+                ],
+                "spiral_review": [
+                    "Revisit the make-ten and doubles addition facts, the pairs the strategy depends on",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Addition keeps a quiet law: numbers may be gathered in any grouping, and the sum is always the same. This law is the adder's freedom. Given three numbers to add, the wise reckoner does not add them blindly in their order, but looks for the easy pair, the two that make ten or the two that match, joins those first, and the third falls in with ease.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the law of grouping: numbers may be joined in any order, and the sum stays the same",
+                        "Chant the easy pairs to hunt for: the two that make ten, and the two that are the same",
+                    ],
+                    "recitations": [
+                        "Recite that to add three numbers is to add two and then the third, and that the easy pair is added first",
+                    ],
+                },
+                "copywork": [
+                    "Copy a three-number sum, then copy it again with the addends rearranged, showing the same total beneath each",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the law of grouping and chanting the make-ten pairs before any new work.",
+                "history_integration": "Tell that the law by which numbers may be grouped in any order has been known since arithmetic began, and that it is one of the plain and certain truths on which all reckoning is built.",
+                "read_aloud_suggestions": [
+                    "A story in which things are gathered from three sources and counted up together, read aloud so the child hears three groups joined into one",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated story or counting book in which things are gathered from three places, with real artwork and never a worksheet",
+                ],
+                "short_lesson_flow": "Take three small real groups, perhaps apples picked from three trees, and join them. Let the child see that the easy pair, the two that make ten, can be added first, and the third after. Try grouping them another way and see the total hold. Keep the numbers honest and the lesson short.",
+                "narration_prompt": "Tell me how you added the three groups. Which two did you put together first, and why was that the easy way?",
+                "real_world_objects": [
+                    "Three small real groups to join: apples, acorns, beads, blocks",
+                    "Three dice rolled and the spots gathered into one sum",
+                    "The child's own day, with its three rounds of a game or three bags to count",
+                ],
+                "nature_connection": "Outdoors, gather things from three places, the pebbles by the path, by the tree, and by the water, and add the three small heaps into one count, choosing the easy pair first.",
+                "habit_focus": "The habit of thinking before acting: looking for the easy pair before beginning to add.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The colored bead bars, three bars to be joined into one quantity",
+                    "The addition strip board for combining numbers",
+                    "Number cards for setting out three addends to rearrange",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With three bead bars: these two make ten, the easy pair to join first; show me the pair that makes ten; which two bars make the easy pair?",
+                    "steps": [
+                        "Lay out three bead bars and count the whole quantity they make",
+                        "Find the pair that makes ten, or the matching pair, and join it first, then add the third bar",
+                        "Rearrange the three bars into a different grouping and confirm the same total",
+                    ],
+                },
+                "control_of_error": "The bead bars are the control: counted out, the three bars make one fixed quantity, so whatever the order they are joined the child finds the same length and sees that grouping does not change the sum.",
+                "abstraction_pathway": "From joining three concrete bead bars and counting the whole, to choosing the easy pair by sight, toward adding three numbers in the mind by making ten first.",
+                "extensions": [
+                    "Add four bead bars, hunting for more than one easy pair",
+                    "Find all the ways three numbers can be grouped and see each gives one sum",
+                    "Solve three-addend word problems with the beads",
+                ],
+                "observation_focus": "Watch for the child seeking the make-ten or doubles pair before adding, and trusting that the order of joining does not change the total.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep three dice and number cards out for free adding games",
+                    "Leave out collections that come in three groups: three jars, three baskets, three piles",
+                    "Have paper handy for adding up the math of real situations",
+                ],
+                "real_world_contexts": [
+                    "Adding scores across three rounds of a game",
+                    "Counting up items gathered from three different places",
+                    "Adding the prices of three things being bought",
+                    "Combining three small handfuls or piles into one count",
+                ],
+                "conversation_starters": [
+                    "We have three numbers to add. Which two would be the easy ones to put together first?",
+                    "Can you find two of these that make ten?",
+                    "Does it matter which two you add first? Try it another way and see.",
+                ],
+                "resource_bank": [
+                    "Dice, number cards, and counters kept available",
+                    "Games that score across several rounds",
+                    "Real moments of gathering things from three places",
+                ],
+                "parent_role": "When three amounts come up to be added, in a game, at the shop, around the house, wonder aloud together which pair is the easy one to join first. Let the child discover by trying that the order of adding does not change the total, rather than being told it as a rule.",
+                "observation_documentation": "Over time, note whether the child adds three numbers, hunts for an easy make-ten or doubles pair, and trusts that grouping the addends differently keeps the same sum. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Adding three things in a story",
