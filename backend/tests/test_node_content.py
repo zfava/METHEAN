@@ -6,9 +6,8 @@ Covers:
 - validate_content keeps its required-field behavior.
 - validate_philosophy warns on legacy strings and hard-fails an
   unschooling variant carrying a lesson/sequence/assessment key.
-- The authored reference nodes mf-01, mf-02, mf-03, mf-04, mf-05, mf-06,
-  mf-07, rf-01, rf-02, rf-03, rf-04, rf-05, rf-06
-  carry native variants for all five philosophies.
+- The authored reference nodes mf-01 through mf-08 and rf-01 through
+  rf-06 carry native variants for all five philosophies.
 """
 
 import pytest
@@ -313,6 +312,7 @@ class TestAuthoredPhilosophyContent:
             "mf-05",
             "mf-06",
             "mf-07",
+            "mf-08",
             "rf-01",
             "rf-02",
             "rf-03",
@@ -342,6 +342,7 @@ class TestAuthoredPhilosophyContent:
             "mf-05",
             "mf-06",
             "mf-07",
+            "mf-08",
             "rf-01",
             "rf-02",
             "rf-03",

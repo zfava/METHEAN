@@ -1821,10 +1821,115 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Verbalize: 'Nine plus what is sixteen? Seven. So sixteen minus nine is seven.'",
         },
         "philosophy_specific": {
-            "classical": "Connect every subtraction to addition. Fact families as system.",
-            "charlotte_mason": "Real situations: had 17 strawberries, ate 9. Always concrete.",
-            "montessori": "Bead bar subtraction. Strip board. Stamp game.",
-            "traditional": "Think-addition worksheets. Fact family drills.",
+            "traditional": {
+                "introduction": "Subtraction within twenty leans on the addition facts we already know. The strongest strategy is think-addition: to solve 15 - 8, think eight and what make fifteen. We also subtract through ten: 13 - 5 is 13 take 3 to reach ten, then take 2 more. Today we subtract teen numbers fluently, write fact families, and solve word problems.",
+                "gradual_release": {
+                    "i_do": "Model 15 - 8 by think-addition, saying aloud eight and what make fifteen, seven. Model 14 - 6 as subtract-through-ten on a ten-frame: take 4 to reach ten, then take 2 more, eight. Then build the fact family for 7, 9, 16.",
+                    "we_do": "Solve teen subtractions together by thinking the addition, subtract through ten together with counters, build and read a teen fact family together, and work a comparison word problem together.",
+                    "you_do": "Child solves subtraction within twenty, names the strategy used, writes the fact family, and solves take-away and comparison word problems.",
+                },
+                "guided_practice": [
+                    "Think-addition with fact-family triangles for teen numbers",
+                    "Subtract through ten on a ten-frame",
+                    "Comparison problems: find how many more one group holds than another",
+                ],
+                "independent_practice": [
+                    "Teen subtraction practice through dice and card games rather than timed drill",
+                    "Solve written subtraction word problems within twenty",
+                ],
+                "mastery_check": [
+                    "Solve any subtraction within twenty",
+                    "Explain the think-addition strategy",
+                    "Solve a comparison word problem within twenty",
+                ],
+                "spiral_review": [
+                    "Revisit subtraction within ten and the addition facts within twenty before harder teen subtraction",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Every subtraction is an addition turned around, and the teen numbers part exactly as the smaller ones do. Learn the teen fact families by heart, and let the addition you already know answer the subtraction at once.",
+                "memory_work": {
+                    "chants": [
+                        "Chant a teen fact family in full: seven and nine are sixteen; nine and seven are sixteen; sixteen take seven is nine; sixteen take nine is seven",
+                        "Chant the doubles in reverse: eight and eight are sixteen, so sixteen take eight is eight",
+                        "Chant the think-addition move: to take a number away, ask what adds back to the whole",
+                    ],
+                    "recitations": [
+                        "Recite the teen subtraction facts and their addition partners in order, a few each day, until the set is held",
+                    ],
+                },
+                "copywork": [
+                    "Copy teen fact families and subtraction number sentences neatly, such as 16 - 7 = 9, so each written fact is sure to the hand",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the teen facts and families learned so far, with their addition partners, before adding new ones; the work is cumulative and never assumed.",
+                "history_integration": "Subtract one year from another on a simple timeline to find the span between two events, carrying the parting of numbers onto the chronological spine.",
+                "read_aloud_suggestions": [
+                    "A well-told story in which larger groups of things are given away, lost, or compared, read aloud for its language and its quiet arithmetic",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 12,
+                "living_book_suggestions": [
+                    "A beautifully illustrated picture book in which real things past ten are shared, eaten, or compared, chosen for lovely artwork and never a busy workbook",
+                ],
+                "short_lesson_flow": "Set out a real group of more than ten objects. Ask the child to take some away and find how many remain, or to compare two groups and find how many more one holds. Let the child show you the way they found it. Do one or two such problems, calmly, and stop while interest is high.",
+                "narration_prompt": "Tell me how you found how many were left, or how many more. What did you do, and how did you know your answer was right?",
+                "real_world_objects": [
+                    "Strawberries or grapes, some eaten and the rest counted",
+                    "Two groups of objects set side by side and compared",
+                    "Coins, some spent and the rest counted",
+                ],
+                "nature_connection": "On a walk, gather two nature collections that pass ten, and tell how many more one holds than the other; record the comparison with a small drawing in the nature notebook.",
+                "habit_focus": "The habit of thinking before counting: reaching for an addition fact already known rather than counting back one by one.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The subtraction strip board extended through the teen numbers",
+                    "The colored bead bars and golden ten bars, for taking a quantity through ten",
+                    "The stamp game for recording subtraction",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a teen difference: this is the difference, fifteen take seven leaves eight; show me the addition hidden inside it; what does fifteen take seven leave? Spoken with the materials in hand.",
+                    "steps": [
+                        "Lay a teen quantity as a golden ten bar and a colored bar",
+                        "Take a part away by first taking from the colored bar to reach ten, then taking from the ten, so subtracting through ten is done by the hand",
+                        "Record the subtraction on the stamp game, and check the difference against the control chart",
+                    ],
+                },
+                "control_of_error": "The fixed length of the subtraction strip board, the ten-bar exchange, and the control chart let a wrong difference show itself as a mismatch the child sees and corrects without an adult's verdict.",
+                "abstraction_pathway": "From taking through ten with the bead bars (the strategy felt as a real exchange in the hand), to recording on the stamp game, toward solving teen subtraction by think-addition with no material at all.",
+                "extensions": [
+                    "Work longer subtraction problems on the strip board and the stamp game",
+                    "Build the teen fact families with the bead bars and find the doubles among them",
+                ],
+                "observation_focus": "Watch for the child taking through ten or thinking the addition rather than counting back, and for free, repeated return to the subtraction work.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave two dice, dominoes, and a deck of cards within reach for free play with teen numbers",
+                    "Keep a coin jar and board games with scoring past ten accessible",
+                    "Cook or bake together where pieces past ten are eaten or taken away",
+                ],
+                "real_world_contexts": [
+                    "Eating some of a group of more than ten things and counting what is left",
+                    "Comparing two scores or two collections and asking how many more",
+                    "Spending coins and counting the change that remains",
+                    "Counting the days left until an awaited event",
+                ],
+                "conversation_starters": [
+                    "You had seventeen and ate eight. How many are left now?",
+                    "You know eight and eight are sixteen. Could that help you take eight from sixteen?",
+                    "You have fourteen and I have six. How many more do you have than me?",
+                ],
+                "resource_bank": [
+                    "Dice, dominoes, and playing cards kept available, not assigned",
+                    "Board games with two-digit scoring",
+                    "A coin jar and real money",
+                    "Math picture books left on a low shelf",
+                ],
+                "parent_role": "Notice the daily moments of taking away and comparing past ten, snacks, scores, coins, and count what is left or how many more aloud with the child. Show how a known addition fact answers a subtraction, and let games and real life build the facts rather than a drill.",
+                "observation_documentation": "Over time, note whether the child thinks the addition or counts back, which teen facts they simply know, whether they handle how-many-more comparisons, and whether they see subtraction and addition as two sides of one fact. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Comparison word problems: who has more?",
