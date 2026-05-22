@@ -4045,10 +4045,116 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Natural strength. Audiobooks alongside physical books. Discussion-heavy response. The child may want to retell the story aloud rather than draw or write.",
         },
         "philosophy_specific": {
-            "classical": "Read-alouds of great literature above the child's reading level. Discussion of virtue, truth, and beauty in the text. Exposure to complex language.",
-            "charlotte_mason": "THE daily practice: living books read aloud with narration as the primary response. No comprehension worksheets. The child's retelling IS the assessment.",
-            "montessori": "Child-selected books for shared reading. Response through art, drama, or construction. Follow the child's interests.",
-            "traditional": "Structured read-aloud time with comprehension questions. Written response sentences. Read-aloud log tracking books completed.",
+            "traditional": {
+                "introduction": "A read-aloud lets a child meet stories, vocabulary, and ideas richer than they could yet decode alone. During a read-aloud the child's work is to listen, think, and respond, by discussion, by drawing, or by simple writing. Today we listen to quality literature read aloud, answer questions about the text, respond to it, and make connections between the story and our own lives.",
+                "gradual_release": {
+                    "i_do": "Read a passage of quality literature aloud, modeling attentive listening: pause to wonder aloud what may happen next, answer a question about the text with a detail from it, and say plainly, this part reminds me of something in my own life.",
+                    "we_do": "Read a passage together, then answer questions about it together, draw or talk about the favorite part, and name one way the story connects to the child's experience.",
+                    "you_do": "Child listens to a read-aloud of quality literature, answers questions about the text with details, responds through discussion, drawing, or a written sentence, and makes a connection to their own life.",
+                },
+                "guided_practice": [
+                    "Answer who, where, and what-happened questions after a read-aloud",
+                    "Draw the most important scene and tell why it was chosen",
+                    "Name one way the story connects to the child's own experience",
+                ],
+                "independent_practice": [
+                    "Keep a response journal: after each read-aloud, draw and write or dictate one sentence",
+                    "Follow a chapter book over several sessions, discussing each chapter",
+                ],
+                "mastery_check": [
+                    "Answer comprehension questions about a read-aloud with specific details from the text",
+                    "Respond to a read-aloud through drawing, discussion, or writing that shows understanding",
+                    "Make a meaningful connection between the text and personal experience",
+                ],
+                "spiral_review": [
+                    "Revisit retelling a passage in order, since comprehension of a read-aloud rests on holding its events",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "A good book read aloud is a feast set before the mind. Through the reader's voice the child meets language finer, stories larger, and ideas deeper than their own decoding could yet reach. To listen well to such a book, to weigh what is true and good and beautiful in it, and to answer it with one's own thought, is to be fed by the best that has been written.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the listener's work: listen well, think upon it, and answer with your own thought",
+                        "Chant the three things to seek in a good book: what is true, what is good, what is beautiful",
+                    ],
+                    "recitations": [
+                        "Recite a memorable passage or saying drawn from a read-aloud, so its language is kept by heart",
+                    ],
+                },
+                "copywork": [
+                    "Copy a fine sentence from the read-aloud, chosen for its beauty or its truth, neatly and with care",
+                ],
+                "recitation_routine": "Begin each session by recalling and reciting from the previous read-aloud before the next portion is read, so the great books met are rehearsed cumulatively.",
+                "history_integration": "Tell that for most of history books were costly and few, and reading aloud was how a whole household shared a story, and that the practice joins the child to a long line of listeners.",
+                "read_aloud_suggestions": [
+                    "A work of great literature pitched above the child's own reading level, read aloud for its language and its ideas",
+                    "A biography or historical tale that sets a worthy life before the child",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A living book, rich in language and idea, well above the child's independent reading level, never an abridged or twaddly version",
+                ],
+                "short_lesson_flow": "Settle somewhere comfortable and read a portion of a living book aloud, with feeling and without rushing. Read it once. Then close the book and let the child narrate it back, telling what they heard. A short, warm conversation may follow if it arises naturally. Stop while the book is still longed for.",
+                "narration_prompt": "Tell me about the part of the book we just heard. What stayed with you most?",
+                "real_world_objects": [
+                    "The living book itself, a beautiful edition worth returning to",
+                    "A narration or nature notebook where the child may draw a scene from the reading",
+                ],
+                "nature_connection": "When a read-aloud touches on a bird, a tree, or a season, carry it outdoors: go and look for the very thing the book described, and note it in the nature notebook.",
+                "habit_focus": "The habit of attention: listening to a worthy book so fully that it becomes the child's own and can be told back.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A shelf of beautiful, child-selected books for shared reading",
+                    "A response shelf with drawing materials, simple writing paper, and small figures for acting out a scene",
+                    "A read-aloud response journal kept by the child",
+                    "A quiet, comfortable reading corner prepared for listening",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With examples of response: this is a connection to your own life, this is a question about the story; show me a connection to your own life; what kind of response is this?",
+                    "steps": [
+                        "The child chooses a book and the adult reads it aloud in the prepared reading corner",
+                        "After the reading, the child and adult talk about the text, the child answering and asking questions",
+                        "The child chooses how to respond, by drawing, by writing, or by acting the scene with small figures, and records it in the response journal",
+                    ],
+                },
+                "control_of_error": "The book itself is the control: a question about the text is answered by returning to the page, and the child sees when a recollection does not match what the book says. A response that wanders from the story is gently brought back to it.",
+                "abstraction_pathway": "From listening and responding with a drawing close to the page, to discussing the text and asking one's own questions, toward holding a chapter book across many sessions and responding in writing.",
+                "extensions": [
+                    "Follow a chapter book over many sessions, with a response after each chapter",
+                    "Compare two books on a like theme",
+                    "Move from drawn response toward written response in the journal",
+                ],
+                "observation_focus": "Watch for the child listening with attention, answering with details from the text, asking their own questions, and connecting the story to their own life.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a rich, varied library within reach and read aloud generously, on the couch and at bedtime",
+                    "Leave out drawing and writing materials so a child may respond to a story however they wish",
+                    "Have audiobooks playing in the car and at quiet times so good stories are always at hand",
+                ],
+                "real_world_contexts": [
+                    "Cuddling up for a read-aloud simply because the story is loved, not as a lesson",
+                    "Reading a book about cooking and then making the recipe together",
+                    "Reading about a bird or a place and then going to look for it",
+                    "A story becoming a shared family reference talked about long after the reading",
+                ],
+                "conversation_starters": [
+                    "What was your favorite part? What made you love it?",
+                    "What do you think will happen next?",
+                    "Did that remind you of anything that happened to you?",
+                    "If you could ask the author one thing, what would it be?",
+                ],
+                "resource_bank": [
+                    "A wide home library, audiobooks, and frequent library visits",
+                    "Drawing, writing, and craft materials for responding to stories",
+                    "Comfortable, inviting spots for reading together",
+                ],
+                "parent_role": "Read aloud often and with delight, choosing books above what the child can yet read alone, and follow their interests in what to read next. Talk about the stories as a real conversation rather than a quiz, and let connections to life and further exploration arise on their own.",
+                "observation_documentation": "Over time, note whether the child listens with engagement to read-alouds, talks about the text, asks questions, responds through drawing or writing, and connects stories to their own life. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Read-alouds about math concepts (counting books, shape stories) build mathematical vocabulary",
