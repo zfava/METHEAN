@@ -1719,11 +1719,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["word cards for sorting", "sentences from read-aloud books"],
             "recommended": ["parts of speech poster", "noun/verb sorting mat"],
-            "philosophy_specific": {
-                "classical": "Formal grammar instruction: noun and verb as the first two parts of speech. Definition memorized. Daily identification in sentences. Begin sentence diagramming with subject and predicate.",
-                "charlotte_mason": "Grammar caught from reading before formally taught. The child already uses nouns and verbs naturally — naming the parts confirms what they know. Keep formal grammar short and connected to real reading.",
-                "montessori": "Grammar symbols: large black triangle for noun, small red circle for verb. The child places symbols above words in sentence strips. Physical, visual, and hands-on grammar.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -1733,6 +1728,116 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Color-code nouns and verbs in sentences (blue for nouns, red for verbs). Parts of speech poster. Visual sorting mats.",
             "kinesthetic_learner": "Verb charades. Physical word card sorting. Walk around the room touching nouns. Act out verbs.",
             "auditory_learner": "Chant definitions: 'A noun names a person, place, thing, or idea!' Oral identification in sentences. Discuss word choices aloud.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Nouns and verbs are the two essential building blocks of every sentence. A noun names a person, a place, a thing, or an idea; a verb shows action or a state of being. Today we define the noun and the verb, identify them in sentences from our reading and our own writing, and sort a list of words correctly into nouns and verbs.",
+                "gradual_release": {
+                    "i_do": "Read a sentence aloud, 'The bird sang a song', and think aloud: 'bird' names a thing, that is a noun; 'song' names a thing, another noun; 'sang' shows what the bird did, that is a verb. Underline the nouns once and the verb twice.",
+                    "we_do": "Examine sentences together, asking of each word whether it names something or shows action or being, and sort a set of word cards into nouns and verbs.",
+                    "you_do": "Child identifies the nouns and verbs in a set of sentences and sorts a list of words correctly into nouns and verbs.",
+                },
+                "guided_practice": [
+                    "Name every noun in a sentence and tell whether each names a person, place, thing, or idea",
+                    "Find the verb in a sentence and tell whether it shows an action or a state of being",
+                    "Sort a mixed set of word cards into nouns and verbs",
+                ],
+                "independent_practice": [
+                    "Identify the nouns and verbs in sentences drawn from a reading passage",
+                    "Sort a list of twenty words into nouns and verbs and check the result",
+                ],
+                "mastery_check": [
+                    "Define a noun as a word that names a person, place, thing, or idea",
+                    "Define a verb as a word that shows action or a state of being",
+                    "Identify nouns and verbs in sentences and sort a word list correctly",
+                ],
+                "spiral_review": [
+                    "Review the definitions of noun and verb and find an example of each in the day's reading",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Of the eight parts of speech, the noun and the verb come first, for without them no sentence can stand. The noun gives the sentence its substance, naming the person, the place, the thing, or the very idea of which we speak; the verb gives the sentence its life, telling what that thing does or is. To know these two is to hold the frame on which all of grammar is built.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the definition of the noun: a noun is the name of a person, a place, a thing, or an idea",
+                        "Chant the definition of the verb: a verb shows an action or a state of being",
+                    ],
+                    "recitations": [
+                        "Recite that every complete sentence must contain at least one noun and one verb, the substance and the life of the thought",
+                    ],
+                },
+                "copywork": [
+                    "Copy a short, well-built sentence and mark each noun with one line beneath it and each verb with two",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the definitions of the noun and the verb before any identification work is done.",
+                "history_integration": "Tell that the parts of speech were named and ordered by the grammarians of ancient Greece and Rome, and that the noun and the verb were set first because they were judged the two without which speech cannot be.",
+                "read_aloud_suggestions": [
+                    "A passage of clear prose read aloud, the child invited to catch the naming words and the action words as they pass",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A well-written living book whose vivid nouns and strong verbs the child has met many times in reading before grammar is named",
+                ],
+                "short_lesson_flow": "Keep the lesson short, ten to fifteen minutes. The child has used nouns and verbs in speech and met them in countless living books; naming the parts only makes plain what is already known. Open a familiar book, read a sentence, and let the child point to the words that name things and the words that show action. Name them gently, noun and verb, and let the child find a few more. Stop while interest is fresh.",
+                "narration_prompt": "Tell me a sentence about something you saw today, then tell me which words in it name a thing and which word shows what happened.",
+                "real_world_objects": [
+                    "A favorite living book to draw example sentences from",
+                    "Word cards naming things and showing actions, to sort by hand",
+                    "Good lined paper and a comfortable pencil",
+                ],
+                "nature_connection": "In the nature notebook the child names what was seen with exact nouns, robin, fern, granite, and tells what it did with strong verbs, so grammar serves real observation.",
+                "habit_focus": "The habit of attention: noticing the naming words and the action words in a sentence rather than letting them slip past.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The Montessori grammar symbols: the large black triangle for the noun and the red circle for the verb",
+                    "Sentence strips and small object cards for the noun work",
+                    "Word cards and a sorting mat for nouns and verbs",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the grammar symbols: this black triangle marks a noun, a naming word, this red circle marks a verb, an action word; you place a triangle over a noun; show me a noun and a verb in this sentence.",
+                    "steps": [
+                        "The child reads a sentence strip and finds the words that name people, places, things, or ideas",
+                        "The child places the black triangle above each noun and the red circle above each verb",
+                        "The child sorts a set of word cards into nouns and verbs on the sorting mat",
+                    ],
+                },
+                "control_of_error": "The grammar symbols make any error visible: a triangle resting over an action word, or a circle over a naming word, looks plainly wrong to the child, who corrects it without being told.",
+                "abstraction_pathway": "From marking nouns and verbs with concrete symbols on sentence strips, to sorting word cards by part of speech, toward recognizing nouns and verbs in any sentence without the symbols.",
+                "extensions": [
+                    "Hunt for nouns and verbs in a printed passage and mark each with its symbol",
+                    "Match object cards to noun cards, then add an action card to make a sentence",
+                    "Sort nouns further into people, places, things, and ideas",
+                ],
+                "observation_focus": "Watch for the child distinguishing naming words from action words, placing the symbols with confidence, and beginning to name the parts of speech in everyday sentences.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep word cards and the grammar symbols, or simple colored shapes, out for whoever wants to play with them",
+                    "Leave out books, poems, and comics where vivid nouns and strong verbs can be noticed",
+                    "Offer a notebook for collecting interesting naming words and action words",
+                ],
+                "real_world_contexts": [
+                    "Following a recipe, full of action verbs: stir, pour, fold, bake",
+                    "Reading game instructions, where verbs give the commands: roll, draw, move",
+                    "Naming the exact things in the world on a walk, finch instead of bird, maple instead of tree",
+                    "Noticing strong verbs in a favorite story or song",
+                ],
+                "conversation_starters": [
+                    "'Table' names a thing: that kind of word is a noun. Can you find another?",
+                    "'Sprint' is a much stronger word than 'go'. What other action words do you know?",
+                    "Is 'run' a thing you do or a thing you have? It can be both, depending on the sentence.",
+                ],
+                "resource_bank": [
+                    "Books, comics, recipes, and game rules full of nouns and verbs",
+                    "Word cards and colored shapes for sorting and marking",
+                    "Picture dictionaries and word lists to browse",
+                ],
+                "parent_role": "Notice nouns and verbs aloud as they come up in reading, cooking, and play, naming the parts lightly without turning it into a lesson. When the child writes or tells a story, delight in a vivid noun or a strong verb, and let the child's growing pleasure in exact words carry the learning.",
+                "observation_documentation": "Over time, notice whether the child can tell a naming word from an action word, names the parts of speech when they come up, and reaches for exact nouns and strong verbs in their own writing and speech. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Identifying nouns and verbs in reading deepens comprehension: knowing the WHO and the WHAT-HAPPENED in each sentence",
