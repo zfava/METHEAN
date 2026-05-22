@@ -1196,11 +1196,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["lined paper", "sample sentences with capitalization errors to correct"],
             "recommended": ["capitalization rules reference card", "editing checklist"],
-            "philosophy_specific": {
-                "classical": "Capitalization rules memorized explicitly. Daily practice in copywork and dictation. Error correction as a formal exercise.",
-                "charlotte_mason": "Correct capitalization absorbed through copywork — the child sees correct capitals hundreds of times before rules are named. When rules are taught, they are confirming what the child already does.",
-                "montessori": "Grammar symbols and sentence analysis cards. Capitalization rules discovered through observation of patterns in reading and copywork.",
-            },
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 10},
         "accommodations": {
@@ -1210,6 +1205,115 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Color-code capital letters in models. Capitalization rules poster at the writing desk.",
             "kinesthetic_learner": "Use stamp letters — choose uppercase stamps for capitals. Physical sorting of words that need capitals vs those that don't.",
             "auditory_learner": "Say 'CAPITAL' aloud before writing each word that needs one. Chant the rules: 'Sentences, names, I — always capitalize!'",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Capital letters are signals to the reader: a new sentence begins here, or this is the name of a particular person, place, day, or month. The rules at this level are few and clear. Today we capitalize the first word of every sentence, capitalize proper nouns, always capitalize the pronoun I, and find and fix capitalization errors in sample sentences.",
+                "gradual_release": {
+                    "i_do": "Read a sentence aloud, 'on monday my friend sam and i went to denver', and think through the rules: 'On' begins the sentence, capital; 'Monday' is a day, capital; 'Sam' is a person's name, capital; 'I' is always capital; 'Denver' is a particular city, capital. Write the corrected sentence.",
+                    "we_do": "Examine sentences together, naming the rule that applies to each capital, and correct sentences that have missing or wrong capitals.",
+                    "you_do": "Child finds and corrects all capitalization errors in a set of sample sentences and names the rule behind each correction.",
+                },
+                "guided_practice": [
+                    "Circle every capital in a passage and name the rule for each one",
+                    "Correct sentences that begin with a lowercase letter or miss a proper noun",
+                    "Decide whether a word, a day, a season, a name, needs a capital and explain why",
+                ],
+                "independent_practice": [
+                    "Fix all capitalization errors in a set of sample sentences",
+                    "Write sentences that correctly use each capitalization rule",
+                ],
+                "mastery_check": [
+                    "Capitalize the first word of every sentence",
+                    "Capitalize names of people, specific places, days, and months, and always the pronoun I",
+                    "Identify and correct capitalization errors in sample sentences",
+                ],
+                "spiral_review": [
+                    "Check capitalization in copywork and in the child's own writing each day, naming the rule for each capital",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Capitalization is a small courtesy of great use: it tells the reader where each thought begins and which words name a particular person or place. The rules are few, and they are learned to be kept always: the first word of a sentence, the proper name of any person, place, day, or month, and the pronoun I, which English alone among the common pronouns honors with a capital.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the capital rule: sentence beginnings, names of people and places, days and months, and the pronoun I",
+                    ],
+                    "recitations": [
+                        "Recite that a proper noun names one particular person, place, or thing, and is always written with a capital",
+                    ],
+                },
+                "copywork": [
+                    "Copy a passage rich in proper nouns and circle each capital, naming the rule it obeys",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the capital rule and the meaning of a proper noun before any correction work begins.",
+                "history_integration": "Tell that capital letters take their name from the Latin word for head, and that the large letters once stood at the head of important passages long before the rules of today were settled.",
+                "read_aloud_suggestions": [
+                    "A well-written passage read aloud, the child later shown the same passage in print to find the capitals and name their rules",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "The living book the family is reading, full of correct capitals the child has copied many times before any rule is named",
+                ],
+                "short_lesson_flow": "Keep the lesson short, five to ten minutes. The child has copied correct capitals in copywork for a long time and already uses many of them by habit. Open a familiar living book and let the child find capitals and tell you, in their own words, why each is there. When the few rules are named, they only confirm what the child already does. Then fix a sentence or two together.",
+                "narration_prompt": "Find three capital letters on this page and tell me, for each one, why that word begins with a capital.",
+                "real_world_objects": [
+                    "A familiar living book for finding correct capitals",
+                    "A calendar, where days and months show their capitals",
+                    "Good lined paper and a comfortable pencil",
+                ],
+                "nature_connection": "In the nature notebook the child capitalizes the proper names of places visited and the months of each entry, so the rules are kept in real and worthy writing.",
+                "habit_focus": "The habit of best work: the child reviews their own writing for correct capitals before the lesson is set aside.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Sentence strip cards, some with correct capitals and some with errors to find and fix",
+                    "Word sorting cards for common nouns and proper nouns",
+                    "Small letter cards or stamps for placing capitals, and lined paper",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With common and proper noun cards: 'park' is a common noun and stays lowercase, 'Yellowstone' is a proper noun and takes a capital; you sort these cards; show me a common noun and a proper noun.",
+                    "steps": [
+                        "The child sorts noun cards into common nouns, which stay lowercase, and proper nouns, which take a capital",
+                        "The child examines sentence strips and marks where each capital belongs, naming the rule for each",
+                        "The child corrects sentence strips that carry capitalization errors and writes a few correct sentences",
+                    ],
+                },
+                "control_of_error": "The error-bearing sentence strips can be checked against matching correct strips, so the child confirms each correction without being told.",
+                "abstraction_pathway": "From sorting concrete noun cards into common and proper, to marking capitals on sentence strips, toward applying the capitalization rules in the child's own writing.",
+                "extensions": [
+                    "Collect proper nouns from the child's own life, names, places, days, and write each with its capital",
+                    "Sort a mixed set of words by whether they need a capital and why",
+                    "Hunt for capitals in a printed passage and name the rule for each",
+                ],
+                "observation_focus": "Watch for the child distinguishing common from proper nouns, beginning sentences with capitals by habit, and capitalizing the pronoun I wherever it appears.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep paper, pencils, and a calendar where the child can see days and months written with capitals",
+                    "Leave out books, signs, and labels where correct capitals can be noticed",
+                    "Offer a notebook for the child's own writing, notes, and lists",
+                ],
+                "real_world_contexts": [
+                    "Writing a name on belongings, schoolwork, and cards, a name always takes a capital",
+                    "Writing the date, with its capitalized day and month, on a letter or a drawing",
+                    "Addressing an envelope to a particular person in a particular town",
+                    "Reading street signs, shop names, and book titles and noticing the capitals",
+                ],
+                "conversation_starters": [
+                    "Why do you think 'Monday' gets a big letter but 'day' does not?",
+                    "Your name starts with a capital wherever it sits: want to know why?",
+                    "I wrote 'i went to the store'. Does anything look not quite right?",
+                ],
+                "resource_bank": [
+                    "A calendar, books, signs, and maps where capitals appear naturally",
+                    "Paper, cards, and envelopes for real writing",
+                    "A simple list of the few capital rules to glance at when wanted",
+                ],
+                "parent_role": "Point out capitals in the world as they come up, on signs, on the calendar, in the child's own name, and answer the why behind each one simply. When the child writes, welcome their work first, then offer a gentle look for capitals on names, sentence beginnings, and the word I, treating it as polishing rather than correcting.",
+                "observation_documentation": "Over time, notice whether the child begins sentences with capitals, capitalizes names and the word I by habit, and can say why a particular word is capitalized. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Noticing capitals while reading reinforces the rules: 'Why is that word capitalized? Oh, it's the start of a sentence / a name.'",
