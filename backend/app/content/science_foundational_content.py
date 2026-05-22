@@ -398,11 +398,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["collection of natural objects for sorting", "pictures of living and nonliving things"],
             "recommended": ["magnifying glass for close observation", "poster board for living/nonliving display"],
-            "philosophy_specific": {
-                "classical": "Classification as the first great act of scientific thinking. Memorize the characteristics of life. Systematic sorting with proper vocabulary.",
-                "charlotte_mason": "Nature walks to observe living and nonliving things in their natural setting. The child discovers the difference through direct observation before formal definitions.",
-                "montessori": "Nomenclature cards: living and nonliving things with photographs. Sorting trays for physical classification. Real specimens (plants, shells, rocks) for hands-on exploration.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -412,6 +407,117 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Sorting mats with clear labels. Photographs of living and nonliving things. Color-coded categories.",
             "kinesthetic_learner": "Handle real objects. Nature walk collecting. Physical sorting into piles or trays.",
             "auditory_learner": "Discuss each item: 'Is this alive? How do you know?' Verbal reasoning is the primary assessment mode.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "One of the first great questions in science is: what makes something alive? Living things share characteristics, they grow, they reproduce, they need food and water, and they respond to their environment. Today we list the characteristics of life, sort objects into living and nonliving with explanations, and reason carefully through tricky cases like a dead leaf or a moving cloud.",
+                "gradual_release": {
+                    "i_do": "Hold up a leaf and a stone and think aloud: I check each against the characteristics of life, does it grow, reproduce, need food and water, respond to its surroundings. The stone meets none; the leaf, and the tree it came from, meets them all. Show plainly that a dead leaf was once living, while a stone never was.",
+                    "we_do": "Check several objects against the characteristics of life together, sorting them into living, once-living, and never-living, and working through a tricky case as a pair.",
+                    "you_do": "Child sorts a set of objects into living and nonliving, explains each choice by the characteristics of life, and reasons through a tricky case.",
+                },
+                "guided_practice": [
+                    "Check objects against the four characteristics of life and sort them",
+                    "Sort a nature-walk collection into living, once-living, and never-living",
+                    "Reason through tricky cases: fire, a cloud, a seed, a dead leaf",
+                ],
+                "independent_practice": [
+                    "Sort ten objects into living and nonliving and write the reason for each",
+                    "Make a living and nonliving poster with labeled drawings",
+                ],
+                "mastery_check": [
+                    "List at least four characteristics of living things",
+                    "Sort ten objects correctly into living and nonliving with explanations",
+                    "Reason correctly through a tricky case and explain it",
+                ],
+                "spiral_review": [
+                    "Revisit careful observation, since deciding what is alive depends on observing what a thing really does",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "To bring order to the living world, the mind must first divide it: what is alive, and what is not. This was among the earliest acts of natural philosophy. The living are marked by sure signs, they grow, they bring forth their own kind, they take nourishment, and they answer their surroundings. To know these signs is to hold the first key of all the study of life.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the characteristics of life: the living grow, the living reproduce, the living need food and water, the living respond to their world",
+                        "Chant the three kinds: the living, the once-living, and the never-living",
+                    ],
+                    "recitations": [
+                        "Recite that movement alone does not mark life, for fire and rivers move, and that a thing is living only if it bears all the signs of life",
+                    ],
+                },
+                "copywork": [
+                    "Copy the characteristics of living things, neatly listed, and beside each an example",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the characteristics of life before any new sorting or classifying.",
+                "history_integration": "Tell that the ordering of the world into the living and the nonliving, and the living into their kinds, is the oldest work of natural philosophy, and that scholars have sought the true marks of life since the most ancient times.",
+                "read_aloud_suggestions": [
+                    "A passage of natural history that describes a living creature going about the business of life, read aloud so the child hears the characteristics of life at work",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A living book of natural history that shows real creatures and plants living their lives, with true artwork and never a workbook",
+                ],
+                "short_lesson_flow": "Take a nature walk and let the child gather what catches their eye, leaves, stones, an acorn, a feather. Back home, sort the basket calmly into things that are or were alive and things that never lived, talking it over. Let the child's own noticing of how living things behave lead the way, before any formal list. Stop while interest holds.",
+                "narration_prompt": "Tell me how you sorted your basket. How could you tell which things were alive, or had once been alive?",
+                "real_world_objects": [
+                    "A nature-walk basket of leaves, stones, acorns, feathers, and shells",
+                    "A growing houseplant and a family pet, living things to watch",
+                    "A nature notebook for drawing the living and the nonliving",
+                ],
+                "nature_connection": "Out of doors the child meets living things going about their lives, a bird feeding, a plant turning to the light, an ant carrying a crumb, and sees the characteristics of life in action, not as a list but as a truth observed.",
+                "habit_focus": "The habit of attention: watching a creature or a plant long enough to see that it grows, feeds, and answers its world.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Living and nonliving classification cards with clear photographs",
+                    "Sorting trays for the physical classification of objects",
+                    "Real specimens: a growing plant, shells, rocks, a feather, an acorn",
+                    "The first of the biology nomenclature cards",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the classification cards: this is a living thing, see that it grows and feeds; show me a living thing; is this living or nonliving?",
+                    "steps": [
+                        "The child sorts real specimens and cards into living and nonliving on the sorting trays",
+                        "For each, the child checks the characteristics of life: does it grow, reproduce, feed, and respond",
+                        "The child meets the tricky cases, the once-living and the never-living, and places them with reasoning",
+                    ],
+                },
+                "control_of_error": "The classification cards and specimens are matched and verified, so a card placed in the wrong tray can be checked against the characteristics of life and against the card's own pairing, and the child corrects it themselves.",
+                "abstraction_pathway": "From sorting real, concrete specimens by what they plainly do, to classifying pictures and tricky cases by the characteristics of life, toward grasping life as a category defined by its sure signs.",
+                "extensions": [
+                    "Sort the living things further into plants and animals",
+                    "Care for a living plant or creature, meeting its needs as a study of life",
+                    "Investigate a tricky case in depth: is a seed alive, is a virus alive",
+                ],
+                "observation_focus": "Watch for the child checking all the characteristics of life rather than relying on movement alone, and reasoning calmly through the once-living and never-living cases.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a basket for nature-walk treasures, the living, the once-living, and the never-living",
+                    "Have a houseplant or pet the child can help tend",
+                    "Leave out nature books and a magnifying glass for close looking",
+                ],
+                "real_world_contexts": [
+                    "Caring for a pet or a plant and meeting its real needs for food, water, and care",
+                    "Noticing on a walk what is alive, what was once alive, and what never lived",
+                    "Wondering at the kitchen: which of our foods came from living things",
+                    "Talking about tricky cases as they come up: is fire alive, is a seed alive",
+                ],
+                "conversation_starters": [
+                    "Is this alive? How can you tell?",
+                    "A fire grows and moves, does that make it alive? What is it missing?",
+                    "This leaf fell off the tree, is it living or nonliving now?",
+                ],
+                "resource_bank": [
+                    "A pet or houseplant to care for and observe",
+                    "Nature books and field guides",
+                    "The whole out-of-doors, full of the living and the nonliving",
+                ],
+                "parent_role": "Let the question of what is alive arise from real life, from caring for a pet, from a found feather, from a fire in the hearth, and wonder it through together. Welcome the child's reasoning about tricky cases, and let real living things, watched and tended, do the teaching.",
+                "observation_documentation": "Over time, note whether the child tells living from nonliving, names the characteristics of life, and reasons through tricky cases like dead things, fire, and seeds. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Living/nonliving vocabulary builds reading comprehension in science texts: organism, reproduce, respond, environment",
