@@ -5261,10 +5261,115 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Read aloud. Retell in own words. State question before solving.",
         },
         "philosophy_specific": {
-            "classical": "Applied logic. Identify operation before computing.",
-            "charlotte_mason": "Real stories, real numbers from the child's own life.",
-            "montessori": "Story problems with golden bead material.",
-            "traditional": "Graded worksheets. Key word strategy.",
+            "traditional": {
+                "introduction": "A word problem is a math story. To solve it, the child reads the story, finds the numbers and the action, decides whether things are being joined together, draws a picture of what is happening, and writes a number sentence with a plus and an equals sign. When groups are put together, the story calls for addition.",
+                "gradual_release": {
+                    "i_do": "Read an addition story aloud, then act it out with counters. Think aloud: here are the numbers, here things are being joined, so I add. Draw a picture of the two groups, write the number sentence with plus and equals, and check the answer by counting the picture.",
+                    "we_do": "Read a word problem together, find the key numbers and the joining action, draw the picture, write the number sentence, solve it, and check by counting.",
+                    "you_do": "Child reads an addition word problem, identifies the key information, draws a picture, writes a number sentence, and solves it.",
+                },
+                "guided_practice": [
+                    "Act out addition stories with counters or toys",
+                    "Underline or name the key numbers and the joining action in a problem",
+                    "Draw a picture for a word problem and write its number sentence",
+                ],
+                "independent_practice": [
+                    "Solve addition word problems by drawing a picture and writing the number sentence",
+                    "Write an addition word problem of your own and solve it",
+                ],
+                "mastery_check": [
+                    "Solve a single-step addition word problem within twenty",
+                    "Draw a picture that matches the problem",
+                    "Write a correct addition number sentence with plus and equals",
+                ],
+                "spiral_review": [
+                    "Revisit addition facts within twenty, the computation the word problem rests on",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Number is not only counted, it is reasoned with. A word problem sets a small story before the mind and asks a question of it. The reasoner must read with care, find what is given and what is asked, see that two groups are being joined, and so know that the answer is found by adding. To solve it is to turn a story into a number sentence.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the steps: read the story, find the numbers, name the action, write the sentence, and check",
+                        "Chant the sign of joining: when groups are put together, we add, and the answer is the whole",
+                    ],
+                    "recitations": [
+                        "Recite that to add is to join groups together, and that the number sentence tells the story in the language of number",
+                    ],
+                },
+                "copywork": [
+                    "Copy a word problem and the number sentence that solves it, neatly, one beneath the other",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the steps of solving a word problem before any new problem is met.",
+                "history_integration": "Tell that word problems are very old, that the arithmetic of merchants and builders was always set as stories of real goods and real needs, and that to reason from a story to a number is an ancient and useful art.",
+                "read_aloud_suggestions": [
+                    "A story in which amounts are gathered or combined, read aloud so the child hears a real question of how many altogether",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated story or counting book in which things are gathered together, with real artwork and never a worksheet",
+                ],
+                "short_lesson_flow": "Take a real, small situation, perhaps apples gathered into a basket, and tell it as a little story with true numbers. Let the child act it out with the real things, draw what happened, and say the number sentence. Keep the numbers honest and the lesson short and calm. Stop while interest holds.",
+                "narration_prompt": "Tell me the story of the problem in your own words. What was being put together, and how many were there altogether?",
+                "real_world_objects": [
+                    "Real things to gather and count: apples, acorns, blocks, beads",
+                    "A basket or bowl into which two groups are joined",
+                    "The child's own day, full of real moments of more arriving",
+                ],
+                "nature_connection": "Outdoors, gather things into two small groups, pinecones found by the path and pinecones found by the tree, and ask the real question of how many were gathered altogether.",
+                "habit_focus": "The habit of attention: reading a story closely enough to know truly what it asks.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The golden bead material for representing the quantities in a story",
+                    "Counters and small objects for acting a problem out",
+                    "Word problem cards the child may read and choose",
+                    "Paper for drawing the problem and writing the number sentence",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a problem acted in beads: this is the joining, the two groups put together; show me the joining; what is happening to the groups in this story?",
+                    "steps": [
+                        "The child reads or hears a word problem and acts it out with golden beads or counters",
+                        "The child names the numbers given and sees that the two groups are being joined",
+                        "The child draws the problem and writes the number sentence, then checks the answer against the beads",
+                    ],
+                },
+                "control_of_error": "The golden beads are the control: the answer written in the number sentence must match the quantity the joined beads make, so a wrong sentence is revealed by the beads themselves.",
+                "abstraction_pathway": "From acting a story out with golden beads, to drawing the two groups, toward reading a word problem and writing its number sentence with no material at hand.",
+                "extensions": [
+                    "Solve problems with larger quantities using the golden beads",
+                    "Write original word problems for another child to act out",
+                    "Begin to meet problems that carry an extra number not needed for the answer",
+                ],
+                "observation_focus": "Watch for the child reading the whole story before reaching for an answer, and choosing addition because groups are joined rather than because numbers are present.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Let the child help with real counting and combining around the house",
+                    "Keep counters, coins, and small toys handy for acting out questions of how many",
+                    "Leave out paper for drawing and writing the math of a real situation",
+                ],
+                "real_world_contexts": [
+                    "Counting how many altogether when two groups of things are put together",
+                    "Adding up items going into the shopping cart or onto the table",
+                    "Combining scores or points in a game",
+                    "Gathering things and asking how many there are now",
+                ],
+                "conversation_starters": [
+                    "You had some, and now more have come. How many do you have altogether?",
+                    "How could you draw what just happened so we can see it?",
+                    "Can you tell me that as a math sentence, with a plus in it?",
+                ],
+                "resource_bank": [
+                    "Counters, coins, blocks, and toys for acting out",
+                    "Paper and pencils for drawing and writing",
+                    "The countless real moments of combining in daily life",
+                ],
+                "parent_role": "Notice the real moments when groups are joined and how-many-altogether is a true question, and wonder it aloud together. Let the child act it out with real things, and put the math into words and into a number sentence only as far as the child enjoys.",
+                "observation_documentation": "Over time, note whether the child makes sense of an addition story, finds the key numbers, draws or acts it out, and can express it as a number sentence. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Comprehension required for word problems",
