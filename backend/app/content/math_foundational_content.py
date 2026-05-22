@@ -6176,10 +6176,114 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Talk through: 'About 20 because this looks like two groups of ten.'",
         },
         "philosophy_specific": {
-            "classical": "Estimation as mathematical habit. Systematic benchmarking.",
-            "charlotte_mason": "Estimate everything: steps to mailbox, apples in bag.",
-            "montessori": "Estimation from concrete work. Feel for number grows.",
-            "traditional": "Estimation worksheets. Is-it-reasonable exercises.",
+            "traditional": {
+                "introduction": "Estimation is an educated guess, made using what you already know about numbers. Before counting a jar of beans, you look and judge: about ten, about twenty, about fifty. Before adding, you judge about how big the answer should be. A benchmark, a known group of ten or twenty, helps the eye judge. Estimation builds number sense and lets you check whether an answer is reasonable. Today we estimate quantities and sums, use benchmarks, and check answers for reasonableness.",
+                "gradual_release": {
+                    "i_do": "Look at a group without counting and think aloud: this looks like about two groups of ten, so about twenty. Estimate a sum: eight and nine are both near ten, so about twenty. Then count or compute and compare. Show how to ask, is this answer reasonable.",
+                    "we_do": "Estimate quantities and sums together, using a benchmark of ten, then count or add and see how close the estimate was, and check answers for reasonableness.",
+                    "you_do": "Child estimates a quantity and a sum before counting or adding, uses a benchmark, and checks whether an answer is reasonable.",
+                },
+                "guided_practice": [
+                    "Estimate a quantity using a benchmark group of ten, then count and compare",
+                    "Estimate a sum before adding, then add and compare",
+                    "Decide whether a given answer is reasonable and say why",
+                ],
+                "independent_practice": [
+                    "Estimate the count of several jars or groups, then count and see how close",
+                    "After solving problems, check each answer for reasonableness",
+                ],
+                "mastery_check": [
+                    "Estimate a quantity of ten to thirty, coming reasonably close",
+                    "Estimate a sum before adding",
+                    "Judge whether an answer is reasonable and explain why",
+                ],
+                "spiral_review": [
+                    "Revisit benchmark groups of ten and twenty, the reference points estimation leans on",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Not every question of number asks for an exact count. Often the wise answer is a judged one: about how many, about how much. Estimation is that judgment, an educated guess resting on a known measure, a benchmark of ten or twenty held in the mind. And once a sum is reckoned, estimation guards it, for it asks the steadying question: is this answer reasonable?",
+                "memory_work": {
+                    "chants": [
+                        "Chant the benchmarks: about ten, about twenty, about fifty",
+                        "Chant the guard of every answer: is this reasonable, could it truly be so",
+                    ],
+                    "recitations": [
+                        "Recite that an estimate is an educated guess, made with a benchmark, and that a good estimate is close, not exact",
+                    ],
+                },
+                "copywork": [
+                    "Copy a few estimates beside their true counts, neatly, so the eye sees how near a good estimate comes",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the benchmarks and the question of reasonableness before any new estimating.",
+                "history_integration": "Tell that before exact measure was always at hand, people lived by good estimation, judging a harvest, a flock, a journey by eye and by experience, and that the judging of about how many is an old and practical wisdom.",
+                "read_aloud_suggestions": [
+                    "A story in which a character judges an amount by eye, read aloud so the child hears estimation at work",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A beautifully illustrated book full of countable things, birds, leaves, stars, that invites the child to guess and then look, never a workbook",
+                ],
+                "short_lesson_flow": "Make estimation a small, glad habit of the day rather than a lesson. Before counting anything, the steps to the gate, the apples in the bowl, the books on the shelf, pause and guess together. Then count, and see how near the guess came. Keep it light and unhurried.",
+                "narration_prompt": "Tell me your guess before we count. What made you guess that number? How close was it?",
+                "real_world_objects": [
+                    "Everyday countable things: steps, apples, books, buttons, birds",
+                    "A jar of beans or pebbles to guess at and then count",
+                    "A known group of ten kept as a benchmark for the eye",
+                ],
+                "nature_connection": "Outdoors, estimate before counting: about how many petals on the flower, how many birds in the flock, how many steps to the big tree, then count and compare in the nature notebook.",
+                "habit_focus": "The habit of attention and of judgment: looking carefully enough to make a thoughtful guess, and being content that a good estimate is close.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Benchmark sets, a clear group of ten and a group of twenty, kept for the eye to refer to",
+                    "Estimation jars holding countable quantities",
+                    "An estimation mat for recording the guess and then the true count",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the benchmark sets: this is a group of ten, this a group of twenty; show me the group of twenty; how many is this benchmark group?",
+                    "steps": [
+                        "Look at a quantity beside the benchmark of ten and judge, without counting, about how many",
+                        "Record the estimate, then count the quantity truly",
+                        "Compare the estimate with the true count and see how near it came",
+                    ],
+                },
+                "control_of_error": "The true count is the control: after the estimate is made and recorded, the child counts the real quantity and sees plainly how close the guess was, so the material itself teaches the eye to judge better.",
+                "abstraction_pathway": "From judging a quantity beside a concrete benchmark of ten, to estimating with the benchmark only pictured in the mind, toward estimating sums and judging the reasonableness of any answer.",
+                "extensions": [
+                    "Estimate larger quantities and sums",
+                    "Keep a record of estimates and true counts and watch the estimates draw closer",
+                    "Use estimation to check the reasonableness of completed work",
+                ],
+                "observation_focus": "Watch for the child using a benchmark to judge rather than guessing wildly, and growing content that a good estimate is close, not exact.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a guessing jar filled with something countable and changed often",
+                    "Make estimating a playful part of ordinary moments",
+                    "Leave out collections worth guessing at and then counting",
+                ],
+                "real_world_contexts": [
+                    "Guessing the grocery total before reaching the checkout",
+                    "Judging about how long something will take",
+                    "Guessing how far away the park is, or how many steps to the door",
+                    "Guessing how many are in a jar, a bowl, or a basket before counting",
+                ],
+                "conversation_starters": [
+                    "About how many do you think are in there? What makes you guess that?",
+                    "Do you think this will cost closer to ten dollars or twenty?",
+                    "We got an answer of fifty. Does that seem about right to you?",
+                ],
+                "resource_bank": [
+                    "A guessing jar kept filled and changed",
+                    "The real estimating moments of shopping, cooking, and travel",
+                    "Collections of things to guess at and count",
+                ],
+                "parent_role": "Wonder aloud about about-how-many and about-how-much as real questions come up in the day, and make a glad game of guessing and then finding out. Welcome every guess, celebrate a close one, and let the child see that estimation is a useful, everyday way of thinking, not a test.",
+                "observation_documentation": "Over time, note whether the child estimates before counting, leans on benchmarks, comes reasonably close, and checks whether answers seem reasonable. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Estimating how long a book takes",
