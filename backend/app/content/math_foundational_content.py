@@ -6644,10 +6644,114 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "State rule aloud: 'My rule is SHAPE. Circles here, squares here.'",
         },
         "philosophy_specific": {
-            "classical": "Classification as foundation of systematic knowledge.",
-            "charlotte_mason": "Sort nature collections: leaves by shape, rocks by color.",
-            "montessori": "Sorting in practical life. Geometric cabinet classification.",
-            "traditional": "Sorting worksheets. Attribute block exercises.",
+            "traditional": {
+                "introduction": "Sorting is putting things into groups by what they share. Classifying is the same with a clear, stated rule. The most important question is, what is your rule. A good sorter can name the rule, keep to it through the whole sort, and then sort the same things again by a different rule. Today we sort objects by color, shape, size, and other attributes, name our rules, and sort the same collection in more than one way.",
+                "gradual_release": {
+                    "i_do": "Take a mixed collection and sort it by one attribute, all the red things together, all the blue, naming the rule aloud: my rule is color. Then gather them and sort the very same things a different way, by shape. Show plainly that the rule must hold for every object, start to finish.",
+                    "we_do": "Sort a collection together by one attribute, name the rule, check that every object obeys it, then sort the same collection again by a different attribute.",
+                    "you_do": "Child sorts a collection by an attribute, names the rule, and sorts the same objects again a different way.",
+                },
+                "guided_practice": [
+                    "Sort a collection by one attribute and name the rule",
+                    "Sort the same collection again by a different attribute",
+                    "Decide whether an object belongs in a group and say why",
+                ],
+                "independent_practice": [
+                    "Sort a collection by three different attributes in turn, naming each rule",
+                    "Sort by two attributes at once: big and red, big and blue, small and red, small and blue",
+                ],
+                "mastery_check": [
+                    "Sort a collection by at least three different attributes",
+                    "Explain the sorting rule clearly",
+                    "Sort the same collection in more than one way",
+                ],
+                "spiral_review": [
+                    "Revisit naming the attributes of objects: color, shape, and size",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "To classify is to bring order to a heap of things, and orderly knowledge begins here. The mind looks at many objects and asks, by what shall these be grouped, and having chosen, holds to that rule with discipline. Yet the same things may be ordered by another rule entirely, and the wise sorter knows that the rule is chosen, not given.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the sorter's question: by what rule shall these be grouped, color, shape, or size",
+                        "Chant the sorter's discipline: name the rule, hold the rule, and let it govern every object",
+                    ],
+                    "recitations": [
+                        "Recite that to classify is to group by a stated rule, and that one collection may be sorted truly in many ways",
+                    ],
+                },
+                "copywork": [
+                    "Copy the names of the attributes, color, shape, and size, and beside each a thing it could sort",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the attributes by which things may be sorted before any new sorting work.",
+                "history_integration": "Tell that the ordering of things into kinds is the beginning of every science, that scholars of old set the plants, the animals, and the stars each into their classes, and that all systematic knowledge rests on such sorting.",
+                "read_aloud_suggestions": [
+                    "A story or true account in which things are gathered and set in order, read aloud so the child hears classification at work",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated book about nature's variety, leaves, shells, birds, that invites the child to notice and group, never a workbook",
+                ],
+                "short_lesson_flow": "Bring in a real collection, perhaps leaves or shells gathered on a walk, and let the child handle them and group them however they wish. Ask gently, what is your rule. Then wonder together whether they could be grouped another way. Keep it calm and unhurried, and let the child's own noticing lead.",
+                "narration_prompt": "Tell me how you grouped your collection. What was your rule? Could you group it another way?",
+                "real_world_objects": [
+                    "A real collection from a nature walk: leaves, shells, stones, seed pods",
+                    "Buttons, beads, or the family's own household objects to group",
+                    "Sorting trays or small bowls to hold the groups",
+                ],
+                "nature_connection": "On a nature walk, gather one kind of thing, leaves or stones, and at home sort them by shape, by size, by color, noticing nature's variety and recording the groups in the nature notebook.",
+                "habit_focus": "The habit of attention and order: looking closely enough to see how things are alike and unlike, and arranging them with care.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Sorting trays and baskets of objects that vary by one clear attribute at a time",
+                    "Real practical-life materials, buttons, beans, spoons, to sort",
+                    "The geometric cabinet and color tablets, which classify by shape and by color",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a sorted collection: this group is sorted by color; show me a group sorted by color; by what rule is this group sorted?",
+                    "steps": [
+                        "Choose a collection and sort it by a single attribute into its groups",
+                        "Name the rule, and check that every object in each group obeys it",
+                        "Gather the collection and sort it again by a different attribute",
+                    ],
+                },
+                "control_of_error": "The collection itself is the control: an object that does not match the others in its group stands out plainly to the eye, and the child, looking, sees the misfit and moves it without being told.",
+                "abstraction_pathway": "From sorting concrete objects by one plain attribute, to sorting by two attributes at once, toward classifying by a rule chosen and named in the mind.",
+                "extensions": [
+                    "Sort by two attributes at once, and explore overlapping groups",
+                    "Classify a collection in a hierarchy, broad groups divided into smaller ones",
+                    "Sort the natural and made objects of the whole prepared environment",
+                ],
+                "observation_focus": "Watch for the child holding to one rule through a whole sort, naming it, and seeing that the same collection can be sorted truly in more than one way.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep collections the child loves, rocks, cards, toy animals, in open trays for free sorting",
+                    "Leave out bowls, trays, and bins that invite grouping",
+                    "Let the child take part in the real sorting work of the household",
+                ],
+                "real_world_contexts": [
+                    "Sorting the laundry into whites and colors",
+                    "Putting toys away into bins by type",
+                    "Sorting the recycling, the cutlery drawer, or a button jar",
+                    "Organizing a collection: cards, stickers, rocks, figures",
+                ],
+                "conversation_starters": [
+                    "How did you decide which things go together? What is your rule?",
+                    "Could you sort these a completely different way?",
+                    "Does this one belong in this group? Why, or why not?",
+                ],
+                "resource_bank": [
+                    "The child's own collections, kept where they can be sorted freely",
+                    "Trays, bowls, and bins for grouping",
+                    "The real sorting tasks of everyday life",
+                ],
+                "parent_role": "Welcome the child into the real sorting work of the home, and notice aloud the many ways a thing could be grouped. Ask about the child's rule with genuine curiosity, and let their own collections and their own logic, rather than a worksheet, be where sorting is practiced.",
+                "observation_documentation": "Over time, note whether the child sorts by various attributes, holds to a rule through a whole sort, can say what the rule is, and sees that one collection may be grouped in many ways. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Sorting words by beginning sound or family",
