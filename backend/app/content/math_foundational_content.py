@@ -3880,10 +3880,115 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Shape songs. Verbal property descriptions.",
         },
         "philosophy_specific": {
-            "classical": "Memorize names, properties, definitions. Geometry vocabulary.",
-            "charlotte_mason": "Find shapes in nature and architecture. Draw from life.",
-            "montessori": "Geometric cabinet. Metal insets. Constructive triangles.",
-            "traditional": "Shape worksheets. Draw and label exercises.",
+            "traditional": {
+                "introduction": "A flat shape is two-dimensional: it has sides and corners but no thickness. Today we learn five shapes by name (circle, square, rectangle, triangle, hexagon), describe each by counting its sides and vertices (corners), find them in the world around us, and learn that a flat shape drawn on paper is not the same as a solid object you can hold.",
+                "gradual_release": {
+                    "i_do": "Hold up each shape, name it, and trace its sides and corners aloud: a triangle has three sides and three vertices. Show that a square turned on its corner is still a square, since orientation does not change a shape. Hold a flat paper circle beside a ball and name one flat and one solid.",
+                    "we_do": "Sort shape cards by name together, count the sides and vertices of each, and sort a tray of objects into flat shapes and solid objects.",
+                    "you_do": "Child names all five shapes on sight, states the sides and vertices of each, finds an example of each in the room, and tells whether an object is a flat shape or a solid.",
+                },
+                "guided_practice": [
+                    "Sort shape cards by number of sides",
+                    "Count the sides and vertices of each shape and write the numbers",
+                    "Go on a shape scavenger hunt and name the shape of each object found",
+                ],
+                "independent_practice": [
+                    "Draw and label each of the five shapes with its number of sides and vertices",
+                    "Sort a set of objects into flat shapes and solid objects",
+                ],
+                "mastery_check": [
+                    "Name all five shapes on sight regardless of their orientation",
+                    "State the number of sides and vertices for each shape",
+                    "Tell whether a given object is a flat shape or a solid object",
+                ],
+                "spiral_review": [
+                    "Revisit counting to six, which underlies counting the sides and vertices of each shape",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Long before there were numbers on a page, people saw shapes in the world and gave them names. The circle has no corner at all; the triangle has three; the square and rectangle have four; the hexagon has six. To know a shape is to know its name and to know how many sides and corners it carries.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the shapes and their sides: circle none, triangle three, square four, rectangle four, hexagon six",
+                        "Chant the corners: a triangle three corners, a square four corners, a hexagon six corners",
+                    ],
+                    "recitations": [
+                        "Recite the five shape names in order, and recite that a flat shape has sides and corners while a solid object has faces you can hold",
+                    ],
+                },
+                "copywork": [
+                    "Copy each shape's name beside its number of sides, neatly, so the name and the count are joined in the hand",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the five shapes and their side counts before any new work; the shape names are rehearsed cumulatively.",
+                "history_integration": "Tell that builders of long ago used these same shapes in arches, towers, and tiled floors, and that the study of shapes, geometry, is one of the oldest studies of all.",
+                "read_aloud_suggestions": [
+                    "A well-illustrated book that names shapes in the world, read aloud for its language and pictures",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 12,
+                "living_book_suggestions": [
+                    "A beautifully illustrated picture book that finds shapes in nature and architecture, with real artwork and never a worksheet",
+                ],
+                "short_lesson_flow": "Step outside or walk through the house with no rush. Look closely at one thing at a time: a round plate, a rectangular window, a triangular roof gable. Name the shape, count its sides and corners together, and notice whether it is flat or solid. Stop while the looking is still a pleasure.",
+                "narration_prompt": "Tell me about the shapes you found today. Which one had no corners at all?",
+                "real_world_objects": [
+                    "A round clock face and a round plate",
+                    "A rectangular door and a rectangular book",
+                    "A triangular roof gable or sign",
+                    "A hexagonal tile or pencil",
+                ],
+                "nature_connection": "Look for shapes in nature: the round face of a flower, the hexagon of a honeycomb cell, the triangle of a fir tree, and draw one carefully from life in the nature notebook.",
+                "habit_focus": "The habit of attention: looking long enough at a real thing to see its true shape, its sides, and its corners.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The geometric cabinet with its framed shape insets",
+                    "Shape cards in solid, thick-outline, and thin-outline forms for matching",
+                    "A basket pairing flat shapes with solid objects, a circle card with a ball and a square card with a cube",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the geometric cabinet insets: this is a triangle; show me the triangle; what is this shape?",
+                    "steps": [
+                        "Take an inset from the cabinet, feel its outline with two fingers, and name it",
+                        "Trace each side and each corner with a finger while counting them",
+                        "Match the inset to its shape card, then sort flat shape cards from solid objects",
+                    ],
+                },
+                "control_of_error": "Each geometric cabinet inset fits only its own frame, so a wrong shape will not seat; the matching cards likewise pair one to one, showing the child any mistake without a word from the adult.",
+                "abstraction_pathway": "From feeling the framed insets with the fingers, to matching them to thick-outline and then thin-outline cards, toward naming a flat shape on sight and telling it from a solid object.",
+                "extensions": [
+                    "Build shapes with the constructive triangles to see how shapes are composed",
+                    "Find and name the shapes of objects throughout the room and home",
+                    "Sort a collection into flat shapes and solid objects",
+                ],
+                "observation_focus": "Watch for the child tracing sides and corners with the finger, naming shapes regardless of orientation, and beginning to separate flat shapes from solid objects.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave out pattern blocks or shape tiles for free building",
+                    "Set out a basket of household objects of varied shapes to handle and sort",
+                    "Keep paper and a tray of round, square, and triangular things to trace",
+                ],
+                "real_world_contexts": [
+                    "Naming the shapes of road signs, windows, and tiles while out and about",
+                    "Noticing the shapes in a building's bricks, arches, and roof",
+                    "Cutting food into shapes, a sandwich into triangles or rectangles",
+                    "Spotting hexagons in a honeycomb or on a soccer ball",
+                ],
+                "conversation_starters": [
+                    "What shape is that sign? How many sides does it have?",
+                    "Is a circle a shape with corners? Why not?",
+                    "This shape is flat on the paper, but this ball is not flat. How are they different?",
+                ],
+                "resource_bank": [
+                    "Pattern blocks and shape tiles kept available",
+                    "Picture books that find shapes in the world",
+                    "Paper, scissors, and household objects of many shapes for tracing and sorting",
+                ],
+                "parent_role": "Name shapes as they come up in real life, on signs, in buildings, and in food, and wonder aloud about sides and corners. Follow the child's noticing rather than drilling, and let real objects show the difference between a flat shape and a solid thing.",
+                "observation_documentation": "Over time, note whether the child names the five shapes, counts their sides and corners, finds them in the world, and tells a flat shape from a solid object. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Shape words as vocabulary",
