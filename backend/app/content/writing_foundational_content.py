@@ -2516,11 +2516,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["quality read-aloud book", "lined paper for copying", "a patient parent-scribe"],
             "recommended": ["narration journal notebook", "narration growth tracker"],
-            "philosophy_specific": {
-                "classical": "Narration as the classical bridge from listening to composing. The child's oral composition is transcribed and becomes the model for copywork. This develops composition skills years before formal essay writing.",
-                "charlotte_mason": "Narration-to-dictation IS Charlotte Mason's core writing method for young children. One reading, narration, transcription, copy. The child never writes independently until they can compose orally with quality. This is THE method.",
-                "montessori": "The child dictates stories and observations to the teacher. Transcribed stories become the child's reading material. The movable alphabet allows the child to 'write' before handwriting is fluent.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -2530,6 +2525,115 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Seeing their spoken words on paper is the core visual-learning moment. Use the transcription as a reading passage too — the child reads what they composed.",
             "kinesthetic_learner": "The copy step is physical writing. Allow the child to pace while narrating. The variety of activities (listening, speaking, watching, writing) provides natural movement breaks.",
             "auditory_learner": "The entire process is auditory at its heart: listening, speaking, hearing the transcription read back. This is a natural strength method for auditory learners.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Narration to dictation bridges speaking and writing: the parent reads a passage, the child narrates it back, the parent transcribes the narration exactly as spoken, and the child copies it. This lets the child compose at their speaking level while practicing handwriting on words that are truly their own. Today we narrate a passage in sequence after one reading, have it transcribed, and copy it carefully.",
+                "gradual_release": {
+                    "i_do": "Read a short passage aloud once, then model a narration: tell back the events in order, in complete sentences. Show the four steps: read, narrate, the parent writes it down, the child copies.",
+                    "we_do": "Work through the cycle together: read a passage, the child narrates, the parent transcribes exactly, and together we read the transcription before the child copies it.",
+                    "you_do": "Child narrates a passage in proper sequence after one reading, watches it transcribed, and copies the transcription with care.",
+                },
+                "guided_practice": [
+                    "Narrate a three to five sentence passage in order after a single reading",
+                    "Copy a transcribed narration carefully and check it against the parent's writing",
+                    "Notice one place where spoken words were tidied for writing and discuss why",
+                ],
+                "independent_practice": [
+                    "Narrate a longer passage, have it transcribed, and copy the whole narration",
+                    "Keep a narration journal of transcribed and copied narrations",
+                ],
+                "mastery_check": [
+                    "Narrate a passage in proper sequence with descriptive detail after one reading",
+                    "Copy the transcribed narration accurately and neatly",
+                    "Explain how spoken words are connected to written words through this process",
+                ],
+                "spiral_review": [
+                    "Compare a recent narration to an earlier one and name what has grown",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "This is the classical bridge from the ear to the hand. The pupil hears a worthy passage, renders it back in ordered speech of their own, and sees that speech set down as written text, which they then copy. So the labor of composing and the labor of handwriting are met one at a time, and the child learns that written language is but spoken language made to last.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the four steps: listen to the passage, narrate it back, watch it written down, then copy it",
+                    ],
+                    "recitations": [
+                        "Recite that writing is speech made lasting, and that a narration well told may be set down and kept",
+                    ],
+                },
+                "copywork": [
+                    "Copy the transcribed narration carefully, the words being the child's own ordered thought made permanent",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the four steps of narration to dictation before the passage is read.",
+                "history_integration": "Tell that many great works of the past were first spoken and then written down by a scribe, and that the dictation of composed thought to a faithful hand is an ancient and honored practice.",
+                "read_aloud_suggestions": [
+                    "A short passage of fine, well-ordered prose, read aloud once with care, as the narration's source",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A living book of real literary worth, read aloud as the single source for the day's narration",
+                ],
+                "short_lesson_flow": "Keep the lesson short, ten to fifteen minutes. This is the Charlotte Mason method itself: read a passage aloud one time only, then the child narrates it back in their own words. Write the narration down exactly as the child speaks it, every word as said. Read it back so the child hears their own words as text. The child then copies it. The child does not write independently until they can narrate with quality.",
+                "narration_prompt": "I will read this once. Then tell me everything you remember, in your own words and in the order it happened.",
+                "real_world_objects": [
+                    "A worthy living book for the read-aloud",
+                    "A narration notebook where transcriptions are kept and copied",
+                    "Good lined paper and a comfortable pencil",
+                ],
+                "nature_connection": "The child narrates a nature walk or a passage of nature writing, and the transcription, copied into the notebook, joins narration to the habit of close observation.",
+                "habit_focus": "The habit of attention: listening to a passage once, with full attention, knowing it will be told back.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The movable alphabet, so the child can compose words before handwriting is fluent",
+                    "A read-aloud book and a notebook for transcribed narrations",
+                    "Lined paper for copying the transcription",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the movable alphabet and the cycle: we listen, we tell it back, it is written, we copy it; you tell back what you heard; show me your words written and then copied.",
+                    "steps": [
+                        "The child listens to a passage read once and narrates it back in proper sequence",
+                        "The parent transcribes the narration exactly, or the child composes parts with the movable alphabet",
+                        "The child copies the transcription onto lined paper, seeing their own thought as written text",
+                    ],
+                },
+                "control_of_error": "The transcription is the model for the copy, so the child sets the copy beside it and finds any difference; and a narration out of sequence is plainly confusing when read back, prompting the child to retell it.",
+                "abstraction_pathway": "From narrating aloud and composing with the movable alphabet, to copying the transcribed narration, toward writing one's own narrations directly once handwriting is fluent.",
+                "extensions": [
+                    "Compose a short narration with the movable alphabet before copying it by hand",
+                    "Build a notebook of transcribed and copied narrations to read again",
+                    "Move toward writing a sentence of the narration independently before copying the rest",
+                ],
+                "observation_focus": "Watch for the child narrating in sequence, copying the transcription with care, and beginning to connect their spoken words to the written text they produce.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Read aloud often from books the child loves and welcome their retellings",
+                    "Offer to write down the child's stories and narrations whenever they want them kept",
+                    "Leave the transcribed narrations where the child can read and reread their own words",
+                ],
+                "real_world_contexts": [
+                    "Telling back a favorite scene from a read-aloud and seeing it written down",
+                    "Dictating a story or a letter for a parent to type or write",
+                    "Retelling a film, a trip, or an event to someone who wants to hear it",
+                    "Reading aloud their own transcribed words later, as their own book",
+                ],
+                "conversation_starters": [
+                    "Want me to write that down so you can keep it?",
+                    "Tell it back to me in your own words: I will be your scribe.",
+                    "Look, these are exactly your words, written down. Do you want to copy any of them?",
+                ],
+                "resource_bank": [
+                    "A rich shelf of read-aloud books",
+                    "A willing scribe, a parent or a voice-to-text tool",
+                    "Notebooks where the child's narrations are kept",
+                ],
+                "parent_role": "Read aloud generously and offer to be the child's scribe, writing their narrations exactly as spoken, with delight rather than correction. Let the child see their own told words become text, and let copying or keeping those words be an invitation, taken up when the child wants their story to last.",
+                "observation_documentation": "Over time, notice whether the child retells what they hear in sequence and detail, enjoys seeing their words written down, and connects spoken language to written language. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "The child reads their own transcribed narration — they authored it, so comprehension is guaranteed. This builds reading confidence.",
