@@ -4870,10 +4870,117 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Discuss new words in conversation. Use new words in sentences aloud. Word games played verbally: 'Give me another word for...'",
         },
         "philosophy_specific": {
-            "classical": "Systematic vocabulary instruction with Latin roots, prefixes, and suffixes. Word lists organized by root family. Copywork with rich vocabulary.",
-            "charlotte_mason": "Vocabulary absorbed through living books and quality conversation. No isolated word lists — words learned in the context of beautiful writing. Narration naturally reveals whether new words are being absorbed.",
-            "montessori": "Nomenclature cards with three-part matching (word, definition, picture). Word study as a choice work activity. Classified reading cards by topic.",
-            "traditional": "Weekly vocabulary lists with definitions, sentences, and tests. Dictionary skills. Vocabulary workbooks with context clue exercises.",
+            "traditional": {
+                "introduction": "Vocabulary is the fuel of reading: the more words a child knows, the more they understand. New words need not be looked up one by one. A reader can often unlock a hard word by the clues around it, by the picture on the page, or by the family of words it belongs to. Today we use context clues and illustrations to figure out unfamiliar words, sort words into categories of shared meaning, and put new words to use in our own speech.",
+                "gradual_release": {
+                    "i_do": "Read a sentence with a hard word and think aloud: the dog was famished after missing two meals, so famished must mean very hungry, the surrounding words told me. Use a picture as a clue. Sort a few words into a meaning group, then use a new word in a sentence of my own.",
+                    "we_do": "Meet unfamiliar words together: figure out each from the sentence around it or the picture, sort word cards into categories, and make sentences using new words.",
+                    "you_do": "Child uses context clues and illustrations to determine an unfamiliar word's meaning, sorts words into meaningful categories, and uses three or more newly learned words accurately within a week.",
+                },
+                "guided_practice": [
+                    "Read sentences with unfamiliar words and use the surrounding words as clues",
+                    "Use a book's pictures to help unlock the meaning of an unknown word",
+                    "Sort word cards into categories of shared meaning",
+                ],
+                "independent_practice": [
+                    "Keep a word journal: each new word with a kid-friendly meaning and a picture or sentence",
+                    "Use newly learned words in conversation and writing across the week",
+                ],
+                "mastery_check": [
+                    "Use context clues to determine the meaning of an unfamiliar word in a passage",
+                    "Sort words into meaningful categories and explain the groupings",
+                    "Use three or more recently learned words accurately within a week",
+                ],
+                "spiral_review": [
+                    "Revisit reading for meaning, since context clues depend on understanding the sentence around the word",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Words are the coin of thought: the richer a child's store of words, the more finely they can think and speak. Many words are kin, built from the same root, and to know one is to hold a key to its whole family. To weigh the words around an unknown one, and so divine its meaning, is an art the careful reader practices all their life.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the reader's question for a hard word: what do the words around it tell, and what does the picture show",
+                        "Chant a small family of words built from one root, hearing the meaning they share",
+                    ],
+                    "recitations": [
+                        "Recite the meanings of new words learned, with a sentence for each, reviewing earlier words cumulatively",
+                    ],
+                },
+                "copywork": [
+                    "Copy a fine sentence that holds a new word, so the word is kept in the hand with the context that explains it",
+                ],
+                "recitation_routine": "Begin each lesson by reciting words learned before and using each in a sentence, so the growing store of words is rehearsed cumulatively.",
+                "history_integration": "Tell that very many English words descend from older tongues, Latin and Greek, and that a single root, carried down the centuries, can be found living inside a whole family of words used today.",
+                "read_aloud_suggestions": [
+                    "A book written in rich, well-chosen language, read aloud so the ear meets fine words in their natural setting",
+                    "A story whose context makes a new word's meaning plain, read aloud and paused upon",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A living book written in rich, beautiful, undumbed-down language, the best soil for new words to be met in",
+                ],
+                "short_lesson_flow": "There is no separate vocabulary lesson. Read a living book aloud, and when a beautiful or unfamiliar word arrives, pause just long enough to relish it: wonder together what it means from the sentence and the picture, say it once with pleasure, and read on. The child's narration afterward will quietly show which words have been taken in.",
+                "narration_prompt": "Tell me about what we read. Was there a word you loved the sound of, or one you puzzled out?",
+                "real_world_objects": [
+                    "The living book itself, the source of words met in their true context",
+                    "A commonplace book where a child may copy a sentence holding a word worth keeping",
+                    "The real things, in the kitchen, the garden, the workshop, that new words name",
+                ],
+                "nature_connection": "On a nature walk, give the real things their true names, canopy, burrow, habitat, camouflage, so the rich word and the living thing it names are met together and remembered as one.",
+                "habit_focus": "The habit of attention: noticing words, delighting in them, and letting beautiful language be heard often enough to be absorbed.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Classified nomenclature cards, sets of word, picture, and definition cards grouped by topic",
+                    "Word category sorting cards, words to be grouped by shared meaning",
+                    "A personal word journal",
+                    "Books rich in language for self-directed reading",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the nomenclature cards: this word is enormous, see the great whale in the picture; show me the word enormous; what does this word mean?",
+                    "steps": [
+                        "The child works with a set of classified nomenclature cards, matching each word to its picture and its definition",
+                        "The child sorts word cards into categories of shared meaning and names each group",
+                        "The child meets new words in self-chosen reading, uses context and picture to unlock them, and records them in the word journal",
+                    ],
+                },
+                "control_of_error": "The nomenclature cards are the control: the word, picture, and definition match only in one way, so a mismatched card shows the child the error, and the matched set itself confirms a meaning guessed from context.",
+                "abstraction_pathway": "From matching a word to its picture and definition on the cards, to sorting words into families of shared meaning, toward unlocking a new word from context alone and carrying it into one's own speech.",
+                "extensions": [
+                    "Make classified card sets for new topics of interest",
+                    "Explore word roots and how prefixes such as un- and re- change meaning",
+                    "Use newly learned words in self-directed writing",
+                ],
+                "observation_focus": "Watch for the child using context and pictures to unlock words rather than waiting to be told, and beginning to use new words in their own speech.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a wide, varied library of books written in rich language within reach",
+                    "Leave out a word journal or notebook for words the child wants to keep",
+                    "Have a child-friendly thesaurus and picture dictionary available to browse",
+                ],
+                "real_world_contexts": [
+                    "Cooking, which brings words like simmer, whisk, fold, dice, and saute",
+                    "Nature walks, which bring words like canopy, habitat, burrow, and camouflage",
+                    "Building and fixing projects, which bring words like measure, level, fasten, and brace",
+                    "Naming feelings precisely in everyday life: frustrated, relieved, delighted, furious",
+                ],
+                "conversation_starters": [
+                    "That is an interesting word. What do you think it means? What in the sentence gives you a clue?",
+                    "Can you think of another word that means almost the same as happy?",
+                    "These words seem to go together. What makes them a family?",
+                    "You learned curious yesterday. Can you use it to tell me about something?",
+                ],
+                "resource_bank": [
+                    "A rich and varied home library and frequent library visits",
+                    "A child-friendly thesaurus and picture dictionary",
+                    "Everyday life, full of real work with its own rich words",
+                ],
+                "parent_role": "Use rich, precise words in everyday talk rather than simplifying, and expand rather than correct the child's word choices: yes, and another word for that is. Wonder aloud about interesting words as they come up, and let real conversation, real books, and real work be the place new words are met.",
+                "observation_documentation": "Over time, note whether the child unlocks unfamiliar words from context and pictures, groups words by shared meaning, and takes new words into their own speech. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Math vocabulary: sum, difference, product, quotient, equal, greater, less — specific words with precise meanings",
