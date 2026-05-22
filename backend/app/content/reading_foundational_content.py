@@ -6539,10 +6539,114 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "The oral portions (reading aloud, retelling, discussion) will be strengths. Ensure the environment is quiet for optimal listening during comprehension checks.",
         },
         "philosophy_specific": {
-            "classical": "Comprehensive skills assessment verifying mastery of phonics, fluency, and comprehension. Clear criteria for advancing to the next stage. Assessment as a gateway, not a gatekeeping tool.",
-            "charlotte_mason": "Gentle oral assessment through reading aloud and narration. No standardized tests. The parent observes: can the child read fluently? Can they narrate what they read? If yes, they are ready for the next level.",
-            "montessori": "Observation-based assessment. The child demonstrates reading competency through daily work, not through a formal test. Progress is self-paced.",
-            "traditional": "Formal assessment checklist with benchmarks. Standardized reading level testing. Progress report documenting skills mastered.",
+            "traditional": {
+                "introduction": "This is the capstone check of the foundational reading level. It is not a test to pass or fail but a careful inventory: what reading skills are solid, what still needs practice, and whether the child is ready for the developing level. We check the phonics patterns (CVC, silent-e, blends, digraphs, and vowel teams), reading accuracy on grade-level text, instant recognition of sight words, and the retelling of a passage. It should feel calm and natural, woven into an ordinary reading session.",
+                "gradual_release": {
+                    "i_do": "Explain the parts of the check warmly and without pressure, and model the warm-up by reading a short familiar passage aloud, showing what fluent, accurate reading and a clear retelling look like.",
+                    "we_do": "Begin with a comfortable warm-up together: the child reads a favorite familiar book aloud for confidence, and you talk through what each part of the check will involve so nothing is a surprise.",
+                    "you_do": "Child independently reads the phonics-pattern words, the sight words, and a grade-level passage, then retells it, while the parent quietly notes what is solid and what needs more practice.",
+                },
+                "guided_practice": [
+                    "Read a familiar book aloud as a confidence-building warm-up",
+                    "Read words covering each phonics pattern: CVC, silent-e, blends, digraphs, vowel teams",
+                    "Retell a short passage, naming characters, setting, and main events",
+                ],
+                "independent_practice": [
+                    "Read a grade-level passage aloud for accuracy and fluency",
+                    "Read the first one hundred sight words and note which are instant",
+                ],
+                "mastery_check": [
+                    "Read grade-level text with ninety percent or higher accuracy",
+                    "Recognize ninety or more of the first hundred sight words instantly",
+                    "Apply all foundational phonics patterns and retell a passage with key details",
+                ],
+                "spiral_review": [
+                    "Revisit any phonics pattern or sight words not yet solid before moving to the developing level",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Every stage of learning ends with a looking-back, a gathering-up of what has been won. This is that moment for foundational reading. It is not a trial to be feared but a gateway: a comprehensive showing of the phonics, the fluency, and the comprehension the child has built, and an honest judgment that the child stands ready to pass on to the developing level. Assessment here opens the gate; it does not bar it.",
+                "memory_work": {
+                    "chants": [
+                        "Recite again the phonics patterns mastered: CVC, silent-e, blends, digraphs, and vowel teams",
+                        "Recite the marks of a reader: to read accurately, to know the sight words, and to retell what was read",
+                    ],
+                    "recitations": [
+                        "Recite a well-loved passage learned by heart over the foundational level, the gathered fruit of the year's reading",
+                    ],
+                },
+                "recitation_routine": "Make the check itself a cumulative recitation: the child reads and retells, drawing on every skill built across the foundational level, oldest and newest together.",
+                "history_integration": "Tell that learning has always been marked by such gateways, that in older schooling a stage was completed and confirmed before the next was begun, and that to pass this gate is to join the long company of those who have learned to read.",
+                "read_aloud_suggestions": [
+                    "A worthy grade-level passage, read by the child aloud, fit to show the reading skill now won",
+                    "A fine book held ready as the first reward of the developing level to come",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A living book the child loves and knows, read aloud by the child as the gentlest possible showing of their reading",
+                    "A new and beautiful book held ready, the first of the developing level",
+                ],
+                "short_lesson_flow": "There is no formal test. On an ordinary day, simply listen as the child reads a passage of a living book aloud, and then let them narrate it. That is the whole assessment. You will hear at once whether the reading is fluent and accurate and whether the narration is full and ordered. If both are so, the child is ready; if not, you have seen exactly what to gently continue.",
+                "narration_prompt": "Read me this passage, and then tell it back to me in your own words. Who was in it, where did it happen, and what took place?",
+                "real_world_objects": [
+                    "A living book, read aloud and narrated, the gentle instrument of the whole assessment",
+                    "The child's own reading notebook or list of books read, showing the year's growth",
+                    "Print in the real world the child can now read: signs, labels, recipes, notes",
+                ],
+                "nature_connection": "Let the child read aloud a passage about the natural world and then narrate it, or read the labels in their own nature notebook, so the assessment is set in the living things they love.",
+                "habit_focus": "The habit of attention, shown now in full: the child who can read a passage and narrate it back has formed the habit on which all further learning rests.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The familiar reading materials of the foundational level, used now as the child works, not as a test",
+                    "A shelf of grade-level books for the child to choose and read",
+                    "The child's own ongoing reading record kept across the level",
+                    "Phonics word lists and sight word cards, met as ordinary work",
+                ],
+                "presentation": {
+                    "three_period_lesson": "There is no new naming here; instead the adult watches the child in the third period of every lesson long since given, recalling and applying letters, sounds, and words independently in real reading.",
+                    "steps": [
+                        "The adult prepares the environment with grade-level books and the familiar materials, and observes the child at ordinary reading work",
+                        "The adult notes which phonics patterns, sight words, and comprehension skills the child applies fluently and independently",
+                        "The adult and child review the child's reading record together and see that the foundational work is complete",
+                    ],
+                },
+                "control_of_error": "The child's own reading is the control: in real, self-chosen reading, a phonics pattern not yet secure or a sight word not yet known reveals itself plainly, with no test required, so the adult's observation rests on what the child actually does.",
+                "abstraction_pathway": "From the concrete materials of the foundational level long since internalized, the child has reached independent reading; this assessment simply confirms that the abstraction is complete and the next stage may begin.",
+                "extensions": [
+                    "Move into the developing level's reading work without delay once competence is observed",
+                    "Continue the reading record into the next stage",
+                    "Let the child set their own reading work and goals for the level to come",
+                ],
+                "observation_focus": "Watch, across the child's ordinary reading, for accurate decoding of every phonics pattern, instant sight word recognition, and full, ordered retelling, the signs that the foundational level is truly complete.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a rich and varied library, signs, menus, recipes, and notes everywhere a reader's eye can fall",
+                    "Leave out books a small step beyond the child's current ease, ready for when they reach for them",
+                    "Have the next, more challenging books quietly available for the child to discover",
+                ],
+                "real_world_contexts": [
+                    "Reading signs, labels, menus, and instructions out in the world, with no help",
+                    "Reading a recipe and following it, or reading the rules of a new game",
+                    "Choosing and reading books from the library independently",
+                    "Reading a note, a letter, or a message and writing one back",
+                ],
+                "conversation_starters": [
+                    "What are you reading these days? What do you want to read next?",
+                    "How has reading changed for you, what can you do now that you could not before?",
+                    "What do you most want to be able to read or learn about now?",
+                ],
+                "resource_bank": [
+                    "A wide home library and free, frequent library visits",
+                    "The endless print of everyday life as proof of real reading",
+                    "More challenging books kept within reach for when the child is ready",
+                ],
+                "parent_role": "There is no test. You already know your child has become a reader, because you see them read, the cereal box, the street sign, the bedtime book, the game's rules. Notice that fluency as it shows itself in real life, follow the child into harder and richer books as their own appetite grows, and trust what you have watched unfold.",
+                "observation_documentation": "Over time, simply note what the child reads in the course of real life: whether they decode unfamiliar words with ease, read signs and books and instructions independently, retell what they have read, and reach without prompting for harder books. This lived noticing, not any test, shows that the child is a reader and ready for whatever comes next.",
+            },
         },
         "connections": {
             "math": "Assessment skills transfer: self-reflection, goal-setting, and recognizing growth are the same in math and reading",
