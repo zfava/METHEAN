@@ -1626,10 +1626,113 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Emphasize the vowel sound change aloud: 'hop... hope!' Exaggerate the long vowel.",
         },
         "philosophy_specific": {
-            "classical": "Systematic CVCe instruction: master a-e words before moving to i-e, o-e, u-e. Daily drill with word cards.",
-            "charlotte_mason": "Discover the silent-e pattern in living books. Point out CVCe words during read-alouds. Short, focused lessons.",
-            "montessori": "Blue series to green series transition. CVCe word cards with matching objects. Movable alphabet for building CVCe words.",
-            "traditional": "CVCe word family lists. Fill-in-the-blank exercises. Spelling tests with CVCe words.",
+            "traditional": {
+                "introduction": "The silent e is a powerful rule. An e at the end of a word makes no sound itself; it reaches back over the consonant and makes the vowel say its name, so cap becomes cape. Today we read and spell CVCe words and learn the rule that governs them.",
+                "gradual_release": {
+                    "i_do": "Model with letter tiles: build cap, read it, then add an e tile to the end and read cape. Explain that the silent e changed the short /a/ to the long /a/, the vowel saying its name.",
+                    "we_do": "Build CVC-to-CVCe pairs together, tap and tape, pin and pine, reading both and naming what the e did. Spell a CVCe word from dictation together.",
+                    "you_do": "Child reads CVCe words, spells them from dictation, explains the silent-e rule in their own words, and compares a CVC and CVCe pair to name the vowel-sound change.",
+                },
+                "guided_practice": [
+                    "CVC-to-CVCe flip cards: read the word, add the e, read it again",
+                    "Match CVC word cards to their CVCe partners",
+                    "Read CVCe words inside simple sentences",
+                ],
+                "independent_practice": [
+                    "Read CVCe word lists and short passages",
+                    "Spell CVCe words from dictation",
+                ],
+                "mastery_check": [
+                    "Read CVCe words with all four long-vowel patterns accurately",
+                    "Spell CVCe words from dictation",
+                    "Explain the silent-e rule and name the vowel change in a CVC and CVCe pair",
+                ],
+                "spiral_review": [
+                    "Revisit short-vowel CVC reading alongside CVCe so the two patterns stay distinct",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Among the first great rules of reading is the silent e: the letter that says nothing yet changes everything, reaching back across the consonant to make the vowel say its name. Learn the rule surely, and a whole class of words opens to be read.",
+                "memory_work": {
+                    "chants": [
+                        "Chant CVC and CVCe pairs in rhythm: cap, cape; tap, tape; pin, pine",
+                        "Chant the rule: a silent e at the end makes the vowel say its name",
+                        "Chant CVCe word sets gathered by their vowel",
+                    ],
+                    "recitations": [
+                        "Recite the silent-e rule, and read CVCe word lists aloud cleanly, mastering the a-e words before the i-e, o-e, and u-e words",
+                    ],
+                },
+                "copywork": [
+                    "Copy CVCe words and CVC-to-CVCe pairs neatly while reading them, so the silent e is written as carefully as it is read",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the rule and re-reading the CVCe words learned so far before adding new ones; one vowel pattern is mastered before the next, cumulatively.",
+                "history_integration": "Tell, simply, that the silent e is a relic of older English, where that final e was once truly sounded; our spelling has kept the letter even after its sound fell away.",
+                "read_aloud_suggestions": [
+                    "A rich read-aloud for the ear, and simple readers built on the silent-e pattern for the child's own reading",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "The family's current living read-aloud and simple readers in which CVCe words appear in real, worthy sentences",
+                ],
+                "short_lesson_flow": "In a book read together, meet a CVCe word. Say it, and notice the e at the end that says nothing yet makes the vowel say its name. Compare it for a moment with a short-vowel word. Take one short turn, and stop while the child is still glad to be reading.",
+                "narration_prompt": "Tell me what the silent e did to the word we read, and another word of your own where it does the same thing.",
+                "real_world_objects": [
+                    "CVCe words on signs and store fronts, such as SALE, HOME, and BIKE",
+                    "Nature words that follow the pattern: pine, lake, stone, vine, cave",
+                    "Everyday objects whose names are CVCe words: tape, rope, bone, cube",
+                ],
+                "nature_connection": "On a nature walk, notice CVCe words for things that are found, pine, lake, vine, stone, and write one of them in the nature notebook.",
+                "habit_focus": "The habit of attentive looking: noticing the quiet e at a word's end that changes how the whole word is read.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The large movable alphabet for building CVC words and adding the silent e",
+                    "The green series CVCe word cards with their matching objects",
+                    "The blue-to-green series materials that bridge from short vowels to the silent-e pattern",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a built CVCe word and its object: this says cape; show me cape; what does this say? The word built, the change heard, and then read.",
+                    "steps": [
+                        "Build a CVC word with the movable alphabet and read it",
+                        "Add the silent e to the end and read aloud how the vowel changes to say its name",
+                        "Match the green series CVCe word cards to their objects, reading each to check",
+                    ],
+                },
+                "control_of_error": "Each green series CVCe word card has its own object or picture, so a word that does not match its pair reveals a misread to the child without an adult's word.",
+                "abstraction_pathway": "From building the CVC word and adding the e by hand (the silent-e rule made physical), to reading the green series cards, toward reading CVCe words in any book with no material.",
+                "extensions": [
+                    "Work through green series CVCe word lists and read CVCe phrases",
+                    "Spell CVCe words from the objects in the green series boxes",
+                ],
+                "observation_focus": "Watch for the child applying the silent-e rule by choice, reading the vowel long, and not sounding the final e as a separate sound.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep letter tiles within reach, including a spare e tile or a craft stick labelled e to add to words",
+                    "Leave simple readers that use CVCe words on a low shelf",
+                    "Post a few CVCe words that matter to the child where they will be seen",
+                ],
+                "real_world_contexts": [
+                    "CVCe words on signs and store names, such as SALE, HOME, and BIKE",
+                    "CVCe words in loved books and in the names of people and places",
+                    "Building and transforming CVC words into CVCe words with magnetic letters in play",
+                ],
+                "conversation_starters": [
+                    "What happens if we add an e to the end of hop?",
+                    "This word ends in e, but you do not hear it. What do you think it is doing?",
+                    "If I cover the e in cape, what word do you have now? What changed?",
+                ],
+                "resource_bank": [
+                    "Magnetic letters and letter tiles",
+                    "Simple decodable readers that include CVCe words, kept available",
+                    "Word-building games",
+                ],
+                "parent_role": "When a CVCe word comes up in real reading, point out the silent e and what it does to the vowel, and follow the words the child wants to read. Let real reading attempts do the teaching rather than a drill.",
+                "observation_documentation": "Over time, note whether the child reads CVCe words, applies the silent-e rule on their own, spells words with the silent e, and can compare a CVC and CVCe pair. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "The silent e changes value like a zero changes place value: 1 vs 10",
