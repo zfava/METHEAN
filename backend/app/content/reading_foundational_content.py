@@ -4599,10 +4599,113 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Sing nursery rhymes to melodies. Emphasize the musical quality. Listen to recorded versions and sing along.",
         },
         "philosophy_specific": {
-            "classical": "Nursery rhymes as the earliest form of memory work. Systematic memorization of the canon. Recitation as a daily practice.",
-            "charlotte_mason": "Mother Goose as a child's first literature. Rhymes learned naturally through daily repetition, not drilling. The joy of language comes first.",
-            "montessori": "Rhyme cards with illustrations. Children select rhymes to practice during circle time. Self-selected favorites for performance.",
-            "traditional": "Weekly rhyme assigned for memorization. Rhyme recitation chart tracking which rhymes the child knows. Classroom-style performance.",
+            "traditional": {
+                "introduction": "Nursery rhymes are a child's first poems, learned by heart and said aloud. Jack and Jill, Humpty Dumpty, Hey Diddle Diddle: they carry a strong beat and clear rhymes, and saying them trains the ear for the sounds inside words, which is the ground of reading. Today we recite five or more nursery rhymes from memory, clap and move to their rhythm, find the rhyming words, and learn that these rhymes have been passed down for generations.",
+                "gradual_release": {
+                    "i_do": "Say a nursery rhyme aloud with a strong, clear beat, clapping along. Say it again and stop before the rhyming word, showing how Jill and hill ring together. Name the rhyme as one many families have known for a very long time.",
+                    "we_do": "Say nursery rhymes together, clapping or marching the beat, and fill in the rhyming word when the adult pauses, naming the rhyming pairs.",
+                    "you_do": "Child recites five or more nursery rhymes from memory, claps or moves to the rhythm, and points out the rhyming words.",
+                },
+                "guided_practice": [
+                    "Recite familiar nursery rhymes, the adult pausing for the child to fill in the rhyming word",
+                    "Clap, march, or tap the beat while saying a rhyme",
+                    "Name the rhyming pairs in well-known rhymes",
+                ],
+                "independent_practice": [
+                    "Recite several nursery rhymes all the way through, without prompting",
+                    "Say a rhyme while keeping its beat with claps or steps",
+                ],
+                "mastery_check": [
+                    "Recite five or more nursery rhymes from memory, independently",
+                    "Clap or move to the rhythm of a rhyme, keeping the beat",
+                    "Identify rhyming pairs within familiar nursery rhymes",
+                ],
+                "spiral_review": [
+                    "Revisit hearing and matching rhyming sounds, which the rhymes practice over and over",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Nursery rhymes are the first memory work of childhood. Long before a child can read, these little verses, said and sung for hundreds of years, can be carried whole in the mind. They are handed from grandparent to parent to child, an unbroken line of voices, and learning them by heart is the child's first taking up of that inheritance.",
+                "memory_work": {
+                    "chants": [
+                        "Recite a nursery rhyme together daily, clapping its beat, until it is held by heart",
+                        "Build the repertoire one rhyme at a time: Jack and Jill, Humpty Dumpty, Hey Diddle Diddle, and more",
+                    ],
+                    "recitations": [
+                        "Recite each learned nursery rhyme from memory, reviewing the whole collection cumulatively so none is forgotten",
+                    ],
+                },
+                "recitation_routine": "Begin each lesson by reciting the nursery rhymes already learned before adding a new one, so the whole collection is rehearsed cumulatively.",
+                "history_integration": "Tell that many nursery rhymes are hundreds of years old, that the child's grandparents and great-grandparents knew these very same rhymes, and that to learn them is to join hands with all who said them before.",
+                "read_aloud_suggestions": [
+                    "A treasury of traditional nursery rhymes, said and sung aloud daily until they are known by heart",
+                    "A beautifully illustrated Mother Goose collection, read aloud for its pictures and its old, musical language",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 5,
+                "living_book_suggestions": [
+                    "A beautifully illustrated traditional nursery rhyme treasury, with real artwork worthy of a child's first book",
+                ],
+                "short_lesson_flow": "Weave nursery rhymes gently into the day rather than sitting down to teach them: sing one while dressing, chant one in the car, say one at bath time. Add hand motions and claps. Through this happy daily repetition the rhymes are learned by heart, with no drilling. A few minutes is plenty.",
+                "narration_prompt": "Say your favorite nursery rhyme to me. What happens in it, and which words sound the same?",
+                "real_world_objects": [
+                    "A nursery rhyme treasury, looked at together for its pictures",
+                    "The child's own hands, for finger plays like Itsy Bitsy Spider and Pat-a-cake",
+                    "Everyday moments, dressing, the car, the bath, that carry the rhymes",
+                ],
+                "nature_connection": "Say the rhymes that sing of weather, animals, and nature, Rain Rain Go Away, Baa Baa Black Sheep, Little Bo Peep, out of doors, when the rain or the sheep or the season is really there to see.",
+                "habit_focus": "The habit of joyful attention: delighting in the sound and rhythm of words said and sung together.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Nursery rhyme cards, each with a clear illustration, that the child may choose during circle or work time",
+                    "A basket of small objects and finger puppets for acting out rhymes",
+                    "Recordings of nursery rhymes the child may choose to play",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the rhyme cards: this is Humpty Dumpty, see him on the wall; show me the card for Humpty Dumpty; which rhyme is this?",
+                    "steps": [
+                        "The child chooses a rhyme card and the adult says or sings the rhyme, clapping the beat",
+                        "The child says the rhyme along, then independently, and claps or marches its rhythm",
+                        "The child acts the rhyme with small objects or finger puppets and may choose a new rhyme to learn",
+                    ],
+                },
+                "control_of_error": "The familiar rhyme is its own control: a rhyme has a fixed shape, and a missed or changed word breaks the beat and the rhyme, which the child hears at once and sets right by returning to the known verse.",
+                "abstraction_pathway": "From hearing and joining in a rhyme, to reciting it independently with its beat, toward holding a whole collection of rhymes by heart and choosing freely which to say.",
+                "extensions": [
+                    "Choose and learn new, less common rhymes to widen the collection",
+                    "Sort the rhyme cards by favorites or by topic, animals, weather, people",
+                    "Recite a rhyme to a younger child",
+                ],
+                "observation_focus": "Watch for the child reciting rhymes independently, keeping the beat with claps or steps, and beginning to notice the words that rhyme.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep nursery rhyme books and Mother Goose treasuries within easy reach",
+                    "Have recordings of nursery rhymes and rhyme songs available to play",
+                    "Leave a little room in the day for finger plays and clapping games",
+                ],
+                "real_world_contexts": [
+                    "Singing and chanting rhymes during everyday routines, dressing, the car, bath time, bedtime",
+                    "Playing finger games like Itsy Bitsy Spider, Pat-a-cake, and This Little Piggy",
+                    "Hearing the same rhymes from grandparents and older relatives",
+                    "Clapping games and jump rope rhymes with other children",
+                ],
+                "conversation_starters": [
+                    "Which words sound the same in Jack and Jill went up the hill?",
+                    "Can you clap along while we say Humpty Dumpty?",
+                    "What is your favorite rhyme? Shall we say it together?",
+                    "Did you know Grandma knew this very same rhyme when she was little?",
+                ],
+                "resource_bank": [
+                    "Nursery rhyme books and Mother Goose treasuries",
+                    "Recordings of nursery rhymes set to music",
+                    "Family elders, who carry the same rhymes",
+                ],
+                "parent_role": "Say and sing nursery rhymes freely throughout ordinary days, in the car, at bath time, at bedtime, simply because they are merry and loved. Add claps and finger plays, share the rhymes from your own childhood, and let the child join in and pick favorites at their own pace.",
+                "observation_documentation": "Over time, note whether the child says nursery rhymes from memory, claps or moves to their beat, hears the rhyming words, and delights in rhymes shared across the family. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Counting rhymes: 'One, Two, Buckle My Shoe' is a counting rhyme that combines math and language",
