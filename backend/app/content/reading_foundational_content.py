@@ -6249,10 +6249,116 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Talk through connections out loud. Parent-child conversation about shared connections. 'That reminds me of...' becomes a natural part of reading talk.",
         },
         "philosophy_specific": {
-            "classical": "Connections to moral lessons: 'This character showed courage like the heroes we studied.' Connecting literature to virtue and truth.",
-            "charlotte_mason": "Living books are chosen BECAUSE they connect to the child's life and interests. Connections happen naturally through narration and discussion.",
-            "montessori": "Connection cards: the child writes a connection on a card and matches it to the book. Personal relevance drives reading selection.",
-            "traditional": "Connection graphic organizers: Text / My Connection / How It Helps. Structured reflection after reading passages.",
+            "traditional": {
+                "introduction": "A text-to-self connection is the link a reader makes between a story and their own life. When a child reads about a character nervous on a first day and thinks of their own first day somewhere new, they are connecting. But the connection must be a deep one, not just naming something similar. A deep connection joins feelings and experiences and helps the reader understand the character better. Today we make text-to-self connections, explain how each connection deepens understanding, and tell deep connections from surface ones.",
+                "gradual_release": {
+                    "i_do": "Read a passage and think aloud: this character is sad about losing her dog; I felt that same sadness when our fish died, and because I have felt it, I understand her. Show plainly the difference between a deep connection of feeling and a surface one, the story has a dog and I have a dog.",
+                    "we_do": "Read together and make connections, each one stated fully with the sentence frame, this reminds me of, because, and talk about how the connection helps us understand the character.",
+                    "you_do": "Child makes text-to-self connections, explains how each connection deepens understanding of the character or event, and tells a meaningful connection from a surface one.",
+                },
+                "guided_practice": [
+                    "Make a connection using the frame: this reminds me of, because",
+                    "Explain how a connection helps you understand a character's feelings",
+                    "Sort connections into deep ones that aid understanding and surface ones that do not",
+                ],
+                "independent_practice": [
+                    "Keep a connection journal: this reminds me of, with the because explained",
+                    "Mark connection points with sticky notes while reading independently",
+                ],
+                "mastery_check": [
+                    "Make text-to-self connections that relate to story events, characters, or themes",
+                    "Explain how a connection deepens understanding of the text",
+                    "Distinguish a meaningful connection from a surface-level one",
+                ],
+                "spiral_review": [
+                    "Revisit describing how a character feels, since a connection deepens understanding of those feelings",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "A story read is held against the reader's own life, and where the two touch, understanding deepens. The character's fear, the character's choice, the character's loss, met in a book, is truly known only by one who has felt something of the same. The worthy connection is a connection of the heart, of feeling and experience, not a mere noticing that the book names a thing the reader happens to own.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the frame of a true connection: this reminds me of, because",
+                        "Chant the test of a connection: does it help me understand, or does it only name something the same",
+                    ],
+                    "recitations": [
+                        "Recite that a deep connection joins feeling and experience and deepens understanding, while a surface connection only names a likeness",
+                    ],
+                },
+                "copywork": [
+                    "Copy a full connection, the reminding and its because, neatly, so the connection and its reason are joined",
+                ],
+                "recitation_routine": "Begin each lesson by recalling a connection made in an earlier reading and how it deepened the understanding of that book.",
+                "history_integration": "Tell that the lasting power of the old stories is just this, that men and women in every age have found their own joys and griefs mirrored in them, and so a tale of long ago can still be felt as one's own.",
+                "read_aloud_suggestions": [
+                    "A story whose feelings, fear, longing, courage, the child has known something of, read aloud so a true connection may be felt",
+                    "A story of an experience close to the child's own life, chosen so connection comes readily",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A living book chosen because its life and feelings touch the child's own, full of real and relatable experience",
+                ],
+                "short_lesson_flow": "Read a living book aloud, and model a connection of your own simply and warmly: this reminds me of the time I. Then, when the child's narration or talk reveals a connection, receive it with interest and gently ask, how does that help you understand the character. Keep it a real conversation, never a worksheet.",
+                "narration_prompt": "Tell me about the story, and tell me if anything in it reminded you of your own life. How did remembering that help you understand the character?",
+                "real_world_objects": [
+                    "The living book itself, its life held against the child's own",
+                    "A connection or commonplace notebook for a connection worth keeping",
+                    "The child's own memories and experiences, the true material of connection",
+                ],
+                "nature_connection": "When a book speaks of a storm, a garden, a creature, let it call up the child's own memory of the real storm, the family garden, the creature once watched, joining the book to the living world the child knows.",
+                "habit_focus": "The habit of attention and of sympathy: bringing one's own felt experience to a book so its people are truly understood.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A shelf of books with relatable characters and situations",
+                    "Connection cards the child writes a connection and its because upon",
+                    "A connection journal",
+                    "Sorting cards for separating deep connections from surface ones",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With connection examples: this is a deep connection, it joins a feeling, this is a surface connection, it only names a likeness; show me a deep connection; which kind of connection is this?",
+                    "steps": [
+                        "After reading, the child makes a connection between the text and their own experience",
+                        "The child states it fully on a connection card, this reminds me of, because, and tells how it helps them understand",
+                        "The child sorts their connections into deep ones that aid understanding and surface ones that do not",
+                    ],
+                },
+                "control_of_error": "The test of understanding is the control: a connection is sorted as deep only if the child can say how it helps them understand the text, and a connection that explains nothing reveals itself as surface, so the sorting checks itself.",
+                "abstraction_pathway": "From naming any likeness between book and life, to stating a connection fully with its because, toward making, of one's own accord, deep connections that genuinely deepen understanding.",
+                "extensions": [
+                    "Keep a connection journal across many books",
+                    "Move toward text-to-text and text-to-world connections",
+                    "Connect to characters whose lives differ from the child's own",
+                ],
+                "observation_focus": "Watch for the child making connections of feeling rather than surface likeness, and able to say how a connection deepens understanding.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep books with relatable, true-to-life characters within reach",
+                    "Choose books that touch the child's own current experiences",
+                    "Leave out drawing and writing materials for capturing a connection",
+                ],
+                "real_world_contexts": [
+                    "A book about moving recalling the family's own move, or a friend's",
+                    "A story of a new sibling recalling when the child's own sibling was born",
+                    "A book about a garden, a pet, or a storm recalling the child's real one",
+                    "A story of feeling left out recalling a real time of being new somewhere",
+                ],
+                "conversation_starters": [
+                    "Has anything like this ever happened to you? Tell me about it.",
+                    "How does remembering your own time help you understand how the character feels?",
+                    "That character had to make a hard choice. Have you ever had to choose like that?",
+                ],
+                "resource_bank": [
+                    "A home library chosen to match the child's life and interests",
+                    "Drawing and writing materials for capturing connections",
+                    "The family's own shared memories and stories",
+                ],
+                "parent_role": "Share your own connections to books warmly and often, this reminds me of, and welcome the child's connections with real interest rather than judgment. Choose books that touch the child's life, and let connecting be a natural part of talking about what you read together.",
+                "observation_documentation": "Over time, note whether the child connects books to their own life, explains how a connection helps them understand, and senses the difference between a deep connection and a surface one. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Connecting math problems to real life: 'This addition problem is like when we combined two piles of blocks'",
