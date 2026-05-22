@@ -2045,10 +2045,115 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Say place value name: 'The five means five TENS which is FIFTY.'",
         },
         "philosophy_specific": {
-            "classical": "Systematic instruction with formal notation. Expanded form standard.",
-            "charlotte_mason": "Real objects: bundle 10 sticks, 10 pennies make a dime.",
-            "montessori": "Golden bead material. Place value overlay cards.",
-            "traditional": "Place value charts and worksheets.",
+            "traditional": {
+                "introduction": "Place value is the biggest idea in early math: a digit's position tells how much it is worth. The 3 in 35 means three tens; the 3 in 53 means three ones. Today we build two-digit numbers with base-ten blocks, name their tens and ones, and write them in expanded form.",
+                "gradual_release": {
+                    "i_do": "Model building 34 on a place-value mat: three ten-rods in the tens column, four unit cubes in the ones column. Say three tens and four ones, thirty-four. Write the expanded form, 34 = 30 + 4.",
+                    "we_do": "Build two-digit numbers together on the mat, naming the tens and the ones aloud each time. Write the expanded form together, and solve a place-value riddle together.",
+                    "you_do": "Child builds any two-digit number with blocks, names its tens and ones, writes it in expanded form, and tells which digit is worth more.",
+                },
+                "guided_practice": [
+                    "Build a number with base-ten blocks and write its numeral",
+                    "Sort blocks into the tens and ones columns of a place-value mat",
+                    "Place-value riddles: I have 5 tens and 3 ones, what number am I?",
+                ],
+                "independent_practice": [
+                    "Write two-digit numbers in expanded form",
+                    "Build a list of numbers with blocks and record each numeral",
+                ],
+                "mastery_check": [
+                    "Decompose any two-digit number into tens and ones",
+                    "Build any two-digit number with base-ten blocks",
+                    "Explain why a digit's position changes its worth",
+                ],
+                "spiral_review": [
+                    "Revisit the teen numbers as one ten and some ones before larger two-digit work",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Our numbers hold a hidden cleverness: the same ten digits can write every number, because where a digit sits tells how much it is worth. The place of a digit is its rank, and learning that order is learning the secret of written number.",
+                "memory_work": {
+                    "chants": [
+                        "Chant count-by-tens to one hundred, the spine of the tens place",
+                        "Chant the place names from the right: ones, then tens",
+                        "Chant the rule: the right-hand place is ones, the next place is tens",
+                    ],
+                    "recitations": [
+                        "Recite the place-value rule, and read two-digit numbers aloud as so many tens and so many ones",
+                    ],
+                },
+                "copywork": [
+                    "Copy two-digit numbers in expanded form, neatly, such as 42 = 40 + 2, the writing making the tens and the ones plain",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the place names and the place-value rule before new work; the idea is rehearsed cumulatively, never assumed.",
+                "history_integration": "Tell, simply, that writing numbers by place was a great invention: older ways of writing numbers had no such cleverness, and the place-value system made all of arithmetic far easier.",
+                "read_aloud_suggestions": [
+                    "A well-made read-aloud about numbers and how large numbers are written, chosen for clear and rich language",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 12,
+                "living_book_suggestions": [
+                    "A beautifully illustrated picture book about numbers and the grouping of things, with real artwork and never a busy workbook",
+                ],
+                "short_lesson_flow": "Bring out real things to bundle. Count out ten craft sticks and tie them into a bundle of ten, then make more, and gather some loose ones. Make a two-digit number as bundles and loose sticks, and name its tens and its ones. Do one or two numbers, calmly, and stop while interest is high.",
+                "narration_prompt": "Tell me how you made your number. How many bundles of ten did you use, and how many loose ones?",
+                "real_world_objects": [
+                    "Bundles of ten craft sticks tied with a band, beside loose single sticks",
+                    "Dimes worth ten cents beside pennies worth one",
+                    "Beans or buttons gathered into cups of ten with some loose",
+                ],
+                "nature_connection": "Gather a nature collection, bundle it into groups of ten with some loose ones, and write the two-digit total with a small drawing in the nature notebook.",
+                "habit_focus": "The habit of orderly, careful work: gathering exactly ten before bundling, and keeping the tens and the ones each in their proper place.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The golden bead material: unit beads and ten-bars",
+                    "The large place-value number cards that overlay, tens and ones",
+                    "A place-value tray for laying out the quantity and its cards",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the cards and beads: this is forty, four tens; show me forty; what is this? Always pairing the written card with the bead quantity.",
+                    "steps": [
+                        "Build a two-digit quantity with ten-bars and unit beads",
+                        "Lay the matching tens card and units card beside the beads",
+                        "Slide the units card over the zero of the tens card, so 40 with 2 becomes 42, showing the tens and the ones joined",
+                    ],
+                },
+                "control_of_error": "The fixed bead quantities and the overlaying number cards make a wrong build show itself as a mismatch the child sees and corrects without an adult's verdict.",
+                "abstraction_pathway": "From the golden beads (the tens and ones felt in the hand), to the overlay cards (the structure of place made visible), toward reading and writing any two-digit number from the held idea with no material.",
+                "extensions": [
+                    "Build numbers all the way to ninety-nine with the beads and cards",
+                    "Work place-value riddles with the number cards alone",
+                ],
+                "observation_focus": "Watch for the child grasping that a digit's position carries its value, and for free, repeated work with the golden beads and cards by choice.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave bundling materials within reach: craft sticks and rubber bands, or beads to thread in tens",
+                    "Keep a coin jar of dimes and pennies accessible",
+                    "Set base-ten blocks out on a low shelf and say nothing",
+                ],
+                "real_world_contexts": [
+                    "Counting and trading dimes and pennies",
+                    "Bundling a pile of small things into groups of ten with some loose",
+                    "Reading the two-digit numbers on house doors, page corners, and clocks",
+                    "Filling an egg carton or ten-frame tray and counting the tens and the loose ones",
+                ],
+                "conversation_starters": [
+                    "In thirty-five, what do you think the three stands for?",
+                    "If we bundle these into tens, how many bundles will there be, and how many loose?",
+                    "Which is worth more, the four or the nine in forty-nine?",
+                ],
+                "resource_bank": [
+                    "Dimes and pennies and a coin jar",
+                    "Craft sticks and rubber bands for bundling",
+                    "Base-ten blocks kept available, not assigned",
+                    "Number picture books on a low shelf",
+                ],
+                "parent_role": "Count and bundle things in tens through the day, and talk about what each digit means when a two-digit number comes up in real life. Answer the child's questions about big numbers, and let coins and bundling do the teaching rather than a worksheet.",
+                "observation_documentation": "Over time, note whether the child sees a two-digit number as tens and ones, can bundle a pile into tens and decompose a number, and understands that a digit's position carries its worth. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Understanding page and chapter numbers",
