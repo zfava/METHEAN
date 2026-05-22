@@ -3639,10 +3639,113 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Chants: 'Penny one cent! Nickel five cents!'",
         },
         "philosophy_specific": {
-            "classical": "Memorize names and values. Systematic drill.",
-            "charlotte_mason": "Real coins for real purposes: saving, buying, giving.",
-            "montessori": "Coin exercises in practical life. Making change.",
-            "traditional": "Coin identification worksheets. Value matching.",
+            "traditional": {
+                "introduction": "Coins are math you can hold. A penny is one cent, a nickel five cents, a dime ten cents, and a quarter twenty-five cents. The tricky part is that a dime is smaller than a nickel yet worth more: size does not equal value. Today we name the coins, learn their values, and count collections of them.",
+                "gradual_release": {
+                    "i_do": "Model naming each coin by sight and stating its value. Count a group of same coins aloud, nickels by fives and dimes by tens. Show plainly that a dime, though smaller than a nickel, is worth more.",
+                    "we_do": "Sort real coins by type together, count a group of same coins, and begin counting a simple mixed collection together by starting with the most valuable coins.",
+                    "you_do": "Child names all four coins on sight, states each value, counts collections of same coins, and begins counting simple mixed collections.",
+                },
+                "guided_practice": [
+                    "Sort real coins into groups by type",
+                    "Count groups of same coins, nickels by fives and dimes by tens",
+                    "Play store: price items at five, ten, and fifteen cents and pay with coins",
+                ],
+                "independent_practice": [
+                    "Count several collections of same coins and write each total",
+                    "Begin counting simple mixed collections of two coin types",
+                ],
+                "mastery_check": [
+                    "Name all four coins on sight and state each value",
+                    "Count a collection of same coins correctly",
+                    "Begin counting a simple mixed collection by value",
+                ],
+                "spiral_review": [
+                    "Revisit skip counting by fives and tens, which underlies counting nickels and dimes",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Each coin is a small token of an agreed worth. Four coins carry the everyday values, and their worths must simply be known by heart: a penny one, a nickel five, a dime ten, a quarter twenty-five. Once those are sure, money can be counted.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the coins and their values: penny one, nickel five, dime ten, quarter twenty-five",
+                        "Chant by fives for the nickels and by tens for the dimes",
+                    ],
+                    "recitations": [
+                        "Recite the four coin values, and recite the rule that the size of a coin does not tell its worth",
+                    ],
+                },
+                "copywork": [
+                    "Copy the names of the coins beside their values, neatly, so each coin and its worth are joined in the hand",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the coins and their values before counting any money; the values are rehearsed cumulatively, never assumed.",
+                "history_integration": "Tell that coins are very old, that people once traded goods directly before money was made, and that a coin's worth is a value agreed upon, not a thing of its size.",
+                "read_aloud_suggestions": [
+                    "A well-told story in which coins are earned, saved, and spent, read aloud for its language",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 12,
+                "living_book_suggestions": [
+                    "A beautifully illustrated picture book about earning, saving, and spending, with real artwork and never a busy workbook",
+                ],
+                "short_lesson_flow": "Bring out a handful of real coins. Look at them closely, name each, and learn its value. Count a small group of same coins together, calmly, for a real purpose, perhaps toward a small saving. Stop while interest is high.",
+                "narration_prompt": "Tell me about the coins we counted. Which is worth the most, and is it the biggest?",
+                "real_world_objects": [
+                    "Real coins counted into a piggy bank toward a saving goal",
+                    "Coins used to pay for a small item at a shop",
+                    "Coins given as a gift or to someone in need",
+                ],
+                "nature_connection": "Take coins outdoors and make coin rubbings of leaves and bark, or count the coins needed for a small treat after a walk, noting it in the notebook.",
+                "habit_focus": "The habit of careful handling and honest counting: knowing the worth of what one holds and counting it truly.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Real coins, penny, nickel, dime, and quarter, in a sorting tray",
+                    "Coin value cards pairing each coin with its written worth",
+                    "A practical-life shop or money box for real exchanges",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the coins: this is a dime, worth ten cents; show me the dime; what is this coin, and what is it worth?",
+                    "steps": [
+                        "Name each coin and learn its value, handling the real coin",
+                        "Sort the coins by type and count a group of one kind",
+                        "Use the coins in a real exchange at the practical-life shop or money box",
+                    ],
+                },
+                "control_of_error": "The coin value cards pair each coin with one worth, and a real exchange that does not balance shows the child plainly that a count was wrong.",
+                "abstraction_pathway": "From handling and naming the real coins, to counting groups of one kind, toward counting a mixed collection by value with no cards.",
+                "extensions": [
+                    "Count mixed collections of coins by starting with the most valuable",
+                    "Make change in the practical-life shop",
+                ],
+                "observation_focus": "Watch for the child counting coins by their value rather than by ones, and grasping that size does not decide worth.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a jar of real coins within reach for free sorting and counting",
+                    "Set out a real or play cash register and a small shop of priced items",
+                    "Leave a piggy bank or saving jar where the child can add and count coins",
+                ],
+                "real_world_contexts": [
+                    "Paying for a small item at a real store",
+                    "Saving coins toward something the child wants",
+                    "Making change at a lemonade stand or pretend shop",
+                    "Sorting and counting the coins found in pockets and couch cushions",
+                ],
+                "conversation_starters": [
+                    "Which coin do you think is worth the most? Is it the biggest one?",
+                    "If you have three dimes, how much money is that?",
+                    "Would you rather have five pennies or one nickel? Why?",
+                ],
+                "resource_bank": [
+                    "A jar of real coins kept available",
+                    "A real or play cash register and a piggy bank",
+                    "Picture books about money, saving, and shops",
+                ],
+                "parent_role": "Let the child handle real coins and real small purchases, count change aloud together, and follow their interest in saving for something they want. Answer genuine questions about coin values, and let real shopping do the teaching.",
+                "observation_documentation": "Over time, note whether the child names the four coins and their values, counts groups of same coins, begins to count mixed collections by value, and understands that size does not decide worth. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Reading price tags and coin names",
