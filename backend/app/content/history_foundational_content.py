@@ -2561,11 +2561,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "books about community helpers and citizenship",
                 "visit to a local government building or fire station",
             ],
-            "philosophy_specific": {
-                "classical": "Citizenship as civic virtue. Memorize key terms: community, law, citizen, government, service. Connect to Roman civic ideals and Greek democracy.",
-                "charlotte_mason": "Citizenship as daily habit: service, respect, responsibility practiced at home and in the neighborhood. Living books about community and leadership.",
-                "montessori": "Practical life as citizenship: the child contributes to the classroom/home community through real work. Peace curriculum: conflict resolution, grace, and courtesy.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -2575,6 +2570,119 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Community map drawing. Pictures of community services and helpers. Comparison charts of different communities.",
             "kinesthetic_learner": "Community service projects (hands-on). Government role play. Walk through the neighborhood identifying community features.",
             "auditory_learner": "Discussion-based learning is the core here. Interview a community helper (firefighter, librarian). Family debates about rules and fairness.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "A community is a group of people who live near one another, help one another, and follow shared rules. A family is a community, and so is a neighborhood, a town, and a country. Rules and laws exist so that people can live together fairly and safely. A good citizen does more than follow the rules: a good citizen shows respect, takes part, and serves the community. Government is the way a community chooses leaders, makes its rules, keeps people safe, and provides shared services. Today we learn all of this.",
+                "gradual_release": {
+                    "i_do": "Start with the family as a community and think aloud: here are our rules, here is why each one exists, here is what would happen without them. Name the communities I belong to, name the responsibilities of a citizen, respect, participation, service, and describe what government does: make rules, keep people safe, provide services.",
+                    "we_do": "List the communities the child belongs to together, talk through why particular laws exist, name the responsibilities of a citizen, and describe the basic purpose of government.",
+                    "you_do": "Child describes what a community is and the communities they belong to, explains why laws and rules exist, names three responsibilities of a citizen, and explains the basic purpose of government.",
+                },
+                "guided_practice": [
+                    "Name the communities the child belongs to, from the family outward",
+                    "Explain why a particular rule or law exists and what would happen without it",
+                    "Name and give an example of the responsibilities of a citizen: respect, participation, service",
+                ],
+                "independent_practice": [
+                    "Draw a map of the community and label its shared services",
+                    "Carry out a small act of community service and describe how it helped",
+                ],
+                "mastery_check": [
+                    "Describe what a community is and identify the communities the child belongs to",
+                    "Explain why laws and rules exist and how they help people live together",
+                    "Describe three responsibilities of a citizen and explain the basic purpose of government",
+                ],
+                "spiral_review": [
+                    "Revisit how earlier civilizations made rules to live together, such as Hammurabi's written Code",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Long before a child can study a constitution, they can grasp the idea beneath it: the community, a group of people who share a place, a set of rules, and a care for one another. The classical tradition has always held that the good person is also the good citizen, that to live well is to take one's part in the shared life. Rules and laws exist so that people may live together in fairness and safety, and government is the community's way of ordering that shared life.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the widening communities: the family, the neighborhood, the town, the country",
+                        "Chant the responsibilities of a citizen: to show respect, to take part, and to serve",
+                    ],
+                    "recitations": [
+                        "Recite that laws and rules exist so that people may live together fairly and safely, and that government makes the rules, keeps people safe, and provides shared services",
+                    ],
+                },
+                "copywork": [
+                    "Copy the responsibilities of a citizen, and the words community, law, citizen, government, and service",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the widening communities and the responsibilities of a citizen before any new work.",
+                "history_integration": "Tie this study to the chronological spine the child has been building: the Greek idea of the citizen who governs, the Roman republic of elected leaders, Hammurabi's written laws, all are earlier chapters of the long human effort to live well together, of which the child's own community is the latest.",
+                "read_aloud_suggestions": [
+                    "A living book about community helpers and the shared work of a town, read aloud so the child sees citizenship in action",
+                    "A story of a person who served their community well, read aloud as an example of civic virtue",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book about a community and the people who serve it, with true artwork, never a dry civics text",
+                ],
+                "short_lesson_flow": "Let the lesson live in the real community. Walk the neighborhood and notice who keeps it running, the firefighter, the librarian, the road crew. Talk over the family's own rules and why they exist. Do one real act of kindness for a neighbor. Citizenship, in the Charlotte Mason way, is a daily habit formed by living it, not a lesson recited.",
+                "narration_prompt": "Tell me about our community. Who helps keep it running, and what could you do to be a good member of it?",
+                "real_world_objects": [
+                    "The real neighborhood and town, walked and observed",
+                    "The family's own rules, talked over together",
+                    "The community's shared places: the library, the park, the fire station",
+                    "A real chance to serve, a kindness done for a neighbor",
+                ],
+                "nature_connection": "Notice that the community shares not only rules but a place: the same air, the same water, the same parks and trees, so that caring for the natural surroundings is itself a part of good citizenship.",
+                "habit_focus": "The habit of service and of respect: being, in small daily ways, a good and helpful member of every community the child belongs to.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The practical-life materials, through which the child does real, contributing work for the community of the home",
+                    "A map of the local community for the child to build and label",
+                    "The peace materials: the peace rose or peace table for resolving conflict, and grace-and-courtesy lessons",
+                    "Cards of community helpers and the services they provide",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the community helper cards: this is a firefighter, who keeps the community safe; show me a community helper; what service does this person provide?",
+                    "steps": [
+                        "The child does real practical-life work that contributes to the community of the home or classroom",
+                        "The child maps the local community and names its shared services and helpers",
+                        "The child practices grace and courtesy and the peaceful resolution of conflict as the daily work of a citizen",
+                    ],
+                },
+                "control_of_error": "The community itself is the control: practical-life work left undone is plainly felt by all, and a conflict left unresolved keeps the peace from holding, so the child sees directly how each member's care upholds the shared life.",
+                "abstraction_pathway": "From doing real, concrete work for the community of the home, to mapping and naming the wider community and its services, toward grasping citizenship and the purpose of government as ideas.",
+                "extensions": [
+                    "Compare different kinds of government: who makes the rules, and how",
+                    "Visit and learn how the local government works",
+                    "Take on an ongoing role of service in the home or wider community",
+                ],
+                "observation_focus": "Watch for the child contributing to the shared life without being asked, resolving conflict peaceably, and grasping that rules exist for fairness and safety.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Bring the child into the real work and decisions of the household community",
+                    "Keep books about community, citizenship, and how things work within reach",
+                    "Leave room for real chances to help neighbors and take part in community life",
+                ],
+                "real_world_contexts": [
+                    "Sharing in the real chores and decisions of the family",
+                    "Helping a neighbor, joining a community clean-up, or volunteering together",
+                    "Noticing the shared services of daily life: the roads, the library, the water, the mail",
+                    "Taking part in how the family decides things together, hearing every voice",
+                ],
+                "conversation_starters": [
+                    "What would happen if our family, or our town, had no rules at all?",
+                    "Who keeps our streets clean and our water safe? How do you think that gets done?",
+                    "What is one thing you could do that would make our community a little better?",
+                ],
+                "resource_bank": [
+                    "The real household and neighborhood, with their shared work and rules",
+                    "Books about community, citizenship, and community helpers",
+                    "Real chances to serve: neighbors, clean-ups, volunteering",
+                ],
+                "parent_role": "Welcome the child into the genuine work and decisions of the family and the wider community, and wonder aloud about why rules exist and what a good neighbor does. Let real helping, real belonging, and real conversation about fairness, rather than a worksheet, teach what community and citizenship mean.",
+                "observation_documentation": "Over time, note whether the child names the communities they belong to, understands why rules and laws exist, takes part and serves, and grasps what government is for. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Reading about communities and citizenship builds civic vocabulary: law, vote, citizen, service, respect, government",
