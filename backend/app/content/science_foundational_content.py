@@ -932,11 +932,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["pictures of different habitats and animals", "shoebox and craft supplies for diorama"],
             "recommended": ["animal reference books or cards", "magnifying glass for backyard habitat study"],
-            "philosophy_specific": {
-                "classical": "Habitat classification: memorize 6 habitats and key animals. Vocabulary: habitat, adaptation, ecosystem. Systematic study with flashcards and drill.",
-                "charlotte_mason": "Living books about animals in their homes. Nature walks to observe local habitats. The child draws animals they see and describes the habitat in their nature notebook.",
-                "montessori": "Continent animal cards sorted by habitat. Habitat diorama as a hands-on project. Nomenclature cards matching animals to habitats.",
-            },
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 10},
         "accommodations": {
@@ -946,6 +941,117 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Photographs and videos of habitats. Diorama building. Illustrated animal-habitat charts.",
             "kinesthetic_learner": "Build dioramas. Outdoor habitat walks. Animal movement imitation (waddle like a penguin, slither like a snake).",
             "auditory_learner": "Listen to nature documentaries narrated by David Attenborough. Discuss adaptations in conversation. Animal sound identification.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Every animal lives in a habitat, the place that gives it everything it needs: food, water, shelter, and space. Animals do not live just anywhere; they are adapted to their habitat, their bodies and behaviors fitted to that particular place. Today we name the major habitats and the animals in each, explain how an animal is adapted to its home, and learn what happens when a habitat is destroyed.",
+                "gradual_release": {
+                    "i_do": "Take one habitat, the desert, and think aloud: it is dry and hot; here lives the camel, and its hump stores fat for energy, its body is built for little water, so it is adapted to the desert. Show how a habitat gives food, water, shelter, and space, and ask what would become of the camel if the desert changed.",
+                    "we_do": "Work through several habitats together, naming the animals in each, matching each animal to what its habitat provides, and naming one adaptation that fits the animal to its home.",
+                    "you_do": "Child names the major habitats with animals for each, explains how an animal is adapted to its habitat, and describes what happens when a habitat is destroyed.",
+                },
+                "guided_practice": [
+                    "Name the major habitats and two or more animals that live in each",
+                    "Match an animal's adaptation to the habitat it fits: webbed feet, thick fur, gills",
+                    "Discuss what happens to animals when their habitat is destroyed",
+                ],
+                "independent_practice": [
+                    "Build a habitat diorama and explain why each animal belongs there",
+                    "Study one animal in depth: its habitat, its adaptations, and the threats to its home",
+                ],
+                "mastery_check": [
+                    "Name at least five habitats with two animals for each",
+                    "Explain how one animal is adapted to its specific habitat",
+                    "Describe what happens when an animal's habitat is destroyed",
+                ],
+                "spiral_review": [
+                    "Revisit the characteristics and needs of living things, since a habitat is what supplies those needs",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The natural world is ordered into realms, the forest, the desert, the ocean, the grassland, the wetland, the frozen poles, and each realm has its own creatures, fitted to it as a key is fitted to a lock. This fitness is called adaptation. No animal lives where it pleases; it lives where its body and its ways allow, and to study habitats is to study the deep order of nature.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the major habitats: forest and desert, ocean and grassland, wetland and frozen pole",
+                        "Chant what every habitat must give: food and water, shelter and space",
+                    ],
+                    "recitations": [
+                        "Recite that an animal is adapted to its habitat, its body and its ways fitted to the place it lives, and cannot simply be moved to another",
+                    ],
+                },
+                "copywork": [
+                    "Copy the names of the major habitats, and beside each an animal that lives there and one adaptation that fits it",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the major habitats and what every habitat must provide before any new study.",
+                "history_integration": "Tell that the naturalists who voyaged the world, charting which creatures lived in which lands, first revealed how deeply each animal belongs to its own place, and that the protecting of habitats is among the newest and most urgent of human tasks.",
+                "read_aloud_suggestions": [
+                    "A vivid account of a single animal living in its habitat, read aloud so the child hears how the creature and its home belong together",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A living book about an animal in its true home, written with knowledge and beauty, never a dry fact-list reader",
+                ],
+                "short_lesson_flow": "Begin close to home: walk in the yard or a nearby park and watch a real animal, a bird, a squirrel, an insect, in its own habitat. Notice quietly what the place gives it and how its body suits it. Read a portion of a living book about another habitat, and let the child narrate and draw the creature they met. Keep it warm and unhurried.",
+                "narration_prompt": "Tell me about the animal we watched, or read of. Where does it live, and how is its body suited to that home?",
+                "real_world_objects": [
+                    "The yard, park, or pond, a real local habitat to observe",
+                    "A nature notebook for drawing animals in their homes",
+                    "Living books and beautiful animal pictures",
+                ],
+                "nature_connection": "The lesson begins out of doors with the habitats nearest home, the birds in the hedge, the creatures in the pond, and the child comes to know the local habitat first and most truly before studying the far ones.",
+                "habit_focus": "The habit of attention: watching a creature long enough to see how it lives and how its home provides for it.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The continent animal cards, sorted by habitat",
+                    "Animal and habitat nomenclature cards for matching",
+                    "Materials for building a habitat diorama",
+                    "Models or figures of animals to sort into their habitats",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the habitat cards: this is the desert habitat; show me the desert habitat; which habitat is this?",
+                    "steps": [
+                        "The child sorts animal cards or figures into their habitats",
+                        "For each animal, the child names an adaptation that fits it to its home",
+                        "The child builds a habitat diorama, placing in it only the animals that truly belong",
+                    ],
+                },
+                "control_of_error": "The animal and habitat cards are matched pairs, so an animal placed in the wrong habitat can be checked against its card and against its adaptations, and the child sees and corrects the mismatch.",
+                "abstraction_pathway": "From sorting concrete animal cards and figures into habitats, to naming the adaptations that fit each animal to its home, toward understanding habitat as the web of food, water, shelter, and space that an animal depends upon.",
+                "extensions": [
+                    "Study the smaller habitats within one, the coral reef, the tidal pool, the kelp forest within the ocean",
+                    "Trace a simple food chain within a habitat",
+                    "Investigate an endangered animal and its threatened habitat",
+                ],
+                "observation_focus": "Watch for the child connecting an animal's body and behavior to its specific habitat, and understanding that an animal cannot simply be moved to another.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep animal books, field guides, and nature documentaries available",
+                    "Leave out craft materials for building habitat dioramas",
+                    "Have binoculars and a magnifying glass for watching real animals",
+                ],
+                "real_world_contexts": [
+                    "Watching the animals in the yard, the park, and the pond and noticing what their habitat gives them",
+                    "Visiting a zoo, an aquarium, or a nature center and seeing recreated habitats",
+                    "Setting up a bird feeder or birdhouse and creating habitat features at home",
+                    "Wondering, on a trip, why different animals live in different places",
+                ],
+                "conversation_starters": [
+                    "Why do you think that animal lives here and not somewhere else?",
+                    "What does this place give the animal that it needs?",
+                    "Could this animal live in the desert, or the ocean? Why not?",
+                ],
+                "resource_bank": [
+                    "Animal books, field guides, and nature documentaries",
+                    "A local park, pond, or wood for watching real habitats",
+                    "Zoos, aquariums, and nature centers",
+                ],
+                "parent_role": "Follow the child's love of particular animals wherever it leads, into books, documentaries, and trips to see them, and wonder aloud about why each creature lives where it does. Let real animal-watching, near home and far, rather than a worksheet, teach how an animal and its habitat belong together.",
+                "observation_documentation": "Over time, note whether the child names habitats and their animals, explains how an animal is adapted to its home, and understands that an animal depends on its habitat and suffers when it is destroyed. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Animal habitat books build reading comprehension and vocabulary: habitat, adaptation, ecosystem, predator, prey, camouflage",
