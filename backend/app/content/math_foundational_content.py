@@ -2707,10 +2707,113 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Chant ordinals. Stories: 'The THIRD little pig.'",
         },
         "philosophy_specific": {
-            "classical": "Memorize through recitation. Latin roots: primary, secondary, tertiary.",
-            "charlotte_mason": "Use naturally in daily life: 'Tell me the second event.'",
-            "montessori": "Ordinal exercises with objects. Calendar ordinal dates.",
-            "traditional": "Ordinal number worksheets. Matching exercises.",
+            "traditional": {
+                "introduction": "Cardinal numbers tell how many, as in three cats. Ordinal numbers tell position, as in the third cat. Today we name positions first through tenth, write the abbreviations 1st through 10th, and learn to tell an ordinal number from a cardinal one.",
+                "gradual_release": {
+                    "i_do": "Model with a line of five objects: name first through fifth, touching each in turn. Write the abbreviations 1st, 2nd, 3rd. Explain plainly the difference between three and third.",
+                    "we_do": "Line objects up and name positions together through tenth. Match the ordinal words to their abbreviations together, and find positions in a real line of people or things.",
+                    "you_do": "Child names positions first through tenth, writes the abbreviations 1st through 10th, and tells ordinal from cardinal in sentences.",
+                },
+                "guided_practice": [
+                    "Line up ten objects and name each position first through tenth",
+                    "Match ordinal words to their abbreviations, first to 1st through tenth to 10th",
+                    "Find ordinal dates on a calendar",
+                ],
+                "independent_practice": [
+                    "Ordinal position practice pages",
+                    "Write the abbreviations for the ordinal words",
+                ],
+                "mastery_check": [
+                    "Use ordinal numbers first through tenth correctly",
+                    "Write the abbreviations 1st through 10th",
+                    "Apply ordinal numbers to a real situation",
+                ],
+                "spiral_review": [
+                    "Revisit counting to ten and the difference between how-many and which-position",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Besides the numbers that tell how many, there are numbers that tell which one in an order: first, second, third. Learn the ordinal names in their sequence, and every position has a name ready for it.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the ordinal numbers in order, first through tenth",
+                        "Chant the ordinal-and-abbreviation pairs: first, 1st; second, 2nd; third, 3rd",
+                    ],
+                    "recitations": [
+                        "Recite the ordinals first through tenth, and note that words such as primary and secondary come from old roots for first and second",
+                    ],
+                },
+                "copywork": [
+                    "Copy the ordinal words and their abbreviations neatly, such as first and 1st, second and 2nd",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the ordinal sequence before new work; the sequence is rehearsed cumulatively, never assumed.",
+                "history_integration": "Name the order of events on a timeline, the first event and the second, and note that kings and queens are numbered by ordinals, a ruler called the Third.",
+                "read_aloud_suggestions": [
+                    "A well-told story or rhyme that names things in their order, read aloud for its language",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A lovely story with a clear sequence of events, told in worthy language and real illustrations",
+                ],
+                "short_lesson_flow": "With the child, line up a few real things, or recall together the order of the day's events. Name the positions naturally, first, second, third, as they come. Take one short turn, and stop while the child is still interested.",
+                "narration_prompt": "After a story, tell me what happened first, what happened second, and what came after that.",
+                "real_world_objects": [
+                    "The order of children in a line",
+                    "The order of the events of the day",
+                    "Dates on the calendar and places in a row",
+                ],
+                "nature_connection": "On a walk, notice the order of things seen, the first bird, the second tree, and record an ordered list in the nature notebook.",
+                "habit_focus": "The habit of orderly attention: keeping events and things in their true order, first things first.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A set of identical small objects to line up",
+                    "Ordinal label cards, first through tenth, with their abbreviations",
+                    "A calendar for ordinal dates",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a line of objects: this one is the third; show me the third; which position is this? Spoken with the line in view.",
+                    "steps": [
+                        "Line up ten objects in a row",
+                        "Name a position, and the child places the matching ordinal label, then names each position in turn",
+                        "Find and name ordinal dates on the calendar",
+                    ],
+                },
+                "control_of_error": "The line of objects is itself the control: the third object is plainly the third, so a mislabel shows against the line and the child corrects it.",
+                "abstraction_pathway": "From naming positions in a real line of objects, to matching the ordinal label cards, toward using the ordinal words and abbreviations with no objects at all.",
+                "extensions": [
+                    "Name ordinal dates across the calendar month",
+                    "Name positions in longer lines and in the real routines of the day",
+                ],
+                "observation_focus": "Watch for the child distinguishing how-many, the cardinal, from which-place, the ordinal.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a calendar at child height where ordinal dates are read each day",
+                    "Leave toys and figures out for lining-up and ordering play",
+                    "Set out games whose finishing order or turn order matters",
+                ],
+                "real_world_contexts": [
+                    "Who is first in line and who is second",
+                    "The order of the events of the day",
+                    "Calendar dates and the floors of a building",
+                    "Finishing order in a race or game, and whose turn comes first",
+                ],
+                "conversation_starters": [
+                    "You are second in line. How many people are ahead of you?",
+                    "What was the third thing we did today?",
+                    "Whose turn was first, and whose came next?",
+                ],
+                "resource_bank": [
+                    "A wall calendar the child can reach",
+                    "Games with a turn order or a finishing order",
+                    "Story books with a clear sequence of events",
+                ],
+                "parent_role": "Use ordinal words naturally through the day, first, next, the third, and point out finishing order and calendar dates as they come up. Answer the child's questions about position, and let real routines do the teaching.",
+                "observation_documentation": "Over time, note whether the child uses the ordinal numbers first through tenth, tells an ordinal from a cardinal number, and applies position words in real life. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Sequence: first, second, third in stories",
