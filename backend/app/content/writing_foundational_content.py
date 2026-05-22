@@ -3554,11 +3554,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["lined paper or stationery", "envelope and stamp for mailing"],
             "recommended": ["letter format template/poster", "address book for recipients"],
-            "philosophy_specific": {
-                "classical": "Letter writing as formal composition with clear conventions. Memorize the 5 parts. Practice with real correspondence. Thank-you letters are an expected courtesy.",
-                "charlotte_mason": "Real communication: the child writes to real people for real purposes. Grandparents, pen pals, friends. The letter is the first real composition — it has an audience and a purpose.",
-                "montessori": "Practical life: letter writing is a real-world skill. The child writes, addresses, stamps, and mails independently. Letter writing as self-initiated communication.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -3568,6 +3563,115 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Letter format poster visible during writing. Stationery with decorative borders. Color-code the 5 parts.",
             "kinesthetic_learner": "The physical act of folding, stuffing the envelope, stamping, and mailing makes the activity tangible and real.",
             "auditory_learner": "Dictate the letter body aloud before writing. Read the finished letter aloud to check how it sounds.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "A friendly letter is composition with a real audience and a real purpose. It has five parts: date, greeting, body, closing, and signature. Today we identify the five parts, write a complete letter to a real person, and include at least three complete sentences in the body.",
+                "gradual_release": {
+                    "i_do": "Write a sample letter on paper, naming each part as it appears: date at the top right; 'Dear Grandma,' the greeting, with a comma; three or four sentences in the body, telling, asking, and sharing; 'Love,' the closing, with a comma; the signature beneath.",
+                    "we_do": "Write a letter together to a real family member, planning each part aloud and checking each one as we go.",
+                    "you_do": "Child writes a complete friendly letter to a real person, with all five parts and at least three complete body sentences, ready to be sent.",
+                },
+                "guided_practice": [
+                    "Identify the five parts in a sample letter and label each one",
+                    "Write a complete greeting with capitalization and a comma",
+                    "Compose three body sentences that tell, ask, and share with the reader",
+                ],
+                "independent_practice": [
+                    "Write a complete friendly letter to a real recipient and prepare to send it",
+                    "Write a thank-you letter for a real gift or kindness",
+                ],
+                "mastery_check": [
+                    "Write a friendly letter with all five parts correctly formatted",
+                    "Include at least three complete sentences in the body",
+                    "Address the letter to a real person for a real purpose",
+                ],
+                "spiral_review": [
+                    "Review capitalization, end punctuation, and the comma in the greeting and closing in every letter written",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The letter is a small, well-formed composition of long and honorable tradition. From ancient times the educated have written letters to one another, and the friendly letter, with its date, its greeting, its body, its closing, and its signature, is the form by which a writer presents a thought to a particular reader. To write one well is to take one's place in a very old conversation.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the five parts of a friendly letter, in order: date, greeting, body, closing, signature",
+                    ],
+                    "recitations": [
+                        "Recite that a letter is written to one reader at one time, and that the form of the friendly letter has not greatly changed in many centuries",
+                    ],
+                },
+                "copywork": [
+                    "Copy a short, well-written friendly letter from a book or a real family letter, attending carefully to the placement of each of the five parts",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the five parts of the friendly letter in order before any letter is written.",
+                "history_integration": "Tell that the letters of statesmen, scholars, and ordinary people have been kept and read across the centuries, and that the friendly letter is among the chief sources by which we know how earlier people lived and thought.",
+                "read_aloud_suggestions": [
+                    "A real, well-written friendly letter or a published letter from a child or family, read aloud so the form is heard as well as seen",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A book of real, well-written letters, or a kept bundle of family letters, that lets the child see what worthy letters look like",
+                ],
+                "short_lesson_flow": "Keep the lesson short, fifteen to twenty minutes. The letter has a real reader, a grandparent, an aunt, a pen friend, and a real reason to be written. The child first thinks of what this particular reader would like to hear, says it aloud, and then writes it down in the simple five-part form. Mistakes are gently corrected before sending; a heartfelt letter, neat and true, is the lesson.",
+                "narration_prompt": "Tell me what you want this reader to know, then tell me what you want to ask them, and what you want to share. Now we will write each of those.",
+                "real_world_objects": [
+                    "Good paper or simple stationery the child chooses",
+                    "An envelope, a stamp, and the recipient's address",
+                    "A favorite pen, that letter-writing may feel like a small ceremony",
+                ],
+                "nature_connection": "The child may share in the letter what was noticed on a recent nature walk, so the letter carries a real piece of the child's living observation to its reader.",
+                "habit_focus": "The habit of attention to the reader: writing not what is convenient to write but what this particular person will be glad to hear.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A letter-writing tray with paper, envelope, stamp, and a sample friendly letter to consult",
+                    "A small reference card showing the five parts and where each one sits on the page",
+                    "Address cards or an address book for real recipients",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the letter-writing tray: here is the friendly-letter form, with date, greeting, body, closing, and signature; you place each part where it belongs on this paper; show me the body of your letter.",
+                    "steps": [
+                        "The child sets out the letter-writing tray and consults the sample, naming the five parts",
+                        "The child writes the date, greeting, body, closing, and signature on lined paper, in order",
+                        "The child addresses the envelope, places the stamp, and prepares the letter to be sent",
+                    ],
+                },
+                "control_of_error": "The sample letter and reference card stand beside the child's work, so a missing or misplaced part is plain when the two are compared, and the child corrects it before the envelope is sealed.",
+                "abstraction_pathway": "From following the laid-out tray and the sample exactly, to writing the five parts from memory, toward composing letters of varied purpose with the form held in mind.",
+                "extensions": [
+                    "Write a thank-you letter for a real gift",
+                    "Write a letter requesting information from a museum or a library",
+                    "Begin and sustain a pen-friend correspondence over time",
+                ],
+                "observation_focus": "Watch for the child completing each of the five parts independently, addressing the envelope correctly, and treating the whole letter as a piece of practical-life work brought to completion.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep good paper, envelopes, stamps, and a few addresses within easy reach",
+                    "Tape a small example letter to the kitchen wall, in case anyone wants to see how it goes",
+                    "Welcome any letter the child wants to send, however short or strange",
+                ],
+                "real_world_contexts": [
+                    "Sending a thank-you to someone who gave a gift or did a kindness",
+                    "Writing to a grandparent or a faraway friend who would love to hear from the child",
+                    "Writing to a favorite author or a museum to ask a real question",
+                    "Sending a postcard from a trip",
+                ],
+                "conversation_starters": [
+                    "Want to send a letter to Grandma? What would she love to hear?",
+                    "We could write to ask the museum about that: real letters get real answers.",
+                    "What would you want to say if you could only fit a few sentences?",
+                ],
+                "resource_bank": [
+                    "A small stash of paper, cards, envelopes, and stamps kept ready",
+                    "A list or book of real addresses of people who would love a letter",
+                    "A sample of a friendly letter, set somewhere the child can glance at it",
+                ],
+                "parent_role": "Write letters yourself where the child can see, addressing them to real people for real reasons, and offer to send a letter together when the wish arises. When the child writes, let real purpose guide the words, help with any of the five parts gently, and trust that real replies will draw out more letters in their own time.",
+                "observation_documentation": "Over time, notice whether the child reaches for letter-writing to thank, ask, or share, includes the parts that the letter needs to do its work, and writes for a particular reader who matters. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Reading letters from others builds comprehension and models the format. Pen pal correspondence creates reading material the child is genuinely excited about.",
