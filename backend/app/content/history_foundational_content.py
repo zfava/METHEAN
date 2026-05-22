@@ -4730,11 +4730,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "markers or colored pencils for illustrations",
             ],
             "recommended": ["printed timeline figures to paste", "reference timeline for checking accuracy"],
-            "philosophy_specific": {
-                "classical": "The timeline is THE master organizational tool of classical education. Daily additions. Weekly review. The child memorizes the sequence of events and eras.",
-                "charlotte_mason": "Book of Centuries: each page represents one century. The child draws and writes entries as they study. It becomes a personal record of historical knowledge.",
-                "montessori": "The Great Lessons include timelines of life and civilization. The child adds to a visual timeline with movable cards. The timeline grows organically.",
-            },
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 15},
         "accommodations": {
@@ -4744,6 +4739,118 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Illustrated timeline is a core strength. Color-code by civilization or era. Large, beautiful wall display.",
             "kinesthetic_learner": "Physical timeline cards to arrange. Walking along the timeline. Cutting and pasting figures.",
             "auditory_learner": "Narrate the timeline aloud regularly. Chant key dates in order. Discuss connections verbally.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "A timeline is the backbone of historical understanding. It is not a one-time project but a living document that grows throughout a child's education: every civilization, figure, and event studied is placed on it. Over time the child begins to see patterns, that Egypt and China existed at the same time, that the pyramids were already ancient when Rome was founded. A Book of Centuries, a notebook with a page for each century, does the same in a portable form. Today we build and maintain a timeline of twenty or more events, add to it, trace connections across it, and illustrate it.",
+                "gradual_release": {
+                    "i_do": "Set up the timeline or Book of Centuries and think aloud while placing events: this one is older, it goes to the left; this one is recent, it goes to the right. Add the civilizations and figures already studied, point out a surprising connection, and draw a small picture for a key event.",
+                    "we_do": "Place studied civilizations, figures, and events on the timeline together, in correct order, and trace a connection between two of them.",
+                    "you_do": "Child maintains a timeline or Book of Centuries with twenty or more events in correct chronological order, adds new events and figures, traces connections across it, and illustrates key events.",
+                },
+                "guided_practice": [
+                    "Place studied civilizations, figures, and events on the timeline in correct chronological order",
+                    "Add a newly studied event or figure to the timeline and explain the placement",
+                    "Trace a connection between two events on different parts of the timeline",
+                ],
+                "independent_practice": [
+                    "Maintain the timeline as a habit, adding each new topic as it is studied",
+                    "Walk the timeline and narrate the story of history from beginning to end",
+                ],
+                "mastery_check": [
+                    "Maintain a timeline or Book of Centuries with twenty or more events in correct chronological order",
+                    "Add new events, figures, and civilizations to the timeline as they are studied",
+                    "Trace connections between events on different parts of the timeline and illustrate key events",
+                ],
+                "spiral_review": [
+                    "Revisit the whole timeline regularly, narrating it in order so the sequence of history stays firm",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The timeline is the master tool of the classical study of history: the chronological spine made visible. Upon it every civilization, every figure, every event finds its true and ordered place, and from it the child reads the whole story of history at a glance. A Book of Centuries serves the same end, a page for each century, filled in as study goes on. To keep the timeline faithfully is to hold the order of history itself.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the great divisions of the timeline: the ancient, the medieval, and the modern",
+                        "Chant the rule of the timeline: each event in its true place, the old to the left, the recent to the right",
+                    ],
+                    "recitations": [
+                        "Recite that the timeline is the chronological spine made visible, and that every study finds its place upon it",
+                    ],
+                },
+                "copywork": [
+                    "Copy the key dates and events of the timeline in their order, and the names of the great divisions of history",
+                ],
+                "recitation_routine": "Begin each lesson by walking the timeline and reciting the order of events placed on it before adding the next.",
+                "history_integration": "This node is the chronological spine itself: the timeline the child keeps holds every civilization and figure studied across all of history, and every future study will find its place upon it.",
+                "read_aloud_suggestions": [
+                    "A living account of the sweep of history from the ancient world to the present, read aloud so the child hears the order the timeline records",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A beautifully illustrated book of the sweep of history, with true artwork, that shows the order of the ages",
+                ],
+                "short_lesson_flow": "Keep a Book of Centuries, a notebook with a page for each century. There is no separate lesson: whenever a person or event is studied, the child turns to the right century and adds a small drawing and a line or two. Slowly, over years, the book fills, and it becomes the child's own beautiful record of all the history they have met.",
+                "narration_prompt": "Walk along your timeline, or turn through your Book of Centuries, and tell me the story of history in order.",
+                "real_world_objects": [
+                    "A Book of Centuries, a notebook with a page for each century",
+                    "A long wall timeline the child adds to over the years",
+                    "Colored pencils for illustrating the events",
+                    "Printed figures and pictures of historical people and events to add",
+                ],
+                "nature_connection": "Add to the timeline the great changes in the natural world the child has studied, so that history and the long story of the Earth are seen to run together.",
+                "habit_focus": "The habit of faithful, ongoing work: adding to the timeline a little at a time, year upon year, so that it grows into a record of all the child knows.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A long wall timeline with movable cards for civilizations, figures, and events",
+                    "The Montessori timelines from the Great Lessons: the timeline of life and of human beings",
+                    "Printed timeline figures the child places and illustrates",
+                    "A Book of Centuries or personal timeline notebook",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the timeline cards: this is ancient Egypt, near the beginning; this is the modern age, near the end; show me ancient Egypt; which part of the timeline is this?",
+                    "steps": [
+                        "The child places the studied civilizations, figures, and events on the timeline in correct order",
+                        "The child traces connections between events on different parts of the timeline",
+                        "The child illustrates key events and adds each new topic as it is studied",
+                    ],
+                },
+                "control_of_error": "The dates are the control: an event placed out of its true order does not match the dates of the events around it, and the child, checking, sets it right.",
+                "abstraction_pathway": "From handling and placing the concrete timeline cards, to tracing the connections between them, toward carrying in the mind the whole ordered sweep of history.",
+                "extensions": [
+                    "Add parallel rows to the timeline for what was happening on different continents at the same time",
+                    "Research exact dates for events placed only approximately",
+                    "Connect the history timeline to the Great Lessons' timeline of life",
+                ],
+                "observation_focus": "Watch for the child placing events by when they truly happened rather than when they were studied, and noticing the connections the timeline reveals.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a long roll of paper or a Book of Centuries notebook within reach, and add to it freely",
+                    "Leave out printed timeline figures, pictures, and colored pencils",
+                    "Have books about the sweep of history available",
+                ],
+                "real_world_contexts": [
+                    "Adding to the timeline whatever history the child has met, in books, films, museums, or family stories",
+                    "Placing the family's own history, births, journeys, on the timeline alongside the wider story",
+                    "Adding events from the news to the timeline's recent end, history happening now",
+                    "Checking the timeline when a historical period comes up to see what else was happening then",
+                ],
+                "conversation_starters": [
+                    "The pyramids were built long before Rome began; how many years apart do you think that is?",
+                    "Where on our timeline does this new story go, near the beginning, the middle, or the end?",
+                    "Can you find two things on the timeline that happened at the same time in different places?",
+                ],
+                "resource_bank": [
+                    "A long timeline or Book of Centuries kept available",
+                    "Printed timeline figures, pictures, and colored pencils",
+                    "Books about the whole sweep of history, and the family's own history",
+                ],
+                "parent_role": "Keep a timeline or Book of Centuries somewhere in the home and add to it together whenever history comes up, in a book, a film, a museum, or a family story. Wonder aloud about the order of events and the connections between them, and let the growing timeline, rather than a worksheet, give the child a feel for the shape of history.",
+                "observation_documentation": "Over time, note whether the child places events in true chronological order, adds new history to the timeline, traces connections across it, and is building a feel for the whole sweep of the past. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "The timeline shows when books were written and when stories are set — connecting literature to history",
