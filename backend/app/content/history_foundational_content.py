@@ -4184,11 +4184,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
                 "a physical object to examine as an 'artifact'",
             ],
             "recommended": ["museum visit (in person or virtual)", "collection of reproduced primary source documents"],
-            "philosophy_specific": {
-                "classical": "Direct encounter with historical evidence as foundation for analytical thinking. Systematic observation method taught explicitly.",
-                "charlotte_mason": "Object lessons: real things examined with curiosity and care. The child describes what they see before being told what it means.",
-                "montessori": "Artifact cards with observation questions. The child examines real objects and records findings. Self-directed investigation.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -4198,6 +4193,120 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Core strength: visual analysis of photographs and artifacts. Use magnifying glasses for detail work.",
             "kinesthetic_learner": "Handle physical objects. Create a 'museum exhibit' with artifacts and labels.",
             "auditory_learner": "Describe what you see aloud. Discuss conclusions as a conversation. Listen to audio primary sources (speeches, oral histories).",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "A primary source comes straight from the past: a photograph taken at the time, a letter written by someone who was there, a tool that was used, a newspaper from the day of an event. A secondary source is made later, about the past, like a history book or a biography. Examining primary sources is how a historian thinks: looking at the evidence, asking questions, and drawing conclusions. A source also shows one angle, one person's view, so a careful historian weighs evidence from more than one source. Today we tell primary from secondary sources, examine real evidence, ask analytical questions, and draw conclusions from what we find.",
+                "gradual_release": {
+                    "i_do": "Hold up an old photograph and think aloud: this is a primary source, made at the time; I ask who made it, when, where, and why, and what it shows. I see a horse and wagon and no cars, so this was likely long ago. Note that the photograph shows only one angle, one moment, so I would seek other sources too.",
+                    "we_do": "Examine primary sources together, a photograph, a letter, an object, ask the questions who, when, where, why, and what it reveals, and draw conclusions from the evidence.",
+                    "you_do": "Child distinguishes primary from secondary sources, examines a primary source and describes what it reveals, asks analytical questions about it, and draws conclusions from the evidence.",
+                },
+                "guided_practice": [
+                    "Sort sources into primary, from the time, and secondary, made later",
+                    "Examine a primary source with the questions: who made this, when, where, why, and what does it tell us",
+                    "Draw a conclusion from a primary source and give the evidence for it",
+                ],
+                "independent_practice": [
+                    "Examine a photograph, letter, or artifact and record three things it reveals about the past",
+                    "Set up a museum at home: label household objects as artifacts and explain what each reveals",
+                ],
+                "mastery_check": [
+                    "Distinguish a primary source from a secondary source, with examples",
+                    "Examine a primary source and describe what it reveals about the past",
+                    "Ask analytical questions about a source and draw conclusions from evidence rather than guessing",
+                ],
+                "spiral_review": [
+                    "Revisit careful observation, the skill that examining a primary source depends on",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "To think like a historian is to reason from evidence. A primary source is evidence straight from the past, a letter, a photograph, an artifact; a secondary source is the later study of that evidence. The classical student examines the source closely, asks of it who, when, where, and why, and draws conclusions only from what the evidence shows. And the student remembers that each source carries one perspective, so the truth is best sought from many sources, not one.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the two kinds of source: the primary source from the time, the secondary source made later",
+                        "Chant the historian's questions for a source: who made it, when, where, why, and what does it tell",
+                    ],
+                    "recitations": [
+                        "Recite that a primary source is evidence from the time of an event, and that each source shows one perspective, so the careful historian weighs many",
+                    ],
+                },
+                "copywork": [
+                    "Copy the meanings of primary source and secondary source, and the historian's questions: who, when, where, why",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the two kinds of source and the historian's questions before examining a new source.",
+                "history_integration": "Mark that the chronological spine itself is built from primary sources: every date and event the child has placed on it was learned by historians who examined the evidence the past left behind.",
+                "read_aloud_suggestions": [
+                    "A book that shows historians at work, examining the evidence of the past and reasoning from it",
+                    "A collection of reproduced primary sources, letters, photographs, documents, looked at and read aloud together",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully made book of historical photographs and documents, real evidence of the past to pore over",
+                    "A living book that shows a historian or a curious person reading the clues an old object or photograph holds",
+                ],
+                "short_lesson_flow": "Set a real thing before the child, an old family photograph, a letter, an object, and let them look long and closely before a word is said. Then ask gently what they notice, and what it tells them. The child describes what they see and draws a conclusion from it. Charlotte Mason's object lesson: the real thing first, the questions next, the meaning last.",
+                "narration_prompt": "Tell me about the photograph or object we examined. What did you notice, and what does it reveal about the past?",
+                "real_world_objects": [
+                    "Real old family photographs, letters, and documents",
+                    "A physical object from the past, a tool, a coin, a postcard, to handle and examine",
+                    "A magnifying glass for close looking",
+                    "A museum, where real artifacts and primary sources can be met",
+                ],
+                "nature_connection": "An old photograph or letter can be a record of nature too: the trees, the weather, the animals, the look of the land then, and the child can read in it how the natural world has changed.",
+                "habit_focus": "The habit of attention: looking at a real piece of the past closely and patiently enough to read the evidence it holds.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Real primary sources to examine: old photographs, letters, and artifacts",
+                    "Source-sorting cards for separating primary from secondary sources",
+                    "Observation-question cards: who, when, where, why, what does it reveal",
+                    "A magnifying glass and a museum-style space for labeling and displaying artifacts",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the source cards: this is a primary source, made at the time of the event; show me a primary source; is this source primary or secondary?",
+                    "steps": [
+                        "The child sorts a set of sources into primary and secondary",
+                        "The child examines a primary source closely with the observation-question cards",
+                        "The child draws a conclusion from the evidence and may label and display the source as a museum artifact",
+                    ],
+                },
+                "control_of_error": "The source itself is the control: the date it was made settles whether it is primary or secondary, and a conclusion that the evidence does not support is checked against the source and found to be a guess, not a finding.",
+                "abstraction_pathway": "From handling and examining concrete primary sources, to sorting and questioning them, toward reasoning from historical evidence and grasping that every source carries one perspective.",
+                "extensions": [
+                    "Compare two primary sources about the same event and notice how their perspectives differ",
+                    "Examine a written primary source, a letter or a diary, in depth",
+                    "Investigate how historians judge whether a source is reliable",
+                ],
+                "observation_focus": "Watch for the child drawing conclusions only from the evidence rather than guessing, and beginning to see that a single source shows one angle of the truth.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep old family photographs, letters, and objects where the child can examine them",
+                    "Leave out a magnifying glass and a box of curious old things, coins, postcards, tools",
+                    "Have books of historical photographs and documents available",
+                ],
+                "real_world_contexts": [
+                    "Looking through the family's old photographs and wondering what each one shows",
+                    "Examining old objects found in an attic, a drawer, or an antique shop",
+                    "Visiting a museum and meeting the real evidence of the past",
+                    "Noticing that a newspaper or a photo from today will one day be a primary source of this time",
+                ],
+                "conversation_starters": [
+                    "What is the first thing you notice in this old photograph, and what else if you look closely?",
+                    "How could you figure out, from this old object, what it was used for and who used it?",
+                    "This letter shows one person's view of an event; how could we learn what others saw?",
+                ],
+                "resource_bank": [
+                    "The family's own photographs, letters, and old objects",
+                    "A magnifying glass and a collection of curious historical things",
+                    "Museums and books of reproduced primary sources",
+                ],
+                "parent_role": "Bring out the family's old photographs and objects and wonder at them together, looking closely and asking what each one reveals. Show that a real thing from the past is evidence to be read, that each source shows one angle, and let real artifacts and real museums, rather than a worksheet, teach the child to think like a historian.",
+                "observation_documentation": "Over time, note whether the child tells primary from secondary sources, examines real evidence closely, asks good questions of it, and draws conclusions from evidence rather than guessing. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Analyzing a primary source is close reading: careful observation, questioning, and drawing conclusions from evidence",
