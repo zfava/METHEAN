@@ -3159,10 +3159,113 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Narrate: 'Rock side DOWN. Rock is HEAVIER.'",
         },
         "philosophy_specific": {
-            "classical": "Systematic comparison with formal vocabulary.",
-            "charlotte_mason": "Weigh nature objects: rocks, pinecones. Size is not weight.",
-            "montessori": "Baric tablets. Balance beam activities.",
-            "traditional": "Worksheets. Balance scale with standard weights.",
+            "traditional": {
+                "introduction": "Weight is how heavy a thing is. We begin with the hands as a balance, holding one object in each, then move to a real balance scale, and then we measure: how many blocks balance the apple?",
+                "gradual_release": {
+                    "i_do": "Model holding two objects, one in each hand, to feel which is heavier. Model the balance scale, naming that the heavier side sinks. Then model measuring, counting the cubes that balance an object.",
+                    "we_do": "Predict which object is heavier, then check it on the balance together. Order three objects from lightest to heaviest, and measure an object's weight in cubes together.",
+                    "you_do": "Child compares weights on the balance, orders objects by weight, measures weight in nonstandard units, and uses the words heavier, lighter, and about the same correctly.",
+                },
+                "guided_practice": [
+                    "Explore the balance scale with objects from around the room",
+                    "Sort objects into heavy, medium, and light",
+                    "Estimate how many cubes will balance an object, then check",
+                ],
+                "independent_practice": [
+                    "Weigh several objects in cubes and record each weight",
+                    "Predict-and-test games: guess the heavier object, then balance it",
+                ],
+                "mastery_check": [
+                    "Compare two weights correctly with a balance scale",
+                    "Use the words heavier, lighter, and about the same correctly",
+                    "Measure an object's weight in nonstandard units",
+                ],
+                "spiral_review": [
+                    "Revisit holding two objects to compare before measuring weight with units again",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Weight is felt, not seen, and the eye is easily fooled, for a small thing may outweigh a large one. The balance is an old and honest instrument: it tells plainly the truth that the hand can only guess.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the words of weight, used exactly: heavier, lighter, balanced, about the same",
+                    ],
+                    "recitations": [
+                        "Recite the rule of the balance: the heavier side sinks, and when the pans rest level the weights are equal",
+                        "Recite that size is not weight: a large thing is not always the heavier one",
+                    ],
+                },
+                "copywork": [
+                    "Copy a neat weight record, each object beside the count of units that balanced it",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the rule of the balance before any weighing is done; the rule is rehearsed cumulatively, never assumed.",
+                "history_integration": "Tell that the balance is one of the oldest instruments people made, that they weighed goods against fixed stones and other set weights, and that the balance became an emblem of fair and honest judgment.",
+                "read_aloud_suggestions": [
+                    "A well-told story or account in which goods are weighed and the balance or its old weights appear",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 12,
+                "living_book_suggestions": [
+                    "A beautifully illustrated book in which things are weighed and the balance appears, with real artwork and never a busy workbook",
+                ],
+                "short_lesson_flow": "Bring out two real things. Let the child hold one in each hand and tell which feels heavier, then check the judgment on a balance scale. Weigh one or two pairs, calmly, and stop while interest is high.",
+                "narration_prompt": "Tell me which object was heavier, and how the balance showed it to you.",
+                "real_world_objects": [
+                    "Rocks and pinecones gathered and weighed against each other",
+                    "Produce held and compared, a potato against an apple",
+                    "Heavy and light toys compared in the hands",
+                ],
+                "nature_connection": "On a nature walk, gather found things, weigh and order them on a balance, and discover that the largest is not always the heaviest; record the finding in the nature notebook.",
+                "habit_focus": "The habit of honest judgment: trusting the balance and the feel of the hand over the eye's quick guess at size.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The baric tablets, graded by weight and told apart by the muscular sense, often with eyes closed",
+                    "A child-sized balance scale",
+                    "Uniform objects, such as cubes, for measuring weight",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the baric tablets: this is the heaviest; show me the heaviest; which is this? Often judged with the eyes closed, by the feel in the hand.",
+                    "steps": [
+                        "Sort the baric tablets by weight using the muscular sense, with eyes closed",
+                        "Predict which of two objects is heavier, then check the prediction on the balance",
+                        "Count the uniform units that balance an object to measure its weight",
+                    ],
+                },
+                "control_of_error": "The baric tablets are a fixed, graded set, and the balance shows equality plainly when its pans rest level, so a wrong judgment of weight reveals itself to the child.",
+                "abstraction_pathway": "From feeling weight in the hand with the baric tablets, to the balance scale that shows it, toward measuring and comparing weight by a counted unit.",
+                "extensions": [
+                    "Weigh many objects and order them from lightest to heaviest",
+                    "Measure weight with a uniform unit and compare the counts",
+                ],
+                "observation_focus": "Watch for the child trusting the balance and the muscular sense rather than the look of an object's size.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave a balance scale and an assortment of objects of varied weight within reach",
+                    "Keep a kitchen scale accessible where cooking and weighing meet",
+                    "Let a seesaw or balance toy be available for free play with weight",
+                ],
+                "real_world_contexts": [
+                    "Weighing fruit and vegetables on the scale at the store",
+                    "Feeling how heavy a backpack is when it is full",
+                    "Comparing a heavy toy and a light one in the hands",
+                    "Noticing how a seesaw tips toward the heavier rider",
+                ],
+                "conversation_starters": [
+                    "Which of these do you think is heavier? How could we find out for sure?",
+                    "The balance tipped down on one side. Which side is heavier?",
+                    "Can a small thing be heavier than a big thing? Can you think of one?",
+                ],
+                "resource_bank": [
+                    "A balance scale and a kitchen scale kept available",
+                    "An assortment of objects of different weights",
+                    "Picture books about weighing and balancing",
+                ],
+                "parent_role": "Notice weighing wherever it arises in real life, groceries, backpacks, cooking, and weigh alongside the child. Ask genuine heavier-and-lighter questions, and let the grocery scale and the seesaw do the teaching rather than a worksheet.",
+                "observation_documentation": "Over time, note whether the child compares weights by hand and by balance, measures weight in units, uses the weight vocabulary, and understands that size does not decide weight. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Reading weight labels on packages",
