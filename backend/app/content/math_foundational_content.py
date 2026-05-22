@@ -6897,10 +6897,113 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Oral narration: tell everything about addition. Verbal demo.",
         },
         "philosophy_specific": {
-            "classical": "Formal assessment with pass criteria. Oral recitation. Written computation.",
-            "charlotte_mason": "Narration and demonstration. No tricks, no stress. Show what you know.",
-            "montessori": "Observation-based. Mastery demonstrated through work, not tests.",
-            "traditional": "Written test: computation, word problems, identification.",
+            "traditional": {
+                "introduction": "This is the capstone review of the foundational math level. It is not a stressful test but a comprehensive check and a celebration: a chance for the child to show, across all the major areas, how much they have grown. We mix oral, written, and hands-on tasks covering counting, place value, addition and subtraction, money, fractions, and more, and we end by celebrating what the child knows.",
+                "gradual_release": {
+                    "i_do": "Explain warmly that this is a showing of all that has been learned, not a trial, and model the spirit of it by working a problem aloud, naming the strategy and showing calm, confident thinking.",
+                    "we_do": "Warm up together with a favorite activity from an earlier topic, and talk through what the review will cover so the child meets each part without surprise.",
+                    "you_do": "Child works independently through a mix of computation, word problems, and hands-on tasks across all foundational areas, and explains their mathematical thinking, while the parent notes what is solid and what needs more practice.",
+                },
+                "guided_practice": [
+                    "Warm up with a favorite activity from an earlier topic",
+                    "Work a mix of problems covering each major area, with light support where needed",
+                    "Explain aloud the thinking behind a solved problem",
+                ],
+                "independent_practice": [
+                    "Work through computation and word problems independently across all areas",
+                    "Apply math to a real-world task: plan a small party, run a pretend store, measure a room",
+                ],
+                "mastery_check": [
+                    "Show mastery across all foundational skill areas",
+                    "Apply skills to a novel problem and to a real-world scenario",
+                    "Explain mathematical thinking and at least two strategies clearly",
+                ],
+                "spiral_review": [
+                    "Revisit any skill area found not yet solid before moving to the developing level",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Every stage of learning closes with a gathering-up of what has been won, and this is that moment for foundational mathematics. It is no trial to be feared but a gateway: a comprehensive showing of counting, place value, calculation, money, and measure, and an honest judgment that the child stands ready for the developing level. The assessment opens the gate; it does not bar it.",
+                "memory_work": {
+                    "chants": [
+                        "Recite again the cornerstones of the foundational level: counting and place value, addition and subtraction, money, fractions, and patterns",
+                        "Recite the marks of a mathematician: to reckon truly, to reason through a problem, and to explain the thinking",
+                    ],
+                    "recitations": [
+                        "Recite the number facts and the strategies built across the level, the gathered fruit of the year's work",
+                    ],
+                },
+                "recitation_routine": "Make the review itself a cumulative recitation: the child reckons and reasons, drawing on every skill built across the foundational level, oldest and newest together.",
+                "history_integration": "Tell that learning has always been marked by such gateways, that in older schooling a stage was completed and confirmed before the next began, and that to pass this gate is to take up the long tradition of those who reason with number.",
+                "read_aloud_suggestions": [
+                    "A story of a problem reasoned through with number, read aloud so the child hears mathematics put to confident use",
+                    "A more challenging book of mathematical puzzles, held ready as a reward of the developing level to come",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautifully illustrated book of real mathematical interest, held ready as the first of the developing level",
+                    "The child's own math notebook, looked through together to see the year's growth",
+                ],
+                "short_lesson_flow": "There is no stressful test. Over an ordinary day or two, set the child a few real, worthy problems, some oral, some with real objects, and let them work and narrate their thinking. You will see at once what is sure and what is still tender. Frame the whole as a glad showing of how far they have come, and end by celebrating it together.",
+                "narration_prompt": "Tell me how you solved that. Which math do you feel surest of now, and what are you proudest of learning this year?",
+                "real_world_objects": [
+                    "Real objects for hands-on tasks: coins, counters, a ruler, things to sort and measure",
+                    "The child's own math notebook, showing the year's work from first to last",
+                    "A real task to carry out: planning a small celebration, measuring a room, running a pretend shop",
+                ],
+                "nature_connection": "Set a closing task out of doors: measure the garden bed, count and sort a nature collection, or tally the birds, so the child shows their mathematics among the living things they love.",
+                "habit_focus": "The habit of attention and of confidence: meeting a problem calmly, reasoning it through, and trusting the mind that has been trained all year.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The familiar mathematics materials of the foundational level, used now as the child works, not as a test",
+                    "Real tasks and problem cards spanning all the major areas",
+                    "The child's own ongoing work record kept across the level",
+                ],
+                "presentation": {
+                    "three_period_lesson": "There is no new naming here; instead the adult watches the child in the third period of every lesson long since given, recalling and applying number, operation, and measure independently in real work.",
+                    "steps": [
+                        "The adult prepares the environment with the full range of materials and real tasks, and observes the child at work",
+                        "The adult notes which skills, counting, place value, calculation, money, fractions, the child applies fluently and independently",
+                        "The adult and child review the work record together and see that the foundational mathematics is complete",
+                    ],
+                },
+                "control_of_error": "The materials are the control, as they have always been: in real work a skill not yet secure reveals itself plainly through the material, with no test required, so the adult's judgment rests on what the child actually does.",
+                "abstraction_pathway": "From the concrete materials of the foundational level long since internalized, the child has reached confident, abstract reckoning; this review simply confirms that the abstraction is complete and the next stage may begin.",
+                "extensions": [
+                    "Move into the developing level's work without delay once competence is observed",
+                    "Carry the work record forward into the next stage",
+                    "Let the child set their own mathematical work and goals for the level to come",
+                ],
+                "observation_focus": "Watch, across the child's ordinary work, for sound counting and place value, fluent calculation, and reasoning applied to novel and real problems, the signs that the foundational level is truly complete.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep math present in everyday life: coins, measuring tools, dice, games, things to count and sort",
+                    "Leave out richer, more challenging math materials and puzzles for when the child reaches for them",
+                    "Let the child take a real part in the cooking, building, shopping, and planning of the household",
+                ],
+                "real_world_contexts": [
+                    "Counting and making change in real shopping",
+                    "Measuring and halving while cooking and building",
+                    "Keeping score and reckoning in games",
+                    "Planning a real event: how many guests, how much food, how much it costs",
+                ],
+                "conversation_starters": [
+                    "How did you figure that out? Tell me your way.",
+                    "What math do you find easy now that used to be hard?",
+                    "What would you like to be able to do with numbers next?",
+                ],
+                "resource_bank": [
+                    "The math of everyday life: money, cooking, building, games, time",
+                    "Richer math materials and puzzles kept within reach",
+                    "An adult who reckons aloud and welcomes the child into real math tasks",
+                ],
+                "parent_role": "There is no test. You already know your child's mathematics, because you see them use it, counting change, halving a recipe, keeping score, measuring a shelf. Notice that competence and confidence as they show themselves in real life, follow the child into richer math as their own appetite grows, and trust what you have watched unfold.",
+                "observation_documentation": "Over time, simply note the math the child uses in the course of real life: whether they count and calculate with confidence, reason through new problems, explain their thinking, and reach without prompting for harder challenges. This lived noticing, not any test, shows that the foundational mathematics is sound and the child is ready for whatever comes next.",
+            },
         },
         "connections": {
             "reading": "Reading word problems on assessment",
