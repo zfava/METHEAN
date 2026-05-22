@@ -682,11 +682,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["map of Egypt", "pictures of pyramids, hieroglyphics, and daily life"],
             "recommended": ["living books about ancient Egypt", "model-building supplies for pyramids"],
-            "philosophy_specific": {
-                "classical": "Memorize key facts: pharaoh names, pyramid facts, Nile flooding cycle. Timeline cards for Egyptian history. Map drill.",
-                "charlotte_mason": "Living books about Egypt read aloud with narration. The child draws Egypt in their Book of Centuries. Map drawn from memory after study.",
-                "montessori": "Egypt continent folder with photographs and fact cards. Build a pyramid with blocks. Hieroglyphic stamp set for hands-on writing experience.",
-            },
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 10},
         "accommodations": {
@@ -696,6 +691,118 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Photographs of real Egyptian sites. Illustrated cross-sections of pyramids. Map drawing is a core activity.",
             "kinesthetic_learner": "Build pyramids, write hieroglyphics, make a shaduf model, create a Nile flood simulation with sand and water.",
             "auditory_learner": "Listen to stories about pharaohs and scribes. Discuss and debate Egyptian topics. Audio documentaries about ancient Egypt.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Ancient Egypt rose along the Nile and lasted more than three thousand years. Each year the Nile flooded and left rich dark soil, a gift that made farming, and so cities, temples, and the pyramids, possible. Egypt was ruled by pharaohs, written in hieroglyphics by scribes, and worked by farmers and craftspeople. Today we narrate the story of ancient Egypt, explain how the Nile flood made it possible, draw a map of Egypt, and describe daily life there.",
+                "gradual_release": {
+                    "i_do": "Tell the story of Egypt aloud in order: the Nile and its yearly flood, the farms it fed, the pharaohs who ruled as god-kings, the pyramids built as their tombs, the scribes and their hieroglyphics, the farmers in their mud-brick houses. Draw the map as I go, the Nile, the delta, the desert, the pyramids.",
+                    "we_do": "Retell the story of Egypt together, draw and label the map of Egypt, and name several aspects of daily life there.",
+                    "you_do": "Child narrates the story of ancient Egypt, explains how the Nile flood made the civilization possible, draws and labels a map of Egypt, and describes at least three aspects of daily life.",
+                },
+                "guided_practice": [
+                    "Retell the story of Egypt in order: the Nile, the pharaohs, the pyramids, daily life",
+                    "Draw and label a map of Egypt: the Nile, the delta, the desert, the pyramids",
+                    "Describe aspects of daily life for farmers, scribes, and craftspeople",
+                ],
+                "independent_practice": [
+                    "Narrate the full story of ancient Egypt from memory",
+                    "Compare ancient Egypt to another civilization the child has studied",
+                ],
+                "mastery_check": [
+                    "Narrate ancient Egypt covering the Nile, pharaohs, pyramids, and daily life",
+                    "Explain how the annual flooding of the Nile made Egyptian civilization possible",
+                    "Draw and label a map of Egypt and describe three aspects of daily life",
+                ],
+                "spiral_review": [
+                    "Revisit the characteristics of a civilization, and find each one in ancient Egypt",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Of all the ancient civilizations, none captures the mind like Egypt: the pyramids rising from the desert, the pharaohs ruled as living gods, the scribes setting down hieroglyphics, the mummies prepared for eternity. And all of it was the gift of one river. Each year the Nile rose and flooded, and each year it left behind the black soil that fed a civilization for three thousand years.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the gift of the Nile: it floods, it leaves rich soil, it feeds the farms, it makes Egypt",
+                        "Chant the orders of Egypt: the pharaoh above, then the scribes and priests, then the craftspeople, then the farmers",
+                    ],
+                    "recitations": [
+                        "Recite that the Nile flooded each year and left rich soil, and that this gift made Egyptian civilization possible",
+                    ],
+                },
+                "copywork": [
+                    "Copy a few key facts of ancient Egypt, neatly, and the words pharaoh, pyramid, hieroglyphics, and Nile",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the gift of the Nile and narrating yesterday's portion of the Egypt story before adding the next.",
+                "history_integration": "Place ancient Egypt on the chronological spine: it begins among the first river valley civilizations and endures, remarkably, for three thousand years, longer than the whole span from the Roman Empire to today, a vast and steady stretch of the spine.",
+                "read_aloud_suggestions": [
+                    "A living book that tells the story of ancient Egypt with vividness and truth, read aloud for narration",
+                    "A tale set in ancient Egypt, in the life of a scribe, a farmer, or a young pharaoh, read aloud so the child meets the age through a story",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book about ancient Egypt, written with knowledge and wonder, never a dry fact reader",
+                ],
+                "short_lesson_flow": "Read a single portion of a living book about ancient Egypt aloud, unhurried, and let the child narrate it back in their own words. The child may draw a scene or a map of Egypt into the Book of Centuries. Let the great river, the pyramids, and the people come alive through the story, not through a list of facts. Stop while interest is high.",
+                "narration_prompt": "Tell me the part of the Egypt story we just heard. What was life like along the Nile?",
+                "real_world_objects": [
+                    "A living book about ancient Egypt, returned to portion by portion",
+                    "A Book of Centuries for the child's drawn map and scenes of Egypt",
+                    "Pictures of real Egyptian artifacts, the pyramids, hieroglyphics, a museum visit if one is near",
+                ],
+                "nature_connection": "Consider the Nile as a river of nature study: its yearly flood, the seasons of rainfall far upstream, the green farmland against the desert, the way a whole people lived by the rhythm of one river.",
+                "habit_focus": "The habit of attention: hearing the story of Egypt closely enough to tell it back as a living tale, not a string of facts.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "An Egypt folder in the continent collection, with photographs and fact cards",
+                    "A map of Egypt and the Nile to label",
+                    "Materials for building a pyramid and a hieroglyphic stamp set",
+                    "The fundamental needs of humans chart applied to ancient Egypt",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the Egypt fact cards: this is a pharaoh, the ruler of Egypt; show me the pharaoh; who is this?",
+                    "steps": [
+                        "The child explores the Egypt folder, its photographs and fact cards, and locates Egypt and the Nile on the map",
+                        "The child examines ancient Egypt through the fundamental needs of humans, how the Egyptians fed, housed, governed, and clothed themselves",
+                        "The child builds a pyramid, tries the hieroglyphic stamps, and narrates the story of Egypt",
+                    ],
+                },
+                "control_of_error": "The fact cards and the map carry their own control, matching and locating in one true way, and the fundamental needs framework is the control for understanding: an account of Egypt that leaves out food, shelter, or government is felt to be incomplete.",
+                "abstraction_pathway": "From handling the concrete Egypt folder, the map, and the pyramid model, to studying Egypt through the fundamental needs of humans, toward narrating the whole civilization and its place in history without the materials.",
+                "extensions": [
+                    "Compare how Egypt met the fundamental needs of humans with how another civilization met them",
+                    "Investigate the work of the scribe and the discovery of Tutankhamun's tomb",
+                    "Place Egypt's three-thousand-year span on the long timeline",
+                ],
+                "observation_focus": "Watch for the child connecting every part of Egyptian life back to the gift of the Nile, and narrating Egypt as a connected story rather than scattered facts.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep richly illustrated books about ancient Egypt within reach",
+                    "Leave out materials for building pyramids and trying hieroglyphics",
+                    "Have documentaries about Egypt, the pyramids, and the pharaohs available",
+                ],
+                "real_world_contexts": [
+                    "Visiting a museum with Egyptian artifacts, mummies, statues, jewelry",
+                    "Watching a documentary about the pyramids or the discovery of a tomb",
+                    "Building a pyramid or writing a name in hieroglyphics for the fun of it",
+                    "Following a child's fascination with mummies, pharaohs, or pyramids wherever it leads",
+                ],
+                "conversation_starters": [
+                    "The Nile flooded every year and the Egyptians were glad of it, why would a flood be good news?",
+                    "Why do you think the Egyptians spent twenty years building one pyramid?",
+                    "If you lived in ancient Egypt, would you rather be a pharaoh, a scribe, or a farmer?",
+                ],
+                "resource_bank": [
+                    "Illustrated books and documentaries about ancient Egypt",
+                    "Materials for pyramid-building and hieroglyphic writing",
+                    "Museums with Egyptian collections",
+                ],
+                "parent_role": "Follow the child's fascination with ancient Egypt, the mummies, the pyramids, the pharaohs, into books, documentaries, and museums, and wonder aloud at how a whole civilization lived by one river. Let real artifacts and vivid stories, rather than a worksheet, bring Egypt to life.",
+                "observation_documentation": "Over time, note whether the child can narrate the story of ancient Egypt, explain the gift of the Nile, picture daily life there, and place Egypt in the ancient world. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Hieroglyphics are a writing system — compare to our alphabet. Reading about Egypt builds vocabulary (pharaoh, pyramid, hieroglyphics).",
