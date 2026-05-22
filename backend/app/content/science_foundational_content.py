@@ -2253,11 +2253,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["rocks collected from outdoors", "magnifying glass", "soil sample", "science notebook"],
             "recommended": ["rock identification guide", "penny and nail for scratch testing"],
-            "philosophy_specific": {
-                "classical": "Rock classification using proper terminology: igneous, sedimentary, metamorphic. Memorize properties. Structured observation and sorting logs.",
-                "charlotte_mason": "Rock collections from nature walks. The child draws rocks in their nature notebook with detailed observations. Soil investigation in the garden. Geology discovered outdoors.",
-                "montessori": "Rock sorting trays with magnifying glass. Three-part nomenclature cards for rock types. Practical life: gardening connects soil science to real work.",
-            },
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 10},
         "accommodations": {
@@ -2267,6 +2262,118 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Rock displays with labels. Magnified views of soil. Rock type comparison charts with photographs.",
             "kinesthetic_learner": "Handle every rock. Scratch testing. Dig for soil samples. Build a rock collection display.",
             "auditory_learner": "Describe rocks aloud while observing. Discuss sorting criteria. Tell the 'story' of how each rock type formed.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Rocks are the solid stuff of the Earth, and each was made by a process: cooled from melted rock, pressed from layers of sediment, or changed by heat and pressure. Soil is rock broken into tiny pieces and mixed with decomposed plants and animals. Today we collect and sort rocks by their properties, learn the three rock types, and learn how weathering breaks rock down, slowly, into soil.",
+                "gradual_release": {
+                    "i_do": "Hold up two rocks and observe them aloud: this one is gray and rough, this one reddish and smooth; I sort them by color, then by texture, then by hardness, scratching with a fingernail. Show a layered rock and name it sedimentary, and crumble a little soil to show the tiny rock pieces within.",
+                    "we_do": "Sort a rock collection together by one property at a time, color, texture, size, hardness, examine soil with a magnifying glass, and name the three rock types.",
+                    "you_do": "Child sorts rocks by at least three properties, explains that soil is broken-down rock plus decomposed living material, and identifies rocks as igneous, sedimentary, or metamorphic at a basic level.",
+                },
+                "guided_practice": [
+                    "Collect rocks and sort them by one property at a time: color, texture, size, hardness",
+                    "Examine a spoonful of soil with a magnifying glass and name what it is made of",
+                    "Sort rocks toward the three types: igneous, sedimentary, metamorphic",
+                ],
+                "independent_practice": [
+                    "Build and label a rock collection display, recording each rock's properties",
+                    "Investigate weathering: watch how water slowly breaks something down",
+                ],
+                "mastery_check": [
+                    "Sort rocks by at least three properties with accurate descriptions",
+                    "Explain that soil is broken-down rock mixed with decomposed living material",
+                    "Identify rocks as igneous, sedimentary, or metamorphic at a basic level",
+                ],
+                "spiral_review": [
+                    "Revisit sorting and classifying by attribute, the skill rock classification depends on",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The rocks beneath our feet are the oldest record on the Earth, the planet's history written in stone. Some were born of fire, cooled from melted rock; some were laid down in patient layers at the bottom of ancient seas; some were changed, deep underground, by heat and crushing weight. And all rock, given ages enough, is broken by weather into the soil that feeds the living world.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the three kinds of rock: igneous from fire, sedimentary from layers, metamorphic from heat and pressure",
+                        "Chant what makes soil: broken rock and decayed life, mixed together over long ages",
+                    ],
+                    "recitations": [
+                        "Recite that weathering, by water, ice, wind, and root, breaks the great rocks slowly into soil",
+                    ],
+                },
+                "copywork": [
+                    "Copy the three rock types, each with a few words of how it forms, and the words weathering, mineral, sediment",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the three rock types and how each is formed before any new sorting or study.",
+                "history_integration": "Tell that the first tools were stone, that whole ages of mankind are named for the rock they worked, and that the pyramids, the cathedrals, and the old roads were all built from the rock of the Earth.",
+                "read_aloud_suggestions": [
+                    "A living account of how a mountain rises and is slowly worn to soil, read aloud so the child hears the long story of stone",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book about rocks, mountains, or the Earth, with true artwork and never a dry textbook",
+                ],
+                "short_lesson_flow": "Go out and let the child gather rocks that catch their eye, a real treasure hunt. Back home, look at each one closely and quietly, and the child draws a favorite in the nature notebook with careful observations. Examine a little garden soil with a magnifying glass. Let the wonder of real stone, handled and looked at, be the lesson.",
+                "narration_prompt": "Tell me about the rocks you found. How are they different from one another? What did you see in the soil?",
+                "real_world_objects": [
+                    "A collection of real rocks gathered on a walk",
+                    "A magnifying glass for close looking",
+                    "A spoonful of garden soil to examine",
+                    "A nature notebook for drawing rocks and recording observations",
+                ],
+                "nature_connection": "Geology is met out of doors: the child gathers rocks on walks, digs in the garden soil, sees the layered stone of a cliff or a creek bank, and comes to know the Earth's materials by handling them.",
+                "habit_focus": "The habit of attention: looking closely and patiently at a rock to see its true color, texture, and the story of how it was made.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Rock sorting trays and a magnifying glass",
+                    "A collection of real rocks of the three types",
+                    "Three-part nomenclature cards for igneous, sedimentary, and metamorphic rock",
+                    "A soil sample for examination, and a penny and nail for scratch testing",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the rock cards and specimens: this rock is sedimentary, see its layers; show me a sedimentary rock; which type of rock is this?",
+                    "steps": [
+                        "The child sorts a rock collection on the trays by one property at a time",
+                        "The child tests hardness with the scratch test and matches rocks to the nomenclature cards",
+                        "The child examines soil with the magnifying glass and finds the rock and the organic matter within",
+                    ],
+                },
+                "control_of_error": "The nomenclature cards match each rock type to its name and picture in one true way, and the rock's own properties, its layers, its texture, its hardness, are the control: a rock placed in the wrong group does not match its evidence.",
+                "abstraction_pathway": "From handling, sorting, and scratch-testing real rocks, to matching them to the nomenclature cards of the three types, toward understanding how rock forms and weathers into soil without the materials.",
+                "extensions": [
+                    "Connect the rock types in the rock cycle, one becoming another over ages",
+                    "Investigate the local geology: what rocks are common nearby and why",
+                    "Study fossils as ancient life preserved in sedimentary rock",
+                ],
+                "observation_focus": "Watch for the child sorting by true, observable properties, testing hardness carefully, and seeing soil as a mixture of broken rock and decayed life.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a tray or shelf for the child's growing rock collection",
+                    "Leave out a magnifying glass, a rock guide, and a penny and nail for scratch testing",
+                    "Let digging in the garden and the soil be part of ordinary play",
+                ],
+                "real_world_contexts": [
+                    "Collecting interesting rocks on walks, at the beach, by the creek",
+                    "Digging in the garden and noticing what the soil is made of",
+                    "Noticing the stone in buildings, walls, gravel roads, and countertops",
+                    "Seeing layered rock in a road cut, a cliff, or a creek bank",
+                ],
+                "conversation_starters": [
+                    "Why do you think these two rocks look so different?",
+                    "This rock has stripes like a layer cake, how do you think those got there?",
+                    "What do you see when you look at the soil up close?",
+                ],
+                "resource_bank": [
+                    "The child's own rock collection, kept where it can be sorted",
+                    "A magnifying glass and a rock identification guide",
+                    "The out-of-doors, full of rocks, soil, and stone",
+                ],
+                "parent_role": "Welcome the rocks the child gathers and give them a place to keep and sort them, and wonder aloud at how different each one is. Look at the soil together when the child digs, and let real rock-hunting and real digging, rather than a worksheet, teach the science of the Earth's materials.",
+                "observation_documentation": "Over time, note whether the child sorts rocks by their properties, knows that soil is broken-down rock mixed with decayed life, and begins to tell the three rock types apart. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Geology vocabulary builds science literacy: igneous, sedimentary, metamorphic, weathering, erosion, mineral",
