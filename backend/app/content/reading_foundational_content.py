@@ -5415,10 +5415,113 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Natural strength. Audiobooks are excellent. Musical read-alouds with rhythm. The child may want to repeat phrases aloud.",
         },
         "philosophy_specific": {
-            "classical": "Listening to great stories and retelling them — the oral tradition that precedes all writing. Read-alouds of myths, fables, and hero tales.",
-            "charlotte_mason": "The habit of attention is trained through read-alouds. One reading only. The child must attend because they will be asked to narrate.",
-            "montessori": "Story listening as a group or individual activity. The child selects listening material. Silence activities build listening focus.",
-            "traditional": "Structured read-aloud time with comprehension questions. Listening comprehension tests. Gradual increase in passage complexity.",
+            "traditional": {
+                "introduction": "Listening comprehension is the gateway to reading comprehension: a child must understand what they hear before they can understand what they read, and they can understand far harder language by ear than they can yet decode. Today we listen attentively to a text read aloud for ten to fifteen minutes, answer questions about what we heard, ask our own questions, and build the habit of focused listening.",
+                "gradual_release": {
+                    "i_do": "Model attentive listening: sit ready, make a picture in the mind of what is read, and when the reading stops, answer a who or what question from what was heard, and wonder aloud a real question about it.",
+                    "we_do": "Listen to a read-aloud together, then answer who, what, where, when, and why questions about it, and think up a question of our own about what was heard.",
+                    "you_do": "Child listens attentively to a read-aloud of ten to fifteen minutes, answers comprehension questions about what was heard, and asks a relevant question of their own.",
+                },
+                "guided_practice": [
+                    "Listen to a short read-aloud with a purpose set beforehand, then answer questions about it",
+                    "Answer who, what, where, when, and why questions about a text heard aloud",
+                    "After a passage, think up one or two questions about what was heard",
+                ],
+                "independent_practice": [
+                    "Listen to a longer read-aloud and afterward answer questions and ask one",
+                    "Listen to informational text, not only stories, and tell what it said",
+                ],
+                "mastery_check": [
+                    "Listen attentively for a full ten to fifteen minute read-aloud",
+                    "Answer who, what, where, when, and why questions about a text heard aloud",
+                    "Ask a relevant question about what was heard, without prompting",
+                ],
+                "spiral_review": [
+                    "Revisit retelling a short passage, which depends on having listened with attention",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Long before reading, there was listening. The great stories of every people were heard before they were ever read, and a child who listens well is heir to all of them. To listen is not idle: it is to attend, to hold what is said, to weigh it and wonder at it. The trained ear is the first instrument of the educated mind.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the listener's work: sit still, attend, picture it, and hold it in mind",
+                        "Chant the questions to carry while listening: who, what, where, when, and why",
+                    ],
+                    "recitations": [
+                        "Recite a short passage heard and held in mind, the proof that the ear has attended",
+                    ],
+                },
+                "recitation_routine": "Begin each lesson by recalling and reciting from yesterday's read-aloud before today's is begun, so what is heard is held and reviewed.",
+                "history_integration": "Tell that history itself began as listening, that the deeds of long ago were told aloud and heard, generation upon generation, before ever they were written, and that the attentive listener keeps that ancient tradition.",
+                "read_aloud_suggestions": [
+                    "A myth, fable, or hero tale, read aloud and listened to closely, of the kind first carried by the ear",
+                    "A passage of fine informational prose, read aloud, so the ear learns to attend to true accounts as well as stories",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A living book worth full attention, in language richer than the child could yet read alone, never a dull or twaddly reader",
+                ],
+                "short_lesson_flow": "Read a portion of a living book aloud, once, with no interruption, in a quiet place. The child knows they will be asked to tell it back, and so they attend. After the single reading, the child narrates, and a real question or two may follow. Keep the reading to what attention can hold whole.",
+                "narration_prompt": "Tell me what you heard. What was the most important thing, and what do you wonder about it?",
+                "real_world_objects": [
+                    "The living book, read from once so the ear must attend",
+                    "A quiet, comfortable place kept for listening",
+                    "A nature notebook or drawing paper for picturing what was heard",
+                ],
+                "nature_connection": "Listen out of doors: stand still on a nature walk and attend to what can be heard, the birds, the wind, the water, then tell it back, the same attentive listening turned upon the world.",
+                "habit_focus": "The habit of attention: the single most important habit, trained by hearing a thing once and being expected to hold it.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A shelf of well-chosen books, story and informational, for shared listening",
+                    "A prepared quiet corner where listening is undisturbed",
+                    "Audio recordings of stories the child may choose to listen to",
+                    "The silence game and other listening exercises that sharpen the ear",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With question cards: this question asks who, this one asks where; show me the question that asks where; what does this question ask?",
+                    "steps": [
+                        "The child settles in the prepared quiet corner and listens to a text read or played, once, with full attention",
+                        "After the listening, the child answers questions about what was heard, who, what, where, when, why",
+                        "The child asks a question of their own about the text and may choose the next listening",
+                    ],
+                },
+                "control_of_error": "The text is the control: an answer is checked by returning to the book, and the child hears when their recollection does not match what was read; the silence game shows the child plainly how much the attentive ear can catch.",
+                "abstraction_pathway": "From listening to a short, vivid story with full attention, to holding a longer text and answering questions about it, toward sustained attentive listening to informational text and chapter-length work.",
+                "extensions": [
+                    "Listen to informational texts and accounts, not only stories",
+                    "Listen to a chapter and narrate it to a younger child",
+                    "Use the silence game and listening walks to sharpen the ear further",
+                ],
+                "observation_focus": "Watch for the child attending without needing stillness imposed, answering from what was truly heard, and asking questions that show real engagement.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Read aloud generously and keep audiobooks within easy reach",
+                    "Have a cozy listening spot where stories are heard",
+                    "Leave out quiet hand activities, drawing, clay, that help a child listen",
+                ],
+                "real_world_contexts": [
+                    "Listening to audiobooks on car rides and at quiet times",
+                    "Hearing a family member tell a story about their day",
+                    "Following spoken directions and the verbally explained rules of a game",
+                    "Being read to at bedtime simply because it is loved",
+                ],
+                "conversation_starters": [
+                    "What was the most important part of what we just heard?",
+                    "Was there anything that puzzled you, or that you want to know more about?",
+                    "What do you think the character was feeling? What made you think so?",
+                ],
+                "resource_bank": [
+                    "A wide home library and a steady habit of reading aloud",
+                    "Audiobooks and recorded stories",
+                    "Quiet fidget materials for hands while listening",
+                ],
+                "parent_role": "Read aloud and tell stories often, and trust that a child listens in their own way, some best while their hands are busy. Talk about what was heard as a real conversation, follow the questions the child raises, and judge listening by understanding rather than by stillness.",
+                "observation_documentation": "Over time, note whether the child attends to read-alouds, follows and recalls what was heard, answers questions about it, and asks questions of their own. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Listening to math word problems requires the same focused attention as listening to stories",
