@@ -413,11 +413,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["quality literature for passage selection", "lined paper"],
             "recommended": ["copywork passage cards (pre-selected sentences)", "self-checking rubric"],
-            "philosophy_specific": {
-                "classical": "Copywork from great literature: Scripture, poetry, famous speeches, Aesop. Perfect copy is the standard. Daily non-negotiable habit.",
-                "charlotte_mason": "Copywork is THE central writing method for young children. Short passages from living books copied perfectly. Never allow errors — the child studies before writing. Beauty in handwriting matters.",
-                "montessori": "Copying cards with beautiful sentences. The child selects a card, studies it, and copies. Self-correcting: the card serves as the answer key.",
-            },
         },
         "time_estimates": {"first_exposure": 10, "practice_session": 10, "assessment": 5},
         "accommodations": {
@@ -427,6 +422,115 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Copywork is inherently visual. Use attractive copywork cards. Beautiful handwriting models. Color-coded punctuation in the model.",
             "kinesthetic_learner": "Trace the passage with a finger before writing. Use a whiteboard for practice before final copy on paper.",
             "auditory_learner": "Read the passage aloud before copying. Say each word as you write it. Spell words aloud while writing.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Copywork is a proven method for building accurate spelling, capitalization, and punctuation. The child copies a short passage of excellent English, and through the careful, deliberate act of reproducing it exactly, absorbs the conventions of correct writing. Today we copy a one or two sentence passage from quality literature with zero errors and neat, consistent handwriting.",
+                "gradual_release": {
+                    "i_do": "Choose a fine sentence and copy it aloud, thinking each step through: a capital letter to begin, this word spelled letter by letter, a comma here for the pause, a finger-width space between words, a period to close. Show that copywork means reproducing the model exactly.",
+                    "we_do": "Copy a sentence together, pausing before each word to study its spelling, naming the capital letters and punctuation marks, and checking the finished line against the model word by word.",
+                    "you_do": "Child copies a one or two sentence passage independently, then checks it against the original, circling any difference found.",
+                },
+                "guided_practice": [
+                    "Study a sentence, name its capital letters and punctuation marks, then copy it exactly",
+                    "Copy a short passage and check it against the model word by word, marking any differences",
+                    "Copy a passage that contains one specific teaching point, a question mark or a proper noun, and explain that mark afterward",
+                ],
+                "independent_practice": [
+                    "Daily copywork of one beautiful sentence, aiming for an exact, error-free copy",
+                    "Copy a two-sentence passage and self-check it against the original",
+                ],
+                "mastery_check": [
+                    "Copy a one or two sentence passage with zero errors in spelling, capitalization, and punctuation",
+                    "Maintain neat, consistent handwriting throughout the passage",
+                    "Find and correct an error by comparing the copy to the model",
+                ],
+                "spiral_review": [
+                    "Revisit letter formation and spacing from earlier handwriting work each time a passage is copied",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "As the apprentice painter learns his craft by copying the masters, so the young writer learns his by copying the finest English ever set down. To reproduce a noble sentence exactly, every letter and every mark, is to take its order and its music into the hand and the ear. Copywork is the patient imitation by which excellence is first absorbed and later made one's own.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the copyist's rule: study the passage first, copy it exactly, then check it against the model",
+                    ],
+                    "recitations": [
+                        "Recite that one sentence copied perfectly teaches more than a page copied in haste, and that the writer learns excellence by imitating it",
+                    ],
+                },
+                "copywork": [
+                    "Copy a sentence of fine English, drawn from Scripture, from poetry, from a proverb, or from a worthy story, reproduced exactly after careful study",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the copyist's rule, then read the chosen passage aloud before the pencil begins, so the ear meets the sentence before the hand does.",
+                "history_integration": "Tell that for many centuries, before printing, every book was multiplied by copyists who reproduced great writing word for word, and that scholars have always learned to write well by copying writing that was already excellent.",
+                "read_aloud_suggestions": [
+                    "The passage chosen for copywork, read aloud first with care for its rhythm and sense, drawn from poetry, Scripture, fables, or fine stories",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "The living book the family is currently reading aloud, the source of the copywork sentence, chosen for its beautiful and worthy language",
+                ],
+                "short_lesson_flow": "Keep the lesson short, five to ten minutes. Together choose one beautiful sentence from a living book the child loves. The child studies it closely, noticing every capital, every mark, every spelling, then copies it slowly and perfectly with full attention. Never allow an error to be written: if the child is unsure of a word, they study it again before writing. One perfect sentence is the whole lesson.",
+                "narration_prompt": "Before you copy, tell me what you notice about this sentence: the capital letters, the marks, any word that looks interesting or tricky.",
+                "real_world_objects": [
+                    "A favorite living book to draw the copywork passage from",
+                    "Good lined paper and a comfortable pencil",
+                    "A copybook in which fine passages are gathered over time",
+                ],
+                "nature_connection": "A line of fine nature description, copied from a living book, joins copywork to the nature notebook and to the habit of looking closely at the real world.",
+                "habit_focus": "The habit of perfect execution: copying with such care that no error is ever set down, the child studying any uncertain word before writing it.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Copywork cards, each bearing one beautiful, correct sentence in clear print",
+                    "Lined paper graded to the child's hand and a comfortable pencil",
+                    "A folder or box in which the child's finished copywork is gathered",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a copywork card: this is a copywork card, we study the sentence and then copy it exactly; you study this card; show me how you check your copy against the card.",
+                    "steps": [
+                        "The child chooses a copywork card and studies the sentence, noticing the capital letters, the spelling, and the punctuation",
+                        "The child copies the sentence onto lined paper, reproducing the model exactly",
+                        "The child lays the card beside the finished copy and compares them word by word, correcting any difference",
+                    ],
+                },
+                "control_of_error": "The copywork card itself is the control: it stays in view, and the child sets the finished copy beside it to find and correct any difference without the parent marking it.",
+                "abstraction_pathway": "From copying a single given sentence exactly, to noticing the conventions it contains, toward writing one's own sentences with the same correctness.",
+                "extensions": [
+                    "Copy a longer passage of two or more sentences from a card",
+                    "Sort copywork cards by a feature: those with a question mark, those with a comma, those with a proper noun",
+                    "Begin a personal copybook of favorite sentences gathered over time",
+                ],
+                "observation_focus": "Watch for the child studying the card before writing, copying without rushing, and checking the finished copy against the model to find their own errors.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep good paper, comfortable pencils, and favorite books within easy reach",
+                    "Leave a beautiful line or quotation written out somewhere the child might choose to copy it",
+                    "Offer a blank copybook or journal the child can fill with words and lines they love",
+                ],
+                "real_world_contexts": [
+                    "Copying a recipe to keep or to share with someone",
+                    "Copying a favorite line of a poem, a song lyric, or a quotation onto a card or poster",
+                    "Copying a greeting or verse into a birthday or thank-you card",
+                    "Copying out the words for a sign, a label, or a game the child is making",
+                ],
+                "conversation_starters": [
+                    "That line you liked from the story: want to copy it so it is yours to keep?",
+                    "Want to make a card? You could copy a nice verse inside it.",
+                    "Look how this sentence is built, a capital here, a comma there. Notice anything?",
+                ],
+                "resource_bank": [
+                    "A shelf of well-written books to draw lines and passages from",
+                    "Cards, paper, and a copybook for keeping favorite words",
+                    "Poems, quotations, and song lyrics the child enjoys",
+                ],
+                "parent_role": "Copy things yourself where the child can see, a recipe, a quotation, an address, so copying looks like a natural and useful thing to do. When the child copies, let real purposes choose the passage, and when they are interested, point out gently how the sentence is built so noticing grows alongside the copying.",
+                "observation_documentation": "Over time, notice whether the child copies more accurately, whether spelling and punctuation in their own writing improve, and whether they begin to notice how good sentences are built. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Copywork reinforces reading: the child reads the passage carefully before and during copying",
