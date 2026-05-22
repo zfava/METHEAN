@@ -5138,10 +5138,112 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Talk through the concepts: 'I start here. I read this way. This word says...' Verbal narration of the reading process.",
         },
         "philosophy_specific": {
-            "classical": "Systematic instruction in book handling and print conventions. Daily practice with tracking text during read-alouds.",
-            "charlotte_mason": "Print concepts learned naturally through daily read-alouds. The parent models by pointing to text. No formal instruction needed — just consistent modeling.",
-            "montessori": "Sandpaper letters introduce the concept that symbols carry meaning. The movable alphabet shows that words are built from letters with spaces between them.",
-            "traditional": "Print concept assessment checklist. Formal instruction on book parts. Practice worksheets with directionality arrows.",
+            "traditional": {
+                "introduction": "Before a child can read, they must learn how print works. Print has rules: we read left to right and top to bottom, and we turn pages front to back. Spaces separate one word from the next. A book has a front cover, a back cover, a title that names it, and an author who wrote it. And print carries meaning: words spoken aloud can be written down and read back. Today we learn these rules of print.",
+                "gradual_release": {
+                    "i_do": "During a read-aloud, run a finger under the words, left to right and top to bottom, so the path of print is seen. Name the front cover, the back cover, the title, and the author. Point to single words and show the spaces between them. Say a sentence, write it down, and read it back.",
+                    "we_do": "Explore a book together: find the front cover, the title, and the author. Point to each word of a sentence in turn, counting the words by the spaces. The child says a sentence and watches it be written and read back.",
+                    "you_do": "Child shows left-to-right and top-to-bottom directionality, names the front cover, back cover, title, and author, points to single words, and tells that spoken words can be written and read back.",
+                },
+                "guided_practice": [
+                    "Run a finger under the words during a shared read-aloud, left to right and top to bottom",
+                    "Find and name the front cover, back cover, title, and author of a book",
+                    "Point to each word of a short sentence and count the words by the spaces",
+                ],
+                "independent_practice": [
+                    "Explore an unfamiliar book and identify its title and author",
+                    "Dictate a sentence, watch it written, and point to each word while reading it back",
+                ],
+                "mastery_check": [
+                    "Demonstrate left-to-right, top-to-bottom directionality on a page",
+                    "Identify the front cover, back cover, title, and author of a book",
+                    "Point accurately to individual words, showing word boundaries",
+                ],
+                "spiral_review": [
+                    "Revisit handling a book the right way up and turning pages front to back",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Print is speech made to last. The words a person says vanish on the air, but written down they stay, and may be read back by anyone, in any year. Yet print keeps rules: it runs left to right and top to bottom, it gathers letters into words and parts the words with spaces, and a book names itself by its title and names its maker, the author. To learn these rules is the doorway to reading.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the way of print: left to right, top to bottom, front of the book to the back",
+                        "Chant the parts of a book: front cover, back cover, the title that names it, the author who wrote it",
+                    ],
+                    "recitations": [
+                        "Recite that spaces part the words, that the title names the book and the author wrote it, and that spoken words written down can be read back",
+                    ],
+                },
+                "recitation_routine": "Begin each lesson by reciting the way of print, left to right and top to bottom, and naming the parts of the book in hand.",
+                "history_integration": "Tell that writing is one of the great inventions, that before it all words had to be remembered, and that not every language runs as English does, for some are written right to left, so the way of print is a thing each people has settled.",
+                "read_aloud_suggestions": [
+                    "A beautifully made book, read aloud with a finger tracking the print, so the child sees the way of print while hearing the story",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A beautiful picture book, well made and well loved, the kind worth handling and returning to often",
+                ],
+                "short_lesson_flow": "There is no separate lesson. At every read-aloud, simply hold the book so the child sees it, name its title and author once, and run your finger gently under the words as you read. Through this quiet, daily modeling, day after day, the rules of print are learned without a single worksheet.",
+                "narration_prompt": "Show me the front of this book and tell me its name. Where on the page should we start to read?",
+                "real_world_objects": [
+                    "Real, beautiful picture books, held and explored",
+                    "The child's own name, written out, their first piece of meaningful print",
+                    "Print in the real world: signs, labels, a grocery list, a recipe",
+                ],
+                "nature_connection": "In the nature notebook, write beneath the child's drawing the words they tell you, so the child sees their own spoken words about a leaf or a bird become print that can be read back.",
+                "habit_focus": "The habit of attention: watching the finger move under the words and seeing how print is followed.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The sandpaper letters, where a symbol is traced and given its sound",
+                    "The movable alphabet, with which words are built from letters and parted by spaces",
+                    "A shelf of well-made books for handling: finding the cover, the title, the author",
+                    "Cards on which the child's own dictated words are written",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a book in hand: this is the title, it names the book; show me the title; what is this part of the book called?",
+                    "steps": [
+                        "Handle a book: find the front cover, the back cover, the title, and the author",
+                        "Follow the print during a reading, the finger moving left to right and top to bottom",
+                        "Build a short message with the movable alphabet, leaving a space between each word, and read it back",
+                    ],
+                },
+                "control_of_error": "The movable alphabet is the control: a word run together with no spaces cannot be read back cleanly, and the child, sounding it out, hears that the spaces are needed; the book itself shows that print followed out of order makes no sense.",
+                "abstraction_pathway": "From tracing single sandpaper letters as symbols that carry sound, to building spaced words with the movable alphabet, toward following whole lines of print and knowing how a book is ordered.",
+                "extensions": [
+                    "Build longer messages with the movable alphabet, carefully spaced",
+                    "Find the title and author on many books and sort them",
+                    "Label real objects in the room with small written cards",
+                ],
+                "observation_focus": "Watch for the child following print left to right without drift, leaving spaces between words, and treating print as something that carries meaning.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep beautiful, varied books all around the house, within easy reach",
+                    "Leave out paper and pens so a child may watch their words be written",
+                    "Let the child see real print in use: lists, labels, notes, recipes",
+                ],
+                "real_world_contexts": [
+                    "Being read to daily, watching a finger move under the words",
+                    "Seeing their own name and reading it as print that means them",
+                    "Watching a grocery list or a note be written, then used",
+                    "Noticing print everywhere: signs, cereal boxes, labels, instructions",
+                ],
+                "conversation_starters": [
+                    "Where should we start reading on this page? Which way do the words go?",
+                    "Can you find the name of this book? Who do you think wrote it?",
+                    "If I write down what you just said, could Grandma read it later?",
+                ],
+                "resource_bank": [
+                    "A rich home library and frequent library visits",
+                    "Paper and pens for writing down the child's words",
+                    "The print of everyday life: signs, lists, labels, mail",
+                ],
+                "parent_role": "Read aloud daily and let the child see the book, run a finger under the words, and name the title and author as a natural part of it. Write down the child's own words when they ask, and point out print in the world, letting curiosity rather than drill lead the way.",
+                "observation_documentation": "Over time, note whether the child follows print left to right and top to bottom, names the parts of a book, points to single words, and understands that print carries meaning. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Math also reads left to right: 2 + 3 = 5 is read in order. Number lines go left to right.",
