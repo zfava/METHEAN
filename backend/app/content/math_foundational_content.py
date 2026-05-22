@@ -2933,10 +2933,113 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Narrate: 'The pencil reaches to 6. Six inches.'",
         },
         "philosophy_specific": {
-            "classical": "Systematic instruction with formal units. Precision as virtue.",
-            "charlotte_mason": "Measure in nature: how tall is the sunflower? Real questions.",
-            "montessori": "Red rods for comparison. Metric rods. Practical life.",
-            "traditional": "Measurement worksheets with ruler practice.",
+            "traditional": {
+                "introduction": "Measurement begins with comparison: which is longer? Then it asks how much longer, by laying a unit end to end. We start with nonstandard units, paper clips, so the child sees that a unit must be repeated with no gaps and no overlaps, and then we move to the ruler and standard inches.",
+                "gradual_release": {
+                    "i_do": "Model comparing two objects to see which is longer. Lay paper clips end to end along an object, with no gaps, counting the units. Then model the ruler: line the object up at the zero mark and read where it ends.",
+                    "we_do": "Measure objects together with paper clips, then with blocks, and discuss why the same object gave two different numbers. Read the ruler together to the nearest inch.",
+                    "you_do": "Child measures objects with nonstandard units and with a ruler to the nearest inch, compares two lengths, and tells how much longer one object is.",
+                },
+                "guided_practice": [
+                    "Measure five objects with paper clips and record each length in a chart",
+                    "Estimate a length, then measure it with a ruler to check",
+                    "Compare two objects and find how much longer one is",
+                ],
+                "independent_practice": [
+                    "Measure objects around the room with a ruler and record the results",
+                    "A measuring scavenger hunt: find something about five units long",
+                ],
+                "mastery_check": [
+                    "Measure with nonstandard units accurately, end to end with no gaps",
+                    "Measure with a ruler to the nearest inch, starting at zero",
+                    "Explain why standard units matter",
+                ],
+                "spiral_review": [
+                    "Revisit direct comparison of two lengths before measuring with units again",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "To measure is to ask how many of a chosen unit fit along a thing. The rule is exact and worth keeping: lay the unit end to end, with no gaps and no overlaps, and count. Once that rule is sure, the ruler and its inches are simply a fixed unit kept ready.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the rule of measuring: lay the unit end to end, no gaps, no overlaps, then count",
+                        "Chant the inch facts as they are met: twelve inches make one foot",
+                    ],
+                    "recitations": [
+                        "Recite the rule of measuring, and recite that a unit must be the same each time or the count cannot be trusted",
+                    ],
+                },
+                "copywork": [
+                    "Copy a neat measurement record, each object beside its length, and copy the numbered marks of the ruler in order",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the rule of measuring before any measuring is done; the rule is rehearsed cumulatively, never assumed.",
+                "history_integration": "Tell that people once measured with the body, the cubit from elbow to fingertip, the span of a hand, the foot, and that the trouble of bodies differing led to fixed, standard units.",
+                "read_aloud_suggestions": [
+                    "A well-told story or account in which things are measured, and the old body-based measures appear",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated book about how things are measured and built, with real artwork and never a busy workbook",
+                ],
+                "short_lesson_flow": "Take a real question outdoors or around the home, how tall is the sunflower, how long is the table, and answer it together. Lay a chosen unit end to end, count carefully, and then try a ruler. Measure one or two real things, calmly, and stop while interest is high.",
+                "narration_prompt": "Tell me how you measured it. What unit did you use, and how did you keep your measuring honest?",
+                "real_world_objects": [
+                    "A growing plant measured week by week",
+                    "Furniture measured to see whether it will fit a space",
+                    "The child's own height marked and measured",
+                ],
+                "nature_connection": "On a nature walk, measure a found thing, a leaf, a stick, a stone, and record its length with a small drawing in the nature notebook.",
+                "habit_focus": "The habit of exactness: starting at the very end, laying each unit truly against the last, and reading the measure honestly.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The red rods, graded in length, for direct comparison and ordering",
+                    "A child-sized ruler and measuring tape",
+                    "Practical-life objects of many lengths to measure and order",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the red rods: this is the longest; show me the longest; which rod is this? Then, with a ruler, name the units along its edge.",
+                    "steps": [
+                        "Order the red rods from shortest to longest and compare them directly",
+                        "Lay a chosen unit end to end along an object and count the units",
+                        "Measure the same object with the ruler and read its length in inches",
+                    ],
+                },
+                "control_of_error": "The graded red rods fit together in only one true order, and a measuring laid with gaps or overlaps gives a count that does not match the ruler, so the error shows itself to the child.",
+                "abstraction_pathway": "From comparing the red rods directly (length felt in the hand), to laying units end to end, toward reading a length from the ruler alone.",
+                "extensions": [
+                    "Measure many objects and order them by length",
+                    "Measure with both inches and centimeters and compare the two units",
+                ],
+                "observation_focus": "Watch for the child laying units truly end to end and starting the ruler at zero, and for free, repeated measuring by choice.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave a ruler, a measuring tape, and paper clips within reach",
+                    "Keep a height chart on the wall where the child can mark and measure",
+                    "Set out building and cooking materials where measuring naturally arises",
+                ],
+                "real_world_contexts": [
+                    "Measuring the child's own growing height",
+                    "Measuring ingredients and pans while cooking and baking",
+                    "Checking whether a piece of furniture or a toy will fit a space",
+                    "Measuring for a building or craft project the child cares about",
+                ],
+                "conversation_starters": [
+                    "How long do you think this is? How could we find out?",
+                    "You measured with your hand and I measured with mine and we got different numbers. Why?",
+                    "Which of these is longer, and how much longer?",
+                ],
+                "resource_bank": [
+                    "A ruler and a measuring tape kept available",
+                    "A wall height chart",
+                    "Paper clips, blocks, and other things to measure with",
+                ],
+                "parent_role": "Measure things aloud as real questions arise, cooking, building, growing, and let the child measure alongside. Answer genuine questions about length and units, and let real projects do the teaching rather than a worksheet.",
+                "observation_documentation": "Over time, note whether the child lays units end to end without gaps, reads a ruler from zero, compares two lengths, and understands why a unit must stay the same. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Reading numbers on rulers and tape measures",
