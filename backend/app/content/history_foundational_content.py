@@ -3369,11 +3369,6 @@ HISTORY_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["calendar showing major holidays", "books about holiday origins"],
             "recommended": ["family traditions journal", "historical photographs of holiday celebrations"],
-            "philosophy_specific": {
-                "classical": "Holidays as annual touchstones to the national narrative. Memorize dates and origins. Patriotic songs and recitations on civic holidays.",
-                "charlotte_mason": "Seasonal rhythm: study each holiday as it approaches through living books. The Year Round calendar connects history to the child's lived experience.",
-                "montessori": "Holiday calendar with movable cards. Cultural celebration folders. The child researches and presents holiday origins to the family.",
-            },
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -3383,6 +3378,120 @@ HISTORY_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Holiday photo collections. Illustrated timeline of holiday origins. Decorated calendar.",
             "kinesthetic_learner": "Cook traditional foods. Make holiday crafts. Act out origin stories.",
             "auditory_learner": "Hear holiday origin stories told aloud. Sing patriotic songs. Discuss holiday meanings in conversation.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Holidays are living history. Every Fourth of July, Thanksgiving, or Martin Luther King Jr. Day remembers a real event or a real person, and a holiday is how a community says, this matters, we must not forget. Some holiday stories are remembered simply, but the true history behind them is often fuller: the first Thanksgiving was a real harvest feast shared by the Plymouth colonists and the Wampanoag, and the longer history between the English settlers and the Wampanoag was also marked by sickness, lost land, and war. Today we learn the origins of at least five holidays, connect each to what it commemorates, and place them on the calendar and the timeline, telling the histories truthfully.",
+                "gradual_release": {
+                    "i_do": "Take a holiday and tell its origin in order: what happened, when, and why it is remembered. For Thanksgiving, tell the real harvest feast of 1621, and tell honestly that the wider story between the settlers and the Wampanoag held hardship and conflict as well. Place the holiday on the calendar and on the historical timeline.",
+                    "we_do": "Study the origins of several holidays together, connect each to the event or person it commemorates, and place each on the calendar and the timeline.",
+                    "you_do": "Child explains the origins of at least five holidays, connects each to what it commemorates, describes how celebrations preserve memory, and places the holidays on the calendar and the timeline.",
+                },
+                "guided_practice": [
+                    "Tell the origin story of a holiday: the event or person, the date, and why it is remembered",
+                    "Connect each holiday studied to the event, person, or idea it commemorates",
+                    "Place each holiday on the annual calendar and on the historical timeline",
+                ],
+                "independent_practice": [
+                    "Research the origin of an upcoming holiday and present it to the family",
+                    "Make a Holiday History Book with a page for each holiday's origin, date, and family traditions",
+                ],
+                "mastery_check": [
+                    "Explain the historical origins of at least five major holidays",
+                    "Connect each holiday to the event, person, or idea it commemorates",
+                    "Describe how celebrations and traditions help communities remember important events",
+                ],
+                "spiral_review": [
+                    "Revisit the historical timeline, placing each holiday's origin event in its true spot",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "A holiday is a community's act of memory: a day set apart so that an event or a person from the past is not forgotten. The classical mind asks of each holiday, what is the true history beneath it, and tells that history honestly. Some holidays carry simple stories that the fuller record makes more complex, as the harvest feast of the Plymouth colonists and the Wampanoag stands within a longer and harder history between those peoples. To know a holiday well is to know the real events it marks.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the holidays and what each marks: Independence Day the Declaration, Thanksgiving a harvest, Memorial Day the fallen soldiers, Presidents' Day the leaders, Martin Luther King Jr. Day the work for equal rights",
+                        "Chant the purpose of a holiday: to remember, to honor, and to hand the memory on",
+                    ],
+                    "recitations": [
+                        "Recite that a holiday marks a real event or person, and that the honest student learns the true history beneath the celebration",
+                    ],
+                },
+                "copywork": [
+                    "Copy the names of several holidays beside their dates and the events they commemorate",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the holidays studied and what each one marks before any new study.",
+                "history_integration": "Place each holiday's origin event on the chronological spine, so the child sees that Thanksgiving's harvest feast, the Declaration of Independence, and the work of Dr. King fall at very different points along the long story of history.",
+                "read_aloud_suggestions": [
+                    "A living account of the true origin of a holiday, told honestly with its fuller history",
+                    "A children's history of a holiday and the people, all of them, whose story it marks",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book about the true origin of a holiday, honest about the fuller history rather than a tidy legend",
+                    "A living book that tells, truthfully, the story of the peoples behind a holiday such as Thanksgiving",
+                ],
+                "short_lesson_flow": "Let the calendar set the lesson: as a holiday draws near, read its true origin story aloud, and let the child narrate it back. Tell the history honestly, the harvest feast and also the harder history between the settlers and the Wampanoag, and let the child sit with the whole of it. Mark the day, and keep the family's own traditions gladly.",
+                "narration_prompt": "Tell me the real story behind this holiday. What does it remember, and what is the fuller history beneath it?",
+                "real_world_objects": [
+                    "The calendar, with the holidays marked through the year",
+                    "A Book of Centuries where each holiday's origin event is placed",
+                    "The family's own holiday traditions, foods, decorations, and gatherings",
+                    "Living books and historical pictures of holiday celebrations",
+                ],
+                "nature_connection": "Notice that many holidays follow the turning year, the harvest of Thanksgiving, the seasons of planting and gathering, so that the calendar of holidays is woven into the calendar of nature.",
+                "habit_focus": "The habit of attention and of truthfulness: learning the real history a holiday marks, the glad parts and the hard parts together.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A holiday calendar with movable cards for the year's holidays",
+                    "Cultural and civic celebration folders with photographs and honest origin accounts",
+                    "A timeline for placing each holiday's origin event",
+                    "Materials for the child to research and present a holiday's history",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the holiday cards: this is Independence Day, marking the Declaration of Independence; show me Independence Day; which holiday is this, and what does it mark?",
+                    "steps": [
+                        "The child places the year's holidays on the calendar and learns what each one marks",
+                        "The child studies the true origin of a holiday through an honest account, including its fuller history",
+                        "The child places each holiday's origin event on the timeline and presents what they learned",
+                    ],
+                },
+                "control_of_error": "The calendar and the timeline are the control: a holiday placed on the wrong date or its origin set in the wrong era does not match the record, and an account that tells only a tidy legend is checked against the honest history and found incomplete.",
+                "abstraction_pathway": "From handling the concrete holiday cards and calendar, to studying the true origin of each holiday, toward grasping that holidays are a community's way of keeping real history in living memory.",
+                "extensions": [
+                    "Research how the same holiday is kept differently in different families and places",
+                    "Investigate the fuller history behind a holiday's familiar story",
+                    "Compare a civic holiday and a cultural holiday and what each preserves",
+                ],
+                "observation_focus": "Watch for the child connecting each holiday to the real event it marks, and meeting the fuller history honestly rather than resting on a simple legend.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep books about the true origins of holidays within reach",
+                    "Mark the year's holidays on a family calendar to wonder about as each draws near",
+                    "Have the family's own holiday traditions, foods, and stories alive in the home",
+                ],
+                "real_world_contexts": [
+                    "Keeping the family's holidays and asking, as each comes, what it truly marks and for whom",
+                    "Noticing the decorations, foods, and traditions of a holiday and where they came from",
+                    "Hearing how grandparents and elders kept the same holidays in their day",
+                    "Seeing how friends and neighbors of different backgrounds keep different holidays",
+                ],
+                "conversation_starters": [
+                    "Why do you think people set aside a whole day to remember this?",
+                    "The Thanksgiving story is often told simply; the real history between the settlers and the Wampanoag was fuller and harder. What do you make of that?",
+                    "If you could make a holiday, what would it remember, and how would you keep it?",
+                ],
+                "resource_bank": [
+                    "Books and documentaries about the true origins of holidays",
+                    "A family calendar marking the year's holidays",
+                    "The family's own elders, traditions, and stories",
+                ],
+                "parent_role": "As each holiday comes round, wonder aloud with the child about what it truly marks, and tell its origin honestly, the glad parts and the hard parts alike, as with the fuller history behind Thanksgiving. Keep the family's traditions with joy, share the documented history openly, and let the child reason about its meaning rather than handing them a tidy verdict.",
+                "observation_documentation": "Over time, note whether the child knows the origins of the holidays the family keeps, connects each to what it marks, and can meet the fuller history honestly. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Holiday books build reading skills. Origin stories are compelling narratives for narration practice.",
