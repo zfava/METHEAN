@@ -5024,7 +5024,7 @@ SCOPE_SEQUENCES["history"] = {
         {
             "ref": "hist_f_09",
             "title": "American History Stories",
-            "description": "America's story through real people: exploration, Pilgrims, Native Americans, Washington, Franklin, Lincoln, Tubman. Emphasis on courage and character.",
+            "description": "America's story through real people: exploration, Pilgrims, American Indians, Washington, Franklin, Lincoln, Tubman. Emphasis on courage and character.",
             "prerequisites": ["hist_f_01"],
             "estimated_weeks": 2,
             "key_concepts": ["exploration", "colonial life", "founding fathers", "slavery and freedom"],
@@ -5450,7 +5450,7 @@ SCOPE_SEQUENCES["history"] = {
         },
         {
             "ref": "hist_d_12",
-            "title": "Native American Civilizations",
+            "title": "American Indian Civilizations",
             "description": "Major pre-Columbian civilizations: Aztec, Maya, Inca empires and North American nations (Iroquois, Plains, Pueblo, Northwest Coast). Their achievements and the catastrophic impact of European contact.",
             "prerequisites": ["hist_d_11"],
             "estimated_weeks": 2,
@@ -5588,7 +5588,7 @@ SCOPE_SEQUENCES["history"] = {
         {
             "ref": "hist_d_19",
             "title": "Westward Expansion",
-            "description": "Manifest Destiny: Oregon Trail, Gold Rush, Transcontinental Railroad, homesteading, Indian Wars, and destruction of Native American ways of life.",
+            "description": "Manifest Destiny: Oregon Trail, Gold Rush, Transcontinental Railroad, homesteading, Indian Wars, and destruction of American Indian ways of life.",
             "prerequisites": ["hist_d_16"],
             "estimated_weeks": 1,
             "key_concepts": [
@@ -5604,7 +5604,7 @@ SCOPE_SEQUENCES["history"] = {
                 "Distinguishes frontier myths from reality",
             ],
             "classical_alignment": "Grammar stage: westward expansion as narrative drama with moral complexity",
-            "charlotte_mason_alignment": "Living books: pioneer and Native American perspectives with map work",
+            "charlotte_mason_alignment": "Living books: pioneer and American Indian perspectives with map work",
             "standard_alignment": "Westward Expansion",
         },
         {

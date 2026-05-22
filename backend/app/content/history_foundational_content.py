@@ -2137,7 +2137,7 @@ HISTORY_FOUNDATIONAL_CONTENT = {
     "hf-09": {
         "enriched": True,
         "learning_objectives": [
-            "Narrate at least 5 key stories from American history: exploration, Pilgrims, Native Americans, the Revolution, and key figures",
+            "Narrate at least 5 key stories from American history: exploration, Pilgrims, American Indians, the Revolution, and key figures",
             "Identify key historical figures: Columbus, Pocahontas, Washington, Franklin, Lincoln, Tubman",
             "Place major American history events on a timeline in correct chronological order",
             "Describe the concepts of courage, freedom, and character through the lives of historical figures",
