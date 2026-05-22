@@ -2521,11 +2521,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "iron filings for visualizing magnetic fields",
                 "compass for demonstrating Earth's magnetism",
             ],
-            "philosophy_specific": {
-                "classical": "Magnetism as the child's first encounter with invisible forces. Vocabulary: attract, repel, poles, magnetic field. Systematic testing and recording.",
-                "charlotte_mason": "Hands-on discovery: the child experiments freely with magnets before formal instruction. Wonder first, terminology second. Record discoveries in the science notebook.",
-                "montessori": "Magnet experiment tray: magnets, test materials, and a recording sheet. The child works independently, testing and recording. Compass work as a practical life extension.",
-            },
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 10},
         "accommodations": {
@@ -2535,6 +2530,118 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Iron filings on paper over a magnet make the invisible magnetic field VISIBLE. Charts recording attracted vs not attracted. Compass needle visibly pointing north.",
             "kinesthetic_learner": "Handling magnets and test objects is the core activity. Feel the pull of attraction. Feel the push of repulsion. Build a compass. Magnetic fishing game.",
             "auditory_learner": "Discuss predictions before testing: 'What do you think will happen? Why?' Talk through results. Verbal explanations of the rules of magnetism.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "A magnet pulls certain objects toward it with an invisible force. That force is magnetism. Magnets attract only metals that contain iron, nickel, or cobalt, not all metals and nothing else. Every magnet has two poles, a north and a south; opposite poles attract, like poles repel. Today we predict and test what magnets attract, explore the poles, and learn that magnetism reaches through air and some materials.",
+                "gradual_release": {
+                    "i_do": "Hold a magnet to several objects and think aloud: the steel paperclip is pulled, the plastic toy is not, the copper penny is not, so it is not all metal but iron-containing metal. Bring two magnets together one way to feel them attract, flip one to feel them repel, and pull a paperclip through paper to show the force reaching across.",
+                    "we_do": "Predict and test together what a magnet will attract, sort the results, explore attraction and repulsion with two magnets, and test the force through paper, cloth, and water.",
+                    "you_do": "Child predicts and tests which materials a magnet attracts, demonstrates attraction and repulsion with the poles, and explains that magnetism is an invisible force acting through air and some materials.",
+                },
+                "guided_practice": [
+                    "Predict, then test, which household objects a magnet attracts, and sort the results",
+                    "Bring two magnets together both ways to feel attraction and repulsion",
+                    "Test whether a magnet's force reaches through paper, cloth, and water",
+                ],
+                "independent_practice": [
+                    "Go on a magnet scavenger hunt, recording attracted and not-attracted, and look for the pattern",
+                    "Design and carry out an original magnet experiment",
+                ],
+                "mastery_check": [
+                    "Predict and test magnetic attraction accurately for common materials",
+                    "Demonstrate attraction and repulsion with two magnets and explain the poles",
+                    "Explain that magnetism is an invisible force that acts through air and some materials",
+                ],
+                "spiral_review": [
+                    "Revisit sorting objects by a property, the skill used to sort the attracted from the not-attracted",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "There are forces in the world that the eye cannot see, and magnetism is the first of them a child may meet and master. An unseen power reaches out from a magnet, across the empty air, and draws iron to itself. It is not magic but a law of nature, with rules as sure as any: opposite poles draw together, like poles drive apart, and only certain metals answer the call.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the rule of the poles: opposite poles attract, like poles repel",
+                        "Chant what a magnet attracts: iron, nickel, and cobalt, and not all metals besides",
+                    ],
+                    "recitations": [
+                        "Recite that magnetism is an invisible force, that it acts at a distance through air and through some materials, and that every magnet has a north pole and a south",
+                    ],
+                },
+                "copywork": [
+                    "Copy the rule of the poles and the words magnet, attract, repel, pole, and magnetic field",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the rule of the poles and what a magnet attracts before any new testing.",
+                "history_integration": "Tell that the ancients found stones, called lodestones, that drew iron of themselves, that the Chinese made the first compass from such a stone, and that this small invisible force opened the seas to navigators and changed the map of the world.",
+                "read_aloud_suggestions": [
+                    "An account of the compass and how it guided explorers across unknown seas, read aloud so the child hears magnetism put to great use",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A living book about magnets, the compass, or invisible forces, written with wonder and never as a dry reader",
+                ],
+                "short_lesson_flow": "Give the child a magnet and let them simply explore, with no instruction first: go about the house and discover what the magnet pulls and what it does not. Let wonder come before any word like pole or force. Afterward, the child tells what they found and records a few discoveries in the science notebook. Stop while the magic is still fresh.",
+                "narration_prompt": "Tell me what you discovered with the magnet. What did it pull toward itself, and what did it leave alone?",
+                "real_world_objects": [
+                    "A magnet, and the whole house full of things to test",
+                    "Two magnets for feeling attraction and repulsion",
+                    "A compass, a tiny magnet that finds the north",
+                    "A science notebook for recording discoveries",
+                ],
+                "nature_connection": "Carry the magnet outdoors: test the iron in sand or soil, and speak of the Earth itself as a vast magnet, with its own north and south, that the compass needle feels and obeys.",
+                "habit_focus": "The habit of wonder and of attention: marveling at an unseen force and watching closely what it does.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A magnet experiment tray with bar magnets, a collection of test objects, and a recording sheet",
+                    "Two magnets for exploring the poles",
+                    "A compass for the practical-life extension",
+                    "Iron filings for making the magnetic field visible",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With two magnets: this is attraction, the poles pull together, this is repulsion, they push apart; show me repulsion; is this attraction or repulsion?",
+                    "steps": [
+                        "The child works through the tray, predicting and then testing each object, and recording attracted or not attracted",
+                        "The child explores the two magnets, feeling attraction and repulsion, and naming the poles",
+                        "The child tests the force through materials and may make the field visible with iron filings",
+                    ],
+                },
+                "control_of_error": "The magnet itself is the control: a prediction is confirmed or corrected the instant the object is brought near, with no need of an adult, so the child checks every guess against the real force.",
+                "abstraction_pathway": "From freely testing real objects with a real magnet, to recording the results and finding the pattern, toward understanding magnetism as an invisible force with sure laws, acting at a distance.",
+                "extensions": [
+                    "Make the magnetic field visible with iron filings on paper",
+                    "Build a floating compass from a magnetized needle",
+                    "Investigate how the force changes with distance and through different materials",
+                ],
+                "observation_focus": "Watch for the child predicting before testing, noticing that only iron-containing metals are attracted, and grasping that the force reaches across a distance.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep magnets of different kinds within easy reach for free play",
+                    "Leave out a compass, a box of varied objects to test, and iron filings",
+                    "Have a magnetic board or the refrigerator for everyday magnet play",
+                ],
+                "real_world_contexts": [
+                    "Discovering what around the house sticks to a magnet and what does not",
+                    "Using refrigerator magnets and noticing why they hold to the door",
+                    "Playing with a compass and watching the needle always find the north",
+                    "Building toys and games that use magnets",
+                ],
+                "conversation_starters": [
+                    "The paperclip sticks but the plastic toy does not, what is different about them?",
+                    "This penny is metal, why does the magnet not pull it?",
+                    "Can the magnet pull the paperclip through the paper? What do you predict?",
+                ],
+                "resource_bank": [
+                    "A set of magnets and a compass kept available",
+                    "A box of varied objects, metal and not, to test",
+                    "Books about magnets, the compass, and invisible forces",
+                ],
+                "parent_role": "Hand the child magnets and let them discover freely what magnetism does, welcoming every surprise. Wonder aloud about the poles and the unseen force, answer the questions that arise, and let real play with real magnets, rather than a worksheet, do the teaching.",
+                "observation_documentation": "Over time, note whether the child can predict and test what a magnet attracts, knows the rule of the poles, and understands that magnetism is an invisible force acting at a distance. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Magnet vocabulary builds science literacy: attract, repel, poles, magnetic field, force, compass",
