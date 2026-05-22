@@ -4392,11 +4392,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["magnifying glass for insect observation", "science notebook for drawings"],
             "recommended": ["butterfly raising kit or outdoor chrysalis observation", "insect field guide"],
-            "philosophy_specific": {
-                "classical": "Insect anatomy memorized: head, thorax, abdomen, 6 legs. Metamorphosis stages drilled. Classification: insects within arthropods. Vocabulary: metamorphosis, larva, pupa, pollination.",
-                "charlotte_mason": "Observing insects in nature: watching caterpillars, finding beetles under logs, drawing bees on flowers. The nature notebook is full of insect observations. Living books about insect life.",
-                "montessori": "Insect puzzle with labeled body parts. Metamorphosis sequence cards. Butterfly life cycle figures. Real specimen observation with magnifying glass.",
-            },
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 10},
         "accommodations": {
@@ -4406,6 +4401,118 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Magnified insect observation. Detailed drawings. Metamorphosis diagrams and photographs.",
             "kinesthetic_learner": "Bug hunts with collection jars. Handling (safe) insects. Building insect models from clay.",
             "auditory_learner": "Discuss insect behaviors. Listen to insect sounds (crickets, cicadas). Narrate metamorphosis as a story.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Insects are the most numerous animals on Earth, and they are easy to tell from other small creatures by two sure marks: an insect has six legs and three body parts, a head, a thorax, and an abdomen. Many insects change form completely as they grow, in a process called metamorphosis. Today we label the insect's body parts, learn the butterfly's metamorphosis, learn how insects help ecosystems, and tell insects from spiders and other creatures.",
+                "gradual_release": {
+                    "i_do": "With a magnifying glass on a real insect or a clear picture, count aloud: six legs, three body parts, head, thorax, abdomen, so this is an insect. Set a spider beside it, eight legs, two body parts, not an insect. Lay out the four stages of the butterfly, egg, larva, pupa, adult, and name how insects pollinate and decompose.",
+                    "we_do": "Examine insects together, labeling the body parts and counting the legs, sequence the metamorphosis stages, and sort small creatures into insects and not-insects.",
+                    "you_do": "Child labels the insect's three body parts, describes complete metamorphosis, explains two ways insects help ecosystems, and distinguishes insects from spiders and other creatures.",
+                },
+                "guided_practice": [
+                    "Label the head, thorax, and abdomen on an insect diagram and count the six legs",
+                    "Put the four stages of butterfly metamorphosis in order",
+                    "Sort small creatures into insects and not-insects by leg and body-part count",
+                ],
+                "independent_practice": [
+                    "Go on a bug hunt and draw insects from life, labeling their body parts",
+                    "Observe metamorphosis over weeks by raising caterpillars or watching a chrysalis",
+                ],
+                "mastery_check": [
+                    "Label the three body parts of an insect: head, thorax, and abdomen",
+                    "Describe complete metamorphosis using the butterfly's four stages",
+                    "Explain two ways insects help ecosystems and tell an insect from a spider",
+                ],
+                "spiral_review": [
+                    "Revisit the characteristics of living things, since insects show them all, growing, feeding, reproducing, responding",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Of all the animals upon the Earth, the insects are the most numerous, more kinds than all the rest together. They are known by sure marks: six legs and a body in three parts. And many of them work a wonder as they grow, the complete remaking called metamorphosis, by which a crawling caterpillar becomes a winged butterfly. Small though they are, the insects hold the living world together.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the marks of an insect: six legs and three body parts, the head, the thorax, and the abdomen",
+                        "Chant the four stages of metamorphosis: egg, larva, pupa, and adult",
+                    ],
+                    "recitations": [
+                        "Recite that an insect has six legs and a spider eight, and that the insects serve the living world by pollination and by decomposition",
+                    ],
+                },
+                "copywork": [
+                    "Copy the three body parts of an insect and the four stages of metamorphosis, each in order and neatly set down",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the marks of an insect and the stages of metamorphosis before any new study.",
+                "history_integration": "Tell that the silkworm, an insect, spun the thread that built the great Silk Road of trade, that honey bees have been kept by people for thousands of years, and that swarms of locusts brought famine to whole nations, so that the small insect has shaped human history.",
+                "read_aloud_suggestions": [
+                    "A living account of the life of a bee, an ant colony, or a butterfly's metamorphosis, read aloud so the child hears the insect's story told",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book about the life of insects, written with knowledge and wonder, never a dry fact reader",
+                ],
+                "short_lesson_flow": "Go out on a bug hunt, unhurried, with a magnifying glass. Find a real insect and watch it quietly going about its life. Count its legs, see its three body parts, and the child draws it from life in the nature notebook. If a caterpillar can be raised at home, let the child witness the wonder of metamorphosis over the weeks. Let real creatures, watched, be the lesson.",
+                "narration_prompt": "Tell me about the insect you watched. What was it doing, and how did you know it was an insect?",
+                "real_world_objects": [
+                    "A magnifying glass for close insect observation",
+                    "Real insects met on a bug hunt outdoors",
+                    "A caterpillar raised at home, or a chrysalis found and watched",
+                    "A nature notebook for drawing insects from life",
+                ],
+                "nature_connection": "Insects are met everywhere in nature study, the bee on the flower, the beetle under the log, the ant on its errand, and the child comes to know them by patient watching out of doors, season after season.",
+                "habit_focus": "The habit of attention: watching a small creature long enough and closely enough to see how it is made and how it lives.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A parts-of-an-insect puzzle with the body parts labeled",
+                    "Metamorphosis sequence cards and butterfly life-cycle figures",
+                    "Insect and other-creature nomenclature cards for sorting",
+                    "A magnifying glass and real insect specimens for observation",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the insect puzzle: this part is the thorax, where the legs attach; show me the thorax; which body part is this?",
+                    "steps": [
+                        "The child works the parts-of-an-insect puzzle, naming the head, thorax, and abdomen",
+                        "The child arranges the metamorphosis sequence cards in order, egg, larva, pupa, adult",
+                        "The child sorts creature cards into insects and not-insects, counting legs and body parts",
+                    ],
+                },
+                "control_of_error": "The puzzle and the sequence cards carry their own control: each puzzle piece fits only its place, and the metamorphosis cards run true only in one order, while a real insect, with its countable six legs, settles whether a creature belongs.",
+                "abstraction_pathway": "From handling the insect puzzle and the life-cycle figures, to sorting real and pictured creatures by their marks, toward knowing the insect by its definition and its place in the living world without the materials.",
+                "extensions": [
+                    "Compare complete metamorphosis with the incomplete metamorphosis of the grasshopper",
+                    "Study the social insects, the ant colony and the bee hive",
+                    "Investigate how insects pollinate and decompose, the work they do for the world",
+                ],
+                "observation_focus": "Watch for the child counting legs and body parts to identify an insect truly, and grasping that caterpillar and butterfly are one creature in two forms.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a magnifying glass and bug-viewing jars within easy reach",
+                    "Leave out insect books, field guides, and a notebook for drawing",
+                    "Have a butterfly-raising kit or a watched chrysalis available if the child is keen",
+                ],
+                "real_world_contexts": [
+                    "Finding and watching insects in the yard, the garden, and the park",
+                    "Watching bees at flowers and wondering at the work they do",
+                    "Raising caterpillars and witnessing metamorphosis unfold",
+                    "Noticing the insects, and the spiders, that share the home and the outdoors",
+                ],
+                "conversation_starters": [
+                    "You found a spider, it has eight legs, do you think it is an insect?",
+                    "The caterpillar and the butterfly look so different, how can they be the same animal?",
+                    "What do you think would happen to the garden if there were no bees?",
+                ],
+                "resource_bank": [
+                    "A magnifying glass, bug jars, and a notebook",
+                    "Insect books and field guides",
+                    "The yard and garden, full of insects to find and watch",
+                ],
+                "parent_role": "Follow the child's fascination with bugs wherever it leads, into the garden, into books, into raising a caterpillar, and wonder aloud at how insects are made and what they do for the world. Welcome every bug brought to you, and let real creatures, found and watched, rather than a worksheet, teach insect science.",
+                "observation_documentation": "Over time, note whether the child tells an insect by its six legs and three body parts, knows the stages of metamorphosis, and understands how insects help the living world. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Insect vocabulary: metamorphosis, larva, pupa, chrysalis, thorax, abdomen, antenna, pollination, exoskeleton",
