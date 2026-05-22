@@ -4342,10 +4342,114 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Count aloud while pointing. Narrate hops.",
         },
         "philosophy_specific": {
-            "classical": "Number line as foundational tool. Systematic instruction.",
-            "charlotte_mason": "A ruler IS a number line. Real measurement connection.",
-            "montessori": "Bead stair as physical line. Number line rug.",
-            "traditional": "Number line worksheets. Printed line operations.",
+            "traditional": {
+                "introduction": "A number line is a picture of the numbers in order, evenly spaced, with bigger numbers to the right and smaller to the left. It turns counting, adding, subtracting, and comparing into movement: forward to add, backward to subtract. Today we count forward and backward on it, add and subtract with hops, place numbers in their right spots, and compare numbers by which sits farther right.",
+                "gradual_release": {
+                    "i_do": "Walk a floor number line, counting forward, then backward. Model addition: start on 5, hop 3 forward, land on 8, and say plainly that the starting number is not counted as a hop. Model subtraction by hopping back. Compare two numbers by naming which is farther right.",
+                    "we_do": "Walk and hop the number line together: count forward and back, solve an addition and a subtraction by hopping, place a missing number between two marked ones, and compare two numbers.",
+                    "you_do": "Child counts forward and backward on the line, adds and subtracts by hopping, places numbers correctly, and compares two numbers by position.",
+                },
+                "guided_practice": [
+                    "Walk a floor number line counting forward and then backward",
+                    "Add and subtract within twenty by hopping forward and back",
+                    "Place missing numbers on a partly labeled line and compare two numbers",
+                ],
+                "independent_practice": [
+                    "Solve addition and subtraction problems on a paper number line, drawing the hops",
+                    "Place a set of numbers on a blank line from zero to twenty",
+                ],
+                "mastery_check": [
+                    "Add and subtract within twenty using a number line, without counting the start as a hop",
+                    "Place numbers in their correct, evenly spaced positions on a line",
+                    "Compare two numbers by which is farther right on the line",
+                ],
+                "spiral_review": [
+                    "Revisit counting forward and backward by ones, the movement the number line makes visible",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Numbers have an order, and that order can be drawn as a straight road: each number a step along it, the small numbers behind, the large ahead. Once the road is drawn, every sum is a journey: to add is to walk forward, to subtract is to walk back. The number line makes the order of numbers something the eye can see and the foot can travel.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the rule of the line: forward to add, backward to subtract, and the bigger number lies to the right",
+                        "Chant a count up and back along the line: nought, one, two, three, and back again",
+                    ],
+                    "recitations": [
+                        "Recite that on the number line each step is the same size, and that the number you start on is not counted as a step",
+                    ],
+                },
+                "copywork": [
+                    "Draw a number line with evenly spaced marks and copy the numerals in order beneath them",
+                ],
+                "recitation_routine": "Begin each lesson by counting aloud up and down the line and reciting the rule of forward and backward before any new work.",
+                "history_integration": "Tell that picturing numbers as points along a line is an old idea that joined counting to measuring, and that the ruler and the measuring tape are number lines put to work.",
+                "read_aloud_suggestions": [
+                    "A story of a journey told in steps or stages, read aloud so the child hears distance counted out like a number line",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A picture book that counts a journey or a climb step by step, with real artwork and never a workbook page",
+                ],
+                "short_lesson_flow": "Lay a number line along the floor or take up a real ruler or measuring tape. Walk it together, counting calmly. Take a few small hops forward to add, a few back to subtract, for a real purpose, perhaps measuring a length. Stop while the walking is still a pleasure.",
+                "narration_prompt": "Tell me about the hops we took. When we hopped forward, did the number get bigger or smaller?",
+                "real_world_objects": [
+                    "A ruler and a measuring tape, which are number lines",
+                    "A floor number line marked with tape or sidewalk chalk",
+                    "A thermometer, a number line standing upright",
+                ],
+                "nature_connection": "Outdoors, use a measuring tape to measure the height of a sunflower or the length of a fallen branch, reading the number line that the tape is, and note it in the nature notebook.",
+                "habit_focus": "The habit of accuracy: stepping evenly and counting truly, so each hop on the line is the same size.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A number line rug or long printed number line marked in even units",
+                    "The colored bead chains, laid out straight to form a counted line",
+                    "Number tickets to lay beside the line and a small marker the child moves along it",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the number line: this point is twelve; show me twelve; what number is this point on the line?",
+                    "steps": [
+                        "Walk the eye and a finger along the number line, counting each evenly spaced point",
+                        "Place a marker on a number, hop it forward to add, hop it back to subtract, counting the hops",
+                        "Lay number tickets in their places on the line and compare two by their position",
+                    ],
+                },
+                "control_of_error": "The bead chain beneath the line is the control: each hop counted on the line can be checked bead by bead against the chain, and a number ticket laid in the wrong place will not match the bead count there.",
+                "abstraction_pathway": "From walking and hopping a concrete bead-chain line, to moving a marker on the printed number line, toward picturing the line in the mind and adding, subtracting, and comparing without it.",
+                "extensions": [
+                    "Use the longer bead chains to extend the line well past twenty",
+                    "Skip count along the line in twos, fives, and tens",
+                    "Find the difference between two numbers by counting the hops between them",
+                ],
+                "observation_focus": "Watch for the child keeping the hops even, not counting the starting number as a hop, and reading bigger numbers as lying to the right.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Mark a number line on the floor or driveway with tape or chalk for hopping games",
+                    "Leave out a ruler, a measuring tape, and a tape-marked hopscotch grid",
+                    "Keep a thermometer where the child can watch the number rise and fall",
+                ],
+                "real_world_contexts": [
+                    "Hopping forward and back on a sidewalk hopscotch or chalk number line",
+                    "Measuring things around the house with a ruler or tape measure",
+                    "Watching a thermometer climb and drop with the weather",
+                    "Reading the numbers count up on a clock, a stopwatch, or a flight of stairs",
+                ],
+                "conversation_starters": [
+                    "If you stand on seven and hop forward three, where do you land?",
+                    "Which number is farther along the line, eight or twelve?",
+                    "When you hop backward, does the number get bigger or smaller?",
+                ],
+                "resource_bank": [
+                    "A chalk or tape number line outdoors",
+                    "Rulers, measuring tapes, and a thermometer kept available",
+                    "Hopscotch and other hopping games",
+                ],
+                "parent_role": "Point out the number lines already in the child's world, the ruler, the tape measure, the thermometer, the marked stairs, and play hopping and measuring games when the child is keen. Wonder aloud about forward and backward hops, and let real measuring answer the questions.",
+                "observation_documentation": "Over time, note whether the child counts forward and backward along a line, hops to add and subtract, places numbers in their right spots, and compares numbers by position. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Timelines as number lines for stories",
