@@ -420,6 +420,7 @@ class TestAuthoredPhilosophyContent:
             "wf-09",
             "wf-10",
             "wf-11",
+            "wf-12",
         ],
     )
     def test_node_has_all_five_native_variants(self, node_key):
@@ -542,6 +543,7 @@ class TestAuthoredPhilosophyContent:
             "wf-09",
             "wf-10",
             "wf-11",
+            "wf-12",
         ],
     )
     def test_unschooling_variant_has_no_lesson_keys(self, node_key):

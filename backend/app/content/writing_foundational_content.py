@@ -3034,11 +3034,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["high-frequency word list (first 50-100)", "lined paper"],
             "recommended": ["personal word wall or word ring", "high-frequency word flash cards"],
-            "philosophy_specific": {
-                "classical": "Systematic memorization: 5 words per week with daily review. Cumulative spelling tests. Word lists organized by frequency. Mastery required before advancing.",
-                "charlotte_mason": "Visual spelling: the child studies the word until they can SEE it in their mind, then writes from memory. Never guess — always study first. Correct spelling is a habit formed early.",
-                "montessori": "Puzzle word boxes: irregular words acknowledged as special cases. Sandpaper high-frequency words. Personal word dictionaries the child builds.",
-            },
         },
         "time_estimates": {"first_exposure": 10, "practice_session": 10, "assessment": 10},
         "accommodations": {
@@ -3048,6 +3043,115 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Look-cover-write-check is inherently visual. Word wall display. Highlight tricky parts of words in color.",
             "kinesthetic_learner": "Trace words in sand or salt. Write on a whiteboard. Stamp words with letter stamps. Build with magnetic letters.",
             "auditory_learner": "Spell words aloud rhythmically while writing. Create mnemonics: 'said = Silly Ants In Dirt.' Chant tricky spellings.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "High-frequency words are the glue of written English, words like 'the', 'said', 'was', and 'because' that appear in nearly every sentence. Many of them break phonics rules and must be learned by sight. When these words are spelled automatically, the child's mind is free for ideas. Today we work to spell 50 high-frequency words correctly without a model and use them fluently in writing.",
+                "gradual_release": {
+                    "i_do": "Take the word 'said' and model look-say-cover-write-check: look closely, notice the tricky 'ai', say it, cover it, write it from memory, check. Show that this word cannot be sounded out and must be learned by sight.",
+                    "we_do": "Work through a few new high-frequency words together with look-say-cover-write-check, then use each in a spoken and written sentence.",
+                    "you_do": "Child studies and spells a set of high-frequency words from memory and uses them correctly in original sentences.",
+                },
+                "guided_practice": [
+                    "Study a high-frequency word with look-say-cover-write-check until it is correct three times",
+                    "Write a sentence using two or three newly learned high-frequency words",
+                    "Find and fix misspelled high-frequency words in a sample sentence",
+                ],
+                "independent_practice": [
+                    "Spell a cumulative set of high-frequency words from dictation",
+                    "Proofread a piece of writing for misspelled high-frequency words",
+                ],
+                "mastery_check": [
+                    "Spell 50 high-frequency words correctly in writing without a model",
+                    "Use high-frequency words fluently in original sentences",
+                    "Self-correct a misspelled high-frequency word by recognizing it does not look right",
+                ],
+                "spiral_review": [
+                    "Review all previously learned high-frequency words alongside each week's new ones",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Some words in English will not yield to the rules of sound; 'said', 'was', 'could', and their kind must be known by sight, as old friends are known by their faces. Because these words recur in nearly every sentence, the writer commits them faithfully to memory, that the hand may render them without thought and the mind be left free for the matter at hand.",
+                "memory_work": {
+                    "chants": [
+                        "Spell a small set of high-frequency words aloud in rhythm: t-h-e, the; s-a-i-d, said; w-a-s, was",
+                    ],
+                    "recitations": [
+                        "Recite that the most common words of English are often the most irregular, and so must be learned by sight and held fast in memory",
+                    ],
+                },
+                "copywork": [
+                    "Copy each new high-frequency word several times in a neat column, then copy a sentence in which it is used",
+                ],
+                "recitation_routine": "Begin each lesson by spelling aloud the high-frequency words learned so far before the new words are studied.",
+                "history_integration": "Tell that English drew its words from many tongues, Old English, Norse, French, and Latin, and that this mingled inheritance is why its commonest words are spelled so strangely.",
+                "read_aloud_suggestions": [
+                    "A passage read aloud, the child afterward shown the same text to find how often the high-frequency words appear",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "The living book the family is reading, where the high-frequency words appear hundreds of times in worthy sentences",
+                ],
+                "short_lesson_flow": "Keep the lesson very short, five to ten minutes. The method is visual: show one high-frequency word, let the child look at it until they can see it with eyes closed, then write it from that inner picture and check. Never let the child guess; if the picture is not yet sure, study again. A very few words, truly mastered, are the lesson, and reading does much of the rest.",
+                "narration_prompt": "Close your eyes and tell me what the word looks like, letter by letter. Now write it from the picture in your mind.",
+                "real_world_objects": [
+                    "Word cards bearing single high-frequency words for visual study",
+                    "A small card to cover a studied word before writing",
+                    "A familiar living book where the words are met in real reading",
+                ],
+                "nature_connection": "When the child writes a sentence in the nature notebook, the connecting words, the, was, and, with, are high-frequency words doing real work in real recording.",
+                "habit_focus": "The habit of attention: studying a word until its picture is sure, and the habit of writing correctly because correct spelling was formed early.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Puzzle word cards, marking the irregular high-frequency words as special cases to be learned by sight",
+                    "Sandpaper or textured high-frequency word cards for tracing",
+                    "A personal word dictionary the child builds and keeps",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a puzzle word card: this is 'said', a puzzle word that does not follow the sounds; you trace 'said'; show me how 'said' is spelled.",
+                    "steps": [
+                        "The child studies a high-frequency word and traces the textured card, feeling its letters in order",
+                        "The child writes the word from memory and checks it against the card",
+                        "The child enters the mastered word in their personal word dictionary",
+                    ],
+                },
+                "control_of_error": "The textured word card and the model card let the child check each spelling for themselves, and a word that looks wrong against the model is plain to the trained eye.",
+                "abstraction_pathway": "From tracing and studying the irregular words as concrete puzzle words, to writing them from memory, toward using high-frequency words fluently and correctly in independent writing.",
+                "extensions": [
+                    "Add each mastered word to the personal word dictionary and revisit it",
+                    "Sort word cards into regular words and puzzle words",
+                    "Find the puzzle words in a printed passage and tally how often they appear",
+                ],
+                "observation_focus": "Watch for the child treating irregular words as sight words rather than sounding them out, writing them from memory, and using them with growing fluency in writing.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Read aloud and read together often, where the high-frequency words appear on every page",
+                    "Leave out the child's own books, labels, and notes full of these everyday words",
+                    "Keep a notebook or word list handy for words the child asks to keep",
+                ],
+                "real_world_contexts": [
+                    "Reading and writing real messages, lists, and stories, where words like the, and, was, said recur constantly",
+                    "Noticing the same small words again and again in a favorite book",
+                    "Writing a note where 'because', 'they', or 'could' is genuinely needed",
+                    "Seeing high-frequency words everywhere, on signs, screens, and packaging",
+                ],
+                "conversation_starters": [
+                    "This little word 'said' shows up everywhere: want me to show you how it is spelled?",
+                    "That word looks almost right. Want to see the real spelling?",
+                    "How many times can you spot the word 'the' on this page?",
+                ],
+                "resource_bank": [
+                    "A generous supply of books to read and reread",
+                    "The child's own writing, where these words recur naturally",
+                    "A word list or notebook to glance at when a spelling is wanted",
+                ],
+                "parent_role": "Read with the child often, so the common words are met thousands of times in real and loved text, and spell any word gladly when the child asks. Treat the irregular spellings as interesting facts rather than tests, and trust that abundant real reading and writing settle these words far more deeply than drill.",
+                "observation_documentation": "Over time, notice whether the child writes the common words correctly and without hesitation in real writing, and notices when a familiar word does not look right. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "High-frequency word spelling reinforces reading fluency: words recognized and written automatically free the mind for comprehension",
