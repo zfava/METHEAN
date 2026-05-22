@@ -4585,11 +4585,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["lined paper", "calendar for date reference"],
             "recommended": ["heading template for reference until the habit is formed", "date format poster"],
-            "philosophy_specific": {
-                "classical": "Orderly habits as the framework for all scholarly work. The heading is non-negotiable: name, date, subject on every paper, every time. Consistency breeds discipline.",
-                "charlotte_mason": "Good habits in small things: neatness and order practiced until automatic. The heading is a habit, not a rule — it should feel natural, not forced, through daily repetition.",
-                "montessori": "Practical life: the child prepares their own workspace and materials. Heading a paper is part of work preparation — a step the child completes independently before beginning.",
-            },
         },
         "time_estimates": {"first_exposure": 10, "practice_session": 5, "assessment": 5},
         "accommodations": {
@@ -4599,6 +4594,115 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Heading template posted at the desk. Color-code: name in blue, date in red, subject in green until habitual.",
             "kinesthetic_learner": "Date stamp for journals. Writing the heading is a physical routine that begins every session.",
             "auditory_learner": "Say the heading aloud while writing: 'My name is... Today's date is... The subject is...'",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "A clear heading at the top of every paper, name, date, and subject, is a small habit that makes work organized, identifiable, and ready to be reviewed. Today we write our full name with correct capitalization, the date in standard format, and head every paper with name, date, and subject without being asked.",
+                "gradual_release": {
+                    "i_do": "At the top of a fresh sheet, write a full name with both names capitalized; on the next line, write the date in standard form, full month name capitalized, day, comma, year; on a third line, write the subject. Show that the same three lines begin every paper, every day.",
+                    "we_do": "Head a paper together, naming each element as it is written: first name and last name; the date in full form; the subject.",
+                    "you_do": "Child heads every piece of written work that day with full name, the date in standard format, and the subject, without prompting.",
+                },
+                "guided_practice": [
+                    "Write the full name on the top line with correct capitalization",
+                    "Write the date in standard form: Month Day, Year",
+                    "Write the subject on the third line and begin the day's work below",
+                ],
+                "independent_practice": [
+                    "Head every paper for a week with name, date, and subject, without reminder",
+                    "Write a list of ten dates in standard format to build fluency with the month names",
+                ],
+                "mastery_check": [
+                    "Write the full name with correct capitalization, consistently",
+                    "Write the date in standard format accurately, full month, comma, four-digit year",
+                    "Head every paper with name, date, and subject without prompting",
+                ],
+                "spiral_review": [
+                    "Review capitalization of names, days, and months each time a heading is written",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Order is the seedbed of all serious study. Among the smallest, and the steadiest, of scholarly habits is the heading at the top of every page, the writer's name, the date, the subject in hand. By this small rite the work becomes a thing identified, a thing dated, a thing belonging to its proper study, and the scholar makes ready for the labor of the day.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the order of the heading: name, then date, then subject, three lines at the top of every page",
+                    ],
+                    "recitations": [
+                        "Recite that order in small things is order in great things, and that the headed page is the scholar's daily preparation",
+                    ],
+                },
+                "copywork": [
+                    "Copy a model heading carefully, the name on line one, the date on line two, the subject on line three, until the form is held in memory",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the order of the heading before the day's writing is begun.",
+                "history_integration": "Tell that scholars and scribes have headed and dated their work for many centuries, and that the dated, named page is what allows us still to know whose hand wrote a manuscript and in what year.",
+                "read_aloud_suggestions": [
+                    "A short account of how scholars and naturalists kept their dated, named notebooks, read aloud so the heading is met as an old and honored practice",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 5,
+                "living_book_suggestions": [
+                    "A book of real, dated entries, a naturalist's journal or a family ledger, where the heading is shown in living use",
+                ],
+                "short_lesson_flow": "Keep the lesson very short, five minutes is enough. The heading is a small habit formed by daily repetition, never by drill. Each morning, before any other writing, the child writes the three lines, name, date, subject, on the day's first paper. The parent says nothing if the heading is done; if it is forgotten, a quiet pointing to the top of the page suffices. Habit, not rule.",
+                "narration_prompt": "Tell me the three things at the top of every page, in order. Now write them.",
+                "real_world_objects": [
+                    "Lined paper for daily work, kept where the child can reach it",
+                    "A wall calendar showing today's date in full form",
+                    "A small reference card with a sample heading, kept near the writing place",
+                ],
+                "nature_connection": "In the nature notebook, each entry is headed by the date and the place, so the child's natural-history work is dated like that of any naturalist and stays in order through the year.",
+                "habit_focus": "The habit of orderly work: heading the page each day without thought, because the habit has been formed quietly by daily doing.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A small heading reference card showing the three lines, with a sample name, date, and subject",
+                    "A wall calendar in clear print, accessible to the child",
+                    "Paper, a comfortable pencil, and any subject-name cards needed for the day's work",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the heading card and a fresh paper: this is the heading, name on the first line, date on the second, subject on the third; you write your heading on this paper; show me the date in its proper form.",
+                    "steps": [
+                        "The child sets out paper and consults the heading card and the calendar",
+                        "The child writes the full name, the date in standard form, and the subject, in three lines at the top of the paper",
+                        "The child puts the heading card and calendar back in their place and begins the day's work",
+                    ],
+                },
+                "control_of_error": "The heading reference card stands beside the child's paper, and the wall calendar shows today's date, so an error in form or in the date is plain to the child, who corrects it before the day's work is begun.",
+                "abstraction_pathway": "From copying the model heading exactly with the card in view, to writing the heading from memory and consulting only the calendar, toward heading every paper from memory with the date drawn from inner knowledge of the calendar.",
+                "extensions": [
+                    "Begin every notebook and journal with a similar dated heading",
+                    "Practice writing many different dates in standard form to build calendar fluency",
+                    "Head a real letter or invitation with the proper date as a piece of practical-life work",
+                ],
+                "observation_focus": "Watch for the child preparing the heading independently as part of starting work, writing the date accurately from the calendar, and treating the heading as the natural opening of any written task.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep good pens and a wall calendar within reach so dating something is easy when the child wants to",
+                    "Welcome the child to put their name on drawings, projects, letters, and anything they have made",
+                    "Offer to write a date on a creation alongside the child if they want a record",
+                ],
+                "real_world_contexts": [
+                    "Signing a drawing, a card, or a project so it is plainly the child's own",
+                    "Dating a journal entry, a letter, or a photograph to mark when it was made",
+                    "Writing a date on a craft, a model, or a story so the family knows when it was finished",
+                    "Reading the dates and signatures on real letters and documents around the house",
+                ],
+                "conversation_starters": [
+                    "Want to sign that drawing so it is plainly yours?",
+                    "Want me to write the date on this for now, or do you want to do it?",
+                    "When you look back at this in a year, will you want to know when you made it?",
+                ],
+                "resource_bank": [
+                    "A wall calendar in clear print, kept somewhere the child can see it",
+                    "Good pens, a date stamp, and stickers the child can use to date and name things",
+                    "Family photographs and letters where dating and signing can be seen in real use",
+                ],
+                "parent_role": "An unschooling life does not produce 'papers' to be headed with a school subject, so the formal three-line heading is not pursued here. Instead, the parent welcomes the child's natural wish to sign their work and writes a date alongside whenever a piece is worth keeping, so signing one's name and dating real creations grow as living habits rather than as a school routine.",
+                "observation_documentation": "Over time, notice whether the child reaches for their name on things they have made, asks for or writes the date on creations they want to keep, and treats signing and dating as a way of claiming and ordering their own work. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Reading dates in books, letters, and documents reinforces date format understanding",
