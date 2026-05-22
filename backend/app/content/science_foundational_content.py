@@ -2786,11 +2786,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "materials for opacity testing (cardboard, wax paper, clear plastic)",
                 "shadow puppet supplies",
             ],
-            "philosophy_specific": {
-                "classical": "Light properties memorized: straight-line travel, reflection, shadow formation. Vocabulary: opaque, translucent, transparent, source, shadow. Structured experiments.",
-                "charlotte_mason": "Shadow play and sundials: the child discovers light behavior through outdoor observation. Drawing shadows in the nature notebook. Shadow puppets as art meets science.",
-                "montessori": "Light experiment tray: flashlight, objects, and classification cards. The child tests materials independently and sorts into categories. Sundial construction as practical work.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -2800,6 +2795,118 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Light and shadow are inherently visual topics. Shadow tracing, material testing, and puppet shows are all visual activities.",
             "kinesthetic_learner": "Move the flashlight and objects. Trace shadows outdoors. Build shadow puppets. Physical manipulation of light.",
             "auditory_learner": "Discuss observations: 'What happened when I moved the light closer?' Verbal predictions before each test.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Light is energy we can see, and it travels in straight lines from a source: the sun, a flame, a bulb, a screen. When an opaque object stands in the light's path, it blocks the light and a shadow forms behind it. Today we name sources of light, learn how and why shadows form, predict how a shadow changes as the light moves, and sort materials as opaque, translucent, or transparent.",
+                "gradual_release": {
+                    "i_do": "Name several sources of light, then shine a flashlight in a dark room and think aloud: the light travels straight; when I put a toy in its path, the toy blocks the light and a shadow falls behind it. Move the flashlight closer to make the shadow grow, and hold up card, wax paper, and clear plastic to show opaque, translucent, and transparent.",
+                    "we_do": "Name light sources together, make shadows with a flashlight and explain why they form, change the shadow's size by moving the light, and sort materials by how much light they let through.",
+                    "you_do": "Child names sources of light, explains how a shadow forms, predicts how a shadow changes as the light moves, and classifies materials as opaque, translucent, or transparent.",
+                },
+                "guided_practice": [
+                    "List sources of light around the home and outdoors",
+                    "Make a shadow with a flashlight and explain why it forms",
+                    "Move the light source and predict, then check, how the shadow changes",
+                ],
+                "independent_practice": [
+                    "Trace a shadow outdoors at three times of day and describe how it changed",
+                    "Test materials with a flashlight and sort them into opaque, translucent, and transparent",
+                ],
+                "mastery_check": [
+                    "Name at least five sources of light",
+                    "Explain that a shadow forms when an opaque object blocks light traveling in a straight line",
+                    "Classify materials as opaque, translucent, or transparent",
+                ],
+                "spiral_review": [
+                    "Revisit the sun's path across the sky, which moves a shadow through the day",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Light pours from the sun and from every flame and lamp, and it travels always in straight lines, never bending round a corner. Where a solid thing stands in its path, the light is stopped, and behind the thing lies a shadow, a shape of darkness that is simply the place the light could not reach. To study light and shadow is to learn one of the plainest and surest laws of nature.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the law of light: light comes from a source and travels in straight lines",
+                        "Chant the three kinds of material: opaque blocks the light, translucent lets some through, transparent lets it all through",
+                    ],
+                    "recitations": [
+                        "Recite that a shadow forms when an opaque object blocks light traveling in a straight line, and that the shadow is not a thing but the absence of light",
+                    ],
+                },
+                "copywork": [
+                    "Copy the three kinds of material with their meanings, and the words source, shadow, opaque, translucent, transparent",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the law of light and the three kinds of material before any new experiment.",
+                "history_integration": "Tell that long before clocks people told the hours by shadow, that the sundial is among the oldest of instruments, and that the shadow play of ancient China and the far East turned the science of light into an art.",
+                "read_aloud_suggestions": [
+                    "A tale in which a shadow or the changing light is told with care and wonder, read aloud so the child hears light described",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book about light, shadows, or the sun, with true artwork and never a workbook",
+                ],
+                "short_lesson_flow": "Go out on a sunny day and let the child play with their own shadow: step on it, stretch it, make shapes, notice which way it falls. Trace it once with chalk, and come back hours later to find it has moved and changed. Indoors, a flashlight and a few objects let the wonder continue. Let delighted play be the lesson.",
+                "narration_prompt": "Tell me about your shadow today. How was it different in the morning and the afternoon, and why?",
+                "real_world_objects": [
+                    "The child's own shadow, and chalk to trace it through the day",
+                    "A flashlight and household objects for indoor shadow play",
+                    "Materials to hold to the light: card, wax paper, clear glass",
+                    "A science notebook for recording shadow observations",
+                ],
+                "nature_connection": "The sun and the child's own shadow are the lesson: out of doors the child watches the shadow lengthen and shorten and swing about as the sun travels the sky, learning light from the living day.",
+                "habit_focus": "The habit of attention: noticing how a shadow changes through the day and asking why.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A light experiment tray with a flashlight and objects to cast shadows",
+                    "Materials sorted for testing: opaque, translucent, and transparent",
+                    "Classification cards for the three kinds of material",
+                    "Chalk for outdoor shadow tracing, and materials for a sundial",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the test materials: this card is opaque, it blocks the light; show me a material that is translucent; is this opaque, translucent, or transparent?",
+                    "steps": [
+                        "The child makes shadows with the flashlight and an object, seeing that the object blocks the straight-traveling light",
+                        "The child moves the light and watches the shadow grow and shrink",
+                        "The child tests materials against the light and sorts them into opaque, translucent, and transparent",
+                    ],
+                },
+                "control_of_error": "The light is the control: a material sorted as transparent will plainly pass the light, and one sorted as opaque will plainly block it, so the flashlight itself shows the child any mistake.",
+                "abstraction_pathway": "From making and changing real shadows with the flashlight, to sorting materials by how they meet the light, toward understanding that light travels straight and a shadow is where it is blocked.",
+                "extensions": [
+                    "Build and use a sundial, telling time by shadow",
+                    "Explore reflection with a mirror",
+                    "Make a shadow puppet theater",
+                ],
+                "observation_focus": "Watch for the child connecting the shadow to the blocked light, predicting how the shadow will change, and sorting materials accurately by their opacity.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep flashlights and a torch within reach for free shadow play",
+                    "Leave out chalk for tracing shadows outdoors",
+                    "Have materials of every kind, card, wax paper, glass, near a light for testing",
+                ],
+                "real_world_contexts": [
+                    "Playing with shadows outdoors on a sunny day",
+                    "Making shadow puppets on the wall at night",
+                    "Noticing how a shadow is long in the morning and short at noon",
+                    "Seeing how sunglasses, blinds, and curtains block and let through light",
+                ],
+                "conversation_starters": [
+                    "Why is your shadow so long right now? What was the sun doing this morning?",
+                    "I moved the light closer and the shadow grew, why do you think that happened?",
+                    "Does light go through this? What about this?",
+                ],
+                "resource_bank": [
+                    "Flashlights, a torch, and chalk kept available",
+                    "Materials of all kinds to hold up to the light",
+                    "The sun and the child's own shadow, free every sunny day",
+                ],
+                "parent_role": "Play with shadows alongside the child, make puppets, chase shadows, notice them lengthen, and wonder aloud about the light that makes them. Welcome the child's experiments with the flashlight, and let real shadow play, rather than a worksheet, teach how light behaves.",
+                "observation_documentation": "Over time, note whether the child names sources of light, understands that a shadow forms where an object blocks the light, and can tell opaque, translucent, and transparent apart. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Light vocabulary: opaque, translucent, transparent, source, shadow, reflect. Stories about shadows (Peter Pan's shadow, Groundhog Day).",
