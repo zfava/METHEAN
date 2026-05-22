@@ -4842,11 +4842,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["timer", "lined paper", "quality copywork passages"],
             "recommended": ["stress ball for hand exercises", "writing progress chart"],
-            "philosophy_specific": {
-                "classical": "Daily handwriting practice is non-negotiable until fluency is achieved. Speed and accuracy tracked and improved systematically. Handwriting is a discipline.",
-                "charlotte_mason": "Short lessons with PERFECT effort: 10 minutes of beautiful writing, never 20 minutes of deteriorating scrawl. Quality always over quantity. Speed comes naturally with daily careful practice.",
-                "montessori": "The child self-monitors: they compare their own work quality from beginning to end. Metal inset work continues to build pencil control. The child sets personal speed goals.",
-            },
         },
         "time_estimates": {"first_exposure": 10, "practice_session": 10, "assessment": 10},
         "accommodations": {
@@ -4856,6 +4851,116 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Progress charts showing speed improvement over time. Visual models of excellent handwriting for comparison.",
             "kinesthetic_learner": "Hand warm-up exercises before every session. Standing while writing. Large-muscle movements (chalkboard writing) before fine-motor paper work.",
             "auditory_learner": "Quiet background music during writing sessions can help sustain focus. Verbal encouragement during timed writing.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Handwriting fluency is the goal of all handwriting instruction: the child writes quickly enough and neatly enough that the physical act no longer slows the thinking. Today we copy a three-sentence passage with legible handwriting in under five minutes, write for ten continuous minutes without fatigue or quality decline, and keep letter quality consistent across a full page.",
+                "gradual_release": {
+                    "i_do": "Set a five-minute timer and copy a short passage at a steady, careful pace, then show: the first line and the last line look the same, the letters keep their size, the words keep their spacing, and the hand was not pressed beyond what it could carry well.",
+                    "we_do": "Do timed copywork together, the parent and child each copying the same short passage for five minutes, then comparing the first and last lines for consistency.",
+                    "you_do": "Child copies a three-sentence passage under timer in under five minutes with legible handwriting, and writes for ten continuous minutes with quality consistent from first sentence to last.",
+                },
+                "guided_practice": [
+                    "Warm up the hand with finger stretches, then copy a short passage at a steady pace",
+                    "Compare the first line of a writing session to the last line for size, spacing, and formation",
+                    "Build endurance by adding one minute to the writing session each week",
+                ],
+                "independent_practice": [
+                    "Daily timed copywork: track speed each week and confirm that quality is held",
+                    "Write a full-page journal entry, letter, or short composition without hand fatigue",
+                ],
+                "mastery_check": [
+                    "Copy a three-sentence passage in under five minutes with legible handwriting",
+                    "Write for ten continuous minutes without hand fatigue or significant quality decline",
+                    "Maintain consistent letter quality and spacing across a full page",
+                ],
+                "spiral_review": [
+                    "Begin each session with hand warm-ups and a brief review of grip and formation",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The young writer's hand is trained as the musician's is, by patient daily labor, until the act of writing becomes nearly invisible to the mind. Handwriting fluency is the fruit of long practice: enough speed that thought is not delayed, enough neatness that the reader is not pained, and enough steadiness that the last line of a page is as fair as the first. To reach this is to be free, at last, to think with the pen.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the fluency rule: warm the hand, hold the grip, keep the size, hold the spacing, work without pause",
+                        "Chant the three handwriting virtues: legibility, speed, steadiness",
+                    ],
+                    "recitations": [
+                        "Recite that the hand is trained as the musician's hand is, by daily labor, until writing becomes a quiet servant of thought",
+                    ],
+                },
+                "copywork": [
+                    "Copy a short, well-formed passage under a five-minute timer, with strict attention to size, spacing, and the steadiness of the line",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the fluency rule and the three handwriting virtues before the timer is started.",
+                "history_integration": "Tell that long before the printing press, professional scribes were trained from childhood to write with both speed and grace, and that for centuries a fair, swift hand was one of the most prized of all scholarly skills.",
+                "read_aloud_suggestions": [
+                    "A short account of medieval scribes and their daily training, or of how clerks and copyists once supported entire fields of learning, read aloud so the child meets handwriting fluency as a real and valued craft",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A short, well-loved living book passage used as the day's copywork, never a textbook of drills",
+                ],
+                "short_lesson_flow": "Keep the lesson short, ten minutes is enough. Speed comes naturally to a hand that has copied well, daily, for a long time, never as the goal but as the fruit. Choose a short, beautiful passage, settle the grip and the page, and let the child copy with full attention for ten quiet minutes. If quality begins to slip, the lesson is at an end. A page of fine, unhurried writing builds fluency far better than a page of hurried scrawl.",
+                "narration_prompt": "Look at your first line and your last line. Tell me what is the same about them and what changed.",
+                "real_world_objects": [
+                    "A favorite living book to draw the day's passage from",
+                    "Lined paper of the right size for the child's hand",
+                    "A comfortable pencil and a small clock or quiet timer",
+                ],
+                "nature_connection": "Nature-notebook entries are themselves a daily handwriting practice: when the child fills a page with descriptions of what was seen, fluency grows alongside attention to the natural world.",
+                "habit_focus": "The habit of best work, sustained: holding the same care for the last letter as for the first, page after page, day after day.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A timer the child can set themselves",
+                    "A folder of well-chosen short passages for daily copywork",
+                    "Lined paper suited to the child's hand and the metal insets still available for hand-warming",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the timer and a fresh passage: this is timed copywork, you write for the whole time and check the quality at the end; you set the timer for ten minutes and begin; show me the first line and the last line side by side.",
+                    "steps": [
+                        "The child warms the hand with the metal insets or a few finger stretches, sets out the passage and paper",
+                        "The child sets the timer and writes the passage with steady attention, neither racing nor lingering",
+                        "The child compares the first line and the last line of their finished page and notes any place where the formation slipped",
+                    ],
+                },
+                "control_of_error": "The first line of the page stands as its own control: if the last line is plainly less even, the child sees that the session was either too long or too hurried, and adjusts in the next sitting without needing correction.",
+                "abstraction_pathway": "From timed copywork on prepared passages, to sustained original writing of comparable length, toward writing freely for ten or more minutes with handwriting that no longer demands conscious attention.",
+                "extensions": [
+                    "Track personal speed weekly and aim to improve while holding quality",
+                    "Try copywork standing at a small lectern to refine posture",
+                    "Copy a passage twice in succession, comparing the second copy to the first",
+                ],
+                "observation_focus": "Watch for the child writing for the full session without strain, for a last line as fair as the first, and for handwriting that has become a quiet servant of thought rather than an obstacle.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep good pens, comfortable pencils, and pleasant paper out for whoever wants to write",
+                    "Set quiet stretches of unhurried time in which writing might happen",
+                    "Welcome any sustained writing the child takes up: stories, letters, lists, codes",
+                ],
+                "real_world_contexts": [
+                    "Writing a long letter to a real correspondent over a quiet morning",
+                    "Filling pages of a personal journal or story notebook day by day",
+                    "Copying out a favorite poem or song lyric onto a card to keep",
+                    "Writing the rules and lore of an invented game across a few notebook pages",
+                ],
+                "conversation_starters": [
+                    "Want to write until you fill the page? See how it feels when you keep going.",
+                    "Does your hand feel tired? Want to stretch and then come back to it?",
+                    "Look at this line and that line: do they look like the same hand?",
+                ],
+                "resource_bank": [
+                    "Good pens and pencils kept ready, including grips and weighted pens if the child enjoys them",
+                    "Notebooks the child has chosen, set apart for sustained writing",
+                    "Quiet, unhurried time in which writing for its own sake is possible",
+                ],
+                "parent_role": "Write at length yourself where the child can see, letters, journals, plans, projects, so sustained handwriting looks like a useful adult thing. When the child writes for real reasons they care about, leave them alone to find their own pace, and over time the hand grows fluent without ever being drilled.",
+                "observation_documentation": "Over time, notice whether the child writes for longer stretches without complaint, whether the last line of a page is as readable as the first, and whether handwriting has stopped getting in the way of what the child wants to say. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Handwriting fluency supports reading fluency: the physical comfort with letters transfers in both directions",
