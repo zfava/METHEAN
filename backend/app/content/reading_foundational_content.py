@@ -3224,10 +3224,113 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Oral retelling games. Retell to a partner. Listen for signal words during read-alouds.",
         },
         "philosophy_specific": {
-            "classical": "Chronological retelling as the foundation of narrative composition. Practice with fables and myths that have clear sequences.",
-            "charlotte_mason": "Narration IS sequencing: the child retells in order after a single reading. No re-reading; the habit of attention produces ordered retelling.",
-            "montessori": "Sequence cards with self-correcting numbers on the back. Story strips the child arranges independently.",
-            "traditional": "Sequence worksheets: number the events 1-4. Fill-in-the-signal-word exercises.",
+            "traditional": {
+                "introduction": "Stories happen in order. Understanding what came first, next, and last is how a reader organizes meaning. Signal words such as first, next, then, after, and finally are road signs through a story. Today we retell stories in order, use the signal words, and name a story's beginning, middle, and end.",
+                "gradual_release": {
+                    "i_do": "Read a simple three-event story aloud and model retelling it: at the beginning, then in the middle, and at the end. Point out the signal words and explain that they tell the reader the order.",
+                    "we_do": "Retell a short story together using the signal words, and arrange a few scrambled sentence strips from a familiar story into the right order together.",
+                    "you_do": "Child retells a story's events in the correct order using signal words, arranges scrambled events chronologically, and names the story's beginning, middle, and end.",
+                },
+                "guided_practice": [
+                    "Arrange scrambled story-event cards back into the correct order",
+                    "Retell a story with the signal words first, next, then, after, finally",
+                    "Draw three pictures showing a story's beginning, middle, and end",
+                ],
+                "independent_practice": [
+                    "Retell an unfamiliar story in order without looking back at the text",
+                    "Number the events of a passage one through four",
+                ],
+                "mastery_check": [
+                    "Retell a story's events in the correct order from beginning to end",
+                    "Use the sequence signal words correctly",
+                    "Arrange out-of-order story events into chronological order",
+                ],
+                "spiral_review": [
+                    "Revisit retelling the order of the child's own familiar daily routine before sequencing new stories",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Every story moves in order, one event giving rise to the next. To retell a story rightly, in the order it happened, is the first work of narrative, and the ground on which all later composition is built.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the sequence signal words in order: first, next, then, after that, finally",
+                        "Chant the shape of a story: a beginning, a middle, and an end",
+                    ],
+                    "recitations": [
+                        "Memorize and recite short fables and myths whose events run in a clear order, retelling them in sequence from beginning to end",
+                    ],
+                },
+                "copywork": [
+                    "Copy a short ordered retelling of a story, the signal words and their commas kept in place",
+                ],
+                "recitation_routine": "Begin each lesson by retelling, in order, a fable or story already memorized before turning to a new one; the repertoire of well-ordered stories grows cumulatively.",
+                "history_integration": "Retell the events of a simple history story in the order they happened, placing them on a timeline, so sequencing is practiced on the chronological spine itself.",
+                "read_aloud_suggestions": [
+                    "Fables, myths, and well-told tales with clear, strong sequences of events, read aloud",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "Living storybooks with clear, well-shaped sequences of events, told in language worth one attentive reading",
+                ],
+                "short_lesson_flow": "Read a short story aloud once, attentively, without re-reading. The child then narrates it back, and the telling naturally comes out in order, from beginning to end. Stop while the child is still glad to be telling.",
+                "narration_prompt": "Tell me the story back in your own words, from what happened first all the way to how it ended.",
+                "real_world_objects": [
+                    "The events of the child's own day, told in order",
+                    "The steps of a recipe followed in order while cooking",
+                    "A family outing retold from first to last",
+                ],
+                "nature_connection": "After a nature walk, the child retells the walk in order, first, next, finally, and may draw a small ordered strip of it in the nature notebook.",
+                "habit_focus": "The habit of attention: listening once, fully, so that the whole story can be told back in its true order without re-reading.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Story sequence cards, with the correct order numbered on the back for self-checking",
+                    "Story strips the child arranges into order independently",
+                    "Small figures and objects for acting a story out in sequence",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the sequence cards: this card is the beginning; show me the beginning; where in the story does this card belong?",
+                    "steps": [
+                        "Read or recall a short story",
+                        "Lay the scrambled sequence cards in the order the events happened",
+                        "Turn the cards over and check the order against the numbers on the back",
+                    ],
+                },
+                "control_of_error": "The numbers on the back of the sequence cards let the child check the order they built for themselves and correct it without an adult's word.",
+                "abstraction_pathway": "From arranging the picture sequence cards by hand, to ordering written story strips, toward retelling any story in correct order with no cards at all.",
+                "extensions": [
+                    "Sequence the steps of a recipe or a how-to text",
+                    "Act a story out in order with small figures after reading it",
+                ],
+                "observation_focus": "Watch for the child holding the order of events steadily and using the signal words as they retell.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep storybooks with strong, clear sequences within reach",
+                    "Leave small figures and props out for acting stories through in order",
+                    "Let simple recipes and craft instructions be available, where order genuinely matters",
+                ],
+                "real_world_contexts": [
+                    "Telling a parent about something that happened, first this, then that",
+                    "Following a recipe in order while cooking: first measure, then mix, next bake",
+                    "Building or crafting, where the steps must come in the right order to work",
+                    "Retelling a family trip from beginning to end",
+                ],
+                "conversation_starters": [
+                    "What happened at the very beginning, before anything else?",
+                    "You said the boy found the treasure. What happened right before that?",
+                    "If we mixed up the steps of this recipe, would it still work? Why not?",
+                ],
+                "resource_bank": [
+                    "Storybooks with clear sequences, kept available",
+                    "Small figures and props for acting stories out",
+                    "Simple recipes and craft instructions",
+                ],
+                "parent_role": "Invite the child to tell back stories and real happenings in order, and notice aloud the order words in recipes and instructions you use together. Follow the stories the child loves, and treat the retelling as real sharing rather than a quiz.",
+                "observation_documentation": "Over time, note whether the child retells events in the correct order, uses the sequence signal words, can reorder scrambled events, and speaks of a story as having a beginning, a middle, and an end. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Sequence in math: first add, then subtract. Order of operations is a sequence.",
