@@ -4110,10 +4110,114 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Sound patterns: clap-snap. Musical rhythms.",
         },
         "philosophy_specific": {
-            "classical": "Patterns as foundation of reasoning. Identify, extend, create.",
-            "charlotte_mason": "Patterns in nature: leaf arrangements, petals, spirals.",
-            "montessori": "Bead chains. Geometric pattern work.",
-            "traditional": "Pattern worksheets. What-comes-next exercises.",
+            "traditional": {
+                "introduction": "A pattern is something that repeats in a rule you can name. The part that repeats is the pattern's core: in red, blue, red, blue the core is red, blue. Today we identify a repeating pattern, find its core, extend it by three or more elements, create our own patterns, and meet growing patterns where the change increases each time, like two, four, six, eight.",
+                "gradual_release": {
+                    "i_do": "Build an AB pattern with colored blocks, name the core aloud, and extend it by three. Then build an ABC and an AAB pattern and name each core. Show a growing pattern, two, four, six, and say the rule: add two each time.",
+                    "we_do": "Read a pattern together, point to and name its core, and extend it by three elements. Build a new pattern together and say its rule.",
+                    "you_do": "Child identifies a repeating pattern, names its core, extends it by three or more, creates an original pattern with a stated rule, and recognizes a simple growing pattern.",
+                },
+                "guided_practice": [
+                    "Extend AB, ABC, and AAB patterns by three elements",
+                    "Point to and name the core of each pattern",
+                    "Build a new pattern with blocks and say its rule",
+                ],
+                "independent_practice": [
+                    "Extend several patterns by three elements and check each against its core",
+                    "Create original patterns and write or say the rule for each",
+                ],
+                "mastery_check": [
+                    "Extend any repeating pattern correctly by three or more elements",
+                    "Name the core, the repeating part, of a pattern",
+                    "Create an original pattern and recognize a simple growing pattern",
+                ],
+                "spiral_review": [
+                    "Revisit skip counting by twos and fives, which are themselves growing patterns",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The world keeps order, and order shows itself in patterns. Day follows night and night follows day; the seasons turn in the same circle every year. A pattern is a rule that repeats, and the part that repeats is its core. To find the core is to find the rule, and once the rule is known the pattern can be carried on.",
+                "memory_work": {
+                    "chants": [
+                        "Chant a clapping pattern, clap clap snap, clap clap snap, until the core is sure",
+                        "Chant a growing pattern by twos: two, four, six, eight, ten",
+                    ],
+                    "recitations": [
+                        "Recite the rule of patterns: find the core, the part that repeats, and the pattern can be carried on",
+                    ],
+                },
+                "copywork": [
+                    "Copy a short pattern of letters or numbers neatly, then continue it for three more, so the hand follows the rule",
+                ],
+                "recitation_routine": "Begin each lesson by clapping or chanting a known pattern and naming its core before any new pattern is met.",
+                "history_integration": "Tell that people have always read patterns in order to live well: the pattern of the seasons told them when to plant and harvest, and the pattern of the moon marked the months.",
+                "read_aloud_suggestions": [
+                    "A cumulative or repetitive tale whose words build in a pattern, read aloud so the ear hears the repeating rule",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A beautifully illustrated book whose pictures or words carry a clear repeating pattern, with real artwork and never a worksheet",
+                ],
+                "short_lesson_flow": "Bring out a basket of natural objects or colored beads. Make one simple pattern together, calmly, and let the child name what repeats. Extend it a little, then invite the child to make one of their own. Stop while the making is still a delight.",
+                "narration_prompt": "Tell me about the pattern you made. What is the part that repeats?",
+                "real_world_objects": [
+                    "Colored beads threaded on a string",
+                    "Pinecones, shells, and leaves laid in a pattern",
+                    "Stripes and patterns on cloth or pottery",
+                ],
+                "nature_connection": "Look closely for the patterns nature makes: the spiral of a snail's shell, the rows of seeds in a sunflower, the petals around a flower's center, and draw one in the nature notebook.",
+                "habit_focus": "The habit of observation: noticing the order and repetition that is already present in the world.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The colored bead bars and bead chains",
+                    "Baskets of sortable objects, colored tiles, beads, and small natural items, for laying patterns",
+                    "Pattern cards showing a core to copy and continue",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With a laid pattern: this is the core, the part that repeats; show me the core; what is this part of the pattern called?",
+                    "steps": [
+                        "Lay a simple AB pattern with the materials and read it aloud",
+                        "Find and isolate the core, then extend the pattern by repeating the core",
+                        "Create an original pattern and let a partner continue it",
+                    ],
+                },
+                "control_of_error": "A pattern card shows the correct continuation, and the child sees plainly when a laid pattern no longer matches its core; the bead chains, repeating the same bar, make a break in the pattern visible at once.",
+                "abstraction_pathway": "From laying and reading concrete object patterns, to isolating the core, toward seeing growing number patterns in the bead chains and continuing a pattern with no card.",
+                "extensions": [
+                    "Skip count along a bead chain to meet growing patterns",
+                    "Make ABC and AAB patterns for another child to extend",
+                    "Hunt for and record patterns found in the room and outdoors",
+                ],
+                "observation_focus": "Watch for the child isolating the core rather than copying element by element, and beginning to see the rule of a growing pattern.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave out colored beads, blocks, or tiles for free pattern making",
+                    "Set out natural objects, stones, leaves, and shells, that invite sorting and arranging",
+                    "Keep a drum or a pair of spoons nearby for making sound and rhythm patterns",
+                ],
+                "real_world_contexts": [
+                    "Hearing the pattern in a favorite song, verse and chorus repeating",
+                    "Noticing patterns in clothing stripes, tiled floors, and brick walls",
+                    "Following the daily pattern of the routine and the weekly pattern of the days",
+                    "Spotting patterns in nature on a walk, petals, pinecone spirals, animal stripes",
+                ],
+                "conversation_starters": [
+                    "What part of this keeps repeating?",
+                    "Can you guess what comes next? How did you know?",
+                    "Can you make a pattern I have never seen before?",
+                ],
+                "resource_bank": [
+                    "Colored beads, blocks, and tiles kept available",
+                    "Music and instruments for rhythm patterns",
+                    "Picture books and songs rich in repetition",
+                ],
+                "parent_role": "Notice patterns aloud as they appear in songs, on walks, and in the day's routine, and wonder together about what repeats and what comes next. Let the child make and break and remake patterns freely, following their own designs rather than a set exercise.",
+                "observation_documentation": "Over time, note whether the child notices patterns, names the repeating core, extends patterns, invents original ones, and begins to see growing patterns. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Rhyming patterns in poetry",
