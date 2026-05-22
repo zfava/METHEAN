@@ -3493,10 +3493,116 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Discuss characters aloud like talking about a real person. 'What would you say to this character?' Voice-act the character's lines.",
         },
         "philosophy_specific": {
-            "classical": "Character study as moral education: what virtues does this character display? What vices? Aesop's fables and hero tales.",
-            "charlotte_mason": "Living books present real, complex characters. Discuss them as if they are real people. 'What kind of person is this? Would you trust them?'",
-            "montessori": "Character cards with trait descriptors. Matching characters to traits. Self-directed reading with character journals.",
-            "traditional": "Character trait worksheets. Evidence charts: what the character says, does, thinks. Structured comprehension questions.",
+            "traditional": {
+                "introduction": "A character is a person, animal, or creature that a story happens to. To understand a character is to look past what they look like and notice what they say, what they do, and what they think, since those are the evidence of what kind of person they are. Today we name the main characters, describe their traits using evidence from the text, explain how a character feels and why, and compare two characters.",
+                "gradual_release": {
+                    "i_do": "Read a short passage aloud and think aloud: name the main character, then point to a line and say, she gave away her lunch, so I would call her generous. Name a feeling and the line that shows it. Set two characters side by side and name one likeness and one difference.",
+                    "we_do": "Read a story together, list the characters and mark the main ones, and for each trait find the line in the text that proves it. Track one character's feelings from beginning to end together.",
+                    "you_do": "Child names the main characters and their roles, gives at least two traits for a character with text evidence for each, explains how the character feels at two points and why, and compares two characters.",
+                },
+                "guided_practice": [
+                    "List a story's characters and sort main characters from minor ones",
+                    "Name a character trait and underline the words in the text that prove it",
+                    "Track a character's feelings at the beginning, middle, and end of a story",
+                ],
+                "independent_practice": [
+                    "Write three trait words for a main character, each with a line of text evidence",
+                    "Compare two characters in writing: one way they are alike, one way they differ",
+                ],
+                "mastery_check": [
+                    "Name the main characters and describe each one's role",
+                    "Give two traits for a character, each supported by evidence from the text",
+                    "Explain how and why a character's feelings change, and compare two characters",
+                ],
+                "spiral_review": [
+                    "Revisit retelling a story's events, since a character's traits and feelings are read out of what happens",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Stories have always been a school of the human heart. The people in a tale show us courage and cowardice, kindness and cruelty, and by watching them we learn to know such things in ourselves. To study a character is to ask not only what they did but what kind of soul would do it, and what their words, deeds, and thoughts reveal.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the questions of character study: what does the character say, what does the character do, what does the character think, and what does that reveal",
+                        "Chant a list of trait words in pairs: brave and timid, generous and selfish, honest and false, patient and hasty",
+                    ],
+                    "recitations": [
+                        "Recite a short, noble speech of a worthy character, and tell what virtue it shows",
+                    ],
+                },
+                "copywork": [
+                    "Copy a sentence in which a character's words or deeds reveal a virtue or a fault, and underline the words that show it",
+                ],
+                "recitation_routine": "Begin each lesson by recalling characters met before and the virtue or fault each displayed, so the gallery of characters is rehearsed cumulatively.",
+                "history_integration": "Tell that the oldest stories, the fables of Aesop and the tales of heroes, were told to teach character, and that the men and women of history are themselves characters whose traits and motives can be weighed.",
+                "read_aloud_suggestions": [
+                    "A fable or hero tale with a character of clear and weighable virtue, read aloud for its moral force",
+                    "A story whose chief character is neither wholly good nor wholly bad, so the child learns that a soul is a mixture",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A living book whose characters are real and complex, drawn with truth rather than as flat good or bad figures, never a contrived reader",
+                ],
+                "short_lesson_flow": "Read a portion of a living book in which a character acts or speaks. Pause and let the child narrate what the character did. Then talk about the character as though about a real person met in life: what kind of person is this, and how do you know? Keep it warm and unhurried.",
+                "narration_prompt": "Tell me about this character as though you had met them. What kind of person are they, and would you trust them? Why?",
+                "real_world_objects": [
+                    "The living book itself, returned to again and again as the character is met in new chapters",
+                    "A commonplace book where the child may note a character worth remembering",
+                ],
+                "nature_connection": "Notice that animals met in nature study, like characters, have their own ways: a cautious squirrel, a bold robin, a patient spider, and that watching them closely is the same attention a character asks for.",
+                "habit_focus": "The habit of attention and of just judgment: knowing a person, real or in a book, by their words and deeds rather than by first appearance.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A shelf of well-chosen storybooks with real, complex characters",
+                    "Character trait word cards, a printed bank of describing words such as brave, generous, timid, and curious",
+                    "A character journal in which the child records a character, traits, and the text evidence",
+                    "Three-part work: a character card, a trait card, and an evidence card to match",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the trait cards and a known character: this character is generous, see how she shared; show me a character who is generous; what kind of character is this?",
+                    "steps": [
+                        "After a story, the child names the main characters and their roles",
+                        "The child chooses a trait card and finds the line in the book that gives evidence for it",
+                        "The child records the character, the trait, and the evidence in the character journal, and may compare two characters",
+                    ],
+                },
+                "control_of_error": "The text itself is the control: a trait card can only be matched to a character if a line in the book supports it, and the child returns to the page to check, so an unsupported trait does not hold.",
+                "abstraction_pathway": "From naming a character by what they plainly do, to matching a trait word to a line of evidence, toward describing a character's inner motive and feelings with no cards at all.",
+                "extensions": [
+                    "Keep an ongoing character journal across many books",
+                    "Compare two characters from different stories on a self-made chart",
+                    "Trace one character's changing feelings through a whole book",
+                ],
+                "observation_focus": "Watch for the child returning to the text for evidence rather than guessing, and beginning to speak of why a character acts, not only what they do.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a rich and varied bookshelf within reach, with characters of many kinds",
+                    "Leave out drawing materials beside a favorite book for spontaneous character portraits",
+                    "Have audiobooks and read-aloud time available so strong characters can be met without the work of decoding",
+                ],
+                "real_world_contexts": [
+                    "Talking about characters in the books, films, and shows the child already loves",
+                    "Wondering aloud about why a friend or family member acted as they did, the same skill turned on real people",
+                    "Noticing characters in the stories of history and in the news",
+                    "Playing pretend and stepping into a character's shoes",
+                ],
+                "conversation_starters": [
+                    "What kind of person is that character? What makes you say so?",
+                    "Why do you think they did that? What did they want?",
+                    "How do you think the character felt right then? Have you ever felt that way?",
+                    "Those two characters, how are they alike, and how are they different?",
+                ],
+                "resource_bank": [
+                    "A wide home library and library visits for books with memorable characters",
+                    "Audiobooks and films that tell strong stories",
+                    "Drawing and dress-up materials for character play",
+                ],
+                "parent_role": "Talk about characters the way you would talk about real people you both know, with genuine curiosity rather than quizzing. Follow the child's own attachments to characters, and let conversations about why people, real and imagined, behave as they do arise naturally.",
+                "observation_documentation": "Over time, note whether the child names main characters, describes them by what they say and do rather than how they look, explains their feelings and motives, and compares one to another. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Characters in math word problems have needs and goals — understanding the character helps solve the problem",
