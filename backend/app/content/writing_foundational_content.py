@@ -1456,11 +1456,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["sentences without punctuation for practice", "punctuation mark cards (. ? !)"],
             "recommended": ["punctuation poster for reference", "sentences for expressive reading practice"],
-            "philosophy_specific": {
-                "classical": "Punctuation rules memorized and drilled. Sentence type identification as formal grammar. Daily error correction exercises.",
-                "charlotte_mason": "Punctuation absorbed through copywork and read-alouds: the child hears what punctuation sounds like long before learning the rules. Formal rules confirm what is already natural.",
-                "montessori": "Punctuation marks as concrete objects (large cards). Sentence sorting by type. The child places the correct mark at the end of sentence strips.",
-            },
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 10},
         "accommodations": {
@@ -1470,6 +1465,115 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Color-code punctuation marks: periods in black, question marks in blue, exclamation points in red. Punctuation poster visible during writing.",
             "kinesthetic_learner": "Hold up punctuation cards while listening. Stamp punctuation marks onto sentences. Stand up for exclamations, sit for periods, lean forward for questions.",
             "auditory_learner": "Read sentences aloud and identify by ear. Voice intonation is the primary teaching tool. 'Does your voice go up or down at the end?'",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "End punctuation marks tell the reader how a sentence ends. A period closes a statement; a question mark closes a question; an exclamation point closes an excited or surprising sentence. Today we identify whether a sentence is a statement, a question, or an exclamation, and place the correct end mark on each.",
+                "gradual_release": {
+                    "i_do": "Read three sentences aloud with clear intonation: 'The cat is asleep' falls flat, it tells, so it takes a period; 'Where is the cat' rises, it asks, so it takes a question mark; 'The house is on fire' is urgent, it exclaims, so it takes an exclamation point. Mark each sentence.",
+                    "we_do": "Read sentences together, decide the type of each by how it sounds and what it does, and place the correct end mark, naming the rule.",
+                    "you_do": "Child reads sentences, identifies each as statement, question, or exclamation, and places the correct end punctuation independently.",
+                },
+                "guided_practice": [
+                    "Read a sentence aloud and decide whether it tells, asks, or exclaims",
+                    "Add the correct end mark to sentences written without punctuation",
+                    "Find and fix sentences that carry the wrong end mark",
+                ],
+                "independent_practice": [
+                    "Place the correct end punctuation on a set of unpunctuated sentences",
+                    "Write one statement, one question, and one exclamation, each with the correct end mark",
+                ],
+                "mastery_check": [
+                    "Place a period at the end of a statement and a question mark at the end of a question",
+                    "Place an exclamation point at the end of an exclamation, used sparingly",
+                    "Identify a sentence as statement, question, or exclamation and match the correct end mark",
+                ],
+                "spiral_review": [
+                    "Check end punctuation in copywork and in the child's own writing each day, naming each sentence type",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Punctuation is the writer's way of guiding the reader's voice. The period bids the voice to rest, for the thought is complete; the question mark lifts the voice, for something is asked; the exclamation point quickens the voice, for the matter is urgent or full of feeling. To end each sentence with its right mark is to hand the reader the writer's own intended tone.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the end-mark rule: a period ends a telling sentence, a question mark ends an asking sentence, an exclamation point ends an exclaiming sentence",
+                    ],
+                    "recitations": [
+                        "Recite the three kinds of sentence: the statement that tells, the question that asks, and the exclamation that cries out",
+                    ],
+                },
+                "copywork": [
+                    "Copy three short sentences, one of each kind, and name the end mark of each",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the three kinds of sentence and the end mark each requires before any punctuation work is done.",
+                "history_integration": "Tell that early writing had no marks at all between its words, and that the punctuation we use was added little by little over the centuries to make the writer's meaning clear to the reader's eye.",
+                "read_aloud_suggestions": [
+                    "A lively passage with statements, questions, and exclamations, read aloud so the ear hears how the voice changes for each kind of sentence",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A favorite living book read aloud with natural expression, so the child hears periods, questions, and exclamations long before any rule is named",
+                ],
+                "short_lesson_flow": "Keep the lesson short, five to ten minutes. Punctuation is first heard, not learned from rules. Read a passage aloud with true expression: let your voice fall at periods, rise at questions, and quicken at exclamations. The child listens, then tells which sentences told, asked, or cried out. Only then name the three marks, and let the child add a mark or two to a sentence. The ear has already taught most of the lesson.",
+                "narration_prompt": "Listen as I read, then tell me which sentence asked a question and how you knew, and which one was an exclamation.",
+                "real_world_objects": [
+                    "A favorite living book to read aloud with full expression",
+                    "Large cards bearing the three end marks for the child to hold up",
+                    "Good lined paper and a comfortable pencil",
+                ],
+                "nature_connection": "When the child records a nature observation, a quiet statement of what was seen or an excited exclamation at a discovery, the right end mark gives the entry its true voice.",
+                "habit_focus": "The habit of attention: listening to a sentence closely enough to hear whether it tells, asks, or exclaims.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Large, concrete cards for the three end marks: the period, the question mark, the exclamation point",
+                    "Sentence strips without end punctuation, for the child to complete",
+                    "Sorting labels for the three sentence types and lined paper",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the end-mark cards: this is a question mark, it ends an asking sentence; you find the question mark; show me which mark ends a sentence that asks.",
+                    "steps": [
+                        "The child reads a sentence strip aloud and decides whether it tells, asks, or exclaims",
+                        "The child places the correct end-mark card at the end of the strip and sorts the strip under its sentence type",
+                        "The child writes one sentence of each kind and adds the matching end mark",
+                    ],
+                },
+                "control_of_error": "The strips can be matched to a correctly punctuated set, so a wrongly placed end mark is plain to the child, who corrects it without being told.",
+                "abstraction_pathway": "From handling the end marks as concrete cards and placing them on sentence strips, to sorting sentences by type, toward punctuating the child's own writing correctly.",
+                "extensions": [
+                    "Sort a basket of sentence strips into statements, questions, and exclamations",
+                    "Take one set of words and try each end mark, reading aloud how the meaning changes",
+                    "Find the three end marks in a printed passage and name the sentence type of each",
+                ],
+                "observation_focus": "Watch for the child reading strips with intonation that matches each mark, choosing the correct end mark, and using exclamation points sparingly rather than everywhere.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep paper, pencils, and the three end-mark cards handy for whoever wants them",
+                    "Leave out comics and books where periods, question marks, and exclamation points show up in real use",
+                    "Offer a notebook for the child's own questions, jokes, and exclamations",
+                ],
+                "real_world_contexts": [
+                    "Sending a written message, where a question mark or exclamation point changes the tone",
+                    "Writing a question to ask someone, or a sign that warns or announces something",
+                    "Writing speech in a comic or a story, choosing the mark that fits the moment",
+                    "Reading signs, where 'stop' and 'quiet please' carry very different tones",
+                ],
+                "conversation_starters": [
+                    "Listen to these two: 'You are here.' and 'You are here?' What changed?",
+                    "Should this sentence end calm, asking, or excited? Read it the way you mean it.",
+                    "If every sentence shouted with an exclamation point, would any of them feel exciting?",
+                ],
+                "resource_bank": [
+                    "Comics, books, and signs full of end marks in real use",
+                    "Paper, cards, and a way to write real messages",
+                    "The three end-mark cards to point and choose with",
+                ],
+                "parent_role": "Read aloud with real expression and notice end marks as they come up in messages, signs, and books. When the child writes, read their sentence back the way the mark tells you to, so they hear whether the mark matches the meaning, and let real messages, ones with a question or a feeling, show why the right mark matters.",
+                "observation_documentation": "Over time, notice whether the child ends sentences with a mark, chooses the mark that fits the meaning, and saves exclamation points for genuine excitement. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Punctuation in reading tells you HOW to read the sentence: where to pause, what to emphasize, when to raise your voice",
