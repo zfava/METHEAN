@@ -5213,11 +5213,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["completed nature journal from the year", "materials for one experiment demonstration"],
             "recommended": ["science portfolio folder", "celebration supplies for family science night"],
-            "philosophy_specific": {
-                "classical": "Comprehensive assessment: narration of concepts, identification drills, experiment demonstration. The child proves knowledge through performance across all science areas studied.",
-                "charlotte_mason": "Examination by narration and demonstration: the child tells what they know, shows what they can do, and shares their nature journal. No standardized tests — the work itself is the evidence.",
-                "montessori": "Observation-based assessment: the teacher reviews the child's work portfolio, experiment records, and nature journal. The child participates in self-assessment. Mastery shown through daily work, not a single test.",
-            },
         },
         "time_estimates": {"first_exposure": 30, "practice_session": 20, "assessment": 30},
         "accommodations": {
@@ -5227,6 +5222,116 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Nature journal IS the visual portfolio. Drawing and diagramming as primary evidence. Experiment demonstration is visual.",
             "kinesthetic_learner": "Experiment demonstration is physical. Setting up a science fair display. Handling specimens and materials during identification activities.",
             "auditory_learner": "Narration is the primary assessment mode. Family science night presentation is oral. Discussing science concepts in conversation format.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "This is the capstone of the foundational science year. It is not a test of memorized facts but a demonstration of scientific thinking. The child presents their nature journal, the record of a year of observation; narrates what they have learned across life, earth, and physical science; and performs a simple experiment, explaining its question, prediction, test, and results. It should feel like a science presentation to the family, a glad sharing of a year's discovery.",
+                "gradual_release": {
+                    "i_do": "Explain warmly that this is a showing of all that has been learned, not a trial, and model the spirit of it by narrating a science concept clearly and walking through a simple experiment aloud, naming the question, the prediction, the test, and the result.",
+                    "we_do": "Look through the nature journal together, celebrating its growth, and rehearse what each part of the presentation will involve so the child meets it without surprise.",
+                    "you_do": "Child presents the nature journal, narrates three science concepts from across the branches of science, and demonstrates and explains a simple experiment, while the parent notes what is solid and what needs more practice.",
+                },
+                "guided_practice": [
+                    "Look through the nature journal and trace its growth over the months",
+                    "Narrate a familiar science concept clearly, with its key vocabulary",
+                    "Demonstrate a simple experiment and explain its question, prediction, test, and result",
+                ],
+                "independent_practice": [
+                    "Narrate three science concepts, one each from life, earth, and physical science",
+                    "Present the nature journal and a chosen experiment to the family",
+                ],
+                "mastery_check": [
+                    "Present a nature journal showing at least six months of observations with growing detail",
+                    "Narrate three science concepts from memory, accurately, across the branches of science",
+                    "Demonstrate a simple experiment and explain the results with scientific thinking",
+                ],
+                "spiral_review": [
+                    "Revisit any science topic or skill found not yet solid before moving to the developing level",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Every stage of learning ends with a gathering-up of what has been won, and this is that moment for foundational science. It is no trial to be feared but a gateway: a showing of the year's observation, of the concepts now held in mind across life, earth, and physical science, and of the scientific method put to use, and an honest judgment that the child stands ready for the developing level.",
+                "memory_work": {
+                    "chants": [
+                        "Recite again the branches of the year's study: the life science, the earth science, and the physical science",
+                        "Recite the marks of a scientist: to observe with care, to question, to predict, to test, and to judge by the evidence",
+                    ],
+                    "recitations": [
+                        "Recite, from memory, three concepts learned across the year, the gathered fruit of a year of natural study",
+                    ],
+                },
+                "recitation_routine": "Make the capstone itself a cumulative recitation: the child narrates and demonstrates, drawing on every observation and concept built across the foundational year.",
+                "history_integration": "Tell that learning has always been marked by such gateways, that a stage of study was completed and confirmed before the next began, and that to pass this gate is to take up the long tradition of those who study nature.",
+                "read_aloud_suggestions": [
+                    "A living account of a scientist's life and discoveries, read aloud as the child completes the foundational level",
+                    "A more challenging science book held ready, the first reward of the developing level to come",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautiful science or nature book held ready as the first of the developing level",
+                    "The child's own nature journal, looked through together as the year's true record",
+                ],
+                "short_lesson_flow": "There is no formal test. On an ordinary day, look through the nature journal together and let the child narrate what they know of a few science topics and demonstrate a simple experiment they love. You will see at once, in the journal's growth and the fullness of the narration, whether the child is ready. Frame the whole as a glad sharing, and celebrate it together.",
+                "narration_prompt": "Show me your nature journal and tell me how it has grown. Tell me everything you know about one science topic you love.",
+                "real_world_objects": [
+                    "The child's own nature journal, the record of a year's observation",
+                    "Materials for a simple, loved experiment to demonstrate",
+                    "A new and beautiful science book, the first of the level to come",
+                ],
+                "nature_connection": "Let the capstone be set out of doors where it belongs: a final nature walk, the child observing and narrating among the living things they have come to know across the year.",
+                "habit_focus": "The habit of attention, shown now in full: the child who can observe, narrate, and wonder has formed the habit on which all further science rests.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The child's nature journal and work portfolio gathered across the year",
+                    "The familiar science materials, used now as the child works, not as a test",
+                    "Identification cards for rocks, birds, insects, and clouds",
+                    "Materials for a simple experiment the child chooses to demonstrate",
+                ],
+                "presentation": {
+                    "three_period_lesson": "There is no new naming here; instead the adult watches the child in the third period of every lesson long since given, recalling and applying the science learned across the year in real work.",
+                    "steps": [
+                        "The adult and child review the nature journal and work portfolio together, seeing the year's growth",
+                        "The child narrates science concepts and demonstrates a chosen experiment",
+                        "The adult observes the child's identification and classification skills at ordinary work and confirms the foundational level is complete",
+                    ],
+                },
+                "control_of_error": "The child's own work is the control: the nature journal, the experiment records, and the identification work show plainly what is secure and what is not, with no test required, so the adult's judgment rests on what the child actually does.",
+                "abstraction_pathway": "From the concrete observation and experiment of the foundational year, the child has reached scientific thinking; this review simply confirms that the foundation is complete and the next stage may begin.",
+                "extensions": [
+                    "Move into the developing level's science work without delay once readiness is observed",
+                    "Carry the nature journal and the portfolio forward into the next stage",
+                    "Let the child set their own science questions and goals for the level to come",
+                ],
+                "observation_focus": "Watch, across the child's work, for careful observation, accurate narration of concepts, and the scientific method applied to a real experiment, the signs that the foundational level is truly complete.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep the nature journal, the experiment materials, and the year's science books where the child can revisit them",
+                    "Leave out richer, more challenging science books and materials for when the child reaches for them",
+                    "Let science stay woven into ordinary life: the walks, the weather, the garden, the kitchen",
+                ],
+                "real_world_contexts": [
+                    "Observing nature with a scientist's eye on every walk and in every season",
+                    "Asking and investigating real questions as they arise in daily life",
+                    "Sharing discoveries gladly with the family, at the table, on a walk, after a find",
+                    "Reaching, of the child's own accord, for harder science books and bigger questions",
+                ],
+                "conversation_starters": [
+                    "What is the most interesting thing you learned about the world this year?",
+                    "What science question do you most want to chase next?",
+                    "Show me your nature journal, what are you proudest of?",
+                ],
+                "resource_bank": [
+                    "The child's nature journal and the year's science books and finds",
+                    "Richer science books and materials kept within reach",
+                    "The whole natural world, the unschooler's endless laboratory",
+                ],
+                "parent_role": "There is no test. You already know your child's science, because you have watched them observe, question, experiment, and wonder all year long. Notice that scientific thinking as it shows itself in real life, follow the child into richer science as their own curiosity grows, and trust what you have watched unfold.",
+                "observation_documentation": "Over time, simply note the science the child lives: whether they observe closely, ask and chase real questions, draw and record what they notice, and reach for more. This lived noticing, not any test, shows that the foundational science is sound and the child is ready for whatever comes next.",
+            },
         },
         "connections": {
             "reading": "Science vocabulary built throughout the year enables reading science books independently at the developing level",
