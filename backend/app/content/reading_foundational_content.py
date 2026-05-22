@@ -5689,10 +5689,113 @@ READING_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "Record the retelling and play it back. Retell to different audiences. Practice verbal storytelling as a performance.",
         },
         "philosophy_specific": {
-            "classical": "Retelling as the first step toward composition. Retell myths, fables, and fairy tales — the stories that form the foundation of Western literature.",
-            "charlotte_mason": "Narration IS retelling. After one reading, the child tells it back. This is the cornerstone assessment method — no tests, no worksheets, just retelling.",
-            "montessori": "Story cards in sequence for the child to arrange. Retelling as a social activity in the classroom or family. Story baskets with props.",
-            "traditional": "Structured retelling rubric: characters, setting, BME, problem/solution. Retelling assessment as a reading comprehension measure.",
+            "traditional": {
+                "introduction": "Retelling a story is telling it back in your own words, in the order it happened. A good retelling has three parts, a beginning, a middle, and an end, and carries the key details: who was in the story, where it took place, and the major events. Today we retell familiar stories with a clear beginning, middle, and end, name the characters and the setting, and keep the events in order.",
+                "gradual_release": {
+                    "i_do": "Retell a well-known story, thinking aloud: at the beginning, then the middle with its problem, then the end. Name the characters and the setting. Show plainly that the events must come in the order they happened, not jumbled.",
+                    "we_do": "Retell a familiar story together, the adult and child taking turns with the events, naming the beginning, middle, and end, the characters, and the setting, keeping all in order.",
+                    "you_do": "Child retells a familiar story with a clear beginning, middle, and end, names the characters and setting, and includes the major events in sequence.",
+                },
+                "guided_practice": [
+                    "Retell a well-known story using the pictures in the book as prompts",
+                    "Tell the beginning, then the middle, then the end of a familiar story",
+                    "Name the characters and describe the setting of a story",
+                ],
+                "independent_practice": [
+                    "Retell a story from memory, without picture prompts, in correct order",
+                    "Retell a story to someone who has not heard it",
+                ],
+                "mastery_check": [
+                    "Retell a familiar story with a clear beginning, middle, and end",
+                    "Include the characters, the setting, and at least three major events",
+                    "Keep the events of the retelling in correct sequential order",
+                ],
+                "spiral_review": [
+                    "Revisit listening attentively to a story, since a retelling can only hold what was first taken in",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "To retell a story is to make it your own. The tale heard is gathered up and given back in your own words, in its true order: how it began, what befell in the middle, how it ended. This is the first step toward composition itself, for one who can order a story aloud is learning to order thought, and will one day order it on the page.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the three parts of every story: a beginning, a middle, and an end",
+                        "Chant what a retelling must carry: the characters, the setting, and the events in their order",
+                    ],
+                    "recitations": [
+                        "Recite a short, well-loved tale and then retell it in your own words, the recited and the retold both being the keeping of a story",
+                    ],
+                },
+                "recitation_routine": "Begin each lesson by retelling the story from the last lesson before a new one is read, so the stories are kept and reviewed cumulatively.",
+                "history_integration": "Tell that for most of human history stories were kept alive only by retelling, passed from teller to teller down the generations, and that to retell a tale faithfully is to do the work that has carried stories through all of time.",
+                "read_aloud_suggestions": [
+                    "A fairy tale, fable, or myth with a clear beginning, middle, and end, read aloud and then retold",
+                    "A well-loved story heard many times, its shape so familiar it is easy to tell back",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A living book or well-told tale with a clear, strong shape, worth hearing and telling again, never a contrived reader",
+                ],
+                "short_lesson_flow": "Read a story, or a portion of one, aloud and unhurried. Close the book. Let the child tell it back in their own words, beginning, middle, and end, while you listen without correcting or prompting. The retelling is itself the lesson and the assessment both. Keep it warm and unhurried.",
+                "narration_prompt": "Tell me the story back, from the very beginning to the end. Who was in it, and where did it happen?",
+                "real_world_objects": [
+                    "The living book itself, the story heard and then told back",
+                    "Simple props or stuffed animals the child may use to act the retelling",
+                    "Drawing paper for picturing the beginning, middle, and end",
+                ],
+                "nature_connection": "After a nature walk or an outing, ask the child to retell it as a story, beginning, middle, and end, the same telling-back turned upon a real day's events.",
+                "habit_focus": "The habit of attention and of telling back: hearing a story fully and giving it again, whole and in order.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Story sequence cards the child arranges in order, beginning, middle, and end",
+                    "A story basket with small figures and props for acting a retelling",
+                    "A shelf of familiar storybooks for retelling practice",
+                    "Drawing paper or a three-part beginning-middle-end frame",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the sequence cards: this card is the beginning, this the middle, this the end; show me the beginning; which part of the story is this card?",
+                    "steps": [
+                        "The child hears or reads a familiar story",
+                        "The child arranges the story sequence cards in order, beginning, middle, and end, naming the characters and the setting",
+                        "The child retells the story aloud, using the cards or the story basket props, keeping the events in order",
+                    ],
+                },
+                "control_of_error": "The story sequence cards are the control: arranged out of order, the story does not run true, and the child, retelling it, hears that it will not make sense until the cards are set right; the book itself confirms the true order.",
+                "abstraction_pathway": "From arranging sequence cards and retelling with props in hand, to retelling a familiar story from memory alone, toward retelling a less familiar story heard only once or twice.",
+                "extensions": [
+                    "Retell a story to a younger child",
+                    "Make sequence cards for a new story",
+                    "Retell a real outing or experience in beginning-middle-end order",
+                ],
+                "observation_focus": "Watch for the child holding the events in their true order, including the beginning and middle and not only the end, and naming the characters and setting unprompted.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a rich shelf of storybooks within reach and read aloud often",
+                    "Leave out small figures, puppets, and props for acting stories out",
+                    "Have drawing materials handy for picturing a story's parts",
+                ],
+                "real_world_contexts": [
+                    "Telling a parent what happened in a book read at bedtime",
+                    "Retelling the plot of a film or show the family watched",
+                    "Recounting a birthday party, a playdate, or an outing in order",
+                    "Telling a sibling or grandparent a favorite story",
+                ],
+                "conversation_starters": [
+                    "How did that story start? And then what happened? How did it end?",
+                    "Who was in the story, and where did it all take place?",
+                    "Could you tell that story to your brother? He has never heard it.",
+                ],
+                "resource_bank": [
+                    "A wide home library and audiobooks for stories worth retelling",
+                    "Puppets, figures, and props for acting stories out",
+                    "Willing listeners: family, friends, and favorite toys",
+                ],
+                "parent_role": "Be a glad, genuine listener whenever the child wants to tell back a story, a film, or a day, without quizzing or correcting. Tell stories yourself and retell shared days aloud, so retelling is simply part of how the family talks, and let the child's own delight in telling carry it.",
+                "observation_documentation": "Over time, note whether the child retells stories with a beginning, middle, and end, names the characters and setting, includes the major events, and keeps them in order. This noticing replaces any test.",
+            },
         },
         "connections": {
             "math": "Retelling the steps of solving a math problem: 'First I added, then I subtracted...'",
