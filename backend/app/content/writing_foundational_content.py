@@ -2245,11 +2245,6 @@ WRITING_FOUNDATIONAL_CONTENT = {
                 "story starter cards",
                 "sequence word reference card (first, then, next, after that, finally)",
             ],
-            "philosophy_specific": {
-                "classical": "Oral composition (oratory) is the classical foundation for all written composition. The child learns to speak in organized, complete thoughts before writing them. Rhetoric begins here.",
-                "charlotte_mason": "Narration IS oral composition: the child retells what they know in their own words. Daily narration across all subjects builds composition skills without formal writing assignments.",
-                "montessori": "Circle time storytelling. The child tells stories to the group. Story sequence cards prompt organized oral accounts. Self-expression through spoken language before written.",
-            },
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 10},
         "accommodations": {
@@ -2259,6 +2254,112 @@ WRITING_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Use picture prompts or photographs as story starters. Draw a storyboard first, then tell the story aloud.",
             "kinesthetic_learner": "Walk and talk. Act out the story while telling it. Use hand gestures to show sequence (left hand = first, right hand = then).",
             "auditory_learner": "Natural strength area. Record and play back stories. Tell stories to different family members. Listen to professional storytellers for inspiration.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Children can think and speak far above the level at which they can write. Oral composition builds the skill of organizing thought without the burden of handwriting. Today we tell a personal experience aloud in five or more connected sentences with a clear beginning, middle, and end, using sequence words and speaking in complete sentences.",
+                "gradual_release": {
+                    "i_do": "Tell a short, well-ordered account aloud: 'First I went outside. Then I found a ladybug on a leaf. Next I watched it crawl onto my hand. Finally it flew away.' Show that it has an order, complete sentences, and sequence words.",
+                    "we_do": "Build an oral account together, the parent asking what happened first, then next, then last, and helping the child shape each part into a complete sentence.",
+                    "you_do": "Child tells a personal experience aloud in five or more connected, complete sentences with a beginning, a middle, and an end.",
+                },
+                "guided_practice": [
+                    "Tell what happened first, then in the middle, then at the end of a small event",
+                    "Retell a short account using the sequence words first, then, next, and finally",
+                    "Turn a spoken fragment into a complete spoken sentence",
+                ],
+                "independent_practice": [
+                    "Tell a five-sentence account of a personal experience to a listener who was not there",
+                    "Describe an object or place aloud in five complete, organized sentences",
+                ],
+                "mastery_check": [
+                    "Tell a personal experience aloud in five or more connected sentences with a clear beginning, middle, and end",
+                    "Use sequence words to order a spoken account",
+                    "Speak in complete sentences throughout the oral composition",
+                ],
+                "spiral_review": [
+                    "Practice oral composition briefly each day, retelling an event before any writing is attempted",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Before the hand writes, the tongue must learn to order thought. In the classical tradition the spoken composition comes first, and for long: the pupil learns to relate an experience clearly, in proper sequence and in whole sentences, and so masters the arranging of thought that all later writing, and all true rhetoric, will require.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the order words of a told account: first, then, next, after that, and finally",
+                    ],
+                    "recitations": [
+                        "Recite that a well-told account has a beginning, a middle, and an end, and that thought is ordered on the tongue before it is set down by the hand",
+                    ],
+                },
+                "recitation_routine": "Begin each lesson by reciting the sequence words and the parts of a told account, beginning, middle, and end, before the child tells their story.",
+                "history_integration": "Tell that in the schools of Greece and Rome the spoken word was trained before the written, and that orators practiced telling and arranging accounts aloud long before they were trusted with the pen.",
+                "read_aloud_suggestions": [
+                    "A well-ordered short narrative read aloud, the child invited to hear its beginning, its middle, its end, and the words that mark its sequence",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A rich living book read aloud, the source the child narrates from, since narration is oral composition itself",
+                ],
+                "short_lesson_flow": "Keep the lesson short, ten to fifteen minutes. Narration is the heart of this work: after a single reading, the child tells back what was heard, in their own words, in proper order. No questions, no prompting beyond a gentle 'and then?'. The child's own telling, complete and sequenced, is the whole composition. Daily narration across every subject builds the skill without a single formal assignment.",
+                "narration_prompt": "Tell me, in your own words, everything you remember, from how it began, through the middle, to how it ended.",
+                "real_world_objects": [
+                    "A living book worth narrating",
+                    "An attentive listener, the truest requirement",
+                    "Picture prompts from real experiences, if a starting point is wanted",
+                ],
+                "nature_connection": "After a nature walk the child narrates aloud what was seen and done, in sequence, so that oral composition records real out-of-door experience.",
+                "habit_focus": "The habit of attention: listening once, closely, and then telling back fully and in true order.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Story sequence cards that prompt an ordered spoken account",
+                    "Objects and picture cards the child can describe aloud",
+                    "A quiet space and an attentive listener for telling",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With sequence cards: these cards show what happened first, next, and last; you put them in order; tell me the story these cards show, in order.",
+                    "steps": [
+                        "The child arranges story sequence cards in their proper order",
+                        "The child tells the account the cards show, aloud, in complete sentences",
+                        "The child tells a personal experience of their own in the same ordered way, with a beginning, middle, and end",
+                    ],
+                },
+                "control_of_error": "Sequence cards placed out of order make the told account confusing, and the child hears that the story does not hang together, so they reorder the cards and tell it again.",
+                "abstraction_pathway": "From ordering concrete sequence cards and telling their story, to telling a personal experience in the same ordered way, toward composing ordered accounts in the mind alone.",
+                "extensions": [
+                    "Describe an object aloud in five complete sentences without naming it, for a listener to guess",
+                    "Tell a longer account, building from a few sentences to many",
+                    "Tell the same account to different listeners, noticing what each needs to know",
+                ],
+                "observation_focus": "Watch for the child telling accounts in proper sequence, speaking in complete sentences, and ordering thought clearly before any writing is asked.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Make room at meals and on car rides for everyone to tell about their day",
+                    "Leave story dice, puppets, or picture cards out for whoever wants to spin a tale",
+                    "Welcome the child's stories, jokes, and accounts whenever they want to tell them",
+                ],
+                "real_world_contexts": [
+                    "Telling a parent about something that happened when they were not there",
+                    "Leaving a voice message for a relative",
+                    "Telling about a trip, a project, or a discovery to someone who is genuinely curious",
+                    "Giving someone spoken directions for a route or a task",
+                ],
+                "conversation_starters": [
+                    "Tell me the whole thing: what happened first?",
+                    "And then what? I want to hear how it ended.",
+                    "If Grandma heard this, would she know what you mean? What would she need to know?",
+                ],
+                "resource_bank": [
+                    "Family meals and travel time, the natural home of storytelling",
+                    "Story dice, puppets, and picture prompts for play",
+                    "Audiobooks and storytellers to enjoy and learn from",
+                ],
+                "parent_role": "Tell your own day's stories aloud, and listen, really listen, when the child tells theirs, asking a genuine 'and then?' rather than correcting. Let real listeners, ones who were not there and truly want to know, give the child a reason to tell things fully and in order.",
+                "observation_documentation": "Over time, notice whether the child tells experiences in a clear order, in complete sentences, with a beginning, middle, and end, and whether listeners can follow. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Oral composition skills mirror reading comprehension: organizing events, identifying main ideas, including details — the same skills needed to understand a story are needed to tell one",
