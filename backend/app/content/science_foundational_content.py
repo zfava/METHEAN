@@ -3324,11 +3324,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
                 "simple pulley setup",
                 "collection of simple machine examples (bottle opener, jar, screws)",
             ],
-            "philosophy_specific": {
-                "classical": "Memorize all 6 simple machines and their definitions. Identify in daily life systematically. Vocabulary: fulcrum, force, load, effort, mechanical advantage.",
-                "charlotte_mason": "Finding simple machines everywhere: the child sees physics in the playground, kitchen, and workshop. Drawing simple machines in the science notebook with labels.",
-                "montessori": "Simple machine experiment trays: lever tray, ramp tray, pulley tray. The child tests each independently. Nomenclature cards matching machines to real-world examples.",
-            },
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 10},
         "accommodations": {
@@ -3338,6 +3333,118 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Diagrams of each simple machine. Photographs of real-world examples. Drawing and labeling machines found during scavenger hunt.",
             "kinesthetic_learner": "Build every machine. Test lever positions. Roll objects down ramps. Pull with pulleys. Cut with wedges. Turn screws.",
             "auditory_learner": "Discuss how each machine works. Chant the 6 machine names. Verbal scavenger hunt: name machines as you walk through the house.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Simple machines are the basic devices that make work easier. There are six: the lever, the wheel and axle, the pulley, the inclined plane, the wedge, and the screw. A machine does not make work disappear; it changes the force you need, making it smaller or pointing it in a more useful direction. Today we name all six, find them everywhere in daily life, and show with a hands-on experiment how one of them reduces effort.",
+                "gradual_release": {
+                    "i_do": "Name the six simple machines and hold up a household example of each: a bottle opener is a lever, a doorknob a wheel and axle, a jar lid a screw. Lift a heavy book straight up, then roll it up a ramp, and think aloud: the ramp did not make the book lighter, it let me use less force over a longer distance.",
+                    "we_do": "Go through the six machines together, finding examples of each around the house, and set up a ramp or a lever to feel how it reduces the effort needed.",
+                    "you_do": "Child names all six simple machines, finds real examples of each, explains that a simple machine makes work easier, and demonstrates one reducing effort.",
+                },
+                "guided_practice": [
+                    "Name the six simple machines and a household example of each",
+                    "Go on a scavenger hunt and find simple machines around the home",
+                    "Set up a ramp or a lever and feel how it makes lifting easier",
+                ],
+                "independent_practice": [
+                    "Build a lever or a ramp and test how it changes the force needed",
+                    "Find and label three examples of each simple machine in the home",
+                ],
+                "mastery_check": [
+                    "Identify all six simple machines by name",
+                    "Find real-world examples of each simple machine",
+                    "Explain that simple machines make work easier by changing the force needed, and demonstrate one",
+                ],
+                "spiral_review": [
+                    "Revisit the idea of a force as a push or a pull, which simple machines redirect and reduce",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Long ago people learned that a clever device could do what bare strength could not. From this learning came the six simple machines, the lever, the wheel and axle, the pulley, the inclined plane, the wedge, and the screw. They are the alphabet of all mechanism: every complex machine, however grand, is built of these six. To know them is to understand how human ingenuity has multiplied human strength.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the six simple machines: lever, wheel and axle, pulley, inclined plane, wedge, and screw",
+                        "Chant the law of the machine: it does not lessen the work, but changes the force, in size or in direction",
+                    ],
+                    "recitations": [
+                        "Recite that a simple machine makes work easier by changing the amount or the direction of the force, and that the six are the parts of every machine",
+                    ],
+                },
+                "copywork": [
+                    "Copy the names of the six simple machines, each with a few words of what it does, and the words force, fulcrum, effort, and load",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the six simple machines and the law of the machine before any new study.",
+                "history_integration": "Tell that the ancient Egyptians raised their pyramids with ramps and levers and rollers, that Archimedes of old declared he could move the Earth itself given a lever and a place to stand, and that the simple machines are the beginning of all the history of technology.",
+                "read_aloud_suggestions": [
+                    "An account of how the great builders of antiquity moved mountains of stone with ramp and lever, read aloud so the child hears the simple machines at work in history",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book about machines, building, or the great works of engineering, with true artwork and never a dry textbook",
+                ],
+                "short_lesson_flow": "Let the lesson be discovery, not instruction. Walk through the house, the kitchen, the garage, the playground, and find the simple machines hiding in plain sight: the door handle, the scissors, the seesaw, the ramp. Name each one gladly as it is found, and the child draws a favorite in the science notebook. Stop while the hunt is still a delight.",
+                "narration_prompt": "Tell me about the simple machines you found today. Which one surprised you most, and how does it make work easier?",
+                "real_world_objects": [
+                    "The household itself, full of levers, wheels, screws, wedges, ramps, and pulleys",
+                    "A bottle opener, a jar, a doorknob, real machines to handle",
+                    "A board and books for a ramp, a ruler and pencil for a lever",
+                    "A science notebook for drawing the machines found",
+                ],
+                "nature_connection": "Notice the simple machines in the child's own body and in nature: the arm is a lever with the elbow as its fulcrum, the front teeth are wedges, and a bird's beak, too, is a clever natural tool.",
+                "habit_focus": "The habit of attention: looking at an ordinary object closely enough to see the simple machine within it.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Simple machine experiment trays: a lever tray, a ramp tray, a pulley tray",
+                    "Real examples of each of the six simple machines for handling",
+                    "Nomenclature cards matching each machine to its real-world examples",
+                    "A board, books, weights, string, and a ruler for building and testing",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the machine examples: this is a lever, the bottle opener; show me a lever; which simple machine is this?",
+                    "steps": [
+                        "The child handles each of the six simple machines and learns its name",
+                        "The child works a tray, building a lever or a ramp and feeling how it reduces the effort",
+                        "The child matches the nomenclature cards, machine to name to real-world example",
+                    ],
+                },
+                "control_of_error": "The machine itself is the control: the child feels directly that pushing up a ramp takes less effort than lifting straight up, and a nomenclature card mismatched to a machine does not fit its example, so the work checks itself.",
+                "abstraction_pathway": "From handling and building the real machines and feeling the effort change, to matching them to the nomenclature cards, toward recognizing the six simple machines within every complex machine.",
+                "extensions": [
+                    "Find the simple machines hidden inside a complex machine, a bicycle or a pair of scissors",
+                    "Measure how a lever or pulley changes the force needed",
+                    "Build a chain of machines that work together",
+                ],
+                "observation_focus": "Watch for the child feeling the change in effort for themselves, and recognizing a simple machine by what it does rather than by its appearance.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep real tools and gadgets that are simple machines within reach to handle and use",
+                    "Leave out boards, ramps, string, and pulleys for free building",
+                    "Have books about machines, building, and how things work available",
+                ],
+                "real_world_contexts": [
+                    "Using simple machines in daily life: opening jars, turning doorknobs, riding a bike, cutting with scissors",
+                    "Playing on the playground: the seesaw, the slide, the merry-go-round",
+                    "Helping with real work that uses ramps, levers, and wheels",
+                    "Taking apart or fixing things and finding the simple machines inside",
+                ],
+                "conversation_starters": [
+                    "It is easier to roll the box up a ramp than to lift it, why do you think that is?",
+                    "Where is the fulcrum on this bottle opener? Where do you push?",
+                    "How many simple machines can you find on your bicycle?",
+                ],
+                "resource_bank": [
+                    "Real tools and gadgets that are simple machines",
+                    "Boards, ramps, string, and pulleys for building",
+                    "Books about machines and how things work, and a nearby playground",
+                ],
+                "parent_role": "Bring the child into real work and play that uses simple machines, and wonder aloud at how a ramp, a lever, or a wheel makes a hard job easy. Welcome the child's building and tinkering, and let real machines, used and taken apart, rather than a worksheet, teach how they work.",
+                "observation_documentation": "Over time, note whether the child recognizes the six simple machines, finds them in daily life, and understands that a machine makes work easier by changing the force. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Simple machine vocabulary: lever, fulcrum, inclined plane, pulley, wedge, screw, force, effort, load. Technical reading skills.",
