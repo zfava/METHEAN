@@ -4926,11 +4926,6 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
         "resource_guidance": {
             "required": ["animal pictures or cards for sorting", "science notebook for comparisons"],
             "recommended": ["living books about mammals", "zoo visit or nature documentary"],
-            "philosophy_specific": {
-                "classical": "Mammal classification memorized: 5 characteristics. Major mammal orders named. Vocabulary: mammary, warm-blooded, vertebrate, adaptation, habitat.",
-                "charlotte_mason": "Living books about mammals with narration. Observing local mammals (squirrels, rabbits, pets) in their natural behavior. Drawing mammals in the nature notebook.",
-                "montessori": "Mammal cards sorted by habitat. Parts-of-a-mammal nomenclature cards. Animal classification work with physical figures sorted into groups.",
-            },
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -4940,6 +4935,118 @@ SCIENCE_FOUNDATIONAL_CONTENT = {
             "visual_learner": "Animal photographs. Comparison charts. Adaptation diagrams. Documentary videos.",
             "kinesthetic_learner": "Sort physical animal figures. Pet observation. Act out mammal behaviors. Build habitat dioramas.",
             "auditory_learner": "Discuss adaptations as conversations. Listen to nature documentaries. Describe mammals aloud before drawing.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Mammals are the animal group that includes us. A mammal has five marks: it is warm-blooded, it has hair or fur, it feeds its young with milk, it usually gives live birth, and it breathes air with lungs. From the tiny bat to the great whale, mammals live in every habitat on Earth, each fitted to its own. Today we name the five characteristics, compare mammals from different habitats and their adaptations, and learn that we ourselves are mammals.",
+                "gradual_release": {
+                    "i_do": "Run through the five marks of a mammal on a familiar animal, a dog, thinking aloud: warm-blooded, furred, nursed as a pup, born live, breathes air, so it is a mammal. Set a whale beside it, no fish but a mammal, and show how the polar bear's thick fur and the camel's hump each fit its habitat.",
+                    "we_do": "Check animals against the five characteristics together, sort them into mammals and not-mammals, and compare two mammals from different habitats and their adaptations.",
+                    "you_do": "Child lists the five characteristics of mammals, compares mammals from different habitats with their adaptations, and explains why an animal is or is not a mammal.",
+                },
+                "guided_practice": [
+                    "Check the five mammal characteristics against familiar animals",
+                    "Sort animal pictures into mammals and not-mammals with reasons",
+                    "Compare mammals from different habitats and name an adaptation of each",
+                ],
+                "independent_practice": [
+                    "Make a habitat comparison chart of three mammals and their adaptations",
+                    "Study one mammal in depth: its habitat, its adaptations, its mammalian marks",
+                ],
+                "mastery_check": [
+                    "List the five characteristics that define mammals",
+                    "Compare mammals from at least three habitats and describe their adaptations",
+                    "Explain why an animal is or is not a mammal, and recognize that humans are mammals",
+                ],
+                "spiral_review": [
+                    "Revisit how an animal is adapted to its habitat, since each mammal is fitted to its own",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Among all the kinds of animals, one is our own: the mammals, and the human being is a mammal. The mammal is known by sure marks, warm blood, a coat of hair, the nursing of its young with milk, and air drawn into lungs. By these marks the whale is known a mammal though it swims, and the bat a mammal though it flies, for the marks, not the look, decide the kind.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the five marks of a mammal: warm blood, hair or fur, milk for the young, live birth, and breath of air",
+                        "Chant the surprising mammals: the whale that swims, the bat that flies, and ourselves",
+                    ],
+                    "recitations": [
+                        "Recite that a mammal is known by its marks and not by its look, so the whale is no fish and the bat no bird",
+                    ],
+                },
+                "copywork": [
+                    "Copy the five characteristics of mammals, neatly listed, and the names of several mammals from different habitats",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the five marks of a mammal before any new study.",
+                "history_integration": "Tell that humankind long ago took certain mammals into its keeping, the dog, the cow, the horse, the sheep, and that this domestication of mammals, more than ten thousand years ago, changed the whole course of human life.",
+                "read_aloud_suggestions": [
+                    "A living account of the life of a particular mammal in its habitat, read aloud so the child hears how the creature is fitted to its world",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A beautifully illustrated living book about mammals, written with knowledge and affection, never a dry fact reader",
+                ],
+                "short_lesson_flow": "Begin with the mammals nearest at hand: a pet, or the squirrels and rabbits of the yard. Watch one quietly going about its life, and notice its fur, its warmth, its ways. Read a portion of a living book about a mammal of a far habitat, and let the child narrate and draw the creature in the nature notebook. Keep it warm and unhurried.",
+                "narration_prompt": "Tell me about the mammal we watched, or read of. How is its body suited to where it lives, and how do you know it is a mammal?",
+                "real_world_objects": [
+                    "A family pet or a local wild mammal to observe",
+                    "Living books and beautiful pictures of mammals",
+                    "A nature notebook for drawing mammals from life",
+                    "The child's own body, a mammal to consider",
+                ],
+                "nature_connection": "The local mammals are met in nature study, the squirrel in the tree, the rabbit in the field, the mouse in the hedge, and the child comes to know the mammal kind first through the creatures of their own place.",
+                "habit_focus": "The habit of attention: watching a mammal long enough to see its fur, its warmth, and the ways it is fitted to its life.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Mammal cards with photographs, sorted by habitat",
+                    "Parts-of-a-mammal nomenclature cards",
+                    "Animal figures to sort into mammals and other groups",
+                    "A magnifying glass and, where possible, real observation of a mammal",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the animal figures: this is a mammal, it has fur and was nursed with milk; show me a mammal; is this animal a mammal?",
+                    "steps": [
+                        "The child sorts animal figures and cards into mammals and not-mammals, checking the five marks",
+                        "The child sorts the mammal cards by habitat and names an adaptation for each",
+                        "The child works the parts-of-a-mammal nomenclature cards and records a comparison",
+                    ],
+                },
+                "control_of_error": "The five marks are the control: an animal sorted as a mammal must show warm blood, hair, milk, live birth, and air-breathing, and the matched nomenclature cards confirm the work, so a wrong sort does not hold against the evidence.",
+                "abstraction_pathway": "From sorting concrete animal figures by the five marks, to comparing mammals across habitats by their adaptations, toward knowing the mammal as a kind defined by its characteristics, not its appearance.",
+                "extensions": [
+                    "Sort the mammals further into their orders, the primates, the rodents, the carnivores",
+                    "Study one mammal's adaptations in depth",
+                    "Compare mammals to birds, fish, and reptiles by their characteristics",
+                ],
+                "observation_focus": "Watch for the child sorting by the five marks rather than by appearance, and connecting a mammal's body to the habitat it lives in.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep mammal books, field guides, and nature documentaries available",
+                    "Have animal figures and picture cards within reach for free sorting",
+                    "Let the family pet, if there is one, be a mammal close at hand to know",
+                ],
+                "real_world_contexts": [
+                    "Caring for and observing a pet, a mammal with real needs",
+                    "Watching the wild mammals of the yard, the park, and the woods",
+                    "Visiting a zoo, a farm, or a nature center and meeting mammals of many kinds",
+                    "Noticing that the child's own body has the marks of a mammal",
+                ],
+                "conversation_starters": [
+                    "A whale lives in the sea and looks like a fish, why do you think it is a mammal?",
+                    "Your dog and an elephant look nothing alike, what makes them both mammals?",
+                    "How is a polar bear's body different from a camel's, and why?",
+                ],
+                "resource_bank": [
+                    "Mammal books, field guides, and nature documentaries",
+                    "A pet, and the local wild mammals, to observe",
+                    "Zoos, farms, and nature centers",
+                ],
+                "parent_role": "Follow the child's love of particular animals into books, documentaries, and visits to see them, and wonder aloud at what makes a creature a mammal and how each is fitted to its home. Let real animals, the pet, the wild creatures, the zoo, rather than a worksheet, teach what a mammal is.",
+                "observation_documentation": "Over time, note whether the child names the marks of a mammal, tells mammals from other animals, compares mammals across habitats, and knows that humans are mammals too. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Mammal vocabulary: vertebrate, warm-blooded, adaptation, mammary, habitat, endangered, species, evolution",
