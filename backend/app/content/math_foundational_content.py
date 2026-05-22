@@ -4561,10 +4561,114 @@ MATH_FOUNDATIONAL_CONTENT = {
             "auditory_learner": "'2, 4, 6, 8, who do we appreciate? EVEN!'",
         },
         "philosophy_specific": {
-            "classical": "Formal: even divisible by 2. Odd has remainder 1.",
-            "charlotte_mason": "Discover through sharing: can we split 7 cookies evenly?",
-            "montessori": "Cards and counters: pairs. Even perfect, odd one left.",
-            "traditional": "Even/odd worksheets. Hundred chart coloring.",
+            "traditional": {
+                "introduction": "An even number splits into two equal groups with nothing left over; an odd number always has one left over. The surest test is pairing: give each thing a partner, and if every thing has one the number is even, but if one stands alone the number is odd. Today we identify even and odd numbers, show why with pairing, and learn the pattern that even numbers end in zero, two, four, six, or eight.",
+                "gradual_release": {
+                    "i_do": "Take six counters and pair them: three pairs, none alone, so six is even. Take seven and pair them: one stands alone, so seven is odd. Then point along a count of numbers and show that even numbers end in zero, two, four, six, or eight.",
+                    "we_do": "Pair counters together for several numbers, calling out even or odd, and sort number cards into an even pile and an odd pile.",
+                    "you_do": "Child identifies a number as even or odd, shows why by pairing or by the ones digit, and names the even-number pattern.",
+                },
+                "guided_practice": [
+                    "Pair counters to test whether numbers are even or odd",
+                    "Sort number cards from one to twenty into even and odd piles",
+                    "Color the even numbers on a hundred chart and see the pattern",
+                ],
+                "independent_practice": [
+                    "Decide even or odd for a list of numbers and write the reason",
+                    "List all the even numbers and all the odd numbers within twenty",
+                ],
+                "mastery_check": [
+                    "Identify any number within twenty as even or odd",
+                    "Explain the answer using pairing or the ones digit",
+                    "State the pattern: even numbers end in zero, two, four, six, or eight",
+                ],
+                "spiral_review": [
+                    "Revisit skip counting by twos, which lands on every even number in turn",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Of every number it may be asked: can it be shared fairly between two? The numbers that can, that fall into two equal halves with nothing left over, the ancients called even; the numbers that leave one over they called odd. This is one of the oldest things known about number, and it is learned by the simple act of pairing.",
+                "memory_work": {
+                    "chants": [
+                        "Chant the even numbers by twos: two, four, six, eight, ten, twelve",
+                        "Chant the rule: even splits in two with none to spare, odd always leaves one standing there",
+                    ],
+                    "recitations": [
+                        "Recite that an even number ends in zero, two, four, six, or eight, and an odd number ends in one, three, five, seven, or nine",
+                    ],
+                },
+                "copywork": [
+                    "Copy the even numbers in one row and the odd numbers in another, neatly, so the two patterns are seen side by side",
+                ],
+                "recitation_routine": "Begin each lesson by chanting the even numbers and reciting the rule of even and odd before any new work.",
+                "history_integration": "Tell that the study of even and odd is among the oldest in arithmetic, that thinkers of old held it a first and important truth about every number, and that it begins the long study of how numbers are built.",
+                "read_aloud_suggestions": [
+                    "A story of fair sharing between two, read aloud so the child hears when a thing divides evenly and when one is left over",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A simple, beautifully illustrated counting or sharing book, with real artwork and never a workbook",
+                ],
+                "short_lesson_flow": "Bring out a small handful of real objects, perhaps acorns or buttons. Try to share them fairly between two, calmly, and see whether any is left over. Name the number even or odd. Try another small number. Stop while interest is high.",
+                "narration_prompt": "Tell me what happened when we shared the seven acorns. Was there one left over? Even or odd?",
+                "real_world_objects": [
+                    "Acorns, buttons, or pebbles shared fairly between two",
+                    "Pairs of socks, shoes, and gloves, which are even by nature",
+                    "House numbers, even on one side of the street and odd on the other",
+                ],
+                "nature_connection": "Outdoors, notice where nature pairs and where it does not: the two wings of a butterfly, the petals counted around a flower, and ask whether the count is even or odd.",
+                "habit_focus": "The habit of attention: noticing whether a thing shares out fairly or leaves one over.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "The cards and counters material, numeral cards one to ten with loose counters",
+                    "Baskets of small objects for free pairing",
+                    "A box of number cards to sort into even and odd",
+                ],
+                "presentation": {
+                    "three_period_lesson": "With the cards and counters: this number is even, see how every counter has a partner; show me a number that is even; is this number even or odd?",
+                    "steps": [
+                        "Lay the numeral cards in order and place counters beneath each, two by two in pairs",
+                        "For each number run a finger up between the pairs: if it passes clear through the number is even, if a lone counter blocks it the number is odd",
+                        "Sort the numbers into even and odd, and notice the pairs alternate",
+                    ],
+                },
+                "control_of_error": "The counters themselves are the control: laid in pairs, an odd number always shows one counter with no partner, and the finger run between the columns is stopped by it, so the child sees even and odd without being told.",
+                "abstraction_pathway": "From laying counters in pairs and feeling whether one is left over, to recognizing even and odd on sight, toward knowing a number by its ones digit alone.",
+                "extensions": [
+                    "Test numbers past ten by pairing larger collections",
+                    "Investigate what happens when two even numbers, or two odd numbers, are joined",
+                    "Find even and odd in the world: stairs, windows, house numbers",
+                ],
+                "observation_focus": "Watch for the child laying the counters truly in pairs and reading even or odd from the lone counter rather than guessing.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep baskets of small objects, buttons, beans, pebbles, within reach for free sorting and pairing",
+                    "Leave out two small bowls inviting a child to share a handful fairly between them",
+                    "Have a hundred chart or number chart on the wall to color and notice",
+                ],
+                "real_world_contexts": [
+                    "Sharing snacks, grapes, or crackers fairly between two people",
+                    "Pairing socks and shoes from the laundry",
+                    "Noticing house numbers, even on one side of the street and odd on the other",
+                    "Choosing teams or partners and finding whether everyone has a buddy",
+                ],
+                "conversation_starters": [
+                    "If we share these grapes between the two of us, will it come out fair, or is one left over?",
+                    "Does everyone here have a partner, or is someone left out?",
+                    "What do you notice about the numbers on this side of the street?",
+                ],
+                "resource_bank": [
+                    "Baskets of small countable objects kept available",
+                    "A hundred chart or number chart",
+                    "Everyday sharing moments: snacks, toys, teams",
+                ],
+                "parent_role": "Let the everyday business of sharing fairly and pairing things up raise the question of even and odd, and wonder aloud about whether a number comes out fair. Follow the child's noticing of patterns rather than drilling, and let real handfuls of objects do the showing.",
+                "observation_documentation": "Over time, note whether the child tells even from odd, shows why by pairing or sharing, and notices the pattern of even numbers. This noticing replaces any test.",
+            },
         },
         "connections": {
             "reading": "Even/odd page numbers (left vs right)",
