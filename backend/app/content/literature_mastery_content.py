@@ -20,6 +20,148 @@ strand.
 """
 
 LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
+    "lit-craft-001": {
+        "node_type": "craft",
+        "strand": "close reading",
+        "band": "emerging",
+        "prerequisites": [],
+        "objective": (
+            "Notice exactly what the text says, in age-appropriate, concrete form: tell "
+            "back a short passage in the writer's own words and name one specific word "
+            "the writer chose, distinguishing what the text says from what we already "
+            "knew or expected."
+        ),
+        "core_understanding": (
+            "Reading begins with attention to the actual words on the page. Close "
+            "reading is the habit of looking at what is there, not what is summarized, "
+            "remembered, or wished for. At this band the seed of the habit is laid by "
+            "listening, telling back, and pointing at one specific word the writer chose."
+        ),
+        "analytical_moves": [
+            "Tell back what the text actually said, in the text's own words, when asked",
+            "Point to one specific word the writer chose and say it aloud",
+            "Distinguish what the text shows from what we already knew or expected",
+            "Point to the exact phrase that gives evidence for what you think",
+        ],
+        "seminar_questions": [
+            "What did the writer say, exactly?",
+            "Which word did the writer choose for that, and what does that word make you picture?",
+            "Does the story say so, or are we adding that?",
+        ],
+        "writing_invitations": [
+            "Copy a single chosen sentence from the day's read-aloud and circle the word you noticed most",
+            (
+                "Draw the picture the chosen sentence puts in your mind and write one "
+                "word from the sentence under your drawing"
+            ),
+        ],
+        "exemplar_texts": [
+            "A short, fine picture book read aloud (a Beatrix Potter tale; a McCloskey)",
+            "A Mother Goose verse or a short Aesop fable",
+            "A single page of a chapter book read one paragraph at a time (Charlotte's Web; Frog and Toad)",
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "The first habit of every reader is hearing the words exactly. We "
+                    "listen to the line, tell it back, and say one specific word the "
+                    "writer chose."
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "A single short line from the day's read-aloud, recited",
+                    ],
+                },
+                "copywork": [
+                    "The recited line copied once, slowly, by hand",
+                ],
+                "recitation_routine": (
+                    "Begin each session by reciting the line carried over from yesterday before the new line is met."
+                ),
+                "read_aloud_suggestions": [
+                    "A short picture book or single page read aloud with care",
+                    "A Mother Goose verse or a short Aesop fable",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A worthy picture book or chapter book, read aloud one page at a time",
+                ],
+                "short_lesson_flow": (
+                    "Read a short passage aloud once, attentively. The child tells back "
+                    "what they heard in their own words. Then we ask: which word stood "
+                    "out? Which word did the writer choose? The smallest amount of text, "
+                    "attended to truly, is the whole lesson."
+                ),
+                "narration_prompt": "Tell me what the writer said, just what was said.",
+                "real_world_objects": [
+                    "A worthy book in hand, not a worksheet",
+                    "A small slip of paper for copying the noticed line",
+                ],
+                "nature_connection": (
+                    "Close reading is to a sentence what looking is to a leaf: notice "
+                    "exactly what is there, and name what you actually saw."
+                ),
+                "habit_focus": (
+                    "The habit of attention: hearing the words as the writer wrote them, before any opinion is offered."
+                ),
+            },
+            "traditional": {
+                "introduction": "Explicit, modeled noticing on a short, age-appropriate passage.",
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher reads a single line aloud and names one specific word "
+                        "the writer chose: 'The writer said small, not little. Small.'"
+                    ),
+                    "we_do": (
+                        "Teacher reads the next line and, together with the child, names "
+                        "one specific word the writer chose, saying it aloud."
+                    ),
+                    "you_do": (
+                        "Child picks one specific word the writer chose from a new short "
+                        "line, says it aloud, and then copies the line."
+                    ),
+                },
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep beautiful, well-written picture books and chapter books within reach",
+                    "Read aloud often, slowly enough that any single word can be noticed",
+                ],
+                "real_world_contexts": [
+                    "Bedtime stories, car-ride books, and the picture books the child returns to",
+                    "The line of a song, rhyme, or read-aloud the child says back without prompting",
+                ],
+                "conversation_starters": [
+                    "Did you hear that word? Which one stood out to you?",
+                    "Want me to read that line again? It is a good one.",
+                ],
+                "resource_bank": [
+                    "A shelf of worthy picture books and short read-alouds",
+                    "A growing list of lines the child loved enough to ask about again",
+                ],
+                "parent_role": (
+                    "Read aloud well, lingering on a word that pleases you so the child "
+                    "hears that words are worth noticing. Welcome any word the child "
+                    "names back, and trust that attention to words grows from being "
+                    "delighted in them."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the child points at words on the page, "
+                    "asks 'what did it say?' rather than restating, and remembers a "
+                    "specific word from a story. This noticing replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori at this level focuses on word-building, phonemic awareness, "
+                "sentence analysis, and the grammar materials rather than a distinct "
+                "close-reading method."
+            ),
+        },
+    },
     "lit-craft-031": {
         "node_type": "craft",
         "strand": "narrative craft",

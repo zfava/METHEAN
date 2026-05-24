@@ -204,17 +204,26 @@ class TestContentDictExists:
 
 
 # The three gold-standard exemplars set the in-code bar for the
-# strand. Their structural properties are asserted directly so any
-# future edit that violates the bar fails the gate.
+# strand and must always be present. Authored nodes grow as the
+# strand is built out; every id added to AUTHORED_NODE_IDS is
+# parametrized through validate_literature below.
 
-EXEMPLAR_IDS = ("lit-craft-031", "lit-work-001", "lit-work-inh-004")
+GOLD_EXEMPLAR_IDS = ("lit-craft-031", "lit-work-001", "lit-work-inh-004")
+
+AUTHORED_NODE_IDS = (
+    *GOLD_EXEMPLAR_IDS,
+    "lit-craft-001",
+)
 
 
 class TestAuthoredExemplars:
-    def test_three_exemplars_present(self) -> None:
-        assert set(LITERATURE_MASTERY_CONTENT.keys()) == set(EXEMPLAR_IDS)
+    def test_gold_exemplars_present(self) -> None:
+        assert set(GOLD_EXEMPLAR_IDS).issubset(LITERATURE_MASTERY_CONTENT.keys())
 
-    @pytest.mark.parametrize("node_id", EXEMPLAR_IDS)
+    def test_authored_ids_match_content(self) -> None:
+        assert set(AUTHORED_NODE_IDS) == set(LITERATURE_MASTERY_CONTENT.keys())
+
+    @pytest.mark.parametrize("node_id", AUTHORED_NODE_IDS)
     def test_each_node_validates(self, node_id: str) -> None:
         validate_literature(LITERATURE_MASTERY_CONTENT[node_id])
 
