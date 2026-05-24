@@ -214,6 +214,7 @@ AUTHORED_NODE_IDS = (
     *GOLD_EXEMPLAR_IDS,
     "lit-craft-001",
     "lit-craft-002",
+    "lit-craft-003",
 )
 
 

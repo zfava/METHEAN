@@ -331,6 +331,184 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-003": {
+        "node_type": "craft",
+        "strand": "close reading",
+        "band": "proficient",
+        "prerequisites": ["close reading: developing"],
+        "objective": (
+            "Apply close reading independently to whole difficult works: locate passages "
+            "that bear interpretive weight, hold a small original reading defensible "
+            "from the words on the page, and articulate it in both spoken and written "
+            "argument."
+        ),
+        "core_understanding": (
+            "Close reading is no longer a discrete classroom exercise but a habit one "
+            "brings to any text. The proficient reader trusts their own attention to "
+            "find the passages that matter, and can defend a reading from the words "
+            "themselves rather than from received opinion. This is the doorway to the "
+            "Socratic seminar: the table at which a small original reading, well "
+            "grounded, becomes the substance of the conversation."
+        ),
+        "analytical_moves": [
+            "Read a difficult work whole, with attention, on first encounter",
+            "Mark or note passages that bear interpretive weight as they are read",
+            "Return to a marked passage and articulate why it matters to the work",
+            "Build a short defensible reading from one or two specific passages",
+            "Hear a different reading respectfully and name where in the text it draws its evidence",
+        ],
+        "seminar_questions": [
+            "Which passage in this work feels most central to its meaning, and why?",
+            "Where does this work invite more than one reading, and which words make it so?",
+            "What does this writer let us see only by what they refuse to say?",
+        ],
+        "writing_invitations": [
+            (
+                "Write a short analytical paragraph defending one specific reading of a "
+                "chosen passage, with the words quoted and the reading grounded line by line"
+            ),
+            (
+                "Choose two passages from the same work that complicate each other and "
+                "write the paragraph that holds them together"
+            ),
+        ],
+        "exemplar_texts": [
+            (
+                "A novel of literary substance read whole (Pride and Prejudice; Jane "
+                "Eyre; To Kill a Mockingbird; a great Russian novel in a worthy translation)"
+            ),
+            "A short story by a careful prose writer (Chekhov; Joyce's Dubliners; Flannery O'Connor)",
+            "A whole poem by a poet whose lines reward sustained attention (Donne; Hopkins; Bishop)",
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "Close reading meets the Socratic seminar. The reader brings a "
+                    "passage and a reading; the seminar tests both. Rhetoric and "
+                    "interpretation begin to converse: what does the writer claim, and "
+                    "by what words does the writer secure the claim?"
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "A passage central to the work, recited from memory at the seminar's opening",
+                    ],
+                },
+                "copywork": [
+                    "The recited passage copied into a kept notebook of close-read passages",
+                ],
+                "recitation_routine": (
+                    "Each seminar opens from a recited passage; the discussion takes its "
+                    "first question from the lines just heard, and returns to the text "
+                    "for every claim."
+                ),
+                "read_aloud_suggestions": [
+                    "A chapter of the novel under study, read aloud at the seminar's opening",
+                    "A short story read aloud whole before the discussion begins",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 45,
+                "living_book_suggestions": [
+                    "A worthy novel read whole at a sustained pace, not excerpted",
+                    "A volume of short stories or poems read across a term, one at a sitting",
+                ],
+                "short_lesson_flow": (
+                    "The proficient student reads the whole work at a sustained pace, "
+                    "narrating each sitting. Passages worth attending to are slipped or "
+                    "noted as they are met. At the end of a chapter or a poem, one or "
+                    "two such passages are taken up: copied into the commonplace book, "
+                    "discussed, and tested against the rest of the work. The habit is "
+                    "now across the long span of a whole book, not the single page."
+                ),
+                "narration_prompt": (
+                    "Tell back the chapter you read, and tell me which passage you "
+                    "would set down as the one that bears most weight, and why."
+                ),
+                "real_world_objects": [
+                    "The whole novel, marked with the reader's own slips at chosen passages",
+                    "A commonplace book gathering passages across many works over the year",
+                ],
+                "nature_connection": (
+                    "The proficient close reader is to a difficult book what a "
+                    "naturalist of long practice is to a forest: at home in the whole, "
+                    "able to notice the one thing worth attending to without losing the "
+                    "view of all the rest."
+                ),
+                "habit_focus": (
+                    "The habit of sustained attention across a whole work, and the habit "
+                    "of returning to the text for evidence rather than relying on memory."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in locating passages that bear interpretive "
+                    "weight, in defending a reading from the words, and in writing the "
+                    "short analytical paragraph that quotes its evidence."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher reads a passage aloud, names what about its language "
+                        "makes it bear weight in the work, and writes a short paragraph "
+                        "defending one reading of it on the board, quoting the passage."
+                    ),
+                    "we_do": (
+                        "Class chooses a candidate passage from the work under study, "
+                        "weighs it against other candidates, and drafts a short paragraph "
+                        "together defending one reading, quoting the passage line by line."
+                    ),
+                    "you_do": (
+                        "Student locates a passage independently, drafts a short "
+                        "analytical paragraph defending one specific reading of it, and "
+                        "revises after hearing a peer's different reading at seminar."
+                    ),
+                },
+                "independent_practice": [
+                    "The analytical paragraph on a self-chosen passage from the work under study",
+                    "A short revision of the paragraph after seminar discussion",
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep the long shelf: novels, story collections, and poems of real substance, available, never assigned",
+                    "Keep a commonplace book and small slips for marking passages in books the reader cares about",
+                ],
+                "real_world_contexts": [
+                    "A difficult book a student has chosen and loves, returned to and quoted from",
+                    "A long evening conversation about a passage the student wanted to read aloud to someone",
+                    "A piece of writing the student composed because a book moved them to write back",
+                ],
+                "conversation_starters": [
+                    "Which passage in that book do you keep coming back to? Read it to me?",
+                    "What do you think the writer is doing there, in those exact words?",
+                    "Is there more than one way to read that? Which words make it so?",
+                ],
+                "resource_bank": [
+                    "A shelf of difficult, worthy books available for the long pull",
+                    "A reader-companion willing to discuss a chosen passage as a fellow reader",
+                ],
+                "parent_role": (
+                    "Be a fellow reader who takes the student's chosen book seriously and "
+                    "their chosen passage as seriously as one's own. Discussion follows "
+                    "the student's reading; the parent contributes their own reading as "
+                    "another reader at the table, not as an examiner."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the student returns to difficult books on "
+                    "their own, marks passages, defends a reading from the words, and "
+                    "hears a different reading without giving up their own. This noticing "
+                    "replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori's literature pedagogy at the elementary and early-secondary "
+                "level does not carry a distinct method for the sustained close reading "
+                "of whole difficult works; the practice here is drawn from the seminar "
+                "tradition rather than from the prepared environment."
+            ),
+        },
+    },
     "lit-craft-031": {
         "node_type": "craft",
         "strand": "narrative craft",
