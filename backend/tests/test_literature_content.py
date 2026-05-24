@@ -201,3 +201,83 @@ class TestContentDictExists:
         # validator is the one exported from node_content.
         assert "mastery_check" in _UNSCHOOLING_FORBIDDEN_KEYS
         assert "gradual_release" in _UNSCHOOLING_FORBIDDEN_KEYS
+
+
+# The three gold-standard exemplars set the in-code bar for the
+# strand. Their structural properties are asserted directly so any
+# future edit that violates the bar fails the gate.
+
+EXEMPLAR_IDS = ("lit-craft-031", "lit-work-001", "lit-work-inh-004")
+
+
+class TestAuthoredExemplars:
+    def test_three_exemplars_present(self) -> None:
+        assert set(LITERATURE_MASTERY_CONTENT.keys()) == set(EXEMPLAR_IDS)
+
+    @pytest.mark.parametrize("node_id", EXEMPLAR_IDS)
+    def test_each_node_validates(self, node_id: str) -> None:
+        validate_literature(LITERATURE_MASTERY_CONTENT[node_id])
+
+    def test_work_nodes_have_minimum_band(self) -> None:
+        for node_id, node in LITERATURE_MASTERY_CONTENT.items():
+            if node.get("node_type") == "work":
+                assert node.get("minimum_band") in LITERARY_BANDS, node_id
+
+    def test_inheritance_node_has_lineage_and_comparative_threads(self) -> None:
+        node = LITERATURE_MASTERY_CONTENT["lit-work-inh-004"]
+        assert node.get("track") == "inheritance"
+        assert node.get("lineage"), "inheritance node must carry lineage"
+        threads = node.get("comparative_threads") or []
+        assert threads, "inheritance node must carry non-empty comparative_threads"
+
+    def test_every_node_has_classical_and_charlotte_mason(self) -> None:
+        for node_id, node in LITERATURE_MASTERY_CONTENT.items():
+            philosophy = node["philosophy"]
+            assert "classical" in philosophy, node_id
+            assert "charlotte_mason" in philosophy, node_id
+            assert isinstance(philosophy["classical"], dict), node_id
+            assert isinstance(philosophy["charlotte_mason"], dict), node_id
+
+    def test_no_unschooling_lesson_keys(self) -> None:
+        for node_id, node in LITERATURE_MASTERY_CONTENT.items():
+            unschooling = node["philosophy"].get("unschooling")
+            if isinstance(unschooling, dict):
+                forbidden = _UNSCHOOLING_FORBIDDEN_KEYS.intersection(unschooling.keys())
+                assert not forbidden, f"{node_id} unschooling has forbidden keys: {sorted(forbidden)}"
+
+    def test_no_node_reproduces_long_in_copyright_passages(self) -> None:
+        for node_id, node in LITERATURE_MASTERY_CONTENT.items():
+            warnings = validate_literature(node)
+            copyright_flags = [w for w in warnings if "in-copyright" in w]
+            assert not copyright_flags, f"{node_id} reproduced flagged passage(s): {copyright_flags}"
+
+    def test_montessori_neutralized_with_reason(self) -> None:
+        # All three exemplars explicitly mark montessori as neutral
+        # rather than authoring a stretched native variant.
+        for node_id, node in LITERATURE_MASTERY_CONTENT.items():
+            neutral = node.get("philosophy_neutral", {})
+            assert "montessori" in neutral, node_id
+            assert neutral["montessori"], f"{node_id} montessori neutral lacks a reason"
+
+    def test_lit_craft_031_band_and_prerequisites(self) -> None:
+        node = LITERATURE_MASTERY_CONTENT["lit-craft-031"]
+        assert node["node_type"] == "craft"
+        assert node["band"] == "advanced"
+        assert node["prerequisites"] == [
+            "point of view: proficient",
+            "close reading: proficient",
+        ]
+        assert node["strand"] == "narrative craft"
+
+    def test_lit_work_001_is_public_domain_classics(self) -> None:
+        node = LITERATURE_MASTERY_CONTENT["lit-work-001"]
+        assert node["track"] == "classics"
+        assert node["work"]["author"] == "Homer"
+        assert node["minimum_band"] == "developing"
+
+    def test_lit_work_inh_004_is_inheritance(self) -> None:
+        node = LITERATURE_MASTERY_CONTENT["lit-work-inh-004"]
+        assert node["track"] == "inheritance"
+        assert node["work"]["author"] == "J.R.R. Tolkien"
+        assert node["minimum_band"] == "proficient"
+        assert "Beowulf" in node["lineage"]
