@@ -162,6 +162,175 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-002": {
+        "node_type": "craft",
+        "strand": "close reading",
+        "band": "developing",
+        "prerequisites": ["close reading: emerging"],
+        "objective": (
+            "Name the practice of close reading and apply it with support: select a "
+            "specific quotation from a text, restate what it actually says in the "
+            "writer's own words, and offer a small inference grounded in the language on "
+            "the page."
+        ),
+        "core_understanding": (
+            "Close reading proceeds by quotation. The reader points at the exact words; "
+            "what those words say (and only what they say) is the evidence. Inferences "
+            "are welcome, but each must be grounded in the language. At this band the "
+            "habit becomes named and conscious, and the child begins to copy chosen "
+            "passages into a commonplace book of their own."
+        ),
+        "analytical_moves": [
+            "Choose a single short passage worth attending to",
+            "Quote it exactly, with quotation marks, and read it aloud once more",
+            "Say what the passage literally says before saying what it suggests",
+            "Distinguish the text's claim from one's own opinion, summary, or wish",
+        ],
+        "seminar_questions": [
+            "What does this passage say, exactly? Which words?",
+            ("What does it suggest beyond what it says directly, and which words make you think so?"),
+            "Could two careful readers reach different inferences from the same words? Why?",
+        ],
+        "writing_invitations": [
+            (
+                "Choose a passage you find striking from today's reading and write a "
+                "short paragraph quoting it and saying what the words actually say"
+            ),
+            ("Take a passage you have summarized and rewrite the analysis quoting the actual words instead"),
+        ],
+        "exemplar_texts": [
+            (
+                "A passage from a Newbery-honored novel (Charlotte's Web; The Lion, the "
+                "Witch and the Wardrobe; Bridge to Terabithia)"
+            ),
+            "A short fable, parable, or folk tale",
+            "A page of a Beatrix Potter tale or a passage of The Wind in the Willows",
+            "A short poem suitable to the age (Stevenson's A Child's Garden of Verses)",
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "Close reading is now named as a habit, and the writer's exact words "
+                    "become evidence in a small rhetorical practice. We choose the "
+                    "passage, quote it, and reason from the words themselves."
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "A chosen passage of two or three sentences, recited from memory",
+                    ],
+                },
+                "copywork": [
+                    "The chosen passage copied exactly into a commonplace book, with quotation marks",
+                ],
+                "recitation_routine": (
+                    "Begin each session by reciting the previous session's chosen "
+                    "passage; the new lesson opens from the recited words."
+                ),
+                "read_aloud_suggestions": [
+                    "A chapter of a worthy novel, read aloud at the rate of one chapter a sitting",
+                    "A short poem read aloud twice before discussion",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    (
+                        "Living books of the first order at this age: Charlotte's Web, "
+                        "The Wind in the Willows, the Narnia chronicles, Heidi"
+                    ),
+                ],
+                "short_lesson_flow": (
+                    "Read a passage aloud, attentively, then the child narrates it. "
+                    "Together choose one striking sentence from the passage; the child "
+                    "copies it into the commonplace book. Ask, gently: what do these "
+                    "exact words say, and what do they suggest? The smallest analysis, "
+                    "grounded in the chosen line."
+                ),
+                "narration_prompt": (
+                    "Tell back what we read; then tell me which sentence you would keep "
+                    "for your commonplace book, and what its words say."
+                ),
+                "real_world_objects": [
+                    "A commonplace book in which chosen passages are copied",
+                    "The living book itself, marked with small slips at chosen passages",
+                ],
+                "nature_connection": (
+                    "Choosing a passage worth attending to is the same habit as choosing "
+                    "a bird or a leaf worth attending to: notice exactly, hold it long "
+                    "enough to copy, and let the writing record what looking found."
+                ),
+                "habit_focus": (
+                    "The habit of grounding any inference in the words on the page rather "
+                    "than in summary, memory, or wish."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in selecting a passage, quoting it accurately, "
+                    "and writing a short paragraph grounded in the words themselves."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher chooses a passage, quotes it on the board with quotation "
+                        "marks, says what the words literally say, and offers one small "
+                        "inference, naming the words that support it."
+                    ),
+                    "we_do": (
+                        "Class chooses a passage together, quotes it, restates it, and "
+                        "weighs one or two possible inferences, defending each from the "
+                        "words on the page."
+                    ),
+                    "you_do": (
+                        "Student chooses a passage from the day's reading, quotes it "
+                        "exactly, and writes a short paragraph saying what the words say "
+                        "and what they suggest, naming the language that grounds the "
+                        "inference."
+                    ),
+                },
+                "independent_practice": [
+                    "A short close-reading paragraph on a chosen passage, with the quotation set off and quoted accurately",
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a commonplace book or notebook the child can use freely for lines they love",
+                    "Read aloud often from books worth quoting and copy a favorite line yourself when one strikes you",
+                ],
+                "real_world_contexts": [
+                    "A line from a favorite book copied to keep or share",
+                    "A passage the child quotes back to a sibling or grandparent because they liked how it sounded",
+                    "A line written into a card or note for someone the child cares about",
+                ],
+                "conversation_starters": [
+                    "Want to copy that line? It is a good one.",
+                    "What did those exact words say? Read it again.",
+                    "Does the book say that, or are we adding it?",
+                ],
+                "resource_bank": [
+                    "A commonplace book and good pens within reach",
+                    "A shelf of well-written novels, poems, and tales worth quoting",
+                ],
+                "parent_role": (
+                    "Be a fellow reader who quotes back what they loved. When the child "
+                    "shares a line, ask gently what the words say before discussing what "
+                    "they suggest; let real reading and real lines do the teaching."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the child begins to quote rather than "
+                    "summarize when discussing a book, copies lines they love, and "
+                    "distinguishes what the text says from what they add. This noticing "
+                    "replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori does not carry a distinct close-reading method at this band; "
+                "literature work at this age stays within word study, sentence analysis, "
+                "and the grammar materials rather than the analytical reading of passages."
+            ),
+        },
+    },
     "lit-craft-031": {
         "node_type": "craft",
         "strand": "narrative craft",

@@ -213,6 +213,7 @@ GOLD_EXEMPLAR_IDS = ("lit-craft-031", "lit-work-001", "lit-work-inh-004")
 AUTHORED_NODE_IDS = (
     *GOLD_EXEMPLAR_IDS,
     "lit-craft-001",
+    "lit-craft-002",
 )
 
 
