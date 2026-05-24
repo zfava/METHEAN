@@ -509,6 +509,194 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-010": {
+        "node_type": "craft",
+        "strand": "character",
+        "band": "developing",
+        "prerequisites": ["close reading: developing"],
+        "objective": (
+            "Identify what a character wants and what moves them to act, and articulate "
+            "the difference between a character's stated reason and their underlying "
+            "motive when the text makes the gap visible."
+        ),
+        "core_understanding": (
+            "A character is most clearly understood by what they want. Desire shapes "
+            "choice; motive is the engine. Characters in serious literature often want "
+            "more than one thing at once, and the surface reason an action is given and "
+            "the underlying motive are sometimes not the same. At this band the reader "
+            "can name desire and motive in chosen scenes and quote the words that "
+            "reveal each."
+        ),
+        "analytical_moves": [
+            "Name what a character wants in a scene or chapter, in one sentence",
+            ("Find a moment where the character chooses or refuses something and ask what desire drove the choice"),
+            ("Distinguish a character's stated reason from their underlying motive when the text shows both"),
+            "Notice when a character's wants are in conflict, and ask which one wins",
+        ],
+        "seminar_questions": [
+            "What does this character want, and how do you know?",
+            ("Did the character do this for the reason they say, or for another reason? Which words tell you?"),
+            "What does this character want most when they cannot have everything they want?",
+        ],
+        "writing_invitations": [
+            (
+                "Write a short paragraph naming what a chosen character wants in one "
+                "scene and the moment that reveals it, quoting the words"
+            ),
+            (
+                "Take a character whose stated reason and underlying motive seem to "
+                "differ; quote both and explain the gap"
+            ),
+        ],
+        "exemplar_texts": [
+            "Charlotte's choice to save Wilbur in Charlotte's Web",
+            "Edmund's choice to follow the White Witch in The Lion, the Witch and the Wardrobe",
+            "Anne Shirley's want for kinship in Anne of Green Gables",
+            "Jo March's want to write in Little Women",
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "Character is the seedbed of meaning in a story, and want is the way "
+                    "into character. The seminar asks plainly: what does this person "
+                    "want, and is the reason they give the true one? The writer's words "
+                    "are the evidence."
+                ),
+                "memory_work": {
+                    "recitations": [
+                        (
+                            "The line in which a chosen character's want is first made "
+                            "plain, recited at the seminar's opening"
+                        ),
+                    ],
+                },
+                "copywork": [
+                    (
+                        "The chosen line copied into a kept notebook of character "
+                        "passages, with the character's name and the work named"
+                    ),
+                ],
+                "recitation_routine": (
+                    "Each seminar opens from the recited line; discussion takes its "
+                    "first question from the want the line names."
+                ),
+                "read_aloud_suggestions": [
+                    "A chapter from a novel chosen for the strength of its characters",
+                    "A short story whose force turns on a single character's choice",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    (
+                        "Living books strong on character at this age: Anne of Green "
+                        "Gables, Little Women, The Lion, the Witch and the Wardrobe, "
+                        "Charlotte's Web, Heidi"
+                    ),
+                ],
+                "short_lesson_flow": (
+                    "Read a chapter aloud, attentively, and the child narrates. Then ask "
+                    "gently: what did this person want today, and what words showed it? "
+                    "If the chapter contains a choice, ask which desire won. The chosen "
+                    "line is copied into the commonplace book under the character's name."
+                ),
+                "narration_prompt": (
+                    "Tell back what happened to this character today, and tell me what "
+                    "they wanted and where you heard it."
+                ),
+                "real_world_objects": [
+                    "The living book in hand, marked at the chapter's chosen line",
+                    "A commonplace book organized so passages may be gathered under each character",
+                ],
+                "nature_connection": (
+                    "Attention to a character's wants is the same habit as attention to "
+                    "the wants of a real creature in the field: notice exactly what is "
+                    "done, listen to what is said, and do not assume that the two always "
+                    "agree."
+                ),
+                "habit_focus": (
+                    "The habit of charitable attention: taking a character's words "
+                    "seriously while also watching their choices, and noticing without "
+                    "judgment when the two part ways."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in naming a character's want, identifying the "
+                    "moment that reveals it, and distinguishing stated reason from "
+                    "underlying motive, supported by quoted evidence."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher chooses a scene, names what the character wants in one "
+                        "sentence, quotes the line that reveals it, and, where the text "
+                        "shows it, names the gap between the character's stated reason "
+                        "and their underlying motive."
+                    ),
+                    "we_do": (
+                        "Class works through a second scene together, drafting one "
+                        "sentence for what the character wants and quoting the line that "
+                        "reveals it; together weighing whether stated reason and motive "
+                        "agree."
+                    ),
+                    "you_do": (
+                        "Student writes a short paragraph on a chosen scene naming what "
+                        "the character wants, quoting the revealing line, and, where the "
+                        "text supports it, identifying any gap between stated reason and "
+                        "underlying motive."
+                    ),
+                },
+                "independent_practice": [
+                    "The short paragraph on a chosen character and chosen scene, with quoted evidence",
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep books strong on character on hand, available, never assigned",
+                    (
+                        "Welcome the child's running conversation about the people in "
+                        "the books they love, as one might welcome talk about real "
+                        "people the family knows"
+                    ),
+                ],
+                "real_world_contexts": [
+                    "Long conversations about a beloved character at meals or on walks",
+                    ("A drawing, a letter, or a piece of fan writing the child makes about a character they love"),
+                    "Comparing a character's choice to a real choice the child has watched or made",
+                ],
+                "conversation_starters": [
+                    "What did she want, do you think? Why?",
+                    "He said that, but did he mean it? What did he do?",
+                    "If they could only have one thing, which one would they pick?",
+                ],
+                "resource_bank": [
+                    "A shelf of well-loved novels with strong characters",
+                    "A willing listener who will discuss a character as a real and interesting person",
+                ],
+                "parent_role": (
+                    "Be a fellow reader who takes the characters seriously. Ask the "
+                    "child what each person wants and listen to the answer; offer your "
+                    "own reading when invited, as another reader at the table. Let the "
+                    "child's care for the people in the book do the teaching."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the child begins to ask, of any character, "
+                    "what they want and whether the reason they give is the true one, "
+                    "and whether they reach for the words in the text when they answer. "
+                    "This noticing replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori at this band does not carry a distinct method for the "
+                "analysis of desire and motive in fictional characters; literature work "
+                "here remains within the grammar materials and the practical-life and "
+                "moral imagination cultivated through chosen reading rather than through "
+                "an analytical apparatus."
+            ),
+        },
+    },
     "lit-craft-031": {
         "node_type": "craft",
         "strand": "narrative craft",
