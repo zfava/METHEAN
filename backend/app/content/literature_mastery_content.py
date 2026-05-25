@@ -6716,6 +6716,120 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-018": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Gulliver's Travels",
+            "author": "Jonathan Swift",
+            "date": "first published 1726 (with revisions in 1735)",
+            "genre": "satirical prose fiction",
+            "form": "four-part prose narrative in the form of a traveler's memoir; first-person narration by Lemuel Gulliver",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Excretory and bodily humor (especially in Lilliput); a graphic "
+            "scene of public humiliation among the Brobdingnagians; satirical "
+            "violence including Gulliver's account of European warfare to the "
+            "King of Brobdingnag; Book 4's depiction of the Yahoos is "
+            "intentionally repellent and has been read both as misanthropy and "
+            "as moral provocation. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Unreliable narration: Gulliver as the narrator the satire works through, increasingly unreliable as the voyages progress; the gap between Gulliver and Swift (lit-craft-031)",
+            "Figurative system of the satire: scale (tiny, giant), proportion, the rational animal, the body politic figured as a body (lit-craft-042 at proficient; lit-craft-043 at advanced)",
+            "Theme advanced: what the satire refuses to settle about reason, humanity, and the Yahoo (lit-craft-023)",
+            "Voice realized through staged speech: the King of Brobdingnag and the Master Houyhnhnm as positions the satire stages (lit-craft-013 at proficient)",
+        ],
+        "entry": (
+            "Proficient: read the four voyages whole; follow the satire's "
+            "figurative move of changing scale and proportion across the first "
+            "three books; meet the Houyhnhnms and Yahoos in Book 4 and feel the "
+            "satire's turn. Advanced: argue what Gulliver knows when and where "
+            "Gulliver and Swift diverge; argue what the satire refuses to "
+            "settle about reason and the human; set the work against the "
+            "travel-narrative tradition Swift is parodying. Mastery: original "
+            "argument about Book 4 and the satire's place in the long inheritance "
+            "of satire from Lucian forward."
+        ),
+        "close_reading_passages": [
+            "The Lilliput court and the war over which end to break an egg (Book 1): how does the satire stage the politics of England's religious controversies by miniaturizing them?",
+            "Gulliver's account of European warfare to the King of Brobdingnag (Book 2, chapter 6): how does the satire stage a defense of contemporary Europe that the satire itself refuses to endorse?",
+            "Gulliver's return home from the Houyhnhnms (Book 4, last chapter): how does the satire stage Gulliver's revulsion from his own family, and where does the satire refuse to let the reader simply agree or simply refuse?",
+        ],
+        "structural_analysis": (
+            "Four voyages of escalating satiric reach: Lilliput, where the "
+            "miniaturization deflates contemporary English politics; "
+            "Brobdingnag, where the magnification deflates Gulliver's defense "
+            "of Europe; Laputa and the academy of Lagado, where the satire "
+            "moves to abstract reason and projection; the Houyhnhnms and "
+            "Yahoos, where the satire moves to what the rational animal is. "
+            "The structure is the satire's argument: the more closely the "
+            "reader follows Gulliver, the more sharply the reader is invited "
+            "to see what Gulliver does not."
+        ),
+        "thematic_lines": [
+            "Reason and the rational animal: the satire's deepest question, sharpened to a point in Book 4",
+            "Scale as a satiric tool: what magnification and miniaturization expose that direct argument could not",
+            "Gulliver as a vehicle the satire trusts and then withdraws trust from: where the reader and the narrator come apart",
+        ],
+        "comparative_threads": [
+            "Lucian's True History and the ancient satiric travel inheritance",
+            "Contemporary travel narratives Swift is parodying (the genuine voyages-and-discoveries literature of his moment)",
+            "Voltaire's Candide (1759) as a sibling satire of the rational pretensions of Swift's century",
+            "Orwell's 1984 (to be authored) as a political-satire descendant of Swift",
+        ],
+        "seminar_questions": [
+            "Where do Gulliver and Swift diverge? In Book 4 especially, what does the satire let the reader see that Gulliver does not?",
+            "Is Book 4 misanthropy, moral provocation, or both? Where does the work refuse to say?",
+            "What does scale do in the satire that direct argument could not?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on a moment of scale-shift in Book 1 or Book 2, naming what the figure exposes",
+            "The essay on Gulliver's account to the King of Brobdingnag, naming what the satire refuses to endorse",
+            "The sustained essay on Book 4 and the question of the Yahoo: what the work refuses to settle",
+        ],
+        "context": (
+            "Composed in Swift's later years in Dublin; published anonymously in "
+            "1726 and an immediate sensation; the central English-language "
+            "satire of the eighteenth century; supplied as fact, interpretation "
+            "left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The central English-language satire of the eighteenth century; the seminar text on satire, scale, and the question of the rational animal.",
+                "memory_work": {
+                    "recitations": [
+                        "Recitation of a chosen passage from the King of Brobdingnag's response to Gulliver"
+                    ],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from where the satire stages a position it then refuses to endorse.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Gulliver's Travels (the unexpurgated text; the Penguin or Oxford World's Classics) read aloud across a term",
+                ],
+                "short_lesson_flow": "A living book read aloud across the four voyages and narrated; the figurative move of scale noticed across the first three books; deepening to analysis of Book 4 as the bands move up.",
+                "narration_prompt": "Tell back the voyage we read today, and tell me what Gulliver thought it meant, and what the satire let you see that Gulliver did not.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Gulliver's Travels on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in satire, in political and human folly, or in the question of the rational animal leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let Book 4 be Book 4; do not paper over the satire's provocations.",
+                "observation_documentation": "Over time, notice whether the student returns to particular voyages and begins to feel the gap between Gulliver and Swift. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of satire as a form, the figurative move of scale, and the unreliable narrator where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
