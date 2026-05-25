@@ -8914,6 +8914,129 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-037": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Selected poems and essays of T. S. Eliot (The Love Song of J. Alfred Prufrock, The Waste Land, Four Quartets; The Metaphysical Poets and Tradition and the Individual Talent)",
+            "author": "T. S. Eliot",
+            "date": "Prufrock 1915; The Waste Land 1922; Tradition and the Individual Talent 1919; The Metaphysical Poets 1921; Four Quartets 1936-43",
+            "genre": "Anglo-American modernist poetry and criticism",
+            "form": "fragmentary modernist verse with multiple voices and dense allusion; critical essays that shaped how modernism read its inheritance",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "The Waste Land is fragmentary by design; Eliot's allusions are "
+            "to Western, Sanskrit, and other traditions; period antisemitic "
+            "passages in poems including 'Burbank with a Baedeker' and "
+            "stretches of Sweeney material that Eliot's later editors and "
+            "critics have weighed without resolving; the late religious "
+            "turn of Four Quartets is in Anglo-Catholic register the reader "
+            "is invited to weigh, not adopt. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading across modes on a fragmentary modernist poem of dense allusion (lit-craft-004)",
+            "Figurative system as inheritance: every allusion is a piece of the work's argument and brings its source with it (lit-craft-043)",
+            "Multiple speakers, no authoritative voice: The Waste Land is voiced by Tiresias and many others, none of them the poet (lit-craft-031, lit-craft-014)",
+            "Theme advanced: what the poems refuse to settle about the modern world, about the inheritance the poet is in argument with (lit-craft-023)",
+            "The critical essays as part of the work: 'The Metaphysical Poets' revived Donne; 'Tradition and the Individual Talent' argued the inheritance the poems enact",
+        ],
+        "entry": (
+            "Advanced: read The Waste Land whole, with the notes Eliot "
+            "supplied as part of the work (and held suspiciously as part of "
+            "the work, as Eliot himself later did); follow the allusions to "
+            "Dante, Shakespeare, Webster, the Buddha, the Upanishads, Donne, "
+            "the Grail material; read Eliot's two great essays alongside the "
+            "poems; meet Four Quartets as the late religious turn the poems "
+            "make. Mastery: original argument about Eliot's place in "
+            "Anglo-American modernism and what his criticism did to twentieth-"
+            "century taste."
+        ),
+        "close_reading_passages": [
+            "'The Love Song of J. Alfred Prufrock' (1915): how does the poem stage a speaker who cannot complete his question, and what does the dramatic monologue inheritance (from Browning) become here?",
+            "The Waste Land, Part 1 ('The Burial of the Dead'): how does the poem stage its fragmented voices and the famous epigraph from Petronius's Satyricon, and what does the opening sequence claim?",
+            "Four Quartets, 'Little Gidding' (1942): how does the late Eliot stage a return to a place of religious resonance, and what does the meeting with the 'familiar compound ghost' do?",
+        ],
+        "structural_analysis": (
+            "Across Eliot's career: a single dramatic monologue (Prufrock); "
+            "a long fragmented poem of multiple voices (The Waste Land); a "
+            "four-part meditative sequence (Four Quartets); and a body of "
+            "criticism that shaped how the poems were read and how the "
+            "inheritance the poems work from was reread. The Waste Land is "
+            "the central work: its multiple voices are filtered through "
+            "Tiresias (per Eliot's note) but no one in the poem speaks for "
+            "the poet, and the closing Sanskrit (Shantih shantih shantih) "
+            "is part of the argument. The structure across the body of work "
+            "is the argument: modernism enacted in the poems, theorized in "
+            "the essays, and turned at the close to a religious resolution "
+            "the early poems did not promise."
+        ),
+        "thematic_lines": [
+            "Fragmentation as the modern form: not a failure of unity but the work's argument about the time it was made in",
+            "Inheritance as constitutive: every Eliot allusion brings its source with it, and the poems are made of the inheritance",
+            "The late religious turn: Four Quartets as resolution the earlier poems did not promise; what the body of work argues by ending where it does",
+        ],
+        "comparative_threads": [
+            "Donne (lit-work-033): Eliot's 1921 essay 'The Metaphysical Poets' revived Donne in the twentieth century; Eliot's poems learned from Donne",
+            "Dante's Inferno (lit-work-010): Eliot's most-quoted predecessor in The Waste Land and across Four Quartets; the inheritance is decisive",
+            "The British Romantics (lit-work-034): the inheritance Eliot explicitly argued against in his criticism; Romanticism as the taste he undertook to displace",
+            "Ezra Pound (Eliot's contemporary and editor of The Waste Land): the parallel modernism; the dedication to Pound as 'il miglior fabbro' (the better maker) is part of the poem",
+            "William Carlos Williams (the American counter-modernism): the alternative the American tradition kept developing",
+        ],
+        "seminar_questions": [
+            "What does the fragmentation of The Waste Land argue that a unified poem could not?",
+            "What does each allusion bring with it, and where does the poem refuse to translate or paraphrase?",
+            "What does Four Quartets earn that the earlier poems did not have access to?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on 'The Burial of the Dead', naming what the fragmentary form does in the opening sequence",
+            "The essay on a single allusion (Dante's; Shakespeare's; the Upanishadic close) as part of the work",
+            "The sustained essay on Eliot's two great essays alongside the poems, naming what the criticism did to twentieth-century taste",
+        ],
+        "context": (
+            "Composed across Eliot's career from his American youth through "
+            "his English citizenship, his Anglo-Catholic conversion in 1927, "
+            "and the war years; The Waste Land was edited by Ezra Pound from "
+            "a longer draft and is dedicated to him; Four Quartets was "
+            "composed during the Second World War, with 'Little Gidding' "
+            "(1942) at its end; supplied as fact, interpretation left to "
+            "the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The central poet of Anglo-American modernism; the seminar text on the fragmentary form, the dense allusion, and the inheritance the poems enact.",
+                "memory_work": {
+                    "recitations": [
+                        "Recitation of the opening of 'The Burial of the Dead' or the closing of 'Little Gidding'"
+                    ],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from what the allusion brings and what the poem refuses to translate.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Eliot (the Faber Selected Poems; the Norton Critical edition of The Waste Land; the Library of America volumes) read aloud across a term, paired with the two great essays",
+                ],
+                "short_lesson_flow": "A living book read aloud across the major poems and the essays, narrated; the allusions tracked one at a time without rushing; deepening to analysis of the fragmentary form as the bands move up.",
+                "narration_prompt": "Tell back the passage we read today, and tell me what the voice was doing and what the allusion brought with it.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Eliot's poems and essays on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in modernism, in fragmentation as form, or in the long inheritance the poems work with leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the allusions be researched when the reader wants; do not paper over the difficulty.",
+                "observation_documentation": "Over time, notice whether the student returns to particular passages and begins to track the allusions as part of the work. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the fragmentary modernist form and Eliot's criticism alongside the poems where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
