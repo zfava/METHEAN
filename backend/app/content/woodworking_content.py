@@ -275,4 +275,178 @@ WOODWORKING_CONTENT: dict[str, dict] = {
         "signoff_validity_days": 365,
         "related_projects": [],
     },
+    "wc-001": {
+        "node_type": "technique",
+        "trade": "woodworking",
+        "competency_name": "Measure to a marked dimension with a tape measure and a pencil",
+        "progression_band": "helper",
+        "prerequisites": ["ws-001"],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "The tape's spring return can snap the metal blade back into a finger if the "
+                    "learner lets it run loose; a minor pinch, not a serious injury"
+                ),
+                (
+                    "The end hook of a tape measure has intentional play (about 1/16 inch) to "
+                    "compensate for the hook's thickness for inside vs outside measurements; a "
+                    "learner who does not know this will get measurements that disagree between "
+                    "pulled and pushed readings"
+                ),
+            ],
+            "ppe_required": [
+                "Shop PPE per ws-001 (closed-toe shoes, the shop's general rules); no additional PPE for measuring",
+            ],
+            "supervision_required": False,
+            "supervision_basis": (
+                "Measuring with tape and pencil involves no cutting tool. Trade-level supervision "
+                "from woodworking-root still applies through the helper band, but the work itself "
+                "is low-hazard and can be performed alongside a working mentor rather than under "
+                "constant watch."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "Tape measure",
+                "specification": (
+                    "12 to 25 foot tape with imperial graduations to 1/16 inch, hook end intact and not bent"
+                ),
+                "alternatives": [
+                    "A wooden or metal rule with 1/16 inch graduations, for shorter measurements",
+                ],
+            },
+            {
+                "name": "Pencil",
+                "specification": "A sharpened wood pencil (#2 or harder); a fine mechanical pencil also works",
+                "alternatives": [],
+            },
+            {
+                "name": "A verified second rule for checking",
+                "specification": "A known-accurate rule the mentor keeps for verifying the learner's marks",
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [
+            {
+                "name": "Practice stock, softwood",
+                "quantity": "Three to five boards, 1x4 nominal, 12 to 24 inches long",
+                "approximate_cost_usd": 8,
+            },
+        ],
+        "workspace_requirements": {
+            "surface": "Flat workbench at the learner's wrist height",
+            "ventilation": "Open air or normally ventilated shop",
+            "lighting": "Strong light on the tape so the small graduations are plainly visible",
+            "power": "None",
+            "containment": "None required",
+        },
+        "skill_description": (
+            "The learner pulls the tape to the intended dimension, holding the body of the tape "
+            "tight to the work and keeping the blade from twisting. They read the dimension to "
+            "the nearest 1/16 inch and transfer it to the board with a short pencil tick. The "
+            "tick is small and sharp, not a long line; precision matters more than visibility "
+            "at this stage. The learner verifies the mark against a known-accurate rule before "
+            "moving on. They learn that the hook end has play and that pulling against the hook "
+            "and pushing against a stop can give slightly different readings until the technique "
+            "is consistent."
+        ),
+        "demonstration_criteria": [
+            (
+                "Reads a marked dimension from a tape measure to the nearest 1/16 inch, agreeing "
+                "with a verified second rule across five consecutive measurements"
+            ),
+            (
+                "Pencil tick falls within 1/32 inch of the intended dimension, verified against "
+                "the second rule across five consecutive marks"
+            ),
+            (
+                "Tape is held tight against the work (no slack in the blade between the hook and "
+                "the read point) for every measurement demonstrated"
+            ),
+            (
+                "Hook end is engaged correctly for outside measurements (pulled tight against the "
+                "edge) and the play is named when the mentor asks about it"
+            ),
+            "The learner can transfer the same dimension to three points along a board and have all three marks fall within 1/32 inch of each other",
+        ],
+        "common_errors": [
+            {
+                "error": "Tape blade is loose between the hook and the read point",
+                "cause": "The learner is not holding the body of the tape tight to the work, or is not pulling the hook tight against the edge",
+                "remedy": (
+                    "Press the tape body firmly to the work. For outside measurements, give the "
+                    "hook a small pull to engage it against the edge before reading."
+                ),
+            },
+            {
+                "error": "Readings disagree between two attempts on the same board",
+                "cause": "Either the tape is twisting, or the hook is being treated differently between attempts (pulled one time, pushed the next)",
+                "remedy": (
+                    "Use the tape the same way each time. For repeated measurements, the same "
+                    "edge of the board is the reference each time. For high precision, the learner "
+                    "may eventually be taught to 'burn an inch' (read from the 1 inch mark instead "
+                    "of the hook); that technique belongs to a later band."
+                ),
+            },
+            {
+                "error": "Reading to the nearest 1/8 instead of 1/16",
+                "cause": "The 1/16 graduations are smaller and easier to skip past; the learner is reading the larger marks only",
+                "remedy": (
+                    "Slow down. Find the inch, then the half-inch, then the quarter, then the "
+                    "eighth, then the sixteenth. Name the fraction aloud as the eye walks it down."
+                ),
+            },
+            {
+                "error": "Pencil tick is a long line rather than a precise point",
+                "cause": "The pencil is dull, or the learner is making a visible mark rather than an accurate one",
+                "remedy": (
+                    "Keep the pencil sharp. A short tick at the exact dimension is more accurate "
+                    "than a long line; when the line is needed for a cut, that line is drawn from "
+                    "the tick with a square in wc-002, not from the tape."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "photo",
+            "what_to_capture": (
+                "Three boards each marked at three points to the same dimension, with a tape "
+                "measure or a verified rule laid alongside one mark of each board so the photo "
+                "shows the mark against the rule"
+            ),
+            "what_the_evidence_shows": (
+                "That each mark falls at the intended dimension to within 1/32 inch of the "
+                "verified rule, and that repeated marks of the same dimension agree with each "
+                "other to within 1/32 inch"
+            ),
+        },
+        "mentor_signoff_required": False,
+        "pedagogy": {
+            "i_do": (
+                "The mentor measures and marks a dimension on a board, narrating: pulling the "
+                "tape tight, engaging the hook, walking the eye from inches down to sixteenths, "
+                "naming the dimension aloud, and placing a sharp tick on the board. The mentor "
+                "then checks the tick against a verified second rule and shows the agreement."
+            ),
+            "we_do": (
+                "Mentor and learner alternate marks. The learner pulls and reads; the mentor "
+                "watches the tape, names the reading from their side, and they compare. The "
+                "mentor places a tick once, the learner places the next, and they verify both "
+                "against the second rule."
+            ),
+            "you_do_supervised": (
+                "The learner marks five dimensions on three boards. The mentor verifies each "
+                "with the second rule. The learner is expected to catch their own errors before "
+                "the mentor checks; the mentor's role is to confirm."
+            ),
+            "you_do_unsupervised": (
+                "Once the learner can produce ten consecutive accurate marks across two sessions, "
+                "they may measure and mark unsupervised. The work is still inside a session a "
+                "mentor is supervising at the trade level; the competency itself is unsupervised."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 3,
+        "session_length_minutes": 20,
+        "related_projects": [],
+    },
 }
