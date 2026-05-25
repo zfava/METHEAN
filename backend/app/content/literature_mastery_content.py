@@ -9693,4 +9693,141 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-009": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "The Once and Future King (composite of four novels: The Sword in the Stone 1938; The Queen of Air and Darkness 1939; The Ill-Made Knight 1940; The Candle in the Wind 1958; collected and revised 1958)",
+            "author": "T. H. White",
+            "date": "1938-1958; the omnibus 1958 with revisions to the earlier books; the posthumously-published 'The Book of Merlyn' (1977) was originally drafted as the closing fifth book",
+            "genre": "twentieth-century English Arthurian novel",
+            "form": "four novels held together as one cycle; modern English prose; narrator's voice modern, knowing, and self-aware of writing across the Second World War while reading Malory",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "The Orkney faction's brutality and the murder of Morgause; the "
+            "warfare across all four books, treated with explicit moral "
+            "weight in light of the Second World War White was writing "
+            "into; the long sequences in 'The Ill-Made Knight' on Lancelot's "
+            "shame and Guinevere's situation; the final book's argument "
+            "that war itself is the question. White's title is from Malory's "
+            "Latin epitaph; in-copyright text, analyzed and pointed to, "
+            "never reproduced. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Character advanced: Arthur as a child whose education by Merlyn is the cycle's structural argument; Lancelot held with sustained painful sympathy; Guinevere refused the Tennysonian role of figure-of-the-fall (lit-craft-014)",
+            "Narrative craft: White's knowing modern narrator addressing the reader across centuries; the gap between Malory's prose and White's commentary (lit-craft-031 in the family of moves; lit-craft-008)",
+            "Theme advanced: Might-versus-Right as the cycle's central question; Merlyn's reverse-time argument that the present is the future's past; White's own argument with Malory at every turn (lit-craft-023)",
+            "The figurative system inherited from Malory and revised: the sword, the Round Table, the Grail, the swans Merlyn turns the boy Arthur into for his education (lit-craft-042 at proficient; lit-craft-043 at advanced)",
+        ],
+        "entry": (
+            "Proficient: read the four novels in their omnibus order ('The "
+            "Sword in the Stone' as Arthur's education, 'The Queen of Air "
+            "and Darkness' as the Orkney faction, 'The Ill-Made Knight' as "
+            "Lancelot's long sequence, 'The Candle in the Wind' as the "
+            "dissolution); meet Merlyn's reverse-time argument and White's "
+            "Might-vs-Right framing as the cycle's structural argument. "
+            "Advanced: argue what White does to Malory at every turn, "
+            "where the modern narrator's voice exceeds or refuses Malory's "
+            "frame, and what the cycle does that no earlier Arthurian work "
+            "could do because no earlier work was written by an Englishman "
+            "watching another European war from a cottage in Ireland. "
+            "Mastery: original argument about The Once and Future King as "
+            "the great twentieth-century Malory commentary."
+        ),
+        "close_reading_passages": [
+            "The opening of 'The Sword in the Stone' and Merlyn's first transformation of the Wart into another creature: how does White stage Arthur's education, and what does Merlyn's reverse-time wisdom do to the cycle's frame?",
+            "The Orkney passages in 'The Queen of Air and Darkness': how does White stage the Orkney brothers' formation, and what does the chapter on the killing of the unicorn do?",
+            "The closing of 'The Candle in the Wind' and the night before the last battle: how does White stage Arthur's final reflection, and what does the page break with the page-of-Malory excerpt at the end do?",
+        ],
+        "structural_analysis": (
+            "Four novels written across two decades, collected in 1958 with "
+            "revisions; the original drafts of the earlier books were "
+            "different works for different audiences, and the omnibus "
+            "smooths the seams. Merlyn's reverse-time biography (he lives "
+            "backwards through time) is the cycle's most distinctive "
+            "structural device: he knows the future because he has lived it "
+            "and forgets the past as it has not yet happened for him. The "
+            "four books move from education (Sword) through faction "
+            "(Queen) through long human failure (Ill-Made Knight) to "
+            "dissolution (Candle). White's modern narrator addresses the "
+            "reader directly throughout. The structure is the work's "
+            "argument: a Malory revisited by an Englishman writing across "
+            "the Second World War, asking whether civilization can be made "
+            "to last."
+        ),
+        "thematic_lines": [
+            "Might versus Right: the cycle's central question, posed in different forms across each of the four books",
+            "Education as the cycle's first act: Merlyn's instruction of the child Arthur is what the cycle returns to as the moment everything else descended from",
+            "What war is for: a question sharpened by White writing across the Second World War; the cycle refuses to settle whether the Round Table's order failed or whether it was always going to",
+        ],
+        "comparative_threads": [
+            "lit-work-inh-007 Le Morte d'Arthur: White's chapter epigraphs and explicit references throughout name Malory as the source; the title is from Malory's Latin epitaph; the omnibus closes with a page-of-Malory excerpt",
+            "lit-work-inh-008 Idylls of the King: White read Tennyson and explicitly pushed against the Victorian moral frame; Guinevere is refused the role Tennyson gave her",
+            "lit-work-inh-010 Cornwell's Warlord Chronicles: the next major English-language Arthurian inheritor; Cornwell's foreword names White alongside Malory; the comparison illuminates two different modern departures from Malory",
+            "lit-work-inh-004 Tolkien's The Lord of the Rings: contemporary mid-twentieth-century English mythopoesis; Tolkien and White were not friends but the parallel is real",
+            "The 1960 Lerner-Loewe musical 'Camelot' and the 1963 Disney animated adaptation of 'The Sword in the Stone' as the popular afterlife of White's cycle",
+        ],
+        "seminar_questions": [
+            "What does Merlyn's reverse-time argument let White do that no straightforward chronology could?",
+            "What does White refuse about the Victorian Tennysonian Guinevere, and where in 'The Ill-Made Knight' is the refusal sharpest?",
+            "What does the cycle argue about Might-vs-Right, and where does it refuse to settle the question?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on a Merlyn passage in 'The Sword in the Stone', naming what the reverse-time framing does that no other narrator could",
+            "The essay on how White reads Lancelot against Malory and against Tennyson",
+            "At advanced, the essay on Might-vs-Right as the cycle's central question, with passages from each of the four books",
+        ],
+        "context": (
+            "Composed across 1936-1958 in England and Ireland; the earlier "
+            "books originally written for children but the omnibus is for "
+            "adults; White was writing across the Second World War and is "
+            "explicit about it; the most influential twentieth-century "
+            "English-language reading of Malory; supplied as fact, "
+            "interpretation left to the student."
+        ),
+        "lineage": (
+            "Matter of Britain. Inheritor position. White's title is from "
+            "Malory's (lit-work-inh-007) closing Latin epitaph; White's "
+            "chapter epigraphs and explicit references name Malory "
+            "throughout; The Once and Future King is sometimes called the "
+            "great modern English-language Malory commentary. White also "
+            "engages and pushes against Tennyson's (lit-work-inh-008) "
+            "Victorian moral framing of the cycle, especially around "
+            "Guinevere. Reaches back through Malory to the French romance "
+            "tradition and through Tennyson to the Victorian medievalism."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The great twentieth-century English-language Malory commentary; the seminar text on Might-versus-Right and on what a modern narrator can do to a medieval cycle.",
+                "memory_work": {
+                    "recitations": ["Recitation of a chosen Merlyn passage from 'The Sword in the Stone'"],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from what Merlyn's reverse-time wisdom claims and what the cycle does with it.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of The Once and Future King (the Ace omnibus; the Putnam) read aloud across a term, with The Sword in the Stone often appropriate for younger readers in its own original form before the omnibus revisions",
+                ],
+                "short_lesson_flow": "A living book read aloud across the four novels and narrated; Merlyn's lessons followed first; deepening to analysis of White's argument with Malory as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me what Merlyn taught and what White was quietly arguing with Malory about.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of The Once and Future King on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in Arthurian fiction, in education, or in what English writers did with myth across the Second World War leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let The Sword in the Stone be the entry point if the reader is younger and trust the later books to find them.",
+                "observation_documentation": "Over time, notice whether the student returns to the cycle and begins to read White's argument with Malory in the margins of their own reading. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of White's narrator, the omnibus structure, and the argument with Malory where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
