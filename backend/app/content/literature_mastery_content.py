@@ -6372,6 +6372,122 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-015": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "The Canterbury Tales (selections: General Prologue, the Knight's Tale, the Miller's Tale, the Wife of Bath's Prologue and Tale)",
+            "author": "Geoffrey Chaucer",
+            "date": "c. 1387-1400 (unfinished at Chaucer's death)",
+            "genre": "medieval frame narrative",
+            "form": "narrative poem in Middle English; mixed meter, predominantly iambic pentameter couplets; tales in many forms (romance, fabliau, sermon, exemplum)",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Sexual material in the fabliaux (notably the Miller's Tale and the "
+            "Reeve's), bawdy humor, medieval anti-Semitic content in the "
+            "Prioress's Tale (not in this selection), the Wife of Bath's frank "
+            "treatment of marriage and her own desire; the work holds its "
+            "fourteenth-century world without polishing it. Honest information, "
+            "not a gate."
+        ),
+        "craft_focus": [
+            "Character proficient: each tale-teller is the work's argument about themselves; the tale fits the teller (lit-craft-013)",
+            "Voice as constructed within voice: the General Prologue's narrator describing the pilgrims who tell the tales (lit-craft-008 in the family of moves)",
+            "Theme as the tale-and-teller in conversation: the Knight tells a romance; the Miller answers with a fabliau (lit-craft-022)",
+            "The Wife of Bath's Prologue as a single character's sustained argument against the clerical tradition that has constructed her (lit-craft-014 in entry)",
+        ],
+        "entry": (
+            "Proficient: read the General Prologue and three or four tales with "
+            "their teller-portraits; argue how each tale fits its teller and what "
+            "the placement of tales does to each other (Knight then Miller; the "
+            "Wife of Bath then the Clerk in the Marriage Group); read in a worthy "
+            "modern translation alongside the Middle English original where "
+            "possible. Advanced: argue what Chaucer does to the inherited "
+            "tradition (Boccaccio's Decameron, the romance tradition, the "
+            "fabliau, the clerical anti-feminist tradition the Wife of Bath "
+            "argues with); read the Marriage Group as a sustained argument across "
+            "several tales. Mastery: original argument about the frame as the "
+            "work's structural argument and Chaucer's place in establishing the "
+            "English literary tradition."
+        ),
+        "close_reading_passages": [
+            "The General Prologue (the opening 'Whan that Aprille'): how does the narrator introduce the pilgrimage, and what stance does the narrator take toward the pilgrims he is about to describe?",
+            "The opening of the Knight's Tale and the opening of the Miller's Tale: how does the placement of one tale against the next argue something neither tale alone does?",
+            "The Wife of Bath's Prologue (her account of her five husbands): how does Chaucer give a character a sustained argument against the tradition that has constructed her, and what does the prologue do that her tale alone could not?",
+        ],
+        "structural_analysis": (
+            "A frame narrative on pilgrimage to Canterbury, with a host who "
+            "proposes a tale-telling contest; the General Prologue introduces "
+            "the pilgrims through a narrator who is among them but also above "
+            "them; the tales are told by characters who have just been "
+            "introduced, and each tale fits or strains against its teller. The "
+            "structure is the work's argument: voices in conversation, no "
+            "authoritative narrator, the moral and literary frame negotiated "
+            "across many tellers."
+        ),
+        "thematic_lines": [
+            "Tale and teller: the tale fits its teller, and the teller is constructed by the tale they choose",
+            "Authority and experience: the Wife of Bath's argument with the clerical tradition that defined women in her time",
+            "Estates and the social order: how the General Prologue presents the medieval estates and what the narrator does and does not say about them",
+        ],
+        "comparative_threads": [
+            "Boccaccio's Decameron: the immediate inherited model of the tale-telling frame; what Chaucer does that the Decameron did not",
+            "The romance tradition (the Knight's Tale draws on Boccaccio's Teseida) and the fabliau tradition (the Miller's Tale's continental cousins)",
+            "The clerical anti-feminist tradition (Jerome's Against Jovinian and the Wife's own quoted sources): the inheritance the Wife of Bath argues with",
+            "Later English frame narratives and tale-telling cycles (Bocaccio's Italian successors; the inheritance forward into Spenser's Faerie Queene and beyond)",
+        ],
+        "seminar_questions": [
+            "How does the tale fit the teller in the Knight's Tale, and how does the Miller's Tale argue against the Knight's by being placed next?",
+            "What does the Wife of Bath's Prologue do that her Tale alone could not?",
+            "Where in the General Prologue is the narrator on a side? Where does he refuse to be on one?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on a portrait from the General Prologue, naming what the narrator says and what he carefully does not say",
+            "The essay on how a tale fits its teller, holding two or three passages from the prologue and the tale together",
+            "At advanced, the essay on the Wife of Bath's Prologue as an argument with the inherited tradition that defined her",
+        ],
+        "context": (
+            "Composed in London in the last decade of Chaucer's life; "
+            "unfinished at his death in 1400; the founding work of English "
+            "literary tradition in the vernacular; supplied as fact, "
+            "interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The founding work of English vernacular literary tradition; the seminar text on voices in conversation.",
+                "memory_work": {
+                    "recitations": [
+                        "Recitation of the opening of the General Prologue in Middle English or a worthy modern translation"
+                    ],
+                },
+                "recitation_routine": "Seminar opens from the recited opening; the discussion takes its first question from what the narrator says about the pilgrims he is about to describe.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of the Canterbury Tales (Nevill Coghill's modern verse translation; the Riverside Chaucer for the Middle English; David Wright's prose translation) read aloud across a term",
+                ],
+                "short_lesson_flow": "A living book read aloud across the chosen tales, the General Prologue first; the tale and the teller held alongside each other; deepening to analysis of how the placement of tales argues across them.",
+                "narration_prompt": "Tell back the portrait or the tale we read today, and tell me what the teller is doing by telling that tale.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of the Canterbury Tales on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in voices, in medieval life, or in the founding of English literature leads; readings in Middle English heard aloud",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the bawdier tales be themselves; honor the Wife of Bath as her own argument.",
+                "observation_documentation": "Over time, notice whether the student returns to particular pilgrims and begins to feel the conversation across tales. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the frame narrative, the estates tradition, and the tale-and-teller match where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
