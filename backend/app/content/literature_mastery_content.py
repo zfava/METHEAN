@@ -11807,4 +11807,159 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-024": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "The Bloody Chamber and Other Stories",
+            "author": "Angela Carter",
+            "date": "first published 1979",
+            "genre": "late-twentieth-century literary refigurings of European fairy tale",
+            "form": "ten prose tales rewriting Perrault, the Beauty-and-the-Beast tradition, Bluebeard, Red Riding Hood, Snow White, Puss-in-Boots, and other inherited European fairy-tale types; dense ornate prose; explicitly adult literary work, not children's literature",
+        },
+        "minimum_band": "mastery",
+        "content_notes": (
+            "Explicit sexual content throughout, including in the title "
+            "story's wedding-night sequence and across the Beauty-and-the-"
+            "Beast and Red Riding Hood reworkings; graphic violence "
+            "(the Marquis's collection in the title story; the wolves "
+            "across the lupine tales; the explicit visceral imagery "
+            "throughout); the work is adult literary fiction that uses "
+            "fairy-tale form to handle sexual violence, female desire, "
+            "and the body without softening; Carter's preface to her own "
+            "Virago Book of Fairy Tales (1990) and her essay 'Notes from "
+            "the Front Line' frame her project; the minimum_band is "
+            "mastery as a genuine analytical-readiness judgment about "
+            "the content, not a comfort rating. In-copyright; analyzed "
+            "and pointed to, never reproduced. Honest information, not "
+            "a gate."
+        ),
+        "craft_focus": [
+            "Close reading mastery on Carter's dense ornate late-twentieth-century prose (lit-craft-004)",
+            "Character mastery: the female protagonists Carter constructs against their inherited folk-tale positions (the Marquis's wife rewritten against Perrault's Bluebeard heroine; the girl who is Red Riding Hood and is not) (lit-craft-014)",
+            "Theme mastery: what the inherited fairy tale held without saying that Carter says; sexual violence, female desire, the body; what the form does that direct realist fiction could not (lit-craft-023)",
+            "Figurative system: the chamber, the mirror, the wolf, the rose, the snow; the inherited fairy-tale figures Carter reworks with explicit purpose (lit-craft-043)",
+            "Literary refiguring as a form: each story explicitly responds to an identifiable source tale (Perrault's Bluebeard; the Beauty-and-the-Beast tradition; Red Riding Hood in multiple versions); the comparison is built into the work",
+        ],
+        "entry": (
+            "Mastery: read the collection whole; recognize each story's "
+            "source tale (Perrault's Bluebeard; the Beauty-and-the-Beast "
+            "tradition; Red Riding Hood across multiple lupine versions; "
+            "Snow White; Puss-in-Boots); meet Carter's dense ornate prose "
+            "as the work's instrument; engage what Carter does to the "
+            "inherited form by handling sexual violence and female "
+            "desire explicitly; read Carter's preface to her own Virago "
+            "Book of Fairy Tales (1990) and her essay 'Notes from the "
+            "Front Line' alongside; engage the substantial critical "
+            "literature on Carter (Lorna Sage's biography and criticism; "
+            "Helen Simpson's introductions; the long body of feminist "
+            "criticism on Carter). The minimum_band is mastery as a "
+            "genuine analytical-readiness judgment: the explicit content "
+            "and the sophistication of the literary refiguring require "
+            "analytical readiness no lower band provides. Not for "
+            "younger readers."
+        ),
+        "close_reading_passages": [
+            "'The Bloody Chamber' (the title story, rewriting Perrault's Bluebeard) and the wedding-night sequence and the discovery of the chamber: how does Carter rewrite the inherited tale, and what does the explicit handling do that Perrault's omission did not?",
+            "'The Tiger's Bride' (rewriting the Beauty-and-the-Beast tradition) and the closing transformation: how does Carter close the tale in a way the inherited form did not, and what does the closing do to the inheritance?",
+            "'The Company of Wolves' (rewriting Red Riding Hood) and the closing image of the girl asleep between the wolf's paws: how does Carter end the tale, and what does the close refuse to settle?",
+        ],
+        "structural_analysis": (
+            "Ten tales rewriting identifiable European fairy-tale "
+            "sources, ordered with deliberate care: the title-story "
+            "Bluebeard rewriting at the head; the Beauty-and-the-Beast "
+            "tales next; the Puss-in-Boots and Snow White rewritings in "
+            "the middle; the three lupine tales (rewriting Red Riding "
+            "Hood in three different directions) at the close. Each "
+            "tale's source is recognizable but Carter rewrites the form "
+            "explicitly, often closing in a place the inheritance did "
+            "not go. The structure is the collection's argument: the "
+            "inherited fairy-tale form held things without saying them "
+            "(sexual violence, female desire, the body), and the modern "
+            "literary refiguring can say them without losing the form."
+        ),
+        "thematic_lines": [
+            "What the inherited fairy tale held without saying: Carter's central concern across the collection; sexual violence, female desire, the body",
+            "Female agency in the rewritten form: the protagonists choose differently than their inherited counterparts in many of the tales; the rewriting is itself an argument",
+            "The Bluebeard tale and its long afterlife: the title story holds the collection's most direct rewriting and is itself a foundational text in late-twentieth-century feminist fairy-tale scholarship",
+        ],
+        "comparative_threads": [
+            "Charles Perrault's Histoires ou contes du temps passe (1697): the seventeenth-century French source for Bluebeard, Red Riding Hood, Puss-in-Boots; Carter's most direct source tradition",
+            "lit-work-inh-019 The Grimms' Tales: the German tradition Carter also engages",
+            "lit-work-inh-020 Andersen's tales: the literary fairy-tale tradition Carter responds to alongside the collected",
+            "lit-work-inh-022 MacDonald's Phantastes: the Victorian literary fairy tale; Carter's late-twentieth-century work is distinct but in the same long tradition",
+            "lit-work-inh-023 Calvino's Italian Folktales (1956): the contemporary curator-of-folk-tale project; Carter and Calvino as the two late-twentieth-century European writers most responsible for keeping the fairy-tale form serious literary territory",
+            "Carter's own The Virago Book of Fairy Tales (1990) and The Second Virago Book of Fairy Tales (1992): Carter herself worked as collector and editor of folk tale alongside writing the literary refigurings",
+            "Critical work: Lorna Sage's biography and Sage's edited Flesh and the Mirror; Helen Simpson's introductions; the long body of feminist criticism on Carter",
+        ],
+        "seminar_questions": [
+            "What does Carter's rewriting do to its source tale that the source tale held without saying?",
+            "What does the closing transformation in 'The Tiger's Bride' do that the inherited Beauty-and-the-Beast tradition refused to do?",
+            "Across the three lupine tales, what does Carter argue about Red Riding Hood that no one of the tales alone could?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the wedding-night sequence in 'The Bloody Chamber', alongside the relevant passages of Perrault's Bluebeard",
+            "The essay on the three lupine tales as one argument about Red Riding Hood across multiple endings",
+            "The sustained essay on Carter's literary refiguring as a form, with passages from at least three different rewritings and from Carter's own essay 'Notes from the Front Line'",
+        ],
+        "context": (
+            "Composed in the late 1970s by Angela Carter, an English "
+            "writer whose larger body of work also includes the novels "
+            "Nights at the Circus (1984) and Wise Children (1991) and "
+            "the essays in The Sadeian Woman (1979); the collection has "
+            "become one of the most-taught works of late-twentieth-"
+            "century English fiction and the most-cited text in the "
+            "long feminist literary engagement with the inherited "
+            "fairy-tale form; supplied as fact, interpretation left to "
+            "the student."
+        ),
+        "lineage": (
+            "Folklore. Modern literary fairy tale (inheritor of "
+            "Perrault, the Grimms, Andersen; the late-twentieth-century "
+            "literary refiguring of the inherited form). Each story "
+            "explicitly responds to an identifiable European source "
+            "tale, most often from Perrault (seventeenth-century French) "
+            "with engagement also of the Grimms (lit-work-inh-019) and "
+            "Andersen (lit-work-inh-020). Stands alongside Calvino's "
+            "(lit-work-inh-023) curator project as one of the two "
+            "late-twentieth-century European writers most responsible "
+            "for keeping the fairy-tale form serious literary territory. "
+            "Reaches forward into the long feminist literary engagement "
+            "with fairy tale that continues to the present."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The central late-twentieth-century literary refiguring of the European fairy-tale tradition; the seminar text on what literary rewriting can do to inherited form.",
+                "memory_work": {
+                    "recitations": [
+                        "Recitation of a chosen passage of Carter's ornate prose (the opening of 'The Bloody Chamber' or the closing of 'The Company of Wolves')"
+                    ],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from how Carter's prose register operates and what the rewriting does.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of The Bloody Chamber and Other Stories (the Penguin Modern Classics; Vintage paperback) read aloud across a term with the source tales (Perrault, Grimms) available alongside; this is adult literary fiction and the household decides whether and when it enters the curriculum",
+                ],
+                "short_lesson_flow": "A living book read aloud across the ten tales with the source tales available; the rewriting noticed against the source; deepening to analysis of what the rewriting does as the bands move up; the household holds the explicit content with the seriousness the work requires.",
+                "narration_prompt": "Tell back the tale we read today, and tell me what its source tale was and what Carter did to the source.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of The Bloody Chamber on the shelf, available, never assigned; the work asks the reader to choose it",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in fairy tale, in the modern literary refiguring of inherited form, or in the long feminist engagement with fairy tale leads",
+                ],
+                "parent_role": "Be a reader who has read the collection and is willing to be the adult companion at the table when the student does; do not paper over the explicit content; bring the source tales (Perrault, Grimms) into the room when the rewriting comes up.",
+                "observation_documentation": "Over time, notice whether the student returns to particular tales and begins to read the rewriting against its source. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of literary refiguring of inherited form and Carter's place in late-twentieth-century English fiction where chosen; not for younger readers as a matter of genuine analytical readiness and explicit content.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }

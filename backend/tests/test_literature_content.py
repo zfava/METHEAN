@@ -291,6 +291,7 @@ AUTHORED_NODE_IDS = (
     "lit-work-inh-021",
     "lit-work-inh-022",
     "lit-work-inh-023",
+    "lit-work-inh-024",
 )
 
 
