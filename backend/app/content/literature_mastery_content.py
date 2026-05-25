@@ -10256,4 +10256,135 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-013": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "The Prose Edda (selections; the Prologue, Gylfaginning, and selected sections of Skaldskaparmal)",
+            "author": "Snorri Sturluson",
+            "date": "c. 1220",
+            "genre": "medieval Icelandic compendium of Norse mythology and poetics",
+            "form": "Old Norse prose in four parts: Prologue, Gylfaginning ('the deluding of Gylfi'; the main mythological narrative), Skaldskaparmal ('language of poetry'; the kennings and the stories behind them), Hattatal ('list of verse forms')",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "The Norse cosmological violence (the killing of Ymir, the "
+            "binding of Loki, the death of Baldr, Ragnarok); Snorri "
+            "writes as a Christian preserving pagan mythology and his "
+            "Prologue offers a euhemerizing rationale (the Aesir as "
+            "deified ancient kings) that the Gylfaginning itself does "
+            "not require; the work both preserves and frames its "
+            "material. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading advanced on medieval Icelandic prose in worthy modern translation (lit-craft-004)",
+            "Snorri's frame: the king Gylfi visits the Aesir (disguised as men) who tell him the old stories; the frame as Snorri's way of preserving paganism within a Christian intellectual culture (lit-craft-008; lit-craft-031 in the family of moves for the gap between the Prologue's rationale and the Gylfaginning's narrative)",
+            "Character: Odin, Thor, Loki, Frigg, Tyr as Snorri presents them; what Snorri's framing does to them (lit-craft-014)",
+            "Theme advanced: preservation versus rationalization; what Snorri's Prologue claims and what the Gylfaginning refuses to need (lit-craft-023)",
+            "Figurative system: the kennings of Skaldskaparmal as a systematic preservation of poetic figure with its source-myth explanations (lit-craft-043)",
+        ],
+        "entry": (
+            "Advanced: read the Prologue and the Gylfaginning whole, "
+            "with selected sections of Skaldskaparmal; meet Snorri's "
+            "euhemerizing framing in the Prologue and notice what the "
+            "Gylfaginning does and does not need from it; meet the "
+            "kennings of Skaldskaparmal as a preserved poetic system "
+            "with source-myths attached; read alongside the Poetic Edda "
+            "(lit-work-inh-012) which Snorri quotes from explicitly. "
+            "Mastery: original argument about Snorri's role in "
+            "preserving Norse mythology and the question of what his "
+            "Christian framing does to what he preserves."
+        ),
+        "close_reading_passages": [
+            "The Prologue's euhemerizing argument (the Aesir as deified ancient kings descended from Troy): how does Snorri stage his framing, and what does it claim?",
+            "The Gylfaginning's opening (Gylfi's visit, the three thrones of High, Just-as-High, and Third): how does the dialogue-frame stage the mythology Snorri is preserving?",
+            "Skaldskaparmal's account of the mead of poetry: how does the work tell a myth that is also an account of why poetic figure exists?",
+        ],
+        "structural_analysis": (
+            "Four parts. The Prologue offers a Christian-intellectual "
+            "rationale (euhemerism) that frames the pagan material as "
+            "the deification of historical figures. The Gylfaginning "
+            "stages the king Gylfi as listener and the Aesir-as-men as "
+            "speakers, letting Snorri preserve the cosmology in "
+            "dialogue. The Skaldskaparmal preserves the kenning system "
+            "with the myths that explain why each figure works. The "
+            "Hattatal lists meters. The structure is Snorri's "
+            "preservation strategy: a Christian intellectual writing "
+            "down a pagan literary system in a form that lets the system "
+            "survive him."
+        ),
+        "thematic_lines": [
+            "Preservation versus rationalization: Snorri's Prologue frames the mythology; the Gylfaginning lets it speak; the gap between them is part of the work",
+            "Poetic figure as system: the Skaldskaparmal is the first systematic preservation of the Norse kenning tradition",
+            "What survives Snorri: most of what later inheritors know about Norse mythology comes through the Prose Edda; the choice of what to preserve was his",
+        ],
+        "comparative_threads": [
+            "lit-work-inh-012 The Poetic Edda: Snorri's main source; he quotes from the Poetic Edda explicitly and many readings survive only through his quotation",
+            "lit-work-005 The Saga of the Volsungs: the prose Icelandic compilation of the same heroic material; the two together are the prose preservation of the Northern tradition",
+            "lit-work-inh-014 the Nibelungenlied: the Continental medieval German parallel that does not pass through Iceland",
+            "lit-work-inh-004 Tolkien's The Lord of the Rings: Tolkien drew names and material from both Eddas; his lectures named Snorri as a model of literary preservation",
+        ],
+        "seminar_questions": [
+            "What does Snorri's euhemerizing Prologue let the Gylfaginning do without needing to assert?",
+            "How does the dialogue-frame of the Gylfaginning preserve the mythology in a form Christian readers could attend to?",
+            "What does the Skaldskaparmal claim by preserving the kennings alongside the myths that explain them?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on Snorri's Prologue and what its framing claims versus what the Gylfaginning needs",
+            "The essay on the mead-of-poetry passage as both myth and account of figure",
+            "At advanced, the essay on Snorri's preservation strategy and what survived because of his choices",
+        ],
+        "context": (
+            "Composed in Iceland in the 1220s by Snorri Sturluson, an "
+            "Icelandic chieftain, lawspeaker, and historian who also "
+            "wrote the Heimskringla saga-history of the kings of Norway; "
+            "the foundational systematic preservation of Norse mythology "
+            "and skaldic poetics; most of what later readers know about "
+            "Norse mythology comes through this work; supplied as fact, "
+            "interpretation left to the student."
+        ),
+        "lineage": (
+            "Norse-Germanic. Source position. The systematic prose "
+            "preservation of Norse mythology, drawing on and quoting "
+            "from the Poetic Edda (lit-work-inh-012). Stands alongside "
+            "the prose Saga of the Volsungs (lit-work-005) as the prose "
+            "Icelandic preservation of the Northern tradition. The "
+            "Continental Nibelungenlied (lit-work-inh-014) is the "
+            "parallel German preservation of the heroic material that "
+            "does not pass through Iceland. Tolkien's (lit-work-inh-004) "
+            "Anglo-Saxon and Norse scholarship drew on both Eddas."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The systematic medieval Icelandic preservation of Norse mythology and skaldic poetics; the seminar text on Snorri's preservation strategy.",
+                "memory_work": {
+                    "recitations": ["Recitation of a passage of the Gylfaginning in a worthy modern translation"],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from what the dialogue-frame lets Snorri preserve.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of the Prose Edda (Jesse Byock; Anthony Faulkes) read aloud across the Prologue, Gylfaginning, and selected Skaldskaparmal passages",
+                ],
+                "short_lesson_flow": "A living book read aloud across the Prologue and Gylfaginning, narrated; Snorri's framing held in mind; deepening to analysis of the Skaldskaparmal kenning system as the bands move up.",
+                "narration_prompt": "Tell back the passage we read today, and tell me what Snorri's Prologue framed and what the Gylfaginning was content to let speak.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of the Prose Edda on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in Norse mythology, in the preservation of pagan material by a Christian writer, or in the kenning system leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let Snorri's framing be his framing; bring the Poetic Edda quotations into the room when Snorri quotes them.",
+                "observation_documentation": "Over time, notice whether the student returns to the Gylfaginning and brings Norse mythology into other reading. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of Snorri's preservation strategy and the medieval Icelandic prose form where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
