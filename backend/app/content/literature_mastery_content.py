@@ -5374,6 +5374,125 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-006": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Oedipus Rex (Oedipus the King)",
+            "author": "Sophocles",
+            "date": "c. 429 BCE",
+            "genre": "Greek tragedy",
+            "form": "verse tragedy in five episodes with choral odes",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Parricide, incest (offstage; the play uncovers what has already happened "
+            "long before), suicide, self-blinding (offstage but graphically reported); "
+            "the play's ethical and emotional weight is in the recognition, not in any "
+            "depicted violence. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Dramatic structure: the in-medias-res opening and the unrelenting progress of recognition",
+            "Anagnorisis (recognition) and peripeteia (turn) as the structural backbone (lit-craft-052)",
+            "The chorus of Theban elders as commentator, mediator, and voice of the polis (lit-craft-052)",
+            "The figure of the king who is also the answer to the riddle (lit-craft-013)",
+            "Dramatic irony: the audience knows from the first scene what Oedipus discovers at the last (lit-craft-051)",
+        ],
+        "entry": (
+            "Proficient: meet the play whole, name peripeteia and anagnorisis where "
+            "they fall, read the chorus as function, feel the dramatic irony as the "
+            "audience holds what Oedipus does not. Advanced: argue what the play "
+            "refuses to settle (is Oedipus chosen, fated, or undone by his own "
+            "thoroughness; does the play endorse the knowing or mourn it); set the "
+            "play against the inheritance of the Theban material and against the "
+            "later Oedipus at Colonus. Mastery: original argument about how the play "
+            "shapes the tragic form for everything after."
+        ),
+        "close_reading_passages": [
+            "The opening scene of the suppliants and the priest's appeal: how does the play introduce a city already in plague, and what does Oedipus claim to be?",
+            "The exchange with Tiresias: what does Tiresias know, what does he refuse to say plainly, and what does Oedipus hear that he will not hear?",
+            "The messenger's report and the recognition: how does the play give the recognition that has been there all along, and what does the chorus say at the moment of seeing?",
+        ],
+        "structural_analysis": (
+            "The play begins after the truth is in place; the action is the bringing "
+            "of that truth into the king's knowing. Every episode tightens the "
+            "chain; every choral ode holds the city's stake; the recognition arrives "
+            "and the king is the one who could not see. The structure is the "
+            "argument: tragedy is not what is hidden becoming known but the price "
+            "exacted by knowing."
+        ),
+        "thematic_lines": [
+            "Knowing and not-knowing: whether the play counts the seeking of truth as virtue or as the form the doom takes",
+            "Fate and choice: the play holds both without resolving which has the more weight; competing readings have been held for two and a half millennia",
+            "The king as the city: Oedipus is the answer to the riddle and the city's plague at once; what the play asks the polis to do with that doubling",
+        ],
+        "comparative_threads": [
+            "Antigone (lit-work-007): the same Theban material across the same playwright; what each play does with Creon",
+            "The Oresteia (lit-work-008): the parallel question of inherited bloodshed and the founding of public justice; Aeschylus and Sophocles reading the same problem differently",
+            "Aristotle's Poetics: Oedipus as the play Aristotle uses to define tragedy; the analysis the play makes possible",
+        ],
+        "seminar_questions": [
+            "Does the play endorse Oedipus's seeking of the truth, mourn it, or hold both at once? Which lines tell you?",
+            "What is the chorus doing in this play that no single character could do? Where do they speak for the city, and where do they speak for the audience?",
+            "Where is the recognition, exactly? Is it a single moment, or a tightening across many?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the chorus of Theban elders, naming what work the chorus is doing in one chosen ode",
+            "The essay on whether the play counts knowing as virtue, with two or three passages held in tension",
+            "At advanced, the comparative paragraph setting Oedipus against an inheritance the play is working with (the Theban myth as the earlier tellings have it; what Sophocles does to the inheritance)",
+        ],
+        "context": (
+            "Performed at the City Dionysia in Athens in or around 429 BCE; one of "
+            "seven surviving Sophoclean tragedies; the play Aristotle uses in the "
+            "Poetics to define peripeteia and anagnorisis; supplied as fact, "
+            "interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "The play Aristotle uses to define tragedy; the Greek seminar text on knowing and the price of knowing."
+                ),
+                "memory_work": {
+                    "recitations": ["Recitation of a choral ode in a worthy modern translation"],
+                },
+                "recitation_routine": (
+                    "Seminar opens from the recited ode; the discussion takes its first question from what the chorus saw that the king did not."
+                ),
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of Oedipus Rex (Robert Fagles; David Grene) read aloud as a living book, parts taken",
+                ],
+                "short_lesson_flow": (
+                    "A living book read aloud and narrated; the chorus heard aloud "
+                    "where possible, deepening to analysis of the recognition as the bands move up."
+                ),
+                "narration_prompt": (
+                    "Tell back the episode we read today, and tell me what the chorus said about it, and what Oedipus did not yet know."
+                ),
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of Oedipus Rex on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in fate, knowing, or the Theban material leads; a filmed performance watched together",
+                ],
+                "parent_role": (
+                    "Read aloud and discuss where the student's interest leads; bring the chorus's voice into the room when you can. No imposed apparatus."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the student returns to the play and brings the recognition into other reading. This noticing replaces any test."
+                ),
+            },
+            "traditional": {
+                "introduction": "Structured study of Greek tragic conventions and the play's structural backbone where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
