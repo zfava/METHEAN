@@ -4216,6 +4216,123 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-003": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "The Aeneid",
+            "author": "Virgil",
+            "date": "c. 29-19 BCE",
+            "genre": "epic",
+            "form": "epic poem",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Battlefield violence; the suicide of Dido; the killing of Turnus at "
+            "the poem's close, on which the poem ends without comment; honest "
+            "information, not a gate."
+        ),
+        "craft_focus": [
+            "The conscious reply to Homer: the first six books as Odyssey, the second six as Iliad",
+            "Pietas as the hero's defining quality and its cost",
+            "The Virgilian simile and its conscious differences from Homer's",
+            "The ending that refuses to comment on the killing of Turnus",
+            "Dido as the figure the poem cannot quite leave behind",
+        ],
+        "entry": (
+            "Proficient: meet Aeneas as the reluctant founder, follow the conscious "
+            "reply to Homer, name pietas as the hero's defining quality and ask "
+            "what it costs. Advanced: read the simile as Virgil's revision of "
+            "Homer's, argue what the poem refuses to settle about the killing of "
+            "Turnus, set Aeneas against the inheritance of the warrior-hero. "
+            "Mastery: original argument about what the Aeneid does to the epic "
+            "tradition and what the empire it founds is, in the poem's own measure."
+        ),
+        "close_reading_passages": [
+            "The proem and the question of what the poem invokes: arms and the man, but in what order?",
+            "The fall of Troy as Aeneas tells it (Book 2): what does the first-person frame let the poem do?",
+            "The killing of Turnus and the poem's last lines: what does the poem refuse to say?",
+        ],
+        "structural_analysis": (
+            "Twelve books built consciously as a reply to Homer: the first six echo "
+            "the Odyssey (wandering, the descent to the underworld), the second six "
+            "echo the Iliad (war in Italy, the killing). The structure is the "
+            "poem's argument: the founder must do both the journey and the war, "
+            "and the cost of both is the poem."
+        ),
+        "thematic_lines": [
+            "Pietas: duty, piety, devotion to family, gods, and the founded city",
+            "The cost of founding: who pays, and what is paid",
+            "Dido and the woman the foundation leaves behind",
+        ],
+        "comparative_threads": [
+            "lit-work-001 (Odyssey): the model for the journey half of the poem",
+            "lit-work-002 (Iliad): the model for the war half; together they form the conscious shadow the Aeneid argues with",
+        ],
+        "seminar_questions": [
+            "Does Aeneas's pietas exonerate the killing of Turnus, and does the poem think so?",
+            "What does the poem do with Dido that it cannot quite undo?",
+            "Why does Virgil write so consciously inside Homer? What does the doubling argue?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on a Virgilian simile set beside a Homeric simile, naming what each lets the reader see",
+            "The essay on whether the killing of Turnus is just, in the poem's own measure",
+            "At advanced, the comparative essay on Aeneas against an inherited hero type the poem is consciously working with",
+        ],
+        "context": (
+            "The poem composed for the Augustan moment, the foundational text of "
+            "imperial Rome and a deeply Roman reading of Greek epic; supplied as "
+            "fact, interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "The foundational Latin epic in conversation with Homer; pietas examined rhetorically and ethically."
+                ),
+                "memory_work": {
+                    "recitations": ["Recitation of the proem"],
+                },
+                "recitation_routine": (
+                    "Seminar opens from the recited proem; the discussion takes its "
+                    "first question from the order of arma virumque (arms and the "
+                    "man) and what that order tells."
+                ),
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of the Aeneid, read aloud as a living book (Fitzgerald, Mandelbaum, or Sarah Ruden)",
+                ],
+                "short_lesson_flow": (
+                    "A living book read aloud and narrated; the journey followed "
+                    "and the war followed, deepening to analysis of Virgil's "
+                    "conscious reply to Homer as the bands move up."
+                ),
+                "narration_prompt": (
+                    "Tell back the part we read today, and tell me what you noticed about Aeneas (or Dido, or Turnus) this time."
+                ),
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of the Aeneid on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in Rome, duty, or the cost of founding leads, no imposed apparatus",
+                ],
+                "parent_role": ("Read aloud and discuss where the student's interest leads; no imposed apparatus."),
+                "observation_documentation": (
+                    "Over time, notice whether the student returns to the poem and "
+                    "brings it into conversation with the Homeric epics. This "
+                    "noticing replaces any test."
+                ),
+            },
+            "traditional": {
+                "introduction": "Structured study of epic conventions and Virgil's conscious revision of Homer where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
