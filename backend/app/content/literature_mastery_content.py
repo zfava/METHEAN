@@ -1601,6 +1601,164 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-020": {
+        "node_type": "craft",
+        "strand": "theme and meaning",
+        "band": "emerging",
+        "prerequisites": [],
+        "objective": (
+            "Tell what a story is about in age-appropriate, concrete terms, both what "
+            "happens (the surface topic) and one feeling or idea the story leaves with "
+            "the reader; point to the part of the story where that feeling came from."
+        ),
+        "core_understanding": (
+            "Every story is about something. At the simplest level, a story is about "
+            "what happens in it. At a slightly deeper level, a story is also about what "
+            "it leaves us thinking or feeling. At the seed of theme, the child learns "
+            "to tell back what happens and to name what feeling or idea the story "
+            "leaves behind."
+        ),
+        "analytical_moves": [
+            "Tell back what happens in the story, in the child's own words",
+            ("Name one feeling the story left you with (happy, sad, brave, worried, surprised)"),
+            "Point to the part of the story where that feeling came from",
+            "Notice when two people read the same story and feel different things",
+        ],
+        "seminar_questions": [
+            "What is this story about?",
+            "How did the story leave you feeling, and where did that come from?",
+            "What do you think the story is trying to show us?",
+        ],
+        "writing_invitations": [
+            (
+                "Draw the part of the story you would keep, and write one word for what "
+                "the story is about under your drawing"
+            ),
+            "Copy a single sentence from the story that catches what the story is about",
+        ],
+        "exemplar_texts": [
+            "A picture book whose meaning is plain and warm (The Giving Tree; Owl Moon)",
+            "A fable whose lesson is named at the end (Aesop)",
+            ("A simple chapter book whose theme is felt across the whole (Charlotte's Web; The Velveteen Rabbit)"),
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "Every story carries something beyond its events: a feeling, an "
+                    "idea, a glimpse of how things are. Before we name it theme, the "
+                    "child first hears that the story leaves something behind, and "
+                    "learns to say what it is."
+                ),
+                "memory_work": {
+                    "recitations": [
+                        ("A single short line from the story that catches what it is about, recited"),
+                    ],
+                },
+                "copywork": [
+                    "The recited line copied once, slowly, with one word beneath it for what the story is about",
+                ],
+                "recitation_routine": (
+                    "Each session begins by reciting yesterday's about-line; the new "
+                    "lesson opens with 'and what was today's story about?'"
+                ),
+                "read_aloud_suggestions": [
+                    "A picture book whose meaning carries plainly through the events",
+                    "An Aesop fable whose lesson is plain at the end",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A worthy picture book or chapter book whose meaning lives in the whole story",
+                ],
+                "short_lesson_flow": (
+                    "Read a short passage or a whole short story aloud, attentively. "
+                    "The child narrates. Then ask gently: how did it leave you feeling? "
+                    "What was it about? Where in the story did that feeling come from? "
+                    "Let the child's own answer stand without correction."
+                ),
+                "narration_prompt": (
+                    "Tell back what happened, and tell me how the story left you feeling, and where that came from."
+                ),
+                "real_world_objects": [
+                    "A worthy book in hand, not a worksheet",
+                    "A small card on which one word for what the story is about is written",
+                ],
+                "nature_connection": (
+                    "Hearing what a story is about is the same habit as feeling the "
+                    "mood of a real day in the woods or the kitchen: a whole has its "
+                    "own feeling, beyond the sum of what is in it."
+                ),
+                "habit_focus": (
+                    "The habit of attention to the whole story: hearing what it leaves "
+                    "behind, not only what happens within it."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit, modeled naming of what a story is about and what feeling "
+                    "or idea it leaves, on a short, age-appropriate story."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher reads a short story aloud and names plainly: 'This "
+                        "story is about a spider and a pig becoming friends. It left me "
+                        "feeling that friends can save each other.'"
+                    ),
+                    "we_do": (
+                        "Teacher reads a second story and, together with the child, "
+                        "names what it is about and one feeling it leaves, pointing to "
+                        "where that feeling came from."
+                    ),
+                    "you_do": (
+                        "Child listens to a new short story and tells what it is "
+                        "about, names one feeling it left, and points to the part "
+                        "where that feeling came from."
+                    ),
+                },
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a mixed shelf of stories whose feelings are worth feeling within reach",
+                    "Read aloud often and welcome the child's running talk about how a story made them feel",
+                ],
+                "real_world_contexts": [
+                    "A bedtime story that left the child quiet and thinking afterward",
+                    "A re-read of a favorite picture book because the child wanted the feeling again",
+                    "A drawing or a story the child made in response to one they loved",
+                ],
+                "conversation_starters": [
+                    "How did that story leave you feeling?",
+                    "What do you think it was really about?",
+                    "Did anything in it make you remember something of your own?",
+                ],
+                "resource_bank": [
+                    "A shelf of picture books and short chapter books whose stories are worth carrying around",
+                    "Quiet time after a story for the feeling to settle",
+                ],
+                "parent_role": (
+                    "Read aloud well and let the silence after a story stay a moment. "
+                    "Welcome whatever the child says about what it was about or how it "
+                    "felt; offer your own response now and then as another reader. "
+                    "Trust that attention to meaning grows from being moved."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the child begins to say things like "
+                    "'this one was about being brave' or 'it made me feel sad in a "
+                    "good way,' and whether they return to stories whose meaning held "
+                    "them. This noticing replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori at this band does not carry a distinct method for naming "
+                "the meaning a story leaves; the prepared environment centers on "
+                "practical life, the sensorial materials, and the grammar materials "
+                "rather than on the analysis of theme."
+            ),
+        },
+    },
     "lit-craft-031": {
         "node_type": "craft",
         "strand": "narrative craft",
