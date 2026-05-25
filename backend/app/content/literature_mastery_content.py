@@ -9422,4 +9422,141 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-007": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "Le Morte d'Arthur (selections, with attention to the opening books and the last two)",
+            "author": "Sir Thomas Malory",
+            "date": "composed in prison c. 1469-70; printed by William Caxton 1485; the Winchester Manuscript (rediscovered 1934) preserves a different, less-edited textual version",
+            "genre": "late-medieval English Arthurian prose compilation",
+            "form": "prose narrative cycle in twenty-one books (Caxton) or eight tales (Winchester); the longest sustained English Arthurian work; channels Geoffrey, the French Vulgate Cycle, and earlier into a single Round-Table narrative",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "Sustained battlefield violence throughout; the killing of "
+            "innocents in the May Day infant-massacre Arthur orders to "
+            "destroy Mordred; the adulterous love of Lancelot and "
+            "Guinevere; the killings of Gareth and Gaheris at Lancelot's "
+            "hand and the wars that follow; the final battle at Camlann "
+            "and the deaths of Arthur and Mordred; the book is a long "
+            "elegy for a fellowship that destroys itself. Honest "
+            "information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading advanced on late Middle English prose, in the Caxton or Winchester text with modernization where chosen (lit-craft-004)",
+            "Narrative craft advanced: the long compilation as one structural argument across many borrowed sources; Malory's seams and unifications (lit-craft-008 strained past proficient; lit-craft-031 in the family of moves for the question of when Malory is repeating his source and when revising)",
+            "Character advanced: Arthur, Lancelot, Guinevere, Gawain, Mordred across the long span; the fellowship as the work's argument (lit-craft-014)",
+            "Theme advanced: the whole work as elegy for the Round Table; what the cycle refuses to settle about Lancelot's adultery, about Arthur's responsibility, about whether the fellowship was always doomed (lit-craft-023)",
+            "Figurative system: the sword, the cup, the seat at the Round Table, the queen's chamber, the boat that takes Arthur to Avalon (lit-craft-042 at proficient; lit-craft-043 at advanced)",
+        ],
+        "entry": (
+            "Advanced: read the work whole over a long span (most readers "
+            "take a year); meet the Winchester Manuscript's eight tales or "
+            "Caxton's twenty-one books and follow the long argument across; "
+            "argue what Malory does to the inheritance he is compiling (the "
+            "French Vulgate Cycle, the alliterative Morte Arthure, Geoffrey "
+            "through the chronicle tradition); honor what the book refuses "
+            "to settle about Lancelot, about Arthur, about whether the "
+            "fellowship was always going to fall. Mastery: original "
+            "argument about Malory's place in establishing the English-"
+            "language Arthurian canon every later inheritor reaches back to."
+        ),
+        "close_reading_passages": [
+            "The drawing of the sword from the stone (Caxton Book 1; the opening tales in Winchester): how does Malory stage Arthur's accession, and what does the prose's plainness do that a more elaborate telling could not?",
+            "The first meeting of Lancelot and Guinevere and the long sequence of Lancelot's quests (Caxton Books 6 and 18 especially): how does Malory stage a love the cycle will not let succeed, and what does the prose let the reader feel about Lancelot's interior?",
+            "The final battle at Camlann, the wounding, and the passing to Avalon (Caxton Book 21): how does Malory stage the end of the fellowship, and what does the famous Latin epitaph 'Hic iacet Arthurus, Rex quondam, Rexque futurus' (here lies Arthur, the once and future king) do at the close?",
+        ],
+        "structural_analysis": (
+            "A late-medieval prose compilation drawing on the French "
+            "Vulgate Cycle (Lancelot-Grail), the post-Vulgate, the "
+            "alliterative Morte Arthure, the stanzaic Morte Arthur, and "
+            "earlier chronicle material going back to Geoffrey of Monmouth. "
+            "Caxton edited the work into twenty-one books for the 1485 "
+            "print; the Winchester Manuscript (rediscovered 1934) "
+            "preserves an earlier form in eight tales, with different "
+            "chapter divisions and fewer editorial unifications. The "
+            "structure is the work's argument: a fellowship gathered, "
+            "glorified, and undone, across the long span the cycle requires."
+        ),
+        "thematic_lines": [
+            "The Round Table as the cycle's central figure: the fellowship is what the work is about and what the work loses",
+            "Adultery, loyalty, and the doom of the fellowship: Malory refuses to settle whether Lancelot's love destroys the order or merely reveals what was destroying it",
+            "Once and future: the book's final phrase ('Rex quondam, Rexque futurus') the inheritance bequeaths to every later English-language Arthurian work",
+        ],
+        "comparative_threads": [
+            "lit-work-inh-005 Geoffrey of Monmouth: the ultimate English-language ancestor through the chronicle tradition",
+            "lit-work-inh-006 Sir Gawain and the Green Knight: Malory's Gawain is a different Gawain, more compromised; the comparison illuminates both works",
+            "The French Vulgate Cycle (Lancelot-Grail; the post-Vulgate Roman du Graal): Malory's largest single source, in French, which he both translates and edits sharply",
+            "lit-work-inh-008 Tennyson's Idylls of the King: the Victorian inheritor that reads Malory through Victorian moral lens",
+            "lit-work-inh-009 T. H. White's The Once and Future King: the modern inheritor whose chapter epigraphs and explicit references name Malory throughout; White's title is from Malory's epitaph",
+            "lit-work-inh-010 Cornwell's Warlord Chronicles: the post-Roman historical recasting; Cornwell's foreword names Malory and explicitly diverges from him",
+        ],
+        "seminar_questions": [
+            "What does Malory refuse to settle about Lancelot? Where in the work is the question sharpest?",
+            "What does the Winchester text show that the Caxton text edited out, and what does the editorial history let you see about Malory?",
+            "What does the epitaph at the close ('here lies Arthur, the once and future king') do that no explicit statement could?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the drawing of the sword from the stone, naming what the plain prose does that elaboration could not",
+            "The essay on Lancelot and Guinevere as the cycle's central failure, with passages from the middle and the close",
+            "The sustained essay on what the book refuses to settle about whether the fellowship was doomed, holding three or four passages in productive tension",
+        ],
+        "context": (
+            "Composed in prison by a knight named Sir Thomas Malory across "
+            "the late 1460s; printed by Caxton in 1485 in the form that "
+            "circulated for four and a half centuries; the Winchester "
+            "Manuscript (an earlier, less-edited form) was rediscovered in "
+            "1934 and has since been published in scholarly editions; the "
+            "foundational English-language Arthurian compilation; supplied "
+            "as fact, interpretation left to the student."
+        ),
+        "lineage": (
+            "Matter of Britain. Source position: the foundational "
+            "English-language Arthurian prose compilation that channels "
+            "Geoffrey of Monmouth (lit-work-inh-005), the French Vulgate "
+            "Cycle, and the older alliterative and stanzaic Morte poems "
+            "into a single cycle. Every later English-language Arthurian "
+            "work descends from Malory in some way: Tennyson "
+            "(lit-work-inh-008) reads Malory through Victorian lens; "
+            "T. H. White (lit-work-inh-009) takes his title from Malory's "
+            "closing Latin epitaph and uses Malory as chapter source; "
+            "Cornwell (lit-work-inh-010) explicitly diverges from Malory "
+            "while drawing on the same materials."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The foundational English-language Arthurian prose compilation; the seminar text on the cycle's long fall and on the late-medieval English prose Malory invented for it.",
+                "memory_work": {
+                    "recitations": [
+                        "Recitation of the closing Latin epitaph and the surrounding passage of Arthur's passing"
+                    ],
+                },
+                "recitation_routine": "Seminar opens from the recited closing; the discussion takes its first question from what the epitaph claims and what the work has earned.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Le Morte d'Arthur (the Norton with the Winchester text; the Penguin two-volume Cooper edition based on Caxton; the Oxford World's Classics) read aloud across a year, in chunks",
+                ],
+                "short_lesson_flow": "A living book read aloud across the long span and narrated; the fellowship watched as it gathers and as it falls; deepening to analysis of the Winchester/Caxton question as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me what the fellowship gained or lost in it.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Le Morte d'Arthur on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in the long Arthurian cycle, in late-medieval prose, or in the inheritance from Geoffrey forward into every modern Arthurian retelling leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; the year-long reading is the practice; let Lancelot and Guinevere be themselves.",
+                "observation_documentation": "Over time, notice whether the student returns to particular tales and brings Malory into other reading. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of late-medieval English prose, the cycle structure, and the Winchester/Caxton textual question where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
