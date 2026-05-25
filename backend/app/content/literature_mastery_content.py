@@ -10956,4 +10956,142 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-018": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "The Border Trilogy (All the Pretty Horses 1992; The Crossing 1994; Cities of the Plain 1998)",
+            "author": "Cormac McCarthy",
+            "date": "1992-1998 as three novels; read as a single trilogy",
+            "genre": "late-twentieth-century American novel of the borderlands",
+            "form": "third-person novels in McCarthy's prose without quotation marks, quieter than Blood Meridian; All the Pretty Horses follows John Grady Cole; The Crossing follows Billy Parham; Cities of the Plain brings them together; the long span runs from the late 1940s into the 1950s",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "Violence across the trilogy: the killing of horses and the "
+            "deaths of named characters in All the Pretty Horses; the "
+            "killing of the wolf in The Crossing and the long sustained "
+            "passages of the journey with her; the killings at the close "
+            "of Cities of the Plain; the trilogy is far less graphically "
+            "violent than Blood Meridian but does not avoid violence "
+            "where it falls; the borderlands are depicted with their "
+            "documented mid-twentieth-century history of Mexican and "
+            "American populations, ranching, the loss of ranching to "
+            "developers and the military, and the long border. "
+            "In-copyright; analyzed and pointed to, never reproduced. "
+            "Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading advanced on McCarthy's quieter prose, still without quotation marks (lit-craft-004)",
+            "Character advanced: John Grady Cole and Billy Parham as protagonists with more interior access than the kid had in Blood Meridian; the elders Billy meets across The Crossing (the Indian wolfer, the heretic priest, the gypsies); secondary figures held with sustained dignity (lit-craft-014)",
+            "Theme advanced: the loss of the rancher's world; what is left when the inheritance ends; the borderlands as a place rather than only as a frontier (lit-craft-023)",
+            "Figurative system: the horse, the wolf, the road, the river, the cities of the plain (a borrowing from Genesis) (lit-craft-042 at proficient; lit-craft-043 at advanced)",
+            "Even-handed historical treatment: the border region's Mexican and American populations and the long historical relations between them; the ranching world's actual decline through midcentury",
+        ],
+        "entry": (
+            "Advanced: read the three novels in order as one trilogy; "
+            "follow John Grady Cole in All the Pretty Horses, Billy "
+            "Parham in The Crossing, and both together in Cities of the "
+            "Plain; meet the borderlands as the trilogy's central place; "
+            "argue what McCarthy does that is different in register from "
+            "Blood Meridian, and what stays the same in his concerns. "
+            "Mastery: original argument about McCarthy's two American "
+            "modes (the metaphysical Blood Meridian and the borderlands "
+            "trilogy) and what each mode does that the other could not."
+        ),
+        "close_reading_passages": [
+            "The opening of All the Pretty Horses and John Grady's leaving the family ranch: how does the trilogy stage the inheritance ending, and what does the prose do with horses and weather in the opening pages?",
+            "The opening of The Crossing and Billy's long journey with the trapped wolf: how does the second novel stage Billy's choice to bring the wolf back to Mexico, and what does the journey-with-the-wolf do that no later sequence could?",
+            "The closing of Cities of the Plain and the epilogue with the old man Billy at the close of his life: how does the trilogy close, and what does the late conversation with the stranger refuse to settle?",
+        ],
+        "structural_analysis": (
+            "Three novels in McCarthy's prose without quotation marks, "
+            "centered on the borderlands. All the Pretty Horses follows "
+            "John Grady from a Texas ranch he loses to a Mexico he goes "
+            "to find. The Crossing follows Billy across three Mexican "
+            "journeys (the wolf, the search for his brother, the long "
+            "return). Cities of the Plain brings John Grady and Billy "
+            "together on a ranch about to be lost to the military's "
+            "expansion. The epilogue closes the trilogy on Billy as an "
+            "old man. The structure is the trilogy's argument: a way of "
+            "life on the borderlands as it ends, the ending told quietly "
+            "and without the rhetorical violence of Blood Meridian."
+        ),
+        "thematic_lines": [
+            "The end of the rancher's world: the trilogy's most consistent thematic concern across the three novels",
+            "Crossings: the literal border crossings and the figurative ones; what each journey costs and what each leaves behind",
+            "The elders and what they know: the figures Billy meets in The Crossing especially carry the trilogy's wisdom and refuse the trilogy's resolution",
+        ],
+        "comparative_threads": [
+            "lit-work-inh-017 Blood Meridian: McCarthy's other major treatment of the border; the comparison is decisive within his own body of work; the trilogy is the quieter answer to Blood Meridian's metaphysical violence",
+            "lit-work-inh-016 The Last of the Mohicans: Cooper's frontier romance the trilogy departs from quietly rather than violently",
+            "lit-work-024 Moby-Dick: still the American novelistic predecessor; the metaphysical reach is quieter here but the inheritance is the same",
+            "lit-work-027 Adventures of Huckleberry Finn: another American novel of a journey across a contested landscape; the vernacular tradition John Grady's speech reaches back to",
+            "Critical work: the Cormac McCarthy Society's scholarship; Edwin T. Arnold and Dianne C. Luce's work on the trilogy",
+        ],
+        "seminar_questions": [
+            "What does the trilogy do that Blood Meridian does not, and what does it keep that Blood Meridian had?",
+            "What does the long journey with the wolf in The Crossing do that no plot summary could honor?",
+            "What does the trilogy refuse to settle about the ending of the ranching world?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the journey-with-the-wolf in The Crossing, naming what the sustained passage does",
+            "The essay on the borderlands as place across the three novels",
+            "At advanced, the comparative essay on Blood Meridian and the Border Trilogy as McCarthy's two American modes",
+        ],
+        "context": (
+            "Composed across the 1990s in El Paso, Texas, after Blood "
+            "Meridian; All the Pretty Horses won the National Book Award "
+            "and the National Book Critics Circle Award in 1992; the "
+            "border region is McCarthy's chosen ground across both Blood "
+            "Meridian and the trilogy and continues into his later "
+            "novels (No Country for Old Men, The Road); supplied as "
+            "fact, interpretation left to the student."
+        ),
+        "lineage": (
+            "American myth and frontier. Inheritor position. McCarthy's "
+            "quieter return to the same border region after Blood "
+            "Meridian (lit-work-inh-017); the trilogy departs from "
+            "Cooper's (lit-work-inh-016) frontier romance differently, "
+            "by holding the borderlands as a place inhabited by real "
+            "populations rather than as the romance's contested wild. "
+            "Reaches back to Moby-Dick (lit-work-024) for the American "
+            "novelistic register and to the long American journey "
+            "tradition that includes lit-work-027 Huckleberry Finn."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "McCarthy's quieter borderlands trilogy; the seminar text on the end of a way of life and on the long journey as a form.",
+                "memory_work": {
+                    "recitations": [
+                        "Recitation of a chosen passage of landscape or horse description from All the Pretty Horses"
+                    ],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from what the prose's quietness lets the trilogy do.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "Worthy editions of the three novels (the Vintage paperbacks; the Library of America volumes) read aloud across two terms, one novel at a time",
+                ],
+                "short_lesson_flow": "A living book read aloud across the three novels and narrated; the borderlands held as place; deepening to analysis of the trilogy as one structural argument as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me what the trilogy let you see about the place and what it let you see about the people who live in it.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep worthy editions of the three Border Trilogy novels on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in McCarthy, in the American borderlands, in horses and ranching, or in the long American journey-novel tradition leads",
+                ],
+                "parent_role": "Be a fellow reader who has lived with the trilogy in their own returning; let the journey with the wolf in The Crossing be the long passage it is; do not rush.",
+                "observation_documentation": "Over time, notice whether the student returns to the trilogy and begins to feel the borderlands as a place rather than only as a setting. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the trilogy form and the borderlands as place where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
