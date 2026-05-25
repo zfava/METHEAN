@@ -4553,6 +4553,229 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-053": {
+        "node_type": "craft",
+        "strand": "drama",
+        "band": "advanced",
+        "prerequisites": ["drama: proficient", "close reading: advanced", "theme and meaning: proficient"],
+        "objective": (
+            "Argue the play's full dramatic argument as the very way the play means "
+            "(not its content but the shape it has when staged choices, structural "
+            "turns, the system of voices, and chorus function are held together as "
+            "one whole); set the play against its inheritance (a revenge tragedy "
+            "against the revenge-tragedy tradition; a Greek tragedy against its "
+            "predecessors and successors); honor what the play refuses to settle; "
+            "write the sustained essay arguing both the play's claim and what the "
+            "play refuses."
+        ),
+        "core_understanding": (
+            "At this band the play is no longer separable from how it is staged. "
+            "The work's argument is the staged whole: every silence, every entrance, "
+            "every choric passage, every soliloquy, every refusal to speak operates "
+            "together to make the meaning. A play has no narrator; nothing is "
+            "authoritative; the reader holds a system of voices and the staging that "
+            "exhibits them. The reader also meets the inheritance: a revenge tragedy "
+            "carries everything earlier revenge tragedies have done; a Greek tragedy "
+            "is in conversation with the ones before and the ones after; the writer "
+            "is doing something to the tradition. The play often refuses to settle: "
+            "that refusal is itself an argument. The advanced essay names both what "
+            "the play claims and what the play refuses, and holds them together."
+        ),
+        "analytical_moves": [
+            "Argue the play's full dramatic argument as the very way it means rather than as content it delivers",
+            (
+                "Set the play against its inheritance: name what tradition the play "
+                "belongs to and what the writer is doing to it"
+            ),
+            "Identify and honor what the play refuses to settle, and argue what is gained by leaving it unsettled",
+            (
+                "Defend a sustained reading scene-by-scene with staged choice, "
+                "structural turn, and choric function as evidence"
+            ),
+            (
+                "Hear another reader's account of the play's argument and locate "
+                "where in the text and in the tradition that account draws its evidence"
+            ),
+        ],
+        "seminar_questions": [
+            "What is this play's whole argument, and how do its staged choices operate together to make it?",
+            "What tradition of drama is this play working with, and where is the playwright doing something the tradition had not done?",
+            "What does this play refuse to settle, and what would be lost if it settled it?",
+            "Where would another reader's reading of this play diverge from yours, and what staged moment would they cite?",
+        ],
+        "writing_invitations": [
+            (
+                "Write a sustained essay arguing a chosen play's whole dramatic "
+                "argument as the very way the play means, holding three or four "
+                "scenes in productive tension and naming the play's inheritance"
+            ),
+            "Write the paragraph arguing what a chosen play refuses to settle and what is gained by the refusal",
+        ],
+        "exemplar_texts": [
+            (
+                "A Shakespeare tragedy held whole and against its inheritance (Hamlet "
+                "against the revenge-tragedy tradition; King Lear against the "
+                "medieval Lear story; Othello against Cinthio)"
+            ),
+            (
+                "A Greek tragedy in dialogue with its predecessors and successors "
+                "(Sophocles' Oedipus against earlier myth; Antigone in conversation "
+                "with later treatments by Anouilh and Brecht)"
+            ),
+            (
+                "A modern play that intervenes in an inheritance (Beckett's Endgame "
+                "against the well-made play; Stoppard's Rosencrantz and Guildenstern "
+                "Are Dead against Hamlet)"
+            ),
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "Drama meets the long seminar and the genealogy of forms. The "
+                    "reader brings the play's whole argument as a hypothesis; the "
+                    "seminar tests it, and the inheritance of the play's form is "
+                    "brought into the room. Aristotle's vocabulary, the chorus "
+                    "tradition, the revenge tradition, the inheritance the "
+                    "playwright is doing something to: all of these converge."
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "A passage central to the play's whole argument, recited at the seminar's opening",
+                        "A passage from another play in the inheritance the work intervenes in",
+                    ],
+                },
+                "copywork": [
+                    "The recited passage copied into the kept commonplace book, with the inheritance the play intervenes in noted in the margin",
+                ],
+                "recitation_routine": (
+                    "Each seminar opens from two recited passages: one from the play "
+                    "under study, one from elsewhere in the inheritance; the first "
+                    "question is taken from what each lets the other see, and the "
+                    "discussion returns to the staged text for every claim."
+                ),
+                "read_aloud_suggestions": [
+                    "A scene at the heart of the play's argument read aloud at the seminar's opening",
+                    "A scene from another play in the inheritance read aloud beside it",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 50,
+                "living_book_suggestions": [
+                    "A whole Shakespeare play or Greek tragedy held across a term, read aloud and paired with a performance",
+                    "A second play earlier in the inheritance, read alongside or after to bring the inheritance into the commonplace work",
+                ],
+                "short_lesson_flow": (
+                    "The advanced student reads the play whole at a sustained pace, "
+                    "narrating each scene honestly. Staged choices and structural "
+                    "turns are slipped or marked. At a scene's end one passage is "
+                    "taken up: copied into the commonplace book, discussed, and "
+                    "tested against the rest of the play and against passages from "
+                    "other plays in the inheritance. The essay forms across the long "
+                    "span of the whole play."
+                ),
+                "narration_prompt": (
+                    "Tell back what you read, and tell me what the whole play is "
+                    "doing, and which scene you would set down as the place we most "
+                    "clearly see the argument, and which scene from another play in "
+                    "the inheritance you would set beside it."
+                ),
+                "real_world_objects": [
+                    "The whole play, marked at the scenes decisive for the dramatic argument",
+                    "A commonplace book gathering dramatic passages across many plays and across the inheritance",
+                ],
+                "nature_connection": (
+                    "A play's whole argument is to its scenes what a season is to "
+                    "its days: not a thing one sees in any one but the long pattern "
+                    "that emerges from many held together."
+                ),
+                "habit_focus": (
+                    "The habit of holding a whole play's argument as a hypothesis to "
+                    "be tested against the staged text, and the habit of bringing "
+                    "the inheritance of the form into the reading."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in arguing a play's full dramatic "
+                    "argument, in setting the play against its inheritance, in "
+                    "honoring what the play refuses to settle, and in writing the "
+                    "sustained essay that holds the play's claim and what the play "
+                    "refuses together."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher works a chosen play on the board: names the play's "
+                        "whole argument as a hypothesis, identifies the inheritance "
+                        "the play intervenes in, names what the play refuses to "
+                        "settle, and drafts the opening of a sustained essay quoting "
+                        "two scenes from the play and one from the inheritance."
+                    ),
+                    "we_do": (
+                        "Class gathers the decisive scenes of a chosen play, weighs "
+                        "the play against its inheritance, names what the play "
+                        "refuses to settle, and drafts together the body of the "
+                        "sustained essay."
+                    ),
+                    "you_do": (
+                        "Student writes an independent sustained essay on a chosen "
+                        "play, arguing its whole dramatic argument, naming the "
+                        "inheritance, honoring what the play refuses to settle, and "
+                        "holding three or four scenes in productive tension, and "
+                        "revises after seminar."
+                    ),
+                },
+                "independent_practice": [
+                    "The sustained essay on a self-chosen play, arguing its whole dramatic argument and naming the inheritance",
+                    "A paragraph naming and defending what the play refuses to settle",
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep the long shelf of Shakespeare and Greek tragedy and modern drama the reader has returned to over years, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "A reader who has lived with a single Shakespeare play across years and watched the whole argument surface as the patterns surfaced from many returns and many performances",
+                    "A piece of writing the reader produced because the play refused to settle and the reader needed to say so",
+                    "A long conversation between two readers who have each lived with the same play in their own returning, each bringing their own scene",
+                ],
+                "conversation_starters": [
+                    "What do you think this whole play is doing now, after all these returns and all these performances?",
+                    "Which other play that you have lived with does this one finally speak to?",
+                    "What does this play refuse to settle, and what would be lost if it settled it?",
+                ],
+                "resource_bank": [
+                    "A shelf of plays gathered slowly across many years; a library of filmed performances",
+                    "A reader-companion of long acquaintance who has also done their long returning and can bring a scene from another play into the room",
+                ],
+                "parent_role": (
+                    "By this band the parent has fully stepped back to fellow "
+                    "reader. They are someone who has done their own long returning "
+                    "to their own beloved plays, and they name a scene from another "
+                    "play in the inheritance when the reader finds the connection. "
+                    "The parent does not orchestrate the inheritance; they receive "
+                    "what the reader has brought up out of their own returning."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the reader returns to a small handful "
+                    "of beloved plays across years, whether the whole arguments "
+                    "surface in their conversation without prompting, and whether "
+                    "they begin to feel the inheritance because their own returning "
+                    "led them into it. The pattern surfacing is the noticing; it "
+                    "replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori's literature pedagogy at the elementary and "
+                "early-secondary level does not carry a distinct method for arguing "
+                "a play's full dramatic argument or for placing the play in the "
+                "inheritance it intervenes in; the practice here is drawn from the "
+                "long seminar tradition and the matured Charlotte Mason habit of "
+                "reading aloud and commonplace work across years."
+            ),
+        },
+    },
     "lit-work-001": {
         "node_type": "work",
         "track": "classics",
