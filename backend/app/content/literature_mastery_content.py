@@ -7866,6 +7866,123 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-028": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Heart of Darkness",
+            "author": "Joseph Conrad",
+            "date": "first serialized in Blackwood's Magazine 1899; published in 'Youth: a Narrative, and Two Other Stories' 1902",
+            "genre": "late-Victorian / early-modernist novella",
+            "form": "double-framed: an unnamed outer narrator records Marlow's oral account aboard the yawl Nellie; Marlow's account is the central narrative",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "Sustained depiction of the Belgian Congo under King Leopold II's "
+            "regime, including the chain gang, the grove of death, the "
+            "language Marlow uses about Africans, and the violence done in "
+            "the name of ivory; period imperial racism in Marlow's account "
+            "and in the novella's broader frame. Chinua Achebe's 1975 essay "
+            "'An Image of Africa: Racism in Conrad's Heart of Darkness' is "
+            "part of how the novella is read; the long argument it began has "
+            "not been settled and is part of reading the novella honestly. "
+            "Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Double-framed narration: the outer narrator (recording Marlow) and Marlow's oral account aboard the Nellie (lit-craft-008)",
+            "Marlow as unreliable: what he claims, what he refuses to claim, what the novella lets the reader see past him (lit-craft-031)",
+            "Figurative system: darkness and light; the river as descent in the inheritance from Aeneid 6 and Inferno; the inverted moral compass (lit-craft-043)",
+            "Theme advanced: what the novella refuses to settle about imperialism, about Kurtz, about what the journey discovers; the Achebe debate as part of the work (lit-craft-023)",
+        ],
+        "entry": (
+            "Advanced: read the novella whole, taking the double frame "
+            "seriously: an outer narrator records Marlow's oral telling, and "
+            "Marlow himself is one of the listeners' company; meet the "
+            "figurative system of darkness and light as the novella's "
+            "argument and as the place where readers have most disagreed; "
+            "read Achebe's essay alongside the novella as part of reading it "
+            "honestly; argue what the novella refuses to settle about Kurtz, "
+            "about Marlow, and about itself. Mastery: original argument "
+            "about the novella's place in the long inheritance from epic "
+            "descent forward into modernism, and about what Achebe's reading "
+            "has done to the work."
+        ),
+        "close_reading_passages": [
+            "The opening on the Nellie at the Thames mouth: how does the novella stage the outer frame, and what does the outer narrator's reference to 'one of the dark places of the earth' do to the frame?",
+            "Marlow's account of the grove of death (near the Outer Station): how does the novella stage the colony's reality, and what does Marlow's voice claim and refuse to claim?",
+            "Kurtz's last words ('The horror! The horror!') and Marlow's lie to the Intended: how does the novella stage two endings, and what does each let the work refuse to settle?",
+        ],
+        "structural_analysis": (
+            "Two frames: the outer narrator on the Nellie at the Thames mouth, "
+            "and Marlow's oral telling that occupies most of the novella. "
+            "The river is the journey, the figurative system is darkness "
+            "against light, the moral compass is inverted (the colony is "
+            "called civilizing and is shown to be its opposite); the closing "
+            "lie to the Intended frames the whole. The structure is the "
+            "work's argument: a story told to listeners in the dusk, every "
+            "claim filtered through Marlow, no authoritative voice."
+        ),
+        "thematic_lines": [
+            "Imperialism and what the novella claims about it: the long debate the novella has provoked is part of reading it",
+            "Kurtz as the limit case the novella refuses to categorize",
+            "What darkness means in the novella, and what Achebe's reading does to the figurative system",
+        ],
+        "comparative_threads": [
+            "The Aeneid (lit-work-003) and Inferno (lit-work-010): the descent figure the novella inherits and bends to colonial imagery",
+            "Achebe's 'An Image of Africa: Racism in Conrad's Heart of Darkness' (1975) as the essay that has been part of how the novella is read for fifty years",
+            "Apocalypse Now (Coppola, 1979) as the most direct cinematic inheritor; how the film reads the novella against the Vietnam War",
+            "Later postcolonial fiction that argues with the novella (Tayeb Salih's Season of Migration to the North; Caryl Phillips's writing on Conrad)",
+        ],
+        "seminar_questions": [
+            "What does the double frame do that no single voice could?",
+            "What does the novella refuse to settle about Kurtz, and where does Marlow refuse to say what he saw?",
+            "What does Achebe's reading let you see about the novella's figurative system, and what does the novella refuse to grant Achebe's reading?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the closing lie to the Intended, naming what the novella argues by making the lie Marlow's final act",
+            "The essay on the figurative system of darkness and light, holding Achebe's reading in productive tension with the novella's claims",
+            "The sustained essay on the descent inheritance from epic into the novella's colonial frame",
+        ],
+        "context": (
+            "Composed in 1899 after Conrad's own months on the Congo in 1890; "
+            "serialized in Blackwood's Magazine and collected in 1902; the "
+            "central English-language novella of late-imperial fiction and "
+            "early modernism; supplied as fact, interpretation left to the "
+            "student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The central late-Victorian and early-modernist novella; the seminar text on double-framed narration and on what the novella's figurative system claims.",
+                "memory_work": {
+                    "recitations": ["Recitation of the opening on the Nellie or the closing lie to the Intended"],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from where the outer narrator stands and what the frame lets Marlow do.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Heart of Darkness (the Norton Critical edition with Achebe's essay; the Penguin) read aloud across a few weeks, with Marlow's voice held distinct from the outer narrator's",
+                ],
+                "short_lesson_flow": "A living book read aloud and narrated; the double frame held; Achebe's essay brought into the room when the novella's figurative system raises it; deepening to analysis of the closing as the bands move up.",
+                "narration_prompt": "Tell back the passage we read today, and tell me what Marlow said and what the novella let you see past him.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Heart of Darkness on the shelf, available, never assigned, and Achebe's essay alongside",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in modernism, in empire, in the long descent figure, or in the long Achebe debate leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let Achebe's reading into the room; let the question stay unsettled.",
+                "observation_documentation": "Over time, notice whether the student returns to the novella and reads Marlow with the suspicion the novella's frame invites. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of double-framed narration and the Achebe debate where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
