@@ -2064,6 +2064,169 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "Montessori has no distinct doctoral-literature method for this skill.",
         },
     },
+    "lit-craft-040": {
+        "node_type": "craft",
+        "strand": "figurative language and symbol",
+        "band": "emerging",
+        "prerequisites": [],
+        "objective": (
+            "Notice when a writer compares one thing to another to help us picture or "
+            "feel something; find a simple comparison (with 'like' or 'as') in a story "
+            "or poem, name the two things being compared, and say what the comparison "
+            "helps the reader picture."
+        ),
+        "core_understanding": (
+            "Writers sometimes describe one thing by saying it is like something else. "
+            "'The moon is like a bright coin.' 'Her hair was as soft as silk.' These "
+            "are comparisons. At the seed of figurative language, the child learns to "
+            "hear when a writer is comparing, to find the two things being compared, "
+            "and to say what the comparison helps the reader picture or feel."
+        ),
+        "analytical_moves": [
+            "When listening to a story or poem, notice when a writer says one thing is like another",
+            "Name the two things being compared (the moon and a coin; her hair and silk)",
+            "Say what the comparison helps you picture or feel",
+            "Try a comparison of your own: this thing is like ___",
+        ],
+        "seminar_questions": [
+            "Did you hear the writer compare one thing to another? What two things?",
+            "What does the comparison help you picture?",
+            "How is the thing being talked about like the thing it is being compared to?",
+        ],
+        "writing_invitations": [
+            ("Draw the two things the writer compared and write the comparison underneath your drawing (X is like Y)"),
+            ("Try your own comparison: choose something around you and write one short line saying what it is like"),
+        ],
+        "exemplar_texts": [
+            (
+                "A picture book with rich, comparative language (Owl Moon; Stopping by "
+                "Woods on a Snowy Evening read aloud)"
+            ),
+            (
+                "A poem of simple comparison (a Christina Rossetti for children; a "
+                "Stevenson from A Child's Garden of Verses)"
+            ),
+            "A fable or folk tale whose images turn on a comparison",
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "Comparison is among the oldest figures of speech and one of the "
+                    "first the ear can hear. Before we name simile and metaphor, the "
+                    "child learns to hear that a writer is comparing and to find the "
+                    "two things set side by side."
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "A short comparison from a chosen poem or story, recited",
+                    ],
+                },
+                "copywork": [
+                    ("The recited comparison copied once, slowly, with the two things compared circled or underlined"),
+                ],
+                "recitation_routine": (
+                    "Each session begins by reciting yesterday's comparison; the new "
+                    "lesson opens with 'and what is compared today?'"
+                ),
+                "read_aloud_suggestions": [
+                    "A picture book or short poem rich in plain comparison",
+                    "A fable whose image turns on a comparison",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A worthy picture book or short poem in which comparisons are easy to hear",
+                ],
+                "short_lesson_flow": (
+                    "Read a short passage or whole short poem aloud, attentively. The "
+                    "child narrates. Then ask gently: did you hear something compared "
+                    "to something else? What two things? What did it help you picture? "
+                    "Let the child try a comparison of their own about something real "
+                    "in the room or out the window."
+                ),
+                "narration_prompt": (
+                    "Tell back what we read, and tell me what the writer compared, and "
+                    "what the comparison helped you see."
+                ),
+                "real_world_objects": [
+                    "A worthy book or short poem in hand, not a worksheet",
+                    "Something real to look at while trying a comparison of one's own",
+                ],
+                "nature_connection": (
+                    "Comparison is the natural language of nature description: a "
+                    "cloud like a feather, a leaf like a hand. The habit of looking and "
+                    "the habit of comparing are nearly the same habit."
+                ),
+                "habit_focus": (
+                    "The habit of seeing one thing in light of another: a small daily "
+                    "act of imagination that begins in childhood and never stops."
+                ),
+            },
+            "traditional": {
+                "introduction": ("Explicit, modeled noticing of comparisons in a short, age-appropriate passage."),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher reads a passage aloud and names the comparison "
+                        "plainly: 'The writer said the moon was like a bright coin. "
+                        "Moon and coin. The comparison helps me picture how round and "
+                        "shiny it was.'"
+                    ),
+                    "we_do": (
+                        "Teacher reads a second passage and, together with the child, "
+                        "names the comparison, the two things, and what it helps "
+                        "picture."
+                    ),
+                    "you_do": (
+                        "Child listens to a new short passage, finds a comparison if "
+                        "one is there, names the two things, and tries a comparison "
+                        "of their own."
+                    ),
+                },
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep poetry and picture books rich in comparison within reach",
+                    "Use comparisons of your own often where the child can hear them, and welcome theirs",
+                ],
+                "real_world_contexts": [
+                    "Pointing at the sky or a leaf or a sound and saying what it is like",
+                    "Listening to a song and noticing a line of comparison in the lyric",
+                    "A drawing the child labels with a comparison of their own",
+                ],
+                "conversation_starters": [
+                    "What is that like?",
+                    "Did you hear the writer say one thing was like another? What two things?",
+                    "How is the moon like a coin?",
+                ],
+                "resource_bank": [
+                    "A shelf of picture books and short poems rich in comparison",
+                    "A willing companion who will play the comparison game in the car or on a walk",
+                ],
+                "parent_role": (
+                    "Notice things aloud and say what they are like when the comparison "
+                    "comes to you, so the child hears that comparison is something "
+                    "grown people do for love of seeing. Welcome the child's "
+                    "comparisons with real interest, and trust that the figure of "
+                    "speech grows from being played with."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the child begins to say of things in the "
+                    "world that they are like other things, and whether they catch "
+                    "comparisons in stories and poems without prompting. This noticing "
+                    "replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori at this band does not carry a distinct method for noticing "
+                "figurative comparison in literature; the prepared environment centers "
+                "on practical life, the sensorial materials, and the grammar materials "
+                "rather than on figures of speech."
+            ),
+        },
+    },
     "lit-work-001": {
         "node_type": "work",
         "track": "classics",
