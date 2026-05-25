@@ -1244,6 +1244,206 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-011": {
+        "node_type": "craft",
+        "strand": "character",
+        "band": "developing",
+        "prerequisites": ["close reading: developing", "desire and motive: developing"],
+        "objective": (
+            "Trace how a character changes across a story, naming what they were like "
+            "at the start, what they are like at the end, and the events or recognitions "
+            "that moved them, with quoted evidence from each stage."
+        ),
+        "core_understanding": (
+            "Characters in serious literature are not fixed. They learn, they fail, "
+            "they regret, they ripen. To trace change is to read a character across "
+            "time, attending to the moments where they cross some threshold. Change is "
+            "sometimes sudden and sometimes slow; sometimes the character knows it has "
+            "happened, and sometimes only the reader does."
+        ),
+        "analytical_moves": [
+            ("Name what a character is like at the start of a story or chapter, with a quoted line that shows it"),
+            ("Name what the same character is like at the end of that span, with a quoted line that shows it"),
+            "Identify the moment, scene, or recognition that moved them from one to the other",
+            "Distinguish change the character notices in themselves from change only the reader notices",
+        ],
+        "seminar_questions": [
+            "How is this character different at the end of the story than at the beginning?",
+            "What moment moved them? Was the change sudden, or slow?",
+            "Does the character know they have changed, or does only the reader know it?",
+        ],
+        "writing_invitations": [
+            (
+                "Write a short paragraph naming a chosen character at the start of the "
+                "story and at the end, with quoted evidence for each, and the moment "
+                "that lies between"
+            ),
+            (
+                "Take a character who changes without noticing and write the paragraph "
+                "that shows the reader what they have come to be"
+            ),
+        ],
+        "exemplar_texts": [
+            "Edmund's change from betrayal to loyalty in The Lion, the Witch and the Wardrobe",
+            "Mary Lennox's softening across The Secret Garden",
+            "Jess's growth across Bridge to Terabithia",
+            "The journey of Despereaux in The Tale of Despereaux",
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "A character is a person met across the long line of a story. To "
+                    "read a character well is to read them in time: who they were, who "
+                    "they are now, and the place between where the change was made. The "
+                    "seminar takes its evidence from the start-line, the end-line, and "
+                    "the line that marks the threshold."
+                ),
+                "memory_work": {
+                    "recitations": [
+                        (
+                            "Two lines side by side: the line where a chosen character "
+                            "is shown at the start, and the line where the change is "
+                            "plain at the end"
+                        ),
+                    ],
+                },
+                "copywork": [
+                    (
+                        "The two recited lines copied into a kept notebook of character "
+                        "passages, under the character's name, with the work named and "
+                        "the moment between them noted"
+                    ),
+                ],
+                "recitation_routine": (
+                    "Each seminar on a character opens by reciting their start-line and "
+                    "their end-line; the discussion begins from the distance between them."
+                ),
+                "read_aloud_suggestions": [
+                    "A chapter from a novel chosen for the clarity of a character's change",
+                    "A short story whose force turns on a single recognition or threshold",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 25,
+                "living_book_suggestions": [
+                    (
+                        "Living books strong on character change at this age: The "
+                        "Secret Garden, The Lion, the Witch and the Wardrobe, Bridge to "
+                        "Terabithia, The Tale of Despereaux, Heidi"
+                    ),
+                ],
+                "short_lesson_flow": (
+                    "Read a chapter aloud, attentively, and the child narrates. At the "
+                    "end of a long enough span, set yesterday's chapter beside today's "
+                    "and ask gently: is this person different from who they were? When "
+                    "did it happen? Mark the line where it shows. The chosen lines are "
+                    "copied into the commonplace book under the character's name, with "
+                    "the chapter noted, so the line of change can be followed across "
+                    "the whole book."
+                ),
+                "narration_prompt": (
+                    "Tell back what happened to this person today, and tell me whether "
+                    "they are different now than they were when we met them, and how "
+                    "you can tell."
+                ),
+                "real_world_objects": [
+                    "The living book itself, with small slips at the chapters where change shows",
+                    "A commonplace book in which character passages are gathered under each name across the work",
+                ],
+                "nature_connection": (
+                    "Reading a character across time is the same habit as watching a "
+                    "tree across the seasons: the changes are sometimes sudden, often "
+                    "slow, and the line of growth can only be seen by attending across "
+                    "the long span."
+                ),
+                "habit_focus": (
+                    "The habit of patient attention across a whole long story, and the "
+                    "habit of charitable reading: noticing growth in another, real or "
+                    "imagined, without judgment of who they were before."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in tracking a character's change across a "
+                    "story, in identifying the moment that marked it, and in writing "
+                    "the short paragraph that shows the change with quoted evidence "
+                    "from both stages."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher chooses a character from a familiar work, names them "
+                        "at the start with a quoted line, names them at the end with "
+                        "another quoted line, and points to the scene that lies between."
+                    ),
+                    "we_do": (
+                        "Class works through a second character together, drafting one "
+                        "sentence for the start, one for the end, with quoted evidence, "
+                        "and naming the moment that moved them."
+                    ),
+                    "you_do": (
+                        "Student writes a short paragraph on a chosen character, "
+                        "showing them at the start and the end with quoted lines, and "
+                        "naming the moment that turned them."
+                    ),
+                },
+                "independent_practice": [
+                    (
+                        "The short paragraph on a chosen character's change, with "
+                        "quoted evidence from both stages and the threshold named"
+                    ),
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep books strong on character change on hand, available, never assigned",
+                    (
+                        "Welcome the child's running conversation about how people in "
+                        "their books are growing or shifting, as one might welcome talk "
+                        "about people the family knows"
+                    ),
+                ],
+                "real_world_contexts": [
+                    ("Long conversations about a beloved character who is becoming different from who they began as"),
+                    ("A drawing, a letter, or a piece of fan writing about a character at two stages of who they are"),
+                    (
+                        "Comparing a character's growth to a real growth the child has "
+                        "noticed in themselves or someone they love"
+                    ),
+                ],
+                "conversation_starters": [
+                    "Are they the same person they were at the start of the book?",
+                    "When did it happen? Was it a moment, or did it sneak up on them?",
+                    "Do they know they have changed?",
+                ],
+                "resource_bank": [
+                    "A shelf of well-loved novels with clear arcs of character change",
+                    "A willing listener who will take the changes in a character seriously",
+                ],
+                "parent_role": (
+                    "Be a fellow reader who knows the people in the book and follows "
+                    "their growth with real interest. Ask what is different and listen "
+                    "to the answer; offer your own reading when invited, as another "
+                    "reader at the table. Let the child's care for the people in the "
+                    "story do the teaching."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the child begins to ask, of any "
+                    "character, how they are different from who they were and what "
+                    "moved them, and whether they reach for the words in the text when "
+                    "they answer. This noticing replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori at this band does not carry a distinct method for tracing "
+                "character change across a story; literature work here remains within "
+                "the grammar materials and the moral imagination cultivated through "
+                "chosen reading rather than through an analytical apparatus for change "
+                "over time."
+            ),
+        },
+    },
     "lit-craft-031": {
         "node_type": "craft",
         "strand": "narrative craft",
