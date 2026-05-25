@@ -509,6 +509,221 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-004": {
+        "node_type": "craft",
+        "strand": "close reading",
+        "band": "advanced",
+        "prerequisites": ["close reading: proficient"],
+        "objective": (
+            "Bring sustained close reading as an inquiry method to whole difficult "
+            "works across multiple modes (literary fiction, drama, poetry, the "
+            "meditative essay, history, philosophy); hold attention through "
+            "bewilderment when a first reading defeats the surface; place two "
+            "passages side by side from different works and articulate what each "
+            "lets us see in the other; build literary argument supported by multiple "
+            "passages held in productive tension across a sustained piece of writing."
+        ),
+        "core_understanding": (
+            "At the proficient band close reading became a habit one brings to a "
+            "chosen difficult work. At the advanced band the habit becomes a "
+            "discipline: an inquiry method, not a school exercise. The advanced "
+            "reader meets work whose surface defeats first reading and learns to "
+            "remain with it; reads across modes (the dramatic monologue, the "
+            "meditative essay, the historian's argument, the philosopher's example) "
+            "and feels what each mode asks of close reading; sets passages from "
+            "different works beside one another and lets each illuminate the other; "
+            "and writes a sustained argument that does not flatten its evidence into "
+            "a single thesis but holds multiple passages in productive tension. The "
+            "habit is now ready to be turned on anything written with care."
+        ),
+        "analytical_moves": [
+            "Sustain attention through bewilderment on a difficult work whose surface defeats first reading",
+            (
+                "Read close attention into modes outside literary fiction (drama, the "
+                "meditative essay, the historian's account, the philosopher's example)"
+            ),
+            "Set two passages from different works side by side and articulate what each lets us see in the other",
+            (
+                "Build a sustained piece of literary argument that holds multiple "
+                "passages in productive tension rather than flattening them to a "
+                "single thesis"
+            ),
+            "Distinguish a reading the words can support from a reading they cannot, and abandon the latter without resentment",
+        ],
+        "seminar_questions": [
+            "Where in this work does the surface refuse a first reading, and what changes when you return?",
+            "What does this work let us see that no other mode of writing could let us see in the same way?",
+            "If we set this passage beside that one from another work, what does each let us see in the other?",
+        ],
+        "writing_invitations": [
+            (
+                "Write a sustained piece of literary argument on a chosen work that "
+                "holds two or three passages in productive tension, returning to "
+                "each across the essay"
+            ),
+            (
+                "Write the comparative paragraph that places a passage from one work "
+                "beside a passage from another and argues what each lets us see in the other"
+            ),
+        ],
+        "exemplar_texts": [
+            "A difficult modernist novel held whole (a Faulkner; a Woolf; a Joyce after Dubliners)",
+            "A dramatic work whose surface yields slowly (a Shakespeare tragedy whole; Beckett; Ibsen)",
+            (
+                "A meditative essay or philosophical passage whose careful prose "
+                "rewards sustained close reading (Augustine; Boethius; an essay of "
+                "Montaigne; a central passage of a Plato dialogue)"
+            ),
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "Close reading meets the long seminar tradition. The reader "
+                    "brings difficult work; the seminar tests what the words can be "
+                    "made to support. Across modes (drama, essay, history, "
+                    "philosophy) the same discipline operates: return to the words, "
+                    "defend the reading from them, hear another reading respectfully "
+                    "and locate where in the text it draws its evidence. Rhetorical "
+                    "analysis and interpretive habit converge here into the kind of "
+                    "attention that a scholarly life is built on."
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "A passage of demanding prose or poetry recited at the seminar's opening, chosen because the seminar has more than one reading of it",
+                    ],
+                },
+                "copywork": [
+                    "The recited passage copied into the kept commonplace book, with both candidate readings noted in the margin",
+                ],
+                "recitation_routine": (
+                    "Each seminar opens from a recited passage of disputed reading; "
+                    "the first question is taken from the lines just heard, and the "
+                    "discussion returns to the text for every claim."
+                ),
+                "read_aloud_suggestions": [
+                    "A scene from a difficult dramatic work read aloud at the seminar's opening",
+                    "A demanding passage of meditative prose read aloud whole before discussion",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 50,
+                "living_book_suggestions": [
+                    "A difficult modernist novel held whole across a term, narrated sitting by sitting",
+                    "A difficult dramatic work read whole, with the most demanding scenes returned to in commonplace work",
+                    "A volume of meditative essays read across a year, one essay per sitting",
+                ],
+                "short_lesson_flow": (
+                    "The advanced student reads the difficult work at a sustained "
+                    "pace, narrating each sitting honestly even when the surface "
+                    "defeated first reading. Passages worth attending to are marked "
+                    "or slipped as they are met. At the chapter's or essay's end, a "
+                    "passage of disputed or layered reading is taken up: copied into "
+                    "the commonplace book, discussed, and tested against the rest of "
+                    "the work and against passages from other works it brings to "
+                    "mind. The habit matures from sustained attention to a single "
+                    "difficult work into the discipline that brings sustained "
+                    "attention to anything written with care."
+                ),
+                "narration_prompt": (
+                    "Tell back what you read, and tell me which passage you would "
+                    "set down as the one whose reading is most worth disputing, and "
+                    "what other passage, in this book or another, you would set beside it."
+                ),
+                "real_world_objects": [
+                    "The whole difficult work, marked at passages worth disputing",
+                    "A commonplace book gathering passages across whole years and several traditions",
+                ],
+                "nature_connection": (
+                    "The advanced close reader is to the world of writing what a "
+                    "naturalist of long practice is to a forest: at home in any "
+                    "species, able to see what is rare without losing the view of the "
+                    "common, and able to set one creature beside another and feel "
+                    "what each tells about the other."
+                ),
+                "habit_focus": (
+                    "The habit of sustained attention across whole difficult works, "
+                    "the habit of returning to the text for every claim, and the "
+                    "habit of setting one work beside another."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in close reading scaled to a sustained "
+                    "piece of literary argument; modeled comparative reading across "
+                    "two works; the analytical essay supported by passages held in tension."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher works a difficult passage on the board, sets it "
+                        "beside a second passage from another work, and drafts a "
+                        "paragraph of literary argument that holds both in tension, "
+                        "quoting each line by line."
+                    ),
+                    "we_do": (
+                        "Class chooses two passages (one from the work under study, "
+                        "one from another) and drafts together a sustained piece of "
+                        "literary argument that holds them in productive tension."
+                    ),
+                    "you_do": (
+                        "Student writes an independent sustained piece of literary "
+                        "argument on a chosen work, holding two or three passages in "
+                        "tension, with one passage from another work brought in as "
+                        "comparative evidence, and revises after seminar."
+                    ),
+                },
+                "independent_practice": [
+                    "The sustained essay on a self-chosen work, holding multiple passages in tension",
+                    "A comparative paragraph placing a passage from the work beside a passage from another work in the tradition",
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep the long shelf of difficult, worthy works across many modes (novels, drama, essays, philosophy, history) available, never assigned",
+                    "Keep the commonplace book matured into a habit, with comparative slips between works the reader keeps coming back to",
+                ],
+                "real_world_contexts": [
+                    "A reader who has returned to a difficult novel across years, watching their reading change as they returned",
+                    "An essay or piece of literary writing the reader produced because two books, met years apart, started to talk to each other in the reader's mind",
+                    "A long conversation with a fellow reader who has read the same work and brings a passage from a third work into the table",
+                ],
+                "conversation_starters": [
+                    "When did this book change for you, and which passage was where it changed?",
+                    "What other book have you read that this one set you thinking about? Read me the passage where the connection lives.",
+                    "Where do the words refuse the reading you wish they supported? Which words say so?",
+                ],
+                "resource_bank": [
+                    "A shelf of difficult, worthy work across genres and modes, gathered slowly",
+                    "A reader-companion of long acquaintance who has read across many traditions and is willing to bring a passage from elsewhere",
+                ],
+                "parent_role": (
+                    "By this band the parent has become a fellow reader who has read "
+                    "alongside the student for years and brings a passage from "
+                    "another work into the room when the student finds a connection. "
+                    "The parent does not assign and does not examine; they name what "
+                    "they themselves found in their own returning. The student is in "
+                    "charge of their reading; the parent is a witness who can be asked."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the student returns to difficult "
+                    "works on their own across years, writes because the work moved "
+                    "them to write, sets passages from different works beside one "
+                    "another without prompting, and abandons a reading the words "
+                    "cannot support without resentment. This noticing replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori's literature pedagogy at the elementary and "
+                "early-secondary level does not carry a distinct method for the "
+                "kind of sustained, comparative close reading of difficult works "
+                "across modes that this band names; the practice here is drawn from "
+                "the long seminar tradition and the matured Charlotte Mason habit "
+                "of narration and commonplace work across years rather than from "
+                "the prepared environment."
+            ),
+        },
+    },
     "lit-craft-006": {
         "node_type": "craft",
         "strand": "narrative craft",
