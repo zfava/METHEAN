@@ -8680,6 +8680,121 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-035": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Leaves of Grass (selections, across editions 1855-1892)",
+            "author": "Walt Whitman",
+            "date": "first edition 1855; revised and expanded across six editions through 1892",
+            "genre": "nineteenth-century American free-verse poetry",
+            "form": "long-line free verse; the catalog as the central rhetorical instrument; cycles of poems gathered into a single evolving book",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Sustained embodied and sensuous imagery throughout, including "
+            "explicit treatment of the body, sexuality, and grief; the Civil "
+            "War poems collected in 'Drum-Taps' and the elegy for Lincoln "
+            "'When Lilacs Last in the Dooryard Bloom'd'; period attitudes "
+            "the poems both exhibit and complicate; the book grows across "
+            "Whitman's life and the late editions are not the same book as "
+            "the first. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Long-line free verse: a meter not given by tradition, invented by Whitman for the embodied first-person voice (lit-craft-003/004)",
+            "The catalog as figurative system: lists that accumulate and refuse selection (lit-craft-042 at proficient; lit-craft-043 at advanced)",
+            "Character advanced: the first-person speaker as a cosmos (the speaker who 'contains multitudes') is itself the work's argument (lit-craft-014)",
+            "Theme advanced: democracy, embodiment, sexuality, the elegy for Lincoln; what the book argues by being a book that keeps becoming itself (lit-craft-023)",
+        ],
+        "entry": (
+            "Proficient: read 'Song of Myself' whole and the major shorter "
+            "poems ('Crossing Brooklyn Ferry,' 'I Sing the Body Electric,' "
+            "'Out of the Cradle Endlessly Rocking'); find the long line and "
+            "the catalog as Whitman's instruments. Advanced: read the elegy "
+            "'When Lilacs Last in the Dooryard Bloom'd' against the Civil "
+            "War; read the multiple editions as part of the work and argue "
+            "what the late Whitman does to the early. Mastery: original "
+            "argument about Whitman's place in American poetry and what his "
+            "embodied speaker did to the lyric tradition."
+        ),
+        "close_reading_passages": [
+            "The opening sections of 'Song of Myself' (sections 1-6, including the catalog of what the speaker is and 'A child said What is the grass?'): how does the poem stage its speaker, and what does the long line let the speaker do?",
+            "'Crossing Brooklyn Ferry': how does the poem stage an address across time to a reader who will be where the speaker was, and what does the figure of the ferry do?",
+            "'When Lilacs Last in the Dooryard Bloom'd': how does the poem stage an elegy for Lincoln by holding the lilac, the star, and the bird together, and what does the figurative system do that direct elegy could not?",
+        ],
+        "structural_analysis": (
+            "Leaves of Grass is one book that grew across six editions from "
+            "1855 to 1892; the late editions are not the same book as the "
+            "first, and the differences are part of the work. Inside the "
+            "book, the long line is the central rhythmic invention, the "
+            "catalog the central rhetorical instrument, and the first-person "
+            "speaker the central figure. The structure is the work's "
+            "argument: a single embodied voice that contains multitudes, "
+            "growing across a life."
+        ),
+        "thematic_lines": [
+            "Democracy and the embodied I: the speaker who claims to contain multitudes and what the catalog does with the claim",
+            "Sexuality and the body: explicit in the poems and refusing the disembodied lyric tradition the period largely held",
+            "The elegy for Lincoln and the Civil War poems: the book turning to mourn at the historical moment that broke the country",
+        ],
+        "comparative_threads": [
+            "The British Romantics (lit-work-034): the inheritance Whitman read; what Whitman does to the Romantic I",
+            "Emerson's essays ('The Poet'): Whitman's named teacher and the explicit American source",
+            "Dickinson (lit-work-036): the contemporary American poet who made the opposite formal choice; the two together are the American poetry of the nineteenth century",
+            "Later inheritors: Allen Ginsberg's Howl; Langston Hughes; the long American debt to the long line",
+        ],
+        "seminar_questions": [
+            "What does the long line let Whitman do that no metered line could?",
+            "What does the catalog claim about democracy and embodiment?",
+            "What does the elegy for Lincoln do that direct statement of grief could not?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on a catalog passage, naming what the accumulation does that selection could not",
+            "The essay on 'When Lilacs Last in the Dooryard Bloom'd' as elegy",
+            "At advanced, the essay on the multiple editions as part of the work",
+        ],
+        "context": (
+            "Composed in Brooklyn and Washington across Whitman's adult life; "
+            "the first edition (1855) self-published in twelve poems; the "
+            "final 'Deathbed' edition (1892) contains hundreds; the founding "
+            "work of distinctively American verse; supplied as fact, "
+            "interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The founding work of distinctively American verse; the seminar text on the long line, the catalog, and the embodied first-person speaker.",
+                "memory_work": {
+                    "recitations": [
+                        "Recitation of a passage from 'Song of Myself' or 'When Lilacs Last in the Dooryard Bloom'd'"
+                    ],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from what the long line lets the speaker do.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Leaves of Grass (the Norton with multiple editions; the Library of America) read aloud across a term, with the catalogs heard aloud",
+                ],
+                "short_lesson_flow": "A living book read aloud across selected poems and narrated; the long line and catalog noticed; deepening to analysis of the multiple-edition question as the bands move up.",
+                "narration_prompt": "Tell back the passage we read today, and tell me what the long line let Whitman say, and what the catalog gathered.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Leaves of Grass on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in American poetry, in the body, in democracy, or in the long line leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; the long line is heard before it is named; let Whitman be his own teacher.",
+                "observation_documentation": "Over time, notice whether the student returns to particular poems and begins to feel the long line as Whitman's instrument. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the long line, the catalog, and Whitman's place in American poetry where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
