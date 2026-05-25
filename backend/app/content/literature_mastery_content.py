@@ -666,6 +666,192 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-007": {
+        "node_type": "craft",
+        "strand": "narrative craft",
+        "band": "developing",
+        "prerequisites": ["point of view: emerging", "close reading: developing"],
+        "objective": (
+            "Name the point of view of a work: first person, third person, and within "
+            "third the difference between omniscient and limited; identify the narrator "
+            "as distinct from any character; quote a sentence that shows the choice."
+        ),
+        "core_understanding": (
+            "Point of view is the writer's choice of who tells the story and how much "
+            "that teller can know. Naming the choice is the first step in seeing why "
+            "the writer made it. The terms first person, third person, omniscient, and "
+            "limited are tools for that naming and, once they are in hand, become "
+            "instruments for the close reading of any story."
+        ),
+        "analytical_moves": [
+            "Identify the point of view of a whole work as first or third person",
+            ("If first person, name who the narrator is, a character in the story or a voice from outside it"),
+            (
+                "If third person, ask whether the narrator knows everything (omniscient) "
+                "or only what one character knows (limited)"
+            ),
+            "Quote a sentence that shows the point of view at work",
+        ],
+        "seminar_questions": [
+            "Whose voice tells us this story, and how does that voice tell us?",
+            ("What can we know because of who is telling, and what is hidden from us because of who is telling?"),
+            "Would a different teller see this scene differently? How?",
+        ],
+        "writing_invitations": [
+            ("Write a short paragraph naming the point of view of today's reading, with one quoted line that shows it"),
+            (
+                "Take a short scene you read and rewrite a few lines from a different "
+                "point of view (first to third, or omniscient to limited); name what "
+                "changed"
+            ),
+        ],
+        "exemplar_texts": [
+            "Sarah, Plain and Tall (Patricia MacLachlan), told in Anna's first person",
+            "The Little House books (Laura Ingalls Wilder), told in third-person limited from Laura's view",
+            (
+                "Charlotte's Web (E.B. White), third-person omniscient, the narrator "
+                "entering Wilbur, Charlotte, Templeton, and the humans by turns"
+            ),
+            "A short story by Beverly Cleary or Roald Dahl, examined for whose voice tells it",
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "The teller has kinds, and the kinds have names. First and third; "
+                    "and within third, omniscient and limited. Naming the kind is the "
+                    "first move of analysis; the rest follows from what each kind allows "
+                    "and forbids the reader to know."
+                ),
+                "memory_work": {
+                    "chants": [
+                        (
+                            "Chant the four POV terms in order: first person, third "
+                            "person, omniscient, limited, and one example of each"
+                        ),
+                    ],
+                    "recitations": [
+                        "A sentence in which the chosen point of view is plainly at work",
+                    ],
+                },
+                "copywork": [
+                    "The recited POV-revealing sentence, copied with the kind named beneath it",
+                ],
+                "recitation_routine": (
+                    "Each seminar opens by chanting the four terms and reciting "
+                    "yesterday's POV-revealing line before the new work is opened."
+                ),
+                "read_aloud_suggestions": [
+                    "A chapter of a first-person novel and a chapter of a third-person novel set side by side",
+                    "A short story chosen for the clarity of its point of view",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    (
+                        "Living books that show the variety of POV: Sarah, Plain and "
+                        "Tall (first person); the Little House books (third-person "
+                        "limited); Charlotte's Web (third-person omniscient)"
+                    ),
+                ],
+                "short_lesson_flow": (
+                    "Read a chapter aloud, attentively, and the child narrates. Then "
+                    "ask: whose voice tells us this? Is it a person in the story, or a "
+                    "voice from outside? If from outside, does it see only one person's "
+                    "world, or all? Together name the kind, quietly; let the name "
+                    "settle. Copy a sentence that shows the chosen voice into the "
+                    "commonplace book."
+                ),
+                "narration_prompt": (
+                    "Tell back what we read; then tell me whose voice told it, and read me one sentence that shows it."
+                ),
+                "real_world_objects": [
+                    "Two living books in hand at once, one first person and one third, for comparing voices",
+                    "A commonplace book in which POV-revealing sentences are gathered under each work's title",
+                ],
+                "nature_connection": (
+                    "Naming a POV is like naming a bird from its song: a particular "
+                    "voice has a particular sound and a particular range of what it "
+                    "knows; once named, it can be heard again in any wood."
+                ),
+                "habit_focus": ("The habit of asking, of any book, whose voice this is, before asking what it means."),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in the four point-of-view terms (first "
+                    "person, third person, omniscient, limited), modeled identification "
+                    "on a chosen passage, and a short paragraph naming the POV of a "
+                    "whole work with quoted evidence."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher reads a passage, names the point of view explicitly, "
+                        "and quotes the sentence that shows it: 'This is third-person "
+                        "limited; we are inside Laura's view only, and the line that "
+                        "shows it is...'"
+                    ),
+                    "we_do": (
+                        "Class identifies the POV of a second passage together, "
+                        "drafting one sentence that names the kind and quoting the "
+                        "evidence on the board."
+                    ),
+                    "you_do": (
+                        "Student names the POV of a whole short work and writes a short "
+                        "paragraph defending the identification with one quoted line."
+                    ),
+                },
+                "independent_practice": [
+                    "The short paragraph naming the POV of a chosen work, with one quoted line of evidence",
+                    "A rewrite of a few lines of a scene from a different point of view, with a note on what changed",
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a mixed shelf of first-person and third-person novels at the band, available, never assigned",
+                    (
+                        "When a child is reading and stops to comment on the voice of a "
+                        "book, name the kind quietly so the language is there for the "
+                        "next time"
+                    ),
+                ],
+                "real_world_contexts": [
+                    "A book the child loved enough to compare its voice to another book's voice",
+                    "A piece of the child's own writing in which they chose a teller",
+                    "A film, audiobook, or play in which the kind of teller is plain and discussed in passing",
+                ],
+                "conversation_starters": [
+                    "Whose voice is telling this book? How can you tell?",
+                    "Does the teller know everything, or only what one person knows?",
+                    "How would this story sound if a different person told it?",
+                ],
+                "resource_bank": [
+                    "A shelf of novels with clearly different points of view",
+                    "A reader-companion who will name the kinds gently when the child notices them",
+                ],
+                "parent_role": (
+                    "Read alongside the child and, when a voice strikes either of you, "
+                    "name its kind in passing. Welcome the child's own attempts to "
+                    "name; correct gently and only when it matters. Trust that the "
+                    "habit of asking 'whose voice?' grows from reading widely with the "
+                    "names available."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the child begins to name the kind of "
+                    "teller in books they discuss, and whether they reach for a "
+                    "POV-revealing sentence to settle a question. This noticing "
+                    "replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori at this band does not carry a distinct method for naming "
+                "the point of view of a literary work; literature work here remains "
+                "within the grammar materials and the practical study of language rather "
+                "than the analytical apparatus of narrative voice."
+            ),
+        },
+    },
     "lit-craft-010": {
         "node_type": "craft",
         "strand": "character",
