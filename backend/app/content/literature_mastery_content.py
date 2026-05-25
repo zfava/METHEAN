@@ -8099,6 +8099,118 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-030": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Mrs Dalloway",
+            "author": "Virginia Woolf",
+            "date": "first published 1925",
+            "genre": "high-modernist novel",
+            "form": "third-person free indirect discourse moving between consciousnesses across a single June day in 1923 London; unbroken in narrative time; sustained 'tunnels' connecting characters who never meet",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "Septimus Warren Smith's shell shock from the First World War and "
+            "his suicide; Clarissa's reflection on Septimus's death at her "
+            "evening party; the period treatment of mental illness "
+            "(Bradshaw's regime of 'proportion') which the novel weighs "
+            "skeptically; period attitudes throughout; the novel does not "
+            "redeem what it shows. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Free indirect discourse moving between consciousnesses without break: the novel's central technical achievement (lit-craft-008 strained to its limit)",
+            "Clarissa and Septimus as paired characters who never meet: the novel's structural argument across two unrelated lives (lit-craft-014)",
+            "Theme advanced: what the novel does with one day's London after the war; what it refuses to settle about Clarissa, about Septimus, about what the party is for (lit-craft-023)",
+            "Figurative networks: Big Ben's strokes against the time of the consciousnesses, flowers, the airplane writing in smoke, the old woman across the way (lit-craft-042 at proficient; lit-craft-043 at advanced)",
+        ],
+        "entry": (
+            "Advanced: read the novel whole in its single-day form; follow "
+            "the free indirect discourse as it moves between consciousnesses "
+            "without break (the famous 'tunnels' Woolf described in her "
+            "diary); meet Septimus and Clarissa as paired across a novel "
+            "where they never meet; argue what the novel does with the day "
+            "after the war and what it refuses to settle. Mastery: original "
+            "argument about the novel's place in modernist fiction and what "
+            "it does to free indirect discourse that Austen and Flaubert did "
+            "not."
+        ),
+        "close_reading_passages": [
+            "The opening ('Mrs Dalloway said she would buy the flowers herself'): how does the novel open in Clarissa's voice without quotation, and what does the free indirect discourse do in the first paragraphs?",
+            "The airplane writing in smoke (early in the novel): how does the novel use a single object in the sky to move between multiple consciousnesses below it, and what does the technique do?",
+            "Clarissa learning of Septimus's death at her party (near the close): how does the novel stage a connection between two characters who have never met, and what does Clarissa do with what she hears?",
+        ],
+        "structural_analysis": (
+            "A single day in June 1923 in London, unbroken in narrative time, "
+            "with free indirect discourse moving between consciousnesses "
+            "through what Woolf called 'tunnels' connecting characters who "
+            "do not all meet. Big Ben's strokes give the day its public "
+            "rhythm; the consciousnesses give it their private times. "
+            "Clarissa's party at the close gathers the day; Septimus's "
+            "suicide enters the party as news Clarissa is told. The "
+            "structure is the work's argument: a city, a day, and the "
+            "tunnels of consciousness underneath both."
+        ),
+        "thematic_lines": [
+            "What the day after the war holds: the public time of Big Ben against the private times of the consciousnesses",
+            "Septimus and Clarissa: paired across the novel; what the novel argues by connecting them without making them meet",
+            "Sir William Bradshaw and his regime of 'proportion': the novel's skeptical weighing of the institutional response to suffering",
+        ],
+        "comparative_threads": [
+            "Dubliners (lit-work-029): Joyce's earlier modernist free indirect discourse; what Woolf has done with the technique that Joyce did not",
+            "Pride and Prejudice (lit-work-019): Austen as Woolf's named English ancestor in free indirect discourse",
+            "Joyce's Ulysses (1922): the same single-day form attempted in the same decade; Woolf read it and her response was complicated",
+            "Later inheritors: Michael Cunningham's The Hours (1998) as the most direct fictional engagement; the long line of modernist consciousness-novels Woolf shapes",
+        ],
+        "seminar_questions": [
+            "How does the free indirect discourse move between consciousnesses, and where does Woolf's technique go beyond Austen's or Joyce's?",
+            "What does the novel do by connecting Septimus and Clarissa without making them meet?",
+            "What does Clarissa do with the news of Septimus's death, and what does the novel refuse to say about her response?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the opening sentence and the first paragraphs, naming what the free indirect discourse does that direct narration could not",
+            "The essay on the airplane sequence as the novel's instruction in its own technique",
+            "The sustained essay on Septimus and Clarissa as paired characters and what the novel argues by connecting them",
+        ],
+        "context": (
+            "Composed in 1923-24 and published in 1925; one of Woolf's two "
+            "great novels of the mid-1920s (To the Lighthouse follows in "
+            "1927); central to high modernism in English; supplied as fact, "
+            "interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The high-modernist novel of consciousness in a single day; the seminar text on what free indirect discourse can do when it moves between minds.",
+                "memory_work": {
+                    "recitations": ["Recitation of the opening sentence and the first paragraph"],
+                },
+                "recitation_routine": "Seminar opens from the recited opening; the discussion takes its first question from where Clarissa's voice ends and the narrator's begins, and whether the question is the right one.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Mrs Dalloway (the Harcourt; the Penguin Modern Classics) read aloud across a few weeks",
+                ],
+                "short_lesson_flow": "A living book read aloud across the single day and narrated; the tunnels of consciousness noticed as they connect; deepening to analysis of the Septimus / Clarissa pairing as the bands move up.",
+                "narration_prompt": "Tell back the passage we read today, and tell me whose consciousness we were inside, and whose we moved into.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Mrs Dalloway on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in modernism, in London, in the aftermath of the First World War, or in consciousness-novels leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the tunnels be tunnels; do not collapse Septimus into Clarissa or Clarissa into Woolf.",
+                "observation_documentation": "Over time, notice whether the student returns to particular passages and begins to feel the free indirect discourse as the novel's central instrument. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of free indirect discourse moving between consciousnesses and the single-day modernist novel where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
