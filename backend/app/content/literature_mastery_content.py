@@ -6603,6 +6603,119 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-017": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Paradise Lost",
+            "author": "John Milton",
+            "date": "first published 1667 (ten books); revised twelve-book edition 1674",
+            "genre": "Christian epic poetry",
+            "form": "blank verse epic in twelve books; classical epic conventions (invocation, in medias res opening, epic similes) bent to Christian subject",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "Cosmic warfare and the casting down of the rebel angels; the "
+            "temptation and fall of Adam and Eve and the expulsion from "
+            "Paradise; sustained theological argument in Milton's particular "
+            "Protestant frame; the poem holds Satan with a power that has "
+            "troubled readers for three and a half centuries. Honest "
+            "information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading across modes: the meditative epic in dense blank verse and inverted Latinate syntax (lit-craft-004)",
+            "Figurative argument: the fall as the work's full figurative system; light and dark; height and depth; the conscious epic similes (lit-craft-043)",
+            "Character advanced: Satan as the inherited tragic hero recast; what Milton does to the heroic tradition (lit-craft-014)",
+            "Theme advanced: the justification of God's ways and what the poem refuses to settle about Satan (lit-craft-023)",
+        ],
+        "entry": (
+            "Advanced: read the poem whole and read the blank verse as the "
+            "argument; argue what Milton does to the classical epic he is "
+            "consciously inheriting (Virgil first, then Homer through Virgil); "
+            "hold the Satan question (heroic, villain, both, and what the poem "
+            "does with each reading) as the work's central refusal to settle "
+            "easily; read the figurative system of light and dark as "
+            "constitutive of meaning. Mastery: original argument about the "
+            "poem's place in the inheritance from Virgil and Dante and forward "
+            "into Romantic poetry."
+        ),
+        "close_reading_passages": [
+            "The opening invocation of Book 1: how does Milton invoke the Holy Spirit and announce the argument, and what does the long suspended syntax do to the reader's footing?",
+            "Satan's first speech in Book 1 ('Better to reign in Hell, than serve in Heaven'): what does the speech reveal, and where does the poem refuse to let the reader simply agree or simply refuse?",
+            "Eve's account of her own creation in Book 4 and the temptation in Book 9: how does the poem give Eve her own consciousness, and what does Book 9 do that no third-person narration of the same events could?",
+        ],
+        "structural_analysis": (
+            "Twelve books built consciously inside the classical epic form Milton "
+            "is inheriting: an invocation, an in-medias-res opening (the angels "
+            "already cast down), epic similes, councils, journeys, set-piece "
+            "battles, and a conscious doubling of Aeneid and Iliad halves. "
+            "Inside that form, Christian material: the fall, the cosmic war, "
+            "the temptation, the expulsion. The structure is the work's "
+            "argument: pagan epic bent to Christian subject; what the form can "
+            "hold and what it strains under."
+        ),
+        "thematic_lines": [
+            "The Satan question: heroic in his refusal, villain in his pride, and what the poem does to keep the reader holding both",
+            "Justification: the poem's stated argument is to justify the ways of God to men; what justification means in the poem's terms",
+            "Free will and obedience: the poem's structural argument that the fall must be free to be a fall",
+        ],
+        "comparative_threads": [
+            "The Aeneid (lit-work-003): Milton's most-consciously-imitated classical epic; the structural doubling and the inheritance of epic conventions",
+            "The Iliad (lit-work-002) and the Odyssey (lit-work-001) through Virgil",
+            "Dante's Inferno (lit-work-010): the previous great Christian epic; Milton's Satan against Dante's; the inheritance Milton works inside and against",
+            "Genesis: the biblical source the poem expands and the reader is invited to weigh against the poem's expansion",
+            "Romantic inheritors (Blake's claim that Milton was of the devil's party; Shelley's Prometheus Unbound) as the poem's most decisive afterlife",
+        ],
+        "seminar_questions": [
+            "Is Satan heroic, villain, or what? Where does the poem refuse to settle which?",
+            "What does the blank verse do that rhyme could not, and what does Milton say in his preface about why he chose it?",
+            "How does the poem justify the ways of God to men, and where does the poem leave the justification to the reader?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the opening invocation, naming what the long suspended sentence does to the reader's footing",
+            "The essay on Satan as the inherited tragic hero recast, holding two or three of his major speeches in productive tension",
+            "The sustained essay on the poem's place in the epic inheritance from Virgil through Dante, with passages from each",
+        ],
+        "context": (
+            "Composed in Milton's blindness after the Restoration of the English "
+            "monarchy in 1660 and Milton's own political eclipse; first "
+            "published in 1667 in ten books, revised into a twelve-book edition "
+            "in 1674; the foundational long poem in English after Spenser; "
+            "supplied as fact, interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The foundational English Christian epic; the seminar text on the Satan question and on epic form bent to Christian subject.",
+                "memory_work": {
+                    "recitations": ["Recitation of the opening invocation of Book 1"],
+                },
+                "recitation_routine": "Seminar opens from the recited invocation; the discussion takes its first question from where the long sentence resolves and what it claims.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Paradise Lost (the Norton Critical edition; the Oxford World's Classics) read aloud across a term, with the blank verse sounded out",
+                ],
+                "short_lesson_flow": "A living book read aloud across the twelve books and narrated; the blank verse heard for its sound, the figurative networks noticed, deepening to analysis of the Satan question as the bands move up.",
+                "narration_prompt": "Tell back the book we read today, and tell me what Satan said, and whether the poem let you simply agree or simply refuse.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Paradise Lost on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in Genesis, in epic, in the Satan figure, or in Milton's blindness leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the Satan question stay unsettled; bring Virgil and Dante into the room when the poem invokes them.",
+                "observation_documentation": "Over time, notice whether the student returns to the poem, holds Satan with the poem's full ambivalence, and begins to feel the inheritance from Virgil and Dante. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the blank verse line, the epic conventions Milton inherits, and the Satan question where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
