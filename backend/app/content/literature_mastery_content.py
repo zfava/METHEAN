@@ -1601,6 +1601,220 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-013": {
+        "node_type": "craft",
+        "strand": "character",
+        "band": "proficient",
+        "prerequisites": ["lit-craft-010", "lit-craft-011", "close reading: proficient"],
+        "objective": (
+            "Hold a literary character as a constructed person whose interior life the "
+            "reader infers from the writer's particular choices (voice, action, "
+            "silence, the eyes of others, what the character does not say or cannot "
+            "see); build a small original reading of a character defensible from the "
+            "words on the page; and recognize when a character also serves a "
+            "structural function in the work without flattening them to that function."
+        ),
+        "core_understanding": (
+            "A character is not a person and not only a function; they are the "
+            "structured place in a work where a particular inner life is offered for "
+            "the reader's inference. At the proficient band the reader sees how the "
+            "writer's choices, what is said and what is withheld, what is acted on and "
+            "what is fled from, what others see and what the character cannot, "
+            "together make the character available. The reader can carry a small "
+            "original reading from the text and defend it against another reader's by "
+            "returning to specific lines. They can also see when a character does work "
+            "for the form of the book (the foil who lights another by contrast, the "
+            "choric voice who interprets the action) without losing the person inside "
+            "the function."
+        ),
+        "analytical_moves": [
+            (
+                "Read a character through the specific choices of voice, action, "
+                "silence, and the eyes of others, naming which the writer foregrounds"
+            ),
+            (
+                "Distinguish a character from the function they may also serve in the "
+                "work (foil, choric voice, antagonist), and hold both"
+            ),
+            (
+                "Identify the gap between a character's self-understanding and what "
+                "the text lets the reader see, and reason about why that gap is there"
+            ),
+            "Build a small original reading of a character supported line by line from the text",
+            (
+                "Hear another reader's different reading of the same character and "
+                "locate where in the text it draws its evidence"
+            ),
+        ],
+        "seminar_questions": [
+            (
+                "Which of this writer's choices is most decisive for our sense of this "
+                "character: voice, action, silence, or what others see in them?"
+            ),
+            (
+                "Where does this character understand themselves, and where do we "
+                "understand them in spite of themselves? Which words tell you?"
+            ),
+            "Does this character also serve a function in the work? Does that function exhaust them?",
+        ],
+        "writing_invitations": [
+            (
+                "Write a short analytical paragraph defending one specific reading of "
+                "a chosen character, quoting two or three lines that ground the reading"
+            ),
+            (
+                "Write the paragraph that holds a character as both a person and a "
+                "function within the work, naming each and naming what is at stake in "
+                "holding both"
+            ),
+        ],
+        "exemplar_texts": [
+            (
+                "A novel whose character work rewards line-level attention (Pride and "
+                "Prejudice; Jane Eyre; Middlemarch read across a term; Bleak House)"
+            ),
+            (
+                "A novel in which a character also serves a structural function (the "
+                "foils in any Austen; the choric voices of Greek tragedy)"
+            ),
+            "A short story whose whole weight is a character (Chekhov; Joyce's Dubliners; Eudora Welty)",
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "Character meets the seminar. The reader brings a reading; the "
+                    "seminar tests both the reading and the words it is built upon. "
+                    "Rhetorical close attention and the older tradition of moral "
+                    "portrait converse: by what particular choices does this writer "
+                    "make this character available, and what does that availability "
+                    "ask of us?"
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "A speech or self-revealing passage from a chosen character, recited at the seminar's opening",
+                    ],
+                },
+                "copywork": [
+                    "The recited passage copied into the kept commonplace book, with the line that bears most weight underlined",
+                ],
+                "recitation_routine": (
+                    "Each seminar opens from a recited passage of a character; the "
+                    "first question is taken from the lines just heard and returns to "
+                    "the text for every claim."
+                ),
+                "read_aloud_suggestions": [
+                    "A scene of strong character voice read aloud at the seminar's opening",
+                    "A short story whose weight is a character, read aloud whole",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 40,
+                "living_book_suggestions": [
+                    "A worthy novel in which character work is the substance, read whole at a sustained pace",
+                    "A volume of short stories whose weight is character",
+                ],
+                "short_lesson_flow": (
+                    "The proficient student reads the whole book at a sustained pace, "
+                    "narrating each sitting. As characters emerge they are watched: "
+                    "what they say, what they will not say, what others see in them. A "
+                    "passage worth attending to is slipped or noted; at the chapter's "
+                    "end one such passage is taken up, copied into the commonplace "
+                    "book, and discussed. A small reading of the character is allowed "
+                    "to form across the long span and tested against the whole work."
+                ),
+                "narration_prompt": (
+                    "Tell back the chapter you read, and tell me which line of which "
+                    "character you would set down as the one that bears most weight, and why."
+                ),
+                "real_world_objects": [
+                    "The whole novel, marked with the reader's own slips at the character's decisive lines",
+                    "A commonplace book gathering character passages across many works",
+                ],
+                "nature_connection": (
+                    "To watch a character across a whole book is to watch as one "
+                    "watches a bird across the years: the same creature in different "
+                    "lights, slowly known."
+                ),
+                "habit_focus": (
+                    "The habit of returning to a character's particular lines for "
+                    "evidence, and the habit of holding more than one reading of a "
+                    "person at the same time."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in reading character through the writer's "
+                    "particular choices, in distinguishing character from function, "
+                    "and in writing the short analytical paragraph that defends a "
+                    "reading from the words."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher reads a passage aloud, names the writer's choices "
+                        "that make the character available (this line of voice, this "
+                        "silence, this action), and writes a short paragraph on the "
+                        "board defending one reading of the character, quoting the passage."
+                    ),
+                    "we_do": (
+                        "Class chooses a candidate character from the work under "
+                        "study, gathers two or three decisive passages, and drafts "
+                        "together a short paragraph defending a small original "
+                        "reading, quoting the lines that ground it."
+                    ),
+                    "you_do": (
+                        "Student writes an independent analytical paragraph defending "
+                        "a chosen reading of a chosen character, with two or three "
+                        "quoted passages as evidence, and revises after hearing a "
+                        "different reading at seminar."
+                    ),
+                },
+                "independent_practice": [
+                    "The analytical paragraph on a self-chosen character from the work under study",
+                    "A short revision of the paragraph after seminar discussion",
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep the long shelf of novels and story collections of real substance, available, never assigned",
+                    "Keep a commonplace book and small slips for marking character passages in books the reader cares about",
+                ],
+                "real_world_contexts": [
+                    "A long conversation about a character a reader has come to love or distrust in a book they chose",
+                    "A piece of writing the reader composed because a character in a book asked something of them",
+                    "A read-aloud of a chosen passage so a fellow reader can hear what the reader heard in it",
+                ],
+                "conversation_starters": [
+                    "Who is this character, really? Which lines made you see them that way?",
+                    "Are they only themselves in the book, or are they also doing some work for the writer?",
+                    "Where do they know themselves, and where do we know them in spite of themselves?",
+                ],
+                "resource_bank": [
+                    "A shelf of difficult, worthy novels and stories whose character work rewards attention",
+                    "A reader-companion willing to discuss a chosen character as a fellow reader, not as an examiner",
+                ],
+                "parent_role": (
+                    "Take the reader's character seriously, and ask the reader to "
+                    "take theirs seriously by going back to the lines. Be a fellow "
+                    "reader who has their own reading and is willing to hear another."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the reader returns to characters "
+                    "across books, defends a reading from the words, and hears a "
+                    "different reading without giving up their own. This noticing "
+                    "replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori's literature pedagogy at the elementary and "
+                "early-secondary level does not carry a distinct method for the "
+                "sustained close reading of literary character; the practice here is "
+                "drawn from the seminar tradition and the long Charlotte Mason habit "
+                "of narration across whole books rather than from the prepared environment."
+            ),
+        },
+    },
     "lit-craft-020": {
         "node_type": "craft",
         "strand": "theme and meaning",
