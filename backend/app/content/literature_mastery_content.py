@@ -852,6 +852,210 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-008": {
+        "node_type": "craft",
+        "strand": "narrative craft",
+        "band": "proficient",
+        "prerequisites": ["point of view: developing", "close reading: proficient"],
+        "objective": (
+            "Identify the point of view of any literary work independently, including "
+            "the variants of third person (omniscient, limited, free indirect discourse) "
+            "and narrators whose distance from the action shifts; analyze how the chosen "
+            "point of view shapes what the reader can see, feel, and know."
+        ),
+        "core_understanding": (
+            "Point of view is not merely a technical choice but a structural and moral "
+            "one. The writer's selection of teller and distance determines the reader's "
+            "access: what is shown, what is hidden, whose interior we share, and whose "
+            "remains opaque. The proficient reader treats POV as a writer's instrument "
+            "and analyzes its consequences for what the work makes possible. This is "
+            "the doorway from naming POV to using POV as an analytical lens, and the "
+            "ground from which the unreliable-narrator question can be asked at all."
+        ),
+        "analytical_moves": [
+            (
+                "Identify the point of view of a whole literary work independently, "
+                "including the variants of third person: omniscient, limited, and free "
+                "indirect discourse"
+            ),
+            "Track shifts in narrative distance within a single work and ask what each shift does",
+            "Analyze what the chosen point of view lets the reader see and what it withholds",
+            "Argue for what the work gains by its specific point of view rather than another",
+        ],
+        "seminar_questions": [
+            "What does this work let us see, and only us, because of its point of view?",
+            ("Where does the narrator come closer to or further from the characters, and what happens there?"),
+            "What would this work lose if it were told from a different point of view?",
+        ],
+        "writing_invitations": [
+            (
+                "Write an analytical paragraph naming the point of view of a whole work "
+                "and arguing what the work gains by it, with the relevant passages quoted"
+            ),
+            (
+                "Choose a passage of free indirect discourse and analyze how the "
+                "narrator's voice and the character's voice blend, line by line"
+            ),
+        ],
+        "exemplar_texts": [
+            (
+                "A novel that exploits third-person limited (To the Lighthouse moves "
+                "between interior consciousnesses; Ishiguro's The Remains of the Day "
+                "works the same effect from inside a first-person narrator)"
+            ),
+            (
+                "A novel in third-person omniscient that comments on its characters "
+                "(Middlemarch; War and Peace in worthy translation)"
+            ),
+            ("A novel of free indirect discourse (Pride and Prejudice; many of Joyce's Dubliners stories)"),
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "Point of view becomes a lens. The seminar asks not only whose voice "
+                    "tells the work, but what this voice secures and what it loses; the "
+                    "writer's chosen instrument is examined for what it can and cannot "
+                    "play. The rhetorical question stands: how is the reader persuaded "
+                    "of this seeing rather than another?"
+                ),
+                "memory_work": {
+                    "recitations": [
+                        (
+                            "A passage of free indirect discourse, recited so the ear "
+                            "may hear the narrator's voice and the character's voice "
+                            "braided in the same line"
+                        ),
+                    ],
+                },
+                "copywork": [
+                    (
+                        "The recited free-indirect passage copied into a kept notebook "
+                        "of POV-revealing passages, with the narrator's and the "
+                        "character's words distinguished where possible"
+                    ),
+                ],
+                "recitation_routine": (
+                    "Each seminar opens from a recited passage that turns on its point "
+                    "of view; the discussion takes its first question from what the "
+                    "passage's chosen voice secures and what it withholds."
+                ),
+                "read_aloud_suggestions": [
+                    "A chapter of a novel chosen for its handling of point of view, read aloud at the seminar's opening",
+                    "A short story whose effect depends on its narrator (Joyce's Dubliners; a Henry James tale)",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 45,
+                "living_book_suggestions": [
+                    "A worthy novel whose point of view is consequential, read whole at sustained pace",
+                    "A volume of short stories read across a term for variety of narrative voice",
+                ],
+                "short_lesson_flow": (
+                    "The proficient student reads the whole work attentively, marking "
+                    "passages where the narrator's distance shifts or where the voice "
+                    "braids with a character's. At the end of a chapter or a story, two "
+                    "or three such passages are taken up: read aloud, copied, and "
+                    "discussed for what the chosen POV permits, withholds, and offers "
+                    "the reader. The habit of attention to voice now bears the weight "
+                    "of analytical work across a whole long book."
+                ),
+                "narration_prompt": (
+                    "Tell back the chapter, and tell me which passage best shows how "
+                    "this work's chosen voice changes what we can see; read it to me."
+                ),
+                "real_world_objects": [
+                    "The whole novel marked at passages where POV does decisive work",
+                    "A commonplace book gathering POV-revealing passages across many works over the year",
+                ],
+                "nature_connection": (
+                    "Reading a work for its point of view is to a long novel what "
+                    "tracking the movement of weather is to a long season: a habit of "
+                    "attention to a thing that shapes everything else it touches."
+                ),
+                "habit_focus": (
+                    "The habit of treating point of view as a writer's instrument and "
+                    "asking, of any difficult work, what its chosen voice has made "
+                    "possible and what it has cost."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in the variants of third person (omniscient, "
+                    "limited, free indirect discourse), in tracking shifts of narrative "
+                    "distance, and in writing the analytical paragraph that argues what "
+                    "a work gains by its chosen point of view."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher chooses a passage that turns on POV, names the variant "
+                        "explicitly, and writes a short paragraph on the board arguing "
+                        "what the work gains by its choice, quoting the passage line by "
+                        "line."
+                    ),
+                    "we_do": (
+                        "Class chooses a candidate passage from the work under study, "
+                        "names the variant together, and drafts the paragraph jointly, "
+                        "weighing what a different POV would have changed."
+                    ),
+                    "you_do": (
+                        "Student locates a POV-decisive passage independently, drafts "
+                        "the analytical paragraph, and revises it after hearing a peer's "
+                        "different reading at seminar."
+                    ),
+                },
+                "independent_practice": [
+                    "The analytical paragraph on a self-chosen POV-decisive passage, with quoted evidence",
+                    (
+                        "A short close analysis of a passage of free indirect discourse, "
+                        "distinguishing narrator and character voice where possible"
+                    ),
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep the long shelf of novels and short-story collections strong on narrative voice, available, never assigned",
+                    "Keep a commonplace book and small slips for marking POV-decisive passages in books the reader cares about",
+                ],
+                "real_world_contexts": [
+                    (
+                        "A novel a student has chosen and loves, returned to for the "
+                        "question of whose voice tells it and what that choice secures"
+                    ),
+                    "A long conversation about a passage the student wanted to read aloud because of how its voice works",
+                    "A piece of the student's own writing in which they chose a teller deliberately and can say why",
+                ],
+                "conversation_starters": [
+                    "Whose voice tells this book? What does that voice let you see, and what does it hide?",
+                    "Did the narrator just come closer to that character, or pull back? What happened?",
+                    "If this story were told from a different point of view, what would change?",
+                ],
+                "resource_bank": [
+                    "A shelf of difficult, worthy novels chosen for the variety and consequence of their POVs",
+                    "A reader-companion willing to discuss a chosen passage as a fellow reader",
+                ],
+                "parent_role": (
+                    "Be a fellow reader who takes the student's chosen book seriously "
+                    "and the question of its narrative voice seriously. Discussion "
+                    "follows the student's reading; the parent contributes their own "
+                    "reading as another reader at the table, never as an examiner."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the student begins to ask, of any "
+                    "serious book, what its chosen voice has made possible, and whether "
+                    "they reach for the passages that show it. This noticing replaces "
+                    "any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori's pedagogy at this band does not carry a distinct method "
+                "for the analysis of narrative voice in difficult literary works; the "
+                "practice here draws from the seminar tradition rather than from the "
+                "prepared environment."
+            ),
+        },
+    },
     "lit-craft-010": {
         "node_type": "craft",
         "strand": "character",
