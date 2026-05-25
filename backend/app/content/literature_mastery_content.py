@@ -4333,6 +4333,131 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-004": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Beowulf",
+            "author": "anonymous",
+            "date": "c. 8th-11th century, oral tradition older still",
+            "genre": "epic",
+            "form": "alliterative epic-elegiac poem in modern English translation",
+        },
+        "minimum_band": "developing",
+        "content_notes": (
+            "Monster combat, the killing of Grendel and the dragon, an elegiac "
+            "mood throughout, mortality; honest information, not a gate."
+        ),
+        "craft_focus": [
+            "The three-combat structure: youth (Grendel), maturity (Grendel's mother), age (the dragon)",
+            "The kenning as figurative system (whale-road for sea, bone-house for body, ring-giver for king)",
+            "The elegiac digressions: the doomed hall, fame and what outlives it, wyrd (fate)",
+            "The hero who is also a king and a man who dies",
+            "The Christian-pagan interweave the poem makes its own",
+        ],
+        "entry": (
+            "Developing: follow Beowulf-Grendel-the-mother-the-dragon as a hero "
+            "story across three ages and narrate it; notice kennings without "
+            "analyzing them. Proficient: name the three-combat structure, hold the "
+            "elegiac mood beside the heroic action, read the kennings as a "
+            "figurative system, ask what the poem counts as fame. Advanced: argue "
+            "what the poem does to the inherited dragon-slayer type, read the "
+            "elegiac as constitutive of the poem's meaning, set the "
+            "Christian-pagan interweave as the poem's unsettled question. "
+            "Mastery: original argument about what Beowulf does to the "
+            "heroic-elegiac form and how Tolkien (and others) inherit it."
+        ),
+        "close_reading_passages": [
+            "The opening (Hwaet!) and the lineage of Hrothgar's hall: how does the poem begin, and what does the beginning tell us about what the poem cares to remember?",
+            "The fight with Grendel's mother in the mere: what does the underwater fight do that the hall-fight could not?",
+            "The dragon and the elegy of the last survivor: what does the poem hold up at the end, the hero or the doom?",
+        ],
+        "structural_analysis": (
+            "Three combats across the hero's life (Grendel in youth, Grendel's "
+            "mother in maturity, the dragon in age), set in a frame of elegiac "
+            "digressions about lineage, the doomed hall, and the men who came "
+            "before. The structure makes the poem's argument: heroism is whole "
+            "only when set beside its end, and what the hero builds is held "
+            "against what time takes."
+        ),
+        "thematic_lines": [
+            "Fame (lof) and what outlives the hero",
+            "Wyrd (fate) and the doomed hall: every gold-given hall the poem names is already burning in another digression",
+            "The Christian-pagan interweave: a Christian narrator looking back at a pre-Christian world he loves",
+        ],
+        "comparative_threads": [
+            "lit-work-inh-004 (Tolkien's The Lord of the Rings): the lineage cites Beowulf directly; Tolkien's own essay 'The Monsters and the Critics' on this very poem",
+            "lit-work-005 (Saga of the Volsungs): the cousin dragon-slaying and the cousin doomed-hoard in the Northern lineage",
+        ],
+        "seminar_questions": [
+            "What does the poem do by setting every great hall it names already in a digression about that hall's coming end?",
+            "Is Beowulf admired wholly by the poem, or does the poem hold something back?",
+            "Why three combats, and why an old hero at the dragon?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on a kenning of your own choosing, naming what it lets the reader see",
+            "The essay on whether the poem endorses heroism in age the way it endorses heroism in youth",
+            "At advanced, the comparative essay on the dragon set beside the dragon of the Volsungs or of Tolkien's Smaug",
+        ],
+        "context": (
+            "The single Old English heroic epic to survive whole (in the Nowell "
+            "Codex, c. 1000 CE), oral tradition older still; the founding work of "
+            "English-language epic and the central node of the Northern epic "
+            "inheritance; supplied as fact."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "The founding English-language epic; the heroic-elegiac mode examined rhetorically and ethically."
+                ),
+                "memory_work": {
+                    "recitations": ["Recitation of the opening (Hwaet! ...) in a worthy translation"],
+                },
+                "recitation_routine": (
+                    "Seminar opens from the recited opening; the discussion takes "
+                    "its first question from what the poem chooses to remember at "
+                    "its first breath."
+                ),
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of Beowulf, read aloud as a living book (Heaney's verse translation; Tolkien's own prose translation when available)",
+                ],
+                "short_lesson_flow": (
+                    "A living book read aloud and narrated; the three combats "
+                    "followed across the hero's life, the kennings noticed, "
+                    "deepening to analysis of the elegiac frame as the bands move up."
+                ),
+                "narration_prompt": (
+                    "Tell back the part we read today, and tell me which kenning stayed with you, or which hall we were told would burn."
+                ),
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of Beowulf on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in monsters, heroes, dragons, and the long lineage Tolkien drew from leads, no imposed apparatus",
+                ],
+                "parent_role": (
+                    "Read aloud and discuss where the student's interest leads; "
+                    "bring Tolkien (and the Volsungs) into the conversation when "
+                    "the student finds the lineage."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the student returns to the poem and "
+                    "traces its lineage forward into Tolkien or sideways into the "
+                    "Norse material. This noticing replaces any test."
+                ),
+            },
+            "traditional": {
+                "introduction": "Structured study of the three-combat structure, the kenning, and the elegiac frame where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
