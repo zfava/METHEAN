@@ -7402,6 +7402,120 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-024": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Moby-Dick; or, The Whale",
+            "author": "Herman Melville",
+            "date": "first published 1851",
+            "genre": "nineteenth-century American novel; hybrid form (narrative, drama, encyclopedia, sermon, scientific catalogue)",
+            "form": "first-person narration by Ishmael, interrupted by 'Cetology' chapters, dramatic chapters with stage directions, philosophical essays, and other forms; 135 chapters and an epilogue",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "Whaling violence in detail, including the killing and rendering "
+            "of sperm whales; the sinking of the Pequod and the death of all "
+            "hands but one; period attitudes toward race that the novel both "
+            "exhibits and complicates (Ishmael's friendship with Queequeg; "
+            "the depiction of the Pequod's mixed crew); the novel does not "
+            "redeem its disaster. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Hybrid form: prose narrative interrupted by Cetology chapters, dramatic scenes with stage directions, philosophical and theological essays (lit-craft-008 strained past its proficient definition; lit-craft-053 in its dramatic chapters)",
+            "Ishmael as a narrator who appears and disappears: the I that opens the novel recedes into a third-person witness for long stretches (lit-craft-031 in the family of moves)",
+            "Ahab as inherited tragic hero in the family of Lear and Macbeth; what Melville does to the Shakespearean inheritance (lit-craft-014)",
+            "The white whale as figurative system: the chapter 'The Doubloon' makes the multiple readings explicit (lit-craft-043)",
+            "What the novel refuses to settle about what the whale means (lit-craft-023)",
+        ],
+        "entry": (
+            "Advanced: read the novel whole including the Cetology chapters "
+            "and the dramatic interludes, treating them as part of the work "
+            "rather than as digressions; argue what Melville does to "
+            "Shakespeare (Lear, Macbeth) and to Paradise Lost (Ahab in the "
+            "Satanic inheritance); read the doubloon chapter as the novel's "
+            "explicit instruction in how to read its central figure; honor "
+            "what the novel refuses to settle about the whale. Mastery: "
+            "original argument about the novel's hybrid form and its place in "
+            "American literature."
+        ),
+        "close_reading_passages": [
+            "The opening ('Call me Ishmael') and the first paragraphs: how does the novel stage its narrator, and what does the choice of self-naming do?",
+            "'The Doubloon' (chapter 99): how does the novel stage multiple characters reading the same gold coin and seeing different things, and what is the novel telling the reader about the whale by staging this?",
+            "Ahab's confrontation with the whale across the last three chapters and the epilogue: how does the novel let the disaster come and the one survivor speak, and what does the epilogue's quotation from Job do to the close?",
+        ],
+        "structural_analysis": (
+            "A first-person novel that abandons its first person for long "
+            "stretches; an epic that interrupts itself with whale anatomy and "
+            "with dramatic dialogues complete with stage directions; a tragedy "
+            "of an inherited Shakespearean figure mounted on an American "
+            "whaler. The form is the work's argument: the whale exceeds any "
+            "single mode of telling, so the novel uses every mode it can. The "
+            "doubloon chapter is the novel's instruction in itself: the whale "
+            "is what each character reads it to be, and the novel refuses to "
+            "rank the readings."
+        ),
+        "thematic_lines": [
+            "What the white whale means: the novel refuses to settle, and the doubloon chapter makes the refusal structural",
+            "Ahab as Shakespearean inheritance: the late tragic figure mounted on a nineteenth-century American ship",
+            "The Pequod as the polis: a mixed crew under a king whose obsession destroys what the crew was for",
+        ],
+        "comparative_threads": [
+            "King Lear (lit-work-013) and Macbeth (lit-work-012): Ahab as the Shakespearean tragic inheritance Melville is consciously working with",
+            "Paradise Lost (lit-work-017): Ahab in the Satanic inheritance; Melville read Milton closely",
+            "The Bible: Job (the epilogue's quotation), Jonah (the sermon early in the novel), the white robes of Revelation",
+            "Later inheritors: Faulkner; Pynchon's Mason & Dixon; the long American tradition of the encyclopedic novel",
+        ],
+        "seminar_questions": [
+            "What does the whale mean? Where does the novel refuse to say, and how does the doubloon chapter stage the refusal?",
+            "Why does the novel abandon Ishmael for chapters at a time, and what does the hybrid form let the novel do?",
+            "How does Ahab read against Lear and against Macbeth? What does Melville do to the Shakespearean inheritance?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the doubloon chapter, naming what the novel argues by staging multiple readings of the same figure",
+            "The essay on the hybrid form as the novel's argument",
+            "The sustained essay on Ahab in the Shakespearean and Miltonic inheritance, with passages from the play and the poem held in productive tension",
+        ],
+        "context": (
+            "Composed in Pittsfield, Massachusetts, while Melville was reading "
+            "Shakespeare closely; dedicated to Nathaniel Hawthorne; commercially "
+            "unsuccessful in Melville's lifetime; recovered as a foundational "
+            "American novel in the twentieth century; supplied as fact, "
+            "interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The hybrid American epic that absorbs Shakespeare and the Bible into a nineteenth-century whaler; the seminar text on what the novel form can hold.",
+                "memory_work": {
+                    "recitations": ["Recitation of the opening paragraph"],
+                },
+                "recitation_routine": "Seminar opens from the recited opening; the discussion takes its first question from the choice of self-naming and what the imperative 'Call me Ishmael' does.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Moby-Dick (the Norton Critical edition with its full apparatus is the standard) read aloud across two terms, with the Cetology chapters and dramatic chapters voiced as the novel asks",
+                ],
+                "short_lesson_flow": "A living book read aloud across the 135 chapters and narrated; the Cetology chapters and dramatic interludes treated as part of the work; deepening to analysis of the doubloon chapter and the hybrid form as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me what mode the chapter was in, and what the novel let that mode do.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Moby-Dick on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in whales, in obsession, in the encyclopedic novel, or in Shakespeare's nineteenth-century inheritors leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; do not paper over the Cetology chapters; let them be themselves; honor what the whale will not settle into.",
+                "observation_documentation": "Over time, notice whether the student returns to the novel and brings its hybrid form into other reading. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the hybrid form, the Shakespearean inheritance, and the doubloon chapter where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
