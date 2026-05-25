@@ -3740,6 +3740,87 @@ SCOPE_SEQUENCES["phonics_reading"] = {
             "standard_alignment": "Grades 2-3 ELA cumulative",
         },
     ],
+    # Three sample topic-metadata entries below set the gold-standard
+    # shape for the phonics_reading intermediate band: reading
+    # mechanics that continue developing past elementary (fluency,
+    # vocabulary depth, comprehension strategy). These are distinct
+    # from the literary-analysis work the literature track covers at
+    # the same band. See docs/curriculum/METHEAN_vertical_levels_design.md
+    # section 6 (Option B) for the rationale.
+    "intermediate": [
+        {
+            "ref": "read_i_01",
+            "title": "Reading Fluency at Grade Level: Rate, Accuracy, and Prosody",
+            "description": "Read grade-level prose aloud with appropriate rate (roughly 100-140 words per minute by the end of the intermediate band), accuracy above 95 percent, and expression that honors the punctuation and the sense of the sentence. Move from word-by-word decoding to phrased, meaningful oral reading.",
+            "prerequisites": ["read_d_03", "read_d_06", "read_d_12"],
+            "estimated_weeks": 4,
+            "key_concepts": ["fluency rate", "accuracy", "prosody", "phrased reading", "expression"],
+            "assessment_indicators": [
+                "Reads aloud at grade-level rate with at least 95 percent word accuracy",
+                "Honors punctuation as phrasing cues (commas as pauses, periods as full stops)",
+                "Reads dialogue with character-appropriate expression",
+                "Self-corrects when a misread changes the sense of the sentence",
+            ],
+            "classical_alignment": "Grammar stage transition to logic: oral reading as the foundation for analytical reading",
+            "charlotte_mason_alignment": "Daily oral reading of a living book; the child reads aloud and is corrected gently for prosody, not speed",
+            "standard_alignment": "RF.3.4, RF.4.4, RF.5.4 (Reading Fluency standards)",
+        },
+        {
+            "ref": "read_i_02",
+            "title": "Vocabulary Through Morphology: Greek and Latin Roots, Prefixes, and Suffixes",
+            "description": "Build vocabulary systematically by recognizing common Greek and Latin roots (e.g. bio-, geo-, hydro-, -ology, -graph), prefixes (un-, re-, pre-, sub-), and suffixes (-tion, -able, -ist). Use morphological analysis to infer the meaning of unfamiliar words encountered in reading.",
+            "prerequisites": ["read_d_07", "read_d_18"],
+            "estimated_weeks": 6,
+            "key_concepts": [
+                "morphology",
+                "Greek roots",
+                "Latin roots",
+                "prefixes",
+                "suffixes",
+                "morphological analysis",
+                "word families",
+            ],
+            "assessment_indicators": [
+                "Identifies the root, prefix, and suffix in multimorphemic words",
+                "Infers the approximate meaning of an unfamiliar word from its parts and context",
+                "Connects words sharing a common root (e.g. biology, biography, biome)",
+                "Uses morphological knowledge in independent reading without prompting",
+            ],
+            "classical_alignment": "Logic stage: systematic study of word origins; Latin and Greek roots prepare for formal language study",
+            "charlotte_mason_alignment": "Discovery in reading: noticing word families across living books rather than memorizing lists",
+            "standard_alignment": "L.4.4, L.5.4, L.6.4 (Vocabulary Acquisition and Use)",
+        },
+        {
+            "ref": "read_i_03",
+            "title": "Inference and Drawing Conclusions: Reading Between the Lines",
+            "description": "Infer information the text does not state directly: a character's motive from their action, a setting's mood from descriptive detail, the cause of an event from its consequences. Distinguish what the text actually says from what the reader concludes, and ground every inference in textual evidence.",
+            "prerequisites": ["read_d_19", "read_d_22"],
+            "estimated_weeks": 4,
+            "key_concepts": [
+                "inference",
+                "text evidence",
+                "implicit meaning",
+                "drawing conclusions",
+                "explicit vs implicit",
+            ],
+            "assessment_indicators": [
+                "Makes a defensible inference from a passage and quotes the lines that support it",
+                "Distinguishes a fact the text states from a conclusion the reader has drawn",
+                "Identifies when an inference is not supported by the text and revises it",
+                "Discusses inferences with another reader and locates evidence for both readings",
+            ],
+            "classical_alignment": "Logic stage: the reader begins to argue from textual evidence",
+            "charlotte_mason_alignment": "Narration extended: the child tells back what happened and also what they inferred and why",
+            "standard_alignment": "RL.4.1, RL.5.1, RI.4.1, RI.5.1 (Key Ideas and Details)",
+        },
+    ],
+    # Scaffold awaiting authoring; advanced and mastery bands of
+    # phonics_reading cover reading mechanics that continue past
+    # intermediate (sustained-stamina reading, reading for study,
+    # critical reading of multiple sources, etc.) and are distinct
+    # from the literature track's literary analysis.
+    "advanced": [],
+    "mastery": [],
 }
 
 SCOPE_SEQUENCES["literature"] = {
