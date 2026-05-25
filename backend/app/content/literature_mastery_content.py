@@ -11244,4 +11244,145 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-020": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "Eventyr og Historier (Fairy Tales and Stories; selections, with attention to 'The Little Mermaid', 'The Emperor's New Clothes', 'The Steadfast Tin Soldier', 'The Ugly Duckling', 'The Snow Queen', 'The Little Match Girl', 'The Red Shoes', 'The Shadow')",
+            "author": "Hans Christian Andersen",
+            "date": "approximately 156 tales published 1835-1872",
+            "genre": "nineteenth-century Danish literary fairy tale",
+            "form": "literary fairy tales authored by Andersen rather than collected from folk sources; many drawn from folk material reshaped, many wholly invented; published in pamphlets and collections across nearly forty years",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Many tales hold sustained grief and physical harm: the "
+            "Little Mermaid's silenced tongue and her dissolution into "
+            "sea-foam at the close (the original ending; later "
+            "adaptations changed it); the Little Match Girl's death in "
+            "the snow; the dancing-to-death of the Red Shoes; the "
+            "Shadow's destruction of its master; the Ugly Duckling's "
+            "long suffering before transformation. Popular twentieth-"
+            "century adaptations (notably Disney) have softened these "
+            "endings considerably; the original Andersen tales are "
+            "darker and more religiously framed. Honest information, "
+            "not a gate."
+        ),
+        "craft_focus": [
+            "Close reading proficient on Andersen's distinctive narrative voice: literary, often ironic, sometimes directly addressing the reader (lit-craft-003)",
+            "Character proficient: Andersen's central figures (the Mermaid, the Match Girl, the Duckling, the Tin Soldier, Kai and Gerda) often carry autobiographical weight (The Ugly Duckling especially is widely read as Andersen's account of his own outsider childhood) (lit-craft-013)",
+            "Theme advanced: longing, transformation, the price of becoming what one is; what Andersen's literary authorship lets the tales claim that collected folk tale could not (lit-craft-023)",
+            "Figurative system: the sea, the snow, the mirror, the match, the shoe, the shadow as recurring Andersen figures (lit-craft-042)",
+            "The literary fairy tale as a distinct form from collected folk tale: authored, single-source, with a narrative voice (lit-craft-022; lit-craft-023)",
+        ],
+        "entry": (
+            "Proficient: read the central tales in a worthy modern "
+            "translation (Tiina Nunnally's translations are widely "
+            "praised; Erik Christian Haugaard's are also worthy); find "
+            "Andersen's distinctive narrator-voice; meet the original "
+            "endings as the tales themselves give them (the Little "
+            "Mermaid's dissolution into sea-foam, not the adapted "
+            "happier endings). Advanced: argue what the literary fairy "
+            "tale does that collected folk tale cannot; meet the "
+            "autobiographical readings (especially The Ugly Duckling); "
+            "argue what Andersen does with religious framing at the "
+            "endings of many tales. Mastery: original argument about "
+            "Andersen's place in establishing the literary fairy tale "
+            "as a distinct form alongside the Grimms' collected folk "
+            "tale."
+        ),
+        "close_reading_passages": [
+            "'The Little Mermaid' (1837) and the closing dissolution into sea-foam (and the appended daughters-of-the-air epilogue): how does Andersen stage an ending that adaptations have refused to keep, and what does the original ending claim?",
+            "'The Emperor's New Clothes' (1837): how does the tale stage the famous child's interruption, and what does the form do that direct social satire could not?",
+            "'The Snow Queen' (1844) and Gerda's journey to find Kai: how does the long tale stage a young heroine's quest, and what does the closing tear at the splinter of mirror do?",
+        ],
+        "structural_analysis": (
+            "Approximately 156 tales across forty years; the early "
+            "tales (1835-1837) draw more directly on folk material; the "
+            "middle period invents more freely; the late tales become "
+            "longer and more reflective. Across the body of work, "
+            "Andersen's narrator-voice is the unifying element: "
+            "literary, sometimes ironic, sometimes directly tender to "
+            "the reader, often religiously framed at endings. Many "
+            "tales are autobiographically read (The Ugly Duckling most "
+            "famously). The structure is the body of work: a literary "
+            "fairy tale established as a distinct form, authored rather "
+            "than collected, with a narrator the reader comes to know."
+        ),
+        "thematic_lines": [
+            "Longing and the price of becoming: a recurring Andersen concern, sharpest in The Little Mermaid",
+            "The outsider and transformation: The Ugly Duckling and other tales of the figure who does not yet know what they are",
+            "Religious framing at endings: many tales close in an explicitly Christian register the modern reader is invited to weigh, not adopt",
+        ],
+        "comparative_threads": [
+            "lit-work-inh-019 The Grimms' Tales: the collected European folk-tale tradition Andersen worked alongside; the literary fairy tale and the collected folk tale as distinct but related forms",
+            "Charles Perrault's earlier French literary fairy tales (1697): the seventeenth-century literary-fairy-tale predecessor",
+            "lit-work-inh-022 MacDonald's Phantastes (in the next batch): the Victorian literary fairy-tale tradition shaped by Andersen as well as the Grimms",
+            "lit-work-inh-024 Angela Carter's The Bloody Chamber: the late-twentieth-century literary refiguring of the same fairy-tale inheritance includes responses to Andersen alongside Perrault",
+            "The twentieth-century Disney adaptations of Andersen tales (The Little Mermaid 1989; Frozen 2013 loosely after The Snow Queen) as the popular afterlife that has substantially altered the original endings",
+        ],
+        "seminar_questions": [
+            "What does the literary fairy tale do that the collected folk tale cannot, and where in Andersen is the difference sharpest?",
+            "Why have so many adaptations softened the original endings of these tales, and what is lost when they do?",
+            "What does Andersen's narrator do that the Grimms' more laconic narration does not?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the original ending of The Little Mermaid, naming what the form refuses to give the reader",
+            "The essay on Andersen's narrator-voice across three or four tales",
+            "At advanced, the essay on the literary fairy tale as a distinct form from the collected folk tale",
+        ],
+        "context": (
+            "Composed by a Danish writer of working-class origin who "
+            "became one of the nineteenth century's most internationally "
+            "translated authors; the tales were translated into English "
+            "across the nineteenth century and shaped the form in every "
+            "European literature; many have been adapted (often "
+            "softened) repeatedly in twentieth- and twenty-first-century "
+            "popular media; supplied as fact, interpretation left to the "
+            "student."
+        ),
+        "lineage": (
+            "Folklore. Source position. The foundational nineteenth-"
+            "century literary fairy tale, established alongside the "
+            "Grimms' (lit-work-inh-019) collected folk tale as a "
+            "distinct form: authored rather than collected, single-"
+            "source, with a narrator-voice the reader comes to know. "
+            "Shaped the Victorian literary fairy tale (MacDonald, "
+            "lit-work-inh-022) and is one of the principal sources the "
+            "late-twentieth-century literary fairy tale (Carter, "
+            "lit-work-inh-024) responds to alongside Perrault."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The foundational nineteenth-century literary fairy tale; the seminar text on what the literary fairy tale does that collected folk tale cannot.",
+                "memory_work": {
+                    "recitations": ["Recitation of a chosen opening or closing of an Andersen tale"],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from Andersen's narrator and what the literary fairy tale does that the collected form does not.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of Andersen's tales (Tiina Nunnally; Erik Christian Haugaard; the Penguin Classics) read aloud across a term, with the original endings kept",
+                ],
+                "short_lesson_flow": "A living book read aloud across selected tales and narrated; Andersen's narrator-voice heard as distinct from the Grimms'; deepening to analysis of the literary form as the bands move up.",
+                "narration_prompt": "Tell back the tale we just read, and tell me what the narrator did that you noticed, and how the ending came.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of Andersen's tales on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in fairy tale, in literary form, or in the long European inheritance leads; the original tales available against the popular adaptations",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; keep the original endings; do not paper over what Andersen kept dark.",
+                "observation_documentation": "Over time, notice whether the student returns to particular tales and begins to feel the literary fairy tale as distinct from the collected folk tale. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the literary fairy tale and Andersen's narrator-voice where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
