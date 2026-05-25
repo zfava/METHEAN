@@ -7178,6 +7178,119 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-022": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Wuthering Heights",
+            "author": "Emily Brontë (published initially under the pseudonym Ellis Bell)",
+            "date": "first published 1847",
+            "genre": "Victorian Gothic novel",
+            "form": "double-framed narrative: Lockwood's diary encloses Nelly Dean's oral account; two-generation family chronicle",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "Sustained cruelty and violence within the two households across "
+            "two generations; Heathcliff's revenge against Hindley and against "
+            "Edgar Linton; the deaths of Catherine, Hindley, Edgar, and "
+            "Heathcliff himself; emotional and physical abuse of children "
+            "across the second generation; the novel does not stand outside "
+            "what it shows and does not redeem its violence by the close. "
+            "Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Double-framed unreliable narration: Lockwood's diary encloses Nelly Dean's oral account, and Nelly has her own stake in what she tells (lit-craft-031)",
+            "Nested narration: every account is filtered through Nelly through Lockwood (lit-craft-008)",
+            "Character advanced: Heathcliff as a figure the novel refuses to make categorizable (lit-craft-014)",
+            "Figurative system: the moors, the two houses (the Heights and the Grange), windows and doors, ghosts at the window (lit-craft-042 at proficient; lit-craft-043 at advanced)",
+            "What the novel refuses to settle about love, vengeance, the second generation's partial repair (lit-craft-023)",
+        ],
+        "entry": (
+            "Advanced: read the novel whole and read both narrators with "
+            "suspicion: Lockwood as outsider misreading what he records, Nelly "
+            "as housekeeper whose account is shaped by her position and her "
+            "loyalties; argue what the novel does that no straightforward "
+            "narration could; hold Heathcliff as a figure the novel refuses to "
+            "categorize; read the two generations as a structural argument. "
+            "Mastery: original argument about the novel's place in nineteenth-"
+            "century English fiction as the work that most thoroughly refuses "
+            "the consolation Victorian fiction commonly offered."
+        ),
+        "close_reading_passages": [
+            "Lockwood's nightmare at the window (chapter 3): how does the novel open with its outermost narrator's encounter with the ghost, and what does the staging do to what we will later read of Catherine and Heathcliff?",
+            "Catherine's declaration about Heathcliff ('I am Heathcliff'): how does the novel stage a claim of identification that the rest of the novel will both honor and undo?",
+            "The closing scenes at the Heights with the second generation: how does the novel stage a partial reconciliation, and where does it refuse to redeem what the first generation did?",
+        ],
+        "structural_analysis": (
+            "Two generations across two households (Wuthering Heights, "
+            "Thrushcross Grange), framed by Lockwood's diary in the present "
+            "and Nelly Dean's oral account of the past; the doubled household "
+            "and doubled generation are the novel's structural argument; "
+            "every narrator is partial; the novel refuses to give the reader "
+            "the consolation of an outside view. The structure is the "
+            "argument: the novel of household and inheritance with no "
+            "authoritative voice to tell us what either is for."
+        ),
+        "thematic_lines": [
+            "Love and vengeance as the same passion or as opposed passions: the novel holds Heathcliff's love and his revenge as inseparable and refuses to settle which the novel is about",
+            "The two generations: what the second generation partially repairs and what it cannot",
+            "The moors as the novel's figurative other: the place outside the houses where the rules the houses live by do not reach",
+        ],
+        "comparative_threads": [
+            "Jane Eyre (lit-work-021): sister's novel published the same year; very different reading of love and household; the two together form a near-pair of opposed Victorian novels",
+            "The Gothic tradition (Walpole, Radcliffe, Maturin); Frankenstein (lit-work-020) as the earlier nineteenth-century work that also refused to settle who its monster was",
+            "Later inheritors: Sylvia Plath's poetry; the long film history of the novel that has not known what to do with it",
+        ],
+        "seminar_questions": [
+            "Whom does the novel trust as a narrator? Anyone?",
+            "Where does the novel honor Catherine's claim to be Heathcliff and where does it undo it?",
+            "Does the second generation repair what the first did, partially repair it, or refuse to repair it? Where does the novel refuse to say?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on Lockwood's nightmare, naming what the staging does to everything that follows",
+            "The essay on Nelly Dean's reliability and what is at stake in her telling the story she tells",
+            "The sustained essay on Heathcliff as a figure the novel refuses to make categorizable",
+        ],
+        "context": (
+            "Composed in Haworth, Yorkshire, by Emily Brontë and published "
+            "under the male pseudonym Ellis Bell in 1847; one of three Brontë "
+            "novels published that year; widely misread in its century and "
+            "central to twentieth-century arguments about narrative reliability; "
+            "supplied as fact, interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The Victorian novel that most thoroughly refuses the consolation its century commonly offered; the seminar text on double-framed unreliable narration.",
+                "memory_work": {
+                    "recitations": ["Recitation of Catherine's declaration about Heathcliff"],
+                },
+                "recitation_routine": "Seminar opens from the recited declaration; the discussion takes its first question from what Catherine claims and how the novel both honors and undoes it.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Wuthering Heights (the Norton; the Penguin; the Oxford World's Classics) read aloud across a term, with Lockwood's and Nelly's voices kept distinct",
+                ],
+                "short_lesson_flow": "A living book read aloud across the two generations and narrated; the framing of every account by Nelly through Lockwood noticed; deepening to analysis of the novel's refusals as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me whose voice told it, and whether you believed them.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Wuthering Heights on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in the Brontës, in the Gothic, or in nineteenth-century novels that refuse easy reading leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; do not paper over the novel's violence or its refusal to redeem; let Nelly's account be Nelly's account.",
+                "observation_documentation": "Over time, notice whether the student returns to the novel and begins to read Nelly with suspicion. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of double-framed narration and the two-generation structure where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
