@@ -7516,6 +7516,121 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-025": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Crime and Punishment",
+            "author": "Fyodor Dostoevsky",
+            "date": "serialized 1866",
+            "genre": "Russian psychological novel",
+            "form": "third-person novel with close access to Raskolnikov's interior; polyphonic crowd of characters each with their own claim; six parts and an epilogue",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "The double murder of the pawnbroker Alyona Ivanovna and her "
+            "sister Lizaveta described in close detail; sustained access to "
+            "Raskolnikov's feverish psychological deterioration; the suffering "
+            "of the Marmeladov family and Sonya's situation; suicide; the "
+            "novel does not stand outside what it shows. Honest information, "
+            "not a gate."
+        ),
+        "craft_focus": [
+            "Close third-person psychological narration: the technique that gives the reader Raskolnikov's interior without making him the first-person narrator (lit-craft-008)",
+            "Polyphonic novel: many characters each with a sustained claim, the novel refusing to make any one of them authoritative (lit-craft-014 at advanced)",
+            "Raskolnikov as the inherited extraordinary-man / Napoleon type set against itself by what he does (lit-craft-014)",
+            "Theme advanced: what the novel argues about the extraordinary-man theory and what it refuses to settle about Raskolnikov's late conversion (lit-craft-023)",
+            "Raskolnikov's self-justifying interior monologue as a near-relation of the unreliable narrator (lit-craft-031)",
+        ],
+        "entry": (
+            "Advanced: read the novel whole and follow the close third-person "
+            "psychological narration through Raskolnikov's deterioration; "
+            "argue what the novel does to the extraordinary-man theory by "
+            "letting Raskolnikov act on it; hold the polyphonic crowd of "
+            "characters (Sonya, Razumikhin, Porfiry, Marmeladov, Svidrigailov, "
+            "Dunya) each with their own claim; honor what the novel refuses "
+            "to settle about Raskolnikov's late conversion in the epilogue. "
+            "Mastery: original argument about Dostoevsky's place in the "
+            "formation of psychological narration and the polyphonic novel."
+        ),
+        "close_reading_passages": [
+            "Raskolnikov's first decision and the murder (Part 1): how does the novel stage the act, and what does the close third-person access do to the reader's complicity?",
+            "Raskolnikov's exchanges with Porfiry (Parts 3-4): how does the novel stage an investigator who knows what the reader knows and is not yet ready to act, and what does the staging do to the question of confession?",
+            "The epilogue and Raskolnikov's late turn: how does the novel stage what some readers receive as conversion and others as the novel imposing what its argument did not earn?",
+        ],
+        "structural_analysis": (
+            "Six parts and an epilogue; the crime in Part 1, the long "
+            "psychological aftermath across the middle, the confession at the "
+            "end of Part 6, the epilogue's reframing. The close third-person "
+            "narration holds the reader inside Raskolnikov's mind without "
+            "making him the first-person narrator; the polyphonic crowd of "
+            "other characters each carries a sustained claim the novel refuses "
+            "to flatten. The structure is the work's argument: a psychology so "
+            "thoroughly entered cannot stand outside itself; the late "
+            "conversion is the question, not the answer."
+        ),
+        "thematic_lines": [
+            "The extraordinary-man theory: the novel does not argue against it abstractly; it lets Raskolnikov act on it and watches",
+            "Suffering and the possibility of return: Sonya's claim and what the novel does and does not let Raskolnikov hear",
+            "The polyphonic crowd: each major character carries a claim the novel takes seriously; the novel refuses to make any of them authoritative",
+        ],
+        "comparative_threads": [
+            "Macbeth (lit-work-012): the Shakespearean predecessor of the protagonist after the deed",
+            "Hamlet (lit-work-011): the inherited figure of the man who cannot act, set against Raskolnikov who can",
+            "The Brothers Karamazov (Dostoevsky's later novel): the polyphonic form developed further; not in this batch",
+            "War and Peace (lit-work-026, next in this batch): Tolstoy and Dostoevsky as the two great nineteenth-century Russian novelists who used the form very differently",
+        ],
+        "seminar_questions": [
+            "What does the novel argue about the extraordinary-man theory by letting Raskolnikov act on it?",
+            "Is the epilogue's conversion earned by the novel, imposed by the novel, or held by the novel as a question? Where does the novel refuse to say?",
+            "What does the close third-person psychological narration do that no first-person could?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on Raskolnikov's interior monologue before the murder, naming what the close third-person access does to the reader",
+            "The essay on the polyphonic crowd, holding Sonya's, Porfiry's, and Svidrigailov's claims in productive tension",
+            "The sustained essay on what the novel refuses to settle about the late conversion",
+        ],
+        "context": (
+            "Serialized in 'The Russian Messenger' across 1866; composed while "
+            "Dostoevsky was in serious debt and under contract for two novels "
+            "at once; the first of the four great late novels; supplied as "
+            "fact, interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The foundational psychological novel of the nineteenth century; the seminar text on what the novel can do with interior access.",
+                "memory_work": {
+                    "recitations": [
+                        "Recitation of a passage of Raskolnikov's interior monologue in a worthy modern translation"
+                    ],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from what Raskolnikov is reasoning toward and where the reasoning fails.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of Crime and Punishment (Pevear and Volokhonsky; Garnett's older version; Oliver Ready's recent translation) read aloud across a term",
+                ],
+                "short_lesson_flow": "A living book read aloud across the six parts and the epilogue, narrated; the psychological narration noticed for what it does; deepening to analysis of the polyphonic crowd and the epilogue as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me what Raskolnikov was reasoning toward, and where the reasoning broke.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of Crime and Punishment on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in psychology, in ideas tested by action, or in nineteenth-century Russian fiction leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the polyphonic crowd be polyphonic; do not collapse Sonya into the novel's answer.",
+                "observation_documentation": "Over time, notice whether the student returns to the novel and brings the polyphonic form into other reading. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of close third-person psychological narration and the polyphonic novel where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
