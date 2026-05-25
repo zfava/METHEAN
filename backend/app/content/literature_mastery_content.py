@@ -10649,4 +10649,154 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-016": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "The Last of the Mohicans",
+            "author": "James Fenimore Cooper",
+            "date": "first published 1826",
+            "genre": "early American historical-romance novel of the frontier",
+            "form": "third-person novel; second in the chronological order of the Leatherstocking Tales (The Deerslayer, The Last of the Mohicans, The Pathfinder, The Pioneers, The Prairie); set in 1757 around the British Fort William Henry on Lake George during the French and Indian War",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "The Fort William Henry massacre of August 1757 (the killing of "
+            "British soldiers and camp-followers by Native allies of the "
+            "French after the fort's surrender, a real historical event "
+            "the novel dramatizes); period attitudes toward Native peoples, "
+            "including the 'noble savage' and 'vanishing Indian' frames "
+            "the novel both perpetuates and partially complicates; the "
+            "novel's portrayal of the Mahican (here spelled Mohican), "
+            "Lenape (Delaware), and Wendat (Huron) peoples mixes historical "
+            "fact with literary convention. The actual Mohican people did "
+            "not vanish: they live today as the Stockbridge-Munsee "
+            "Community of Mohican Indians in Wisconsin; the novel's title "
+            "is a fiction. Mark Twain's 1895 essay 'Fenimore Cooper's "
+            "Literary Offenses' is the famous American critique. Honest "
+            "information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading proficient on Cooper's third-person narration in romance-tradition conventions inherited from Scott (lit-craft-003)",
+            "Character proficient: Hawkeye (Natty Bumppo), Chingachgook, Uncas, Magua, Cora Munro, Alice Munro, Major Heyward as constructed figures in the novel's romance-historical frame (lit-craft-013)",
+            "Theme proficient and advanced: the frontier as the novel's central setting; the 'vanishing' thesis the novel partially constructs and partially mourns; the historical event the novel dramatizes and what the dramatization does and does not honor (lit-craft-022; lit-craft-023)",
+            "Figurative system: the forest, the river, the cave at Glens Falls, the moccasin trail, the Massacre as the novel's central images (lit-craft-042)",
+            "All-sides historical treatment as a standard the novel does not consistently meet; the named peoples (Mahican / Lenape / Wendat) have documented histories the novel selectively represents (lit-craft-023 in the family of moves)",
+        ],
+        "entry": (
+            "Proficient: read the novel whole; meet Hawkeye, Chingachgook, "
+            "Uncas, and Magua as constructed figures; follow the dramatized "
+            "historical events around Fort William Henry; meet the cave at "
+            "Glens Falls and the river-and-forest figures as the novel's "
+            "central images. Advanced: argue what the novel does to and "
+            "for its named peoples (Mahican, Lenape, Wendat) and where "
+            "the novel's conventions distort the historical record; read "
+            "Twain's 'Fenimore Cooper's Literary Offenses' (1895) and the "
+            "twentieth-century critical literature alongside; argue what "
+            "the 'vanishing Indian' thesis does in the novel and what the "
+            "actual continuance of the Mohican people does to the novel's "
+            "title. Mastery: original argument about Cooper's role in "
+            "establishing the American frontier tradition and the cost "
+            "of his role in transmitting the 'vanishing' thesis."
+        ),
+        "close_reading_passages": [
+            "The cave at Glens Falls (the long defensive sequence in the early-middle chapters): how does the novel stage the forest-and-river world as the figurative through-line, and what does the staging do to Hawkeye's claim to be 'a man without a cross' (his much-repeated claim to white descent)?",
+            "The Fort William Henry massacre (the central historical event): how does the novel stage the historical violence, and where does the framing soften or sharpen what the historical record documents?",
+            "The closing chapters and the deaths of Uncas and Cora: how does the novel stage the title's claim, and what does Chingachgook do at the close that the novel itself does not fully reckon with (since the actual Mohican people did not vanish)?",
+        ],
+        "structural_analysis": (
+            "Third-person novel in romance-historical convention inherited "
+            "from Walter Scott; built around a journey across the colonial "
+            "frontier during the French and Indian War, structured by "
+            "captures and pursuits across forest, river, and fortified "
+            "places. Hawkeye and the Mohicans (Chingachgook and Uncas) "
+            "are the heroes; Magua is the antagonist; the Munro sisters "
+            "Cora and Alice are the captives whose fates structure the "
+            "plot. The structure is the novel's argument: the frontier "
+            "as the place where the cultures meet and the meeting is "
+            "rendered through romance-tradition conventions the novel "
+            "applies with uneven historical fidelity."
+        ),
+        "thematic_lines": [
+            "The frontier as the novel's central setting: a meeting-place rendered through romance conventions",
+            "The 'vanishing Indian' thesis: a literary fiction the novel both constructs and partially mourns; the actual continuance of the Mohican people complicates the title in ways the novel itself does not reckon with",
+            "Hawkeye's claim to be 'a man without a cross': what the repeated claim does in the novel and what it shows about the novel's racial framework",
+        ],
+        "comparative_threads": [
+            "Walter Scott's historical novels (Waverley, Ivanhoe): the romance-historical tradition Cooper inherits and adapts to the American frontier",
+            "lit-work-027 Adventures of Huckleberry Finn: Twain wrote 'Fenimore Cooper's Literary Offenses' (1895) as a famous attack on Cooper's prose; Huck Finn's vernacular voice is partly a refusal of Cooper's romance prose",
+            "lit-work-inh-017 Blood Meridian (next): McCarthy's late-twentieth-century departure from the frontier romance toward documented historical violence; the comparison is decisive",
+            "lit-work-inh-018 The Border Trilogy (next): McCarthy's later, quieter departure from the frontier romance",
+            "Native American writers from the twentieth century forward (N. Scott Momaday's House Made of Dawn; Louise Erdrich; Joy Harjo) as the continuation of voices Cooper's novel did not let speak; reading Cooper alongside this later body of work is part of reading the novel honestly",
+        ],
+        "seminar_questions": [
+            "What does Cooper's novel do that the historical record of the Fort William Henry massacre does not support, and what does it do that the historical record does support?",
+            "What does the title's 'vanishing' claim do in the novel, and what does the actual continuance of the Mohican people do to the claim?",
+            "Where does Hawkeye's repeated 'a man without a cross' do work in the novel that the novel does not reflect on?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the cave at Glens Falls, naming what the figurative system does and what it leaves out",
+            "The essay on the Fort William Henry massacre as the novel stages it, alongside a worthy historical account of the same event",
+            "At advanced, the essay on Twain's 1895 critique held against the novel, with attention to what Twain saw and what later critics have added",
+        ],
+        "context": (
+            "Composed in the 1820s during the early period of American "
+            "national literature; the second-published of the "
+            "Leatherstocking Tales but the second chronologically within "
+            "Hawkeye's life; established many of the tropes the long "
+            "American frontier tradition both inherited and argued with; "
+            "Cooper himself was a New York landowner whose family had "
+            "settled at Cooperstown on land taken from the Iroquois "
+            "Confederacy; supplied as fact, interpretation left to the "
+            "student."
+        ),
+        "lineage": (
+            "American myth and frontier. Source position. Established the "
+            "American frontier romance and many of the tropes the long "
+            "American tradition both inherited and argued with. The "
+            "tradition runs forward to Twain (lit-work-027), who attacked "
+            "Cooper directly in prose and refused the romance conventions "
+            "with a vernacular voice, and to McCarthy (lit-work-inh-017 "
+            "Blood Meridian and lit-work-inh-018 the Border Trilogy), who "
+            "in different ways departed from the frontier romance toward "
+            "documented historical violence and toward a quieter "
+            "late-century reckoning. Reading Cooper alongside twentieth-"
+            "century and contemporary Native American writers is part of "
+            "reading the inheritance honestly."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The foundational American frontier romance; the seminar text on the long tradition Cooper established and what the tradition has had to reckon with.",
+                "memory_work": {
+                    "recitations": [
+                        "Recitation of a chosen forest-and-river description from the cave-at-Glens-Falls sequence"
+                    ],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from what the figurative system claims and what the historical record adds or contradicts.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of The Last of the Mohicans (the Penguin Classics; the Library of America Leatherstocking volumes) read aloud across a term, paired with a worthy historical account of the French and Indian War and the Fort William Henry events for context",
+                ],
+                "short_lesson_flow": "A living book read aloud across the journey and narrated; the historical context held alongside the novel's conventions; deepening to analysis of Twain's critique and the larger questions of representation as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me what the novel said about each named people, and what you would want to know from the historical record.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of The Last of the Mohicans on the shelf, available, never assigned, with a worthy history of the French and Indian War alongside",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in the American frontier, in the French and Indian War, or in the long American novelistic tradition leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; do not paper over the novel's racial framework; bring twentieth-century Native American writers into the room when the novel's claims about Native peoples come up.",
+                "observation_documentation": "Over time, notice whether the student returns to the novel and begins to read its conventions against the historical record. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the American frontier romance and Cooper's place in the long tradition where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
