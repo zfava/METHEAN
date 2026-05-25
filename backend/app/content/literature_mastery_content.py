@@ -10387,4 +10387,131 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-014": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "The Nibelungenlied",
+            "author": "anonymous (composed by a poet of the upper Danube region, likely associated with the court of Wolfger von Erla, bishop of Passau)",
+            "date": "c. 1200",
+            "genre": "Middle High German heroic epic",
+            "form": "verse epic of 39 aventiuren (adventures); 2,379 stanzas in the four-line 'Nibelungenstrophe' (Nibelungen stanza)",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "Sustained heroic violence; the killing of Siegfried by Hagen "
+            "at a forest spring; the long second half is the destruction "
+            "of the Burgundians at Etzel's (Attila's) court at Kriemhild's "
+            "instigation; the cycle ends in the killing of nearly the "
+            "whole company; the poem holds the violence with the "
+            "seriousness its form requires. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading advanced on Middle High German stanzaic verse in worthy modern translation (lit-craft-004)",
+            "Character advanced: Siegfried, Brunhild, Kriemhild, Gunther, Hagen as figures whose Norse counterparts (Sigurd, Brynhildr, Gudrun, Gunnar, Hogni) the Eddas and the Volsungs handle differently (lit-craft-014)",
+            "Theme advanced: the destruction of the Burgundians as the poem's central argument; what the poem refuses to settle about Kriemhild's vengeance and Hagen's loyalty (lit-craft-023)",
+            "The Continental tradition's differences from the Norse: courtly chivalric trappings the Eddas do not have, different motives, a different shape to the same heroes' deaths (lit-craft-022)",
+        ],
+        "entry": (
+            "Advanced: read the poem whole in a worthy modern translation "
+            "across its two halves (the wooing and the killing of "
+            "Siegfried; the vengeance and the destruction at Etzel's "
+            "court); meet the Continental tradition's chivalric framing "
+            "and the differences from the Norse-Icelandic versions; argue "
+            "what the poem refuses to settle about Kriemhild and Hagen. "
+            "Mastery: original argument about the German tradition's "
+            "relation to the Norse and the long afterlife in Wagner."
+        ),
+        "close_reading_passages": [
+            "The arrival of Siegfried at Worms (aventiure 3-4): how does the poem stage the wooing-and-rivalry that drives the first half?",
+            "The killing of Siegfried at the spring (aventiure 16): how does the poem stage the act that the second half will revenge?",
+            "The closing destruction at Etzel's court (aventiures 35-39): how does the poem stage the final battle, and what does the ending refuse to settle?",
+        ],
+        "structural_analysis": (
+            "Two great halves. The first (aventiures 1-19): Siegfried "
+            "comes to Worms, marries Kriemhild, helps Gunther win "
+            "Brunhild, is killed by Hagen at the spring. The second "
+            "(aventiures 20-39): Kriemhild marries Etzel (Attila) of the "
+            "Huns and uses the marriage to engineer the destruction of "
+            "the Burgundians at Etzel's court. The Nibelungenstrophe "
+            "(four lines, the last lengthened) is the poem's distinctive "
+            "meter. The structure is the poem's argument: a wooing-and-"
+            "killing whose vengeance destroys everyone who participated "
+            "in the killing."
+        ),
+        "thematic_lines": [
+            "Vengeance and its costs: Kriemhild's revenge for Siegfried destroys the company that killed him and herself with it",
+            "Loyalty and its limits: Hagen's loyalty to his kin compels the killing of Siegfried; what the poem refuses to settle about whether Hagen is hero, villain, or both",
+            "The German tradition versus the Norse: what each tradition does differently with the same figures",
+        ],
+        "comparative_threads": [
+            "lit-work-inh-012 The Poetic Edda (Sigurd cycle): the Norse-Icelandic verse version of the same heroes (Sigurd / Brynhildr / Gudrun / Gunnar / Hogni); the comparison shows what the German tradition does differently",
+            "lit-work-005 The Saga of the Volsungs: the Norse prose version of the same material; the Continental and Norse traditions handle the same heroes with significantly different motives and structure",
+            "lit-work-inh-013 The Prose Edda: Snorri's reference to the heroic material; the two traditions converge and diverge",
+            "Wagner's Ring cycle (Der Ring des Nibelungen, 1869-1876): the central nineteenth-century operatic inheritor; Wagner drew on both the German and the Norse traditions",
+            "lit-work-inh-004 Tolkien's The Lord of the Rings: Tolkien was a scholar of the German as well as the Norse versions; his ring-and-curse material comes through both",
+        ],
+        "seminar_questions": [
+            "What does the German tradition do with Siegfried/Sigurd that the Norse tradition does not?",
+            "Is Hagen hero, villain, or both? Where does the poem refuse to say?",
+            "What does the closing destruction argue that the wooing-and-killing did not yet argue?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the killing of Siegfried at the spring, naming what the staging does that no Norse version does",
+            "The essay on Kriemhild's transformation from young wife to vengeful queen across the two halves",
+            "At advanced, the comparative essay on the German tradition versus the Norse on the same figures",
+        ],
+        "context": (
+            "Composed in the upper Danube region around 1200 by a poet "
+            "whose identity is unknown; the Middle High German heroic "
+            "epic survives in three principal manuscript versions (A, B, "
+            "C) with different lengths and endings; the central "
+            "Continental German version of the heroic material the Norse "
+            "tradition also preserves; supplied as fact, interpretation "
+            "left to the student."
+        ),
+        "lineage": (
+            "Norse-Germanic (Continental German branch). Source position. "
+            "The Continental medieval German verse epic of the same "
+            "Sigurd / Siegfried heroic material that the Poetic Edda "
+            "(lit-work-inh-012) and the Saga of the Volsungs "
+            "(lit-work-005) preserve in Norse. Wagner's Ring drew on "
+            "both the German and the Norse traditions for its operatic "
+            "cycle. Tolkien's (lit-work-inh-004) ring-and-curse material "
+            "comes through both traditions; Tolkien's scholarship "
+            "engaged both directly."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The central Continental medieval German heroic epic; the seminar text on what the German tradition does with the Sigurd heroes that the Norse does not.",
+                "memory_work": {
+                    "recitations": ["Recitation of the opening stanzas in a worthy modern translation"],
+                },
+                "recitation_routine": "Seminar opens from the recited opening; the discussion takes its first question from how the Nibelungenstrophe sets the meter for what follows.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of the Nibelungenlied (A. T. Hatto's Penguin Classics; Cyril Edwards's Oxford World's Classics) read aloud across the two halves",
+                ],
+                "short_lesson_flow": "A living book read aloud across the two halves and narrated; the Continental chivalric framing held alongside the Norse versions; deepening to analysis of the destruction-second-half as the bands move up.",
+                "narration_prompt": "Tell back the aventiure we read today, and tell me what changed about Kriemhild or Hagen across it.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of the Nibelungenlied on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in the German medieval tradition, in Wagner, or in the comparative heroic material across Norse and German leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the German and Norse versions of the same heroes stay distinct; do not collapse Kriemhild into Gudrun.",
+                "observation_documentation": "Over time, notice whether the student returns to the poem and begins to feel the differences from the Norse versions. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the Nibelungenstrophe and the Continental German version of the Sigurd material where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
