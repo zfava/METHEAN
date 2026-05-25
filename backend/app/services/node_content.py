@@ -784,4 +784,40 @@ def validate_competency(content: dict, authored_nodes: dict | None = None) -> li
                     f"safety node {safety_node_id!r}; prerequisites are {prereqs!r}"
                 )
 
+    # safety_review marker: a node may carry an optional safety_review block
+    # of the shape {reviewed: bool, reviewer: str|null, reviewed_on: str|null,
+    # standard_refs: list}. The only hard rule here is that reviewed True
+    # without a named reviewer and a reviewed_on date is not accepted; that
+    # rules out blank or self-claimed verification.
+    review = content.get("safety_review")
+    if isinstance(review, dict) and review.get("reviewed") is True:
+        if not review.get("reviewer") or not review.get("reviewed_on"):
+            raise ValueError(
+                "safety_review.reviewed is True but reviewer or reviewed_on is empty; "
+                "no blank or self-claimed verification"
+            )
+
     return warnings
+
+
+def requires_human_safety_review(node: dict) -> bool:
+    """Return True iff this node must carry a current human safety review before it can be surfaced to a learner.
+
+    True for any safety competency, and for any node whose
+    safety_basis.supervision_required is True. The intent is gating: any
+    node that requires a human watching the work also requires a human
+    reviewing the content.
+
+    TODO (integration): learning_context (and the planner) must refuse to
+    surface any activity whose node returns True from this function while
+    the node's safety_review.reviewed is False. That enforcement gate is
+    deferred to the integration task; it does not live in this module.
+    This helper exists now so the gate has a single, documented source of
+    truth when it is wired.
+    """
+    if not isinstance(node, dict):
+        return False
+    if node.get("node_type") == "safety":
+        return True
+    safety_basis = node.get("safety_basis") or {}
+    return bool(safety_basis.get("supervision_required"))

@@ -17,6 +17,7 @@ from app.services.node_content import (
     NODE_CONTENT_SCHEMA,
     TRADES_BANDS,
     TRADES_NODE_TYPES,
+    requires_human_safety_review,
     validate_competency,
 )
 
@@ -249,3 +250,70 @@ class TestAuthoredWoodworking:
                 assert prereq in authored_ids, (
                     f"{node_id} prereq {prereq!r} does not resolve to any authored node id"
                 )
+
+
+class TestSafetyReviewMarker:
+    def test_all_five_nodes_have_safety_review_block_unreviewed(self) -> None:
+        for node_id, node in WOODWORKING_CONTENT.items():
+            review = node.get("safety_review")
+            assert isinstance(review, dict), f"{node_id} missing safety_review block"
+            assert review.get("reviewed") is False, f"{node_id} safety_review.reviewed is not False"
+            assert review.get("reviewer") is None, f"{node_id} safety_review.reviewer is not None"
+            assert review.get("reviewed_on") is None, f"{node_id} safety_review.reviewed_on is not None"
+            assert isinstance(review.get("standard_refs"), list), f"{node_id} safety_review.standard_refs is not a list"
+
+    def test_validator_rejects_reviewed_true_without_reviewer(self) -> None:
+        node = _minimal_safety_node(
+            safety_review={"reviewed": True, "reviewer": None, "reviewed_on": "2026-05-25", "standard_refs": []},
+        )
+        with pytest.raises(ValueError, match="reviewer or reviewed_on is empty"):
+            validate_competency(node)
+
+    def test_validator_rejects_reviewed_true_without_reviewed_on(self) -> None:
+        node = _minimal_safety_node(
+            safety_review={"reviewed": True, "reviewer": "Jane Smith", "reviewed_on": None, "standard_refs": []},
+        )
+        with pytest.raises(ValueError, match="reviewer or reviewed_on is empty"):
+            validate_competency(node)
+
+    def test_validator_accepts_reviewed_true_with_both_fields(self) -> None:
+        node = _minimal_safety_node(
+            safety_review={
+                "reviewed": True,
+                "reviewer": "Jane Smith, 20 years carpentry",
+                "reviewed_on": "2026-05-25",
+                "standard_refs": [],
+            },
+        )
+        validate_competency(node)
+
+    def test_validator_accepts_reviewed_false_with_empty_fields(self) -> None:
+        node = _minimal_safety_node(
+            safety_review={"reviewed": False, "reviewer": None, "reviewed_on": None, "standard_refs": []},
+        )
+        validate_competency(node)
+
+
+class TestRequiresHumanSafetyReview:
+    def test_helper_returns_true_for_safety_node(self) -> None:
+        assert requires_human_safety_review(WOODWORKING_CONTENT["ws-001"]) is True
+
+    def test_helper_returns_true_for_every_supervision_required_node(self) -> None:
+        for node_id, node in WOODWORKING_CONTENT.items():
+            if node.get("node_type") != "technique":
+                continue
+            supervised = (node.get("safety_basis") or {}).get("supervision_required") is True
+            if supervised:
+                assert requires_human_safety_review(node) is True, (
+                    f"{node_id} is supervised but requires_human_safety_review returned False"
+                )
+
+    def test_helper_returns_false_for_non_supervised_technique(self) -> None:
+        assert requires_human_safety_review(WOODWORKING_CONTENT["wc-001"]) is False
+
+    def test_helper_returns_false_for_root_node(self) -> None:
+        assert requires_human_safety_review(WOODWORKING_CONTENT["woodworking-root"]) is False
+
+    def test_helper_handles_non_dict_input(self) -> None:
+        assert requires_human_safety_review("not a dict") is False  # type: ignore[arg-type]
+        assert requires_human_safety_review(None) is False  # type: ignore[arg-type]

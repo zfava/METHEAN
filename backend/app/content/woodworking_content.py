@@ -39,6 +39,12 @@ WOODWORKING_CONTENT: dict[str, dict] = {
         },
         "safety_node": "ws-001",
         "progression_bands": ["helper", "apprentice", "journeyman", "qualified"],
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
     },
     "ws-001": {
         "node_type": "safety",
@@ -274,6 +280,12 @@ WOODWORKING_CONTENT: dict[str, dict] = {
         "session_length_minutes": 45,
         "signoff_validity_days": 365,
         "related_projects": [],
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
     },
     "wc-001": {
         "node_type": "technique",
@@ -448,6 +460,12 @@ WOODWORKING_CONTENT: dict[str, dict] = {
         "estimated_practice_sessions_to_signoff": 3,
         "session_length_minutes": 20,
         "related_projects": [],
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
     },
     "wc-002": {
         "node_type": "technique",
@@ -662,6 +680,12 @@ WOODWORKING_CONTENT: dict[str, dict] = {
         "estimated_practice_sessions_to_signoff": 4,
         "session_length_minutes": 30,
         "related_projects": [],
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
     },
     "wc-021": {
         "node_type": "technique",
@@ -862,5 +886,11 @@ WOODWORKING_CONTENT: dict[str, dict] = {
         "estimated_practice_sessions_to_signoff": 6,
         "session_length_minutes": 30,
         "related_projects": [],
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
     },
 }
