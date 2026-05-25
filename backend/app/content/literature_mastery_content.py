@@ -9830,4 +9830,148 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-010": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "The Warlord Chronicles (The Winter King 1995; Enemy of God 1996; Excalibur 1997)",
+            "author": "Bernard Cornwell",
+            "date": "1995-1997 as three novels; read as a single trilogy",
+            "genre": "late-twentieth-century historical Arthurian novel",
+            "form": "first-person retrospective trilogy narrated by the old Saxon-born warrior Derfel Cadarn, writing as a reluctant Christian monk for the queen who wants the truth about Arthur set down before the chroniclers fix the wrong story",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Sustained battlefield violence in the post-Roman British wars; "
+            "the religious conflicts between Britons (a mixture of "
+            "Christians, Druids, and older devotion) and the pagan Saxon "
+            "invaders, depicted from the perspectives of multiple parties "
+            "without sanitizing any of them; the rituals of Merlin and "
+            "Nimue depicted with their own seriousness rather than as "
+            "either celebrated or condemned by the novels; the murder of "
+            "the boy-king Mordred at the close; Cornwell's foreword to "
+            "The Winter King names Malory and explicitly diverges from "
+            "him toward post-Roman historical reconstruction. In-copyright; "
+            "analyzed and pointed to, never reproduced. Honest information, "
+            "not a gate."
+        ),
+        "craft_focus": [
+            "First-person retrospective narration by Derfel, writing in old age and explicitly aware of how chroniclers will misremember (lit-craft-008; lit-craft-031 in the family of moves)",
+            "Character advanced: Arthur as warlord, not king, serving the boy-king Mordred; Merlin as a constructed presence the novels refuse to make either heroic or villainous; Derfel as the witness who survives (lit-craft-014)",
+            "Theme advanced: the loss of post-Roman Britain to the Saxon migrations; what is held and what is lost; the Christian/Druid/pagan three-way conflict treated as a contest of real worlds rather than a moral binary (lit-craft-023)",
+            "Figurative system: Caledfwlch (Excalibur in the older Welsh form); the cauldron; the head of Aelle; the Tor at Ynys Wydryn; the slow turn of seasons across the trilogy (lit-craft-042)",
+        ],
+        "entry": (
+            "Proficient: read the three novels in order as one trilogy; "
+            "follow Derfel's first-person voice across the long span; meet "
+            "Arthur as warlord rather than king and Merlin as a "
+            "constructed presence the novels refuse to flatten; meet the "
+            "post-Roman British world Cornwell builds from the Welsh "
+            "sources, the archaeology, and explicit invention. Advanced: "
+            "argue what Cornwell does to the Malory inheritance "
+            "(lit-work-inh-007) by recasting Arthur as warlord and "
+            "removing the Round Table's chivalric frame; argue the "
+            "Christian/Druid/pagan three-way conflict as it is treated in "
+            "the novels, with attention to where Cornwell refuses to "
+            "endorse any party; honor what the trilogy refuses to settle "
+            "about the loss to the Saxons. Mastery: original argument "
+            "about post-Roman British historical fiction and how it "
+            "departs from Malory's Round-Table inheritance."
+        ),
+        "close_reading_passages": [
+            "The Winter King, the opening with Derfel writing in old age for Igraine the queen: how does the trilogy stage its narrator and his stated purpose, and what does the frame let the trilogy claim about truth and chronicle?",
+            "The battle scenes of all three novels (especially the late battle in Excalibur): how does the trilogy stage post-Roman British warfare without sanitizing any of the parties present?",
+            "The Christian/Druid moments across the trilogy (Merlin's quest for the Cauldron, Sansum's bishopric, Nimue's rituals): how does the trilogy hold the religious conflict as a contest of real worlds rather than a moral binary?",
+        ],
+        "structural_analysis": (
+            "Three novels narrated retrospectively by Derfel Cadarn, a "
+            "Saxon-born war-orphan taken into Arthur's household and "
+            "raised as a Briton, now an old Christian monk under abbatial "
+            "discipline writing the true account at the urging of Queen "
+            "Igraine. The frame is the trilogy's argument: chronicle is "
+            "written by survivors who had reasons, and the post-Roman "
+            "British world has no Round Table because the order Malory's "
+            "cycle described was a later imposition on a harsher, more "
+            "fragmented historical moment. The figurative system "
+            "(Caledfwlch, the cauldron, the Tor, the Saxon heads on "
+            "spears) carries the trilogy's meaning across the long span."
+        ),
+        "thematic_lines": [
+            "Arthur as warlord, not king: Cornwell's central departure from Malory and from the Tennysonian frame",
+            "The post-Roman British world as a contest of multiple parties (Briton Christians, Briton Druids, older devotion, Saxon pagans), none of which the trilogy endorses; the even-handed all-sides historical treatment is the trilogy's commitment",
+            "What is lost to the Saxons: the slow falling-away that the trilogy refuses to make either tragic or just",
+        ],
+        "comparative_threads": [
+            "lit-work-inh-007 Le Morte d'Arthur: Cornwell's foreword names Malory and explicitly diverges; the absence of the Round Table in the trilogy is itself the argument with Malory",
+            "lit-work-inh-008 Idylls of the King: the Victorian moral frame Cornwell is also leaving behind; the comparison illuminates what historical reconstruction does that moral allegory cannot",
+            "lit-work-inh-009 The Once and Future King: White's mid-twentieth-century departure from Malory by adding modern commentary; Cornwell's late-twentieth-century departure by reconstructing the historical period; two different roads away from Malory",
+            "lit-work-inh-011 The Saxon Stories / The Last Kingdom: same author, next historical moment; the Saxons who were the enemies in this trilogy are the protagonists' people in that one; the Britons of this trilogy have been pushed west and appear at the margins",
+            "The Welsh sources (the Mabinogion; the Annales Cambriae; the Historia Brittonum's brief Arthurian battle list) that Cornwell drew on alongside the archaeological evidence of the post-Roman fifth-and-sixth centuries",
+        ],
+        "seminar_questions": [
+            "What does Cornwell do by recasting Arthur as warlord rather than king?",
+            "Where in the trilogy does the religious three-way conflict get treated as a contest of worlds rather than a moral binary? Where does the trilogy refuse to endorse any party?",
+            "What does Derfel's frame (an old Saxon-born monk writing for a queen) let the trilogy claim about chronicle and truth?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on Derfel's frame, naming what the first-person retrospective lets the trilogy claim",
+            "The essay on Arthur as warlord rather than king, with passages from The Winter King and Excalibur",
+            "At advanced, the essay on the trilogy's even-handed treatment of the Christian/Druid/pagan three-way conflict",
+        ],
+        "context": (
+            "Composed in the 1990s by Cornwell, who is best known for the "
+            "Sharpe series of Napoleonic-era historical novels; the "
+            "Warlord Chronicles depart from his usual ground into post-"
+            "Roman Britain, drawing on the Welsh sources, the limited "
+            "archaeological evidence, and explicit invention; Cornwell "
+            "writes the trilogy as a deliberate alternative to the Malory "
+            "and Tennyson inheritance; supplied as fact, interpretation "
+            "left to the student."
+        ),
+        "lineage": (
+            "Matter of Britain. Inheritor position. The trilogy is in "
+            "explicit argument with the Malory (lit-work-inh-007) and "
+            "Tennyson (lit-work-inh-008) inheritance: Arthur is recast as "
+            "warlord rather than king, the Round Table is absent, and the "
+            "moral allegory is replaced with historical reconstruction. "
+            "Cornwell also departs from White's (lit-work-inh-009) "
+            "twentieth-century reading of Malory by reconstructing the "
+            "period rather than commenting on Malory. The trilogy threads "
+            "forward to the Saxon Stories (lit-work-inh-011), which "
+            "treats the next historical moment after Arthur and shows the "
+            "Saxons who were the enemies here as the protagonists' people."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The late-twentieth-century historical Arthurian trilogy that recasts Arthur as warlord and departs from the Malory inheritance toward post-Roman reconstruction.",
+                "memory_work": {
+                    "recitations": ["Recitation of the opening of The Winter King in which Derfel names his task"],
+                },
+                "recitation_routine": "Seminar opens from the recited opening; the discussion takes its first question from what Derfel says he is doing and what he might be doing instead.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of the Warlord Chronicles (the original Penguin or HarperCollins paperback editions; the recent Cornwell omnibus where available) read aloud across a term, in chunks",
+                ],
+                "short_lesson_flow": "A living book read aloud across the three novels and narrated; Derfel's frame held in mind; deepening to analysis of the religious three-way conflict as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me what Derfel said and what he might have left out for the queen.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of the Warlord Chronicles on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in historical fiction, in post-Roman Britain, or in alternatives to the Malory-and-Tennyson Arthurian inheritance leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the religious three-way conflict stay even-handed; do not collapse the trilogy into a side.",
+                "observation_documentation": "Over time, notice whether the student returns to the trilogy and brings post-Roman British material into other reading. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of post-Roman British historical fiction and the trilogy's departure from Malory where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
