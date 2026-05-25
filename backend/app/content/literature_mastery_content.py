@@ -509,6 +509,163 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-006": {
+        "node_type": "craft",
+        "strand": "narrative craft",
+        "band": "emerging",
+        "prerequisites": [],
+        "objective": (
+            "Notice whose voice is telling the story, in concrete, oral, age-appropriate "
+            "form: say who is telling, and point to a place in the text where the teller "
+            "appears."
+        ),
+        "core_understanding": (
+            "Every story has a teller. Sometimes the teller is a person inside the "
+            "story; sometimes the teller is a voice outside it. At the seed of point of "
+            "view, the child learns to listen for who is talking and to notice when the "
+            "'I' of the story is and is not the same person as the writer."
+        ),
+        "analytical_moves": [
+            (
+                "When listening to a story, say who is telling it: the writer, a "
+                "character, or someone watching from outside?"
+            ),
+            "Point to a moment where the teller appears, using the word 'I' or speaking of themselves",
+            (
+                "Notice when the teller knows more than any one character could know, "
+                "and when the teller knows only what one character knows"
+            ),
+        ],
+        "seminar_questions": [
+            "Who is telling us this story?",
+            "How do you know it is them telling it?",
+            "Do they see everything, or only what one person sees?",
+        ],
+        "writing_invitations": [
+            (
+                "After a read-aloud, draw the storyteller as you imagine them and write "
+                "one word for who they are (a person in the story, or a voice outside it)"
+            ),
+            (
+                "Tell a short story aloud from your own 'I' voice; then tell a short "
+                "story as someone watching from outside; notice the difference"
+            ),
+        ],
+        "exemplar_texts": [
+            "A first-person picture book or short chapter book (the Frances books; Ramona, told about her)",
+            "A folk tale told in the omniscient outside voice (a tale from Andrew Lang's fairy books)",
+            "A simple first-person poem suitable to the age (a Stevenson from A Child's Garden of Verses)",
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "Before we name the kinds of teller, we first hear that there is a "
+                    "teller. We listen, ask who is telling, and recite one line in the "
+                    "teller's own voice."
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "A single line in which the teller's voice can be plainly heard",
+                    ],
+                },
+                "copywork": [
+                    "The recited line copied once, slowly, with the teller named beneath it",
+                ],
+                "recitation_routine": (
+                    "Each session begins by reciting yesterday's teller-line; the new "
+                    "lesson opens with the question 'and who is telling today?'"
+                ),
+                "read_aloud_suggestions": [
+                    "A first-person picture book whose 'I' voice is plain",
+                    "A folk tale told in the outside, all-seeing voice, for contrast",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A worthy picture book or short chapter book whose teller is easily heard",
+                ],
+                "short_lesson_flow": (
+                    "Read a short passage aloud, attentively. The child narrates. Then "
+                    "ask: who is telling us this? How do you know? If today's voice is a "
+                    "person in the story and yesterday's was not, set the two beside "
+                    "each other and listen to the difference."
+                ),
+                "narration_prompt": "Tell back what we read, and tell me who is telling it.",
+                "real_world_objects": [
+                    "A worthy book in hand, not a worksheet",
+                    "A small card on which the teller of the day's reading is named",
+                ],
+                "nature_connection": (
+                    "Listening for who is telling is the same habit as listening for "
+                    "which bird is singing: a particular voice with a particular sound, "
+                    "noticed before any name for the kind of voice is offered."
+                ),
+                "habit_focus": (
+                    "The habit of attention to voice: hearing that a story is being "
+                    "told, and by whom, before any judgment of the story is offered."
+                ),
+            },
+            "traditional": {
+                "introduction": "Explicit, modeled identification of the teller on a short, age-appropriate passage.",
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher reads a passage aloud and names the teller plainly: "
+                        "'This story is being told by a person inside it, by Frances, "
+                        "and she calls herself I.'"
+                    ),
+                    "we_do": (
+                        "Teacher reads a second passage and, together with the child, "
+                        "names the teller and points to the words that show it."
+                    ),
+                    "you_do": (
+                        "Child listens to a new short passage and names the teller "
+                        "aloud, then points to the words that show it."
+                    ),
+                },
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a mixed shelf of first-person and third-person picture books within reach",
+                    "Read aloud often, and now and then wonder aloud who is telling this story",
+                ],
+                "real_world_contexts": [
+                    "The picture book in which the child notices that the voice 'is talking to me'",
+                    "A favorite bedtime story whose teller the child can name without prompting",
+                    "The child telling a story of their own, choosing whether to use 'I' or 'she'",
+                ],
+                "conversation_starters": [
+                    "Who is telling us this story?",
+                    "Is it the writer, or someone in the story?",
+                    "How do they know what they know?",
+                ],
+                "resource_bank": [
+                    "A shelf with picture books in both first and third person",
+                    "A growing little list of teller-voices the child has noticed",
+                ],
+                "parent_role": (
+                    "Read aloud well, and when a teller's voice is striking, name it as "
+                    "though you were noticing it for the first time. Welcome the child's "
+                    "noticing without correction, and trust that the awareness of voice "
+                    "grows from being delighted in."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the child begins to say things like 'this "
+                    "one is the writer talking' or 'this one is a girl telling about "
+                    "herself,' and whether the child sometimes shifts voices in their "
+                    "own telling. This noticing replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori at this band does not carry a distinct method for noticing "
+                "the narrator of a story; the prepared environment centers on word study, "
+                "sentence analysis, and the grammar materials rather than on questions "
+                "of literary voice."
+            ),
+        },
+    },
     "lit-craft-010": {
         "node_type": "craft",
         "strand": "character",

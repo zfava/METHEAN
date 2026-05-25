@@ -215,6 +215,7 @@ AUTHORED_NODE_IDS = (
     "lit-craft-001",
     "lit-craft-002",
     "lit-craft-003",
+    "lit-craft-006",
     "lit-craft-010",
 )
 
