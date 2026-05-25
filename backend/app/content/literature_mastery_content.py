@@ -4157,6 +4157,204 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-051": {
+        "node_type": "craft",
+        "strand": "drama",
+        "band": "developing",
+        "prerequisites": ["drama: emerging", "close reading: developing", "character: emerging"],
+        "objective": (
+            "Read a scene with multiple characters and track who is on stage at every "
+            "moment; recognize the soliloquy as a character speaking when no one else "
+            "is on stage and the aside as a brief direct address to the audience while "
+            "others are on stage but not meant to hear; begin to feel dramatic irony "
+            "when the audience knows what a character does not."
+        ),
+        "core_understanding": (
+            "At this band the reader meets the conventions that make drama what it "
+            "is. The soliloquy is a character thinking out loud, alone, in a way they "
+            "would never speak to another character. The aside is a brief direct "
+            "address to the audience while others are on stage but not hearing it. "
+            "Both are the playwright's way of giving the audience access to what no "
+            "narrator can give them, because there is no narrator. Dramatic irony "
+            "arises when the audience knows what a character does not: this is one "
+            "of the deepest moves the form makes, and at this band it is recognized "
+            "when it appears in a scene the reader has met."
+        ),
+        "analytical_moves": [
+            "Track who is on stage at every moment of a scene; entrances and exits matter",
+            (
+                "Identify a soliloquy by its character-alone-on-stage convention and "
+                "explain what the character reveals that they would never say to "
+                "another character"
+            ),
+            ("Identify an aside and explain what the audience hears that the other characters on stage do not"),
+            "Name a moment of dramatic irony in a scene already read: where the audience knows what a character does not, and how we know it",
+            (
+                "Read a stage direction as a meaningful choice the playwright made "
+                "(an entrance, an exit, a refusal to look at someone, a touch withheld)"
+            ),
+        ],
+        "seminar_questions": [
+            "Who is on stage when this character is alone, and what does the character say only because they are alone?",
+            "Where in this scene does the audience know something a character does not? How do we know it?",
+            "What did the stage direction just tell us, and what does it change about the scene?",
+        ],
+        "writing_invitations": [
+            (
+                "Write a short paragraph about a soliloquy you read, naming what the "
+                "character reveals that they would never tell another character on stage"
+            ),
+            (
+                "Write the paragraph that explains where in a scene the audience "
+                "knows what a character does not, and what the scene gains by the gap"
+            ),
+        ],
+        "exemplar_texts": [
+            (
+                "A short Shakespearean soliloquy (Hamlet's first soliloquy 'O that "
+                "this too too solid flesh'; Macbeth's 'Is this a dagger which I see "
+                "before me')"
+            ),
+            (
+                "A scene of dramatic irony (the cross-gartering scene with Malvolio "
+                "in Twelfth Night; the tomb scene in Romeo and Juliet where the "
+                "audience knows Juliet is not dead)"
+            ),
+            (
+                "A short play or scene accessible to a developing reader (a Greek "
+                "myth dramatized for young readers; a scene from Wilder's Our Town)"
+            ),
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "After the play is met as a script to be spoken, the reader meets "
+                    "the conventions that make drama distinct. Soliloquy and aside, "
+                    "recognized in the classical curriculum since the grammar school "
+                    "of the Renaissance, are not narration in disguise; they are the "
+                    "playwright's solution to what narration cannot do in a form that "
+                    "has no narrator."
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "A soliloquy of eight to sixteen lines recited from memory at the seminar's opening",
+                    ],
+                },
+                "copywork": [
+                    "The recited soliloquy copied into the kept commonplace book",
+                ],
+                "recitation_routine": (
+                    "Each seminar opens from a recited soliloquy or speech; the "
+                    "first question is taken from what the speaker would never say "
+                    "to another character on stage."
+                ),
+                "read_aloud_suggestions": [
+                    "A scene from Shakespeare read aloud in parts before discussion",
+                    "A short Greek tragedy (or a portion of one) in a worthy modern translation read aloud",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "A worthy edition of a Shakespearean play (Folger; Arden student editions) read at home aloud",
+                    "A volume of dramatic readings drawn from Greek myth",
+                ],
+                "short_lesson_flow": (
+                    "Read a short scene aloud, taking parts where possible. The "
+                    "child narrates the scene, naming who was on stage and what each "
+                    "character said. When a soliloquy appears, ask: nobody else is "
+                    "on stage here; what is the character telling us that they would "
+                    "never tell another character?"
+                ),
+                "narration_prompt": (
+                    "Tell back the scene, and tell me who was on stage when, and "
+                    "what the character said when no one was listening except us."
+                ),
+                "real_world_objects": [
+                    "A worthy edition of the play in the reader's hands, with character names easy to find",
+                ],
+                "nature_connection": (
+                    "A soliloquy is to a play what a creature standing still in a "
+                    "clearing is to the forest: the only moment we see them whole, "
+                    "because there is no one else they are aware of."
+                ),
+                "habit_focus": (
+                    "The habit of asking who is on stage, and the habit of hearing a "
+                    "soliloquy as the playwright's way of letting us in."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in the conventions of soliloquy, aside, "
+                    "and dramatic irony, with practice in identifying each in a "
+                    "short scene and writing the paragraph that explains it."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher reads a soliloquy aloud and names it: this "
+                        "character is alone on stage; this is what they would not "
+                        "say to anyone else. Teacher then reads an aside and "
+                        "explains the convention. Teacher reads a moment of dramatic "
+                        "irony and explains what the audience knows that the "
+                        "character does not."
+                    ),
+                    "we_do": (
+                        "Class works through a scene together, identifying "
+                        "soliloquy, aside, or dramatic irony as each appears, and "
+                        "naming what each reveals or conceals."
+                    ),
+                    "you_do": (
+                        "Student identifies independently a soliloquy, an aside, or "
+                        "a moment of dramatic irony in a new scene and writes a "
+                        "short paragraph explaining it."
+                    ),
+                },
+                "independent_practice": [
+                    "A short notebook entry on a soliloquy, an aside, or a moment of dramatic irony from the play under study",
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a shelf of worthy editions of Shakespeare and accessible Greek tragedy",
+                ],
+                "real_world_contexts": [
+                    "A family viewing of a live or filmed performance of the play the child is reading",
+                    "A long evening discussing why a character said what they said when they were alone",
+                    "A read-aloud of a soliloquy because the reader wanted to hear it out loud",
+                ],
+                "conversation_starters": [
+                    "Why is he alone on the stage right now? What does that let him say?",
+                    "Did anyone else just hear that? Was that for us?",
+                    "We know more than she does right now. How did we get to know it?",
+                ],
+                "resource_bank": [
+                    "A shelf of plays; a streaming service or library DVDs of worthy performances of those plays",
+                ],
+                "parent_role": (
+                    "Be a fellow reader who has their own beloved soliloquies and "
+                    "welcomes the child's. Read a scene together aloud; watch a "
+                    "performance afterward. Drama meets the unschooler in the "
+                    "cadence of speech."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the child begins to ask 'why is he "
+                    "alone' or 'are we the only ones who heard that' on their own. "
+                    "This noticing replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori at this band does not carry a distinct method for the "
+                "analytical reading of dramatic convention. The Montessori "
+                "adolescent program has elements of drama in the prepared "
+                "environment but is not the same practice as the close reading of "
+                "staged conventions in a written play; the practice here is drawn "
+                "from the seminar tradition and the long Charlotte Mason habit of "
+                "reading aloud."
+            ),
+        },
+    },
     "lit-work-001": {
         "node_type": "work",
         "track": "classics",
