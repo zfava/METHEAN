@@ -3759,6 +3759,239 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-043": {
+        "node_type": "craft",
+        "strand": "figurative language and symbol",
+        "band": "advanced",
+        "prerequisites": ["figurative language and symbol: proficient", "lit-craft-031", "close reading: proficient"],
+        "objective": (
+            "Read irony as the writer's gap between figure and literal claim, a "
+            "refusal that itself bears meaning; read the work's full figurative "
+            "system as constitutive of its meaning rather than supportive of it; "
+            "trace inherited figures (the wasteland, the journey, the descent, the "
+            "threshold) across the tradition and ask what this writer does with the "
+            "inheritance; recognize when a figure does work the work cannot do in "
+            "plain language at all."
+        ),
+        "core_understanding": (
+            "At the proficient band the reader tracked figurative networks across a "
+            "whole work, distinguished inherited from invented symbol, and defended "
+            "a small original reading line by line. At the advanced band the figure "
+            "is the work's argument and not its support: certain things a work "
+            "needs to mean cannot be said plainly, and a writer chooses figure "
+            "because plain language cannot carry the meaning. The reader also meets "
+            "irony as figure's farthest reach: a gap between the literal claim and "
+            "what the work lets the reader infer, a refusal of plain saying that "
+            "itself does the work. (Irony in this sense is a near-relation of the "
+            "unreliable narrator's gap, which is why the narrative-craft advanced "
+            "node sits in the prerequisite chain.) The reader brings the tradition "
+            "to the figure: an inherited figure carries with it everything earlier "
+            "writers have done with it, and a writer using it is doing something to "
+            "an inheritance."
+        ),
+        "analytical_moves": [
+            "Read irony as the writer's gap between figure and literal claim and argue what the refusal of plain saying is doing in the work",
+            "Argue the work's full figurative system as constitutive of its meaning rather than as a layer added on top of it",
+            "Trace an inherited figure across the tradition and argue what this writer does with the inheritance",
+            "Identify a meaning the work makes available only through figure and could not make available in plain language at all",
+            "Write the sustained essay that argues a work's figurative argument, holding multiple passages in productive tension",
+        ],
+        "seminar_questions": [
+            "Where in this work does plain saying fail, and what does the figure do that plain saying could not?",
+            "Which inherited figure is this work working with, and what is the writer doing to it?",
+            "Where does this work say one thing and let the reader infer another, and what is gained by the gap?",
+        ],
+        "writing_invitations": [
+            (
+                "Write a sustained essay arguing a chosen work's figurative argument "
+                "as the very way the work means, holding three or four passages in "
+                "productive tension and naming the inherited figures the work is "
+                "working with"
+            ),
+            (
+                "Write the paragraph that argues what a single ironic moment in a "
+                "work is refusing to say plainly and what is gained by the refusal"
+            ),
+        ],
+        "exemplar_texts": [
+            (
+                "A novel whose figurative system is its meaning (Moby-Dick; The "
+                "Scarlet Letter; T. S. Eliot's The Waste Land if poetry is included; "
+                "Tolkien's Lord of the Rings against the inheritance of the quest)"
+            ),
+            "A novel whose central move is ironic (Pride and Prejudice's narrator; a Mark Twain; an Austen)",
+            (
+                "A poem whose figurative argument the reader has lived with long "
+                "enough to feel its inheritance (a Hopkins set against the "
+                "tradition of devotional poetry; a Yeats set against Romantic "
+                "inheritance)"
+            ),
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "Figure meets the long seminar and the genealogy of figures. The "
+                    "reader has tracked networks across a work and named inherited "
+                    "symbol; now the figure is the argument, irony is its farthest "
+                    "reach, and the tradition's stock of figures comes into the "
+                    "room. Rhetorical analysis and the history of figures converge: "
+                    "by what particular choices does this writer make this "
+                    "figurative argument available, which inherited figures has the "
+                    "writer taken up, and where does the work refuse to say plainly "
+                    "what figure does for it?"
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "A passage in which a work's whole figurative argument is most plainly at work, recited at the seminar's opening",
+                        "A passage from elsewhere in the tradition handling the same inherited figure",
+                    ],
+                },
+                "copywork": [
+                    "The recited passage copied into the kept commonplace book, with the inherited figure the writer is working with noted in the margin",
+                ],
+                "recitation_routine": (
+                    "Each seminar opens from two recited passages: one from the work "
+                    "under study and one from elsewhere in the inheritance of the "
+                    "figure; the first question is taken from what each lets the "
+                    "other see, and the discussion returns to the text for every claim."
+                ),
+                "read_aloud_suggestions": [
+                    "A passage at the heart of a work's figurative argument, read aloud at the seminar's opening",
+                    "A passage from elsewhere in the tradition working the same inherited figure, read aloud beside it",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 50,
+                "living_book_suggestions": [
+                    "A worthy novel whose figurative argument is sustained across the work, read whole at a sustained pace",
+                    "A second work earlier in the inheritance of the same figure, read alongside or after to bring the inheritance into the commonplace work",
+                ],
+                "short_lesson_flow": (
+                    "The advanced student reads the work whole at a sustained pace, "
+                    "narrating each sitting. As the figurative argument emerges, "
+                    "passages are slipped or marked, including moments of irony "
+                    "where the work refuses plain saying. At a chapter's end one "
+                    "passage is taken up, copied into the commonplace book, and "
+                    "discussed: what figurative argument is this work making, what "
+                    "inherited figures is the writer working with, and where does "
+                    "the figure do work that plain language could not? When the "
+                    "second work in the inheritance is read, the commonplace book "
+                    "holds the comparative passage."
+                ),
+                "narration_prompt": (
+                    "Tell back what you read, and tell me which figure in the work "
+                    "is doing what plain saying could not, and which passage from "
+                    "elsewhere in the inheritance you would set beside it."
+                ),
+                "real_world_objects": [
+                    "The whole work, marked at passages where the figurative argument is most plainly at work and where irony refuses plain saying",
+                    "A commonplace book gathering figurative passages and the inherited figures they belong to across many works",
+                ],
+                "nature_connection": (
+                    "A figurative argument in a worthy book is to the work what a "
+                    "long-watched feature of a landscape is to a naturalist: not a "
+                    "thing seen at a glance, but the meaning a place carries that "
+                    "only the long returning reveals."
+                ),
+                "habit_focus": (
+                    "The habit of asking what plain language could not do that the "
+                    "figure does, and the habit of bringing the inheritance of "
+                    "figures into the reading of a particular work."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in reading irony as figure's gap between "
+                    "literal claim and inference, in arguing a work's full "
+                    "figurative system as the very way the work means, in tracing "
+                    "inherited figures across the tradition, and in writing the "
+                    "sustained essay that argues the work's figurative argument."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher works a chosen work on the board: names the work's "
+                        "figurative argument as a hypothesis, identifies the "
+                        "inherited figures the writer is working with, points to a "
+                        "moment of irony where the work refuses plain saying, and "
+                        "drafts the opening of a sustained essay that argues the "
+                        "figurative argument, quoting two passages from the work "
+                        "and one from the inheritance."
+                    ),
+                    "we_do": (
+                        "Class gathers the decisive figurative passages of a chosen "
+                        "work, weighs the writer's use of an inherited figure, "
+                        "identifies moments of ironic refusal, and drafts together "
+                        "the body of the sustained essay arguing the figurative argument."
+                    ),
+                    "you_do": (
+                        "Student writes an independent sustained essay on a chosen "
+                        "work, arguing its figurative argument, naming the "
+                        "inherited figures it works with, identifying a moment of "
+                        "irony as figure's refusal, and holding three or four "
+                        "passages in productive tension, and revises after seminar."
+                    ),
+                },
+                "independent_practice": [
+                    "The sustained essay on a self-chosen work, arguing its figurative argument and naming the inherited figures",
+                    "A paragraph on a single ironic moment in the work, arguing what the refusal is doing",
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep the long shelf of difficult, worthy works rich in figurative substance, the ones the reader has returned to over years, available, never assigned",
+                    "Keep the commonplace book matured into a habit, with figurative passages from different works set in conversation rather than in isolation",
+                ],
+                "real_world_contexts": [
+                    "A reader who has lived with a single figurative network across years and watched it surface as the patterns surfaced from many returns",
+                    "A piece of writing the reader produced because a moment of irony in a long-beloved book finally became plain to them as refusal",
+                    "A long conversation in which two readers who have each lived with the same work bring the same inherited figure from different books into the room",
+                ],
+                "conversation_starters": [
+                    "What does this figure in this book do that plain saying could not? When did that become plain to you?",
+                    "Which other book that you have lived with works the same figure? Read me the passage where the connection lives.",
+                    "Where does this book say one thing and let you infer another? When did you start to feel the gap?",
+                ],
+                "resource_bank": [
+                    "A shelf of difficult, worthy work in which figure is the substance, gathered slowly across many years",
+                    "A reader-companion of long acquaintance who has done their own long returning to figurative work and can recognize an inherited figure without naming it as a lesson",
+                ],
+                "parent_role": (
+                    "By this band the parent has fully stepped back to fellow "
+                    "reader. They are someone who has done their own long returning "
+                    "to figurative work in their own beloved books, and they name a "
+                    "connection when the student finds one: 'I felt something like "
+                    "that when I returned to The Waste Land last winter; have you "
+                    "read it lately?' The parent does not catalogue the inheritance "
+                    "of figures; they receive what the student has brought up out "
+                    "of their own returning and offer, as another reader at the "
+                    "table, the passage their own returning gave them. The student "
+                    "is leading their own reading life; the parent is a witness "
+                    "whose long returnings furnished a small library the student "
+                    "is also returning to."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the student returns to figurative "
+                    "work in their beloved books across years, whether moments of "
+                    "irony surface as refusal in their conversation about those "
+                    "books without prompting, and whether they begin to recognize "
+                    "an inherited figure when it recurs because their own returning "
+                    "led them into it. The figurative argument shows up because "
+                    "the student returned; the noticing replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori's literature pedagogy at the elementary and "
+                "early-secondary level does not carry a distinct method for arguing "
+                "a work's full figurative system, for tracing inherited figures "
+                "across the tradition, or for reading irony as figure's refusal of "
+                "plain saying; the practice here is drawn from the long seminar "
+                "tradition and the matured Charlotte Mason habit of narration and "
+                "commonplace work across years rather than from the prepared environment."
+            ),
+        },
+    },
     "lit-work-001": {
         "node_type": "work",
         "track": "classics",
