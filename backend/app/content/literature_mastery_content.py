@@ -6830,6 +6830,119 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-019": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Pride and Prejudice",
+            "author": "Jane Austen",
+            "date": "first published 1813 (drafted earlier as 'First Impressions')",
+            "genre": "English Regency novel",
+            "form": "third-person novel with free indirect discourse; embedded letters at structural turning points",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Money, marriage as economic settlement, and the social pressures "
+            "on women in early-nineteenth-century England; Lydia's elopement "
+            "and its near-ruination of the family; the militia officer Wickham "
+            "as a sustained false suitor. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Free indirect discourse: the proficient narrative-craft move named explicitly in lit-craft-008; Austen's narrator inhabits Elizabeth's mind without disappearing into it",
+            "Character proficient: Elizabeth, Darcy, the Bennet parents, and the secondary characters as constructed positions (lit-craft-013)",
+            "Theme proficient: marriage, money, pride and prejudice as the title earns over the plot (lit-craft-022)",
+            "Ironic narration: the novel's opening sentence as a sustained study in irony; the family of moves with the unreliable narrator (lit-craft-031)",
+        ],
+        "entry": (
+            "Proficient: read the novel whole, follow Elizabeth's growing "
+            "understanding through free indirect discourse, name where pride "
+            "and prejudice belong to Darcy and where to Elizabeth and where to "
+            "both; meet the two great letters (Darcy's letter at Hunsford, "
+            "Mr. Bennet's later) as structural turning points. Advanced: argue "
+            "what the novel does with marriage as economic settlement and "
+            "where the novel refuses to settle the question of romantic love "
+            "versus prudent match; set the novel against the inherited "
+            "marriage-plot tradition (Richardson, Burney) it is doing "
+            "something to. Mastery: original argument about Austen's place in "
+            "the formation of free indirect discourse as the defining tool of "
+            "the nineteenth-century novel."
+        ),
+        "close_reading_passages": [
+            "The opening sentence and the first chapter: how does the famous opening sentence stage a claim the novel both holds and refuses, and what does the Bennet household reveal in its first exchange?",
+            "Darcy's first proposal at Hunsford and his letter the following morning (volume 2, chapters 11-12 in most editions): how does the novel stage a misjudgment that the reader and Elizabeth must both work through, and what does the letter do that the proposal could not?",
+            "Lady Catherine's confrontation with Elizabeth at Longbourn (volume 3, chapter 14 in most editions): how does the novel stage the scene where Elizabeth defends her own right to refuse and where her refusal opens the way to her acceptance?",
+        ],
+        "structural_analysis": (
+            "Three volumes built around two great misjudgments: Elizabeth "
+            "misreads Darcy at the Meryton assembly and Darcy misreads "
+            "Elizabeth at the first proposal; the novel's central work is the "
+            "correction of both by reading more carefully. Free indirect "
+            "discourse lets the narrator stand inside Elizabeth's perception "
+            "and outside it at once; the embedded letters mark the structural "
+            "turns. The structure is the novel's argument: the marriage that "
+            "matters is the one in which both characters have learned to read "
+            "themselves."
+        ),
+        "thematic_lines": [
+            "Pride and prejudice as faults distributed and earned by the plot; the title is not a label but a result",
+            "Marriage as economic settlement and as something else; the novel holds both without giving either up",
+            "Reading other people: the novel's deepest theme, exercised by Elizabeth and by the reader",
+        ],
+        "comparative_threads": [
+            "Richardson's Pamela and Clarissa (Austen's most-named eighteenth-century novelistic inheritance); the epistolary form Austen has absorbed into third-person free indirect discourse",
+            "Frances Burney's Evelina and Cecilia (Austen's named contemporary precursors)",
+            "Charlotte Brontë's Jane Eyre (lit-work-021) and George Eliot's Middlemarch as later inheritors of Austen's narrative technique",
+            "Modern adaptations and reworkings (Helen Fielding's Bridget Jones's Diary; the long film and television history) as twentieth- and twenty-first-century inheritors",
+        ],
+        "seminar_questions": [
+            "Where in the novel does pride belong to Darcy and where to Elizabeth, and where to both at once?",
+            "What does Darcy's letter do that his first proposal could not?",
+            "Is the novel's marriage at the end a romance the novel endorses or a romance the novel ironizes? Where does the novel refuse to say?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the opening sentence, naming what the irony does that direct statement could not",
+            "The essay on free indirect discourse in a chosen scene, naming where the narrator stands inside and outside Elizabeth at once",
+            "At advanced, the essay on marriage as economic settlement and as love in the novel, holding three or four passages in productive tension",
+        ],
+        "context": (
+            "Composed in Hampshire across the 1790s and revised in the early "
+            "1810s; published in 1813; one of six completed novels by Austen "
+            "and the most widely read; supplied as fact, interpretation left "
+            "to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The defining Regency novel and the central English example of free indirect discourse; the seminar text on reading other people.",
+                "memory_work": {
+                    "recitations": ["Recitation of the novel's opening sentence and the paragraph that follows"],
+                },
+                "recitation_routine": "Seminar opens from the recited opening; the discussion takes its first question from what the universally-acknowledged truth is and who acknowledges it.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Pride and Prejudice (the Norton; the Penguin; the Oxford World's Classics) read aloud across a term, with the dialogue and the letters voiced separately",
+                ],
+                "short_lesson_flow": "A living book read aloud across the three volumes and narrated; Elizabeth's growing understanding followed sitting by sitting; deepening to analysis of free indirect discourse as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me what Elizabeth thought and where the narrator agreed and where the narrator gently did not.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Pride and Prejudice on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in marriage, in irony, in social comedy, or in Austen leads; the long history of adaptations watched together",
+                ],
+                "parent_role": "Be a fellow reader who has lived with the novel in their own returning. Read a scene aloud with parts taken when the reader wants to hear the voices.",
+                "observation_documentation": "Over time, notice whether the student returns to particular scenes and begins to feel free indirect discourse as the novel's central instrument. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of free indirect discourse and the marriage-plot tradition where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
