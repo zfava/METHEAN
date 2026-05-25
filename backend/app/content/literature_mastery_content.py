@@ -7745,6 +7745,127 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-027": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Adventures of Huckleberry Finn",
+            "author": "Mark Twain (Samuel Clemens)",
+            "date": "first published in the United Kingdom 1884; in the United States 1885",
+            "genre": "American picaresque novel",
+            "form": "first-person novel in Huck's sustained vernacular voice; episodic journey down the Mississippi River",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Sustained use of nineteenth-century vernacular including the "
+            "racial slur 'nigger' throughout, in Huck's voice and in the "
+            "voices of other speakers; depictions of slavery, racial violence, "
+            "and the institution of slave-catching; the long-standing debate "
+            "about whether the novel exhibits the racism of its setting or "
+            "endorses it has not been settled and the novel is taught with "
+            "that debate in the room. The Phelps farm closing chapters, in "
+            "which Tom Sawyer's romance-driven games extend Jim's captivity, "
+            "are themselves the subject of long-standing criticism by readers "
+            "including Ernest Hemingway and Toni Morrison. Honest information, "
+            "not a gate."
+        ),
+        "craft_focus": [
+            "First-person vernacular voice sustained across a whole novel: Huck's voice is the novel's instrument and its limitation (lit-craft-008)",
+            "Huck as a narrator who tells the truth about what he sees and what he does not yet understand the moral weight of (lit-craft-031 in the family of moves)",
+            "Character proficient: Huck and Jim; what the friendship is and what the novel refuses to settle about it (lit-craft-013)",
+            "The river as the work's figurative through-line: the raft as the only place the rules of the shore do not reach (lit-craft-042)",
+            "Theme proficient and advanced: conscience and law in the Mississippi valley; what the novel does that no didactic novel could (lit-craft-022, lit-craft-023)",
+        ],
+        "entry": (
+            "Proficient: read the novel whole in Huck's sustained voice; "
+            "follow the river as the work's figurative through-line; meet "
+            "the moment when Huck decides he will 'go to hell' rather than "
+            "betray Jim and weigh what the novel argues by giving Huck that "
+            "decision in a voice that does not understand its own moral "
+            "weight. Advanced: hold the Phelps-farm closing chapters as part "
+            "of the work the reader is asked to weigh; argue what the novel "
+            "does that no third-person narration could and where the novel's "
+            "use of its setting's racism does and does not align with the "
+            "novel's argument; meet the long debate about the closing as "
+            "part of reading the novel honestly. Mastery: original argument "
+            "about the novel's place in the formation of American vernacular "
+            "fiction and in the long debate the novel has provoked."
+        ),
+        "close_reading_passages": [
+            "The opening of the novel and Huck's reference back to Tom Sawyer: how does the novel stage its narrator, and what does the first-paragraph claim about Mr. Mark Twain do?",
+            "The decision on the raft where Huck tears up the letter and says he will 'go to hell' rather than turn Jim in: how does the novel stage a moral choice in a voice that misnames itself, and what does the novel argue by giving Huck that decision?",
+            "The Phelps-farm chapters at the close: how does the novel stage Tom Sawyer's romance-driven games extending Jim's captivity, and what does the novel argue by ending where it does?",
+        ],
+        "structural_analysis": (
+            "An episodic journey down the Mississippi, the raft alternating "
+            "with shore episodes that the novel uses to weigh the world the "
+            "raft has briefly escaped. The first-person vernacular voice is "
+            "sustained throughout; the novel's structural argument is the "
+            "alternation between river and shore, and the closing chapters "
+            "either complete the argument or strain it, depending on the "
+            "reader."
+        ),
+        "thematic_lines": [
+            "Conscience versus law in a society whose law has institutionalized slavery: Huck's decision and what the novel argues by it",
+            "The friendship of Huck and Jim and what the novel refuses to settle about whether it survives the closing",
+            "American vernacular as the novel's instrument: what the form does that earlier American novels could not",
+        ],
+        "comparative_threads": [
+            "Don Quixote (lit-work-016): the picaresque ancestor; the journey with a companion that tests the world",
+            "Defoe's Robinson Crusoe and the captivity-narrative tradition; what Twain inherits and refuses",
+            "Hemingway's claim that 'all modern American literature comes from one book by Mark Twain'; the long American debt to the vernacular voice",
+            "Toni Morrison's introduction to a worthy edition; the long debate about the novel's treatment of Jim and the closing as part of reading the novel honestly",
+        ],
+        "seminar_questions": [
+            "What does the novel argue by giving Huck the 'go to hell' decision in a voice that misnames itself?",
+            "Where in the novel does the vernacular voice know what Huck does not?",
+            "Does the Phelps-farm closing complete the novel's argument or strain it? What does the long debate let you see?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the 'go to hell' decision, naming what the staging does that no third-person narration could",
+            "The essay on the river as the work's figurative through-line",
+            "The sustained essay on the closing chapters and the long debate about them, with passages from the novel and references to its critics",
+        ],
+        "context": (
+            "Composed across the 1870s and 1880s; the long-promised sequel to "
+            "The Adventures of Tom Sawyer; the central American novel of the "
+            "Mississippi valley and the first to make a vernacular voice the "
+            "novel's instrument across a whole work; supplied as fact, "
+            "interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The central American novel of the Mississippi valley; the seminar text on the vernacular voice and the moral decision made in a voice that misnames itself.",
+                "memory_work": {
+                    "recitations": ["Recitation of the 'go to hell' passage on the raft"],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from what Huck says and what Huck does not yet know he is saying.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Adventures of Huckleberry Finn (the Norton Critical edition, which includes the long debate; the Library of America) read aloud across a term, with the vernacular voice heard in its full register",
+                ],
+                "short_lesson_flow": "A living book read aloud across the river journey and narrated; the alternation between raft and shore noticed; deepening to analysis of the closing chapters and the debate about them as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me what Huck thought he was doing and what the novel quietly let you see.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Adventures of Huckleberry Finn on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in the Mississippi, in friendship, in the vernacular, or in the long debate about American literature and race leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; do not paper over the vernacular's racial language or the closing's strain; let the debate be the debate.",
+                "observation_documentation": "Over time, notice whether the student returns to the novel and begins to ask their own questions about the closing. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of vernacular first-person narration and the long debate about the novel's closing where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
