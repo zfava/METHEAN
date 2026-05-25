@@ -7983,6 +7983,122 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-029": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Dubliners",
+            "author": "James Joyce",
+            "date": "first published 1914",
+            "genre": "early-modernist short-story collection",
+            "form": "fifteen stories ordered by life stage (childhood, adolescence, maturity, public life) and culminating in 'The Dead'",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Period attitudes throughout the stories; the death of a priest "
+            "in 'The Sisters'; the priest-figure in 'An Encounter'; the failure "
+            "and humiliation across the maturity stories; the long quiet "
+            "devastation of 'The Dead'; the stories are not consoling and "
+            "the collection refuses to redeem the paralysis it names. Honest "
+            "information, not a gate."
+        ),
+        "craft_focus": [
+            "Free indirect discourse adjusted story by story to the consciousness at the center of each: a child's lexicon in the early stories, an adult's in the later (lit-craft-008)",
+            "The epiphany as the work's central technique: a sudden small revelation against which the rest of the story is read (lit-craft-022, lit-craft-023)",
+            "Character proficient: each story's center constructed precisely (lit-craft-013)",
+            "Dublin as the work's figurative through-line: the same city across fifteen stories, returning streets, repeated phrases, recurring objects (lit-craft-042)",
+            "The arrangement of the stories by life stage as the collection's structural argument (lit-craft-022)",
+        ],
+        "entry": (
+            "Proficient: read the collection whole in its ordering; follow "
+            "free indirect discourse as it adjusts story by story to each "
+            "center; meet the epiphany as the collection's central technique "
+            "and notice that what each story shows is sometimes what its "
+            "center cannot yet see; meet 'The Dead' as the collection's "
+            "culminating story. Advanced: argue the collection as an "
+            "argument about paralysis and what fiction can do in its "
+            "presence; set Joyce's free indirect discourse against Austen's "
+            "and Flaubert's; meet 'The Dead' as the story that completes the "
+            "collection's argument. Mastery: original argument about "
+            "Dubliners as the formation of the modernist short story."
+        ),
+        "close_reading_passages": [
+            "'The Sisters' opening: how does the collection begin with a child's lexicon and the death of a priest, and what does the staging do to set up the rest of the collection?",
+            "'Araby' and the boy's late realization in the bazaar: how does the story stage an epiphany the boy cannot yet articulate, and what does the free indirect discourse do that direct statement could not?",
+            "'The Dead' and the final paragraphs: how does the story stage Gabriel's late seeing, and what does the snow falling general all over Ireland do to the close of the collection?",
+        ],
+        "structural_analysis": (
+            "Fifteen stories in four life-stages (childhood, adolescence, "
+            "maturity, public life) plus the culminating 'The Dead'. Free "
+            "indirect discourse adjusts story by story; the city of Dublin "
+            "is the same across them, with returning streets and repeated "
+            "phrases; the epiphany sits at or near the end of most stories "
+            "and is often what the center of the story cannot yet articulate. "
+            "The structure is the collection's argument: paralysis named "
+            "across a life span, the city itself the figure, and 'The Dead' "
+            "the story that holds them all together."
+        ),
+        "thematic_lines": [
+            "Paralysis: Joyce's own named subject for the collection; what it means to be paralyzed in a city that does not name it",
+            "Epiphany: the small revelation against which the rest of the story is read; what the form does that no longer story could",
+            "'The Dead' as the collection's culmination: a long quiet devastation that holds the whole collection together",
+        ],
+        "comparative_threads": [
+            "Pride and Prejudice (lit-work-019): the previous English novel of free indirect discourse Joyce is consciously inheriting from",
+            "Flaubert's Madame Bovary and his short stories: the continental free-indirect-discourse master Joyce was reading",
+            "Chekhov's short stories: the named master of the modern short story Joyce was reading; the form Joyce is doing something specific to",
+            "Hemingway's In Our Time and the long Anglophone short-story tradition Joyce sets in motion",
+        ],
+        "seminar_questions": [
+            "Where in each story does free indirect discourse let the story know more than its center does?",
+            "What does the epiphany in each story do that direct statement could not?",
+            "What does 'The Dead' complete that the earlier stories had only named?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the epiphany in a chosen story, naming what the story knows and what its center cannot yet see",
+            "The essay on the city of Dublin as the collection's figurative through-line",
+            "The sustained essay on 'The Dead' as the story that holds the collection together",
+        ],
+        "context": (
+            "Composed across 1904-07; long delayed in publication by printer "
+            "and publisher objections to material in particular stories; "
+            "published in 1914; the foundational English-language modernist "
+            "short-story collection; supplied as fact, interpretation left "
+            "to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The foundational modernist short-story collection; the seminar text on free indirect discourse and the epiphany.",
+                "memory_work": {
+                    "recitations": ["Recitation of the final paragraph of 'The Dead' ('His soul swooned slowly...')"],
+                },
+                "recitation_routine": "Seminar opens from the recited final paragraph; the discussion takes its first question from how the close holds the whole collection together.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Dubliners (the Norton; the Penguin) read aloud across a term, one story per sitting, with 'The Dead' read whole across two sittings",
+                ],
+                "short_lesson_flow": "A living book read aloud across the fifteen stories and narrated; the epiphany noticed; the city of Dublin tracked across stories; deepening to analysis of 'The Dead' as the bands move up.",
+                "narration_prompt": "Tell back the story we read today, and tell me where the moment came that changed how you read the rest, and what the center of the story did with it.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Dubliners on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in the short story, in Joyce, in Dublin, or in early modernism leads",
+                ],
+                "parent_role": "Read aloud one story at a sitting; let 'The Dead' be 'The Dead'; do not rush across stories.",
+                "observation_documentation": "Over time, notice whether the student returns to particular stories and begins to feel the epiphany as the form's central technique. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of free indirect discourse adjusted to consciousness and the epiphany as a short-story technique where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
