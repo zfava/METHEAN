@@ -4458,6 +4458,138 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-005": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "The Saga of the Volsungs (selection: the Sigurd-Fafnir cycle)",
+            "author": "anonymous",
+            "date": "c. 13th-century Icelandic compilation of older oral material",
+            "genre": "Old Norse saga",
+            "form": "prose with embedded verse, in modern English translation",
+        },
+        "minimum_band": "developing",
+        "content_notes": (
+            "Combat, the killing of the dragon Fafnir, the doomed-treasure motif; "
+            "the saga's full text continues into a darker ending the selection does "
+            "not reach, and a reader who continues will meet treachery, kin-killing, "
+            "and the eventual ruin of the line; honest information, not a gate."
+        ),
+        "craft_focus": [
+            "The dragon-slaying tradition: Sigurd kills Fafnir, the parent of all dragon-slayings in the Northern lineage",
+            "The doomed treasure (the gold of Andvari, the ring) as a recurring symbol the saga and its inheritors return to",
+            "The prose-with-verse mode of saga, where the embedded verse marks the moments that matter most",
+            "The hero who acquires through cunning and instruction, not only through force",
+            "Fate and prophecy as structural givens, not as plot surprises",
+        ],
+        "entry": (
+            "Developing: follow Sigurd-and-Fafnir as a hero-and-dragon story, "
+            "narrate the killing and what comes with the treasure, notice the "
+            "embedded verse where the saga slows. Proficient: name the "
+            "dragon-slaying as a figurative system the saga and its inheritors "
+            "return to, hold the doomed gold beside the heroic action, read the "
+            "prose-with-verse mode as a craft choice, ask what the saga counts as "
+            "victory. Advanced: argue what the saga does to the dragon-slaying "
+            "inheritance, set Sigurd's gold beside Tolkien's ring and beside "
+            "Beowulf's dragon-hoard, read prophecy as the saga's structural "
+            "argument rather than as plot mechanism. Mastery: original argument "
+            "about the doomed-treasure inheritance from the Northern lineage "
+            "forward into Tolkien."
+        ),
+        "close_reading_passages": [
+            "Regin's instruction and the forging of the sword Gram: how does the saga prepare the killing?",
+            "The killing of Fafnir and the speech of the dying dragon: what does Fafnir tell Sigurd, and how does the saga make us hear it?",
+            "Sigurd takes the treasure: what does the saga let us know that Sigurd does not yet know?",
+        ],
+        "structural_analysis": (
+            "Prophecy and fate are given at the outset; the action moves toward "
+            "them rather than away from them, and the saga's craft is in what it "
+            "slows and what it lets the embedded verse interrupt. The "
+            "dragon-slaying sits at the center, and the doomed treasure carries "
+            "the saga's argument from before Sigurd's birth to after his death."
+        ),
+        "thematic_lines": [
+            "Heroism as inseparable from cunning, instruction, and inheritance, not as solitary force",
+            "The doomed treasure: gold the saga marks as already cursed before it is taken",
+            "Fate and prophecy as the saga's structural givens, asking the reader to watch how rather than whether",
+        ],
+        "comparative_threads": [
+            "lit-work-004 (Beowulf): the cousin dragon-slaying and the cousin doomed-hoard in the same Northern lineage",
+            "lit-work-inh-004 (Tolkien's The Lord of the Rings): the doomed ring and Smaug-the-dragon come directly out of this material; Tolkien's own scholarly work on the Volsungs",
+        ],
+        "seminar_questions": [
+            "Why does the saga give the prophecy first, and what does that do to how we read the killing?",
+            "What does the saga gain by letting the dying dragon speak?",
+            "Is Sigurd the same kind of hero as Beowulf? Where does the saga insist they differ?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on a moment where embedded verse interrupts the prose, naming what the verse does that the prose could not",
+            "The essay on the doomed treasure as a figurative system set beside Beowulf's dragon-hoard",
+            "At advanced, the comparative essay on the dragon-slaying inheritance from the Volsungs through Beowulf to Tolkien's Smaug",
+        ],
+        "context": (
+            "The Volsunga saga, an Icelandic prose compilation made c. 1200-1270 "
+            "from older oral material that also produced the Poetic Edda; the "
+            "central source for the Northern dragon-slaying tradition and the most "
+            "cited direct ancestor of Tolkien's invented mythology; supplied as fact."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "The foundational Northern saga of dragon-slaying and doomed "
+                    "treasure; Sigurd examined rhetorically and ethically against "
+                    "the heroic tradition."
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "Recitation of a moment of embedded verse from the Sigurd-Fafnir cycle in a worthy translation"
+                    ],
+                },
+                "recitation_routine": (
+                    "Seminar opens from the recited verse; the discussion takes "
+                    "its first question from why the saga chose to slow at that moment."
+                ),
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of the Saga of the Volsungs, read aloud as a living book (Jesse Byock's Penguin translation; William Morris's older verse-and-prose version)",
+                ],
+                "short_lesson_flow": (
+                    "A living book read aloud and narrated; the Sigurd-Fafnir "
+                    "cycle followed and told back, the kennings and embedded "
+                    "verses noticed, deepening to analysis of the doomed treasure "
+                    "as the bands move up."
+                ),
+                "narration_prompt": (
+                    "Tell back the part we read today, and tell me what you noticed about Sigurd or the gold this time."
+                ),
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of the Saga of the Volsungs on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in dragons, doomed treasure, the Northern world, or the sources behind Tolkien leads, no imposed apparatus",
+                ],
+                "parent_role": (
+                    "Read aloud and discuss where the student's interest leads; "
+                    "bring Beowulf and Tolkien into the conversation when the "
+                    "student finds the lineage on their own."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the student returns to the saga "
+                    "and traces the dragon-slaying or the doomed-treasure forward "
+                    "into Beowulf or Tolkien. This noticing replaces any test."
+                ),
+            },
+            "traditional": {
+                "introduction": "Structured study of the saga form and the dragon-slaying tradition where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
