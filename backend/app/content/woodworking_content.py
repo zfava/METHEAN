@@ -111,16 +111,24 @@ WOODWORKING_CONTENT: dict[str, dict] = {
             {
                 "name": "Fire extinguisher",
                 "specification": (
-                    "A:B:C rated multipurpose extinguisher within reach of the bench, inspection tag current"
+                    "An A:B:C rated multipurpose extinguisher within reach of the bench is the "
+                    "conservative default. A Class A extinguisher is acceptable only if the shop "
+                    "holds zero flammable finishes, oils, or solvents and has no electrical "
+                    "outlets or appliances; otherwise A:B:C. The household confirms the "
+                    "appropriate rating for their actual shop with a local fire-safety authority "
+                    "(local fire marshal or equivalent); inspection tag is kept current."
                 ),
                 "alternatives": [],
             },
             {
                 "name": "First aid kit",
                 "specification": (
-                    "A kit with adhesive bandages, gauze pads, medical tape, antiseptic wipes, "
-                    "and tweezers; the household's choice of contents beyond this is up to the "
-                    "household"
+                    "A kit that meets a recognized standard for first-aid contents: ANSI/ISEA "
+                    "Z308.1 (Minimum Requirements for Workplace First Aid Kits and Supplies) or "
+                    "current American Red Cross guidance for home/shop kits. The authoritative "
+                    "contents list is the named standard, not this node. At minimum the kit will "
+                    "contain items such as adhesive bandages, gauze pads, medical tape, "
+                    "antiseptic wipes, and tweezers; the standard supplies the full list."
                 ),
                 "alternatives": [],
             },
@@ -156,8 +164,15 @@ WOODWORKING_CONTENT: dict[str, dict] = {
         ),
         "demonstration_criteria": [
             "Names every PPE item on the list and explains when each is required and when each is forbidden",
-            "Locates the A:B:C fire extinguisher within reach of the bench and names its rating",
-            "Locates the first aid kit and names what is in it",
+            (
+                "Locates the fire extinguisher within reach of the bench, names its rating, "
+                "and confirms the rating is appropriate for what is actually in the shop "
+                "per the household's confirmation with a local fire-safety authority"
+            ),
+            (
+                "Locates the first aid kit and confirms it meets a recognized standard "
+                "(ANSI/ISEA Z308.1 or current American Red Cross guidance)"
+            ),
             (
                 "Demonstrates the safe carry of a chisel: held by the handle, the cutting edge "
                 "controlled, the edge angled away from the carrier's body and away from anyone "
@@ -284,7 +299,23 @@ WOODWORKING_CONTENT: dict[str, dict] = {
             "reviewed": False,
             "reviewer": None,
             "reviewed_on": None,
-            "standard_refs": [],
+            "standard_refs": [
+                (
+                    "ANSI/ISEA Z308.1 (Minimum Requirements for Workplace First Aid Kits and "
+                    "Supplies). The standard itself supplies the authoritative contents list; "
+                    "this node defers to it."
+                ),
+                (
+                    "American Red Cross home/shop first-aid kit guidance as an alternate "
+                    "recognized standard; the household chooses one and follows it."
+                ),
+                (
+                    "Local fire-safety authority confirmation of the appropriate extinguisher "
+                    "rating for the actual shop (the household contacts the local fire marshal "
+                    "or equivalent; A:B:C is the conservative default in the absence of a "
+                    "specific local recommendation)."
+                ),
+            ],
         },
     },
     "wc-001": {

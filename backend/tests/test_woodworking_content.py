@@ -317,3 +317,39 @@ class TestRequiresHumanSafetyReview:
     def test_helper_handles_non_dict_input(self) -> None:
         assert requires_human_safety_review("not a dict") is False  # type: ignore[arg-type]
         assert requires_human_safety_review(None) is False  # type: ignore[arg-type]
+
+
+def _ws_tool_named(name_substring: str) -> dict:
+    for tool in WOODWORKING_CONTENT["ws-001"]["tools_required"]:
+        if name_substring.lower() in tool["name"].lower():
+            return tool
+    raise AssertionError(f"no ws-001 tool whose name contains {name_substring!r}")
+
+
+class TestEmergencyItemsDeferToStandards:
+    def test_fire_extinguisher_spec_states_conditional_reasoning(self) -> None:
+        spec = _ws_tool_named("fire extinguisher")["specification"]
+        assert "A:B:C" in spec, "fire extinguisher spec must keep A:B:C as the conservative default"
+        assert "Class A" in spec, "fire extinguisher spec must describe the Class A condition"
+        assert "fire-safety authority" in spec, "fire extinguisher spec must defer to local fire-safety authority"
+
+    def test_first_aid_spec_references_recognized_standard(self) -> None:
+        spec = _ws_tool_named("first aid kit")["specification"]
+        assert "ANSI/ISEA Z308.1" in spec, "first aid spec must reference ANSI/ISEA Z308.1"
+        assert "Red Cross" in spec, "first aid spec must reference American Red Cross guidance"
+        assert "at minimum" in spec.lower(), "first aid spec must reframe items as 'at minimum' examples"
+
+    def test_ws_001_standard_refs_includes_both_standards(self) -> None:
+        refs = WOODWORKING_CONTENT["ws-001"]["safety_review"]["standard_refs"]
+        joined = " ".join(refs)
+        assert "ANSI/ISEA Z308.1" in joined
+        assert "Red Cross" in joined
+        assert "fire-safety authority" in joined or "fire marshal" in joined
+
+    def test_demonstration_criteria_no_longer_hardcode_abc_rating(self) -> None:
+        # The fire-extinguisher demo criterion must no longer assert that the
+        # extinguisher is A:B:C; the rating is confirmed against the
+        # household's local fire-safety authority.
+        criteria = WOODWORKING_CONTENT["ws-001"]["demonstration_criteria"]
+        joined = " ".join(criteria)
+        assert "fire-safety authority" in joined or "appropriate for what is actually in the shop" in joined
