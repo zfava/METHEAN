@@ -5816,6 +5816,118 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-010": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Inferno (Divine Comedy, Part 1)",
+            "author": "Dante Alighieri",
+            "date": "c. 1308-1320 (Inferno composed c. 1308-1314)",
+            "genre": "medieval Christian epic poetry",
+            "form": "narrative poem in terza rima, thirty-four cantos",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "Sustained images of punishment and physical torment in each circle of "
+            "Hell, often described in vivid corporeal detail; political invective "
+            "against contemporary Florentines and named historical figures; "
+            "presentation of damnation as deserved within the poem's theological "
+            "frame; the poem holds particular damnations the reader is invited to "
+            "weigh and sometimes to resist. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading across modes: the meditative-narrative poem read with the same sustained attention as a novel (lit-craft-004)",
+            "The contrapasso as figurative system: each punishment a figure for the sin (lit-craft-043)",
+            "The inherited descent figure: Aeneas's katabasis, the underworld of Odyssey 11, transformed (lit-craft-043)",
+            "Theme as the work's argument: the structured cosmos in which moral order is the law of the place (lit-craft-023)",
+            "The voice of the pilgrim and the voice of the poet: who knows what when, and what the gap does to the reader (lit-craft-031 in the family of moves)",
+        ],
+        "entry": (
+            "Advanced: read the Inferno whole and read the contrapasso as a "
+            "figurative system that makes the theology available; place the poem "
+            "against its inheritance (Virgil as guide and Virgil as the inherited "
+            "epic; the descent from Homer); argue what the poem refuses to settle "
+            "(the readings the reader is invited to resist; the damnations the "
+            "poem invites grief over); follow the gap between the pilgrim's knowing "
+            "and the poet's knowing. Mastery: original argument about how the "
+            "Inferno does theology by figure, and what that argument asks of the "
+            "reader who does not share its frame."
+        ),
+        "close_reading_passages": [
+            "The opening tercets and the dark wood: how does the poem begin in the middle of life, and what does the simile of the man who escapes the sea do to the reader's footing?",
+            "Canto 5 (the second circle, the lustful; Paolo and Francesca): what does the poem do by making the pilgrim faint and by giving the damned the most beautiful speech?",
+            "Canto 33 (Count Ugolino in the ice): how does the poem stage a damnation it invites grief over without contradicting the cosmology that placed him there?",
+        ],
+        "structural_analysis": (
+            "Thirty-four cantos descending through nine circles into the center "
+            "of the earth, the structure built so that the punishment in each "
+            "circle is a figure for the sin: lust whirled in the wind, gluttons "
+            "lying in foul rain, traitors frozen in ice. The terza rima locks "
+            "every tercet into the next, the form a structural argument that the "
+            "cosmos is interlocked. The pilgrim narrates as one who has been "
+            "there; the poet narrates as one who has written. The gap between "
+            "the two is part of the poem's argument."
+        ),
+        "thematic_lines": [
+            "Moral order as the law of the place: the cosmos as theological argument, the contrapasso as its figure",
+            "Sympathy and judgment: the damnations the reader is asked to weigh, the readings the poem invites and the readings it invites resistance to",
+            "The inheritance the poem is doing something to: classical epic descent transformed by Christian eschatology",
+        ],
+        "comparative_threads": [
+            "The Aeneid (lit-work-003): Virgil as the pilgrim's guide and as the poem's most-cited classical predecessor; the descent in Aeneid 6 as the direct ancestor of the Inferno's structure",
+            "The Odyssey (lit-work-001): the older descent of Odysseus in book 11 as the inheritance behind Virgil's, and through Virgil behind Dante's",
+            "Milton's Paradise Lost (to be authored): the next great Christian epic and the inheritance Dante shapes for it",
+        ],
+        "seminar_questions": [
+            "Where does the poem invite resistance to its own judgments? Which lines give you the resistance?",
+            "Where is the pilgrim's knowing different from the poet's? What does the gap do?",
+            "Is the contrapasso always just within the poem's frame? Where does the figure exceed the theology?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on one circle and its contrapasso, naming what the figure does that direct theological statement could not",
+            "The essay on a damnation the poem invites grief over (Francesca, Ugolino, Brunetto), naming what the poem makes the reader hold",
+            "The comparative paragraph setting the descent of Inferno against the descent of Aeneid 6, naming what Dante does to the inheritance",
+        ],
+        "context": (
+            "Composed in vernacular Tuscan in exile from Florence between roughly "
+            "1308 and 1320; the first part of a three-part Christian epic that "
+            "established the Italian literary language and shaped Western "
+            "imagination of the afterlife for seven centuries; supplied as fact, "
+            "interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The foundational medieval Christian epic; the Western seminar text on the moral cosmos, with Virgil as the named guide.",
+                "memory_work": {
+                    "recitations": ["Recitation of the opening tercets of Canto 1 in a worthy modern translation"],
+                },
+                "recitation_routine": "Seminar opens from the recited opening; the discussion takes its first question from where the pilgrim finds himself and what the recital of the dark wood asks of the reader.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of Inferno (Robert and Jean Hollander; Mark Musa; Allen Mandelbaum) read aloud across a term, paired with notes and a worthy commentary",
+                ],
+                "short_lesson_flow": "A living book read aloud across cantos and narrated each sitting; the descent followed circle by circle, the contrapasso noticed, deepening to analysis of the moral cosmos as the bands move up.",
+                "narration_prompt": "Tell back the canto we read today, and tell me which damnation you found yourself resisting, and which line gave you the resistance.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of Inferno on the shelf with a worthy commentary alongside, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in the afterlife, in moral order, or in the long inheritance from Virgil leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the damnations be weighed honestly; bring Virgil into the room when Dante does.",
+                "observation_documentation": "Over time, notice whether the student returns to particular damnations and finds their own readings forming. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of medieval Christian cosmology and the contrapasso as figurative system where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
