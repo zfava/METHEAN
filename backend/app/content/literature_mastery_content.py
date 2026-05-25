@@ -8326,6 +8326,121 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-032": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Nineteen Eighty-Four",
+            "author": "George Orwell (Eric Arthur Blair)",
+            "date": "first published 1949",
+            "genre": "twentieth-century dystopian novel",
+            "form": "third-person novel with sustained close access to Winston Smith's consciousness, in three parts and a structurally significant Appendix on Newspeak",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Sustained depiction of state surveillance, propaganda, "
+            "doublethink, the Two Minutes Hate, and torture (including the "
+            "graphic interrogation scenes in Room 101 in Part 3); the "
+            "destruction of Winston's selfhood at the close; the novel does "
+            "not redeem its dystopia. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Third-person narration close to Winston's consciousness across most of the novel (lit-craft-008)",
+            "Theme: totalitarian language and the relationship between language and thought; Newspeak as constructed-language argument (lit-craft-022; lit-craft-023 for the inclusion of the Appendix as part of the work)",
+            "The Appendix on Newspeak as structurally part of the work: its past-tense framing has been read as evidence that the novel's dystopia did not last (lit-craft-023)",
+            "Figurative system: the telescreen, Big Brother's face, the room above Charrington's shop, the glass paperweight (lit-craft-042)",
+            "Winston's consciousness as the lens through which we see; what the novel lets us see past him (lit-craft-031)",
+        ],
+        "entry": (
+            "Proficient: read the novel whole including the Appendix; follow "
+            "the close third-person access to Winston; meet the figurative "
+            "system (telescreen, the paperweight, Charrington's shop) as the "
+            "work returns to it; meet Room 101 as the structural turn. "
+            "Advanced: argue what the Appendix on Newspeak does structurally "
+            "(its past-tense framing has been read as evidence that the "
+            "dystopia did not last); argue what the novel claims about the "
+            "relationship between language and thought; honor what the "
+            "novel refuses to settle. Mastery: original argument about the "
+            "novel's place in the twentieth-century political-fiction "
+            "tradition Orwell helped form."
+        ),
+        "close_reading_passages": [
+            "The opening on the clocks striking thirteen: how does the novel stage its first sentence and what does the small disturbance do?",
+            "Winston in the room above Charrington's shop: how does the novel stage the brief place outside the telescreen, and what does the staging do to the reader who has begun to hope?",
+            "The Appendix on Newspeak and its past-tense framing: how does the novel argue something by including the Appendix, and what does the tense let some readers infer?",
+        ],
+        "structural_analysis": (
+            "Three parts: Part 1 establishes Winston, Oceania, and the regime; "
+            "Part 2 stages the affair with Julia and the brief place outside; "
+            "Part 3 stages the interrogation in the Ministry of Love and the "
+            "destruction of Winston's selfhood. The novel ends with Winston's "
+            "broken consent. The Appendix on Newspeak follows: its past-tense "
+            "framing of Oceania's principal language has been read by some "
+            "readers as evidence that the regime did not last. The structure "
+            "is the novel's argument: the destruction is enacted in the "
+            "narrative; the Appendix is the question."
+        ),
+        "thematic_lines": [
+            "Totalitarian language and thought: the novel's claim that controlling language controls what can be thought",
+            "Truth and historical record: the Ministry of Truth, doublethink, the falsified past",
+            "What the Appendix lets the reader hope: the past-tense framing as a structural argument the novel does not state",
+        ],
+        "comparative_threads": [
+            "Gulliver's Travels (lit-work-018): Swift as the political-satire ancestor; the figurative system bent to political argument",
+            "Animal Farm (Orwell's 1945 shorter dystopia): the earlier work that established the political fable Orwell uses here",
+            "Huxley's Brave New World (1932): the contemporary alternate dystopia; Orwell read it and wrote about it",
+            "Margaret Atwood's The Handmaid's Tale (1985) as direct later inheritor including its own past-tense appendix-frame",
+        ],
+        "seminar_questions": [
+            "What does the Appendix on Newspeak do that the narrative did not?",
+            "Does the novel argue that controlling language controls thought, or does the novel hold the claim as a question? Where does the novel refuse to say?",
+            "What does Room 101 do to Winston, and what does the novel argue about the limits of resistance?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the opening sentence, naming what the small disturbance does to everything the novel will later show",
+            "The essay on the Appendix on Newspeak as part of the work, with attention to the past tense and what some readers have inferred from it",
+            "At advanced, the sustained essay on what the novel claims about language and thought, holding the narrative and the Appendix in productive tension",
+        ],
+        "context": (
+            "Composed on the Hebridean island of Jura in the late 1940s "
+            "while Orwell was dying of tuberculosis; published in 1949; the "
+            "central English-language political-fiction title of the "
+            "twentieth century; supplied as fact, interpretation left to "
+            "the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The central English-language political-fiction title of the twentieth century; the seminar text on totalitarian language and on the structural argument of the Appendix.",
+                "memory_work": {
+                    "recitations": ["Recitation of the opening sentence and the first paragraph"],
+                },
+                "recitation_routine": "Seminar opens from the recited opening; the discussion takes its first question from the clocks striking thirteen.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Nineteen Eighty-Four (the Houghton Mifflin Harcourt; the Penguin Modern Classics) read aloud across a few weeks, with the Appendix read as part of the work",
+                ],
+                "short_lesson_flow": "A living book read aloud across the three parts and the Appendix, narrated; Winston's consciousness followed; deepening to analysis of the Appendix's past-tense framing as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me what Winston thought and what the novel let you see past him.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Nineteen Eighty-Four on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in language and power, in twentieth-century politics, or in dystopian fiction leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the Appendix be read; do not collapse the novel into a slogan.",
+                "observation_documentation": "Over time, notice whether the student returns to the Appendix and begins to ask what the past tense does. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the third-person close access and the Appendix on Newspeak as structural argument where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
