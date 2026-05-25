@@ -11094,4 +11094,154 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-019": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "Kinder- und Hausmarchen (Children's and Household Tales; selections, with attention to the 1812/1815 first-edition versions alongside the 1857 final edition)",
+            "author": "Jacob Grimm and Wilhelm Grimm",
+            "date": "first edition Volume 1 1812, Volume 2 1815; revised through seven editions; final (seventh) edition 1857",
+            "genre": "early-nineteenth-century German folk-tale collection",
+            "form": "approximately 200 prose tales in the final edition, gathered from informants (largely middle-class women in the Grimms' Hessian circle) and edited substantially across the seven editions by Wilhelm",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Many tales contain explicit violence (the dismemberment of "
+            "the wolf, the mother in 'The Juniper Tree', the punishment "
+            "scenes in 'The Goose Girl', the red-hot iron shoes at the "
+            "close of 'Snow White'); the first-edition (1812/1815) "
+            "versions are notably darker than the later editions Wilhelm "
+            "edited for a child audience; the editorial history is part "
+            "of the work and is itself an object of study. The collection "
+            "also includes antisemitic material in some tales (KHM 110 "
+            "'The Jew Among Thorns' most prominently) that the Grimms "
+            "preserved and that twentieth-century editors and translators "
+            "have weighed without resolving. Honest information, not a "
+            "gate."
+        ),
+        "craft_focus": [
+            "Close reading proficient on folk-tale prose: the laconic narration, the structural repetitions, the formulaic phrasings (lit-craft-003)",
+            "Character proficient: the recurring figures of folk tale (the youngest son, the wicked stepmother, the helper animal, the witch in the woods, the king) as constructed positions rather than individuated persons (lit-craft-013)",
+            "Theme advanced: what the tales hold of the older oral tradition and what the Grimms edited; what the editorial history of seven editions shows about the work itself (lit-craft-023)",
+            "Figurative system: the forest, the spinning wheel, the apple, the ring, the helper animal; recurring images that operate across many tales (lit-craft-042)",
+            "Editorial history as part of the work: the 1812/1815 first-edition versions and the 1857 final edition stand alongside each other (lit-craft-023 in the family of moves)",
+        ],
+        "entry": (
+            "Proficient: read selected tales (from the well-known group: "
+            "'Hansel and Gretel', 'Snow White', 'Rapunzel', 'The Bremen "
+            "Town Musicians', 'The Frog King', 'Cinderella' / "
+            "'Aschenputtel', 'The Juniper Tree'); find the formulaic "
+            "phrasings, the structural repetitions, and the recurring "
+            "figures; meet the editorial history by reading at least one "
+            "tale in both the 1812/1815 form and the 1857 form. "
+            "Advanced: argue what the Grimms preserved and what they "
+            "edited; engage the contested tales (the antisemitic "
+            "material; the softened maternal violence) as part of reading "
+            "the collection honestly. Mastery: original argument about "
+            "the Grimms' role in inventing the modern study of folklore "
+            "and what the seven editions claim across the long process."
+        ),
+        "close_reading_passages": [
+            "'Hansel and Gretel' (KHM 15) in the 1812/1815 and 1857 versions: how does the editorial change from natural mother to stepmother shift the tale's argument?",
+            "'The Juniper Tree' (KHM 47): how does the tale stage the mother's killing of the child and the bird's revenge, and what does the form claim about what folk tale can hold?",
+            "'Snow White' (KHM 53) and the closing punishment of the queen with red-hot iron shoes: how does the form make the punishment fit the crime in folk-tale logic, and what does the form refuse to soften?",
+        ],
+        "structural_analysis": (
+            "Approximately 200 tales in the final edition, gathered from "
+            "informants in the Grimms' Hessian circle and edited "
+            "substantially across seven editions by Wilhelm in "
+            "particular. The 1812 and 1815 first editions retain "
+            "features (darker violence, more sexual material, fewer "
+            "Christian framings) that the later editions soften or "
+            "remove; the 1857 final edition is the version most "
+            "translations and adaptations use. The folk-tale structures "
+            "recur across many tales: the rule-of-three, the youngest-"
+            "son sequence, the helper-animal, the wicked stepmother. The "
+            "structure is the collection's argument: a literary-and-"
+            "folkloric record of the European oral tradition as it "
+            "survived into the early nineteenth century, mediated by the "
+            "Grimms' particular choices."
+        ),
+        "thematic_lines": [
+            "Folk-tale structure as the work's instrument: the rule-of-three, the youngest son, the helper, the wicked stepmother, the woods",
+            "The editorial history as part of the work: the 1812/1815 versions and the 1857 versions hold the same tales differently, and the differences are part of reading the Grimms honestly",
+            "What the tales include that later readers have argued with: the antisemitic material (notably KHM 110); the violence the Grimms both preserved and softened; the categories of women the tales repeat",
+        ],
+        "comparative_threads": [
+            "Charles Perrault's Histoires ou contes du temps passe (1697): the seventeenth-century French collection that established the literary fairy tale; the Grimms knew and drew from Perrault",
+            "lit-work-inh-020 Hans Christian Andersen's tales (next in this batch): the contemporary literary fairy-tale tradition; Andersen wrote rather than collected, the Grimms collected (with editing) rather than wrote",
+            "lit-work-inh-021 Afanasyev's Russian Fairy Tales (next): the Russian counterpart, the Russian Grimms",
+            "lit-work-inh-022 MacDonald's Phantastes (in next batch): the Victorian literary fairy tale shaped by the Grimms and Andersen",
+            "lit-work-inh-023 Calvino's Italian Folktales (in next batch): the Italian Grimms-equivalent collection by a modern Italian writer",
+            "lit-work-inh-024 Angela Carter's The Bloody Chamber (in next batch): the late-twentieth-century literary refiguring of the same fairy-tale inheritance",
+            "lit-work-inh-004 Tolkien's lecture 'On Fairy-stories' (1939): the central twentieth-century scholarly essay on the form the Grimms preserved",
+        ],
+        "seminar_questions": [
+            "What does the editorial change between the 1812/1815 first edition and the 1857 final edition do to a particular tale?",
+            "What folk-tale structures recur across multiple tales, and what do they let the form do that direct narration could not?",
+            "What does the collection include that later readers have argued with, and how is reading the contested material part of reading the Grimms honestly?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on a single tale, naming the folk-tale structures it uses and what the form refuses to soften",
+            "The essay on the editorial history of one tale across the seven editions",
+            "At advanced, the essay on the contested material (the antisemitic tales or the softened maternal violence) as part of reading the Grimms honestly",
+        ],
+        "context": (
+            "Collected and edited by Jacob and Wilhelm Grimm in Kassel "
+            "and Gottingen across the first half of the nineteenth "
+            "century; the brothers were philologists whose work also "
+            "founded modern Germanistik and German lexicography; the "
+            "Tales were published in seven editions across forty-five "
+            "years, with Wilhelm continuing to edit after Jacob's "
+            "death; the foundational work of the modern study of folk "
+            "tale; supplied as fact, interpretation left to the student."
+        ),
+        "lineage": (
+            "Folklore. Source position. The foundational European "
+            "folk-tale collection of the modern period; established the "
+            "field of folklore studies and the basic form in which "
+            "European folk tale circulates in print. Stands alongside "
+            "Perrault (seventeenth-century French) and Afanasyev "
+            "(lit-work-inh-021; nineteenth-century Russian) as the "
+            "principal European folk-tale collections. The Grimms shaped "
+            "the Victorian literary fairy tale (MacDonald, "
+            "lit-work-inh-022) and the long modern literary engagement "
+            "with the form (Calvino, lit-work-inh-023; Carter, "
+            "lit-work-inh-024). Tolkien's (lit-work-inh-004) lecture "
+            "'On Fairy-stories' (1939) is the central twentieth-century "
+            "scholarly essay on the form the Grimms preserved."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The foundational European folk-tale collection of the modern period; the seminar text on what the folk-tale form holds and what the Grimms' editing did to what they preserved.",
+                "memory_work": {
+                    "recitations": ["Recitation of a chosen folk-tale opening in German or worthy modern translation"],
+                },
+                "recitation_routine": "Seminar opens from the recited opening; the discussion takes its first question from the folk-tale structures the opening uses.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of the Tales (Jack Zipes's translation of the 1812/1815 first edition; Jack Zipes's translation of the complete 1857 edition; the Penguin Classics) read aloud across a term, with both first-edition and final-edition versions of at least a few tales read alongside",
+                ],
+                "short_lesson_flow": "A living book read aloud across selected tales and narrated; the folk-tale structures noticed as they return; deepening to analysis of the editorial history as the bands move up.",
+                "narration_prompt": "Tell back the tale we just read, and tell me what the form let the tale do that another form could not.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of the Grimms on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in folk tale, in the long European inheritance, or in the modern study of folklore leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; honor what the Grimms preserved without softening; let the editorial history be itself.",
+                "observation_documentation": "Over time, notice whether the student returns to particular tales and begins to feel the folk-tale structures as the form's instruments. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of folk-tale structure and the Grimms' editorial history where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
