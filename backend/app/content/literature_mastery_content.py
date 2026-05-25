@@ -9559,4 +9559,138 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-008": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "Idylls of the King (selections, with attention to the dedicatory poem, 'The Coming of Arthur', 'Lancelot and Elaine', 'The Holy Grail', 'Guinevere', and 'The Passing of Arthur')",
+            "author": "Alfred, Lord Tennyson",
+            "date": "composed and published in stages 1859-1885; reordered into the twelve-idyll structure with framing poems in subsequent editions",
+            "genre": "Victorian Arthurian verse cycle",
+            "form": "twelve verse idylls in blank verse plus dedicatory and closing poems; framed by Tennyson's dedications to Prince Albert and the elegy 'To the Queen'",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "The adulterous love of Lancelot and Guinevere central to "
+            "'Lancelot and Elaine' and 'Guinevere'; the death of Elaine of "
+            "Astolat; the Grail quest staged as the order's decisive "
+            "spiritual ordeal; the final dissolution and the passing of "
+            "Arthur. Tennyson's framing reads the cycle as a Victorian "
+            "moral allegory of soul and sense; the framing is part of the "
+            "work and is itself part of what later readings argue with. "
+            "Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading on Tennyson's blank verse (lit-craft-003 at proficient; lit-craft-004 at advanced)",
+            "Character: Arthur as Victorian moral exemplar; Guinevere as the figure on whom Tennyson's reading of the fall pivots; Lancelot held with more sympathy than the moral frame would predict (lit-craft-013; lit-craft-014)",
+            "Theme: the cycle as Victorian moral allegory and what the allegory does to Malory's more open material; what Tennyson refuses to settle even inside his frame (lit-craft-022; lit-craft-023)",
+            "Figurative system: Excalibur, the dying fire, the barge to Avalon, the lily-maid Elaine, the dimming of the Round Table's vows (lit-craft-042 at proficient; lit-craft-043 at advanced)",
+        ],
+        "entry": (
+            "Proficient: read the major idylls in the order Tennyson "
+            "finally fixed them; meet 'The Coming of Arthur' and 'The "
+            "Passing of Arthur' as the cycle's frame; follow 'Lancelot "
+            "and Elaine' as the long study of Lancelot's interior and "
+            "'The Holy Grail' as the order's decisive ordeal; meet "
+            "'Guinevere' as the idyll on which Tennyson's reading of "
+            "the fall most explicitly turns. Advanced: argue what "
+            "Tennyson does to Malory by ordering and framing the cycle "
+            "as he does, and where the verse exceeds Tennyson's stated "
+            "moral frame; meet the dedicatory poems to Prince Albert as "
+            "part of the work. Mastery: original argument about Tennyson's "
+            "place in the Arthurian inheritance and what the Victorian "
+            "reading bequeathed to and against modern Arthurian fiction."
+        ),
+        "close_reading_passages": [
+            "'The Coming of Arthur' and the framing dedicatory poems: how does Tennyson stage Arthur's beginning, and what does the dedication to Albert's memory do to the cycle?",
+            "'Lancelot and Elaine' and the death of Elaine of Astolat: how does the verse hold Lancelot with more sympathy than the stated moral frame would predict?",
+            "'The Passing of Arthur' and the throwing of Excalibur into the lake: how does Tennyson stage the ending, and where does the verse rise past the framing?",
+        ],
+        "structural_analysis": (
+            "Twelve idylls in blank verse, composed and published in "
+            "stages across twenty-six years and ordered (in the final "
+            "edition) into a cycle that runs from Arthur's coming to his "
+            "passing. Framing dedicatory poems make the cycle a memorial "
+            "for Prince Albert; the order Tennyson imposes is itself part "
+            "of the work. Inside the cycle, the verse alternates the "
+            "chivalric ideal and the human failure that undoes it; "
+            "'Guinevere' and 'Lancelot and Elaine' are the long human "
+            "passages, 'The Holy Grail' is the spiritual ordeal, 'The "
+            "Passing' is the elegy. The structure is Tennyson's argument: "
+            "a Victorian reading of the rise and fall of an ideal order."
+        ),
+        "thematic_lines": [
+            "The Victorian moral frame: Tennyson reads the cycle as an allegory of soul and sense; the question of where the verse exceeds the frame",
+            "Guinevere as the figure of the fall in Tennyson's reading: a reading later inheritors (and many readers in Tennyson's own century) have argued with",
+            "What the dedication to Prince Albert does to the cycle: a memorial for the modern moment frames a medieval cycle, and the framing is part of the work",
+        ],
+        "comparative_threads": [
+            "lit-work-inh-007 Le Morte d'Arthur: Tennyson's main source; what Tennyson chooses to elaborate, what he chooses to compress, and what he reframes morally is the comparison",
+            "lit-work-inh-009 T. H. White's The Once and Future King: White read Tennyson alongside Malory and pushed against the Victorian moral frame; the comparison is decisive",
+            "lit-work-inh-010 Cornwell's Warlord Chronicles: Cornwell explicitly diverges from both Malory and the Victorian Tennysonian reading toward post-Roman historical reconstruction",
+            "Matthew Arnold's 'Tristram and Iseult' (1852) and William Morris's 'The Defence of Guenevere' (1858) as Victorian contemporaries with their own Arthurian work",
+            "Pre-Raphaelite painting (Rossetti, Burne-Jones, Waterhouse) as the visual culture that took Tennyson's Arthurian world and made it iconic",
+        ],
+        "seminar_questions": [
+            "Where does Tennyson's verse exceed his stated moral frame?",
+            "What does Tennyson do to Malory by ordering and framing the cycle as he does?",
+            "Is Guinevere the figure of the fall in the cycle, or does the cycle let her be more than that? Where does the verse refuse the frame?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on 'The Passing of Arthur' and the throwing of Excalibur, naming what the verse does that direct elegy could not",
+            "The essay on 'Lancelot and Elaine' as a study of Lancelot's interior held against Tennyson's stated frame",
+            "At advanced, the essay on what Tennyson does to Malory by his framing and ordering",
+        ],
+        "context": (
+            "Composed across Tennyson's poet-laureate decades (1850-1892); "
+            "the cycle published in stages, framed late by the dedications "
+            "to Prince Albert and reordered into its final twelve-idyll "
+            "form; the Victorian century's central English Arthurian work; "
+            "the Pre-Raphaelite painters and the wider Victorian "
+            "medievalism drew on the cycle directly; supplied as fact, "
+            "interpretation left to the student."
+        ),
+        "lineage": (
+            "Matter of Britain. Source-and-inheritor position. Inherits "
+            "from Malory (lit-work-inh-007) directly, reading the late-"
+            "medieval prose through a Victorian moral frame; itself "
+            "becomes a source for the modern Arthurian inheritance, with "
+            "T. H. White (lit-work-inh-009) and Cornwell (lit-work-inh-010) "
+            "each pushing against the Tennysonian frame in different "
+            "directions. Reaches back through Malory to Geoffrey "
+            "(lit-work-inh-005) and to the French romance tradition."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The Victorian century's central English Arthurian work; the seminar text on what a Victorian moral frame does to medieval material.",
+                "memory_work": {
+                    "recitations": ["Recitation of a chosen passage from 'The Passing of Arthur'"],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from where the verse exceeds the framing.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Idylls of the King (the Penguin English Poets edition; the Norton selected Tennyson) read aloud across a term, idyll by idyll",
+                ],
+                "short_lesson_flow": "A living book read aloud across the major idylls and narrated; the blank verse heard; deepening to analysis of the framing dedications as the bands move up.",
+                "narration_prompt": "Tell back the idyll we read today, and tell me where the verse said more than the frame would let it.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Idylls of the King on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in Victorian poetry, in the Pre-Raphaelite world, or in the Arthurian inheritance leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the verse exceed the frame where it does.",
+                "observation_documentation": "Over time, notice whether the student returns to particular idylls and begins to feel where the verse and the frame diverge. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of Tennyson's blank verse and the cycle's framing where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
