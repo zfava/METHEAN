@@ -2227,6 +2227,216 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-041": {
+        "node_type": "craft",
+        "strand": "figurative language and symbol",
+        "band": "developing",
+        "prerequisites": ["figurative language and symbol: emerging", "close reading: developing"],
+        "objective": (
+            "Name simile and metaphor as two distinct figures, find each in a story or "
+            "poem, distinguish them from literal description, and notice when an image "
+            "or object in a story carries meaning beyond itself, proposing what it "
+            "might stand for and pointing to the lines that support the reading."
+        ),
+        "core_understanding": (
+            "Comparison is one of writing's most ordinary and most powerful tools. A "
+            "simile says one thing is like another; a metaphor says one thing is "
+            "another, without the bridge of 'like' or 'as.' Both ask the reader to "
+            "hold two things together. At the developing band the reader also meets a "
+            "second move: an image or object in a story may carry weight beyond its "
+            "plain self, recurring or set apart so its meaning grows. Naming the figure "
+            "and noticing the charged image is the developing reader's work; the "
+            "proficient analysis of why the writer chose it comes later."
+        ),
+        "analytical_moves": [
+            "Identify a simile in a passage and name the two things compared",
+            (
+                "Identify a metaphor and explain how it differs from a simile: no 'like' "
+                "or 'as,' the writer claims the two are the same thing"
+            ),
+            "Distinguish a figurative description from a literal one in the same text",
+            (
+                "Notice an image or object that appears more than once, or that the "
+                "writer sets apart, and propose what it might stand for"
+            ),
+            "Point to the lines in the text that support the proposed meaning",
+        ],
+        "seminar_questions": [
+            (
+                "Where in this passage does the writer compare two things? Is it a "
+                "simile or a metaphor, and how can you tell?"
+            ),
+            "Why might the writer have chosen this figure of speech instead of plain saying?",
+            "Does anything in this story keep coming back? What might it carry, and where do you see it?",
+        ],
+        "writing_invitations": [
+            (
+                "Write a short paragraph about a poem or scene that names the simile or "
+                "metaphor, the two things compared, and what the comparison helps the "
+                "reader see or feel"
+            ),
+            (
+                "Choose a recurring image from a story you have read, quote the lines "
+                "where it appears, and write what you think it stands for"
+            ),
+        ],
+        "exemplar_texts": [
+            (
+                "A poem in which simile and metaphor sit close together (a Frost lyric "
+                "such as Mending Wall; a short Dickinson; a Hopkins)"
+            ),
+            (
+                "A worthy children's novel with a charged recurring image (the river in "
+                "The Wind in the Willows; the lamp-post in The Lion, the Witch and the "
+                "Wardrobe; the locket in The Secret Garden)"
+            ),
+            "A fable or folk tale whose central object turns symbolic (the magic mirror, the golden key)",
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "After comparison has been heard, the names arrive. Simile and "
+                    "metaphor are not new things, only new words for what the reader "
+                    "already noticed. The recurring image is offered as the next layer: "
+                    "a writer may set a single image, returned to and returned to, and "
+                    "let it carry more than its plain self."
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "A simile recited from a chosen poem",
+                        "A metaphor recited from a chosen poem",
+                    ],
+                },
+                "copywork": [
+                    (
+                        "A line containing a simile and a line containing a metaphor, "
+                        "copied side by side, with each figure named in the margin"
+                    ),
+                ],
+                "recitation_routine": (
+                    "Each session opens with yesterday's lines recited; the new lesson "
+                    "begins from 'what is compared today, and is it a simile or a metaphor?'"
+                ),
+                "read_aloud_suggestions": [
+                    "A poem rich in both simile and metaphor read aloud whole",
+                    (
+                        "A chapter of a worthy children's novel in which a recurring "
+                        "image appears, read aloud across several sittings"
+                    ),
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A worthy children's novel in which an image or object carries weight across the book",
+                    "A volume of poems with clear and lively comparison",
+                ],
+                "short_lesson_flow": (
+                    "Read the passage or short poem aloud, attentively. The child "
+                    "narrates. Then ask: did you hear a comparison? Is it a simile or a "
+                    "metaphor? What two things? Over time, when reading a longer book, "
+                    "notice together when an image keeps coming back, and ask the child "
+                    "what they think it stands for and where they see it in the text."
+                ),
+                "narration_prompt": (
+                    "Tell back what we read, and tell me what was compared, whether it "
+                    "was a simile or a metaphor, and whether any image kept coming back."
+                ),
+                "real_world_objects": [
+                    "The whole book or poem in hand, marked at recurring images with the child's own slips",
+                    (
+                        "A small commonplace book in which simile, metaphor, and "
+                        "recurring image are gathered as they are met"
+                    ),
+                ],
+                "nature_connection": (
+                    "The recurring image in literature is to a book what a nature "
+                    "notebook is to the year: the same thing observed many times, and "
+                    "meaning growing in it because it has been returned to."
+                ),
+                "habit_focus": (
+                    "The habit of naming a figure when one is heard, and the habit of "
+                    "noticing when an image is set apart or returned to and asking what it carries."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in simile and metaphor as distinct figures of "
+                    "speech, with practice in identifying each, and an introduction to "
+                    "the recurring image or charged object as a doorway to symbol."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher reads a passage aloud and names each figure as it "
+                        "appears: 'The clouds were like ships under sail: simile, with "
+                        "the word like, comparing clouds and ships. The road was a "
+                        "ribbon of moonlight: metaphor, no like, the road is called a "
+                        "ribbon. They are two ways of comparing.'"
+                    ),
+                    "we_do": (
+                        "Class works through a second passage together, surfacing "
+                        "similes and metaphors and naming the two things compared in "
+                        "each. Then the teacher introduces a recurring image from a book "
+                        "the class is reading, and together they list the places it "
+                        "appears and propose what it might stand for."
+                    ),
+                    "you_do": (
+                        "Student finds and names similes and metaphors independently in "
+                        "a new passage and proposes a reading of a recurring image from "
+                        "the book under study, with quoted evidence."
+                    ),
+                },
+                "independent_practice": [
+                    "A short notebook entry of similes and metaphors found and named in a chosen passage",
+                    "A short paragraph proposing the meaning of a recurring image from the book under study",
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep poetry and worthy children's novels rich in figure and image within reach",
+                    "Use simile and metaphor of your own in plain talk so the child hears that grown people use them too",
+                ],
+                "real_world_contexts": [
+                    "Catching a metaphor in a song lyric and asking what two things are being held together",
+                    (
+                        "Noticing a recurring object in a movie or book the child is "
+                        "loving, and wondering aloud what it carries"
+                    ),
+                    "Drawing a recurring image and writing a line under it about what it might mean",
+                ],
+                "conversation_starters": [
+                    "Was that a simile or a metaphor? Which words tell you?",
+                    "Why do you think the writer said it that way instead of saying it plainly?",
+                    "Does anything in this book keep coming back? What do you think it carries?",
+                ],
+                "resource_bank": [
+                    "A shelf of poetry, worthy children's novels, and folk tales in which image and figure are at work",
+                    "A reader-companion willing to wonder about a recurring image as a fellow reader, not as an examiner",
+                ],
+                "parent_role": (
+                    "Be a reader who notices figures and images aloud when you meet "
+                    "them, and welcome the child's noticings as a fellow reader. Trust "
+                    "the names (simile, metaphor) when they become useful, and not "
+                    "before; the figure is heard before it is named."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the child names simile and metaphor on "
+                    "their own when they meet them, and whether they begin to wonder at "
+                    "recurring images in stories without prompting. This noticing "
+                    "replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori at this band does not carry a distinct method for naming "
+                "simile and metaphor or for reading the recurring image as a doorway "
+                "to symbol; the elementary literature work in the prepared environment "
+                "centers on the great-lesson narratives, the grammar boxes, and the "
+                "child's chosen reading rather than on figures of speech."
+            ),
+        },
+    },
     "lit-work-001": {
         "node_type": "work",
         "track": "classics",
