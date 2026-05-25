@@ -8557,6 +8557,129 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-034": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "British Romantic Poetry (selections from Blake, Wordsworth, Coleridge, Byron, Shelley, Keats)",
+            "author": "William Blake, William Wordsworth, Samuel Taylor Coleridge, George Gordon (Lord Byron), Percy Bysshe Shelley, John Keats",
+            "date": "the Romantic moment roughly 1789-1832",
+            "genre": "British Romantic-period poetry",
+            "form": "varied: lyric, ballad, ode, sonnet, fragment, dramatic verse; collected here as a survey of the six major poets",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Blake's prophetic books contain difficult mythic material; "
+            "Wordsworth and Coleridge's 'Lyrical Ballads' include the disturbing "
+            "'The Thorn'; Byron's 'Don Juan' is satirically erotic; Shelley's "
+            "'The Mask of Anarchy' responds to the Peterloo Massacre with "
+            "graphic political imagery; Keats writes about death from very near "
+            "it. The Romantic moment is a moment of revolution, exile, and "
+            "early death; the survey holds that. Honest information, not a "
+            "gate."
+        ),
+        "craft_focus": [
+            "Close reading on a dense lyric, with the work varying by form (ballad, ode, sonnet, fragment, prophetic book) (lit-craft-003 at proficient; lit-craft-004 at advanced)",
+            "Figurative system varies by poet: Blake's contraries, Wordsworth's spots of time, Coleridge's haunted lyric, Shelley's wind and west, Keats's urn and bird (lit-craft-042 at proficient; lit-craft-043 at advanced)",
+            "Theme advanced: Romanticism's central concerns held across six poets (nature, the self, imagination, the sublime, history, the artist) (lit-craft-022; lit-craft-023)",
+            "Character advanced: the Romantic speaker as a constructed I the era invented; the body of work across poets is the argument (lit-craft-014)",
+        ],
+        "entry": (
+            "Proficient: read selections from each poet in their own voice "
+            "and form; find the figurative system that is each poet's "
+            "instrument (Blake's contraries, Wordsworth's spots of time, "
+            "Coleridge's haunted lyric, Shelley's wind, Keats's urn); read "
+            "the great odes and ballads whole. Advanced: argue what each "
+            "poet does to the inheritance from Milton (the most-named "
+            "predecessor across all six) and what the six together do that "
+            "becomes Romanticism as a category; honor that the category is a "
+            "later construction the poets themselves did not share. Mastery: "
+            "original argument about one poet's place in the Romantic moment "
+            "or about what Romanticism gave to the long line of poetry that "
+            "followed."
+        ),
+        "close_reading_passages": [
+            "Blake, 'The Tyger' from Songs of Experience: how does the poem stage its question, and what does the form refuse to answer?",
+            "Wordsworth, 'Lines Composed a Few Miles Above Tintern Abbey': how does the poem stage a return to a place, and what does the poet say has changed in him and what has the place taught?",
+            "Keats, 'Ode on a Grecian Urn': how does the poem stage the address to a silent figure, and what does the close ('Beauty is truth, truth beauty') do that the rest of the poem has earned or has not?",
+        ],
+        "structural_analysis": (
+            "Six poets across roughly fifty years, with no single form or "
+            "movement uniting them in their own time. The category 'Romantic' "
+            "is a later construction. What links the body of work is: a "
+            "constructed first-person I as the poems' instrument; nature, "
+            "imagination, history, and the sublime as recurring concerns; a "
+            "conscious inheritance from Milton most of all; a willingness to "
+            "let form follow concern rather than the other way around. The "
+            "structure of the survey is the argument: read enough of each "
+            "poet to hear them differently, and you hear what later readers "
+            "have meant by Romanticism."
+        ),
+        "thematic_lines": [
+            "Nature as the self's other and the self's mirror: the central Romantic question handled differently by each poet",
+            "Imagination as the source: what each poet claims for the imaginative act, and where the claims diverge",
+            "Revolution and its aftermath: the Romantic moment is the moment of the French Revolution and its undoing; the poetry holds the politics",
+        ],
+        "comparative_threads": [
+            "Paradise Lost (lit-work-017): the most-named predecessor across all six poets; Blake especially read himself against Milton",
+            "Donne (lit-work-033): the seventeenth-century pole the Romantics did not yet have the taste for; their inheritance is largely Miltonic",
+            "Frankenstein (lit-work-020): Mary Shelley's novel as part of the same Romantic moment; the prose Romantic counterpart to the poetry",
+            "T. S. Eliot (lit-work-037): the modernist who argued explicitly with Romantic taste and revived the metaphysical poets against it",
+            "American Romantic inheritors: Whitman (lit-work-035) and Dickinson (lit-work-036), both of whom read the British Romantics with care",
+        ],
+        "seminar_questions": [
+            "What does each poet do that no other on the list does?",
+            "What is the figurative system that is each poet's instrument, and where does each poet refuse to use the others'?",
+            "Where does the Romantic I claim more than the poem earns, and where does it earn more than it claims?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on a single poem, naming its figurative system and what the form lets the system claim",
+            "The essay on one poet's argument with Milton, with passages from both held in productive tension",
+            "At advanced, the comparative essay setting two Romantic poets against each other on a shared theme",
+        ],
+        "context": (
+            "The Romantic moment in British poetry roughly 1789-1832, "
+            "overlapping with the French Revolution, the Napoleonic Wars, "
+            "and the early industrial transformation of Britain; the six "
+            "major figures did not constitute a single school in their own "
+            "time; the category 'Romantic' is largely a later construction; "
+            "supplied as fact, interpretation left to the student. Any of "
+            "the six poets is authorable as its own work node in a later "
+            "batch."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The Romantic moment in British poetry; the seminar text on the constructed first-person I and the figurative systems each major poet invented.",
+                "memory_work": {
+                    "recitations": ["Recitation of a poem from each major Romantic poet across the survey"],
+                },
+                "recitation_routine": "Seminar opens from the recited poem; the discussion takes its first question from the poet's figurative instrument and what the poem claims with it.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy anthology of British Romantic poetry (the Norton Anthology of English Literature, Volume D; the Oxford Anthology) read aloud across a term, one or two poems per sitting",
+                ],
+                "short_lesson_flow": "An anthology read aloud poem by poem and narrated; the figurative instrument of each poet found; deepening to analysis of the body of work across poets as the bands move up.",
+                "narration_prompt": "Tell back the poem we just read, and tell me what the poet's instrument was, and where the poem refused to settle.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy anthology of British Romantic poetry on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in Romantic-period poetry, in nature and the imagination, or in the long inheritance from Milton leads",
+                ],
+                "parent_role": "Be a fellow reader who has lived with particular Romantic poems in their own returning. Read one aloud when the reader wants to hear it.",
+                "observation_documentation": "Over time, notice whether the student returns to particular poems and begins to feel one poet's instrument as distinct from another's. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of one or two poems per major Romantic poet and the figurative systems each invented where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
