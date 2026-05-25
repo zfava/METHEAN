@@ -449,4 +449,218 @@ WOODWORKING_CONTENT: dict[str, dict] = {
         "session_length_minutes": 20,
         "related_projects": [],
     },
+    "wc-002": {
+        "node_type": "technique",
+        "trade": "woodworking",
+        "competency_name": "Mark a line square to a reference edge with a try square and a marking knife",
+        "progression_band": "helper",
+        "prerequisites": ["ws-001", "wc-001"],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "The marking knife is sharp and short: a slip cuts the off-hand or the hand "
+                    "holding the square if it is in the knife's path"
+                ),
+                (
+                    "The square's stock against the board: the off-hand pressing the square hard "
+                    "can drag across the knife edge if the knife is lifted off the line"
+                ),
+                (
+                    "The keep-side / waste-side convention: a line marked on the wrong side of "
+                    "the intended cut wastes stock; not a hazard but a real error that compounds "
+                    "in downstream work"
+                ),
+            ],
+            "ppe_required": [
+                "Shop PPE per ws-001",
+                "Safety glasses optional but recommended for dry or pitchy stock at close range",
+                "No gloves: the marking knife is a fine tool that requires tactile feedback",
+            ],
+            "supervision_required": True,
+            "supervision_basis": (
+                "The marking knife is the learner's first edged tool in the trade. Mentor on "
+                "premises with sight of the off-hand throughout helper-band practice. Mentor "
+                "steps back to apprentice-level supervision (on premises, attention divided) "
+                "once the learner has demonstrated the technique on at least ten boards across "
+                "at least two sessions without an off-hand-in-path moment."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "Try square",
+                "specification": (
+                    "A try square or engineer's square of 6 to 12 inches, the stock and blade "
+                    "verified square against a known reference; a combination square is an "
+                    "acceptable substitute"
+                ),
+                "alternatives": [
+                    "Combination square with the stock locked",
+                    "Engineer's square (machinist's square) of 6 inches or larger",
+                ],
+            },
+            {
+                "name": "Marking knife",
+                "specification": (
+                    "A purpose-made marking knife with a beveled edge, or a chip-carving knife "
+                    "kept sharp; a utility knife with a fresh blade is an acceptable substitute "
+                    "but harder for a learner to control"
+                ),
+                "alternatives": [
+                    "A sharpened pencil at the earliest stage; the learner moves to the knife once the technique with the square is reliable",
+                ],
+            },
+            {
+                "name": "Pencil",
+                "specification": "Sharpened wood pencil for the visible line that follows the knife wall",
+                "alternatives": [],
+            },
+            {
+                "name": "A verified second square for checking",
+                "specification": "A known-square reference the mentor keeps for checking the learner's marks",
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [
+            {
+                "name": "Practice stock, softwood",
+                "quantity": "Three to five boards, 1x4 nominal, 12 to 24 inches long, with one edge planed straight",
+                "approximate_cost_usd": 10,
+            },
+        ],
+        "workspace_requirements": {
+            "surface": "Flat workbench with the board held still by a vise, holdfast, or hand pressure from the off-hand well clear of the knife path",
+            "ventilation": "Open air or normally ventilated shop",
+            "lighting": "Strong task light at a low angle so the knife wall is visible after marking",
+            "power": "None",
+            "containment": "None required",
+        },
+        "skill_description": (
+            "The learner identifies the board's reference edge (the edge already known to be "
+            "straight) and presses the stock of the try square against it. The blade extends "
+            "across the board's face. The learner walks the knife along the blade with the "
+            "bevel of the knife facing the waste side of the line and the flat of the knife "
+            "against the square. The first pass is light, scoring the surface; the second pass "
+            "deepens the line into a true knife wall. The pencil then follows the knife wall "
+            "for visibility. The off-hand presses the square firmly to the reference edge and "
+            "stays well clear of the knife path. The mark is on the keep side or the waste "
+            "side as instructed; the convention is that the knife wall is on the keep side and "
+            "the waste falls away from it."
+        ),
+        "demonstration_criteria": [
+            (
+                "The marked line is square to the reference edge within 1 degree, verified by a "
+                "second known-square reference across the full width of the board"
+            ),
+            "The line goes fully across the board's face from edge to edge with no gaps or skips",
+            (
+                "The knife wall is a single continuous cut, not a series of misaligned short "
+                "strokes; the pencil line follows it cleanly"
+            ),
+            "The line is on the keep side when the mentor specifies keep-side; on the waste side when the mentor specifies waste-side",
+            "The off-hand was clear of the knife path throughout the demonstration; mentor confirms",
+            (
+                "The learner can produce three square lines across three boards from the same "
+                "reference edge with all three lines passing the squareness check"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Square's stock is not firmly against the reference edge",
+                "cause": "The off-hand has loosened its grip on the square during the marking pass",
+                "remedy": (
+                    "Press the square hard with the off-hand throughout the cut. Some learners "
+                    "find it helps to hook the thumb over the top of the stock and the fingers "
+                    "around the underside of the board."
+                ),
+            },
+            {
+                "error": "Knife is held vertical (perpendicular to the board face) rather than with bevel toward the waste",
+                "cause": "The learner is gripping the knife like a pencil and forcing it straight down",
+                "remedy": (
+                    "Tip the knife so the bevel faces the waste and the flat of the blade rides "
+                    "against the square. The knife wall on the keep side will then be a clean "
+                    "vertical face."
+                ),
+            },
+            {
+                "error": "The line is a series of short strokes that do not align",
+                "cause": "The learner is lifting the knife and restarting along the way",
+                "remedy": (
+                    "One light pass first to establish the line, then a second pass deepening "
+                    "it; the knife stays on the wood from edge to edge in each pass."
+                ),
+            },
+            {
+                "error": "Off-hand drifts in front of the knife path during the cut",
+                "cause": "The learner reaches to steady the square or the board with the wrong hand",
+                "remedy": (
+                    "The off-hand stays on top of the square at the far end from the knife. If "
+                    "the board needs more holding, secure it to the bench rather than holding it "
+                    "with the off-hand at all."
+                ),
+            },
+            {
+                "error": "Line marked on the wrong side of the intended cut",
+                "cause": "The keep-side / waste-side convention was not held in mind when the mark was made",
+                "remedy": (
+                    "Before marking, name aloud which side is keep and which is waste. Mark "
+                    "the knife wall on the keep side; the cut will take the waste later."
+                ),
+            },
+            {
+                "error": "Square is referenced from the wrong edge or face of the board",
+                "cause": "The reference edge was not identified and clearly named at the start",
+                "remedy": (
+                    "Mark the reference edge with a small triangle in pencil before any "
+                    "marking begins. Every square mark on the board references from that edge."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "photo",
+            "what_to_capture": (
+                "Three boards each marked with three square lines from the same reference edge, "
+                "with a second known-square reference held against one line of each board so "
+                "the photo shows the squareness"
+            ),
+            "what_the_evidence_shows": (
+                "That each line is square to within 1 degree of the reference edge, that the "
+                "line is continuous across the board, and that the keep-side / waste-side "
+                "convention was held"
+            ),
+        },
+        "mentor_signoff_required": True,
+        "pedagogy": {
+            "i_do": (
+                "The mentor marks a square line on a board, narrating: identifying the "
+                "reference edge with a small triangle in pencil, placing the square stock "
+                "against it, walking the knife along the blade with the bevel toward the "
+                "waste, the light first pass and the deepening second pass, and finally "
+                "running a pencil along the knife wall for visibility. The mentor then shows "
+                "the line against a second square."
+            ),
+            "we_do": (
+                "Mentor and learner alternate marks. The learner places the square; the mentor "
+                "checks it is tight against the reference edge before the learner walks the "
+                "knife. The mentor watches the off-hand throughout. After each line both "
+                "verify it against the second square."
+            ),
+            "you_do_supervised": (
+                "The learner marks three square lines across three boards from the same "
+                "reference edge. Mentor watches the off-hand position, the knife angle, and "
+                "the keep-side / waste-side convention. After each line, the learner verifies "
+                "it against the second square and names aloud which side is keep and which is waste."
+            ),
+            "you_do_unsupervised": (
+                "The learner is signed off for unsupervised square marking once they can "
+                "produce ten consecutive square lines across at least two sessions without "
+                "an off-hand-in-path moment and without a keep-side error, with the ws-001 "
+                "safety signoff current within the last twelve months."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 4,
+        "session_length_minutes": 30,
+        "related_projects": [],
+    },
 }
