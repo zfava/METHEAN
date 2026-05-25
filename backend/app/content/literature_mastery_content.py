@@ -4102,6 +4102,120 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-002": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "The Iliad",
+            "author": "Homer",
+            "date": "c. 8th century BCE",
+            "genre": "epic",
+            "form": "epic poem",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Pervasive battlefield violence, the deaths of named warriors at length, "
+            "the desecration of Hector's body; honest information, not a gate."
+        ),
+        "craft_focus": [
+            "The wrath structure: a single emotion as the poem's whole arc",
+            "Embedded speech: the great set-piece speeches (Achilles to the embassy; Priam's appeal)",
+            "Hector and the cost on the other side",
+            "The Homeric simile, especially in the killing-scenes where simile slows the violence",
+            "The hero as the work's argument (what the poem needs Achilles to be)",
+        ],
+        "entry": (
+            "Proficient: meet the wrath of Achilles as the poem's single arc, follow "
+            "embedded speech as a way characters become available, name the structural "
+            "function of the simile. Advanced: argue what the poem refuses to settle "
+            "about Achilles, set Achilles against the inherited warrior-hero type, "
+            "read the simile as a figurative system. Mastery: original argument about "
+            "what the Iliad does to the warrior-hero tradition and what it asks its "
+            "inheritors to do with the form."
+        ),
+        "close_reading_passages": [
+            "The proem and the question of wrath: what does the poem say it is about, and what does the wrath include?",
+            "The embassy to Achilles (Book 9): what does Achilles refuse, and what does the language of his refusal reveal?",
+            "Priam's visit to Achilles (Book 24): how does the poem end, and what does the ending refuse to say?",
+        ],
+        "structural_analysis": (
+            "A single emotion, the wrath of Achilles, gives the poem its arc; the "
+            "action begins and ends not at the war's beginning or end but at the rise "
+            "and softening of that wrath. The structure makes the poem's argument: "
+            "the warrior-hero's choice is named through what the wrath leaves out and "
+            "what it admits at the end."
+        ),
+        "thematic_lines": [
+            "What the poem counts as honor, and the cost of demanding it absolutely",
+            "Hector and the cost on the other side: a poem of one side that lets the other side be seen",
+            "Mortality, time, and the meaning of choosing the short, bright life",
+        ],
+        "comparative_threads": [
+            "lit-work-001 (Odyssey): the hero who returns set beside the hero who chooses honor",
+            "lit-work-003 (Aeneid): the founder set against the warrior; Virgil's conscious reply to Homer",
+        ],
+        "seminar_questions": [
+            "Is the wrath of Achilles fully justified by the poem, and where does the poem refuse to say?",
+            "What does Hector let us see that Achilles cannot, and what does the poem do with that?",
+            "What changes when Priam crosses the lines? Does Achilles change, or only soften?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on a single Homeric simile, naming what it slows and what it expands",
+            "The essay on whether the poem endorses Achilles",
+            "At advanced, the comparative essay setting Achilles against an inherited warrior-hero type the poem is working with",
+        ],
+        "context": (
+            "The oral epic tradition, the world of bronze-age siege and aristocratic "
+            "honor, the poem at the head of the Western canon alongside the Odyssey; "
+            "supplied as fact, interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "The foundational great-books seminar text on heroic honor; the wrath of Achilles examined rhetorically and ethically."
+                ),
+                "memory_work": {
+                    "recitations": ["Recitation of the proem"],
+                },
+                "recitation_routine": (
+                    "Seminar opens from the recited proem; the discussion takes its "
+                    "first question from the line that names what the wrath includes."
+                ),
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of the Iliad, read aloud as a living book (Fitzgerald, Lattimore, or Wilson)",
+                ],
+                "short_lesson_flow": (
+                    "A living book read aloud and narrated; the wrath followed sitting "
+                    "by sitting, deepening to analysis of the great set-piece speeches "
+                    "as the bands move up."
+                ),
+                "narration_prompt": (
+                    "Tell back the part we read today, and tell me what you noticed about Achilles or Hector this time."
+                ),
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of the Iliad on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in heroes, honor, or war leads, no imposed apparatus",
+                ],
+                "parent_role": ("Read aloud and discuss where the student's interest leads; no imposed apparatus."),
+                "observation_documentation": (
+                    "Over time, notice whether the student returns to the poem and "
+                    "follows its questions into other reading. This noticing replaces any test."
+                ),
+            },
+            "traditional": {
+                "introduction": "Structured study of epic conventions and the great set-piece speeches where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
