@@ -9285,4 +9285,141 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-006": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "Sir Gawain and the Green Knight",
+            "author": "the Gawain poet (anonymous)",
+            "date": "c. 1370-1390",
+            "genre": "Middle English alliterative Arthurian romance",
+            "form": "verse romance in 2,530 lines arranged in 101 stanzas of alliterative long-line with a short rhyming 'bob and wheel' tail; preserved in a single manuscript (BL Cotton Nero A.x) alongside Pearl, Cleanness, and Patience",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "The beheading game at the poem's opening, in which the Green "
+            "Knight invites a blow and survives; sustained hunt scenes in "
+            "Fitt 3 including the dismembering of deer, boar, and fox in "
+            "detail consistent with medieval hunting manuals; bedroom "
+            "scenes with the Lady which are erotically charged but never "
+            "consummated; the wounding of Gawain at the Green Chapel. "
+            "Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading on dense Middle English alliterative verse, in modern translation alongside the original where possible (lit-craft-003 at proficient; lit-craft-004 at advanced)",
+            "Character: Gawain as the constructed knight whose courtesy is the poem's argument (lit-craft-013); Bertilak / the Green Knight as the figure the poem refuses to flatten (lit-craft-014 at advanced)",
+            "Figurative system: the green of the Green Knight, the pentangle on Gawain's shield, the girdle Gawain accepts and keeps, the three hunts braided with the three bedroom temptations (lit-craft-042 at proficient; lit-craft-043 at advanced)",
+            "Theme: courtesy, integrity, the test of a knight whose word is the poem's measure of him (lit-craft-022; lit-craft-023)",
+            "Structural braiding: three hunts intercut with three bedroom scenes; the parallel meanings the form makes (lit-craft-008 in the family of moves)",
+        ],
+        "entry": (
+            "Proficient: read the poem whole in a worthy modern translation, "
+            "with the Middle English original on the facing page where "
+            "possible; follow the four fitts (the New Year's challenge, the "
+            "journey to the Green Chapel, the hunts and bedroom scenes at "
+            "Bertilak's castle, the return to the Chapel); meet the pentangle "
+            "digression in Fitt 2 and the girdle's role across Fitts 3 and 4. "
+            "Advanced: argue what the poem refuses to settle about Gawain's "
+            "failure (he keeps the girdle and is wounded for it), what "
+            "Bertilak's laughter at the close does, and how the intricate "
+            "braiding makes meaning. Mastery: original argument about the "
+            "Gawain poet's place in the alliterative tradition the "
+            "fourteenth century revived and lost again."
+        ),
+        "close_reading_passages": [
+            "The Green Knight's first arrival at Camelot (Fitt 1): how does the poem stage the New Year's interruption, and what does the description of the Green Knight refuse to fix?",
+            "The pentangle digression on Gawain's shield (Fitt 2): how does the poet stage an explicit emblem with five interlocking fives, and what does the digression claim about Gawain that the rest of the poem will test?",
+            "The third hunt and the third bedroom scene (Fitt 3): how does the poem braid the fox-hunt against the Lady's third offer (the green girdle), and what does Gawain do that he will pay for at the Chapel?",
+        ],
+        "structural_analysis": (
+            "Four fitts in 101 stanzas, each stanza alliterative long-line "
+            "closing with a short rhyming bob and wheel. Fitt 1: the New "
+            "Year's beheading game at Camelot. Fitt 2: Gawain's year-long "
+            "preparation and journey, with the pentangle digression. Fitt "
+            "3: three days at Bertilak's castle, where three hunts are "
+            "intercut stanza by stanza with three bedroom temptations and "
+            "three exchanges of winnings between Gawain and his host. Fitt "
+            "4: the return to the Green Chapel, the wounding, and the long "
+            "explanation. The structural braiding is the poem's argument: "
+            "the test was not the blow but the bargain Gawain made, and "
+            "the bargain was made in the bedroom where Gawain thought "
+            "courtesy alone was at stake."
+        ),
+        "thematic_lines": [
+            "Courtesy and the keeping of one's word: the poem's measure of a knight",
+            "Failure and the marking of it: Gawain keeps the girdle and is wounded for it; he returns wearing the girdle as his sign and Arthur's court makes it a fashion; the poem refuses to settle whether the wound was punishment, mercy, or instruction",
+            "The Green Knight's identity: Bertilak and the Green Knight are the same person, and the explanation does not exhaust what the figure means",
+        ],
+        "comparative_threads": [
+            "lit-work-inh-005 Geoffrey of Monmouth: the Arthurian world Geoffrey set in motion; the Gawain poet develops it in alliterative-romance form",
+            "lit-work-inh-007 Le Morte d'Arthur: Malory's Gawain is a different Gawain than the Gawain poet's; the comparison is decisive for any reading of either",
+            "The Pearl Poet's other works (Pearl, Cleanness, Patience) preserved in the same single manuscript: the body of work of one anonymous poet",
+            "Tolkien's edition and translation of Sir Gawain (with E. V. Gordon 1925; Tolkien's solo translation published posthumously 1975): the poem shaped Tolkien's scholarly engagement with Middle English alliterative verse and his work on lit-work-inh-004 The Lord of the Rings",
+            "Simon Armitage's modern verse translation (2007) as the most-read recent inheritor in English",
+        ],
+        "seminar_questions": [
+            "What does the pentangle digression claim about Gawain, and where in the rest of the poem is the claim tested?",
+            "Why does the poem braid the three hunts against the three bedroom scenes stanza by stanza? What does the form make visible that direct statement could not?",
+            "What does Gawain's failure with the girdle mean, and where does the poem refuse to settle the question?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the third hunt and third bedroom scene, naming what the braiding makes visible",
+            "The essay on the green girdle as a figure the poem refuses to fix",
+            "At advanced, the essay on what the poem refuses to settle about Gawain's failure",
+        ],
+        "context": (
+            "Composed in the West Midlands of England in the second half of "
+            "the fourteenth century by a poet whose other works (Pearl, "
+            "Cleanness, Patience) survive only in the same single "
+            "manuscript and whose name is unknown; recovered for English "
+            "literary tradition in the nineteenth century; central to the "
+            "fourteenth-century alliterative revival; supplied as fact, "
+            "interpretation left to the student."
+        ),
+        "lineage": (
+            "Matter of Britain. Source position: the foundational English "
+            "Arthurian romance in the alliterative tradition. Inherits the "
+            "Arthurian world Geoffrey of Monmouth (lit-work-inh-005) set in "
+            "motion. The Gawain of this poem is a different Gawain than "
+            "Malory's (lit-work-inh-007) and the comparison is part of how "
+            "the inheritance branches. The poem shaped Tolkien's "
+            "(lit-work-inh-004) lifelong scholarly engagement with Middle "
+            "English alliterative verse; Tolkien co-edited the standard "
+            "edition and translated the poem himself."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The central Middle English alliterative Arthurian romance; the seminar text on the braided structure and the test of a knight's word.",
+                "memory_work": {
+                    "recitations": [
+                        "Recitation of the opening stanza in Middle English or a worthy modern translation"
+                    ],
+                },
+                "recitation_routine": "Seminar opens from the recited opening; the discussion takes its first question from how the poem stages the New Year's interruption.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Sir Gawain and the Green Knight (the Tolkien translation; Simon Armitage's verse translation; the Norton Critical edition with the Middle English) read aloud across the four fitts",
+                ],
+                "short_lesson_flow": "A living book read aloud across the four fitts and narrated; the three-hunts / three-bedroom braiding noticed; deepening to analysis of the girdle as the bands move up.",
+                "narration_prompt": "Tell back the fitt we read today, and tell me what Gawain did and what the poem made you notice he did.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Sir Gawain on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in Arthurian romance, in Middle English verse, or in Tolkien's scholarly background leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the green girdle stay open; bring Tolkien's translation into the room when the student wants to hear it.",
+                "observation_documentation": "Over time, notice whether the student returns to the poem and begins to feel the braiding as the poem's argument. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of Middle English alliterative verse and the poem's braided structure where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
