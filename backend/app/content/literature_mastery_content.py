@@ -8211,6 +8211,121 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-031": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "The Great Gatsby",
+            "author": "F. Scott Fitzgerald",
+            "date": "first published 1925",
+            "genre": "modernist American novel",
+            "form": "first-person narration by Nick Carraway, a participant in the events he tells; short novel in nine chapters with a brief epilogue",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Period attitudes throughout, including Tom Buchanan's open "
+            "racism and antisemitism (notably toward Meyer Wolfsheim); the "
+            "death of Myrtle Wilson under Daisy's driving and the killing of "
+            "Gatsby by George Wilson; the novel does not stand outside Tom's "
+            "speech but does not endorse it either. Honest information, not "
+            "a gate."
+        ),
+        "craft_focus": [
+            "First-person participant-observer narration: Nick as both teller and figure in the story (lit-craft-008)",
+            "Unreliable narration in a quieter form: Nick's claim to honesty and the ways his honesty is interested (lit-craft-031)",
+            "Character proficient: Gatsby as the work's argument, glimpsed by everyone else; Daisy, Tom, Jordan as constructed positions (lit-craft-013)",
+            "Figurative system: the green light at the end of Daisy's dock; the eyes of Doctor T. J. Eckleburg; the valley of ashes (lit-craft-042 at proficient; lit-craft-043 at advanced)",
+            "Theme proficient: the long pursuit and what is pursued; the famous closing image of the boats against the current (lit-craft-022)",
+        ],
+        "entry": (
+            "Proficient: read the novel whole in Nick's voice; follow the "
+            "figurative system of the green light, the valley of ashes, and "
+            "Eckleburg's eyes; meet the death of Myrtle and the killing of "
+            "Gatsby as the structural turns; close on the boats against the "
+            "current. Advanced: argue what Nick claims about his own honesty "
+            "and where the claim falters; argue what the novel does to the "
+            "pursuit-novel inheritance (Conrad as Fitzgerald's named "
+            "influence); honor what the novel refuses to settle about "
+            "Gatsby. Mastery: original argument about the novel's place in "
+            "American modernism and what it does to the figure of the long "
+            "pursuit."
+        ),
+        "close_reading_passages": [
+            "The opening on Nick's father's advice and the first sight of Gatsby reaching toward the green light (chapter 1): how does the novel stage the narrator's claim to reserve judgment and immediately give us the gesture that the novel will return to?",
+            "The valley of ashes and the eyes of Doctor T. J. Eckleburg (chapter 2): how does the novel stage a figure that no character interprets correctly and that the novel refuses to fix?",
+            "The closing paragraphs ('So we beat on, boats against the current'): how does the novel stage a closing that holds the whole work, and what does the present tense of the close do?",
+        ],
+        "structural_analysis": (
+            "Nine chapters in Nick's first-person voice, the novel's central "
+            "events glimpsed through him: Gatsby's parties, the reunion with "
+            "Daisy, the Plaza Hotel confrontation, the deaths in the valley "
+            "of ashes, the funeral. The figurative system holds the work "
+            "together (green light, valley of ashes, Eckleburg's eyes); the "
+            "closing paragraphs reframe the whole. The structure is the "
+            "novel's argument: a long pursuit recovered after the fact by "
+            "the only listener who cared to listen."
+        ),
+        "thematic_lines": [
+            "The long pursuit and what is pursued: the novel refuses to settle whether Daisy is what Gatsby was after or whether she was the figure for something else",
+            "What the green light means and what Eckleburg's eyes mean: the figures the novel refuses to fix",
+            "Nick's claim to honesty and what the novel does with it",
+        ],
+        "comparative_threads": [
+            "Heart of Darkness (lit-work-028): the participant-observer narrator Fitzgerald is consciously inheriting; Conrad as Fitzgerald's named influence",
+            "Eliot's The Waste Land (1922, in this batch as lit-work-037): the contemporary modernist treatment of the valley of ashes' kind of landscape; Fitzgerald read Eliot and wrote to him about Gatsby",
+            "Hemingway's The Sun Also Rises (1926) as the contemporary American novel of the same generation",
+            "Toni Morrison's writing on Gatsby as part of the long American reading of the novel's race politics",
+        ],
+        "seminar_questions": [
+            "Where does Nick's claim to honesty hold and where does it falter?",
+            "What does the green light mean, and where does the novel refuse to say?",
+            "Is Gatsby admirable, mourned, or both? What does the famous closing image earn?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the closing paragraphs ('So we beat on'), naming what the change to first person plural and present tense does",
+            "The essay on the figurative system of the green light, the ashes, and Eckleburg's eyes",
+            "At advanced, the essay on Nick's reliability and where the novel lets the reader see past him",
+        ],
+        "context": (
+            "Composed on the French Riviera and at Great Neck, Long Island, "
+            "across 1923-24; published in 1925 to mixed reviews and middling "
+            "sales; recovered as a foundational American novel after "
+            "Fitzgerald's death; supplied as fact, interpretation left to the "
+            "student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The crystalline American modernist novel of the long pursuit; the seminar text on the participant-observer narrator and on figures the novel refuses to fix.",
+                "memory_work": {
+                    "recitations": ["Recitation of the closing paragraphs"],
+                },
+                "recitation_routine": "Seminar opens from the recited closing; the discussion takes its first question from what the closing earns and what the novel refuses to settle.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of The Great Gatsby (the Scribner; the Cambridge edition) read aloud across two or three weeks",
+                ],
+                "short_lesson_flow": "A living book read aloud across the nine chapters and narrated; the figurative system noticed as it returns; deepening to analysis of the closing as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me what Nick said about it and what the novel let you see past him.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of The Great Gatsby on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in American modernism, in the long pursuit, or in narrators whose honesty is interested leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the figurative system stay open; do not fix the green light.",
+                "observation_documentation": "Over time, notice whether the student returns to the closing and begins to feel the figurative system as the novel's instrument. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the participant-observer narrator and the novel's figurative system where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
