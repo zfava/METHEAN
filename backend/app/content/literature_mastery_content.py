@@ -9154,4 +9154,135 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-005": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "Historia Regum Britanniae (History of the Kings of Britain), selections from Books IX-XI (the Arthurian portion)",
+            "author": "Geoffrey of Monmouth",
+            "date": "c. 1136",
+            "genre": "medieval Latin chronicle (presented as history, functioning as romance)",
+            "form": "Latin prose chronicle in twelve books; the Arthurian portion runs across Books IX-XI",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Battlefield violence including the catalog of slain in Arthur's "
+            "continental campaign; the treason of Mordred and the wounding "
+            "of Arthur at Camlann; Geoffrey's narrative is presented as "
+            "factual history but contemporary scholars and many medieval "
+            "readers (notably William of Newburgh) recognized the work as "
+            "literary invention; the work's claim to be a translation from "
+            "an 'ancient British book' is part of its strategy. Honest "
+            "information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading proficient on Latin chronicle prose in a worthy translation (lit-craft-003)",
+            "Character proficient: Arthur as constructed founding figure; Merlin; Mordred (lit-craft-013)",
+            "Theme proficient and advanced: the founding-myth shape of the chronicle; what Geoffrey claims to be doing and what the work actually does (lit-craft-022; lit-craft-023)",
+            "The unreliable claim of the source manuscript as a structural device (lit-craft-031 in the family of moves)",
+        ],
+        "entry": (
+            "Proficient: read the Arthurian portion of the Historia whole in "
+            "a worthy modern translation; follow the founding-myth shape of "
+            "the work; meet Merlin's first major appearance in Western "
+            "literature; meet Arthur as the figure Geoffrey invents into "
+            "European literature. Advanced: argue what Geoffrey does by "
+            "presenting his work as history rather than as romance, and "
+            "what the claim of an 'ancient British book' lets the work do; "
+            "set the Historia against Bede's earlier Ecclesiastical History "
+            "of the English People (which Geoffrey was rewriting against). "
+            "Mastery: original argument about Geoffrey's role in inventing "
+            "the literary Arthur for medieval Europe."
+        ),
+        "close_reading_passages": [
+            "The Prophecies of Merlin (the inset prophetic Book VII; often read alongside or before the Arthurian books): how does Geoffrey stage Merlin's prophecies, and what does the inset do to the work's claim to be history?",
+            "Arthur's coronation and the Continental campaign (Book IX): how does the chronicle stage Arthur's rise and his European war, and what does the scale of the campaign claim?",
+            "The treason of Mordred and the wounding at Camlann (Book XI): how does the chronicle stage the fall, and what does the wording of Arthur being carried to Avalon ('for the healing of his wounds') do?",
+        ],
+        "structural_analysis": (
+            "Twelve books of British history from Brutus the Trojan to "
+            "Cadwallader; the Arthurian portion in Books IX-XI is the work's "
+            "longest and most elaborated sequence. Geoffrey writes as a "
+            "chronicler claiming to translate from an ancient British book, "
+            "but the Arthurian sequence has no surviving prior source and is "
+            "largely Geoffrey's invention or his synthesis of folk material. "
+            "The structure is the work's argument: a founding myth for the "
+            "Britons in the form of a Latin chronicle that medieval Europe "
+            "received as fact and that established the Arthurian world for "
+            "every later inheritor."
+        ),
+        "thematic_lines": [
+            "Founding myth as chronicle: the work's claim to be history and what the form lets it do",
+            "Arthur as the figure invented for European literature: the moment from which every later Arthurian inheritor descends",
+            "The 'ancient British book' as Geoffrey's structural device: a claim modern scholarship has not located but that the medieval audience largely accepted",
+        ],
+        "comparative_threads": [
+            "Bede's Ecclesiastical History of the English People (731): the earlier chronicle Geoffrey was rewriting against; Bede had treated the Britons sparingly, Geoffrey makes them central",
+            "lit-work-inh-006 Sir Gawain and the Green Knight: the alliterative-romance inheritance that develops the Arthurian world Geoffrey set in motion",
+            "lit-work-inh-007 Le Morte d'Arthur: Malory's prose compilation; Geoffrey is one of the named English-language predecessors Malory and his French sources both draw from",
+            "Wace's Roman de Brut (c. 1155) and Layamon's Brut (c. 1200): the Anglo-Norman and Middle English verse adaptations that transmitted Geoffrey's Arthur into the romance tradition",
+        ],
+        "seminar_questions": [
+            "What does Geoffrey gain by presenting the Arthurian sequence as history rather than as romance?",
+            "What does the inset of Merlin's prophecies do to the work's claim to be a chronicle?",
+            "How does the wording of Arthur being carried to Avalon leave the ending unsettled, and what do later inheritors do with the opening Geoffrey left?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the wounding-and-Avalon passage, naming what the chronicle refuses to settle",
+            "The essay on Geoffrey's claim to translate from an ancient British book and what the claim lets the work do",
+            "The comparative paragraph setting Geoffrey's Arthur against the Arthur of a later inheritor (Malory or T. H. White)",
+        ],
+        "context": (
+            "Composed in the 1130s by a Welsh-Norman cleric attached to "
+            "Oxford; presented as a translation from an ancient British "
+            "book whose existence modern scholarship has not confirmed; "
+            "received widely across medieval Europe as factual history; "
+            "the foundational text of the literary Arthur; supplied as fact, "
+            "interpretation left to the student."
+        ),
+        "lineage": (
+            "Matter of Britain. Source position: Geoffrey of Monmouth is the "
+            "foundational source of the literary Arthur for medieval Europe. "
+            "The figure passes from Geoffrey into Wace's Roman de Brut, "
+            "Layamon's Brut, the French Vulgate Cycle, Chrétien de Troyes, "
+            "and through that tradition into Malory's Le Morte d'Arthur "
+            "(lit-work-inh-007) and onward to every later English-language "
+            "Arthurian inheritor (Tennyson lit-work-inh-008; T. H. White "
+            "lit-work-inh-009; Cornwell lit-work-inh-010)."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The foundational Latin chronicle that introduces the literary Arthur to medieval Europe; the seminar text on founding myth in chronicle form.",
+                "memory_work": {
+                    "recitations": [
+                        "Recitation of the passage of Arthur's wounding and being carried to Avalon in a worthy modern translation"
+                    ],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from how the chronicle leaves the ending unsettled.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of the Historia Regum Britanniae (Lewis Thorpe's Penguin Classics translation; Michael Faletra's Broadview edition) read aloud across the Arthurian portion",
+                ],
+                "short_lesson_flow": "A living book read aloud across Books IX-XI and narrated; the chronicle's claim to be history weighed against what it actually does; deepening to analysis of the Avalon ending as the bands move up.",
+                "narration_prompt": "Tell back the portion we read today, and tell me whether the chronicle is reporting or inventing, and where you can tell.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of Geoffrey's Historia on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in Arthurian origins, in founding myth, or in medieval chronicle leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the chronicle's invention be itself; trace forward into the inheritance.",
+                "observation_documentation": "Over time, notice whether the student returns to Geoffrey and follows the Arthurian thread forward into Malory and the modern inheritors. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of medieval Latin chronicle and Geoffrey's role in inventing the literary Arthur where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
