@@ -1759,6 +1759,198 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-021": {
+        "node_type": "craft",
+        "strand": "theme and meaning",
+        "band": "developing",
+        "prerequisites": [
+            "close reading: developing",
+            "what the story is about: emerging",
+        ],
+        "objective": (
+            "Distinguish the topic of a story (what it is literally about: the events, "
+            "the people, the place) from its theme (what the story shows about people, "
+            "life, or the world beyond the events themselves); name the theme of a "
+            "chosen story in a short sentence, grounded in a quoted passage."
+        ),
+        "core_understanding": (
+            "The topic of a story is what it is about in the simplest sense, the "
+            "events, the people, the place. The theme is something quieter and harder: "
+            "what the story shows us about people, about life, about the world, beyond "
+            "the events themselves. A story about a pig and a spider in a barn (topic) "
+            "may also be a story about friendship and the goodness of caring for others "
+            "(theme). To distinguish topic from theme is to begin the lifelong habit of "
+            "reading for meaning."
+        ),
+        "analytical_moves": [
+            "Name the topic of a story in one short sentence (what happens, who it is about)",
+            ("Name the theme of the story in one short sentence (what it shows about people, life, or the world)"),
+            "Tell apart topic from theme on a chosen story, saying which is which",
+            "Quote a line or scene from the story that grounds the theme you named",
+        ],
+        "seminar_questions": [
+            "What is this story about, and what is it really about?",
+            ("Could two readers think the theme is different things? Which words might support each reading?"),
+            "Where in the story does the theme show?",
+        ],
+        "writing_invitations": [
+            (
+                "Write a short paragraph naming the topic and the theme of a chosen "
+                "story, with one quoted line that grounds the theme"
+            ),
+            ("Take a story you have summarized only by its topic and write the paragraph that names the theme too"),
+        ],
+        "exemplar_texts": [
+            (
+                "A novel of clear thematic substance at the band (Charlotte's Web; The "
+                "Lion, the Witch and the Wardrobe; Bridge to Terabithia)"
+            ),
+            (
+                "A folk tale or fable whose topic and theme are clearly distinct (a "
+                "tale in which the lesson is unstated and must be drawn out)"
+            ),
+            "A short story or poem whose theme stays just beneath the surface",
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "The rhetorical tradition has long distinguished what a work is "
+                    "about from what it is for. Topic is the matter; theme is the "
+                    "meaning. The seminar asks both: of what does the story speak, and "
+                    "what does the story say?"
+                ),
+                "memory_work": {
+                    "recitations": [
+                        ("A line from the story in which the theme can be seen at work, recited from memory"),
+                    ],
+                },
+                "copywork": [
+                    (
+                        "The recited line copied into a kept notebook, with the topic "
+                        "and the theme of the story written beneath in one short "
+                        "sentence each"
+                    ),
+                ],
+                "recitation_routine": (
+                    "Each seminar opens by reciting the chosen line; the discussion "
+                    "takes its first question from the gap between topic and theme."
+                ),
+                "read_aloud_suggestions": [
+                    "A chapter of a novel chosen for the clarity of its theme",
+                    "A short fable or parable whose theme is plain enough to name and defend",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 25,
+                "living_book_suggestions": [
+                    (
+                        "Living books strong on theme at this age: Charlotte's Web; "
+                        "The Lion, the Witch and the Wardrobe; The Secret Garden"
+                    ),
+                ],
+                "short_lesson_flow": (
+                    "Read a chapter aloud, attentively, and the child narrates. Then "
+                    "ask gently: what is this story about, and what is it really "
+                    "about? Let the child's own answer come first; offer your own as "
+                    "another reader if invited. The chosen line that holds the theme "
+                    "is copied into the commonplace book, with the topic and theme of "
+                    "the work named in the child's own words."
+                ),
+                "narration_prompt": (
+                    "Tell back the chapter, and tell me what this story is really "
+                    "about, and read me the line that makes you think so."
+                ),
+                "real_world_objects": [
+                    "The living book in hand, marked at lines where the theme shows",
+                    "A commonplace book organized so each work's topic and theme can be set side by side",
+                ],
+                "nature_connection": (
+                    "Naming the theme of a story is the same habit as naming what a "
+                    "long season has been about: the events are many; the meaning is "
+                    "one quiet thing under them."
+                ),
+                "habit_focus": (
+                    "The habit of patient attention to what a whole story is really "
+                    "about, beyond what happens in it, and of grounding any answer in "
+                    "the words on the page."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in distinguishing topic from theme, in "
+                    "naming each in a short sentence, and in writing the short "
+                    "paragraph that defends a theme with one quoted line."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher chooses a familiar story, names its topic in one "
+                        "sentence and its theme in another, and quotes a line that "
+                        "shows the theme at work, naming the gap between the two."
+                    ),
+                    "we_do": (
+                        "Class chooses a second story together, drafts a topic "
+                        "sentence and a theme sentence jointly, and finds a quoted "
+                        "line to ground the theme on the board."
+                    ),
+                    "you_do": (
+                        "Student writes a short paragraph on a chosen story naming the "
+                        "topic and the theme and quoting a line that grounds the theme."
+                    ),
+                },
+                "independent_practice": [
+                    (
+                        "The short paragraph on a chosen story, with topic and theme "
+                        "distinguished and the theme grounded in a quoted line"
+                    ),
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep books strong on theme on the shelf, available, never assigned",
+                    (
+                        "Welcome the child's running talk about what a book they loved "
+                        "is really about, as one might welcome talk about what a real "
+                        "experience really meant"
+                    ),
+                ],
+                "real_world_contexts": [
+                    "A long conversation about what a book the child loved was really about",
+                    "A re-read or a recommendation the child makes, with a sentence about what the book is really about",
+                    ("A piece of the child's own writing that draws on the theme of a book they have read"),
+                ],
+                "conversation_starters": [
+                    "What is this book about, and what is it really about?",
+                    "Could someone think it was about something different? Why?",
+                    "Where in the book does that meaning show?",
+                ],
+                "resource_bank": [
+                    "A shelf of well-written novels and stories whose meanings reach beyond their events",
+                    "A reader-companion willing to discuss what a story is really about as another reader",
+                ],
+                "parent_role": (
+                    "Be a fellow reader who takes the child's reading of a story "
+                    "seriously and offers your own as another reader's, not as a "
+                    "teacher's. Ask what a story is really about and listen to the "
+                    "answer; let real care for the books do the teaching."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the child begins to say of a book what "
+                    "it is about and, separately, what it is really about, and whether "
+                    "they reach for the words in the text when they answer. This "
+                    "noticing replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori at this band does not carry a distinct method for the "
+                "analytical distinction between topic and theme in literary works; "
+                "literature work here remains within the grammar materials and the "
+                "moral imagination cultivated through chosen reading rather than "
+                "through an analytical apparatus."
+            ),
+        },
+    },
     "lit-craft-031": {
         "node_type": "craft",
         "strand": "narrative craft",
