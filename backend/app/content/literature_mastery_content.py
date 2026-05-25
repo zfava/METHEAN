@@ -7057,6 +7057,127 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-021": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Jane Eyre",
+            "author": "Charlotte Brontë (published initially under the pseudonym Currer Bell)",
+            "date": "first published 1847",
+            "genre": "Victorian Bildungsroman with Gothic elements",
+            "form": "first-person retrospective novel in five settings (Gateshead, Lowood, Thornfield, Marsh End, Ferndean); direct address to the reader at structural moments",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "The Reed household's cruelty in Gateshead; the privations and "
+            "deaths at Lowood School; the revelation of Bertha Mason, Rochester's "
+            "first wife, kept in the attic at Thornfield; the fire at Thornfield "
+            "and Rochester's blinding; St. John Rivers's marriage proposal as a "
+            "pressure on Jane's selfhood; the novel holds Bertha as a presence "
+            "the reader is invited to weigh and that later readings (notably "
+            "Jean Rhys's Wide Sargasso Sea) have reframed. Honest information, "
+            "not a gate."
+        ),
+        "craft_focus": [
+            "First-person retrospective voice with direct address to the reader (lit-craft-008)",
+            "Character proficient: Jane as the work's argument; her insistence on her own equality and self-sovereignty (lit-craft-013; named as exemplar text in lit-craft-013)",
+            "Gothic figurative network: the red room at Gateshead, the dying fires at Lowood, Thornfield and its attic, the chestnut tree split by lightning (lit-craft-042)",
+            "Theme proficient: equality, conscience, the right of the self to refuse what would erase it (lit-craft-022)",
+        ],
+        "entry": (
+            "Proficient: read the novel whole across its five settings; follow "
+            "Jane's first-person retrospective voice and the direct address to "
+            "the reader as a structural choice; meet the Gothic figurative "
+            "network and the revelation of Bertha as the structural turn at "
+            "Thornfield. Advanced: argue what the novel does to the inherited "
+            "Bildungsroman tradition and what it does that no earlier "
+            "first-person Bildungsroman by a woman had done; honor what the "
+            "novel does and does not do with Bertha; meet Jean Rhys's Wide "
+            "Sargasso Sea as the work that argues with this novel's treatment "
+            "of Bertha. Mastery: original argument about Jane Eyre's place in "
+            "the formation of the first-person novel of conscience."
+        ),
+        "close_reading_passages": [
+            "The red room at Gateshead (Chapter 2): how does the novel stage the first cruelty done to Jane, and how does the red room become a figure the novel returns to?",
+            "Jane and Rochester in the garden after the chestnut tree is split by lightning (Volume 2, near the end of the Thornfield section): how does the novel stage a betrothal that the next chapters will undo, and what does the lightning-split tree do to the reader?",
+            "Jane's refusal of St. John Rivers's proposal (Volume 3): how does the novel stage a different kind of erasure than the one at Thornfield, and what does Jane refuse here that completes what she refused there?",
+        ],
+        "structural_analysis": (
+            "Five settings, each a stage of Jane's formation: Gateshead "
+            "(childhood cruelty), Lowood (schooling under privation), "
+            "Thornfield (the great trial), Marsh End (a different test of "
+            "self-erasure under Christian duty), Ferndean (the marriage on "
+            "Jane's own terms). The first-person retrospective voice holds "
+            "the older Jane's understanding around the younger Jane's "
+            "experience; the direct address to the reader (most famously "
+            "'Reader, I married him') marks structural turns and binds the "
+            "reader as a witness. The structure is the novel's argument: a "
+            "self that refuses every offer to be erased is the self the marriage "
+            "is finally on."
+        ),
+        "thematic_lines": [
+            "Equality and self-sovereignty: Jane's claim that she is the equal of any she meets, and what the novel does with her insistence",
+            "Conscience as the work's compass: the novel's deepest commitment, and what the novel does when conscience pulls against love",
+            "Bertha Mason as presence: the novel holds Bertha as the obstacle and as a presence later readings have read against the novel's framing",
+        ],
+        "comparative_threads": [
+            "Pride and Prejudice (lit-work-019): the previous English Bildungsroman of a young woman's reading of others; what Brontë does that Austen did not",
+            "Frankenstein (lit-work-020): the previous novel of a figure constructed and refused her own account; the two together form a near-pair",
+            "Emily Brontë's Wuthering Heights (1847; to be authored): sister's novel published the same year, very different reading of love and household",
+            "Jean Rhys's Wide Sargasso Sea (1966) as the postcolonial reply that gives Bertha her own account; an inheritor that argues with the novel",
+        ],
+        "seminar_questions": [
+            "Where does Jane refuse to be erased, and where does the novel call her refusal the right one?",
+            "What does the novel do with Bertha that the novel refuses to do explicitly, and how do later readings reframe what the novel does?",
+            "What does the direct address to the reader do that no third-person narration could?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the red room as a figure the novel returns to",
+            "The essay on Jane's refusal of St. John Rivers and what it completes about her refusal at Thornfield",
+            "At advanced, the essay on the novel's treatment of Bertha read alongside Wide Sargasso Sea",
+        ],
+        "context": (
+            "Composed in Haworth, Yorkshire, by Charlotte Brontë and published "
+            "under the male pseudonym Currer Bell in 1847; the central Victorian "
+            "first-person novel of a young woman's formation; one of three "
+            "Brontë novels published that year; supplied as fact, interpretation "
+            "left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The central Victorian first-person novel of conscience; the seminar text on equality and self-sovereignty in nineteenth-century English fiction.",
+                "memory_work": {
+                    "recitations": [
+                        "Recitation of Jane's declaration to Rochester ('I am no bird; and no net ensnares me')"
+                    ],
+                },
+                "recitation_routine": "Seminar opens from the recited declaration; the discussion takes its first question from what Jane claims for herself and what the novel grants and refuses to grant.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Jane Eyre (the Norton; the Penguin; the Oxford World's Classics) read aloud across a term",
+                ],
+                "short_lesson_flow": "A living book read aloud across the five settings and narrated; the Gothic figurative network noticed as it returns; deepening to analysis of the direct address as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me what Jane refused and what she said to the reader directly.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Jane Eyre on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in nineteenth-century novels, in self-sovereignty, or in the Gothic leads; the long film history available",
+                ],
+                "parent_role": "Be a fellow reader who has lived with the novel in their own returning. Read aloud the famous declarations when the reader wants to hear them.",
+                "observation_documentation": "Over time, notice whether the student returns to particular scenes and begins to ask what the novel does with Bertha. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of first-person retrospective narration and the Gothic figurative network where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
