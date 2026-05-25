@@ -278,6 +278,7 @@ AUTHORED_NODE_IDS = (
     "lit-work-inh-008",
     "lit-work-inh-009",
     "lit-work-inh-010",
+    "lit-work-inh-011",
 )
 
 

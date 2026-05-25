@@ -9974,4 +9974,153 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-011": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "The Saxon Stories / The Last Kingdom series (thirteen novels: The Last Kingdom 2004 through War Lord 2020; selections, with attention to The Last Kingdom and The Pale Horseman as the entry novels)",
+            "author": "Bernard Cornwell",
+            "date": "2004-2020, thirteen novels published across sixteen years",
+            "genre": "twenty-first-century historical novel of the Anglo-Saxon and Viking late ninth and tenth centuries",
+            "form": "first-person retrospective by Uhtred Uhtredson of Bebbanburg across the long span of the formation of England; Uhtred narrates as an old man looking back at the wars of his lifetime",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Sustained battlefield violence from the Viking Great Heathen "
+            "Army's campaigns through Alfred's Wessex's resistance and the "
+            "wars that follow under Alfred's successors; sieges, raids, "
+            "the burning of villages and the killing of non-combatants on "
+            "all sides; the religious conflict between Christian Saxons "
+            "and pagan Danes treated as a contest of real worlds rather "
+            "than a moral binary; Uhtred himself is a pagan who fights for "
+            "a Christian king and the novels honor that tension; real "
+            "historical figures (Alfred the Great, Edward the Elder, "
+            "Aethelflaed of Mercia, Aethelstan) appear and the novels do "
+            "not sanitize any party. In-copyright; analyzed and pointed "
+            "to, never reproduced. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "First-person retrospective narration across thirteen novels: Uhtred as the same voice from young warrior to old lord, the longest sustained first-person retrospective in modern English historical fiction (lit-craft-008; lit-craft-031 in the family of moves)",
+            "Character: Uhtred himself as a man caught between two worlds (Saxon birth, Danish upbringing, Christian king's service, pagan faith); Alfred and his successors as constructed historical figures the novels refuse to flatten (lit-craft-014)",
+            "Theme: the formation of England as the series' long argument; what is gained and what is lost when many kingdoms become one (lit-craft-022; lit-craft-023)",
+            "Even-handed all-sides standard: Saxons, Danes, Britons-pushed-west, Welsh, Scots; none sanitized or amplified; the religious conflict held as a contest of worlds (lit-craft-023 in the family of moves)",
+        ],
+        "entry": (
+            "Proficient: read the entry novels (The Last Kingdom, The Pale "
+            "Horseman) and follow as much of the long series as time "
+            "allows; follow Uhtred's first-person voice across the long "
+            "span; meet Alfred as a constructed historical figure the "
+            "novels refuse to flatten; meet the all-sides treatment of "
+            "the Anglo-Saxon / Viking world as the series' central "
+            "commitment. Advanced: argue what the series does with "
+            "Alfred's reputation and what it lets Alfred be that the "
+            "hagiographical sources (Asser, the Anglo-Saxon Chronicle) "
+            "did not let him; argue the religious conflict as it is "
+            "treated through Uhtred, a pagan who fights for a Christian "
+            "king; honor what the series refuses to settle about the "
+            "Britons pushed west, who are the protagonists' people in "
+            "Cornwell's earlier Warlord Chronicles. Mastery: original "
+            "argument about historical-fiction practice when real "
+            "historical figures whose descendants are still in the room "
+            "appear."
+        ),
+        "close_reading_passages": [
+            "The opening of The Last Kingdom and Uhtred's capture and adoption by the Dane Ragnar: how does the series stage Uhtred's two upbringings, and what does the staging do to the religious-and-cultural binary the rest of the series will refuse to settle?",
+            "The Battle of Edington (878) as the series stages it in The Pale Horseman: how does the series stage the real historical battle without sanitizing either the Saxons or the Danes?",
+            "The closing of War Lord (2020) and Uhtred's last reflection: how does the series stage Uhtred's old age and the England he has helped make, and what does the long retrospective frame let the series claim?",
+        ],
+        "structural_analysis": (
+            "Thirteen novels in Uhtred's first-person voice across the "
+            "long span from the 860s through the early tenth century; "
+            "the historical scaffolding is Alfred's defense of Wessex, "
+            "the slow expansion of West Saxon rule into Mercia and the "
+            "Danelaw, and the eventual unification under Alfred's "
+            "grandson Aethelstan. The frame is Uhtred's retrospective: "
+            "he is writing in old age and the long view is part of the "
+            "argument. The structure is the series' commitment: the "
+            "formation of England narrated by a witness who could have "
+            "fought on either side and who frequently wished he were "
+            "fighting on the other."
+        ),
+        "thematic_lines": [
+            "The formation of England: what is gained when many kingdoms become one and what is lost by the kingdoms that are absorbed",
+            "Religion as contest of worlds: the Christian/pagan binary the series refuses to settle, narrated by a pagan who serves a Christian king",
+            "Loyalty between worlds: Uhtred's Saxon birth and Danish upbringing as the series' central tension, never resolved into a single identity",
+        ],
+        "comparative_threads": [
+            "lit-work-inh-010 The Warlord Chronicles: same author, previous historical moment (post-Roman fifth-and-sixth centuries); the Britons who are protagonists in the Warlord Chronicles have been pushed west by the time of the Saxon Stories and appear at the margins; the Saxons who were enemies in the Warlord Chronicles are now the protagonists' people; together the two series cover the long fall of Britain into England",
+            "lit-work-004 Beowulf and lit-work-005 the Saga of the Volsungs: the Norse-Germanic literary world that informs Cornwell's Danes; Uhtred's Danish upbringing is grounded in the same literary inheritance",
+            "lit-work-inh-004 The Lord of the Rings: Tolkien's Anglo-Saxon scholarship and the Rohirrim as a literary use of the same Old English world; Cornwell's Saxons are the historical figures Tolkien's Rohirrim are the literary descendants of",
+            "The Anglo-Saxon Chronicle, Asser's Life of Alfred, and the Annales Cambriae: the documentary sources Cornwell draws on and sometimes argues with",
+            "The Netflix/BBC adaptation 'The Last Kingdom' (2015-2022) as the most-watched visual inheritor of the series",
+        ],
+        "seminar_questions": [
+            "What does Uhtred's two upbringings (Saxon birth, Danish raising) let the series do that a single-identity narrator could not?",
+            "What does the series let Alfred be that the hagiographical sources do not let him be?",
+            "Where does the series refuse to take a side in the religious conflict, and where does it lean despite Uhtred's stated pagan loyalty?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on Uhtred's capture and Danish upbringing, naming what the staging does to the rest of the series",
+            "The essay on the Battle of Edington as the series stages it, attending to the all-sides treatment of the historical event",
+            "At advanced, the essay on Alfred as a constructed historical figure across the series, with attention to where Cornwell departs from Asser",
+        ],
+        "context": (
+            "Composed across 2004-2020 by Cornwell after the success of his "
+            "Sharpe series and his earlier Warlord Chronicles; the series "
+            "draws on the Anglo-Saxon Chronicle, Asser's Life of King "
+            "Alfred, the Annales Cambriae, and a substantial body of "
+            "archaeological work on the late ninth and tenth centuries; "
+            "adapted as 'The Last Kingdom' for BBC and Netflix 2015-2022; "
+            "supplied as fact, interpretation left to the student."
+        ),
+        "lineage": (
+            "Matter of Britain (extended to the Saxon and Viking moment "
+            "that follows the post-Roman moment of Arthur). Inheritor "
+            "position. Same author as the Warlord Chronicles "
+            "(lit-work-inh-010); the Saxons who were the enemies in that "
+            "trilogy are the protagonists' people in this series, and the "
+            "Britons of that trilogy have been pushed west by this period "
+            "and appear at the margins. The Old English literary world of "
+            "Beowulf (lit-work-004) and the Norse literary world of the "
+            "Saga of the Volsungs (lit-work-005) inform the series' "
+            "Saxons and Danes respectively. Tolkien's (lit-work-inh-004) "
+            "Anglo-Saxon scholarship and his Rohirrim as a literary "
+            "extension of the same world stand alongside Cornwell's "
+            "historical reconstruction of the actual figures."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The twenty-first-century historical-novel series on the formation of England; the seminar text on first-person retrospective across a long span and on even-handed all-sides treatment of real historical conflict.",
+                "memory_work": {
+                    "recitations": [
+                        "Recitation of the opening of The Last Kingdom in which Uhtred names himself and his birthright"
+                    ],
+                },
+                "recitation_routine": "Seminar opens from the recited opening; the discussion takes its first question from what Uhtred claims about himself and where the rest of the series will test the claim.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of The Last Kingdom and The Pale Horseman (the HarperCollins or Penguin paperback editions) read aloud across a term, with the remaining novels of the series available for the long return",
+                ],
+                "short_lesson_flow": "A living book read aloud across the entry novels and narrated; Uhtred's two upbringings held in mind; deepening to analysis of Alfred and the all-sides treatment as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me which world Uhtred was speaking from, and which world the chapter let you see most fully.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep worthy editions of The Last Kingdom and The Pale Horseman on the shelf, available, never assigned; the rest of the series available as the reader wants more",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in Anglo-Saxon England, in the Viking age, in Alfred, or in the formation of England leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the religious conflict stay even-handed; honor Uhtred's two worlds as Uhtred honors them.",
+                "observation_documentation": "Over time, notice whether the student returns to the series and begins to bring the formation of England into other reading. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of historical-novel practice and the long first-person retrospective form where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
