@@ -2857,6 +2857,223 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-042": {
+        "node_type": "craft",
+        "strand": "figurative language and symbol",
+        "band": "proficient",
+        "prerequisites": ["figurative language and symbol: developing", "close reading: proficient"],
+        "objective": (
+            "Read figurative language as part of how a work makes meaning, not as "
+            "decoration: trace a network of related images or symbols across the "
+            "work and articulate how they function together; distinguish a "
+            "conventional symbol (the rose, the journey) from a writer's particular "
+            "figurative invention; defend a small original reading of a symbol or "
+            "figurative system from specific passages; and recognize when a figure "
+            "resists a single reading and hold the openness without giving up evidence."
+        ),
+        "core_understanding": (
+            "At the proficient band the reader sees that figurative language is not "
+            "ornament: in a worthy work the figures do work. A network of related "
+            "images may carry the work's meaning more powerfully than any direct "
+            "statement; a symbol may bring in a long inheritance of meaning the "
+            "writer is using or refusing; a metaphor may be the way an idea becomes "
+            "available at all. The reader tracks these figures across the whole "
+            "work, distinguishes inherited symbols from a writer's particular "
+            "inventions, and defends a reading by returning to the lines. They also "
+            "learn to honor figures that resist a single reading and to hold more "
+            "than one without surrendering the discipline of evidence."
+        ),
+        "analytical_moves": [
+            "Track a network of related images or symbols across a whole work and articulate how the network functions together",
+            (
+                "Distinguish a conventional symbol (the rose, the journey, the storm) "
+                "from a writer's particular figurative invention in this work"
+            ),
+            (
+                "Read figurative language as in service of theme and character, "
+                "naming what work the figure does in the meaning of the whole"
+            ),
+            (
+                "Defend a small original reading of a symbol or figurative system "
+                "line by line, returning to the text for every claim"
+            ),
+            (
+                "Hold a figure that resists a single reading, naming the more than "
+                "one reading the words support and what is gained by leaving it open"
+            ),
+        ],
+        "seminar_questions": [
+            "Which images in this work travel together, and what do they do in concert that none of them does alone?",
+            "Where does this writer use an inherited symbol and where do they invent their own? Which words tell you?",
+            "Is there a figure in this work that refuses to settle into one reading? What does that refusal do?",
+        ],
+        "writing_invitations": [
+            (
+                "Write a short analytical paragraph arguing how a network of related "
+                "images in a chosen work makes a theme or a character available, "
+                "quoting two or three passages"
+            ),
+            (
+                "Write the paragraph defending a small original reading of a single "
+                "symbol from a work, naming whether it is inherited or invented and "
+                "grounding the reading line by line"
+            ),
+        ],
+        "exemplar_texts": [
+            (
+                "A worthy novel whose figurative network is part of how it means "
+                "(Moby-Dick; The Scarlet Letter; A Wrinkle in Time; The Lord of the Rings)"
+            ),
+            "A poem in which figure is the work's substance, not its decoration (a Hopkins; a Dickinson; a Yeats lyric)",
+            (
+                "A short story whose central object turns symbolic in the writer's "
+                "particular way (Joyce's Araby; O'Connor's A Good Man Is Hard to Find; Welty)"
+            ),
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "Figure meets the seminar. The reader has named simile and "
+                    "metaphor and has heard a recurring image carry weight. At this "
+                    "band a further step: the figures travel together, and what they "
+                    "do together is the work's meaning. Rhetorical tradition and "
+                    "interpretive habit converse: which figures has this writer "
+                    "chosen, which has the writer inherited from the long tradition, "
+                    "and what does the writer make them do?"
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "A passage in which a figure or a symbolic image bears the weight of the work, recited at the seminar's opening",
+                    ],
+                },
+                "copywork": [
+                    "The recited passage copied into the kept commonplace book, with the figurative words underlined",
+                ],
+                "recitation_routine": (
+                    "Each seminar opens from a recited passage of figure or symbol; "
+                    "the first question is taken from the lines just heard and "
+                    "returns to the text for every claim."
+                ),
+                "read_aloud_suggestions": [
+                    "A chapter rich in a chosen figurative network, read aloud at the seminar's opening",
+                    "A poem whose substance is figure, read aloud whole more than once",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 40,
+                "living_book_suggestions": [
+                    "A worthy novel whose figurative work is sustained across the book, read whole at a sustained pace",
+                    "A volume of poetry in which figure is the substance, read across a term",
+                ],
+                "short_lesson_flow": (
+                    "The proficient student reads the whole work at a sustained "
+                    "pace, narrating each sitting. The recurring images and symbols "
+                    "are marked or slipped as they are met. At a chapter's end one "
+                    "passage of figurative weight is taken up, copied into the "
+                    "commonplace book, and discussed: how does this figure travel "
+                    "through the book, is it the writer's own or an inheritance, and "
+                    "what does it do in the meaning of the whole?"
+                ),
+                "narration_prompt": (
+                    "Tell back the chapter you read, and tell me which images "
+                    "travel together in the book, and which one passage you would "
+                    "set down as the place we most clearly see them at work."
+                ),
+                "real_world_objects": [
+                    "The whole novel, marked with the reader's own slips at the passages where figurative work is plainest",
+                    "A commonplace book gathering figurative passages across many works",
+                ],
+                "nature_connection": (
+                    "The recurring image in a novel is to a book what a single bird "
+                    "returned to across a year is to a nature notebook: not the same "
+                    "in any one moment, but slowly known by the many."
+                ),
+                "habit_focus": (
+                    "The habit of seeing figure as the work's meaning rather than as "
+                    "its decoration, and the habit of returning to the text for "
+                    "evidence rather than relying on received reading."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in tracking a figurative network across a "
+                    "work, in distinguishing inherited from invented symbol, in "
+                    "reading figure in service of theme and character, and in "
+                    "writing the short analytical paragraph that defends a reading "
+                    "from the words."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher reads passages aloud in which a network of related "
+                        "images appears, names the images, names whether each is "
+                        "inherited or invented in this writer, and writes a short "
+                        "paragraph on the board arguing what the network does in the "
+                        "work's meaning, quoting the passages line by line."
+                    ),
+                    "we_do": (
+                        "Class gathers two or three passages of a chosen figurative "
+                        "network from the work under study, weighs whether the "
+                        "figures are inherited or invented, and drafts together a "
+                        "paragraph defending a small original reading of the "
+                        "network, quoting the lines that ground it."
+                    ),
+                    "you_do": (
+                        "Student writes an independent analytical paragraph "
+                        "defending a chosen reading of a figurative network or a "
+                        "single symbol from the work under study, naming inherited "
+                        "and invented elements and grounding the reading line by "
+                        "line, and revises after hearing a different reading at seminar."
+                    ),
+                },
+                "independent_practice": [
+                    "The analytical paragraph on a self-chosen figurative network or symbol from the work under study",
+                    "A short revision of the paragraph after seminar discussion",
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep the long shelf of novels, poetry, and stories rich in figurative substance, available, never assigned",
+                    "Keep a commonplace book and small slips for marking figurative passages in books the reader cares about",
+                ],
+                "real_world_contexts": [
+                    "A long evening conversation about why a writer keeps returning to a single image and what it does in the whole book",
+                    "A piece of writing the reader composed because a symbol in a book asked something of them",
+                    "A read-aloud of a passage so a fellow reader can hear the network the reader has begun to see",
+                ],
+                "conversation_starters": [
+                    "Which images keep coming back in this book, and what do they do together?",
+                    "Is this writer using the symbol the way it always gets used, or making it their own? Which words tell you?",
+                    "Is there a figure in here that will not settle into one meaning? What does that openness do?",
+                ],
+                "resource_bank": [
+                    "A shelf of difficult, worthy books whose figurative work rewards attention",
+                    "A reader-companion willing to argue a chosen figure or symbol as a fellow reader, not as an examiner",
+                ],
+                "parent_role": (
+                    "Be a reader who notices figurative networks aloud when you meet "
+                    "them and welcomes the reader's noticings as a fellow reader. "
+                    "Take the openness of figures seriously: a figure that refuses "
+                    "one reading is doing work."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the reader tracks figurative networks "
+                    "across books, distinguishes inherited from invented symbols, "
+                    "defends a reading line by line, and honors figures that resist "
+                    "a single reading. This noticing replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori's literature pedagogy at the elementary and "
+                "early-secondary level does not carry a distinct method for the "
+                "analytical reading of figurative networks and symbol; the practice "
+                "here is drawn from the seminar tradition and the long Charlotte "
+                "Mason habit of narration across whole books rather than from the "
+                "prepared environment."
+            ),
+        },
+    },
     "lit-work-001": {
         "node_type": "work",
         "track": "classics",
