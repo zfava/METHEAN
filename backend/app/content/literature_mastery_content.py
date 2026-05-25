@@ -7631,6 +7631,120 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-026": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "War and Peace",
+            "author": "Leo Tolstoy",
+            "date": "serialized 1865-1867; book publication 1869",
+            "genre": "Russian novel of nation and family across war and peace",
+            "form": "four books and two epilogues; omniscient third-person with sustained essayistic interludes; hundreds of named characters across noble households and historical figures",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "The Napoleonic invasions of Russia in detail, including the "
+            "battles of Schöngraben, Austerlitz, and Borodino; the burning of "
+            "Moscow; the deaths of major characters across the long span; "
+            "Tolstoy's essayistic polemic against the historians' theory of "
+            "great men; Pierre's captivity; the novel does not gentle its "
+            "violence or its losses. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Omniscient narration with sustained essayistic interludes: the novel includes essays on the philosophy of history that are part of the work (lit-craft-008)",
+            "Character advanced: dozens of characters held with sustained interiority across hundreds of pages; what the form does that no shorter novel could (lit-craft-014)",
+            "Theme advanced: Tolstoy's argument against the great-man theory of history; what the novel refuses to settle about who or what makes history (lit-craft-023)",
+            "Figurative networks across the long span: the oak that buds again, the Moscow that burns, the ice that breaks (lit-craft-042 at proficient; lit-craft-043 at advanced)",
+        ],
+        "entry": (
+            "Advanced: read the novel whole across its long span (most "
+            "students will take a year or more); follow the major characters "
+            "(Andrei, Pierre, Natasha, Marya, the Rostovs, the Bolkonskys) "
+            "across the four books; meet the essayistic interludes as part of "
+            "the work rather than as digressions; argue what Tolstoy refuses "
+            "about the great-man theory and what the second epilogue does "
+            "that the narrative could not. Mastery: original argument about "
+            "the novel's place in the form's long history and what the "
+            "essayistic intrusion does to the novel as a form."
+        ),
+        "close_reading_passages": [
+            "Andrei at Austerlitz looking up at the sky (Book 3 in most editions): how does the novel stage a moment that recurs in Andrei's interior across the rest of the novel?",
+            "Natasha at the ball (Book 6 in most editions): how does the novel stage a young woman's first experience of the social world that the novel is otherwise weighing skeptically?",
+            "Pierre in captivity with Platon Karataev: how does the novel stage a peasant figure whose claim on the novel's philosophy is hard to read either as endorsed or as refused?",
+        ],
+        "structural_analysis": (
+            "Four books and two epilogues, the second epilogue an essay on "
+            "the philosophy of history that is part of the work. The novel "
+            "moves between two great noble households (the Rostovs and the "
+            "Bolkonskys) and the historical events that engulf them; the "
+            "omniscient narrator alternates close access to many characters "
+            "with sustained essayistic polemic against the historians. The "
+            "structure is the work's argument: history is not made by Napoleon; "
+            "history is made by the millions of acts the historians cannot "
+            "see, and only the form that holds both the lives and the "
+            "essayistic polemic can argue this."
+        ),
+        "thematic_lines": [
+            "The great-man theory of history and Tolstoy's argument against it: not abstract, but tested across the novel's long span",
+            "War and peace as the two states the novel holds together: each is what the other makes visible",
+            "Marriage, family, and household across generations: the lives the historians cannot see and the novel can",
+        ],
+        "comparative_threads": [
+            "Crime and Punishment (lit-work-025): the contemporary Russian novelist using the form very differently",
+            "The Iliad (lit-work-002): the older epic of war that Tolstoy was widely read alongside; the comparison was already established in nineteenth-century criticism",
+            "The Aeneid (lit-work-003): the older epic of nation-founding the novel quietly engages",
+            "Later inheritors: Vasily Grossman's Life and Fate as the twentieth-century Russian successor",
+        ],
+        "seminar_questions": [
+            "What does the novel refuse about the great-man theory of history, and how does the second epilogue argue what the narrative has been arguing?",
+            "What does the omniscient narrator with essayistic interludes let the novel do that no other form could?",
+            "What does the novel let Platon Karataev claim, and where does it refuse to either endorse or refuse the claim?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on a single battle scene, naming what the novel does with the historical event and what it does with the personal one",
+            "The essay on the novel's argument against the great-man theory, holding two or three essayistic interludes alongside the narrative moments they comment on",
+            "The sustained essay on the second epilogue as part of the work",
+        ],
+        "context": (
+            "Serialized in 'The Russian Messenger' across 1865-1867 and "
+            "published in book form in 1869; composed over six years; "
+            "Tolstoy's first long novel and one of the longest novels in the "
+            "Western canon; supplied as fact, interpretation left to the "
+            "student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The longest of the great nineteenth-century novels; the seminar text on the form when stretched to hold history, philosophy, and a multitude of lives.",
+                "memory_work": {
+                    "recitations": ["Recitation of Andrei's sky passage at Austerlitz in a worthy modern translation"],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from what Andrei sees and what the rest of the novel does with it.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of War and Peace (Pevear and Volokhonsky; Briggs; Maude's older version) read aloud across a year, in long chunks",
+                ],
+                "short_lesson_flow": "A living book read aloud across the four books and the epilogues, narrated; the major characters followed across the long span; deepening to analysis of the essayistic interludes as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me which character was being given to us, and what the narrator quietly let us see about them.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of War and Peace on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in nineteenth-century Russia, in the Napoleonic wars, in the long novel, or in the philosophy of history leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; the year-long reading is the practice; let the essayistic interludes be themselves.",
+                "observation_documentation": "Over time, notice whether the student returns to particular characters across the year and brings the essayistic interludes into other reading. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the omniscient narrator with essayistic intrusion and the form of the long novel where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
