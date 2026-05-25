@@ -1444,6 +1444,163 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-012": {
+        "node_type": "craft",
+        "strand": "character",
+        "band": "emerging",
+        "prerequisites": [],
+        "objective": (
+            "Notice the people in a story, name what they are like in concrete words, "
+            "tell back what they do, and point to a moment in the story that shows what "
+            "a character is like; tell two characters in the same story apart by "
+            "something each one does."
+        ),
+        "core_understanding": (
+            "A story is, first of all, about people, or about animals, things, or "
+            "creatures that act like people. At the seed of character, the child learns "
+            "to notice who the story is about, to name them, to tell what they do, and "
+            "to find one moment in the story that shows what a character is like."
+        ),
+        "analytical_moves": [
+            "Name the people in the story: who is in it?",
+            "Tell what a chosen character does in the story, in the child's own words",
+            ("Point to a moment in the story that shows what a character is like (kind, brave, sad, clever)"),
+            "Tell apart two characters in the same story by something each one does",
+        ],
+        "seminar_questions": [
+            "Who is this story about?",
+            "What is this person like? How can you tell?",
+            "What did they do today, in the story?",
+        ],
+        "writing_invitations": [
+            "Draw the character you most cared about today, and write their name under your drawing",
+            "Copy one short sentence from the story that shows what the character is like",
+        ],
+        "exemplar_texts": [
+            (
+                "A favorite picture book or short chapter book whose characters are "
+                "clearly drawn (Frog and Toad; the Frances books; Winnie-the-Pooh)"
+            ),
+            ("A fairy tale or fable with clearly distinct characters (a Three Little Pigs; the Tortoise and the Hare)"),
+            "A first chapter of a chapter book whose characters the family will follow (Charlotte's Web)",
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "A story is about people (or creatures who act like people). Before "
+                    "we name the kinds of want and the kinds of change, we first hear "
+                    "who is in the story and what they do."
+                ),
+                "memory_work": {
+                    "recitations": [
+                        (
+                            "A single short line that shows what a chosen character is "
+                            "like (a line in which they do something)"
+                        ),
+                    ],
+                },
+                "copywork": [
+                    "The recited line copied once, slowly, with the character's name written beneath it",
+                ],
+                "recitation_routine": (
+                    "Each session begins by reciting yesterday's character-line; the new "
+                    "lesson opens with 'and who do we meet today?'"
+                ),
+                "read_aloud_suggestions": [
+                    "A picture book or short chapter book whose characters are easily told apart",
+                    "A fable or fairy tale with clearly drawn characters",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    (
+                        "A worthy picture book or chapter book in which the characters "
+                        "act and feel plainly enough that the child can speak of them"
+                    ),
+                ],
+                "short_lesson_flow": (
+                    "Read a short passage aloud, attentively. The child narrates. Then "
+                    "ask gently: who was in this story? What was this one like? What did "
+                    "they do? If two characters appear, set them side by side and ask "
+                    "how they are different. The smallest noticing, in the child's own "
+                    "words, is the whole lesson."
+                ),
+                "narration_prompt": ("Tell back what we read, and tell me who was in it and what they did."),
+                "real_world_objects": [
+                    "A worthy book in hand, with the characters easy to picture",
+                    "A small card on which the names of the day's characters are written",
+                ],
+                "nature_connection": (
+                    "Noticing the people in a story is the same habit as noticing the "
+                    "creatures in a field: a particular person doing a particular thing, "
+                    "attended to with care, before any name for what kind of person they "
+                    "are is offered."
+                ),
+                "habit_focus": (
+                    "The habit of charitable attention: noticing what a person in a "
+                    "story actually does and says before deciding what kind of person "
+                    "they are."
+                ),
+            },
+            "traditional": {
+                "introduction": "Explicit, modeled noticing of characters in a short, age-appropriate story.",
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher reads a passage aloud, names the people in it, and "
+                        "tells what one of them does: 'Frog is in this one with Toad. "
+                        "Frog brings Toad a letter.'"
+                    ),
+                    "we_do": (
+                        "Teacher reads the next passage and, together with the child, "
+                        "names the people and tells what each one does."
+                    ),
+                    "you_do": (
+                        "Child listens to a new short passage, names the people in it, and tells what each one does."
+                    ),
+                },
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep picture books and chapter books with strong characters within reach",
+                    "Read aloud often and welcome the child's running talk about the people they meet in stories",
+                ],
+                "real_world_contexts": [
+                    "Bedtime stories in which the child names a favorite character without prompting",
+                    "Pretend play in which the child takes on the part of a character from a beloved book",
+                    "A drawing or a piece of fan writing about a character the child cares about",
+                ],
+                "conversation_starters": [
+                    "Who was in that story?",
+                    "What was she like? What did she do that made you think so?",
+                    "How is he different from the other one?",
+                ],
+                "resource_bank": [
+                    "A shelf of picture books and short chapter books with characters worth caring about",
+                    "Dolls, animal figures, or simple props for acting out characters the child has met",
+                ],
+                "parent_role": (
+                    "Read aloud well and talk about the people in the story as you "
+                    "might talk about people you have met. Welcome the child's care for "
+                    "a character without correction, and trust that attention to people "
+                    "in stories grows from being delighted in them."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the child names characters by name, "
+                    "tells what they did, and begins to compare two characters from the "
+                    "same story. This noticing replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori at this band does not carry a distinct method for noticing "
+                "and naming the people in a story; the prepared environment centers on "
+                "practical life, the sensorial materials, and the grammar materials "
+                "rather than on the analysis of fictional characters."
+            ),
+        },
+    },
     "lit-craft-031": {
         "node_type": "craft",
         "strand": "narrative craft",
