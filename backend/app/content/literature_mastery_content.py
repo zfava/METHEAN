@@ -2165,6 +2165,212 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-022": {
+        "node_type": "craft",
+        "strand": "theme and meaning",
+        "band": "proficient",
+        "prerequisites": ["theme and meaning: developing", "close reading: proficient"],
+        "objective": (
+            "Name more than one theme at work in a story or poem and articulate how "
+            "they relate (reinforcing, complicating, or contending with one another); "
+            "distinguish a writer's theme from a reader's moralized takeaway; "
+            "articulate how specific craft choices (structure, point of view, imagery, "
+            "plot rhythm) make a theme available; and defend a small original reading "
+            "of a chosen theme line by line from the text."
+        ),
+        "core_understanding": (
+            "A work of literary substance carries more than one theme, and its themes "
+            "are not always at peace with one another. The proficient reader holds "
+            "the work as a meaning-bearing whole in which craft choices and themes "
+            "are continuous: a point-of-view choice, a recurring image, a scene's "
+            "place in the structure are not decoration but the very way the theme "
+            "becomes available. The reader also learns to distinguish theme from "
+            "moral, the writer's reading from the reader's projection, and to defend "
+            "a reading from the words rather than from received summary."
+        ),
+        "analytical_moves": [
+            "Name more than one theme at work in a single text, in short sentences each grounded in a specific passage",
+            "Show how two themes in the same work reinforce, complicate, or contend with each other",
+            "Distinguish the theme the work supports from the moral a reader might wish onto it",
+            (
+                "Articulate how a specific craft choice (point of view, imagery, "
+                "structure) makes a chosen theme available to the reader"
+            ),
+            ("Defend a small original reading of a chosen theme line by line, returning to the text for every claim"),
+        ],
+        "seminar_questions": [
+            "What more than one theme is this work doing, and where in the text do you see each?",
+            "Where do the themes of this work meet, and what happens when they do?",
+            (
+                "What is the difference between what this work says about its world "
+                "and what we might want it to say? Which words tell you?"
+            ),
+        ],
+        "writing_invitations": [
+            (
+                "Write a short analytical paragraph naming two themes at work in a "
+                "chosen story or poem, quoting one passage for each, and arguing "
+                "whether they reinforce, complicate, or contend with each other"
+            ),
+            (
+                "Choose one craft choice in a work (a point of view, a recurring "
+                "image, the placement of a scene) and write the paragraph that argues "
+                "how that choice makes a chosen theme available"
+            ),
+        ],
+        "exemplar_texts": [
+            (
+                "A worthy novel held whole in which more than one theme is plainly at "
+                "work (To Kill a Mockingbird; A Wrinkle in Time; The Hobbit; Pride "
+                "and Prejudice)"
+            ),
+            "A short story whose themes admit more than one reading (Chekhov; Joyce's Dubliners; Flannery O'Connor)",
+            "A poem in which the theme rests on a specific craft choice (a Frost lyric; a Hopkins; a Wilfred Owen)",
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "Theme meets the seminar. The reader does not arrive with the "
+                    "moral they had hoped to find; they arrive with the words, and "
+                    "from the words a reading. The seminar tests it. Rhetorical and "
+                    "interpretive habits converse: by what particular choices does "
+                    "this writer make this theme available, and which theme, of more "
+                    "than one possible, is bearing the weight of the work?"
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "A passage central to a chosen theme of the work, recited from memory at the seminar's opening",
+                    ],
+                },
+                "copywork": [
+                    "The recited passage copied into the kept commonplace book, with the lines that bear the theme underlined",
+                ],
+                "recitation_routine": (
+                    "Each seminar opens from a recited passage; the first question is "
+                    "taken from the lines just heard and returns to the text for "
+                    "every claim about theme."
+                ),
+                "read_aloud_suggestions": [
+                    "A chapter at the heart of a chosen theme, read aloud at the seminar's opening",
+                    "A poem whose theme rests on its form, read aloud whole more than once",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 40,
+                "living_book_suggestions": [
+                    "A worthy novel of layered theme, read whole at a sustained pace, not excerpted",
+                    "A volume of poems or short stories read across a term, one at a sitting",
+                ],
+                "short_lesson_flow": (
+                    "The proficient student reads the whole book at a sustained pace, "
+                    "narrating each sitting. As themes emerge they are noted; passages "
+                    "worth attending to are slipped or marked. At a chapter's end, one "
+                    "such passage is taken up, copied into the commonplace book, and "
+                    "discussed: which theme is at work here, and how is the writer "
+                    "making it available? A small reading is allowed to form across "
+                    "the long span and tested against the whole work."
+                ),
+                "narration_prompt": (
+                    "Tell back the chapter you read, and tell me which themes you "
+                    "saw at work, and which passage you would set down as the place "
+                    "we most clearly see one of them, and why."
+                ),
+                "real_world_objects": [
+                    "The whole novel, marked with the reader's own slips at the passages where theme is most plainly at work",
+                    "A commonplace book gathering theme passages across many works",
+                ],
+                "nature_connection": (
+                    "Theme in literature is to a book what a season is to the year: "
+                    "not a thing one sees in any moment, but the long shape one comes "
+                    "to feel from many moments held together."
+                ),
+                "habit_focus": (
+                    "The habit of holding more than one theme in a work and returning "
+                    "to the text for the evidence, and the habit of distinguishing "
+                    "what the work says from what one wished it to say."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in identifying more than one theme in a "
+                    "work, in articulating how craft choices make theme available, in "
+                    "distinguishing theme from moral, and in writing the short "
+                    "analytical paragraph that defends a reading from the words."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher reads a passage aloud, names two themes at work in "
+                        "it, points to the craft choice (this point of view, this "
+                        "image, this placement) that makes one of them available, and "
+                        "writes a short paragraph on the board defending the reading, "
+                        "quoting the passage line by line."
+                    ),
+                    "we_do": (
+                        "Class chooses a candidate theme from the work under study, "
+                        "gathers two or three decisive passages, and drafts together "
+                        "a paragraph defending a small original reading, naming the "
+                        "craft choice that makes the theme available, quoting the "
+                        "lines that ground it."
+                    ),
+                    "you_do": (
+                        "Student writes an independent analytical paragraph defending "
+                        "a chosen reading of a chosen theme, naming one craft choice "
+                        "that makes the theme available, with two or three quoted "
+                        "passages as evidence, and revises after hearing a different "
+                        "reading at seminar."
+                    ),
+                },
+                "independent_practice": [
+                    "The analytical paragraph on a self-chosen theme from the work under study",
+                    "A short revision of the paragraph after seminar discussion",
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep the long shelf of novels, poetry, and story collections of real thematic substance, available, never assigned",
+                    "Keep a commonplace book and small slips for marking theme passages in books the reader cares about",
+                ],
+                "real_world_contexts": [
+                    "A long evening conversation about what a book is really doing, conducted as a real argument between readers",
+                    "A piece of writing the reader composed because a theme in a book wanted writing back",
+                    "A read-aloud of a passage so a fellow reader can hear which theme the reader heard in it",
+                ],
+                "conversation_starters": [
+                    "What did this book turn out to be about, more than one thing?",
+                    (
+                        "Which choice the writer made (whose voice tells, which image "
+                        "keeps coming back, which scene is where) lets you see the theme?"
+                    ),
+                    "What does the book say about its world, and what do we wish it said? Are they the same?",
+                ],
+                "resource_bank": [
+                    "A shelf of difficult, worthy books whose themes reward attention",
+                    "A reader-companion willing to argue a chosen theme as a fellow reader, not as an examiner",
+                ],
+                "parent_role": (
+                    "Take the reader's reading seriously and ask them to take yours "
+                    "seriously by going back to the lines. Be a fellow reader who "
+                    "holds your own reading, is willing to hear another, and willing "
+                    "to be moved by it."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the reader returns to themes across "
+                    "books, defends a reading from the words, distinguishes theme "
+                    "from moral, and holds more than one reading without giving up "
+                    "their own. This noticing replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori's literature pedagogy at the elementary and "
+                "early-secondary level does not carry a distinct method for the "
+                "sustained interpretive reading of theme; the practice here is drawn "
+                "from the seminar tradition and the long Charlotte Mason habit of "
+                "narration across whole books rather than from the prepared environment."
+            ),
+        },
+    },
     "lit-craft-031": {
         "node_type": "craft",
         "strand": "narrative craft",
