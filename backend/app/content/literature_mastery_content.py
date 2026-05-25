@@ -11532,4 +11532,140 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-022": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "Phantastes: A Faerie Romance for Men and Women",
+            "author": "George MacDonald",
+            "date": "first published 1858",
+            "genre": "Victorian literary fairy-tale novel; an early work of modern fantasy",
+            "form": "prose first-person novel of an Englishman's twenty-one-day journey through Fairy Land; episodic, lyric, and frequently interrupted by inset poems and tales",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "The novel's protagonist Anodos encounters figures of "
+            "temptation, false beauty (the Maid of the Alder), shadow-"
+            "selves, and his own death at the close (a death the novel "
+            "treats with Christian-Romantic seriousness rather than as "
+            "a narrative reset); the sustained quasi-dream form may be "
+            "disorienting on first reading; the work is theologically "
+            "framed in MacDonald's Christian-universalist register and "
+            "invites the reader to weigh the framing rather than to "
+            "adopt it. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading advanced on MacDonald's Victorian-lyric prose with embedded poetry (lit-craft-004)",
+            "Character advanced: Anodos as a constructed first-person traveler whose interior the journey works on; the figures of Fairy Land (the Beech, the Maid of the Alder, the Knight, the Shadow) as positions rather than individuated persons (lit-craft-014)",
+            "Theme advanced: the journey through Fairy Land as a working-out of the self; what MacDonald's Christian-universalist register lets the work claim and refuse to claim (lit-craft-023)",
+            "Figurative system: the door in the ordinary world, the cottage, the Shadow, the closing death-as-passage; the literary fairy-tale figures MacDonald inherits from Grimms and Andersen and recasts (lit-craft-043)",
+            "The literary fairy tale extended to novel length: a form MacDonald largely invents and that Tolkien and Lewis explicitly inherit (lit-craft-022)",
+        ],
+        "entry": (
+            "Advanced: read the novel whole; meet the form (the quasi-"
+            "dream journey, the inset poems, the figures of Fairy Land "
+            "as positions rather than persons); meet MacDonald's "
+            "Christian-universalist framing as the register the work is "
+            "written in; argue what the novel does that the literary "
+            "fairy tale at story length cannot. Mastery: original "
+            "argument about MacDonald's role in inventing modern "
+            "fantasy as a form and the explicit inheritance Tolkien "
+            "and Lewis name."
+        ),
+        "close_reading_passages": [
+            "The opening and the appearance of the small woman from the writing-desk: how does the novel stage the threshold between the ordinary world and Fairy Land?",
+            "The episode of the Maid of the Alder (Anodos's first major temptation): how does the novel stage a beauty whose beauty is the warning, and what does the form do that direct allegory could not?",
+            "The closing chapters and Anodos's death-as-passage: how does the novel stage the close, and what does MacDonald's framing claim about what the journey was?",
+        ],
+        "structural_analysis": (
+            "Twenty-five chapters across twenty-one days in Fairy Land. "
+            "The novel is episodic rather than plotted: Anodos enters "
+            "Fairy Land, has a sequence of encounters that each work on "
+            "him, and is finally undone (transformed) at the close. "
+            "Inset poems and tales interrupt the prose; the journey is "
+            "neither a quest with an external goal nor a Bildungsroman "
+            "in the usual sense; the form is closer to medieval romance "
+            "and to the dream-vision than to the Victorian novel of its "
+            "moment. The structure is the work's argument: a journey "
+            "whose meaning is what it does to the traveler, not what "
+            "the traveler accomplishes."
+        ),
+        "thematic_lines": [
+            "Self and shadow: Anodos's encounter with his own Shadow and what the figure does in the novel",
+            "Beauty and warning: the Maid of the Alder and the other false beauties whose form is the warning the novel issues",
+            "Death-as-passage: the closing death MacDonald treats not as defeat but as the journey's completion",
+        ],
+        "comparative_threads": [
+            "lit-work-inh-019 The Grimms' Tales and lit-work-inh-020 Andersen's tales: the European literary-fairy-tale tradition MacDonald inherits and extends to novel length",
+            "lit-work-inh-004 Tolkien's The Lord of the Rings and Tolkien's lecture 'On Fairy-stories' (1939): Tolkien named MacDonald as a direct ancestor; the lecture engages MacDonald explicitly",
+            "C. S. Lewis's preface to his own MacDonald anthology (1946): Lewis named the moment he picked up Phantastes at sixteen as the moment his imagination was 'baptized'; the explicit Lewis-on-MacDonald inheritance is part of the work's afterlife",
+            "MacDonald's other major fantasies (Lilith 1895; the children's books At the Back of the North Wind 1871 and The Princess and the Goblin 1872): MacDonald's larger body of work in the same vein",
+            "Spenser's Faerie Queene (1590-1596): MacDonald's English allegorical-romance ancestor",
+        ],
+        "seminar_questions": [
+            "What does MacDonald do by extending the literary fairy tale to novel length, and what does the form let the work do that story-length tales cannot?",
+            "What does the Shadow do in the novel, and where does MacDonald refuse to make it allegory?",
+            "How does the closing death-as-passage land in MacDonald's Christian-universalist register, and what does the reader who does not share the register do with it?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the opening crossing into Fairy Land, naming what the threshold does",
+            "The essay on the Shadow as a figure the novel works through without flattening into allegory",
+            "At advanced, the essay on the explicit Tolkien-and-Lewis inheritance from MacDonald and what the inheritance shows about modern fantasy",
+        ],
+        "context": (
+            "Composed by a Scottish minister-turned-writer in his early "
+            "thirties; the first sustained novel-length literary fairy "
+            "tale in English; both Tolkien and Lewis explicitly named "
+            "MacDonald as a direct ancestor of their own work; "
+            "MacDonald's reputation in modern fantasy scholarship is "
+            "now firmly established; supplied as fact, interpretation "
+            "left to the student."
+        ),
+        "lineage": (
+            "Folklore. Modern literary fairy tale (inheritor of "
+            "Grimms/Andersen, source for modern fantasy). Inherits "
+            "directly from the Grimms (lit-work-inh-019) and Andersen "
+            "(lit-work-inh-020), extending the literary fairy tale to "
+            "novel length for the first sustained time in English. "
+            "Itself becomes a named source for Tolkien (lit-work-inh-004) "
+            "and Lewis (in their own scholarly and creative work); "
+            "Tolkien's 'On Fairy-stories' engages MacDonald explicitly. "
+            "Stands alongside Calvino's later collection (lit-work-inh-023) "
+            "and Carter's late-twentieth-century reworkings "
+            "(lit-work-inh-024) as part of the long modern literary "
+            "engagement with the fairy-tale form."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The Victorian literary fairy tale extended to novel length; the seminar text on the form's earliest sustained modern English work and the source Tolkien and Lewis named.",
+                "memory_work": {
+                    "recitations": ["Recitation of a chosen inset poem from the novel"],
+                },
+                "recitation_routine": "Seminar opens from the recited inset; the discussion takes its first question from how the inset works against the prose around it.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Phantastes (the Eerdmans paperback; the recent annotated edition) read aloud across a term",
+                ],
+                "short_lesson_flow": "A living book read aloud across the twenty-five chapters and narrated; the figures of Fairy Land met as positions; deepening to analysis of the closing as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me what Anodos met and what the figure was warning or offering.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Phantastes on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in modern fantasy, in the Victorian literary fairy tale, or in MacDonald's named place in Tolkien and Lewis's imagination leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let MacDonald's Christian-universalist framing be itself; bring Tolkien's 'On Fairy-stories' into the room when the student is ready.",
+                "observation_documentation": "Over time, notice whether the student returns to Phantastes and brings the modern-fantasy inheritance into other reading. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the literary fairy tale at novel length and MacDonald's place in modern fantasy where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
