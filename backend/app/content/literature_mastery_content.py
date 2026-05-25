@@ -2825,6 +2825,237 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-023": {
+        "node_type": "craft",
+        "strand": "theme and meaning",
+        "band": "advanced",
+        "prerequisites": ["theme and meaning: proficient", "close reading: proficient"],
+        "objective": (
+            "Argue a work's full thematic system as the very way the work means (not "
+            "just naming themes and tying them to craft choices, but arguing that "
+            "how the work means is its themes operating together as a structured "
+            "whole); set the work's themes against its genre and against the "
+            "inheritance the work intervenes in; honor what the work refuses to "
+            "settle; and write the sustained essay that argues both the work's claim "
+            "and what the work refuses, holding the two together."
+        ),
+        "core_understanding": (
+            "At the proficient band the reader named more than one theme, "
+            "articulated their relations, and tied each to a specific craft choice. "
+            "At the advanced band the themes are no longer separable from the way "
+            "the work means: the work's full thematic system is its very meaning, "
+            "and a theme is not a thing the work contains but the shape the work has "
+            "when its parts are held together. The reader meets the work's genre and "
+            "the inheritance the work intervenes in: a tragedy is not a neutral "
+            "form, a coming-of-age novel arrives carrying everything earlier "
+            "coming-of-age novels have done with the form, and the writer is doing "
+            "something to the inheritance. The reader also learns to honor what the "
+            "work refuses to settle. The essay at this band argues both what the "
+            "work claims and what the work refuses, and holds them together."
+        ),
+        "analytical_moves": [
+            "Argue the work's full thematic system as constitutive of its meaning rather than as content the work delivers",
+            "Set the work's themes against its genre and against the inheritance the work intervenes in",
+            "Identify and honor what the work refuses to settle (genuine ambiguity, multiple endings, claims withheld)",
+            (
+                "Write the sustained essay that argues both the work's claim and "
+                "what the work refuses, holding the two together"
+            ),
+            (
+                "Hear another reader's account of the work's argument and locate "
+                "where in the text and in the tradition that account draws its evidence"
+            ),
+        ],
+        "seminar_questions": [
+            "What is this work's whole argument, and how do its themes operate together to make it?",
+            "Which inheritance does this work belong to, and where is the writer doing something the inheritance had not done?",
+            "What does this work refuse to settle, and what is gained by leaving it unsettled?",
+        ],
+        "writing_invitations": [
+            (
+                "Write a sustained essay arguing a chosen work's whole thematic "
+                "system as the very way the work means, holding three or four "
+                "passages in productive tension and naming the work's place in its "
+                "genre and its inheritance"
+            ),
+            "Write the paragraph that argues what a chosen work refuses to settle and what is gained by leaving it open",
+        ],
+        "exemplar_texts": [
+            "A novel whose thematic system is its meaning (The Brothers Karamazov; Middlemarch held whole; Toni Morrison's Beloved)",
+            "A tragedy in conversation with its genre (a Shakespeare tragedy whole, set beside a Greek tragedy in translation)",
+            (
+                "A modern novel that intervenes in an inheritance (Joyce's Ulysses "
+                "against the epic; Charlotte Brontë's Jane Eyre against the "
+                "bildungsroman of its day)"
+            ),
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "Theme meets the long seminar and the genealogy of forms. The "
+                    "reader brings the work's full argument as a hypothesis, the "
+                    "seminar tests it, and the inheritance of the work's genre is "
+                    "brought into the room. Rhetorical analysis and the history of "
+                    "forms converge: by what particular choices does this writer "
+                    "make this argument available, what does the inheritance the "
+                    "work belongs to make possible and what does it foreclose, and "
+                    "where does the work refuse to settle the question?"
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "A passage in which the whole work's argument is most plainly at work, recited at the seminar's opening",
+                        "A passage from another work in the inheritance the work intervenes in",
+                    ],
+                },
+                "copywork": [
+                    "The recited passage copied into the kept commonplace book, with the inheritance the work intervenes in noted in the margin",
+                ],
+                "recitation_routine": (
+                    "Each seminar opens from two recited passages: one from the work "
+                    "under study and one from elsewhere in the inheritance; the "
+                    "first question is taken from what each lets the other see, and "
+                    "the discussion returns to the text for every claim."
+                ),
+                "read_aloud_suggestions": [
+                    "A scene at the heart of the work's argument read aloud at the seminar's opening",
+                    "A passage from elsewhere in the work's inheritance, read aloud beside it",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 50,
+                "living_book_suggestions": [
+                    "A worthy novel whose argument is its themes operating as a structured whole, read whole at a sustained pace, narrated sitting by sitting",
+                    "A second work earlier in the inheritance, read alongside or after to bring the inheritance into the commonplace work",
+                ],
+                "short_lesson_flow": (
+                    "The advanced student reads the work whole at a sustained pace, "
+                    "narrating each sitting. As the work's whole argument emerges, "
+                    "passages worth attending to are slipped or marked. At a "
+                    "chapter's end one is taken up, copied into the commonplace "
+                    "book, and discussed: what is the work's whole argument, what "
+                    "inheritance is it intervening in, and what does it refuse to "
+                    "settle? When the second work in the inheritance is read, the "
+                    "commonplace book holds the comparative passage. The essay is "
+                    "allowed to form across the long span of the whole work."
+                ),
+                "narration_prompt": (
+                    "Tell back what you read, and tell me what you think the whole "
+                    "work is doing, and which passage you would set down as the "
+                    "place we most clearly see the whole argument at work, and which "
+                    "passage you would set beside it from another book in the inheritance."
+                ),
+                "real_world_objects": [
+                    "The whole novel, marked at the passages decisive for the work's full argument",
+                    "A commonplace book gathering thematic passages across many works and across the inheritance",
+                ],
+                "nature_connection": (
+                    "The whole argument of a worthy book is to the work what the "
+                    "shape of a season is to the year: not a thing one sees in any "
+                    "moment but the long pattern that emerges from the many moments "
+                    "held together."
+                ),
+                "habit_focus": (
+                    "The habit of holding a whole work's argument as a hypothesis to "
+                    "be tested against the text, and the habit of bringing the "
+                    "inheritance of the work's genre into the reading."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in arguing a work's full thematic system, "
+                    "in setting the work against its genre and its inheritance, in "
+                    "honoring what the work refuses to settle, and in writing the "
+                    "sustained essay that holds the work's claim and what the work "
+                    "refuses together."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher works a chosen work on the board: names the work's "
+                        "whole argument as a hypothesis, identifies the inheritance "
+                        "the work intervenes in, names what the work refuses to "
+                        "settle, and drafts the opening of a sustained essay that "
+                        "holds the claim and the refusal together, quoting two "
+                        "passages from the work and one from the inheritance."
+                    ),
+                    "we_do": (
+                        "Class gathers the decisive passages of a chosen work, "
+                        "weighs the work against its inheritance, names what the "
+                        "work refuses to settle, and drafts together the body of "
+                        "the sustained essay arguing both the work's claim and what "
+                        "the work refuses."
+                    ),
+                    "you_do": (
+                        "Student writes an independent sustained essay on a chosen "
+                        "work, arguing its whole thematic system, naming the "
+                        "inheritance the work intervenes in, honoring what the work "
+                        "refuses to settle, and holding three or four passages in "
+                        "productive tension, and revises after seminar."
+                    ),
+                },
+                "independent_practice": [
+                    "The sustained essay on a self-chosen work, arguing its whole thematic system and naming the inheritance",
+                    "A paragraph naming and defending what the work refuses to settle",
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep the long shelf of difficult, worthy works the reader has returned to over years, available, never assigned",
+                    "Keep the commonplace book matured into a habit, with passages from different works in conversation rather than in isolation",
+                ],
+                "real_world_contexts": [
+                    "A reader who has lived with a single difficult novel across years and watched its whole argument surface as the patterns surfaced from many returns",
+                    "A piece of writing the reader produced because two beloved books finally said something to each other in the reader's mind",
+                    "A long conversation between two readers who have each lived with the same work in their own returning, each bringing their own passage",
+                ],
+                "conversation_starters": [
+                    "What do you think this whole book is doing now, after all these returns?",
+                    "Which other book that you have lived with does this one finally speak to? Read me the lines where they meet.",
+                    "What does this book refuse to settle, and what would be lost if it settled it?",
+                ],
+                "resource_bank": [
+                    "A shelf of difficult, worthy work gathered slowly across many years, where the reader's returns have made certain books theirs",
+                    "A reader-companion of long acquaintance who has also done their long returning and can recognize a connection without naming it as a lesson",
+                ],
+                "parent_role": (
+                    "By this band the parent has fully stepped back to fellow "
+                    "reader. They are someone who has done their own long returning "
+                    "to their own beloved works, and they name a connection when "
+                    "the student finds one: 'I felt something like that when I "
+                    "returned to King Lear last summer; have you read it lately?' "
+                    "The parent does not orchestrate the inheritance the work "
+                    "intervenes in; they receive what the student has brought up "
+                    "out of their own returning and offer, as another reader at the "
+                    "table, the passage their own returning gave them. The student "
+                    "is leading their own reading life. The parent is now a witness "
+                    "who can be asked, a reader whose long returnings furnished a "
+                    "small library the student is also returning to, and a fellow "
+                    "at the table when the student wants company."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the student returns to a small "
+                    "handful of beloved works across years rather than chasing the "
+                    "next book, whether the patterns surface in their conversation "
+                    "about those works without prompting, and whether they begin to "
+                    "feel the inheritance because their own returning led them into "
+                    "it. The whole-argument reading and the work's genre and "
+                    "inheritance show up because the student returned, not because "
+                    "they were assigned. The pattern surfacing is the noticing; it "
+                    "replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori's literature pedagogy at the elementary and "
+                "early-secondary level does not carry a distinct method for arguing "
+                "a work's full thematic system or for placing the work in the "
+                "inheritance it intervenes in; the practice here is drawn from the "
+                "long seminar tradition and the matured Charlotte Mason habit of "
+                "narration and commonplace work across years rather than from the "
+                "prepared environment."
+            ),
+        },
+    },
     "lit-craft-031": {
         "node_type": "craft",
         "strand": "narrative craft",
