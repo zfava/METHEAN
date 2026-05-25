@@ -412,7 +412,7 @@ def _is_in_copyright(work: dict) -> bool:
     return year is not None and year >= _PUBLIC_DOMAIN_CUTOFF_YEAR
 
 
-def validate_literature(content: dict) -> list[str]:
+def validate_literature(content: dict, authored_nodes: dict | None = None) -> list[str]:
     """Validate a literary mastery node.
 
     Returns a list of warnings, possibly empty. Raises ValueError on
@@ -432,7 +432,12 @@ def validate_literature(content: dict) -> list[str]:
     - on in-copyright work nodes, any close_reading_passages entry
       longer than _CLOSE_READING_PASSAGE_LIMIT characters, flagged
       for human review against the no-full-reproduction rule. Public-
-      domain works may quote accurately and never trigger this flag.
+      domain works may quote accurately and never trigger this flag;
+    - on craft nodes, any prerequisite string that does not resolve
+      against authored_nodes, when authored_nodes is supplied. A
+      prerequisite resolves if it is the id of an authored node, or
+      a "{strand}: {band}" string matching some authored craft node.
+      When authored_nodes is None the check is skipped.
     """
     if not isinstance(content, dict):
         raise ValueError("literary node content must be a dict")
@@ -498,5 +503,30 @@ def validate_literature(content: dict) -> list[str]:
                         f"warning: close_reading_passages[{i}] is {len(text)} chars on an "
                         "in-copyright work; review for reproduced passage"
                     )
+
+    if node_type == "craft" and authored_nodes is not None:
+        prereqs = content.get("prerequisites") or []
+        if prereqs:
+            authored_ids = set(authored_nodes.keys())
+            valid_pairs: set[str] = set()
+            for other in authored_nodes.values():
+                if not isinstance(other, dict):
+                    continue
+                if other.get("node_type") != "craft":
+                    continue
+                other_strand = other.get("strand")
+                other_band = other.get("band")
+                if isinstance(other_strand, str) and isinstance(other_band, str):
+                    valid_pairs.add(f"{other_strand}: {other_band}")
+            for prereq in prereqs:
+                if not isinstance(prereq, str):
+                    continue
+                if prereq in authored_ids:
+                    continue
+                if prereq in valid_pairs:
+                    continue
+                warnings.append(
+                    f"warning: prerequisite {prereq!r} does not resolve to any authored node id or strand:band"
+                )
 
     return warnings

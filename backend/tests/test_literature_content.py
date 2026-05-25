@@ -284,10 +284,48 @@ class TestAuthoredExemplars:
         assert node["node_type"] == "craft"
         assert node["band"] == "advanced"
         assert node["prerequisites"] == [
-            "point of view: proficient",
+            "lit-craft-008",
             "close reading: proficient",
         ]
         assert node["strand"] == "narrative craft"
+
+    def test_all_prerequisites_resolve_to_authored_nodes(self) -> None:
+        # Every craft-node prerequisite must resolve against authored
+        # content: either as an explicit node id, or as a
+        # "{strand}: {band}" pair that matches exactly one authored
+        # craft node. Bands with more than one authored node (e.g.
+        # character: developing has both lit-craft-010 and lit-craft-011)
+        # are ambiguous and must be disambiguated to a node id.
+        authored_ids = set(LITERATURE_MASTERY_CONTENT.keys())
+        pair_to_ids: dict[str, set[str]] = {}
+        for nid, node in LITERATURE_MASTERY_CONTENT.items():
+            if node.get("node_type") != "craft":
+                continue
+            strand = node.get("strand")
+            band = node.get("band")
+            if isinstance(strand, str) and isinstance(band, str):
+                pair_to_ids.setdefault(f"{strand}: {band}", set()).add(nid)
+        for nid, node in LITERATURE_MASTERY_CONTENT.items():
+            for prereq in node.get("prerequisites") or []:
+                if prereq in authored_ids:
+                    continue
+                if prereq in pair_to_ids:
+                    resolving = pair_to_ids[prereq]
+                    assert len(resolving) == 1, (
+                        f"{nid} prereq {prereq!r} is ambiguous; resolves to "
+                        f"{sorted(resolving)}; use a node id"
+                    )
+                    continue
+                raise AssertionError(
+                    f"{nid} prereq {prereq!r} does not resolve to any "
+                    "authored node id or strand:band"
+                )
+
+    def test_validate_literature_with_registry_emits_no_prereq_warnings(self) -> None:
+        for nid, node in LITERATURE_MASTERY_CONTENT.items():
+            warnings = validate_literature(node, LITERATURE_MASTERY_CONTENT)
+            prereq_warnings = [w for w in warnings if "prerequisite" in w]
+            assert not prereq_warnings, f"{nid} produced: {prereq_warnings}"
 
     def test_lit_work_001_is_public_domain_classics(self) -> None:
         node = LITERATURE_MASTERY_CONTENT["lit-work-001"]

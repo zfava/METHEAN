@@ -670,7 +670,7 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
         "node_type": "craft",
         "strand": "narrative craft",
         "band": "developing",
-        "prerequisites": ["point of view: emerging", "close reading: developing"],
+        "prerequisites": ["lit-craft-006", "close reading: developing"],
         "objective": (
             "Name the point of view of a work: first person, third person, and within "
             "third the difference between omniscient and limited; identify the narrator "
@@ -856,7 +856,7 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
         "node_type": "craft",
         "strand": "narrative craft",
         "band": "proficient",
-        "prerequisites": ["point of view: developing", "close reading: proficient"],
+        "prerequisites": ["lit-craft-007", "close reading: proficient"],
         "objective": (
             "Identify the point of view of any literary work independently, including "
             "the variants of third person (omniscient, limited, free indirect discourse) "
@@ -1248,7 +1248,7 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
         "node_type": "craft",
         "strand": "character",
         "band": "developing",
-        "prerequisites": ["close reading: developing", "desire and motive: developing"],
+        "prerequisites": ["close reading: developing", "lit-craft-010"],
         "objective": (
             "Trace how a character changes across a story, naming what they were like "
             "at the start, what they are like at the end, and the events or recognitions "
@@ -1765,7 +1765,7 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
         "band": "developing",
         "prerequisites": [
             "close reading: developing",
-            "what the story is about: emerging",
+            "lit-craft-020",
         ],
         "objective": (
             "Distinguish the topic of a story (what it is literally about: the events, "
@@ -1955,7 +1955,7 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
         "node_type": "craft",
         "strand": "narrative craft",
         "band": "advanced",
-        "prerequisites": ["point of view: proficient", "close reading: proficient"],
+        "prerequisites": ["lit-craft-008", "close reading: proficient"],
         "objective": (
             "Recognize when a narrator's account cannot be fully trusted, identify the "
             "textual signals of unreliability, and analyze what the gap between the "
