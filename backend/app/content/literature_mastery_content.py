@@ -5707,6 +5707,115 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-009": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "The Bacchae",
+            "author": "Euripides",
+            "date": "c. 405 BCE (posthumously performed)",
+            "genre": "Greek tragedy",
+            "form": "verse tragedy with choral odes",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "The dismemberment of Pentheus by his mother Agave in Dionysian frenzy "
+            "(offstage; reported in detail by the messenger and shown after the "
+            "fact when Agave returns with her son's head), maenadic violence, the "
+            "god's punishment of Thebes; offstage violence is reported with full "
+            "tragic intensity. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "The play's refusal to settle between god and city, between piety and reason (lit-craft-053)",
+            "Dionysus as a character on stage who is also the god the play is about (lit-craft-014)",
+            "The chorus of bacchants as the god's voice and the audience's discomfort (lit-craft-052)",
+            "Pentheus's cross-dressing and the staging of recognition that arrives too late (lit-craft-053)",
+            "Figurative networks: the bull, the mountain, the wand, the dismemberment as figural and literal (lit-craft-042)",
+        ],
+        "entry": (
+            "Advanced: read the play as Euripides's late and most discomforting "
+            "argument about what a city does with a god it does not understand; "
+            "argue what the play refuses to settle (is Dionysus just, vindictive, "
+            "or beyond the categories the play offers; is Pentheus the rationalist "
+            "the play warns against or the city's last defender); set the play "
+            "against the inheritance of Athenian tragedy and against later "
+            "treatments of Dionysus. Mastery: original argument about the place of "
+            "the play in the late Euripidean turn and in the long argument about "
+            "reason and ecstasy."
+        ),
+        "close_reading_passages": [
+            "The opening prologue spoken by Dionysus in disguise: how does the play stage a god speaking to the audience while in disguise to the characters?",
+            "The exchange between Pentheus and the disguised Dionysus, where Pentheus consents to be dressed as a woman: how does the play stage Pentheus's loss of self before the dismemberment?",
+            "Agave's return with the head and the slow recovery of her sight: what does the play do with the recognition that arrives too late?",
+        ],
+        "structural_analysis": (
+            "A god comes to a city that has refused him; the city's king refuses "
+            "him; the god destroys the king through the king's own mother. The "
+            "structure does not punish a wrongdoer and reward a saint; it shows a "
+            "city undone by what it would not include and a god whose justice the "
+            "play does not endorse. Every choric ode raises the god's claim; "
+            "every Pentheus scene tightens the disaster; the recognition arrives "
+            "in Agave, not in Pentheus."
+        ),
+        "thematic_lines": [
+            "Reason and ecstasy: what the polis must do with the power it cannot domesticate; whether the play sides with Pentheus or with Dionysus, or neither",
+            "Recognition arriving too late: the tragic form taken to a particular extreme",
+            "The chorus's faith and the audience's discomfort: a play whose chorus the audience does not always want to follow",
+        ],
+        "comparative_threads": [
+            "The Oresteia (lit-work-008): two plays about a city incorporating what it cannot abolish; what the Furies become against what Dionysus refuses to become",
+            "Oedipus Rex (lit-work-006): two tragedies of late and devastating recognition; what each does with the recognized character",
+            "Modern responses (Wole Soyinka's The Bacchae of Euripides; Donna Tartt's The Secret History as inheritor): how the play has been read against later moments of reason against ecstasy",
+        ],
+        "seminar_questions": [
+            "Does the play endorse Dionysus, Pentheus, both, or neither? Where does the play refuse to say?",
+            "What does the chorus of bacchants ask the audience to hold, and where does the audience pull back?",
+            "What does the play do with Agave's recognition that no earlier tragedy had done?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the scene where Pentheus is dressed, naming what the staging does that no soliloquy could",
+            "The essay on what the play refuses to settle between reason and ecstasy",
+            "The sustained essay on the chorus of bacchants as a function the play needs and the audience resists",
+        ],
+        "context": (
+            "Composed in the last years of Euripides's life at the court of "
+            "Archelaus of Macedon; performed posthumously at the City Dionysia c. "
+            "405 BCE; one of the last great Athenian tragedies; supplied as fact, "
+            "interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The late Euripidean tragedy on the polis and the god it refuses; the seminar text on reason and ecstasy.",
+                "memory_work": {
+                    "recitations": ["Recitation of a choral ode of the bacchants in a worthy modern translation"],
+                },
+                "recitation_routine": "Seminar opens from the recited ode; the discussion takes its first question from what the chorus claims that the audience may not be ready to grant.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of The Bacchae (William Arrowsmith; Anne Carson's Bakkhai) read aloud across a few sittings, parts taken",
+                ],
+                "short_lesson_flow": "A living book read aloud and narrated; the god's claim and the king's refusal followed through to recognition, deepening to analysis of the play's refusal to settle as the bands move up.",
+                "narration_prompt": "Tell back the scene we read today, and tell me what the bacchants said and whether you believed them.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of The Bacchae on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in reason and ecstasy, in the city's outsiders, or in late Euripides leads; a filmed performance watched together",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the play's discomfort be discomfort. No imposed resolution.",
+                "observation_documentation": "Over time, notice whether the student returns to the play and brings its question into other reading. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of late Euripidean tragedy and the play's refusal-to-settle structure where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
