@@ -3992,6 +3992,171 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-050": {
+        "node_type": "craft",
+        "strand": "drama",
+        "band": "emerging",
+        "prerequisites": ["close reading: emerging"],
+        "objective": (
+            "Hear that a play is the transcript of an absent performance, not a story "
+            "told by a narrator; follow who is speaking on the page; read stage "
+            "directions as instructions, not narration; read a short scene aloud with "
+            "another reader, taking different parts."
+        ),
+        "core_understanding": (
+            "A play looks like a story but is not one. There is no narrator. The page "
+            "is what the actors are given to perform; the work itself is the "
+            "performance. Reading a play silently is reading half of it. At this band "
+            "the child meets this difference: the lines belong to characters, the "
+            "italic bits belong to the staging, and the play comes alive when read "
+            "aloud with another person taking another part."
+        ),
+        "analytical_moves": [
+            "Identify each character's lines by the name preceding them",
+            "Read stage directions as instructions for what happens, not as part of any character's speech",
+            "Take a part and read aloud with another reader taking another part",
+            "Notice that no one is telling the story: only the characters speak",
+            "Mark where a stage direction tells you something important happens (an entrance, an exit, a gesture)",
+        ],
+        "seminar_questions": [
+            "Who is speaking now? How do you know?",
+            "What did the stage direction just tell you that no character said?",
+            "If we are reading this aloud, what is missing that would be there on a stage?",
+        ],
+        "writing_invitations": [
+            "Copy out a short exchange between two characters, marking the stage directions",
+            (
+                "Write a one-line stage direction for something that happens between "
+                "two lines (a glance, a touch, a turn away) and read the scene with "
+                "your direction in place"
+            ),
+        ],
+        "exemplar_texts": [
+            "A children's adaptation of Shakespeare presented as dialogue (a scene from Lamb's Tales acted as a script)",
+            "A short scene from an Aesop fable adapted for performance",
+            "A read-aloud version of a folk tale written as dialogue between two voices",
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "Drama is among the oldest forms of teaching by performance. Before "
+                    "the child meets the play as a text to be studied, they meet it as "
+                    "a script to be spoken aloud. The classical tradition holds that "
+                    "the voice of the play lives in the voice of the speaker; the page "
+                    "is a record, not the thing itself."
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "A short exchange of two or three lines recited from a chosen scene, with the child taking one part and the mentor taking the other",
+                    ],
+                },
+                "copywork": [
+                    "A short stage direction copied neatly, with the two surrounding lines of dialogue copied above and below it",
+                ],
+                "recitation_routine": (
+                    "Each session opens with the recited exchange from the previous; "
+                    "the new lesson begins with naming the next two characters who "
+                    "will share the page."
+                ),
+                "read_aloud_suggestions": [
+                    "A short scene from a children's adaptation of Shakespeare (Lamb's Tales)",
+                    "A short folk tale adapted as dialogue between two voices",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 10,
+                "living_book_suggestions": [
+                    "A worthy children's adaptation of Shakespeare",
+                    "A child-suitable book of short plays drawn from classic stories",
+                ],
+                "short_lesson_flow": (
+                    "Read a short scene aloud as a family or with the child taking one "
+                    "part. The child narrates back what happened, naming each "
+                    "character. Then ask: did anyone tell the story to us, or did the "
+                    "people in the play tell it themselves?"
+                ),
+                "narration_prompt": (
+                    "Tell back what we just read, and tell me which character said "
+                    "what, and what the stage directions said happened."
+                ),
+                "real_world_objects": [
+                    "The book held by the reader, with stage directions easy to see",
+                    "Two voices: the child's and a fellow reader's",
+                ],
+                "nature_connection": (
+                    "A play is to ordinary storytelling what a bird seen alive is to a "
+                    "picture in a book: the thing has only been there in front of us "
+                    "when we have heard the voices."
+                ),
+                "habit_focus": (
+                    "The habit of hearing different voices in a written page, and the "
+                    "habit of taking a part rather than reading silently."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in the parts of a printed play: the "
+                    "character names, the lines that follow them, and the stage "
+                    "directions. Practice in reading aloud with another reader, "
+                    "taking parts."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher reads a short scene aloud, naming each character "
+                        "before reading their lines and pausing to read stage "
+                        "directions in a different voice or to act them out."
+                    ),
+                    "we_do": "Teacher and child read the scene together, alternating characters.",
+                    "you_do": (
+                        "Child takes a part with another reader (a sibling or peer) "
+                        "and reads the scene through; mentor watches and confirms the "
+                        "stage directions were not skipped."
+                    ),
+                },
+                "independent_practice": [
+                    "A short scene read aloud with another reader, with the child noting one stage direction they had to act",
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a shelf of children's plays and worthy adaptations of Shakespeare",
+                    "Read aloud as a household at meals or evenings; let the child join in when they are ready",
+                ],
+                "real_world_contexts": [
+                    "A puppet show or backyard production the child stages themselves",
+                    "A family read-aloud where parts are passed around as people want them",
+                ],
+                "conversation_starters": [
+                    "Who said what just now?",
+                    "What did the page tell us that nobody said out loud?",
+                    "Want to take one of the parts?",
+                ],
+                "resource_bank": [
+                    "A shelf of children's plays and adapted classics",
+                    "Voices willing to read parts when invited",
+                ],
+                "parent_role": (
+                    "Read aloud yourself with the lines in your voice, take a part, "
+                    "and welcome the child's part when they ask for one. The child "
+                    "meets drama by joining in, not by being assigned."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the child begins to take parts on "
+                    "their own, asks to read aloud, and acts out stage directions "
+                    "when the page describes them. This noticing replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori at this band does not carry a distinct method for reading "
+                "dramatic literature; the elementary prepared environment centers on "
+                "the great-lesson narratives and the grammar materials. Children's "
+                "dramatic play in the Montessori environment is welcomed but is not "
+                "framed as the reading of a written play."
+            ),
+        },
+    },
     "lit-work-001": {
         "node_type": "work",
         "track": "classics",
