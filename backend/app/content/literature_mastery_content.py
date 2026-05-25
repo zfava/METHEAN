@@ -11385,4 +11385,151 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-021": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "Narodnye russkie skazki (Russian Folk Tales; selections, with attention to tales of Baba Yaga, Vasilisa the Beautiful, the Firebird, Koschei the Deathless, Ivan-Tsarevich and the Grey Wolf, the Frog Princess)",
+            "author": "compiled by Alexander Afanasyev",
+            "date": "8 volumes, 1855-1863; revised edition 1873; the largest single collection of Russian folk tale, approximately 600 tales drawn from many regional informants and earlier collectors",
+            "genre": "nineteenth-century Russian folk-tale collection",
+            "form": "approximately 600 prose tales gathered by Afanasyev from many sources (informants, earlier published collections, manuscript materials); organized by tale-type, not by region or informant",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "The collection holds violent material consistent with the "
+            "European folk-tale corpus (the bone-grinding mortar of Baba "
+            "Yaga, the dismemberments in the Koschei tales, the wolf-"
+            "rides and the underworld journeys); some tales preserve "
+            "Christian framings absent in the older oral material; the "
+            "1860s tsarist censorship suppressed an additional volume "
+            "(the 'Russian Folktales Not for Print', published abroad) "
+            "of bawdier and more politically pointed tales which "
+            "twentieth-century editions have restored; the editorial "
+            "history is part of the work. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading proficient on Russian folk-tale prose: the rhythmic openings, the rule-of-three sequences, the formulaic phrasings ('In a certain kingdom, in a certain land...') (lit-craft-003)",
+            "Character proficient: the Russian folk-tale figures (Baba Yaga in her chicken-legged hut; Vasilisa with her doll; Koschei whose death is hidden in a needle in an egg in a duck in a rabbit; Ivan the Tsarevich and Ivan the Fool; the Firebird; the Grey Wolf; Marya Morevna) as constructed positions a long tradition uses (lit-craft-013)",
+            "Theme advanced: the Russian folk-tale world's particular concerns (death and the hidden life, the youngest brother who is also the fool, the woman-as-helper-or-witch); what the Russian inheritance does that the German does not (lit-craft-023)",
+            "Figurative system: the chicken-legged hut, the death hidden in the egg, the firebird's feather, the milk of mares, the apples of youth (lit-craft-042)",
+        ],
+        "entry": (
+            "Proficient: read a selection from the major Russian tale "
+            "groups (the Baba Yaga tales; the Koschei tales; the Ivan-"
+            "and-the-Firebird tales; the Vasilisa tales) in a worthy "
+            "modern translation (Norbert Guterman's translation of "
+            "Afanasyev is standard in English; Robert Chandler's recent "
+            "Penguin selection is excellent); find the Russian formulaic "
+            "phrasings and the structural repetitions; meet the Russian "
+            "figures who recur across many tales. Advanced: argue what "
+            "the Russian folk-tale inheritance does that the German "
+            "(Grimms, lit-work-inh-019) does not; meet the editorial "
+            "history including the suppressed bawdier volume; engage "
+            "Vladimir Propp's Morphology of the Folktale (1928), which "
+            "is largely built on Afanasyev's corpus. Mastery: original "
+            "argument about the Russian folk-tale tradition as a distinct "
+            "national branch of the European inheritance."
+        ),
+        "close_reading_passages": [
+            "'Vasilisa the Beautiful' (Afanasyev 104): how does the tale stage the doll-helper, the night-rides of Baba Yaga, and the closing recognition; what does the figure of Baba Yaga do that no other European folk-tale witch does?",
+            "'The Death of Koschei the Deathless' (Afanasyev 156 in the standard Guterman): how does the tale stage the nested hiding-place of Koschei's death (a needle, an egg, a duck, a rabbit, a chest, an oak tree on an island), and what does the form do with this structural recursion?",
+            "'Ivan-Tsarevich, the Firebird, and the Grey Wolf' (Afanasyev 168): how does the tale stage the youngest son's quest with the wolf as helper, and what does the form do that the Grimms' 'Bremen Town Musicians' does differently?",
+        ],
+        "structural_analysis": (
+            "Approximately 600 tales organized by Afanasyev by tale-type "
+            "(after the Aarne-Thompson classifications that would only be "
+            "formalized later in the twentieth century but which "
+            "Afanasyev anticipated). The Russian tales hold particular "
+            "figures and structures that recur across many tales: Baba "
+            "Yaga, Koschei, the Firebird, the youngest son who is also "
+            "the fool, the rule-of-three sequences. The 1860s tsarist "
+            "censorship suppressed an additional volume of bawdier and "
+            "more politically pointed tales which was published abroad "
+            "and which twentieth-century editions have restored. The "
+            "structure is the collection's argument: the Russian folk-"
+            "tale tradition as a distinct national branch of the European "
+            "inheritance, with its own figures and its own concerns."
+        ),
+        "thematic_lines": [
+            "The Russian folk-tale world as a distinct branch: Baba Yaga and Koschei as figures the European tradition does not otherwise have",
+            "The youngest brother who is also the fool: the Ivan-the-Fool figure as the Russian inheritance's distinctive hero",
+            "Death and its hidden life: the Koschei structure (death in a needle in an egg) as a Russian preoccupation other European traditions do not match",
+        ],
+        "comparative_threads": [
+            "lit-work-inh-019 The Grimms' Tales: the German counterpart; the comparison shows what each national tradition does differently with shared European folk-tale material",
+            "lit-work-inh-020 Andersen's tales: the literary fairy-tale tradition Afanasyev's collected work runs alongside",
+            "Vladimir Propp's Morphology of the Folktale (1928): the foundational structuralist analysis of folk tale built largely on Afanasyev's corpus",
+            "Stravinsky's The Firebird (1910) and Petrushka (1911): the early-twentieth-century Russian musical inheritance drawing on Afanasyev's tales",
+            "lit-work-inh-022 MacDonald's Phantastes (in next batch): the Victorian literary fairy tale; MacDonald drew on the European tradition Afanasyev is part of",
+            "lit-work-inh-024 Angela Carter's The Bloody Chamber (in next batch): Carter's body of work also engaged Russian folk-tale material (her 1979 'The Tiger's Bride' and other tales)",
+        ],
+        "seminar_questions": [
+            "What does the Russian folk-tale tradition do that the German does not? Where in Afanasyev is the difference sharpest?",
+            "What does the figure of Baba Yaga do that no other European folk-tale witch does?",
+            "What does the Koschei structure (death hidden in nested objects) claim about death that direct narration could not?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on a Baba Yaga tale, naming what the figure does that no other European witch does",
+            "The essay on the Koschei structure, with passages from two or three Koschei tales",
+            "At advanced, the comparative essay on a Russian tale alongside a Grimms tale of the same tale-type",
+        ],
+        "context": (
+            "Compiled by Alexander Afanasyev across the 1850s and 1860s "
+            "in Moscow from many sources; the largest single collection "
+            "of Russian folk tale and the foundational document of "
+            "Russian folkloric studies; the tsarist censorship of an "
+            "additional volume of bawdier and more politically pointed "
+            "tales (published abroad as 'Russkie zavetnye skazki', "
+            "'Russian Folktales Not for Print') is part of the work's "
+            "editorial history; supplied as fact, interpretation left "
+            "to the student."
+        ),
+        "lineage": (
+            "Folklore. Source position. The Russian counterpart to the "
+            "Grimms' (lit-work-inh-019) collected German folk tale: "
+            "Afanasyev as the Russian Grimm, compiling the national "
+            "folk-tale corpus from many regional informants and earlier "
+            "collectors. Stands alongside the Grimms and Andersen "
+            "(lit-work-inh-020) as the third principal European folk-"
+            "tale source authored before the modern literary fairy tale. "
+            "Shaped the early-twentieth-century Russian musical inheritance "
+            "(Stravinsky's Firebird) and the structuralist study of folk "
+            "tale (Propp's Morphology, built largely on this corpus)."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The foundational Russian folk-tale collection; the seminar text on what the Russian national tradition does with European folk tale.",
+                "memory_work": {
+                    "recitations": [
+                        "Recitation of the Russian formulaic opening 'In a certain kingdom, in a certain land...' in a worthy modern translation"
+                    ],
+                },
+                "recitation_routine": "Seminar opens from the recited opening; the discussion takes its first question from what the formulaic frame lets the Russian tale do.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Afanasyev (Norbert Guterman's translation, the standard English; Robert Chandler's Penguin Russian Magic Tales) read aloud across a term, with the Russian and German traditions held alongside each other",
+                ],
+                "short_lesson_flow": "A living book read aloud across selected Russian tales and narrated; the Russian figures (Baba Yaga, Koschei, Ivan, the Firebird) noticed as they recur; deepening to analysis of the Russian inheritance as distinct from the German as the bands move up.",
+                "narration_prompt": "Tell back the tale we just read, and tell me which Russian figure was in it and what they did that the German tradition does not have.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Afanasyev on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in Russian folk tale, in Baba Yaga and Koschei, or in the comparative European folk-tale tradition leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let Baba Yaga be Baba Yaga; do not soften the Russian figures into their German counterparts.",
+                "observation_documentation": "Over time, notice whether the student returns to particular Russian figures and begins to feel the tradition as distinct from the German. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of Russian folk-tale figures and the comparative European folk-tale tradition where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
