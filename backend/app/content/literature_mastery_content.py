@@ -11668,4 +11668,143 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-023": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "Fiabe italiane (Italian Folktales; selections, with attention to Calvino's preface)",
+            "author": "Italo Calvino (selected, edited, and translated; the tales themselves anonymous, drawn from earlier regional Italian collections)",
+            "date": "first published 1956 in Italian; English translation by George Martin 1980",
+            "genre": "twentieth-century literary curation of regional Italian folk tale",
+            "form": "200 tales selected from earlier regional folk-tale collections in many Italian dialects, translated into standard Italian by Calvino; Calvino's introductory essay frames the whole",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "The collection holds the violence consistent with the "
+            "European folk-tale corpus and the regional Italian "
+            "variations on it; some tales include sexual material more "
+            "explicit than the Grimms' tales as Wilhelm edited them but "
+            "consistent with the Mediterranean folk-tale tradition; "
+            "Calvino's preface is candid about his editorial choices "
+            "(which dialect to render into standard Italian, which "
+            "regional variant to select when many existed, how to handle "
+            "tales he found inferior). Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading proficient on folk-tale prose in Calvino's standard-Italian translation (lit-craft-003)",
+            "Character proficient: the regional Italian figures (the Florentine merchant, the Sicilian princess, the Tuscan king, the Calabrian peasant) as the same European folk-tale positions inflected by region (lit-craft-013)",
+            "Theme advanced: regional variation as the collection's argument; what Italy as a multitude of dialects and regional traditions does to the folk-tale form (lit-craft-023)",
+            "Figurative system: the figures recur across European folk-tale traditions but inflect regionally (lit-craft-042)",
+            "Calvino's preface as part of the work: the modern editor as part of the collection rather than transparent (lit-craft-023 in the family of moves)",
+        ],
+        "entry": (
+            "Proficient: read selected tales from across the Italian "
+            "regions Calvino organized; read Calvino's preface as part "
+            "of the work (it is the modern editor making his choices "
+            "visible); meet the regional figures as the same European "
+            "folk-tale positions inflected by region. Advanced: argue "
+            "what Calvino does as the modern editor that the Grimms did "
+            "not (his preface makes the choices visible the Grimms left "
+            "implicit); set the Italian collection against the German "
+            "(Grimms, lit-work-inh-019) and the Russian (Afanasyev, "
+            "lit-work-inh-021) collections. Mastery: original argument "
+            "about the modern literary curator of folk tale as a "
+            "distinct role from both the collector (Grimms, Afanasyev) "
+            "and the author (Andersen, Carter)."
+        ),
+        "close_reading_passages": [
+            "Calvino's preface (often printed as 'Italo Calvino's Introduction to Italian Folktales'): how does Calvino state his editorial method, and what does the preface claim about what the modern curator can and cannot do?",
+            "A regional tale from Tuscany alongside its variant from Sicily (Calvino organizes by region and gives variants): how does the comparison show regional inflection of the same European folk-tale type?",
+            "A tale Calvino marks in his notes as one he found difficult or had to choose carefully among variants: how does the editorial note shape how the reader reads the tale?",
+        ],
+        "structural_analysis": (
+            "200 tales selected by Calvino from earlier regional Italian "
+            "collections in many dialects, organized by region (with "
+            "Calvino's notes on variants), translated into standard "
+            "Italian, framed by Calvino's preface and editorial notes. "
+            "The structure is the collection's argument: Italy as a "
+            "multitude of regional folk-tale traditions that the modern "
+            "curator can present alongside one another while making his "
+            "editorial choices visible. The preface is part of the work; "
+            "Calvino refuses to disappear behind the tales."
+        ),
+        "thematic_lines": [
+            "Regional variation as the collection's central argument: many Italys, one collection",
+            "The modern curator's visibility: Calvino's preface refuses the Grimms' editorial transparency in favor of explicit choice-making",
+            "Folk-tale figures inflected by region: the same European positions handled differently across the peninsula",
+        ],
+        "comparative_threads": [
+            "lit-work-inh-019 The Grimms' Tales: Calvino was explicitly commissioned to do for Italy what the Grimms did for Germany; the comparison is built into the project",
+            "lit-work-inh-021 Afanasyev's Russian Folk Tales: the Russian counterpart; together with the Grimms and Calvino the three constitute the principal national folk-tale collections in Europe",
+            "lit-work-inh-020 Andersen's tales: the literary fairy tale Calvino's curated collection runs alongside",
+            "Calvino's other folk-influenced fiction (Our Ancestors trilogy 1952-59; If on a winter's night a traveler 1979; Cosmicomics 1965): the larger Calvino body of work the folktales sit alongside",
+            "lit-work-inh-024 Angela Carter's The Bloody Chamber (next in this batch): the late-twentieth-century literary refiguring of fairy tale that came twenty-three years later",
+            "Vladimir Propp's Morphology of the Folktale (1928): the structuralist analysis built on Afanasyev that Calvino read closely",
+        ],
+        "seminar_questions": [
+            "What does Calvino's preface make visible that the Grimms' implicit editorial choices left invisible?",
+            "How does regional variation across the Italian peninsula show the same European folk-tale type inflected differently?",
+            "What does the modern curator of folk tale do that the collector and the author do not?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on Calvino's preface, naming what it claims about editorial method",
+            "The essay on a regional pair of variants Calvino gives, naming what each region does with the same type",
+            "At advanced, the comparative essay on Calvino's curation method alongside the Grimms' and Afanasyev's",
+        ],
+        "context": (
+            "Commissioned by the Italian publisher Einaudi in 1954 and "
+            "completed in 1956 by Calvino, then a young writer working "
+            "on his Our Ancestors fantasy trilogy; the project was "
+            "explicitly modeled on the Grimms' German collection and "
+            "took two years; the introductory essay has become a major "
+            "twentieth-century statement on what folk tale is and what "
+            "the modern editor of folk tale does; supplied as fact, "
+            "interpretation left to the student."
+        ),
+        "lineage": (
+            "Folklore. Modern literary curation of folk tale (a distinct "
+            "role from the collector and the author). Calvino was "
+            "explicitly commissioned to do for Italy what the Grimms "
+            "(lit-work-inh-019) did for Germany; the project sits "
+            "alongside the German (Grimms) and Russian (Afanasyev, "
+            "lit-work-inh-021) national folk-tale collections as the "
+            "principal national-scale folk-tale projects of modern "
+            "Europe. The collection runs alongside Andersen's "
+            "(lit-work-inh-020) literary fairy tale as a different "
+            "modern engagement with the form. Calvino's larger fiction "
+            "draws on the same folkloric inheritance throughout."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The twentieth-century Italian counterpart to the Grimms; the seminar text on the modern editor's role and on regional variation in folk tale.",
+                "memory_work": {
+                    "recitations": ["Recitation of a passage from Calvino's preface in a worthy English translation"],
+                },
+                "recitation_routine": "Seminar opens from the recited preface passage; the discussion takes its first question from what Calvino claims about editorial method.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy English edition of Italian Folktales (the Pantheon hardcover; the Harvest paperback; both with George Martin's translation) read aloud across a term, with the preface read first and returned to",
+                ],
+                "short_lesson_flow": "A living book read aloud across selected tales and narrated; Calvino's preface met as part of the work; regional variation noticed across paired variants; deepening to analysis of the modern curator's role as the bands move up.",
+                "narration_prompt": "Tell back the tale we just read, and tell me which region it came from and what Calvino said in his note about why he chose it.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy English edition of Italian Folktales on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in folk tale, in Italy as a many-dialected country, or in the modern editor's role leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let Calvino's preface be itself; bring the Grimms and Afanasyev into the room when the comparison comes up.",
+                "observation_documentation": "Over time, notice whether the student returns to particular regions and begins to feel folk-tale inflection across them. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the modern literary curator of folk tale and regional variation where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
