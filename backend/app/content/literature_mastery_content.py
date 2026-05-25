@@ -4355,6 +4355,204 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-052": {
+        "node_type": "craft",
+        "strand": "drama",
+        "band": "proficient",
+        "prerequisites": ["drama: developing", "close reading: proficient", "narrative craft: proficient"],
+        "objective": (
+            "Read dramatic structure as the playwright's argument (the turn or "
+            "peripeteia, the recognition or anagnorisis); read the chorus in Greek "
+            "tragedy as a function (commentator, mediator, audience-surrogate); "
+            "argue what a staged choice (a silence, an entrance, a prop, a refusal) "
+            "does to meaning; defend a small original reading of a play scene-by-scene "
+            "from the lines themselves."
+        ),
+        "core_understanding": (
+            "A play does not have a narrator, so the playwright's argument is "
+            "carried entirely by the structure (who is on stage when, what happens "
+            "between scenes, when the turn comes, when recognition arrives), by the "
+            "staged choices (a soliloquy here and not there; a silence at the moment "
+            "one would expect speech; a prop set down deliberately), and by the "
+            "system of voices, none of which is authoritative. The proficient reader "
+            "reads the play whole and articulates its argument. They meet the Greek "
+            "chorus as a structural function rather than as background noise: a "
+            "commentator on the action, a mediator between audience and stage, a "
+            "voice of the community whose own commitments the play tests. They also "
+            "meet Aristotle's vocabulary for dramatic structure (peripeteia, the "
+            "turn; anagnorisis, the recognition) and use it as the carpenter uses a "
+            "name for a joint: not to label the work but to see it."
+        ),
+        "analytical_moves": [
+            "Identify the turn (peripeteia) in a play and articulate what changes for whom",
+            (
+                "Identify the recognition (anagnorisis) and articulate what the "
+                "character now knows that they did not before, and what the audience "
+                "now knows about them"
+            ),
+            (
+                "Read the chorus as a function: name what work the chorus is doing in "
+                "a scene (commenting, mediating, voicing the community's stake)"
+            ),
+            (
+                "Argue what a staged choice (a silence, an entrance, a prop, a refusal "
+                "to speak) does to the meaning of a scene"
+            ),
+            (
+                "Defend a small original reading of a play from scene-and-line "
+                "evidence, returning to the text for every claim"
+            ),
+        ],
+        "seminar_questions": [
+            "Where does this play turn, and what does the turn cost?",
+            "Where is the recognition, and what does the character know now that we already knew?",
+            "What is the chorus doing in this scene that no single character could do?",
+            "What would change about this play if a soliloquy here became a dialogue, or if a silence became a speech?",
+        ],
+        "writing_invitations": [
+            "Write an analytical paragraph identifying the turn in a chosen play and arguing what the turn does to the work's meaning",
+            (
+                "Choose one staged moment (a silence, an entrance, a prop, a "
+                "refusal) and write the paragraph that argues what the staging does "
+                "that dialogue alone could not"
+            ),
+        ],
+        "exemplar_texts": [
+            "A Greek tragedy with a clear chorus role (Sophocles' Antigone; Aeschylus' Agamemnon)",
+            "A Shakespeare play whose structure rewards proficient attention (Macbeth's tightness; the mirror plotting of Twelfth Night)",
+            "A modern play where staging is meaning (Beckett's Waiting for Godot; Pinter's silences)",
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "Aristotle gave us the vocabulary the proficient reader needs: "
+                    "peripeteia, the turn; anagnorisis, the recognition. The "
+                    "classical seminar applies them as the carpenter applies a name "
+                    "for a joint: not to label the work but to see it. The Greek "
+                    "chorus, properly read, is not background but a function the "
+                    "play needs."
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "A choral passage of a Greek tragedy recited at the seminar's opening, or a soliloquy from Shakespeare central to the play's turn",
+                    ],
+                },
+                "copywork": [
+                    "The recited passage copied into the commonplace book, with the structural function (turn / recognition / chorus) noted in the margin",
+                ],
+                "recitation_routine": (
+                    "Each seminar opens from the recited passage; the first question "
+                    "is taken from where in the play's structure that passage sits."
+                ),
+                "read_aloud_suggestions": [
+                    "A full Greek tragedy read aloud whole in a worthy translation",
+                    "A Shakespeare play of clear structure (Macbeth, Othello) read whole across a few sessions",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 40,
+                "living_book_suggestions": [
+                    "A whole Greek tragedy in a worthy translation, read across a term",
+                    "A whole Shakespeare play, read aloud with parts taken, paired with a live or filmed performance",
+                ],
+                "short_lesson_flow": (
+                    "The proficient student reads the play whole at a sustained "
+                    "pace, narrating each scene. The reader marks moments of "
+                    "soliloquy, the turn, and the recognition as they meet them. At "
+                    "a scene's end one such moment is taken up: copied into the "
+                    "commonplace book, discussed, and tested against the rest of "
+                    "the play. The chorus passages are returned to and asked: what "
+                    "is the chorus doing here?"
+                ),
+                "narration_prompt": (
+                    "Tell back the scene, and tell me which moment was where the "
+                    "play turned, and which moment was where someone recognized something."
+                ),
+                "real_world_objects": [
+                    "The whole play in the reader's hands, marked at structural moments",
+                    "A performance to attend or watch alongside the reading",
+                ],
+                "nature_connection": (
+                    "A play's structure is to its meaning what a watershed is to a "
+                    "river: the shape the water of voice and action moves along."
+                ),
+                "habit_focus": (
+                    "The habit of asking where the play turns and where recognition "
+                    "comes, and the habit of returning to the line for the staged "
+                    "choice that makes the meaning."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in dramatic structure (peripeteia and "
+                    "anagnorisis), in the function of the chorus, in reading staged "
+                    "choices as meaning, and in writing the short analytical "
+                    "paragraph that defends a reading from scene-and-line evidence."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher works a scene on the board: names the turn, names "
+                        "the recognition, names what the chorus is doing in the "
+                        "passage, and drafts a short paragraph defending a reading "
+                        "of the staged choice, quoting the lines."
+                    ),
+                    "we_do": (
+                        "Class works through a chosen scene together, identifying "
+                        "the turn or the recognition, naming the chorus function, "
+                        "and drafting together a paragraph defending a small original reading."
+                    ),
+                    "you_do": (
+                        "Student writes an independent analytical paragraph on the "
+                        "turn, the recognition, or a chosen staged choice in the "
+                        "play under study, with quoted evidence."
+                    ),
+                },
+                "independent_practice": [
+                    "The analytical paragraph on the turn, recognition, chorus function, or a staged choice from the play under study",
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep the long shelf of Greek tragedy in worthy translation and Shakespeare in worthy editions, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "A live or filmed performance of the play the reader has been living with",
+                    "A long conversation about what the chorus is doing in a tragedy the reader keeps returning to",
+                    "A piece of writing the reader produced because a moment in the play turned for them and they wanted to say so",
+                ],
+                "conversation_starters": [
+                    "Where does this play turn? Read me the lines.",
+                    "What is the chorus telling us that the characters cannot?",
+                    "What changes for the character in the moment they recognize? What changes for us?",
+                ],
+                "resource_bank": [
+                    "A shelf of plays; a streaming service or library DVDs of worthy performances",
+                    "A reader-companion willing to argue a chosen turn or recognition as a fellow reader",
+                ],
+                "parent_role": (
+                    "Be a fellow reader who has lived with the same plays in their "
+                    "own returning. Watch a performance together; argue afterward. "
+                    "The proficient reading of a play often comes from the second "
+                    "or third encounter, not the first."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the reader begins to identify turn "
+                    "and recognition on their own, to ask what the chorus is doing "
+                    "without prompting, and to defend a small reading from the "
+                    "lines. This noticing replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori's literature pedagogy at the elementary and "
+                "early-secondary level does not carry a distinct method for the "
+                "structural analysis of drama or for reading the chorus as a "
+                "function; the practice here is drawn from the seminar tradition "
+                "and the long Charlotte Mason habit of reading aloud across a term."
+            ),
+        },
+    },
     "lit-work-001": {
         "node_type": "work",
         "track": "classics",
