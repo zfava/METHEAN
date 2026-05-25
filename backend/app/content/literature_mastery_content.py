@@ -5493,6 +5493,112 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-007": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Antigone",
+            "author": "Sophocles",
+            "date": "c. 441 BCE",
+            "genre": "Greek tragedy",
+            "form": "verse tragedy in five episodes with choral odes",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "The hanging of Antigone (offstage; reported), the suicides of Haemon "
+            "and Eurydice (offstage; reported), the burial that drives the action "
+            "and the ritual prohibition the play places against the city's edict; "
+            "honest information, not a gate."
+        ),
+        "craft_focus": [
+            "The collision of binding claims as the play's structural argument: Antigone's against Creon's, neither given up by the play",
+            "The chorus of Theban elders as commentator and mediator, never as the play's voice (lit-craft-052)",
+            "Antigone and Creon as the work's argument: each the structural function of their position (lit-craft-013, lit-craft-014)",
+            "What the play refuses to settle: which law commands when two binding claims contend (lit-craft-023)",
+            "The choric odes (especially Ode 1, on what mankind is) as the place where the city looks at itself",
+        ],
+        "entry": (
+            "Proficient: meet the play whole, name peripeteia and anagnorisis where "
+            "they fall on Creon, read the chorus as function, hear Antigone's and "
+            "Creon's claims as binding without giving up either. Advanced: argue "
+            "what the play refuses to settle (which law commands; what is gained by "
+            "leaving the question unresolved); set the play against later "
+            "treatments (Anouilh, Brecht) and against the Theban material more "
+            "broadly. Mastery: original argument about the play's place in the "
+            "tradition of the contending claim."
+        ),
+        "close_reading_passages": [
+            "The opening exchange between Antigone and Ismene: how does the play frame the choice, and what does Ismene's refusal let the play do?",
+            "The first choral ode (on what mankind is and on the city's law): how does the chorus name the human, and what is the chorus quietly asking the audience to hold?",
+            "The exchange between Creon and Haemon: how does the play hear the son's argument, and where does Creon refuse to hear?",
+        ],
+        "structural_analysis": (
+            "Two binding claims at the play's outset, neither given up: a sister's "
+            "ritual duty to bury her brother, a city's edict that the brother who "
+            "attacked the city not be buried. The play unrolls each claim through "
+            "its consequences and refuses to declare which commands. The structure "
+            "is the argument: tragedy is not the punishment of the wrong but the "
+            "cost of holding two rights at once."
+        ),
+        "thematic_lines": [
+            "Divine law and civic law: which commands; competing readings the play sustains",
+            "Family and the polis: where each ends and where each refuses to give way",
+            "Antigone's silence and Creon's late knowing: what each character has at the end that they did not at the beginning",
+        ],
+        "comparative_threads": [
+            "Oedipus Rex (lit-work-006): the same Theban material across the same playwright; what each play does with Creon",
+            "The Oresteia (lit-work-008): the parallel founding question of public justice and the contending claim",
+            "Modern responses (Anouilh's Antigone of 1944; Brecht's adaptation): how the play has been read against later moments of contending claim",
+        ],
+        "seminar_questions": [
+            "Which law does the play say commands, divine or civic? Where does the play refuse to say?",
+            "What is the chorus doing in the ode on mankind? Is the chorus on a side?",
+            "Is Antigone admired wholly, mourned, or both? Where does the play hold something back?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the first choral ode, naming what the chorus lets the audience hear that no character can say",
+            "The essay on what the play refuses to settle between Antigone's claim and Creon's",
+            "At advanced, the comparative paragraph setting Sophocles's Antigone against a later treatment of the same material",
+        ],
+        "context": (
+            "Performed at the City Dionysia in Athens c. 441 BCE; the third (by "
+            "subject) of the three Theban plays though composed first; the central "
+            "Greek tragedy on the binding contending claim; supplied as fact, "
+            "interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The Greek seminar text on the contending claim and what the city does with the law it has made.",
+                "memory_work": {
+                    "recitations": ["Recitation of the first choral ode in a worthy modern translation"],
+                },
+                "recitation_routine": "Seminar opens from the recited ode; the discussion takes its first question from what the chorus said about being human.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of Antigone (Fagles; Heaney's The Burial at Thebes) read aloud as a living book, parts taken",
+                ],
+                "short_lesson_flow": "A living book read aloud and narrated; the contending claims followed and told back, deepening to analysis of the play's refusal to settle as the bands move up.",
+                "narration_prompt": "Tell back the episode we read today, and tell me what Antigone said and what Creon said, and which one the play would have us think was right.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of Antigone on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in contending claims, civil disobedience, or the city leads; a filmed performance watched together",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the contending claim be a contending claim. No imposed resolution.",
+                "observation_documentation": "Over time, notice whether the student returns to the play and brings the contending claim into other reading. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of Greek tragic conventions and the play's contending-claim structure where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
