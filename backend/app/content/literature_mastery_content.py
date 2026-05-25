@@ -7291,6 +7291,117 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-023": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Great Expectations",
+            "author": "Charles Dickens",
+            "date": "serialized 1860-61",
+            "genre": "Victorian Bildungsroman",
+            "form": "first-person retrospective novel in three stages of Pip's expectations; originally serialized; two endings exist, the published one and the earlier draft",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "The opening encounter with Magwitch in the graveyard and Pip's "
+            "terror; Miss Havisham's arrested wedding and her treatment of "
+            "Estella; the violent death of Mrs. Joe; the fire that injures "
+            "Miss Havisham; Magwitch's pursuit and death; the novel ends in "
+            "two versions, both of which the editor of a worthy edition will "
+            "include and discuss. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "First-person retrospective: Pip the narrator looking back at Pip the boy, with a sustained gap between the two (lit-craft-008)",
+            "Character proficient: Pip, Joe, Magwitch, Miss Havisham, Estella as constructed figures the novel needs (lit-craft-013)",
+            "Theme proficient: expectations, gentility, the gift that does not come from where Pip thought (lit-craft-022)",
+            "The gap between older Pip's understanding and younger Pip's: a near-relation of unreliable narration in the family of moves (lit-craft-031)",
+        ],
+        "entry": (
+            "Proficient: read the novel whole across its three stages of "
+            "Pip's expectations; follow the first-person retrospective voice "
+            "and the gap between Pip-the-narrator and Pip-the-protagonist; "
+            "meet the great revelation about the source of the expectations "
+            "as the structural turn. Advanced: argue what Dickens does to the "
+            "Bildungsroman tradition; meet both endings as part of the novel; "
+            "honor what the novel refuses to settle about gentility, "
+            "expectation, and the unearned gift. Mastery: original argument "
+            "about Dickens's place in the formation of the Bildungsroman "
+            "alongside Brontë and George Eliot."
+        ),
+        "close_reading_passages": [
+            "The opening in the graveyard with Magwitch (chapter 1): how does the novel stage Pip's first encounter, and what does the staging do to everything the novel will later let us learn about Magwitch?",
+            "The revelation of the source of Pip's expectations (Volume 2): how does the novel stage the turn, and what does Pip-the-narrator know about it that Pip-the-protagonist did not?",
+            "The two endings (the published ending and the earlier ending Dickens drafted): how does each ending change what the novel argues about expectation and what is finally given?",
+        ],
+        "structural_analysis": (
+            "Three stages of Pip's expectations (the forge and Satis House; "
+            "Pip in London; the return of Magwitch and the unraveling); the "
+            "novel is structured so that what Pip and the reader believe to be "
+            "the source of the expectations is overturned by the truth, and "
+            "what the truth then asks Pip to do is the work of the last "
+            "stage. The first-person retrospective voice holds the older "
+            "Pip's understanding around the younger Pip's experience without "
+            "collapsing into either."
+        ),
+        "thematic_lines": [
+            "Expectations: what they cost, who they come from, and what they ask",
+            "Gentility and the working life: the novel weighs the forge against London and refuses to flatten the comparison",
+            "The unearned gift and what it asks of the receiver: Magwitch's gift and Pip's response across the novel",
+        ],
+        "comparative_threads": [
+            "Jane Eyre (lit-work-021): the previous English first-person Bildungsroman; the same form turned to different ends",
+            "Dickens's earlier novels (David Copperfield is the prior first-person retrospective); what Dickens has tightened in this one",
+            "Joyce's Dubliners (lit-work-029, in this batch) and A Portrait of the Artist as a Young Man: the first-person retrospective opened toward modernism",
+        ],
+        "seminar_questions": [
+            "Where in the novel is the turn, and what does it cost?",
+            "What does Pip-the-narrator know about himself that Pip-the-protagonist did not?",
+            "Which ending does the novel argue for, the published one or the earlier draft? What does each let the novel claim?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the opening graveyard scene, naming what the staging does to everything we later learn about Magwitch",
+            "The essay on the gap between Pip-the-narrator and Pip-the-protagonist across the three stages",
+            "The comparative paragraph on the two endings and what each lets the novel argue",
+        ],
+        "context": (
+            "Serialized in Dickens's weekly periodical 'All the Year Round' "
+            "across 1860-61; the most tightly constructed of Dickens's late "
+            "novels and the most-taught of his Bildungsromans; supplied as "
+            "fact, interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The tightest of Dickens's first-person novels; the seminar text on expectation and the unearned gift.",
+                "memory_work": {
+                    "recitations": ["Recitation of the opening paragraph in the graveyard"],
+                },
+                "recitation_routine": "Seminar opens from the recited opening; the discussion takes its first question from what the young Pip thought he saw and what the narrator now lets us see.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Great Expectations (the Norton; the Penguin; the Oxford World's Classics) read aloud across a term, ideally including both endings",
+                ],
+                "short_lesson_flow": "A living book read aloud across the three stages and narrated; the gap between narrator-Pip and protagonist-Pip noticed; deepening to analysis of the turn and the two endings as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me what Pip thought then and what the narrator quietly knows now.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Great Expectations on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in Dickens, in coming-of-age, or in what gifts ask of those who receive them leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let both endings be available; do not impose a reading of which Dickens 'should' have chosen.",
+                "observation_documentation": "Over time, notice whether the student returns to particular scenes and begins to feel the gap between the two Pips. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of first-person retrospective Bildungsroman and the novel's two endings where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
