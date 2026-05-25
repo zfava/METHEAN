@@ -6262,6 +6262,116 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-014": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "The Sonnets (selection from the sequence of 154)",
+            "author": "William Shakespeare",
+            "date": "composed across the 1590s into the early 1600s; published 1609",
+            "genre": "Renaissance lyric poetry",
+            "form": "fourteen-line sonnet in the English form (three quatrains and a couplet, iambic pentameter, rhyme scheme abab cdcd efef gg)",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "The sequence holds love, desire, jealousy, the procreation argument, "
+            "the rival poet, the young man, the dark lady; the sequence does not "
+            "resolve into a narrative and the reader is asked to hold what the "
+            "speaker holds. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading proficient on a single sonnet: the volta as the turn (lit-craft-003)",
+            "Figurative networks within and across sonnets: time, the rose, the mirror, the line of writing (lit-craft-042)",
+            "Theme as the work's argument: writing as preservation, time as the work's antagonist (lit-craft-022)",
+            "The speaker as a constructed voice (lit-craft-014 in the family of moves): the sonnet's I is not Shakespeare and not a fixed character",
+        ],
+        "entry": (
+            "Proficient: read individual sonnets whole; identify the volta and "
+            "argue how the couplet earns or refuses what the quatrains set up; "
+            "follow figurative networks (time, the rose, the line) across two or "
+            "three sonnets that share them. Advanced: read the sequence as a "
+            "sequence and ask what shape it has when 154 sonnets are held together "
+            "without a story; set Shakespeare's sonnets against the inherited "
+            "Petrarchan tradition the speaker quietly argues with. Mastery: "
+            "original argument about the speaker as a constructed voice and what "
+            "the sequence does that no other Renaissance lyric sequence had done."
+        ),
+        "close_reading_passages": [
+            "Sonnet 18 ('Shall I compare thee to a summer's day'): how does the poem refuse the comparison it offers, and what does the couplet claim about writing?",
+            "Sonnet 73 ('That time of year thou mayst in me behold'): three quatrains, three figures for late life; what does each figure refuse, and what does the couplet ask in return?",
+            "Sonnet 130 ('My mistress' eyes are nothing like the sun'): a sonnet against the inherited praise tradition; what does the speaker do to Petrarchism, and what does the couplet rescue from the refusal?",
+        ],
+        "structural_analysis": (
+            "Each sonnet is a fourteen-line argument: three quatrains build a "
+            "case, the volta (often at line 9 or at the couplet) turns it, and "
+            "the closing couplet claims or refuses what the quatrains set up. "
+            "Across the sequence the figures recur (time, the rose, the line of "
+            "writing, the mirror, the lease) and accumulate meaning by return. "
+            "The sequence is not a narrative; it is the speaker's argument with "
+            "himself, with the addressee, and with time, held across 154 "
+            "fourteen-line propositions."
+        ),
+        "thematic_lines": [
+            "Writing as the work's only stay against time; the speaker's claim that the line will outlast the loved",
+            "The Petrarchan inheritance and what the speaker refuses about it: a tradition of praise tested by a speaker who keeps refusing its terms",
+            "The young man, the dark lady, the rival poet: presences the sequence circles without resolving",
+        ],
+        "comparative_threads": [
+            "Petrarch's Rerum vulgarium fragmenta (the Canzoniere): the inherited sonnet sequence Shakespeare is doing something to",
+            "Donne's Holy Sonnets: the contemporary metaphysical alternate path; the same form bent toward different ends",
+            "Hamlet (lit-work-011), Macbeth (lit-work-012), King Lear (lit-work-013): Shakespeare's other body of work and what it tells us about the same author across forms",
+            "Later sonnet sequences (Elizabeth Barrett Browning's Sonnets from the Portuguese; Heaney's Glanmore Sonnets) as inheritors of the form",
+        ],
+        "seminar_questions": [
+            "Where in this sonnet does the turn fall, and what does the couplet earn or refuse?",
+            "What does the sequence do that no single sonnet could do?",
+            "What does the speaker refuse about the inherited praise tradition, and what does the speaker keep from it?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on a single sonnet, naming the volta and what the couplet claims or refuses",
+            "The essay on a figurative network (time, the rose, the line of writing) across three or four sonnets that share it",
+            "At advanced, the essay on the speaker as a constructed voice and what the sequence does that no narrative could",
+        ],
+        "context": (
+            "Composed across the 1590s into the early 1600s; published in 1609 in "
+            "a quarto whose ordering and dedication have been argued over for "
+            "four centuries; the central English Renaissance lyric sequence and "
+            "the form's defining English example; supplied as fact, "
+            "interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The defining English Renaissance lyric sequence; the seminar text on the sonnet's compressed argument.",
+                "memory_work": {
+                    "recitations": ["Recitation of a chosen sonnet from memory"],
+                },
+                "recitation_routine": "Seminar opens from the recited sonnet; the discussion takes its first question from where the turn falls and what the couplet does.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of the Sonnets (Stephen Booth; Helen Vendler's reading commentary; the Arden) read aloud one or two at a sitting",
+                ],
+                "short_lesson_flow": "A sonnet read aloud whole and narrated; the volta found, the couplet weighed; figurative networks noticed across a few sonnets that share them, deepening to analysis of the sequence as the bands move up.",
+                "narration_prompt": "Tell back the sonnet we just read, and tell me where it turned and what the couplet earned or refused.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of the Sonnets on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in love poetry, in form, or in Shakespeare leads; a sonnet read aloud because the reader wanted to hear it",
+                ],
+                "parent_role": "Be a fellow reader who has lived with particular sonnets in their own returning. Read one aloud when the reader wants to hear it. Let the sequence be a sequence, not a story.",
+                "observation_documentation": "Over time, notice whether the student returns to particular sonnets and begins to feel the sequence's figurative networks across them. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the English sonnet form and the volta where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
