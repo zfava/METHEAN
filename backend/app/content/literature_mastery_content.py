@@ -5599,6 +5599,114 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-008": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "The Oresteia (Agamemnon, The Libation Bearers, The Eumenides)",
+            "author": "Aeschylus",
+            "date": "458 BCE",
+            "genre": "Greek tragedy",
+            "form": "trilogy of verse tragedies with choral odes",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "The murder of Agamemnon (in his bath, on his return), the killing of "
+            "Clytemnestra by her son Orestes, the pursuit of Orestes by the Furies, "
+            "the establishment of the court of the Areopagus; offstage violence "
+            "reported, the trilogy moves from blood-vengeance to founded law. "
+            "Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "The trilogy as one dramatic argument: three plays read as a single whole (lit-craft-053)",
+            "The chorus across three plays: elders of Argos, the libation bearers, the Furies turned Eumenides (lit-craft-052 and lit-craft-053)",
+            "Clytemnestra and Orestes as characters bearing the work's argument (lit-craft-014)",
+            "The system of voices and the founding of public justice (lit-craft-023)",
+            "Figurative networks across the trilogy: blood, net, lion, the loom (lit-craft-042)",
+        ],
+        "entry": (
+            "Advanced: read the three plays as one dramatic argument and follow the "
+            "transformation from inherited bloodshed to founded law; read each "
+            "chorus as the function its play needs; argue what Aeschylus does to "
+            "the inherited material that his audience knew already; honor what the "
+            "trilogy refuses to settle (the Furies are placated, but the Furies "
+            "are not gone). Mastery: original argument about how the trilogy founds "
+            "the Western tragic form's question about justice."
+        ),
+        "close_reading_passages": [
+            "Clytemnestra's welcome of Agamemnon at the palace door and the carpet scene: how does the play stage the entrance to the house, and what does the staging do that no soliloquy could?",
+            "Cassandra before the palace, hearing what no one else hears: how does the play give a chorus of one its truth, and what does the dramatic irony achieve?",
+            "The closing of The Eumenides: Athena's verdict and the transformation of the Furies; what does the trilogy refuse to settle even at the end?",
+        ],
+        "structural_analysis": (
+            "Three plays, one argument: Agamemnon shows the inherited vendetta "
+            "(blood for blood for blood); The Libation Bearers shows the next "
+            "vendetta (Orestes killing his mother to avenge his father); The "
+            "Eumenides shows the founding of the court that breaks the cycle. The "
+            "Furies pursue Orestes across plays; Apollo defends; Athena founds the "
+            "Areopagus. The trilogy is the structural argument that public justice "
+            "is what breaks vendetta, and that nothing about the Furies has been "
+            "merely erased."
+        ),
+        "thematic_lines": [
+            "Vendetta and founded justice: what the polis must do with the inherited claim of blood",
+            "The Furies before and after: a power not abolished but housed; how the polis incorporates what cannot be banished",
+            "Clytemnestra as agent and as the vendetta's continuance: a character the trilogy makes the audience hold without flattening",
+        ],
+        "comparative_threads": [
+            "Oedipus Rex (lit-work-006) and Antigone (lit-work-007): the Sophoclean treatment of the same questions (knowing, contending claim) handled differently by Aeschylus's predecessor and successor",
+            "Hamlet (lit-work-011): Shakespeare's inheritance of the inherited-vendetta problem; what the revenger does when there is no Areopagus yet",
+            "The Iliad (lit-work-002): the unbroken vendetta of the heroic age; what Aeschylus's polis does that Achilles's camp could not",
+        ],
+        "seminar_questions": [
+            "Where in the trilogy is the turn? Is it Orestes's killing, Athena's vote, or somewhere else?",
+            "What does the trilogy say about Clytemnestra that it never says plainly? Where does it refuse to say?",
+            "Are the Furies placated, transformed, or housed? What does the play refuse to settle about them?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the carpet scene, naming what staging does that dialogue alone could not",
+            "The essay on what the trilogy says about justice and what the trilogy refuses to settle about the Furies",
+            "The sustained essay on the chorus across the three plays, naming what each chorus does that the others could not",
+        ],
+        "context": (
+            "Performed at the City Dionysia in Athens in 458 BCE; the only complete "
+            "Greek tragic trilogy to survive; foundational text for the founding "
+            "of the Areopagus and for the Western tragic argument about justice; "
+            "supplied as fact, interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The foundational trilogy on the founding of public justice; the only complete Greek tragic trilogy to survive.",
+                "memory_work": {
+                    "recitations": ["Recitation of a choral ode from Agamemnon in a worthy modern translation"],
+                },
+                "recitation_routine": "Seminar opens from the recited ode; the discussion takes its first question from what the chorus of elders knows and refuses to say.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of the Oresteia (Robert Fagles; Ted Hughes; Anne Carson's An Oresteia for a modern composite reading) read aloud across a term",
+                ],
+                "short_lesson_flow": "A living book read aloud and narrated across the three plays; the long arc followed, the Furies tracked, deepening to analysis of the founding scene as the bands move up.",
+                "narration_prompt": "Tell back the episode we read today, and tell me what the Furies are doing now, and what has changed since the last sitting.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of the Oresteia on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in justice, vendetta, or the founding of law leads; a filmed performance of one play watched together",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; bring the long arc into the room across many sittings.",
+                "observation_documentation": "Over time, notice whether the student begins to ask what justice does with what vengeance leaves behind. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the trilogy form and the transformation across the three plays where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
