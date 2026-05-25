@@ -225,6 +225,110 @@ NODE_CONTENT_SCHEMA = {
         },
         "lineage": "required for inheritance track; absent on classics track",
     },
+    # Trades and skilled work: three node shapes per the design in
+    # docs/curriculum/METHEAN_trades_design.md. A trade has one root
+    # node (trade_root_node) carrying the trade-level defaults; one or
+    # more safety competencies (trade_safety_competency) at the entry of
+    # the trade's DAG; and many technique competencies
+    # (trade_technique_competency) for the hands-on doing. Trades do not
+    # carry the five-philosophy block; they carry a single apprenticeship
+    # pedagogy block. Safety is gating: every hands-on competency has a
+    # prerequisite edge to the trade's safety node.
+    "trade_root_node": {
+        "node_type": "root",
+        "trade": "the trade id, matching SUBJECT_CATALOG['vocational']",
+        "trade_name": "human-readable trade name",
+        "description": "what the trade covers and how it is taught here",
+        "default_supervision_policy": {
+            "hand_tool_work": "supervision default through which band",
+            "power_tool_work": "supervision default through which band",
+        },
+        "safety_node": "id of the trade's entry safety competency",
+        "progression_bands": ["helper", "apprentice", "journeyman", "qualified"],
+    },
+    "trade_safety_competency": {
+        "node_type": "safety",
+        "trade": "the trade id",
+        "competency_name": "what the safety competency teaches",
+        "progression_band": "helper",
+        "prerequisites": ["no prereqs: safety is the root of the trade DAG"],
+        "safety_basis": {
+            "hazards": ["the actual hazards in this shop"],
+            "ppe_required": ["the PPE the learner must wear / not wear, with reasons"],
+            "supervision_required": "true: a safety competency is always supervised",
+            "supervision_basis": "why and to what standard",
+            "fresh_safety_signoff_within_days": (
+                "null on the safety node itself; dependent competencies set their own freshness window"
+            ),
+        },
+        "tools_required": ["the safety equipment of the shop, not the work tools"],
+        "workspace_requirements": {"surface": "...", "lighting": "...", "containment": "..."},
+        "skill_description": "what the learner must know and demonstrate they can do for safety",
+        "demonstration_criteria": ["measurable on the walkthrough itself"],
+        "common_errors": [{"error": "...", "cause": "...", "remedy": "..."}],
+        "artifact_expected": {
+            "type": "photo | video | document | audio",
+            "what_to_capture": "...",
+            "what_the_evidence_shows": "...",
+        },
+        "mentor_signoff_required": "true: no self-attestation on safety",
+        "pedagogy": {"i_do": "...", "we_do": "...", "you_do_supervised": "...", "you_do_unsupervised": "..."},
+        "estimated_practice_sessions_to_signoff": 2,
+        "signoff_validity_days": "annual re-walkthrough as the freshness check",
+        "related_projects": [],
+    },
+    "trade_technique_competency": {
+        "node_type": "technique",
+        "trade": "the trade id",
+        "competency_name": "the doing-shaped name of the skill",
+        "progression_band": "helper | apprentice | journeyman | qualified",
+        "prerequisites": [
+            "must include the trade safety node",
+            "and any technique competencies this one builds on",
+        ],
+        "safety_basis": {
+            "hazards": ["named hazards specific to this technique"],
+            "ppe_required": ["PPE list with reasons; honest about what is optional vs forbidden"],
+            "supervision_required": ("true whenever a cutting tool is used; the validator enforces this"),
+            "supervision_basis": "why and to what standard; named threshold for stepping back",
+            "fresh_safety_signoff_within_days": (
+                "int days: planner refuses to schedule if the trade's safety_check is stale"
+            ),
+        },
+        "tools_required": [
+            {"name": "...", "specification": "...", "alternatives": ["..."]},
+        ],
+        "materials_required": [
+            {"name": "...", "quantity": "...", "approximate_cost_usd": "number or null"},
+        ],
+        "workspace_requirements": {
+            "surface": "...",
+            "ventilation": "...",
+            "lighting": "...",
+            "power": "...",
+            "containment": "...",
+        },
+        "skill_description": "plain prose, one paragraph, what the doing looks like in the hand",
+        "demonstration_criteria": [
+            "each criterion measurable on the work itself (e.g. 'kerf within 1/32 inch of the line')",
+        ],
+        "common_errors": [{"error": "...", "cause": "...", "remedy": "..."}],
+        "artifact_expected": {
+            "type": "photo | video | document | audio",
+            "what_to_capture": "...",
+            "what_the_evidence_shows": "...",
+        },
+        "mentor_signoff_required": "true at apprentice and above; false at helper",
+        "pedagogy": {
+            "i_do": "mentor demonstrates with narration",
+            "we_do": "mentor and learner share the work, with named transition points",
+            "you_do_supervised": "learner performs, mentor watching, with intervention thresholds",
+            "you_do_unsupervised": "the conditions under which the learner can work alone",
+        },
+        "estimated_practice_sessions_to_signoff": 6,
+        "session_length_minutes": 30,
+        "related_projects": ["ids of project nodes that exercise this competency"],
+    },
 }
 
 
@@ -527,6 +631,157 @@ def validate_literature(content: dict, authored_nodes: dict | None = None) -> li
                     continue
                 warnings.append(
                     f"warning: prerequisite {prereq!r} does not resolve to any authored node id or strand:band"
+                )
+
+    return warnings
+
+
+# Trades and skilled work validation.
+#
+# Three node shapes are validated through validate_competency: the trade
+# root node (node_type "root"), the trade safety competency (node_type
+# "safety"), and the trade technique competency (node_type "technique").
+# Safety is gating: a technique competency must carry safety_basis, must
+# prereq the trade safety node when authored_nodes is supplied, must
+# carry demonstration_criteria, and if it uses a cutting tool must set
+# supervision_required to True. These are hard checks that raise.
+
+TRADES_BANDS: frozenset[str] = frozenset({"helper", "apprentice", "journeyman", "qualified"})
+TRADES_NODE_TYPES: frozenset[str] = frozenset({"root", "safety", "technique", "knowledge", "certification_prep"})
+
+# Substring keywords (case-insensitive) that mark a tool as a cutting
+# tool. A technique competency listing any tool whose name contains one
+# of these must set supervision_required True. Conservative on purpose:
+# any tool with a real edge gets supervision until the learner is signed
+# off; the planner enforces the schedule, the mentor enforces the work.
+_CUTTING_TOOL_KEYWORDS: frozenset[str] = frozenset(
+    {
+        "saw",
+        "chisel",
+        "knife",
+        "plane",
+        "drill",
+        "axe",
+        "hatchet",
+        "auger",
+        "spokeshave",
+        "scraper",
+        "router",
+        "gouge",
+        "adze",
+        "drawknife",
+        "froe",
+    }
+)
+
+
+def _technique_uses_cutting_tool(tools_required: list) -> bool:
+    if not isinstance(tools_required, list):
+        return False
+    for tool in tools_required:
+        if isinstance(tool, dict):
+            name = tool.get("name", "")
+        elif isinstance(tool, str):
+            name = tool
+        else:
+            continue
+        if not isinstance(name, str):
+            continue
+        name_lower = name.lower()
+        for keyword in _CUTTING_TOOL_KEYWORDS:
+            if keyword in name_lower:
+                return True
+    return False
+
+
+def validate_competency(content: dict, authored_nodes: dict | None = None) -> list[str]:
+    """Validate a trades competency node.
+
+    Returns a list of warnings, possibly empty. Raises ValueError on the
+    hard violations the trades pipeline must not ship:
+
+    - content must be a dict;
+    - node_type must be one of root | safety | technique | knowledge | certification_prep;
+    - on safety and technique competencies, progression_band must be one of helper | apprentice | journeyman | qualified;
+    - a technique competency must carry safety_basis (a dict);
+    - a technique competency must carry a non-empty demonstration_criteria list;
+    - a technique competency listing any cutting tool in tools_required must set safety_basis.supervision_required to True;
+    - when authored_nodes is supplied, a technique competency's prerequisites must include the trade's safety node id (the authored node with node_type "safety" and matching trade);
+    - when authored_nodes is supplied, every prerequisite string must resolve to an authored node id.
+
+    Warnings are advisory: missing artifact_expected on a technique, missing common_errors, unknown progression_band.
+    """
+    if not isinstance(content, dict):
+        raise ValueError("trades node content must be a dict")
+
+    warnings: list[str] = []
+    node_type = content.get("node_type")
+    if node_type not in TRADES_NODE_TYPES:
+        raise ValueError(f"trades node_type must be one of {sorted(TRADES_NODE_TYPES)} (got {node_type!r})")
+
+    if node_type in {"safety", "technique", "knowledge"}:
+        band = content.get("progression_band")
+        if band is None:
+            raise ValueError(f"{node_type} competency missing progression_band")
+        if band not in TRADES_BANDS:
+            warnings.append(f"warning: unknown progression_band {band!r}; expected one of {sorted(TRADES_BANDS)}")
+
+    if node_type == "technique":
+        safety_basis = content.get("safety_basis")
+        if not isinstance(safety_basis, dict):
+            raise ValueError("technique competency missing safety_basis (must be a dict)")
+        demonstration_criteria = content.get("demonstration_criteria")
+        if not isinstance(demonstration_criteria, list) or not demonstration_criteria:
+            raise ValueError("technique competency missing demonstration_criteria (must be a non-empty list)")
+        tools_required = content.get("tools_required", [])
+        if _technique_uses_cutting_tool(tools_required):
+            supervision = safety_basis.get("supervision_required")
+            if supervision is not True:
+                raise ValueError(
+                    "technique competency uses a cutting tool but safety_basis.supervision_required is not True"
+                )
+        if not content.get("artifact_expected"):
+            warnings.append("warning: technique competency missing artifact_expected")
+        if not content.get("common_errors"):
+            warnings.append("warning: technique competency missing common_errors")
+
+    if node_type == "safety":
+        if not isinstance(content.get("safety_basis"), dict):
+            raise ValueError("safety competency missing safety_basis (must be a dict)")
+        if not content.get("demonstration_criteria"):
+            raise ValueError("safety competency missing demonstration_criteria")
+        if content.get("mentor_signoff_required") is not True:
+            raise ValueError("safety competency must set mentor_signoff_required True (no self-attestation on safety)")
+
+    if node_type == "root":
+        if not content.get("trade"):
+            raise ValueError("trade root node missing trade")
+        if not content.get("safety_node"):
+            raise ValueError("trade root node missing safety_node (id of the entry safety competency)")
+
+    if authored_nodes is not None and node_type in {"safety", "technique", "knowledge"}:
+        prereqs = content.get("prerequisites") or []
+        authored_ids = set(authored_nodes.keys())
+        for prereq in prereqs:
+            if not isinstance(prereq, str):
+                continue
+            if prereq not in authored_ids:
+                warnings.append(f"warning: prerequisite {prereq!r} does not resolve to any authored node id")
+        if node_type == "technique":
+            trade = content.get("trade")
+            safety_node_id: str | None = None
+            for other_id, other in authored_nodes.items():
+                if not isinstance(other, dict):
+                    continue
+                if other.get("node_type") == "safety" and other.get("trade") == trade:
+                    safety_node_id = other_id
+                    break
+            if safety_node_id is None:
+                warnings.append(f"warning: no authored safety competency for trade {trade!r} in authored_nodes")
+            elif safety_node_id not in prereqs:
+                raise ValueError(
+                    f"technique competency for trade {trade!r} must prerequisite the trade "
+                    f"safety node {safety_node_id!r}; prerequisites are {prereqs!r}"
                 )
 
     return warnings
