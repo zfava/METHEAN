@@ -6150,6 +6150,118 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-013": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "King Lear",
+            "author": "William Shakespeare",
+            "date": "c. 1605-1606",
+            "genre": "English Renaissance drama",
+            "form": "verse tragedy with prose interludes, five acts; substantially different Quarto (1608) and Folio (1623) texts",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "The blinding of Gloucester on stage; the suicides and assumed suicides; "
+            "the storm scenes and Lear's madness; the death of Cordelia and Lear at "
+            "the close; the play offers no consolation and ends with the surviving "
+            "characters carrying what cannot be undone. Honest information, not a "
+            "gate."
+        ),
+        "craft_focus": [
+            "What the play refuses to settle: justice, gods, kindness, the meaning of nothing (lit-craft-053)",
+            "Two plots that mirror and diverge: Lear and his daughters, Gloucester and his sons (lit-craft-052)",
+            "The Fool as a near-choric function, speaking truth the play will not let any other character say (lit-craft-052)",
+            "Lear's interior across the storm scenes: madness as a kind of clarity the kingdom forbade (lit-craft-014, lit-craft-053)",
+            "The Quarto/Folio question: two versions of the ending, neither editorially abolished; what the textual situation tells us about the play (lit-craft-053)",
+        ],
+        "entry": (
+            "Advanced: read the play whole and read the two plots as one structural "
+            "argument; honor what the play refuses to settle (kindness, justice, "
+            "the gods; the death of Cordelia is not redeemed by the play); read "
+            "the Fool as a function the play needs and then takes away; argue what "
+            "the storm scenes do that no dialogue between agents could; meet the "
+            "Quarto and Folio endings as part of the work, not an editorial "
+            "embarrassment. Mastery: original argument about what the play does to "
+            "the inherited Lear story (Holinshed; the older anonymous King Leir) "
+            "by refusing the redemption the source supplied."
+        ),
+        "close_reading_passages": [
+            "The opening love-test (Act 1 Scene 1): how does the play stage Lear's demand and Cordelia's refusal, and what does the staging do that no narration of the same moment could?",
+            "The storm scenes and the heath (Act 3): how does the play stage Lear's madness as a kind of clarity, and what does the Fool do across these scenes?",
+            "The closing scene with Cordelia and Lear (Act 5 Scene 3): how does the play stage an ending the inherited story redeemed and the play refuses to redeem?",
+        ],
+        "structural_analysis": (
+            "Two plots, mirroring and diverging: Lear divides his kingdom by a "
+            "love-test and is undone by Goneril and Regan; Gloucester is undone by "
+            "Edmund and saved, briefly, by Edgar. The play's structural argument "
+            "is the doubling: the two plots are not subplot and main plot but two "
+            "stories the play needs to hold together. The storm scenes break the "
+            "kingdom open; the Fool's disappearance after Act 3 is itself a "
+            "structural choice the play does not explain; the closing scene "
+            "refuses the consolation the source story had given."
+        ),
+        "thematic_lines": [
+            "Nothing: the word the play turns on and turns again, from Cordelia's refusal to Lear's recognition",
+            "Kindness in the play's full sense (kind, of the same kin) as the virtue the play insists on without rewarding",
+            "What the gods do or do not do: the play offers competing readings and does not resolve them",
+        ],
+        "comparative_threads": [
+            "Hamlet (lit-work-011) and Macbeth (lit-work-012): the late tragedies, each refusing consolation differently",
+            "The anonymous King Leir (c. 1590) and Holinshed's Chronicles: the inherited Lear story that gave Shakespeare a redemptive ending; what Shakespeare refuses",
+            "Beckett's Endgame (1957) as the modern inheritor of an ending the world will not redeem",
+        ],
+        "seminar_questions": [
+            "What does the play do by refusing to redeem the ending the source supplied?",
+            "Where does the Fool go after Act 3, and what does the play argue by removing him?",
+            "Is the storm a place of madness or of clarity? Where does the play refuse to choose?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the word 'nothing' as it returns across the play",
+            "The essay on what the play refuses to settle about the gods and kindness, holding three or four passages in productive tension",
+            "The comparative paragraph setting Shakespeare's ending against the redemptive ending of the older Lear story",
+        ],
+        "context": (
+            "Composed for the King's Men around 1605-1606; the Quarto of 1608 and "
+            "the Folio of 1623 carry substantially different texts (different "
+            "scenes, different endings) and modern editors handle the two-text "
+            "problem in different ways; the play has been a touchstone of Western "
+            "tragic argument for four centuries; supplied as fact, interpretation "
+            "left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The Shakespearean tragedy that refuses the consolation its source supplied; the seminar text on kindness, nothing, and the gods.",
+                "memory_work": {
+                    "recitations": ["Recitation of a speech from the storm scenes, or Cordelia's first refusal"],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from where in the play the speech sits and what the play refuses to redeem.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of King Lear (Folger; Arden 3, conscious of the Quarto/Folio question) read aloud across a term, paired with a worthy performance",
+                ],
+                "short_lesson_flow": "A living book read aloud across acts and narrated; the two plots followed alongside each other, the Fool's lines noticed, deepening to analysis of the play's refusals as the bands move up.",
+                "narration_prompt": "Tell back the scene we read today, and tell me what the Fool said, and what Lear had not yet seen.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of King Lear on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in tragedy, in kindness, or in Shakespeare's late refusals leads; performances watched together",
+                ],
+                "parent_role": "Be a fellow reader who has lived with the play in their own returning. Let the play's refusal of consolation be honored; do not paper over the closing scene.",
+                "observation_documentation": "Over time, notice whether the student returns to the play and begins to feel its refusals as part of its argument. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the two-plot structure, the Fool, and the Quarto/Folio question where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
