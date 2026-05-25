@@ -10123,4 +10123,137 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-012": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "The Poetic Edda (selections; the mythological poems Voluspa, Havamal, Vafthrudnismal, Grimnismal, and the heroic poems of the Sigurd cycle)",
+            "author": "anonymous compilations of Old Norse-Icelandic poetry",
+            "date": "the poems themselves of varying antiquity (probably 9th-13th century compositions); the principal manuscript (the Codex Regius) c. 1270",
+            "genre": "Old Norse mythological and heroic poetry",
+            "form": "verse in older alliterative meters (fornyrdislag, malahattr, ljodahattr); preserved primarily in the Codex Regius manuscript",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "Cosmological violence (the killing of Ymir, the binding of "
+            "the wolf, the death of Baldr); the curse on Andvari's gold "
+            "and the killings across the Sigurd cycle that the Saga of "
+            "the Volsungs prose-narrates; the destruction of the world at "
+            "Ragnarok and its rebirth; the poems hold the pagan Norse "
+            "cosmology with its own seriousness rather than as either "
+            "celebrated or condemned. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading advanced on Old Norse alliterative verse in worthy modern translation, with the original alongside where possible (lit-craft-004)",
+            "Figurative system: the world-tree Yggdrasil; the wolf and the binding; the gold and the curse; the cosmological figures the poems return to (lit-craft-043)",
+            "Character advanced: Odin as the figure the poems refuse to flatten; Sigurd, Brynhildr, Gudrun across the heroic Sigurd cycle (lit-craft-014)",
+            "Theme advanced: the cosmology held as the world the poems live in; the cycle of doom and the rebirth at the close of Voluspa (lit-craft-023)",
+        ],
+        "entry": (
+            "Advanced: read the mythological poems whole (Voluspa first, "
+            "as the cosmological frame; then Havamal as Odin's gnomic "
+            "wisdom; then the dialogue poems Vafthrudnismal and "
+            "Grimnismal) and follow with the heroic Sigurd cycle (which "
+            "the Saga of the Volsungs prose-narrates and which Wagner "
+            "and Tolkien both drew on); argue what the poetic forms do "
+            "that no prose can; honor the Norse cosmology as the poems "
+            "hold it. Mastery: original argument about the Poetic Edda's "
+            "place in the long Norse-Germanic literary inheritance and "
+            "the long afterlife in Wagner, Tolkien, and modern fantasy."
+        ),
+        "close_reading_passages": [
+            "Voluspa, the seeress's prophecy of the world's creation, fall, and rebirth: how does the poem stage the cosmological span, and what does the form do that direct cosmology could not?",
+            "Havamal, the gnomic Odinic wisdom: how does the poem stage Odin's voice as both god and exile, and what does the gnomic form let the poem claim?",
+            "A passage from the Sigurd cycle (the killing of Fafnir as the poem stages it, set against the Volsunga prose narration of the same event): how do the two forms of the same story illuminate each other?",
+        ],
+        "structural_analysis": (
+            "Two large groups of poems: the mythological poems (Voluspa, "
+            "Havamal, Vafthrudnismal, Grimnismal, and others) that frame "
+            "the Norse cosmology, and the heroic poems (the Sigurd "
+            "cycle, the Atlakvida, the Hamdismal) that narrate the same "
+            "heroic material the Saga of the Volsungs (lit-work-005) "
+            "gives in prose. The Codex Regius preserves the principal "
+            "collection in manuscript form; the poems themselves are of "
+            "varying antiquity and were composed orally before being "
+            "written down. The structure is the inheritance: a body of "
+            "verse the long Northern literary tradition reaches back to."
+        ),
+        "thematic_lines": [
+            "The Norse cosmology as the world the poems live in: Yggdrasil, the Aesir and Vanir, the wolf and the serpent, the rebirth at the close of Voluspa",
+            "Odin as the figure the poems refuse to flatten: god of wisdom, war, and ecstasy; both giver and taker; both gnomic teacher and exiled wanderer",
+            "The heroic Sigurd cycle as the same material the Volsungs (lit-work-005) prose-narrates: two forms of the same inheritance",
+        ],
+        "comparative_threads": [
+            "lit-work-005 The Saga of the Volsungs: the prose Icelandic compilation of the same heroic material the Sigurd cycle of the Poetic Edda gives in verse; the two together are the foundation of the Northern dragon-slaying tradition",
+            "lit-work-inh-013 Snorri Sturluson's Prose Edda (next in this batch): the Prose Edda draws on the Poetic Edda explicitly and quotes from it; Snorri's preservation made the readings possible",
+            "lit-work-inh-014 the Nibelungenlied (next in this batch): the Continental medieval German version of the same Sigurd / Siegfried material the Poetic Edda preserves in Norse",
+            "lit-work-inh-004 Tolkien's The Lord of the Rings: Tolkien's dwarves' names come almost entirely from the Voluspa dwarf-list; Gandalf's name is from the same source; Tolkien's posthumously-published 'The Legend of Sigurd and Gudrun' (2009) is his own verse retelling in the Poetic Edda's meters",
+            "Wagner's Ring cycle (Der Ring des Nibelungen, 1869-1876) as the central nineteenth-century operatic inheritor of the Sigurd material from both the Eddas and the Nibelungenlied",
+        ],
+        "seminar_questions": [
+            "What does Voluspa's cosmology refuse to settle, and what does the closing rebirth do?",
+            "What does Havamal's gnomic form let Odin's voice do that no narrative could?",
+            "How do the verse Sigurd cycle and the prose Volsungs illuminate each other?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on Voluspa's closing rebirth, naming what the verse does that direct theological statement could not",
+            "The essay on Odin's two forms in Havamal (gnomic teacher and exiled wanderer)",
+            "At advanced, the comparative essay on the killing of Fafnir as the Poetic Edda stages it versus the Volsungs prose",
+        ],
+        "context": (
+            "The poems themselves of varying antiquity, probably composed "
+            "orally in Iceland and Norway between the ninth and "
+            "thirteenth centuries; the principal manuscript, the Codex "
+            "Regius (GKS 2365 4to), is dated to about 1270 and was "
+            "rediscovered in 1643; the foundation of all later study of "
+            "Norse mythology and the source the Prose Edda and the "
+            "Volsungs both draw on; supplied as fact, interpretation "
+            "left to the student."
+        ),
+        "lineage": (
+            "Norse-Germanic. Source position. The principal verse "
+            "preservation of Norse mythology and of the heroic Sigurd "
+            "material; the source from which Snorri Sturluson's Prose "
+            "Edda (lit-work-inh-013) quotes and which the Saga of the "
+            "Volsungs (lit-work-005) prose-narrates. The Continental "
+            "Nibelungenlied (lit-work-inh-014) is the parallel German "
+            "version of the same Sigurd / Siegfried material. Tolkien "
+            "(lit-work-inh-004) drew his dwarf-names and Gandalf's name "
+            "from Voluspa and wrote his own verse Sigurd cycle in the "
+            "Edda's meters; Wagner's Ring drew on both Eddas and the "
+            "Nibelungenlied for its operatic cycle."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The foundational verse preservation of Norse mythology and of the heroic Sigurd cycle; the seminar text on Norse cosmological poetry.",
+                "memory_work": {
+                    "recitations": ["Recitation of a passage from Voluspa or Havamal in a worthy modern translation"],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from what the verse cosmology claims and what the form does.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of the Poetic Edda (Jackson Crawford; Carolyne Larrington in the Oxford World's Classics; Lee M. Hollander) read aloud across the major poems",
+                ],
+                "short_lesson_flow": "A living book read aloud across the mythological poems first, then the heroic Sigurd cycle, narrated; the cosmology met first, the heroes second; deepening to analysis of the form's place in the long Northern inheritance as the bands move up.",
+                "narration_prompt": "Tell back the poem we read today, and tell me what the verse let you see about the Norse world.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of the Poetic Edda on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in Norse myth, in Tolkien's sources, or in the long Northern inheritance leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the cosmology be the cosmology; bring Tolkien's dwarf-names and Gandalf into the room when the student finds them.",
+                "observation_documentation": "Over time, notice whether the student returns to the poems and traces the Sigurd cycle forward into the Volsungs and Tolkien. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of Old Norse alliterative verse and the Norse cosmological frame where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
