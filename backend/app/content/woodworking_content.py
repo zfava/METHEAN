@@ -40,4 +40,239 @@ WOODWORKING_CONTENT: dict[str, dict] = {
         "safety_node": "ws-001",
         "progression_bands": ["helper", "apprentice", "journeyman", "qualified"],
     },
+    "ws-001": {
+        "node_type": "safety",
+        "trade": "woodworking",
+        "competency_name": "Woodworking shop safety: hand tools and the workbench",
+        "progression_band": "helper",
+        "prerequisites": [],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "Sharp edges: chisels, plane irons, marking knives, and saws are sharper "
+                    "than they look; a sharp tool dropped point-down can pierce a shoe."
+                ),
+                ("Workpiece motion: a board that is not held still becomes a hazard the moment a tool engages it."),
+                (
+                    "Sawdust and shavings on the floor: shavings underfoot are slippery and "
+                    "tools dropped into shavings can be hard to see."
+                ),
+                (
+                    "Oily rags: rags soaked in linseed oil, boiled linseed oil, tung oil, or "
+                    "danish oil can self-heat and ignite if balled up; they must be laid flat "
+                    "outdoors to dry or stored in a sealed metal can with water."
+                ),
+                (
+                    "Eye injury from chips, sawdust, or sharpening swarf, especially in overhead "
+                    "work, in dry or pitchy stock, and at the grinder or stones."
+                ),
+                (
+                    "Allergic or toxic reactions to specific woods (cocobolo, padauk, rosewoods, "
+                    "yew, some other tropical hardwoods); an unfamiliar wood is identified before "
+                    "it is cut."
+                ),
+                (
+                    "Wrist-line cuts: putting a hand or any body part in the path the cutting edge "
+                    "will travel through if it slips."
+                ),
+            ],
+            "ppe_required": [
+                (
+                    "Closed-toe shoes (leather work shoes or boots preferred; no sandals or open "
+                    "footwear; cloth sneakers offer little protection from a dropped chisel)"
+                ),
+                (
+                    "Safety glasses for any sharpening, any overhead work, any work with dry or "
+                    "pitchy stock, and any unfamiliar operation; default is to wear them"
+                ),
+                "Hair tied back if it would fall forward over the bench",
+                "No loose sleeves, no scarves, and no jewelry near the cut path",
+                (
+                    "No gloves when using saws, chisels, planes, or marking knives; gloves reduce "
+                    "tactile feedback and control"
+                ),
+            ],
+            "supervision_required": True,
+            "supervision_basis": (
+                "The safety competency is itself supervised: an adult mentor walks the learner "
+                "through every hazard and every piece of safety equipment in their actual shop "
+                "and signs off only when the learner can name and locate each. There is no "
+                "self-attestation on safety."
+            ),
+            "fresh_safety_signoff_within_days": None,
+        },
+        "tools_required": [
+            {
+                "name": "Fire extinguisher",
+                "specification": (
+                    "A:B:C rated multipurpose extinguisher within reach of the bench, inspection tag current"
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "First aid kit",
+                "specification": (
+                    "A kit with adhesive bandages, gauze pads, medical tape, antiseptic wipes, "
+                    "and tweezers; the household's choice of contents beyond this is up to the "
+                    "household"
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Sealed metal can with lid for oily rags",
+                "specification": "A metal can with a tight-fitting lid; or a way to lay rags flat outdoors to dry",
+                "alternatives": ["A flat outdoor drying area away from combustibles"],
+            },
+            {
+                "name": "Workbench with a holding device",
+                "specification": "A flat bench with a vise, a holdfast, or bench dogs that can secure a board still",
+                "alternatives": ["A saw bench with the learner's knee holding the work"],
+            },
+        ],
+        "materials_required": [],
+        "workspace_requirements": {
+            "surface": "Flat workbench at a height roughly level with the learner's relaxed wrist when standing",
+            "ventilation": "Open air or normally ventilated shop; minimal for hand-tool work alone",
+            "lighting": "Daylight or strong task lighting; the bench must not be in shadow",
+            "power": "None required for hand-tool safety walkthrough",
+            "containment": "Clear floor space around the bench; no tripping hazards",
+        },
+        "skill_description": (
+            "The learner walks the shop with a mentor and learns where every safety element "
+            "is, what every hazard looks like, and how the safe habits work. They learn the "
+            "PPE rules and when each item is required; the safe carry of a sharp tool (handle "
+            "led, edge controlled, edge away from self and others) and the safe pass of one "
+            "(handle first); the oily-rag rule; the wrist-line rule that no body part is in the "
+            "path the cutting edge will travel through if it slips; how to secure a board so it "
+            "does not move under the tool; and where the fire extinguisher and first aid kit "
+            "live. They learn that a sharp tool is safer than a dull one because it takes less "
+            "force and gives more control."
+        ),
+        "demonstration_criteria": [
+            "Names every PPE item on the list and explains when each is required and when each is forbidden",
+            "Locates the A:B:C fire extinguisher within reach of the bench and names its rating",
+            "Locates the first aid kit and names what is in it",
+            (
+                "Demonstrates the safe carry of a chisel: held by the handle, the cutting edge "
+                "controlled, the edge angled away from the carrier's body and away from anyone "
+                "else in the shop"
+            ),
+            "Demonstrates the safe pass of a chisel to another person: handle first, the receiver taking the handle before the giver lets go",
+            "Demonstrates securing a board to the bench so it does not move when pushed by hand from any direction",
+            (
+                "Names and demonstrates the oily-rag rule: rags from linseed, boiled linseed, tung, "
+                "or danish oil are laid flat outdoors to dry, or are stored in a sealed metal can; "
+                "they are never balled up in a trash can"
+            ),
+            (
+                "Names the wrist-line rule (no body part in the path the cutting edge will travel "
+                "through if it slips) and shows it on a chisel held over a board"
+            ),
+            "Identifies an unfamiliar wood by stopping and asking before any cut",
+            (
+                "Demonstrates safe tool storage at the end of a session: chisels in their rack with "
+                "edges protected, saws on their hanger or in a till, planes on their sides"
+            ),
+            "Names the sharp-tool-is-safer-than-dull rule and explains why",
+        ],
+        "common_errors": [
+            {
+                "error": "Carrying a chisel with the cutting edge leading or facing other people",
+                "cause": "Habit of holding the chisel by the blade rather than by the handle",
+                "remedy": (
+                    "Always carry by the handle with the cutting edge controlled and angled "
+                    "away from the body and from anyone else. When in doubt, slow down and "
+                    "walk the tool the way you would walk an open knife."
+                ),
+            },
+            {
+                "error": "Leaving a sharp tool on the bench with the edge projecting over the bench edge",
+                "cause": "The tool was set down in the middle of a task and the position was not checked",
+                "remedy": (
+                    "Always set sharp tools back from the bench edge with the cutting edge facing "
+                    "away from where a hand could brush it; better, return them to their rack."
+                ),
+            },
+            {
+                "error": "Balling up an oily rag and dropping it in the trash",
+                "cause": "Treating finish-soaked rags as ordinary trash",
+                "remedy": (
+                    "Lay the rag flat outdoors on a non-combustible surface until completely dry "
+                    "and stiff, or store in a sealed metal can with water until disposed of by the "
+                    "rules of the local waste service."
+                ),
+            },
+            {
+                "error": "Standing in shavings without sweeping",
+                "cause": "Letting shavings accumulate underfoot during a long session",
+                "remedy": "Sweep mid-session. A few minutes with a broom prevents both slips and lost tools.",
+            },
+            {
+                "error": "Putting the off-hand in front of the chisel during a paring cut",
+                "cause": "Reaching to steady the work with the hand that is downstream of the cutting edge",
+                "remedy": (
+                    "Both hands behind the cutting edge, or one hand on the chisel and the other "
+                    "fully clear of the cut path. If the work needs steadying, the bench holds it, "
+                    "not the off-hand."
+                ),
+            },
+            {
+                "error": "Skipping safety glasses at the sharpening stones",
+                "cause": "Sharpening feels low-risk; the swarf is small",
+                "remedy": (
+                    "Swarf and stone dust travel toward the face on a forward stroke. Wear the "
+                    "glasses every time the stones come out; make it habit."
+                ),
+            },
+            {
+                "error": "Letting a long sleeve or apron string drag across a sharpened plane iron on the bench",
+                "cause": "The iron was set down off the plane and not noticed",
+                "remedy": "Plane irons stay in the plane on the bench, or on a wooden block edge-down, never loose with the edge up.",
+            },
+        ],
+        "artifact_expected": {
+            "type": "video",
+            "what_to_capture": (
+                "A short walkthrough by the learner of their actual shop (under five minutes), "
+                "pointing at and naming each item on the demonstration_criteria list, with the "
+                "mentor offscreen or beside the learner"
+            ),
+            "what_the_evidence_shows": (
+                "That the learner can identify, locate, and explain every safety element in the "
+                "shop they will be working in, and can demonstrate the safe-carry, safe-pass, "
+                "and securing habits without prompting"
+            ),
+        },
+        "mentor_signoff_required": True,
+        "pedagogy": {
+            "i_do": (
+                "The mentor walks the learner through the shop, naming each hazard and each "
+                "piece of safety equipment, demonstrating the safe carry of a chisel and the "
+                "safe pass of one, securing a board to the bench, and laying out an oily rag "
+                "to dry. The mentor names what is forbidden as well as what is required."
+            ),
+            "we_do": (
+                "Mentor and learner walk the shop together. At each station the learner names "
+                "the item and the mentor confirms or corrects. The learner takes a turn carrying "
+                "and passing a chisel under the mentor's watch; the learner secures a board to "
+                "the bench under the mentor's watch."
+            ),
+            "you_do_supervised": (
+                "The learner walks the mentor through the shop, naming and locating each item "
+                "without prompting. The mentor asks at least one follow-up question per item "
+                "('why is the extinguisher in that spot?', 'what would you do if a rag fell into "
+                "the trash already?'). The video is recorded at this stage."
+            ),
+            "you_do_unsupervised": (
+                "Once signed off, the learner does the same walkthrough at the start of any "
+                "session in a new or modified shop space; in any case the signoff is refreshed "
+                "annually as the freshness check. There is no unsupervised work without a "
+                "current ws-001 signoff."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 2,
+        "session_length_minutes": 45,
+        "signoff_validity_days": 365,
+        "related_projects": [],
+    },
 }
