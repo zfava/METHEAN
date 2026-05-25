@@ -6488,6 +6488,121 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-016": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Don Quixote",
+            "author": "Miguel de Cervantes Saavedra",
+            "date": "Part 1 published 1605; Part 2 published 1615",
+            "genre": "early modern Spanish novel",
+            "form": "prose narrative; the supposed translation of a manuscript by 'Cide Hamete Benengeli'; layered narration; embedded tales",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "Comic violence (the beatings the knight takes, often described "
+            "without sentimentality); period attitudes toward conversos and "
+            "Moors; the cruelty visited on Quixote by the Duke and Duchess in "
+            "Part 2; the death of Quixote at the close. The novel is both "
+            "comedy and elegy at once. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Layered, unreliable narration: the narrator's claim to be translating Cide Hamete Benengeli; the prologue's I; the gaps and the asides (lit-craft-031)",
+            "Character advanced: the inherited romance hero set against itself; what the novel does to the chivalric type (lit-craft-014)",
+            "Theme advanced: what the novel refuses to settle about Quixote (madman, holy fool, the last reader of romances); the novel as the founding of the modern novel form (lit-craft-023)",
+            "The figurative system of romances inside the novel: the books Quixote has read are constantly present in his speech and his vision (lit-craft-043)",
+        ],
+        "entry": (
+            "Advanced: read the novel whole (both parts; Part 2 is essential to "
+            "the work) and read the layered narration as the work's argument "
+            "about what fiction is; argue what Cervantes does to the chivalric "
+            "inheritance the knight has read into himself; hold Quixote as "
+            "madman and as holy fool at once, refusing the binary the novel "
+            "refuses; meet Part 2 as a meta-fictional turn where characters "
+            "have read Part 1. Mastery: original argument about the novel as "
+            "the founding of the modern novel form and what every later novel "
+            "owes to the move."
+        ),
+        "close_reading_passages": [
+            "The opening of Part 1 and the prologue: how does the narrator stage his own claim to be presenting a found manuscript, and what does the prologue's I do that the narrator of the chapters cannot?",
+            "The windmills (Part 1, chapter 8): how does the novel stage the moment everyone remembers, and what does the staging do to the question of whether Quixote is mad?",
+            "The encounter with the spurious Quixote in Part 2 (chapter 59) and the closing of Part 2: how does the novel respond to the publication of the false Avellaneda continuation, and how does the novel let Quixote die?",
+        ],
+        "structural_analysis": (
+            "Two parts (1605 and 1615) bound together by Cervantes's response in "
+            "Part 2 to the publication of a spurious continuation by another "
+            "writer. The narration claims to be a translation of a manuscript by "
+            "Cide Hamete Benengeli, but the manuscript itself contains "
+            "interruptions, missing pages, and an editor's interventions; there "
+            "is no single authoritative voice. Part 1 establishes the knight, "
+            "his squire, and the world's resistance to his romance; Part 2 "
+            "establishes a world that has read Part 1 and treats Quixote "
+            "accordingly. The structure is the work's argument: fiction read "
+            "into the world remakes the world that reads the fiction."
+        ),
+        "thematic_lines": [
+            "Madman or holy fool: the novel holds Quixote as both and refuses to settle which",
+            "What romance does when it is taken literally; what literature does in a world that no longer believes it",
+            "The friendship of Quixote and Sancho: the novel's most steady reality, against the changing illusions",
+        ],
+        "comparative_threads": [
+            "The chivalric romance tradition (Amadís de Gaula and the other romances Quixote has read; the same tradition Ariosto is doing something else to in Orlando Furioso); the inheritance the novel works against",
+            "The Aeneid (lit-work-003) and the older epic inheritance behind chivalric romance",
+            "Later novels that owe themselves to Cervantes: Sterne's Tristram Shandy as the first overt inheritor; the modern novel from Cervantes forward",
+            "Borges's 'Pierre Menard, Author of the Quixote' as the most direct twentieth-century engagement with the novel's question about what writing is",
+        ],
+        "seminar_questions": [
+            "Is Quixote mad or a holy fool? Where does the novel refuse to say?",
+            "What does the layered narration (Cide Hamete, the translator, the editor, the I of the prologue) do that a single voice could not?",
+            "What changes in Part 2 because the world has read Part 1, and what does the novel argue by making that change?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the windmills, naming what the staging does to the question of Quixote's madness",
+            "The essay on the layered narration as the work's argument",
+            "The sustained essay on what the novel does to the chivalric inheritance and on Part 2 as the meta-fictional turn",
+        ],
+        "context": (
+            "Composed and published in Madrid; Part 1 (1605) was an immediate "
+            "success across Europe, prompting both translations and a spurious "
+            "continuation that drew Cervantes's response in Part 2 (1615); "
+            "commonly named the founding work of the modern novel; supplied as "
+            "fact, interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The founding work of the modern novel; the seminar text on layered narration and on what fiction read into the world does.",
+                "memory_work": {
+                    "recitations": [
+                        "Recitation of the opening of Part 1 ('En un lugar de la Mancha...') in Spanish or a worthy modern translation"
+                    ],
+                },
+                "recitation_routine": "Seminar opens from the recited opening; the discussion takes its first question from where the narrator stands and what 'En un lugar de la Mancha' refuses to say.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of Don Quixote (Edith Grossman; John Rutherford; Tobias Smollett's older version) read aloud across a term, in chunks, with Sancho and Quixote's exchanges taken in parts",
+                ],
+                "short_lesson_flow": "A living book read aloud in long chunks and narrated; the friendship of Quixote and Sancho followed across the changing illusions; deepening to analysis of the layered narration as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me whether the world saw what Quixote saw, and whether Sancho did.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of Don Quixote on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in heroes, in madness, in friendship, or in what fiction does leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the question of Quixote's madness stay unsettled; bring romances into the room when the novel does.",
+                "observation_documentation": "Over time, notice whether the student returns to the novel, holds Quixote as both madman and holy fool, and brings the layered narration into other reading. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of layered narration and the novel's relation to the chivalric inheritance where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
