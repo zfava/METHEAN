@@ -8441,6 +8441,122 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-033": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Selected poems of John Donne (Songs and Sonnets, Holy Sonnets, selected sermons)",
+            "author": "John Donne",
+            "date": "composed across the 1590s-1620s; Songs and Sonnets published posthumously 1633; sermons preached and printed in the 1620s",
+            "genre": "English metaphysical poetry and prose",
+            "form": "lyric poetry (sonnets, songs, elegies, holy sonnets) and devotional prose (sermons, Meditations Upon Emergent Occasions); dense conceit-driven verse",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Sustained sensuous and erotic figure in the love poems; sustained "
+            "mortality and devotional self-examination in the Holy Sonnets "
+            "and Meditations; the violence of religious figure in poems such "
+            "as 'Batter my heart, three-personed God'; nothing in Donne is "
+            "merely decorative. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading proficient on a single dense lyric (lit-craft-003); advanced on a sequence (lit-craft-004)",
+            "The metaphysical conceit as a figurative system unique to Donne and his contemporaries: a comparison sustained past the point where direct statement would suffice (lit-craft-042 at proficient; lit-craft-043 at advanced)",
+            "The same form (sonnet, lyric) used for sacred and erotic ends, both in Donne's voice and across the body of work (lit-craft-022; lit-craft-023)",
+            "The voice of the speaker as a constructed dramatic position (lit-craft-014 in the family of moves)",
+        ],
+        "entry": (
+            "Proficient: read individual poems whole, find the conceit, follow "
+            "it past the point of expected resolution, name what the conceit "
+            "claims at the end that direct statement could not; meet the Holy "
+            "Sonnets and the love poems alongside each other and notice that "
+            "the same forms are being used for sacred and erotic ends. "
+            "Advanced: read across the body of work and argue what Donne does "
+            "to the inherited Petrarchan tradition and to the inherited "
+            "devotional tradition at once; meet Donne's sermons and "
+            "Meditations as prose that does what the lyrics do. Mastery: "
+            "original argument about Donne's place in the formation of "
+            "English metaphysical verse and his revival in the twentieth "
+            "century by T. S. Eliot."
+        ),
+        "close_reading_passages": [
+            "'A Valediction: Forbidding Mourning' and the compass conceit: how does the figure of two-feet-of-a-compass work, and how does the poem extend it past the point where a less ambitious figure would stop?",
+            "'The Flea': how does the speaker stage an argument by extending the figure of the flea, and what does the poem refuse to settle about the speaker's claim?",
+            "'Batter my heart, three-personed God' (Holy Sonnet 14): how does the poem use violent erotic figure for devotional address, and what does the form refuse to keep separate?",
+        ],
+        "structural_analysis": (
+            "Each Donne lyric builds a conceit, extends it past expected "
+            "resolution, and tests it; the closing turn (in sonnets, the "
+            "couplet; in songs, the final stanza) either holds the conceit or "
+            "refuses it. Across the body of work the same forms are used "
+            "for sacred and erotic ends, and the boundary the Renaissance "
+            "tradition would have kept Donne explicitly refuses. The sermons "
+            "and Meditations carry the same procedure in prose. The "
+            "structure across the body of work is the argument: a single "
+            "rhetorical method applied wherever attention is needed."
+        ),
+        "thematic_lines": [
+            "Sacred and erotic in the same forms: the body of work refuses to keep them separate",
+            "The conceit as the work's instrument: a figure extended past where direct statement would suffice; what the extension does",
+            "Death, devotion, and the constructed speaker: the Holy Sonnets and Meditations as the prose-and-verse pair of Donne's late period",
+        ],
+        "comparative_threads": [
+            "The Sonnets of Shakespeare (lit-work-014): the contemporary English lyric sequence; how Donne's conceit differs from the Shakespearean sonnet's volta",
+            "Petrarch's Canzoniere: the inherited tradition Donne argues with; what the metaphysical conceit does that Petrarchan figure could not",
+            "George Herbert's The Temple: Donne's contemporary devotional poet, working the same forms differently",
+            "T. S. Eliot's essay 'The Metaphysical Poets' (1921) and Eliot's lit-work-037 The Waste Land: Donne's twentieth-century revival was driven by Eliot",
+        ],
+        "seminar_questions": [
+            "How far does the conceit extend in a chosen poem, and what does the extension do that direct statement could not?",
+            "What does Donne refuse to keep separate that the Renaissance tradition kept separate?",
+            "How does the Holy Sonnet 14 use erotic figure for devotional address, and what does the form let it claim?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on a single conceit in a chosen poem, naming what its extension does",
+            "The essay on a love poem read alongside a Holy Sonnet, naming what the body of work refuses to keep separate",
+            "At advanced, the essay on Donne's place in twentieth-century modernist taste, with Eliot's 1921 essay alongside",
+        ],
+        "context": (
+            "Composed across Donne's life as Jack Donne the young man and Dr. "
+            "John Donne the Dean of St. Paul's; the Songs and Sonnets "
+            "circulated in manuscript and were printed posthumously in 1633; "
+            "Donne's reputation rose and fell across the centuries and was "
+            "decisively revived by Eliot in the twentieth century; supplied "
+            "as fact, interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The central English metaphysical poet; the seminar text on the conceit and on the same forms used for sacred and erotic ends.",
+                "memory_work": {
+                    "recitations": ["Recitation of a chosen Holy Sonnet or song"],
+                },
+                "recitation_routine": "Seminar opens from the recited poem; the discussion takes its first question from how far the conceit extends and what the extension does.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of the major poems of John Donne (the Norton; the Penguin Major Works edited by John Carey) read aloud one or two at a sitting",
+                ],
+                "short_lesson_flow": "A poem read aloud whole and narrated; the conceit found, the extension named; deepening to analysis of the body of work as the bands move up.",
+                "narration_prompt": "Tell back the poem we just read, and tell me how the conceit moved and what the close earned.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Donne's major works on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in metaphysical verse, in sacred-and-erotic figure, or in twentieth-century revivals of seventeenth-century taste leads",
+                ],
+                "parent_role": "Be a fellow reader who has lived with particular Donne poems in their own returning. Read one aloud when the reader wants to hear it.",
+                "observation_documentation": "Over time, notice whether the student returns to particular poems and follows a conceit past where they first thought it ended. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the metaphysical conceit and Donne's place in English lyric tradition where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
