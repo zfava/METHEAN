@@ -8795,6 +8795,125 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-036": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Selected poems of Emily Dickinson (from the nearly 1,800 poems)",
+            "author": "Emily Dickinson",
+            "date": "composed across the 1850s-1880s; only a handful published in Dickinson's lifetime; first significant publication 1890; full scholarly edition 1955 (Johnson) and 1998 (Franklin)",
+            "genre": "nineteenth-century American lyric poetry",
+            "form": "short lyrics, predominantly in ballad and common meter, with characteristic dashes and slant rhyme; nearly all unpublished in the poet's lifetime",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "Sustained engagement with death, doubt, and the limits of "
+            "knowing; intense compression that can be difficult on first "
+            "reading; the poems were largely unpublished in the poet's "
+            "lifetime and the editorial history of the poems (the early "
+            "editors' regularizations and the later scholarly recoveries) "
+            "is itself part of reading Dickinson honestly. Honest "
+            "information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading on a dense short lyric: every word and every dash bearing weight (lit-craft-003 at proficient; lit-craft-004 at advanced)",
+            "Dickinson's dashes and slant rhyme as a figurative-syntactic system: the dash holds what the line cannot say (lit-craft-042 at proficient; lit-craft-043 at advanced)",
+            "Theme advanced: death, doubt, the limits of knowing; faith held alongside its refusal (lit-craft-023)",
+            "The constructed speaker: not Dickinson but the lyric I she keeps inventing across the poems (lit-craft-014)",
+            "The editorial history as part of reading the poems honestly (lit-craft-023 in the family of moves)",
+        ],
+        "entry": (
+            "Proficient: read individual poems whole, slowly; find the work "
+            "the dash and the slant rhyme do; read the poems in their "
+            "Johnson or Franklin numbering rather than by editorial title; "
+            "meet the major themes (death, faith, knowing) as the poems "
+            "return to them. Advanced: read the editorial history as part "
+            "of the work (Mabel Loomis Todd's 1890 edition regularized the "
+            "dashes; the twentieth-century scholarly editions restored "
+            "them); argue what Dickinson does to the lyric tradition with a "
+            "form she largely kept to herself. Mastery: original argument "
+            "about Dickinson's place in nineteenth-century American poetry "
+            "alongside Whitman."
+        ),
+        "close_reading_passages": [
+            "'Because I could not stop for Death' (Fr 479; Jo 712): how does the poem stage the carriage ride, and what does the form do to the figure of death?",
+            "'I heard a Fly buzz when I died' (Fr 591; Jo 465): how does the poem stage the speaker's own death and the fly, and what does the form refuse to say?",
+            "'Tell all the truth but tell it slant' (Fr 1263; Jo 1129): how does the poem name its own method, and what does the imperative claim about lyric form?",
+        ],
+        "structural_analysis": (
+            "Each Dickinson lyric is a compressed argument worked through "
+            "ballad or common meter, with the dashes holding what the line "
+            "would otherwise have to commit to. The slant rhyme refuses the "
+            "closure that perfect rhyme would supply. Across the body of "
+            "work, the same speaker (or several speakers) returns to a small "
+            "set of concerns (death, faith, knowing, the eye that sees, the "
+            "self that survives) and works them through one short poem at a "
+            "time. The structure across the body of work is the argument: "
+            "the lyric handled at the limit of what compression can do."
+        ),
+        "thematic_lines": [
+            "Death as the work's recurring subject and the work's refusal to settle what death is",
+            "Faith and doubt held alongside each other: Dickinson refuses to give either up",
+            "The dash as the syntactic figure for what cannot be said: a punctuation mark made to do the work of a metaphor",
+        ],
+        "comparative_threads": [
+            "Whitman (lit-work-035): the contemporary American poet who made the opposite formal choice; the two together are the American poetry of the nineteenth century",
+            "Donne (lit-work-033): the seventeenth-century English compression Dickinson read; the slant rhyme and dash have something of Donne's procedure done in short form",
+            "Hopkins (the Victorian English near-contemporary): the other nineteenth-century poet whose form was kept largely to himself",
+            "Later inheritors: Marianne Moore; Elizabeth Bishop; the long American debt to Dickinson's compression",
+        ],
+        "seminar_questions": [
+            "What does a Dickinson dash do that a comma or a semicolon could not?",
+            "What does the slant rhyme refuse to settle that perfect rhyme would have settled?",
+            "Where does the body of work hold faith and doubt at the same time, and where does it refuse to choose?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on a single poem, naming what the dashes do and what the slant rhymes refuse",
+            "The essay on three poems handling death, holding them in productive tension",
+            "At advanced, the essay on the editorial history as part of the work",
+        ],
+        "context": (
+            "Composed in near isolation in Amherst, Massachusetts, across "
+            "the 1850s-1880s; nearly 1,800 poems found in manuscript at "
+            "Dickinson's death; first significant publication in 1890 by "
+            "Mabel Loomis Todd and Thomas Wentworth Higginson, with the "
+            "dashes regularized and titles imposed; full scholarly editions "
+            "by Thomas H. Johnson (1955) and R. W. Franklin (1998); supplied "
+            "as fact, interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "One of the two great American poets of the nineteenth century; the seminar text on the lyric at the limit of compression.",
+                "memory_work": {
+                    "recitations": ["Recitation of one or two short Dickinson poems"],
+                },
+                "recitation_routine": "Seminar opens from the recited poem; the discussion takes its first question from where the dash sits and what the form refuses to settle.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Dickinson (the Franklin Reading Edition; the Norton Critical edition; the Johnson edition for the older numbering) read aloud one or two poems at a sitting",
+                ],
+                "short_lesson_flow": "A short poem read aloud and narrated; the dashes heard as part of the line, the slant rhyme noticed; deepening to analysis of the body of work as the bands move up.",
+                "narration_prompt": "Tell back the poem we just read, and tell me where the dash held something the words refused to say.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Dickinson on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in compressed lyric, in death and faith held together, or in poetry that was kept largely to itself leads",
+                ],
+                "parent_role": "Read aloud one poem at a sitting; the slow pace is the practice; let the dashes be heard.",
+                "observation_documentation": "Over time, notice whether the student returns to particular poems and begins to hear the dash as a figure. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the compressed lyric and the dash as syntactic figure where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
