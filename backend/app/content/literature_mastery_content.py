@@ -10799,4 +10799,161 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-017": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "Blood Meridian, or the Evening Redness in the West",
+            "author": "Cormac McCarthy",
+            "date": "first published 1985",
+            "genre": "late-twentieth-century American historical novel of frontier violence",
+            "form": "third-person novel of dense biblical-cadenced prose without quotation marks; sustained violence; an unnamed teenage protagonist called only 'the kid' across most of the book; the Glanton Gang of scalp-hunters and Judge Holden as the novel's central figures",
+        },
+        "minimum_band": "mastery",
+        "content_notes": (
+            "Sustained, graphic violence across the entire novel: scalp-"
+            "hunting on the Texas-Mexico border in 1849-50, killings of "
+            "Apache, Mexican, and other named and unnamed peoples for "
+            "bounty paid by both Mexican and American authorities of the "
+            "period; depictions of child murder, sexual violence "
+            "(including implied violence against children associated with "
+            "Judge Holden), and torture; the violence is neither "
+            "sanitized nor stylized as entertainment; the novel does not "
+            "endorse what it shows and refuses to step outside it; the "
+            "Glanton Gang were real historical figures (John Joel "
+            "Glanton; the historical record draws on Samuel Chamberlain's "
+            "My Confession) and the novel uses the documentary record. "
+            "In-copyright; analyzed and pointed to, never reproduced. "
+            "Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading mastery on McCarthy's dense biblical-cadenced prose without quotation marks (lit-craft-004; the technique pushed past advanced)",
+            "Character mastery: Judge Holden as the figure the novel refuses to make categorizable (heroic, villainous, demonic, philosophical, all and none); the kid as protagonist without an inner life the reader can access; the Glanton Gang as a collective character (lit-craft-014)",
+            "Theme mastery: what the novel argues by refusing to step outside the violence; the question of whether the violence has a meaning the novel itself endorses (lit-craft-023)",
+            "Figurative system: blood, the evening redness, the dance, the desert sky, the judge's bald head; an inheritance from the King James Bible and from Moby-Dick (lit-craft-043)",
+            "Even-handed historical treatment: the Glanton Gang historical record (American scalp-hunters paid by Chihuahua and Sonora authorities to kill Apache, who also killed Mexicans, Comanches, and other non-Apache populations for bounty); the Apache and Mexican populations represented in their own historical contexts; no party sanitized or amplified",
+        ],
+        "entry": (
+            "Mastery: read the novel whole, prepared to remain with "
+            "sustained violence that the novel does not redeem; meet "
+            "McCarthy's prose at the limit of biblical cadence; meet "
+            "Judge Holden as the figure the novel refuses to categorize; "
+            "argue what the novel does by refusing to step outside the "
+            "violence; place the novel against the documented historical "
+            "record of the Glanton Gang and against the larger American "
+            "frontier tradition Cooper (lit-work-inh-016) established; "
+            "engage the considerable critical literature (Harold Bloom's "
+            "reading; Steven Frye; Edwin T. Arnold) as part of reading "
+            "the novel honestly. The minimum_band is mastery because the "
+            "novel's violence and its refusal to step outside it require "
+            "analytical readiness no lower band provides. Not for "
+            "younger readers, not as a comfort rating but as a genuine "
+            "analytical-readiness judgment."
+        ),
+        "close_reading_passages": [
+            "The opening on the kid and the prose that introduces him: how does the novel establish its prose register and its refusal to give the protagonist an inner life?",
+            "Judge Holden's first major speech (the council where he addresses the gang on war): how does the novel stage the judge's claims, and what does the novel refuse to endorse or refuse?",
+            "The closing scenes with the kid, the judge, the jakes, and the dance: how does the novel close, and what does the famous final paragraph on the dance refuse to settle?",
+        ],
+        "structural_analysis": (
+            "Sustained third-person narration without quotation marks "
+            "across the kid's journey from Tennessee through Texas into "
+            "Mexico and beyond; the Glanton Gang's scalp-hunting "
+            "campaign occupies the long middle; the closing returns to "
+            "the kid as an aging man and to the judge's final dance. "
+            "The prose register is biblical, with sustained landscape "
+            "description in the King James cadence; characters have no "
+            "interior access; the violence accumulates without rising "
+            "tension or release. The structure is the novel's argument: "
+            "the historical record is shown without a frame that "
+            "redeems or condemns it from outside, and the reader is "
+            "asked to remain inside what the documented record contains."
+        ),
+        "thematic_lines": [
+            "What the violence is: a question the novel refuses to answer from outside the violence; Judge Holden's claims about war are part of the novel but the novel does not endorse them",
+            "The judge as figure: heroic, villainous, demonic, philosophical, all and none; the novel refuses to settle the question",
+            "The kid as protagonist: a witness whose interior the novel does not give the reader; what the form argues by the refusal",
+            "The documented historical record as the novel's ground: the Glanton Gang were real historical figures; the novel uses the documentary record (Samuel Chamberlain's My Confession most prominently); the even-handed historical treatment is the novel's commitment",
+        ],
+        "comparative_threads": [
+            "lit-work-inh-016 The Last of the Mohicans (Cooper, 1826): the American frontier romance Blood Meridian explicitly departs from; the comparison is one of the decisive nineteenth-to-twentieth-century departures",
+            "lit-work-024 Moby-Dick (Melville, 1851): McCarthy's most-named American predecessor; the dense biblical-cadenced prose, Judge Holden as a figure in the family of Ahab, the metaphysical ambition",
+            "The King James Bible: the prose register's largest single source",
+            "Samuel Chamberlain's My Confession (memoir of a member of the Glanton Gang; published 1956 but the manuscript dates to the 1850s): the historical source McCarthy works from most directly",
+            "lit-work-inh-018 The Border Trilogy (next): McCarthy's later, quieter return to the same border region in a different register; the comparison is decisive within McCarthy",
+            "Critical work: Harold Bloom's identification of the novel as a major American novel of late twentieth-century literature; Steven Frye's and Edwin T. Arnold's scholarly editions and essays",
+        ],
+        "seminar_questions": [
+            "What does the novel argue by refusing to step outside the violence?",
+            "Is Judge Holden a hero, a villain, a demon, a philosopher, or none of the above? Where does the novel refuse to say?",
+            "What does the kid's lack of interior access do that an interior would not?",
+            "What does McCarthy's prose register inherit from the King James Bible and from Moby-Dick, and what does the inheritance let the novel do?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on McCarthy's prose register in the opening pages, naming the King James inheritance and what the absence of quotation marks does",
+            "The essay on Judge Holden as figure, holding two or three of his major speeches in productive tension and refusing to settle his category",
+            "The sustained essay on what the novel does by refusing to step outside the violence, with the documented historical record alongside",
+        ],
+        "context": (
+            "Composed in El Paso, Texas, in the early 1980s; published in "
+            "1985 to limited initial reception; the novel gained "
+            "stature across the 1990s and is now widely named as a major "
+            "American novel of its century; McCarthy drew on the "
+            "documented historical record of the Glanton Gang's "
+            "scalp-hunting campaign of 1849-50, including Samuel "
+            "Chamberlain's memoir My Confession; the historical Glanton "
+            "Gang were American scalp-hunters paid by the Mexican states "
+            "of Chihuahua and Sonora to kill Apache and were eventually "
+            "killed by Yuma at the Colorado River crossing in 1850; "
+            "supplied as fact, interpretation left to the student."
+        ),
+        "lineage": (
+            "American myth and frontier. Inheritor position. Explicitly "
+            "departs from the Cooper (lit-work-inh-016) frontier-romance "
+            "tradition toward documented historical violence without "
+            "redemptive frame; takes its prose register from the King "
+            "James Bible and from Moby-Dick (lit-work-024), which McCarthy "
+            "has named as the American novelistic predecessor; threads "
+            "forward to McCarthy's own Border Trilogy (lit-work-inh-018), "
+            "which returns to the same border region in a different and "
+            "quieter register. The even-handed historical treatment "
+            "applies the all-sides standard to the documented record of "
+            "the Glanton Gang's scalp-hunting and to the Apache, Mexican, "
+            "and other named peoples involved."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The late-twentieth-century American novel of frontier violence at the limit of what the novel form can hold; the seminar text on the prose register and on the question of what the violence argues.",
+                "memory_work": {
+                    "recitations": [
+                        "Recitation of a chosen passage of landscape description in McCarthy's biblical register"
+                    ],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from what the prose register inherits and what it claims.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Blood Meridian (the Vintage paperback; the Modern Library) read aloud across a term with a reader-companion the household trusts; the novel asks for an adult companion at the table",
+                ],
+                "short_lesson_flow": "A living book read aloud across the long span and narrated; the prose register heard; the violence neither sanitized nor amplified; deepening to analysis of the judge as figure as the bands move up; the household decides whether and when the novel enters the curriculum.",
+                "narration_prompt": "Tell back what we read today, and tell me what the prose let you see and what the prose refused to let you see past.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Blood Meridian on the shelf, available, never assigned; in this case 'available' is the right framing because the novel asks the reader to choose it",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in McCarthy, in the American novelistic tradition, in the documented history of the frontier, or in the long argument about what violence in fiction is for leads",
+                ],
+                "parent_role": "Be a reader who has read the novel and is willing to be the adult companion at the table when the student does; do not paper over the violence; do not collapse the novel into a position; let the questions stay open.",
+                "observation_documentation": "Over time, notice whether the student returns to particular passages and begins to read the prose register's inheritance against other American novels. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the prose register and the question of what the violence argues where chosen; not for younger readers as a matter of genuine analytical readiness rather than comfort.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
