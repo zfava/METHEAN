@@ -2030,6 +2030,245 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             ),
         },
     },
+    "lit-craft-014": {
+        "node_type": "craft",
+        "strand": "character",
+        "band": "advanced",
+        "prerequisites": ["lit-craft-013", "narrative craft: proficient", "close reading: proficient"],
+        "objective": (
+            "Read character as part of a work's argument (this character is here "
+            "because the work needed this kind of presence to make its meaning); "
+            "trace character types across the tradition (the picaresque rogue, the "
+            "choric daughter, the unreliable confessor) and ask what a writer does "
+            "with the inherited type; read how the writer's point-of-view choice "
+            "shapes which character becomes available; and write the argumentative "
+            "essay that situates a chosen character inside the work's claim about its world."
+        ),
+        "core_understanding": (
+            "At the proficient band character was held as a constructed person "
+            "whose interior life the reader infers from the writer's particular "
+            "choices, with the structural function (foil, choric voice) held "
+            "alongside the person. At the advanced band the reader sees how a "
+            "character is part of a work's argument: a character is here because "
+            "the work needed this kind of presence to mean what it means. The "
+            "reader also meets the inheritance: certain character types travel "
+            "through the tradition (the rogue, the choric daughter, the unreliable "
+            "confessor) and each writer does something particular with the "
+            "inherited type. Point-of-view choice (the strand met at proficient) "
+            "is now seen as decisive for which character becomes available at all. "
+            "The reader writes the essay that argues a character's place inside "
+            "the work's claim about its world."
+        ),
+        "analytical_moves": [
+            (
+                "Read a character as part of the work's argument and articulate "
+                "what the work needed this presence to do that no other could"
+            ),
+            (
+                "Identify the inherited character type a writer is working with and "
+                "argue what this writer does with the inheritance (extending, "
+                "complicating, refusing it)"
+            ),
+            (
+                "Read how the writer's point-of-view choice makes this character "
+                "available in this way and not another, and ask what a different "
+                "point of view would have made of the same character"
+            ),
+            (
+                "Write the argumentative essay that situates a chosen character "
+                "inside the work's claim about its world, with multiple passages "
+                "held in productive tension"
+            ),
+            (
+                "Hear another reader's situating of the same character and locate "
+                "where in the work and in the tradition that situating draws its evidence"
+            ),
+        ],
+        "seminar_questions": [
+            "What does the work need this character to do that no other presence could?",
+            "Which inherited character type is this writer working with, and what is the writer doing to it?",
+            (
+                "If this work were told from a different point of view, which "
+                "character would change most, and what does that tell you about who "
+                "this character is in this work?"
+            ),
+        ],
+        "writing_invitations": [
+            (
+                "Write an argumentative essay situating a chosen character inside "
+                "the work's claim about its world, holding two or three passages in "
+                "productive tension and naming at least one craft choice (point of "
+                "view, structural placement, recurring image) decisive for the character"
+            ),
+            (
+                "Write the comparative paragraph that sets a character beside an "
+                "inherited type from the tradition and argues what this writer makes "
+                "of the inheritance"
+            ),
+        ],
+        "exemplar_texts": [
+            "A novel whose central character is doing the work of the writer's argument (Middlemarch's Dorothea; Bleak House's Esther; Crime and Punishment's Raskolnikov)",
+            (
+                "A novel in conversation with an inherited character type (Don "
+                "Quixote and the picaresque rogue; Hamlet and the revenger; Tess "
+                "and the fallen-woman type)"
+            ),
+            "A short story whose character is what the work needed (a Chekhov; a Eudora Welty; a Flannery O'Connor)",
+        ],
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": (
+                    "Character meets the long seminar. The reader brings a "
+                    "character and asks why this work needed this presence; the "
+                    "seminar tests both the answer and the words it is built upon, "
+                    "and brings the tradition's inherited types into the room. "
+                    "Rhetorical analysis, moral portrait, and the genealogy of "
+                    "character types converge: by what particular choices does this "
+                    "writer make this character available, what inheritance is at "
+                    "work, and what does that availability ask of the work's argument?"
+                ),
+                "memory_work": {
+                    "recitations": [
+                        "A passage in which a chosen character carries the work's argument, recited at the seminar's opening",
+                    ],
+                },
+                "copywork": [
+                    "The recited passage copied into the kept commonplace book, with the inherited type the writer is working with noted in the margin",
+                ],
+                "recitation_routine": (
+                    "Each seminar opens from a recited passage of character; the "
+                    "first question is taken from the lines just heard, and the "
+                    "discussion brings into the room at least one passage from "
+                    "elsewhere in the tradition working the same character type."
+                ),
+                "read_aloud_suggestions": [
+                    "A scene in which a chosen character bears the weight of the work's argument, read aloud at the seminar's opening",
+                    "A passage from another work in the tradition handling the same inherited character type",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 50,
+                "living_book_suggestions": [
+                    "A worthy novel whose central character carries the work's argument, read whole at a sustained pace",
+                    "A second work in the tradition handling the same inherited character type, read alongside or after",
+                ],
+                "short_lesson_flow": (
+                    "The advanced student reads the work whole at a sustained pace, "
+                    "narrating each sitting. As the central character emerges they "
+                    "are watched not only as a person but as a presence the work "
+                    "needs. Passages worth attending to are slipped or marked; at a "
+                    "chapter's end one is taken up, copied into the commonplace "
+                    "book, and discussed: what is the work doing through this "
+                    "character that nothing else could do, and what inherited type "
+                    "is the writer working with? When a second work in the same "
+                    "tradition is read, the commonplace book holds the comparative passage."
+                ),
+                "narration_prompt": (
+                    "Tell back the chapter you read, and tell me what the book "
+                    "needed this character to do that no other presence could, and "
+                    "which other character, in this book or another, you would set beside them."
+                ),
+                "real_world_objects": [
+                    "The whole novel, marked at the passages decisive for the character's place in the work's argument",
+                    "A commonplace book gathering character passages and the inherited types they belong to across many works",
+                ],
+                "nature_connection": (
+                    "To see a character as part of a work's argument is to see them "
+                    "as the naturalist sees a keystone species: not only as the "
+                    "creature it is, but as the role its being there makes possible "
+                    "for everything else in the place."
+                ),
+                "habit_focus": (
+                    "The habit of asking what a work needed a character to do, and "
+                    "the habit of bringing the tradition's inherited types into the "
+                    "reading of a particular character."
+                ),
+            },
+            "traditional": {
+                "introduction": (
+                    "Explicit instruction in reading character as part of a work's "
+                    "argument, in tracing inherited character types across the "
+                    "tradition, in seeing how point-of-view choice makes a character "
+                    "available, and in writing the argumentative essay that situates "
+                    "a character inside the work's claim about its world."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Teacher works a chosen character on the board: names the "
+                        "inherited type the writer is working with, identifies the "
+                        "point-of-view choice that makes the character available, "
+                        "and drafts the opening of an argumentative essay situating "
+                        "the character inside the work's argument, quoting two passages."
+                    ),
+                    "we_do": (
+                        "Class chooses a candidate character from the work under "
+                        "study, identifies the inherited type, gathers two or three "
+                        "decisive passages, and drafts together the body of the "
+                        "argumentative essay situating the character inside the "
+                        "work's argument, quoting the lines that ground it."
+                    ),
+                    "you_do": (
+                        "Student writes an independent argumentative essay "
+                        "situating a chosen character inside the work's argument, "
+                        "naming the inherited type and the decisive point-of-view "
+                        "choice, holding two or three passages in productive "
+                        "tension, and revises after seminar."
+                    ),
+                },
+                "independent_practice": [
+                    "The argumentative essay on a self-chosen character from the work under study",
+                    "A comparative paragraph placing the character beside an inherited type from the tradition",
+                ],
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep the long shelf of difficult novels and stories whose characters reward returning, available, never assigned",
+                    "Keep the commonplace book matured into a habit, with character passages set beside passages from other works whose characters work the same type",
+                ],
+                "real_world_contexts": [
+                    "A reader who has returned to a beloved character across years and watched their reading of the character change",
+                    "A long conversation in which two readers who love the same character bring a character from another book into the room",
+                    "A piece of writing the reader produced because a character they have lived with finally asked something of them",
+                ],
+                "conversation_starters": [
+                    "What does this book need this character to do that no other character could?",
+                    "Which character in another book reminds you of this one? Read me the passage where the connection lives.",
+                    "If this story were told by someone else, which character would change the most? What does that tell you about who they are here?",
+                ],
+                "resource_bank": [
+                    "A shelf of difficult, worthy novels and stories gathered slowly across years, where the same character types recur in different writers' hands",
+                    "A reader-companion of long acquaintance who has read across many traditions and can recognize an inherited type without naming it as a lesson",
+                ],
+                "parent_role": (
+                    "By this band the parent has stepped back to fellow reader. They "
+                    "are someone who has lived with the same kind of character in "
+                    "their own returning, and they name the connection when the "
+                    "student finds it: 'I think she's doing something like what "
+                    "Dorothea does in Middlemarch; have you read that one yet?' The "
+                    "parent does not assign the comparative work; they receive the "
+                    "student's, and bring their own as another reader at the table."
+                ),
+                "observation_documentation": (
+                    "Over time, notice whether the student returns to characters "
+                    "across years and across books, recognizes inherited types on "
+                    "their own when the type recurs, and writes about a character "
+                    "because the character finally asked it of them. The pattern "
+                    "surfaces because the reader returned; the noticing replaces any test."
+                ),
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": (
+                "Montessori's literature pedagogy at the elementary and "
+                "early-secondary level does not carry a distinct method for reading "
+                "character as part of a work's argument or for the genealogy of "
+                "inherited character types across the tradition; the practice here "
+                "is drawn from the seminar tradition and the matured Charlotte "
+                "Mason habit of narration and commonplace work across years rather "
+                "than from the prepared environment."
+            ),
+        },
+    },
     "lit-craft-020": {
         "node_type": "craft",
         "strand": "theme and meaning",
