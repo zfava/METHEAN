@@ -5928,6 +5928,117 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-011": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Hamlet",
+            "author": "William Shakespeare",
+            "date": "c. 1600-1601",
+            "genre": "English Renaissance drama",
+            "form": "verse tragedy with prose interludes, five acts",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "Murder by poisoning (before the play and within); the staged play of "
+            "the murder, the death of Ophelia (offstage, between scenes; her "
+            "grief and unraveling are on stage), the duel at the close, multiple "
+            "deaths; the play's emotional weight is in Hamlet's interior and in "
+            "the gap between what he says he will do and what he does. Honest "
+            "information, not a gate."
+        ),
+        "craft_focus": [
+            "The soliloquy as the playwright's argument against narration: Hamlet's seven major soliloquies as the play's interior (lit-craft-051, lit-craft-053)",
+            "The play against the revenge-tragedy inheritance: what Shakespeare does to the type (lit-craft-053)",
+            "Hamlet as a character who is also the play's argument: hesitation as the work's question (lit-craft-014)",
+            "Unreliable interiority: Hamlet's own speeches as a near-relation of the unreliable narrator's gap (lit-craft-031)",
+            "Theme advanced: what the play refuses to settle about action, conscience, theatre as truth-telling (lit-craft-023)",
+        ],
+        "entry": (
+            "Advanced: read the play whole and against the revenge-tragedy "
+            "tradition the play is doing something to; argue the seven soliloquies "
+            "as the play's interior argument; hold Hamlet's hesitation as the "
+            "work's question rather than the work's flaw; honor what the play "
+            "refuses to settle (conscience, action, what the play-within-the-play "
+            "does to truth-telling). Mastery: original argument about Hamlet as "
+            "the play that revises the revenge tradition's basic claim."
+        ),
+        "close_reading_passages": [
+            "The ghost scene on the battlements (Act 1 Scene 5): how does the play stage the inherited injunction, and what does the ghost ask Hamlet to do that the play will spend four more acts hesitating over?",
+            "The 'to be or not to be' soliloquy (Act 3 Scene 1): what does the soliloquy do that no exchange with another character could; where does the speech know itself and where does it not?",
+            "The play within the play and the closet scene (Act 3 Scenes 2 and 4): what does the staged play do, and how does the closet scene with Gertrude reframe what we have just watched?",
+        ],
+        "structural_analysis": (
+            "Five acts in which the ghost's injunction sits unfulfilled for four "
+            "and a half; the play is structured so that what would be the climax "
+            "in any other revenge tragedy is what does not happen here. The "
+            "soliloquies carry the interior argument; the play-within-the-play "
+            "makes theatre itself a means of truth-telling; the duel at the end "
+            "is the action arriving when its motive has nearly been forgotten. "
+            "The structure is the play's argument: revenge as a frame the play "
+            "refuses to fill on the frame's own terms."
+        ),
+        "thematic_lines": [
+            "Conscience and action: what the play counts as virtue when revenge is the inherited duty",
+            "Theatre as truth-telling: the play-within-the-play's claim that staged fiction can show what direct accusation cannot",
+            "What is rotten in Denmark: a court whose corruption Hamlet sees and the play does not let any one character cleanse",
+        ],
+        "comparative_threads": [
+            "The Oresteia (lit-work-008): the inherited-vendetta problem treated by founding the law-court; Hamlet has no Areopagus, and the play asks what the revenger does without one",
+            "The revenge-tragedy tradition (Thomas Kyd's The Spanish Tragedy of c. 1587 as the named predecessor; Marlowe's tragedies as the contemporary type) which Shakespeare is doing something to",
+            "Macbeth (lit-work-012) and King Lear (lit-work-013): the other late Shakespearean tragedies, each handling conscience and action differently",
+            "Stoppard's Rosencrantz and Guildenstern Are Dead (1966) as an explicit later inheritor",
+        ],
+        "seminar_questions": [
+            "What does Hamlet's hesitation argue, in the play's own terms? Where does the play refuse to call the hesitation a flaw?",
+            "What does the play-within-the-play know that the rest of the play cannot say plainly?",
+            "Is conscience the play's hero or its trap? Which lines tell you?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on one of the seven soliloquies, naming what the speech reveals that Hamlet would never say to another character",
+            "The essay on what the play does to the revenge-tragedy inheritance, with passages from the play and references to the tradition",
+            "The sustained essay on hesitation as the play's argument rather than as the prince's failing",
+        ],
+        "context": (
+            "Composed for the Lord Chamberlain's Men around 1600-1601, drawing on "
+            "the Norse Amleth legend through Saxo Grammaticus and Belleforest, and "
+            "on the revenge-tragedy type established in England by Kyd's The "
+            "Spanish Tragedy; the play has been continuously performed and read "
+            "for four centuries; supplied as fact, interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The Shakespearean tragedy the seminar tradition keeps returning to; the play that revises the revenge form and gives the West its most-quoted soliloquies.",
+                "memory_work": {
+                    "recitations": ["Recitation of one of the seven major soliloquies"],
+                },
+                "recitation_routine": "Seminar opens from the recited soliloquy; the discussion takes its first question from what the speech says only because Hamlet is alone.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Hamlet (Folger; Arden 3) read aloud across a term with parts taken, paired with a live or filmed performance",
+                ],
+                "short_lesson_flow": "A living book read aloud across acts and narrated each sitting; the soliloquies returned to, the ghost's injunction tracked, deepening to analysis of the play's refusal to give revenge what it usually asks for.",
+                "narration_prompt": "Tell back the scene we read today, and tell me what Hamlet said when he was alone, and whether he did the thing he said he would do.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Hamlet on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in soliloquy, in conscience and action, or in Shakespeare leads; performances watched together",
+                ],
+                "parent_role": "Be a fellow reader who has lived with the play in their own returning. Watch a performance together; read a soliloquy aloud when the student wants to hear it.",
+                "observation_documentation": "Over time, notice whether the student returns to the play, takes up particular soliloquies, and begins to feel the hesitation as the play's question. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the soliloquy as dramatic interior and the play's place in the revenge-tragedy tradition where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
