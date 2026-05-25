@@ -663,4 +663,204 @@ WOODWORKING_CONTENT: dict[str, dict] = {
         "session_length_minutes": 30,
         "related_projects": [],
     },
+    "wc-021": {
+        "node_type": "technique",
+        "trade": "woodworking",
+        "competency_name": "Cross-cut to a line with a panel saw",
+        "progression_band": "apprentice",
+        "prerequisites": ["ws-001", "wc-001", "wc-002"],
+        "safety_basis": {
+            "hazards": [
+                ("Sharp teeth: the saw's teeth are sharper than they look, especially a recently filed crosscut blade"),
+                "Slip-into-the-finger: the saw can skip out of the kerf at the start of the cut",
+                "Workpiece movement: a board not held still moves under the saw and walks the cut",
+                "Eye injury from kerf dust on a dry, dusty board",
+            ],
+            "ppe_required": [
+                "Eyes: safety glasses if the board is dry or pitchy, otherwise optional",
+                "No loose sleeves or cuffs near the saw path",
+                "Hair tied back if long enough to fall forward over the work",
+                "No jewelry on the sawing hand",
+                "No gloves: gloves reduce control of the saw and are forbidden for this technique",
+            ],
+            "supervision_required": True,
+            "supervision_basis": (
+                "Mentor on premises with sight of the cut; the mentor's role is to watch the "
+                "off-hand position and the start of the kerf, the two places where a learner "
+                "can hurt themselves. Mentor steps back once the learner has demonstrated "
+                "start-and-finish on three boards."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "Panel saw, crosscut filed",
+                "specification": "20 to 26 inches long, 8 to 11 points per inch, recently sharpened",
+                "alternatives": [
+                    "A back saw of 14 inches or larger may substitute for stock under 4 inches wide",
+                ],
+            },
+            {
+                "name": "Bench with a vise or holdfast",
+                "specification": (
+                    "A flat surface that does not move under the cut, at a height where the "
+                    "learner's elbow is roughly level with the cut"
+                ),
+                "alternatives": [
+                    "A saw bench with the learner's knee holding the work",
+                    "Two saw horses with a board across, the work clamped to the board",
+                ],
+            },
+            {
+                "name": "Pencil and a marking knife",
+                "specification": "Marking knife sharp enough to leave a visible line in the wood; pencil for the waste-side mark",
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [
+            {
+                "name": "Practice stock, softwood",
+                "quantity": "Three to five boards, each 1x4 nominal, 12 to 24 inches long",
+                "approximate_cost_usd": 8,
+            },
+            {
+                "name": "Practice stock, hardwood (after softwood)",
+                "quantity": "Two boards, each 1x4 nominal, 12 to 24 inches long",
+                "approximate_cost_usd": 18,
+            },
+        ],
+        "workspace_requirements": {
+            "surface": "Flat workbench or saw bench at the learner's elbow height",
+            "ventilation": "Open air or a normally ventilated shop; saw dust is minimal at hand-tool rates",
+            "lighting": (
+                "Daylight or strong task lighting positioned to throw a shadow on the marked "
+                "line, so the line is plainly visible from the sawing side"
+            ),
+            "power": "None",
+            "containment": "None required",
+        },
+        "skill_description": (
+            "The learner secures a board to the bench with the marked line just clear of the "
+            "bench edge, the waste side of the line toward the floor or hanging off the bench. "
+            "The sawing hand grips the saw with the index finger pointing down the spine of the "
+            "handle. The off-hand thumb rests on the board, well away from the kerf, as a "
+            "reference for the saw to start against. The first stroke is a backward pull to nick "
+            "the corner of the board, beginning the kerf on the waste side of the marked line. "
+            "The learner then takes long, full-length strokes with the weight of the saw doing "
+            "the work, not downward pressure from the arm. The eye watches the line, not the "
+            "saw. The cut is finished by easing pressure in the last inch so the offcut does "
+            "not tear away from the board."
+        ),
+        "demonstration_criteria": [
+            (
+                "The kerf falls on the waste side of the marked line, no further than 1/32 inch "
+                "from the line, across the full length of the cut"
+            ),
+            (
+                "The cut face is square to the reference face of the board within roughly 1 "
+                "degree, checked with a try square against the reference face"
+            ),
+            "The cut face is square to the edge of the board within roughly 1 degree, checked from the edge",
+            "No tear-out at the exit corner: the offcut releases cleanly, not by snapping or splintering",
+            "The learner can complete a crosscut on softwood in under 90 seconds for a 1x4, with relaxed shoulders",
+            (
+                "The learner can complete a crosscut on hardwood in under 3 minutes for a 1x4, "
+                "with the same demonstration criteria as softwood"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Kerf wanders off the line",
+                "cause": "The learner is pushing down on the saw, forcing the teeth, or watching the saw instead of the line",
+                "remedy": (
+                    "Let the weight of the saw cut. Take longer strokes. Watch the line, not "
+                    "the saw. If the kerf has already wandered, ease back to the line over the "
+                    "next two strokes rather than yanking the saw back."
+                ),
+            },
+            {
+                "error": "Cut is not square to the reference face",
+                "cause": "The saw is being held tilted, usually because the wrist is bent",
+                "remedy": (
+                    "Check the wrist is straight, the saw's plate vertical. Some learners "
+                    "benefit from sighting along the saw's spine before each stroke until it "
+                    "becomes habit."
+                ),
+            },
+            {
+                "error": "The saw skips out of the kerf at the start",
+                "cause": "The first stroke was a push, not a pull, or the thumb-rest was not in place",
+                "remedy": (
+                    "Always start the cut with a backward pull stroke against the thumb-rest. "
+                    "Once the kerf is established (about 1/8 inch deep), move the thumb away "
+                    "and proceed with full strokes."
+                ),
+            },
+            {
+                "error": "The offcut tears away from the board at the exit",
+                "cause": "The learner finished the cut with full pressure",
+                "remedy": (
+                    "Ease the pressure in the last inch of the cut. If supporting the offcut by "
+                    "hand, do so without lifting it; let it fall straight down or to the side, "
+                    "depending on grain."
+                ),
+            },
+            {
+                "error": "The board moves during the cut",
+                "cause": "The board was not adequately secured, or the vise or holdfast was not tight",
+                "remedy": "Re-secure before continuing. Check that the bench itself does not rack under the cut.",
+            },
+        ],
+        "artifact_expected": {
+            "type": "photo",
+            "what_to_capture": (
+                "Three completed crosscuts on three different boards, laid out flat with their "
+                "mating offcuts beside them. Include a try square against one cut face and one "
+                "cut edge for each board."
+            ),
+            "what_the_evidence_shows": (
+                "The kerf placement relative to the marked line (still visible in pencil on the "
+                "offcut side), the squareness checked by the try square, and the absence of "
+                "exit tear-out."
+            ),
+        },
+        "mentor_signoff_required": True,
+        "pedagogy": {
+            "i_do": (
+                "The mentor crosscuts a 1x4 in softwood, narrating each step: how the board is "
+                "secured, where the off-hand thumb sits, the starting pull stroke, the long "
+                "working strokes, the watching of the line, the easing at the exit. The mentor "
+                "finishes by showing the cut against the try square and pointing to the side of "
+                "the line the kerf fell on."
+            ),
+            "we_do": (
+                "The mentor marks the line on a fresh board, secures it, and begins the cut "
+                "with the starting pull stroke and the first three working strokes, then hands "
+                "the saw to the learner without pausing the cut. The learner finishes. The "
+                "mentor watches the off-hand thumb and the kerf line. The transition point is "
+                "partway through the cut, not at the start: the learner is taking over an "
+                "in-progress cut so they feel what the saw is already doing rather than "
+                "starting cold."
+            ),
+            "you_do_supervised": (
+                "The learner marks, secures, starts, and finishes a crosscut on softwood while "
+                "the mentor watches from a position with sight of the kerf and the off-hand. "
+                "The mentor intervenes only if the off-hand drifts into the saw path, if the "
+                "saw is being forced, or if the board is moving. After the cut, the learner "
+                "shows the result against the try square and names, out loud, which side of "
+                "the line the kerf fell on. Repeat for three cuts on softwood and two cuts on "
+                "hardwood across at least two separate sessions."
+            ),
+            "you_do_unsupervised": (
+                "The learner is signed off for unsupervised crosscutting on softwood stock "
+                "under 1 inch thick once the supervised demonstrations are complete, the "
+                "artifact is in the portfolio, and the safety signoff (ws-001) is current "
+                "within the last twelve months. Hardwood crosscutting and stock over 1 inch "
+                "thick remain supervised until the journeyman band."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 6,
+        "session_length_minutes": 30,
+        "related_projects": [],
+    },
 }
