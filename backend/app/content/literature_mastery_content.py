@@ -6039,6 +6039,117 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-012": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Macbeth",
+            "author": "William Shakespeare",
+            "date": "c. 1606",
+            "genre": "English Renaissance drama",
+            "form": "verse tragedy with prose interludes, five acts",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "The murder of Duncan (offstage, immediately reported), the murder of "
+            "Banquo (onstage), the murder of Lady Macduff and her children "
+            "(onstage), the deaths of Lady Macbeth and Macbeth; the play moves "
+            "quickly and the violence accumulates as the consequences of the first "
+            "act unfold; sleepwalking and visions of blood throughout. Honest "
+            "information, not a gate."
+        ),
+        "craft_focus": [
+            "The play's tight structure: the shortest of the great tragedies, every scene compounds the last (lit-craft-052)",
+            "The three witches as choric function: not a Greek chorus but a near-relation, speaking from outside the social order (lit-craft-052)",
+            "Macbeth's interior across the soliloquies: the dagger, 'tomorrow and tomorrow and tomorrow' (lit-craft-051, lit-craft-013)",
+            "Figurative networks: blood that will not wash, sleep murdered, the unsexed wish (lit-craft-042)",
+            "Lady Macbeth as the work's argument running alongside Macbeth's (lit-craft-013)",
+        ],
+        "entry": (
+            "Proficient: meet the play whole, name where the play turns (the "
+            "decision at the door, the killing of Duncan, the moment Macbeth "
+            "loses sleep), read the witches as a choric function, follow the "
+            "figurative network of blood and sleep. Advanced: argue what the play "
+            "does to inherited ambition and to the regicide story; hold "
+            "Macbeth's interior alongside Lady Macbeth's; honor what the play "
+            "refuses to settle about the witches' agency. Mastery: original "
+            "argument about the play's tightness as its dramatic argument."
+        ),
+        "close_reading_passages": [
+            "The witches' first scene and the encounter on the heath: how does the play stage the meeting that sets everything off, and what does the staging refuse to make the witches' agency settle?",
+            "The dagger soliloquy (Act 2 Scene 1): what does the speech reveal about what Macbeth is becoming, and what does the play do by giving him the dagger he sees but cannot touch?",
+            "Lady Macbeth's sleepwalking (Act 5 Scene 1): how does the play stage the consequence of the first act on a character who would not have predicted it of herself?",
+        ],
+        "structural_analysis": (
+            "Five acts in a compressed timeline; every scene carries the weight "
+            "of the first murder; the figurative network (blood, sleep, the "
+            "unsexed wish, the future tense) compounds across acts. The witches "
+            "open and close the moral atmosphere; Lady Macbeth's resolve and "
+            "Macbeth's hesitation invert across the middle acts; by the end the "
+            "tomorrow speech has lost the future the play started with. The "
+            "structure is the play's argument: ambition is not a single act but "
+            "what the single act sets in motion."
+        ),
+        "thematic_lines": [
+            "Ambition and consequence: the play's question is not whether Macbeth wanted the crown but what wanting it does",
+            "Witches and agency: the play refuses to say whether the witches cause or only foresee; the refusal is itself an argument",
+            "Sleep and blood as the work's figurative system: each returning across acts, each carrying meaning the dialogue cannot say plainly",
+        ],
+        "comparative_threads": [
+            "Hamlet (lit-work-011) and King Lear (lit-work-013): the three late Shakespearean tragedies; what each does with conscience, action, and aftermath",
+            "Holinshed's Chronicles and the Scottish-history inheritance: what Shakespeare takes from the historical Macbeth and what he changes",
+            "Verdi's Macbeth and Kurosawa's Throne of Blood as twentieth-century inheritors that read the play through its tightness",
+        ],
+        "seminar_questions": [
+            "Where does the play turn? Is it the witches' meeting, the decision at the door, or somewhere else?",
+            "What do the witches cause and what do they only foresee? Where does the play refuse to say?",
+            "What does the tomorrow speech know at the end that the dagger soliloquy did not?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the dagger soliloquy, naming what the speech reveals that no exchange could",
+            "The essay on the figurative system of blood and sleep across the play",
+            "At advanced, the comparative paragraph setting the play against the Scottish-history inheritance",
+        ],
+        "context": (
+            "Composed for the King's Men around 1606, drawing on Holinshed's "
+            "Chronicles and on contemporary anxiety about regicide following the "
+            "Gunpowder Plot; performed for King James, whose lineage the play "
+            "addresses through Banquo; the shortest of Shakespeare's major "
+            "tragedies; supplied as fact, interpretation left to the student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The Shakespearean tragedy of tightest structure; the seminar text on ambition and consequence.",
+                "memory_work": {
+                    "recitations": ["Recitation of the dagger soliloquy or the tomorrow speech"],
+                },
+                "recitation_routine": "Seminar opens from the recited soliloquy; the discussion takes its first question from where in the play the speech sits and what it knows.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Macbeth (Folger; Arden 3) read aloud across a few weeks with parts taken, paired with a worthy performance",
+                ],
+                "short_lesson_flow": "A living book read aloud across acts and narrated; the figurative network of blood and sleep noticed as it returns, deepening to analysis of the play's tightness as the bands move up.",
+                "narration_prompt": "Tell back the scene we read today, and tell me whether the blood or the sleep came back, and what Macbeth said when he was alone.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Macbeth on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in ambition, in the supernatural in drama, or in Shakespeare leads; performances watched together",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the witches' agency stay unsettled when the play leaves it unsettled.",
+                "observation_documentation": "Over time, notice whether the student returns to the play and follows the figurative network into other reading. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the play's tight structure and figurative network where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
