@@ -10514,4 +10514,139 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-inh-015": {
+        "node_type": "work",
+        "track": "inheritance",
+        "work": {
+            "title": "Njal's Saga (Brennu-Njals saga)",
+            "author": "anonymous (an Icelandic prose author of the late 13th century)",
+            "date": "c. 1280",
+            "genre": "Icelandic family saga (Islendingasogur)",
+            "form": "Old Norse prose narrative in approximately 159 chapters; sustained genealogical and legal detail; a saga of feud, law, and the burning",
+        },
+        "minimum_band": "advanced",
+        "content_notes": (
+            "Sustained feud-violence across generations; the killings of "
+            "Gunnar of Hlidarendi and his foes; the long legal proceedings "
+            "at the Althing; the burning of Njal and his sons in their "
+            "house at the climax (the act for which the saga is named: "
+            "'brennu' means 'burning'); the saga handles legal procedure "
+            "in detail consistent with the medieval Icelandic legal "
+            "system and does not gentle either the feud or the law's "
+            "limits. Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Close reading advanced on Old Norse saga prose in worthy modern translation: the saga style's laconic balance, refusal of interiority, and reliance on speech and action for character (lit-craft-004)",
+            "Character advanced: Njal, Gunnar, Skarphedinn, Hallgerda, Bergthora, Flosi, Kari across the long span; the saga's particular character method (action and speech only, no interior access) (lit-craft-014)",
+            "Theme advanced: law and feud, what the medieval Icelandic legal system could and could not contain, the burning as what happens when law cannot reach (lit-craft-023)",
+            "Narrative craft: the saga's structural balance between law-court scenes and feud scenes; the famous middle Althing sequences (lit-craft-008)",
+            "Figurative system: the burning at the work's center; the weapons each named character is associated with; the dreams and prophecies that pattern the action (lit-craft-042)",
+        ],
+        "entry": (
+            "Advanced: read the saga whole in a worthy modern translation; "
+            "follow the long span of feud and law; meet the famous "
+            "characters (Gunnar, Njal, the sons, the women whose decisions "
+            "drive the feud, Flosi the burner, Kari the avenger) through "
+            "action and speech alone; meet the burning as the structural "
+            "center; argue what the saga refuses to settle about whether "
+            "law can contain feud. Mastery: original argument about the "
+            "Icelandic family saga as a form and Njal as its central "
+            "example."
+        ),
+        "close_reading_passages": [
+            "Gunnar's death scene at Hlidarendi (chapter 77 in most editions): how does the saga stage Gunnar's last stand, and what does the laconic prose do that interiority could not?",
+            "The trial scenes at the Althing in the middle of the saga: how does the saga stage legal procedure as central narrative, and what does the form claim about law and feud?",
+            "The burning of Njal and his sons (chapters 128-130 in most editions): how does the saga stage the central act for which the work is named, and what does Njal's choice to remain inside do?",
+        ],
+        "structural_analysis": (
+            "Approximately 159 chapters of Old Norse prose, structurally "
+            "built around two central characters (Gunnar and Njal), the "
+            "feuds their households generate, the legal proceedings at "
+            "the Althing that attempt to contain those feuds, and the "
+            "climactic burning of Njal and his sons. The saga style's "
+            "refusal of interior access makes character entirely a "
+            "matter of speech and action; the dreams and prophecies "
+            "interleaved with the action carry what the laconic prose "
+            "will not state. The structure is the saga's argument: "
+            "law and feud as the two systems Iceland balanced, with the "
+            "burning as what happens when law cannot reach."
+        ),
+        "thematic_lines": [
+            "Law and feud: the medieval Icelandic legal system as the saga's structural other; what it can contain and what it cannot",
+            "Character through speech and action alone: the saga style's distinctive method",
+            "The burning as the work's argument: what happens when law's reach ends and the action falls back to fire",
+        ],
+        "comparative_threads": [
+            "lit-work-005 The Saga of the Volsungs: the other major Icelandic prose saga in the inheritance track; the heroic / mythological mode against the family / legal mode",
+            "lit-work-inh-012 The Poetic Edda and lit-work-inh-013 The Prose Edda: the Norse literary world the family sagas live alongside",
+            "lit-work-004 Beowulf: the parallel heroic-elegiac tradition in Old English; what each tradition does with feud, fate, and the doomed hall",
+            "lit-work-inh-004 Tolkien's The Lord of the Rings: Tolkien's scholarly engagement with the Icelandic sagas and his use of saga-style speech-and-action for character",
+            "Modern Icelandic and broader Nordic literature (Halldor Laxness's Independent People as twentieth-century inheritor; the long Nordic crime-novel tradition draws on saga form)",
+        ],
+        "seminar_questions": [
+            "How does the saga's refusal of interior access make character entirely a matter of speech and action?",
+            "What does the legal-procedure material at the Althing claim about law and feud?",
+            "What does the burning at the center of the saga argue that the feud chapters had not yet argued?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on Gunnar's death scene, naming what the laconic prose does that interiority could not",
+            "The essay on law and feud across the saga, with passages from the Althing scenes and the burning",
+            "At advanced, the essay on the saga's character method and what it lets the form claim",
+        ],
+        "context": (
+            "Composed in Iceland in the late thirteenth century by an "
+            "anonymous author working from oral traditions about the "
+            "events of the late tenth and early eleventh centuries; the "
+            "longest and most-praised of the Icelandic family sagas; the "
+            "burning at the climax is a real historical event (Njal "
+            "Thorgeirsson and his household were burned in their house at "
+            "Bergthorshvol around 1011); supplied as fact, interpretation "
+            "left to the student."
+        ),
+        "lineage": (
+            "Norse-Germanic (Icelandic family-saga branch). Source "
+            "position. Stands alongside the heroic Saga of the Volsungs "
+            "(lit-work-005) and the mythological Eddas (lit-work-inh-012, "
+            "lit-work-inh-013) as part of the prose Icelandic preservation "
+            "of the Norse world. The family-saga form is distinct from "
+            "the heroic and mythological modes: it handles feud and law "
+            "in named historical Icelandic households. Tolkien "
+            "(lit-work-inh-004) drew on saga style for character method "
+            "(speech and action over interiority); modern Nordic "
+            "literature (Laxness and the broader crime-novel tradition) "
+            "still draws on the form."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The longest and most-praised of the Icelandic family sagas; the seminar text on law, feud, and the burning, and on the saga style's distinctive character method.",
+                "memory_work": {
+                    "recitations": ["Recitation of a chosen passage from Gunnar's death scene or the burning"],
+                },
+                "recitation_routine": "Seminar opens from the recited passage; the discussion takes its first question from how the laconic prose makes character without interior access.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy translation of Njal's Saga (Robert Cook in the Penguin Classics; Magnus Magnusson and Hermann Palsson in the older Penguin) read aloud across a term, in chunks",
+                ],
+                "short_lesson_flow": "A living book read aloud across the long span and narrated; the feud-and-law alternation noticed; deepening to analysis of the burning as the structural center as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me what each character said or did, since the saga will not let us inside them otherwise.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy translation of Njal's Saga on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in Iceland, in feud-and-law, or in the saga style leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the laconic prose be laconic; let the burning be the burning.",
+                "observation_documentation": "Over time, notice whether the student returns to the saga and begins to feel the character-through-action method as the saga style's distinctive instrument. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of saga prose and the saga style's character method where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
 }
