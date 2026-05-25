@@ -6943,6 +6943,120 @@ LITERATURE_MASTERY_CONTENT: dict[str, dict] = {
             "montessori": "No distinct doctoral-literature method at this level.",
         },
     },
+    "lit-work-020": {
+        "node_type": "work",
+        "track": "classics",
+        "work": {
+            "title": "Frankenstein; or, The Modern Prometheus",
+            "author": "Mary Wollstonecraft Shelley",
+            "date": "first published anonymously 1818; revised edition 1831",
+            "genre": "early-nineteenth-century novel; sometimes the founding work of science fiction",
+            "form": "epistolary frame (Walton's letters) enclosing Victor Frankenstein's first-person narrative, which encloses the Creature's first-person narrative",
+        },
+        "minimum_band": "proficient",
+        "content_notes": (
+            "The creation of the Creature and his subsequent abandonment; the "
+            "murders of William, Justine (executed for William's murder), "
+            "Henry Clerval, and Elizabeth; Victor's pursuit of the Creature "
+            "into the Arctic and Victor's death; the novel asks the reader "
+            "throughout who the monster is and refuses to settle the question. "
+            "Honest information, not a gate."
+        ),
+        "craft_focus": [
+            "Nested narrators: Walton's letters around Victor's narrative around the Creature's narrative; each frame reframes what came before (lit-craft-008)",
+            "Character advanced: the Promethean inherited type and the Creature as the inherited Adam-and-Satan reader of Paradise Lost (lit-craft-014)",
+            "Theme advanced: creation and responsibility; what the novel refuses to settle about who is the monster (lit-craft-022 at proficient, lit-craft-023 at advanced)",
+            "Figurative system: light, fire, ice; the figure of the spark and the figure of the wasteland (lit-craft-042)",
+        ],
+        "entry": (
+            "Proficient: read the novel whole, track the three nested narratives "
+            "and what each frame argues; meet the Creature's account in Volume 2 "
+            "as the heart of the novel; follow the figurative system of fire and "
+            "ice. Advanced: argue what the novel does to the Prometheus "
+            "inheritance and to Paradise Lost (which the Creature reads and "
+            "argues with himself about); honor what the novel refuses to "
+            "settle about who is the monster. Mastery: original argument about "
+            "the novel as the founding work of a tradition that runs from "
+            "Shelley through Wells, Stevenson, and forward."
+        ),
+        "close_reading_passages": [
+            "Walton's letters that open the novel: how does the epistolary frame stage the listener whose stand-in we are about to become?",
+            "The Creature's account of finding Paradise Lost and reading himself into it (Volume 2): how does the novel stage the Creature's reading, and what does the Creature's identification with both Adam and Satan do?",
+            "The closing scene with the Creature standing over Victor's body: how does the novel let the Creature speak last, and where does the novel refuse to let the reader simply judge?",
+        ],
+        "structural_analysis": (
+            "Three nested narratives: Walton writes letters home to his "
+            "sister; in those letters Walton transcribes Victor's first-person "
+            "account; in Victor's account the Creature delivers his own "
+            "first-person account. Each narrator has his own interest in the "
+            "story, and the novel never collapses the three into one "
+            "authoritative voice. The structure is the work's argument: every "
+            "account of who made the monster is filtered through someone who "
+            "had a reason to tell it the way they did."
+        ),
+        "thematic_lines": [
+            "Creation and responsibility: who owes what to whom when one being makes another",
+            "Who is the monster: the question the novel refuses to settle; competing readings have been held for two centuries",
+            "Knowledge and its costs: the Prometheus subtitle's claim, weighed by the novel rather than asserted",
+        ],
+        "comparative_threads": [
+            "Paradise Lost (lit-work-017): the Creature reads it and recognizes himself in both Adam and Satan; the novel makes Milton's poem one of its own structural references",
+            "Greek Prometheus (the subtitle); the Aeschylean Prometheus Bound through Percy Shelley's Prometheus Unbound",
+            "Coleridge's 'Rime of the Ancient Mariner' which Walton quotes; the contemporary Romantic inheritance",
+            "Later inheritors: H. G. Wells's Island of Doctor Moreau; the long science-fiction tradition that begins here; the film tradition that has largely refused the novel's framing of who the monster is",
+        ],
+        "seminar_questions": [
+            "Who is the monster, in the novel's own terms? Where does the novel refuse to say?",
+            "What does the Creature's reading of Paradise Lost let the novel argue that direct statement could not?",
+            "What does the Walton frame do that the novel without it could not?",
+        ],
+        "writing_invitations": [
+            "The analytical paragraph on the Creature's account of finding and reading Paradise Lost, naming what the identification with Adam and with Satan does to the question of who he is",
+            "The essay on the nested-narrator structure as the novel's argument",
+            "At advanced, the essay on the novel's inheritance from Milton and from Greek Prometheus, holding passages from each in productive tension",
+        ],
+        "context": (
+            "Begun in 1816 at the Villa Diodati on Lake Geneva as part of the "
+            "ghost-story contest with Percy Shelley, Byron, and Polidori; "
+            "published anonymously in 1818 when the author was twenty; revised "
+            "and republished under her name in 1831; one of the foundational "
+            "works of the modern novel and of the tradition that became "
+            "science fiction; supplied as fact, interpretation left to the "
+            "student."
+        ),
+        "philosophy": {
+            "classical": {
+                "narrative_introduction": "The foundational nineteenth-century novel of creation and responsibility; the seminar text on who the monster is.",
+                "memory_work": {
+                    "recitations": ["Recitation of the Creature's first speech to Victor on the glacier"],
+                },
+                "recitation_routine": "Seminar opens from the recited speech; the discussion takes its first question from what the Creature claims from his maker and what the novel does with the claim.",
+            },
+            "charlotte_mason": {
+                "living_book_suggestions": [
+                    "A worthy edition of Frankenstein (either the 1818 or 1831 text, with notes on the differences; the Norton; the Penguin) read aloud across a term, with parts taken for the embedded narratives",
+                ],
+                "short_lesson_flow": "A living book read aloud across the three nested narratives and narrated; the Creature's account given its full weight; deepening to analysis of the Paradise Lost inheritance as the bands move up.",
+                "narration_prompt": "Tell back the chapter we read today, and tell me whose voice told it, and what that voice wanted us to think.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a worthy edition of Frankenstein on the shelf, available, never assigned",
+                ],
+                "real_world_contexts": [
+                    "Available and discussed where a student's interest in creation, in monsters, in Romantic poetry, or in the early history of science fiction leads",
+                ],
+                "parent_role": "Read aloud and discuss where the student's interest leads; let the question of who the monster is stay unsettled.",
+                "observation_documentation": "Over time, notice whether the student returns to the novel and brings the Creature's reading of Paradise Lost into other reading. This noticing replaces any test.",
+            },
+            "traditional": {
+                "introduction": "Structured study of the nested-narrator frame and the novel's place in Romantic and proto-science-fiction tradition where chosen.",
+            },
+        },
+        "philosophy_neutral": {
+            "montessori": "No distinct doctoral-literature method at this level.",
+        },
+    },
     "lit-work-inh-004": {
         "node_type": "work",
         "track": "inheritance",
