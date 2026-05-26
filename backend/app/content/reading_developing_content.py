@@ -142,9 +142,7 @@ READING_DEVELOPING_CONTENT = {
             {
                 "type": "problem",
                 "difficulty": 2,
-                "prompt": (
-                    "Read this with expression: 'Wait!' shouted Mara. 'Don't open that door!'"
-                ),
+                "prompt": ("Read this with expression: 'Wait!' shouted Mara. 'Don't open that door!'"),
                 "expected_type": "text",
                 "correct_answer": "'Wait!' shouted Mara. 'Don't open that door!'",
                 "hints": [
@@ -234,8 +232,8 @@ READING_DEVELOPING_CONTENT = {
             },
             {
                 "prompt": (
-                    "Read this dialogue with expression: '\"Hurry up!\" Tom whispered. \"They'll hear us!\" Lily froze. "
-                    "\"Maybe they already have,\" she said.'"
+                    'Read this dialogue with expression: \'"Hurry up!" Tom whispered. "They\'ll hear us!" Lily froze. '
+                    '"Maybe they already have," she said.\''
                 ),
                 "type": "open_response",
                 "target_concept": "prosody_and_dialogue",
@@ -651,9 +649,7 @@ READING_DEVELOPING_CONTENT = {
             {
                 "type": "problem",
                 "difficulty": 2,
-                "prompt": (
-                    "How long should you try to read your chapter book each day at this stage?"
-                ),
+                "prompt": ("How long should you try to read your chapter book each day at this stage?"),
                 "expected_type": "multiple_choice",
                 "options": [
                     "5 minutes.",
@@ -1300,9 +1296,7 @@ READING_DEVELOPING_CONTENT = {
                     "well. The child immediately narrates it in their own words. The parent listens without correcting "
                     "in the moment. Stop while the practice is still alive; the next day continues."
                 ),
-                "narration_prompt": (
-                    "Tell me back the passage we just read. In your own words. Take your time."
-                ),
+                "narration_prompt": ("Tell me back the passage we just read. In your own words. Take your time."),
                 "real_world_objects": [
                     "A living book the family is reading together",
                     "The reading nook or table where narration happens daily",
@@ -1486,9 +1480,7 @@ READING_DEVELOPING_CONTENT = {
             {
                 "type": "problem",
                 "difficulty": 1,
-                "prompt": (
-                    "What is a 'written narration' at this stage?"
-                ),
+                "prompt": ("What is a 'written narration' at this stage?"),
                 "expected_type": "multiple_choice",
                 "options": [
                     "A long composition about your reading.",
@@ -1508,9 +1500,7 @@ READING_DEVELOPING_CONTENT = {
             {
                 "type": "problem",
                 "difficulty": 1,
-                "prompt": (
-                    "What should you do BEFORE you write your written narration?"
-                ),
+                "prompt": ("What should you do BEFORE you write your written narration?"),
                 "expected_type": "multiple_choice",
                 "options": [
                     "Read the passage three more times.",
@@ -2013,9 +2003,7 @@ READING_DEVELOPING_CONTENT = {
             {
                 "type": "problem",
                 "difficulty": 2,
-                "prompt": (
-                    "You want to learn how to fold a paper airplane. What kind of book do you need?"
-                ),
+                "prompt": ("You want to learn how to fold a paper airplane. What kind of book do you need?"),
                 "expected_type": "multiple_choice",
                 "options": [
                     "A realistic fiction book about a boy who flies a paper airplane.",
@@ -2933,9 +2921,7 @@ READING_DEVELOPING_CONTENT = {
             {
                 "type": "problem",
                 "difficulty": 2,
-                "prompt": (
-                    "What are the four classical types of conflict in stories?"
-                ),
+                "prompt": ("What are the four classical types of conflict in stories?"),
                 "expected_type": "multiple_choice",
                 "options": [
                     "Person vs person, person vs nature, person vs self, person vs society.",
@@ -3743,9 +3729,7 @@ READING_DEVELOPING_CONTENT = {
             {
                 "type": "problem",
                 "difficulty": 2,
-                "prompt": (
-                    "What are some DIMENSIONS along which you can compare two books?"
-                ),
+                "prompt": ("What are some DIMENSIONS along which you can compare two books?"),
                 "expected_type": "multiple_choice",
                 "options": [
                     "Theme, setting, characters, point of view, style, conclusion.",
@@ -4122,9 +4106,7 @@ READING_DEVELOPING_CONTENT = {
             {
                 "type": "problem",
                 "difficulty": 2,
-                "prompt": (
-                    "Does poetry have to rhyme?"
-                ),
+                "prompt": ("Does poetry have to rhyme?"),
                 "expected_type": "multiple_choice",
                 "options": [
                     "Yes, all poetry must rhyme.",
@@ -4931,9 +4913,7 @@ READING_DEVELOPING_CONTENT = {
             {
                 "type": "problem",
                 "difficulty": 3,
-                "prompt": (
-                    "You meet an unfamiliar word in your chapter book. What should you do FIRST?"
-                ),
+                "prompt": ("You meet an unfamiliar word in your chapter book. What should you do FIRST?"),
                 "expected_type": "multiple_choice",
                 "options": [
                     "Stop and look it up immediately.",
@@ -6829,9 +6809,7 @@ READING_DEVELOPING_CONTENT = {
             {
                 "type": "problem",
                 "difficulty": 3,
-                "prompt": (
-                    "Why does the time and place a person lives in matter for understanding their biography?"
-                ),
+                "prompt": ("Why does the time and place a person lives in matter for understanding their biography?"),
                 "expected_type": "multiple_choice",
                 "options": [
                     "It doesn't; people achieve the same things regardless of time and place.",
@@ -8281,9 +8259,7 @@ READING_DEVELOPING_CONTENT = {
             {
                 "type": "problem",
                 "difficulty": 2,
-                "prompt": (
-                    "Which of these is a real book-discussion question (not a quiz question)?"
-                ),
+                "prompt": ("Which of these is a real book-discussion question (not a quiz question)?"),
                 "expected_type": "multiple_choice",
                 "options": [
                     "How many children were in the family?",
@@ -9457,9 +9433,7 @@ READING_DEVELOPING_CONTENT = {
             {
                 "type": "problem",
                 "difficulty": 3,
-                "prompt": (
-                    "Why is it important NOT to grade or correct reading response journal entries?"
-                ),
+                "prompt": ("Why is it important NOT to grade or correct reading response journal entries?"),
                 "expected_type": "multiple_choice",
                 "options": [
                     "It saves time.",
