@@ -318,3 +318,164 @@ class TestCertificationPrepValidator:
         node = self._minimal_cert_node(**{field: ["any value"]})
         with pytest.raises(ValueError, match="reproduce or administer exam content"):
             validate_competency(node)
+
+
+class TestMasteryLadder:
+    """The mastery ladder lives on hvac-root and maps each progression band
+    to the competencies, mentor models, and certifications that belong at
+    that band. The ladder is the explicit surface; the doc renders from it.
+    """
+
+    def test_mastery_ladder_present_on_root(self) -> None:
+        root = HVAC_CONTENT["hvac-root"]
+        assert "mastery_ladder" in root, "hvac-root must carry a mastery_ladder"
+        ladder = root["mastery_ladder"]
+        assert isinstance(ladder, dict)
+        assert "framing" in ladder
+        assert "rungs" in ladder
+        assert isinstance(ladder["rungs"], list)
+
+    def test_mastery_ladder_has_four_rungs_in_order(self) -> None:
+        rungs = HVAC_CONTENT["hvac-root"]["mastery_ladder"]["rungs"]
+        names = [r["rung_name"] for r in rungs]
+        assert names == ["helper", "apprentice", "journeyman", "qualified"]
+
+    def test_each_rung_has_required_fields(self) -> None:
+        required = {
+            "rung_name",
+            "mastery_level_alias",
+            "what_the_learner_does",
+            "mentor_models_in_use",
+            "knowledge_competencies",
+            "safety_competencies",
+            "low_hazard_hands_on_competencies",
+            "higher_hazard_hands_on_competencies",
+            "certifications_appropriate_here",
+            "portfolio_artifacts_built_here",
+        }
+        for rung in HVAC_CONTENT["hvac-root"]["mastery_ladder"]["rungs"]:
+            missing = required - set(rung.keys())
+            assert not missing, f"rung {rung['rung_name']!r} missing fields: {missing}"
+
+    def test_each_rung_certification_ids_resolve(self) -> None:
+        authored_ids = set(HVAC_CONTENT.keys())
+        for rung in HVAC_CONTENT["hvac-root"]["mastery_ladder"]["rungs"]:
+            for cert in rung["certifications_appropriate_here"]:
+                cert_id = cert.get("id")
+                assert cert_id in authored_ids, (
+                    f"rung {rung['rung_name']!r} references unknown certification id {cert_id!r}"
+                )
+                assert HVAC_CONTENT[cert_id]["node_type"] == "certification_prep", (
+                    f"rung {rung['rung_name']!r} references non-certification node {cert_id!r}"
+                )
+
+    def test_each_rung_safety_competency_ids_resolve(self) -> None:
+        # safety_competencies entries that look like node ids must resolve.
+        # Strings that are descriptive (containing words like 'current per')
+        # are accepted as prose annotations and skipped.
+        authored_ids = set(HVAC_CONTENT.keys())
+        for rung in HVAC_CONTENT["hvac-root"]["mastery_ladder"]["rungs"]:
+            for entry in rung["safety_competencies"]:
+                # Take the first token before any whitespace; if it looks
+                # like a node id (matches an authored id), it must resolve.
+                token = entry.split()[0] if isinstance(entry, str) else ""
+                if token in authored_ids:
+                    continue
+                if token.startswith(("hs-", "hc-")):
+                    # Token looks like a node id but did not resolve
+                    raise AssertionError(
+                        f"rung {rung['rung_name']!r} safety_competencies entry references unknown id "
+                        f"{token!r}"
+                    )
+
+    def test_each_rung_knowledge_competency_ids_resolve(self) -> None:
+        # Same shape as safety_competencies: strings that look like node
+        # ids must resolve; prose annotations are accepted.
+        authored_ids = set(HVAC_CONTENT.keys())
+        for rung in HVAC_CONTENT["hvac-root"]["mastery_ladder"]["rungs"]:
+            for entry in rung["knowledge_competencies"]:
+                if not isinstance(entry, str):
+                    continue
+                token = entry.split()[0] if entry else ""
+                if token in authored_ids:
+                    continue
+                if token.startswith(("hs-", "hc-")):
+                    raise AssertionError(
+                        f"rung {rung['rung_name']!r} knowledge_competencies entry references unknown id "
+                        f"{token!r}"
+                    )
+
+    def test_mastery_ladder_names_credentials_NOT_substitutable_for(self) -> None:
+        ladder = HVAC_CONTENT["hvac-root"]["mastery_ladder"]
+        assert "credentials_NOT_substitutable_for" in ladder
+        clauses = ladder["credentials_NOT_substitutable_for"]
+        assert isinstance(clauses, list) and len(clauses) >= 4
+        joined = " ".join(clauses).lower()
+        # Each major credential category must be named as non-substitutable
+        assert "epa section 608" in joined
+        assert "state hvac license" in joined
+        assert "nate" in joined
+        assert "osha 10" in joined or "osha" in joined
+
+    def test_mastery_marker_present_and_names_all_three_conditions(self) -> None:
+        marker = HVAC_CONTENT["hvac-root"]["mastery_ladder"]["mastery_marker"]
+        assert isinstance(marker, str) and marker.strip()
+        marker_lower = marker.lower()
+        # The mastery marker must name competency + credential + signoff
+        assert "demonstrated" in marker_lower or "competency" in marker_lower
+        assert "credential" in marker_lower or "license" in marker_lower or "epa 608" in marker_lower
+        assert "qualified" in marker_lower
+
+
+class TestCertificationAlignmentMetadata:
+    """Every existing competency must carry a certification_alignment block
+    after the retrofit. The block is metadata only: it never alters
+    safety_basis or supervision_basis.
+    """
+
+    EXISTING_COMPETENCY_IDS = ("hs-001", "hc-001", "hc-002", "hc-021")
+
+    @pytest.mark.parametrize("node_id", EXISTING_COMPETENCY_IDS)
+    def test_alignment_block_present(self, node_id: str) -> None:
+        node = HVAC_CONTENT[node_id]
+        assert "certification_alignment" in node, (
+            f"{node_id} must carry a certification_alignment block after the retrofit"
+        )
+        alignment = node["certification_alignment"]
+        assert isinstance(alignment, dict)
+        assert "ladder_rung" in alignment
+        assert "notes" in alignment
+        assert "certifications_supported" in alignment
+
+    @pytest.mark.parametrize("node_id", EXISTING_COMPETENCY_IDS)
+    def test_alignment_references_resolve(self, node_id: str) -> None:
+        authored_ids = set(HVAC_CONTENT.keys())
+        alignment = HVAC_CONTENT[node_id]["certification_alignment"]
+        for cert in alignment["certifications_supported"]:
+            cert_id = cert.get("id")
+            assert cert_id in authored_ids, (
+                f"{node_id} references unknown certification id {cert_id!r}"
+            )
+            assert HVAC_CONTENT[cert_id]["node_type"] == "certification_prep"
+
+    @pytest.mark.parametrize("node_id", EXISTING_COMPETENCY_IDS)
+    def test_alignment_does_not_overwrite_safety_basis(self, node_id: str) -> None:
+        # The alignment retrofit must not remove or empty the safety_basis
+        # of any technique competency.
+        node = HVAC_CONTENT[node_id]
+        if node["node_type"] in {"safety", "technique"}:
+            sb = node.get("safety_basis")
+            assert isinstance(sb, dict) and sb
+            assert "hazards" in sb and sb["hazards"]
+            assert "ppe_required" in sb and sb["ppe_required"]
+            assert "supervision_basis" in sb and sb["supervision_basis"].strip()
+
+    def test_hc_021_alignment_locks_supervision_rung(self) -> None:
+        # The apprentice-band gold standard is at the qualified-human-
+        # physically-present supervision rung; the alignment block must
+        # preserve this and explicitly name it as non-negotiable.
+        alignment = HVAC_CONTENT["hc-021"]["certification_alignment"]
+        assert alignment["ladder_rung"] == "apprentice"
+        assert alignment["supervision_rung"] == "qualified_human_physically_present"
+        assert "non-negotiable" in alignment["notes"]
+        assert "unchanged" in alignment["notes"].lower()

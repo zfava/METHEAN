@@ -139,6 +139,253 @@ HVAC_CONTENT: dict[str, dict] = {
         },
         "safety_node": "hs-001",
         "progression_bands": ["helper", "apprentice", "journeyman", "qualified"],
+        "mastery_ladder": {
+            "framing": (
+                "Mastery in this trade is demonstrated competence PLUS a real portfolio of "
+                "work AND readiness for the relevant external credentials. Portfolio and "
+                "credential are complementary, not alternatives: a learner with a portfolio "
+                "but no credential cannot legally do regulated work; a learner with a "
+                "credential but no portfolio is not yet competent. The ladder below places "
+                "each authored competency on its band and places each certification at the "
+                "point in the ladder where a learner is genuinely ready for it. The ladder is "
+                "the surface read by the planner and rendered in the per-trade map document "
+                "(docs/curriculum/HVAC_certification_and_mastery_map.md)."
+            ),
+            "rungs": [
+                {
+                    "rung_name": "helper",
+                    "mastery_level_alias": "emerging",
+                    "what_the_learner_does": (
+                        "Assists a working mentor. Reads nameplates and component layouts. "
+                        "Walks the shop's safety with an adult on premises. Does not yet "
+                        "open enclosures, touch live electrical, handle refrigerant, or open "
+                        "gas systems. Begins study toward OSHA 10 orientation."
+                    ),
+                    "mentor_models_in_use": [
+                        "AI tutor end-to-end (knowledge work)",
+                        "Adult on premises (safety walkthrough, low-hazard hands-on)",
+                    ],
+                    "knowledge_competencies": ["hc-001", "hc-002"],
+                    "safety_competencies": ["hs-001"],
+                    "low_hazard_hands_on_competencies": [
+                        "filter change, condensate trap cleaning, exterior condenser cleaning (not yet authored; future batch)",
+                    ],
+                    "higher_hazard_hands_on_competencies": [],
+                    "certifications_appropriate_here": [
+                        {
+                            "id": "hcert-osha",
+                            "specific_credential": "OSHA 10-Hour Outreach (General Industry or Construction)",
+                            "rationale": (
+                                "Common employer entry prerequisite; reinforces the safety "
+                                "vocabulary used in hs-001 and prepares the learner for the "
+                                "next bands."
+                            ),
+                        },
+                    ],
+                    "portfolio_artifacts_built_here": [
+                        "Nameplate cards (one per piece of household HVAC equipment, per hc-001)",
+                        "Component identification cards (outdoor unit and indoor air handler, per hc-002)",
+                        "Recorded safety walkthrough video (per hs-001)",
+                    ],
+                },
+                {
+                    "rung_name": "apprentice",
+                    "mastery_level_alias": "developing",
+                    "what_the_learner_does": (
+                        "Performs most steps with a mentor checking key cuts, joints, "
+                        "connections, and (for higher-hazard subsystems) with a qualified "
+                        "human physically present. Begins live-dead-live verification at the "
+                        "disconnect (hc-021) under a licensed electrician or licensed HVAC "
+                        "technician. Earns EPA Section 608 (study-only) as a precondition "
+                        "for any later hands-on refrigerant work. Earns OSHA 30 if taking on "
+                        "lead responsibility. Begins entry-level NATE certifications."
+                    ),
+                    "mentor_models_in_use": [
+                        "AI tutor (knowledge work, certification study, procedure walkthrough, artifact review)",
+                        "Adult on premises (low-hazard hands-on)",
+                        "Qualified human physically present (electrical verification per hc-021, and any other hazardous-subsystem work as it enters the band)",
+                    ],
+                    "knowledge_competencies": [
+                        "advanced nameplate interpretation (capacity, latent vs sensible, derating); refrigeration cycle theory; psychrometrics; controls schematics (not yet authored; future batches)",
+                    ],
+                    "safety_competencies": ["hs-001 (current per the annual freshness check)"],
+                    "low_hazard_hands_on_competencies": [
+                        "static-pressure measurement, temperature-rise measurement, condensate-line clearing, capacitor-discharge with qualified human present (future batches)",
+                    ],
+                    "higher_hazard_hands_on_competencies": [
+                        "hc-021 (DMM + LOTO live-dead-live verification at residential disconnect; qualified human physically present)",
+                    ],
+                    "certifications_appropriate_here": [
+                        {
+                            "id": "hcert-epa608",
+                            "specific_credential": "EPA Section 608 Type I, Type II, or Universal (per the equipment the learner expects to work on; legally required before any hands-on refrigerant work)",
+                            "rationale": (
+                                "Study-only credential that the learner can earn before any "
+                                "hands-on refrigerant work; it is the legal precondition for "
+                                "that work in the United States."
+                            ),
+                        },
+                        {
+                            "id": "hcert-osha",
+                            "specific_credential": "OSHA 30-Hour Outreach (when the learner takes on lead or supervisory work)",
+                            "rationale": "Deeper version of OSHA 10 for workers with supervisory responsibility.",
+                        },
+                        {
+                            "id": "hcert-nate",
+                            "specific_credential": "NATE entry-level certifications (Ready to Work, HVAC Support Technician)",
+                            "rationale": "Industry-recognized acknowledgment of basic readiness.",
+                        },
+                    ],
+                    "portfolio_artifacts_built_here": [
+                        "Live-dead-live verification photographs and written narration with qualified-human countersignature (per hc-021)",
+                        "EPA Section 608 certification card (held by the learner; obtained from an EPA-approved certifying body)",
+                        "OSHA Outreach completion card if taken at this band",
+                    ],
+                },
+                {
+                    "rung_name": "journeyman",
+                    "mastery_level_alias": "proficient",
+                    "what_the_learner_does": (
+                        "Completes a competency independently to acceptable quality. Mentor "
+                        "available but not required step by step. For higher-hazard "
+                        "subsystems, the learner now holds the credentials that authorize "
+                        "the hands-on work (EPA 608 for refrigerant; state journeyman "
+                        "license per the AHJ for HVAC scope where licensing is required), "
+                        "and the qualified-human-present rule from the apprentice band "
+                        "shifts to the experienced-journeyman-available rule for live "
+                        "electrical work. The learner is now ready to sit the AHJ's "
+                        "journeyman exam (if not already taken at the close of the "
+                        "apprentice band) and to pursue NATE core / specialty "
+                        "certifications in their chosen subsystems."
+                    ),
+                    "mentor_models_in_use": [
+                        "AI tutor (continuing-education study, certification preparation, code lookup, artifact review)",
+                        "Working mentor available but not required step by step (for routine work)",
+                        "Qualified human present (for unusual hazards, first time on a new equipment family, or any work outside the learner's licensed scope)",
+                    ],
+                    "knowledge_competencies": [
+                        "diagnostic frameworks; load calculations (Manual J); equipment selection (Manual S); duct design (Manual D); commercial controls; combustion analysis (knowledge level) (future batches)",
+                    ],
+                    "safety_competencies": ["hs-001 (current per the annual freshness check)"],
+                    "low_hazard_hands_on_competencies": [
+                        "complete maintenance call (system check, filter, condensate, coil clean, voltage and amperage check); customer write-up (future batches)",
+                    ],
+                    "higher_hazard_hands_on_competencies": [
+                        "refrigerant operations under EPA 608 with own certification; capacitor work; complete service call on a refrigeration fault; gas-system service under state gas license (future batches; each gated separately)",
+                    ],
+                    "certifications_appropriate_here": [
+                        {
+                            "id": "hcert-licensing",
+                            "specific_credential": "State journeyman HVAC license per the AHJ",
+                            "rationale": (
+                                "Earned after completing the AHJ's apprenticeship hours "
+                                "requirement through a recognized apprenticeship and "
+                                "passing the AHJ's journeyman exam. The learner is now "
+                                "legally authorized to perform HVAC work within the scope "
+                                "the license names."
+                            ),
+                        },
+                        {
+                            "id": "hcert-nate",
+                            "specific_credential": "NATE Core plus one or more specialty certifications (air conditioning, gas heating, heat pumps, light commercial refrigeration, etc.)",
+                            "rationale": "Industry-recognized acknowledgment of competence in a chosen subsystem.",
+                        },
+                    ],
+                    "portfolio_artifacts_built_here": [
+                        "Complete service-call write-ups across the chosen specialty",
+                        "State journeyman HVAC license (obtained from the AHJ)",
+                        "NATE core and specialty certification cards (obtained from NATE)",
+                    ],
+                },
+                {
+                    "rung_name": "qualified",
+                    "mastery_level_alias": "mastered",
+                    "what_the_learner_does": (
+                        "Performs reliably under varied conditions across the chosen "
+                        "subsystems. Teaches helpers and apprentices through the helper-band "
+                        "steps of those subsystems. Holds the AHJ's master / contractor "
+                        "license where applicable, with the bonding, insurance, and "
+                        "continuing-education the AHJ requires. Pursues NATE senior-level "
+                        "certification where it advances the learner's chosen specialty. "
+                        "Maintains EPA 608 (no renewal currently required by EPA but the "
+                        "card is kept on the person for refrigerant work) and NFPA 70E "
+                        "currency. Carries the qualified-human-present role for the next "
+                        "generation of learners."
+                    ),
+                    "mentor_models_in_use": [
+                        "AI tutor (continuing-education, code-update tracking, master exam preparation, artifact review)",
+                        "Peer review (other masters / contractors)",
+                        "Learner now MENTORS others as the qualified human present for their hazardous-subsystem work",
+                    ],
+                    "knowledge_competencies": [
+                        "advanced controls and building automation; commercial design; load and energy modeling; project management; business and contract law (master / contractor level) (future batches)",
+                    ],
+                    "safety_competencies": ["hs-001 (current per the annual freshness check; learner now leads the walkthrough for helpers)"],
+                    "low_hazard_hands_on_competencies": [
+                        "full design-and-install of a residential system (future batch; a project node)",
+                    ],
+                    "higher_hazard_hands_on_competencies": [
+                        "complete residential or light-commercial install; commercial refrigeration service; full combustion startup and tuning (future batches; each gated separately)",
+                    ],
+                    "certifications_appropriate_here": [
+                        {
+                            "id": "hcert-licensing",
+                            "specific_credential": "State master / contractor HVAC license per the AHJ",
+                            "rationale": (
+                                "Earned after the journeyman experience requirement the AHJ "
+                                "publishes, plus business / law exam in many states, plus "
+                                "bonding and insurance per the AHJ."
+                            ),
+                        },
+                        {
+                            "id": "hcert-nate",
+                            "specific_credential": "NATE Senior Efficiency Analyst (or other current NATE senior-level certifications) per the chosen specialty",
+                            "rationale": "Top-tier industry recognition; signals mastery to employers, contractors, and customers.",
+                        },
+                    ],
+                    "portfolio_artifacts_built_here": [
+                        "State master / contractor HVAC license (obtained from the AHJ)",
+                        "NATE senior-level certification (obtained from NATE)",
+                        "A full project portfolio (residential install, commercial service, training-of-apprentice records)",
+                        "Continuing-education currency in NFPA 70E and the local AHJ's continuing-education requirements",
+                    ],
+                },
+            ],
+            "mastery_marker": (
+                "The learner is qualified when: (1) every authored competency in the chosen "
+                "specialty has been demonstrated at the proficient or mastered band with "
+                "portfolio artifacts; (2) the legally required credentials for the work the "
+                "learner intends to do are held (EPA 608 for any refrigerant work; state "
+                "journeyman or master license per the AHJ for the work the AHJ regulates); "
+                "(3) the learner has either signed off a helper-band attempt for another "
+                "learner OR completed a journeyman-band project entirely unsupervised, per "
+                "the trades design's qualified-band signoff rule."
+            ),
+            "credentials_NOT_substitutable_for": [
+                (
+                    "EPA Section 608 certification does NOT substitute for the supervision "
+                    "policy on hands-on refrigerant work; a 608-certified learner still "
+                    "performs first hands-on refrigerant operations under a working "
+                    "608-certified mentor per the trade's apprenticeship pedagogy."
+                ),
+                (
+                    "State HVAC license does NOT substitute for the specific safety "
+                    "competencies (e.g. hc-021 live-dead-live verification); license-holders "
+                    "still perform live-dead-live verification on every service call as the "
+                    "competency teaches, because the verification is the safety habit."
+                ),
+                (
+                    "NATE certifications do NOT substitute for EPA Section 608, do NOT "
+                    "substitute for state licensing, and do NOT change any supervision rule."
+                ),
+                (
+                    "OSHA 10 / 30 Outreach completion does NOT substitute for site-specific "
+                    "or task-specific safety training required by particular OSHA standards "
+                    "(LOTO, fall protection, confined-space entry); those remain the "
+                    "employer's responsibility under OSHA's specific-training requirements."
+                ),
+            ],
+        },
         "safety_review": {
             "reviewed": False,
             "reviewer": None,
@@ -755,6 +1002,58 @@ HVAC_CONTENT: dict[str, dict] = {
         "session_length_minutes": 60,
         "signoff_validity_days": 365,
         "related_projects": [],
+        "certification_alignment": {
+            "ladder_rung": "helper",
+            "notes": (
+                "Foundational safety competency. Underpins every credential the trade builds "
+                "toward; underpins every higher-band competency. Metadata only; safety_basis "
+                "and supervision_basis are unchanged."
+            ),
+            "certifications_supported": [
+                {
+                    "id": "hcert-osha",
+                    "domains": [
+                        "introduction to OSHA",
+                        "PPE recognition and use",
+                        "electrical hazard recognition",
+                        "fall hazard recognition",
+                        "hazard communication",
+                        "struck-by and caught-in/between hazards",
+                    ],
+                    "notes": "The walkthrough explicitly names what OSHA 10 / 30 covers as employer-required orientation.",
+                },
+                {
+                    "id": "hcert-epa608",
+                    "domains": [
+                        "refrigerant safety practices (Core domain)",
+                        "refrigerant identification and class awareness (A1 / A2L / A3)",
+                        "venting prohibition under the Clean Air Act",
+                    ],
+                    "notes": (
+                        "hs-001 names the refrigerant classes per ASHRAE 34 and names that "
+                        "hands-on refrigerant work is EPA 608 regulated. The Core domain "
+                        "knowledge introduced here is built up in the hcert-epa608 study."
+                    ),
+                },
+                {
+                    "id": "hcert-licensing",
+                    "domains": [
+                        "general HVAC safety practice",
+                        "NFPA 70E familiarity (introductory)",
+                        "OSHA 1910 / 1926 familiarity (introductory)",
+                        "AHJ adopted code awareness",
+                    ],
+                    "notes": "Foundational safety practice underpinning every AHJ exam.",
+                },
+                {
+                    "id": "hcert-nate",
+                    "domains": [
+                        "safety domain present in every NATE specialty's Knowledge Areas of Technician Expertise",
+                    ],
+                    "notes": "NATE expects baseline safety knowledge regardless of specialty.",
+                },
+            ],
+        },
         "safety_review": {
             "reviewed": False,
             "reviewer": None,
@@ -1084,6 +1383,50 @@ HVAC_CONTENT: dict[str, dict] = {
         "estimated_practice_sessions_to_signoff": 3,
         "session_length_minutes": 30,
         "related_projects": [],
+        "certification_alignment": {
+            "ladder_rung": "helper",
+            "notes": (
+                "Knowledge competency the AI tutor mentors end-to-end. Foundational across "
+                "every credential the trade builds toward; the nameplate is the first thing "
+                "looked at on every service call. Metadata only; safety_basis and "
+                "supervision_basis are unchanged."
+            ),
+            "certifications_supported": [
+                {
+                    "id": "hcert-epa608",
+                    "domains": [
+                        "refrigerant identification (Core)",
+                        "refrigerant type and factory charge",
+                        "equipment type and capacity for sizing recovery / recycling",
+                    ],
+                    "notes": (
+                        "Reading the nameplate's refrigerant type is foundational to all four "
+                        "EPA 608 types (Core, I, II, III, Universal)."
+                    ),
+                },
+                {
+                    "id": "hcert-licensing",
+                    "domains": [
+                        "MCA and MOP for branch-circuit sizing per NEC",
+                        "voltage and phase for service-disconnect sizing per NEC",
+                        "tonnage and capacity for load matching per ACCA Manual S",
+                        "AFUE / SEER2 / HSPF2 / EER2 for energy-code compliance",
+                    ],
+                    "notes": (
+                        "Journeyman exam tests circuit-sizing math from nameplate values; "
+                        "this competency builds the literacy."
+                    ),
+                },
+                {
+                    "id": "hcert-nate",
+                    "domains": [
+                        "equipment identification across the chosen specialty's KATE",
+                        "rated-condition vs operating-condition distinction",
+                    ],
+                    "notes": "Every NATE specialty assumes nameplate fluency.",
+                },
+            ],
+        },
         "safety_review": {
             "reviewed": False,
             "reviewer": None,
@@ -1416,6 +1759,44 @@ HVAC_CONTENT: dict[str, dict] = {
         "estimated_practice_sessions_to_signoff": 3,
         "session_length_minutes": 30,
         "related_projects": [],
+        "certification_alignment": {
+            "ladder_rung": "helper",
+            "notes": (
+                "Knowledge competency the AI tutor mentors end-to-end. Visual literacy of the "
+                "split system is foundational across every credential. Metadata only; "
+                "safety_basis and supervision_basis are unchanged."
+            ),
+            "certifications_supported": [
+                {
+                    "id": "hcert-epa608",
+                    "domains": [
+                        "service-port identification and the rule against opening them without 608 (Core)",
+                        "high-pressure system component recognition (Type II)",
+                        "low-pressure system component recognition (Type III, by contrast)",
+                    ],
+                    "notes": (
+                        "Knowing which valves are service ports and which lines they sit on "
+                        "is a Core EPA 608 domain. hc-002 enforces no-touch at this band."
+                    ),
+                },
+                {
+                    "id": "hcert-licensing",
+                    "domains": [
+                        "split-system architecture for service and install scope",
+                        "disconnect location and identification per NEC",
+                        "secondary drain pan and float switch per IMC for above-living-space installations",
+                    ],
+                    "notes": "Journeyman exam tests both code and system architecture knowledge.",
+                },
+                {
+                    "id": "hcert-nate",
+                    "domains": [
+                        "system architecture per the AC, Heat Pump, and Air Distribution KATEs",
+                    ],
+                    "notes": "Foundational across multiple NATE specialties.",
+                },
+            ],
+        },
         "safety_review": {
             "reviewed": False,
             "reviewer": None,
@@ -1928,6 +2309,62 @@ HVAC_CONTENT: dict[str, dict] = {
         "session_length_minutes": 45,
         "signoff_validity_days": 365,
         "related_projects": [],
+        "certification_alignment": {
+            "ladder_rung": "apprentice",
+            "supervision_rung": "qualified_human_physically_present",
+            "notes": (
+                "Apprentice-band gold standard. ELECTRICAL HAZARD. The qualified-human-"
+                "physically-present rule is non-negotiable and unchanged by any credential the "
+                "learner holds: the supervision rung stays at qualified-human-physically-"
+                "present even when the learner themselves holds a state license, because this "
+                "is the safety habit, not a credential gate. Adding the alignment metadata "
+                "does not weaken any supervision rule; safety_basis and supervision_basis are "
+                "unchanged."
+            ),
+            "certifications_supported": [
+                {
+                    "id": "hcert-osha",
+                    "domains": [
+                        "lockout-tagout per OSHA 29 CFR 1910.147",
+                        "electrical safety practices per OSHA 29 CFR 1910.137 and 1910.335",
+                        "PPE selection",
+                    ],
+                    "notes": "OSHA 10 / 30 covers LOTO and electrical safety as orientation; hc-021 is the demonstrated competency.",
+                },
+                {
+                    "id": "hcert-licensing",
+                    "domains": [
+                        "electrical safety in the workplace per NFPA 70E",
+                        "service disconnects per NEC Article 440 (HVAC) and 422 (appliances)",
+                        "multimeter selection and use per IEC 61010-1 / UL 61010-1 Category Ratings",
+                    ],
+                    "notes": (
+                        "Journeyman and master exams routinely test NFPA 70E concepts including "
+                        "live-dead-live verification and the conditions for energized work. "
+                        "hc-021 is the demonstrated competency for the live-dead-live habit."
+                    ),
+                },
+                {
+                    "id": "hcert-nate",
+                    "domains": [
+                        "electrical-safety domain across all NATE specialties' KATE",
+                        "service-call electrical verification practice",
+                    ],
+                    "notes": "Every NATE specialty expects competent live-dead-live verification practice.",
+                },
+                {
+                    "id": "hcert-epa608",
+                    "domains": [
+                        "system de-energization as the precondition for any refrigerant work (Core safety-practice domain)",
+                    ],
+                    "notes": (
+                        "EPA 608 study touches the rule that refrigerant work happens on "
+                        "de-energized systems; hc-021 is the demonstrated competency for the "
+                        "de-energization step."
+                    ),
+                },
+            ],
+        },
         "safety_review": {
             "reviewed": False,
             "reviewer": None,
