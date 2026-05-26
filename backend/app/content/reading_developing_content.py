@@ -9301,4 +9301,378 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Figurative language enters the child's own writing as soon as they recognize and enjoy it; teaching the figures is teaching writing craft",
         },
     },
+    "rd-24": {
+        "enriched": True,
+        "learning_objectives": [
+            "Write regular reading-response entries (reactions, questions, connections, reflections) on books being read",
+            "Use the four response modes: REACTION (how the reading made me feel), QUESTION (what I'm wondering), CONNECTION (how this relates to my life or other books), REFLECTION (what I'm thinking about now)",
+            "Build the habit of thinking deeply about texts through writing, not just summary or fact recall",
+            "Develop a writing voice over time: the response journal is one of the most natural places for voice to emerge",
+            "Avoid the failure modes that destroy response journal habits (required daily writing, prescribed format, grading or correcting the entries)",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "Building on chapter book reading (rd-02), the reading response journal is the writing companion to "
+                "the reading log (rd-20). Where the log RECORDS books, the journal RESPONDS to them. The four common "
+                "response modes give the child a starter framework: REACTION ('this scared me; this made me cry'), "
+                "QUESTION ('why did the character do that?'), CONNECTION ('this reminded me of when my sister...'), "
+                "REFLECTION ('I'm thinking about what it means to be brave'). Entries are brief at first (a paragraph, "
+                "a few sentences) and grow naturally. Honest content note about failure modes: response journals "
+                "FAIL when they become required daily writing, when they are corrected or graded, when they are made "
+                "to follow a rigid format. The journal works when it is the child's, and when writing is treated as "
+                "thinking made visible rather than as a school task."
+            ),
+            "scaffolding_sequence": [
+                "Set up a notebook the child likes; this is their response journal",
+                "Introduce the four modes with examples; show what each looks like as a brief journal entry",
+                "Demonstrate together: parent writes a sample response on a book recently shared; reads it aloud; explains the move",
+                "Start with one entry per finished book; not daily. Quality over volume.",
+                "After several weeks, add one mid-book response when something strikes the child while reading",
+                "Across months, the entries grow: longer, more reflective, with the child's voice emerging",
+                "Never correct or grade entries; if writing mechanics are weak, that is fine; this is thinking, not composition",
+                "Periodically (once a term) revisit favorite entries together with the child; talk about what was on the child's mind then",
+            ],
+            "socratic_questions": [
+                "How did this book make you feel?",
+                "What are you wondering about?",
+                "Does this remind you of anything else (another book, a memory, a person you know)?",
+                "What are you thinking about now that you've read this?",
+                "If you could ask the author one question, what would it be?",
+            ],
+            "practice_activities": [
+                "Reading response entry after each finished book using one or more of the four modes",
+                "Mid-book response when something strikes the child during reading",
+                "Re-reading favorite past entries periodically and noticing how the child's thinking has grown",
+                "Sharing entries voluntarily with family; reading aloud a favorite entry to start a book conversation",
+                "Writing toward a specific question across multiple entries (e.g., several entries on different books all responding to 'what makes a good friendship?')",
+            ],
+            "real_world_connections": [
+                "Adult readers and writers keep journals; this habit begins here",
+                "Recognizing that writing is a way to think, not only a way to communicate",
+                "Developing the child's authentic writing voice in a low-pressure setting",
+                "Building self-knowledge through reflection on what books mean to the child",
+                "Creating a record of the child's growing reading and inner life that the child will treasure later",
+            ],
+            "common_misconceptions": [
+                "Believing the response journal is for grading or correction. It is not; corrections destroy the journal's value as a thinking space.",
+                "Believing entries must follow a rigid format. Use the four modes as starting points, not requirements.",
+                "Believing daily writing is required. Quality over volume; an entry after each finished book is enough at the start.",
+                "Believing the journal is for the parent's inspection. The journal is the child's; share by invitation only.",
+                "Believing response writing must be polished. Drafts and rough thinking are the point; this is thinking made visible, not finished writing.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Maintains a response journal with regular entries across a term",
+                "Uses multiple response modes naturally (reaction, question, connection, reflection)",
+                "Writes entries that show real thinking, not just summary",
+                "Develops a recognizable voice across entries over time",
+                "Treats the journal as a personal space, not as an assignment",
+            ],
+            "proficiency_indicators": [
+                "Maintains journal with prompting",
+                "Uses one or two response modes consistently",
+            ],
+            "developing_indicators": [
+                "Journal entries are sparse or summary-only",
+                "Cannot move beyond plot retelling into real response",
+            ],
+            "assessment_methods": [
+                "review of the response journal across a term",
+                "discussion of selected entries with the child",
+                "the child's own reflection on how their entries have changed over time",
+                "the journal's role in book discussion and family reading life",
+            ],
+            "sample_assessment_prompts": [
+                "Show me your response journal. Pick three entries to read aloud and tell me about.",
+                "Looking across your entries, what do you notice has changed in your reading or writing?",
+                "Pick a favorite entry. Why does this one stand out to you?",
+                "What kinds of responses do you find easiest to write? Which are harder?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What are the four common response modes for a reading response journal?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Beginning, middle, end, epilogue.",
+                    "Reaction, question, connection, reflection.",
+                    "Title, author, plot, theme.",
+                    "Past, present, future, dream.",
+                ],
+                "correct_answer": "Reaction, question, connection, reflection.",
+                "hints": [
+                    "Four ways to respond to a reading: how it felt, what you wondered, what it reminded you of, what you are thinking about.",
+                ],
+                "explanation": (
+                    "The four response modes are: REACTION (how the reading made me feel), QUESTION (what I'm "
+                    "wondering), CONNECTION (how this relates to my life or other reading), REFLECTION (what I'm "
+                    "thinking about now). Use one mode or several; the journal is flexible."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "How is a response journal different from a reading log?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "They are the same thing.",
+                    "A reading log records what you have read (titles, dates); a response journal responds to your reading (reactions, questions, connections, reflections).",
+                    "A reading log is for adults; a response journal is for children.",
+                    "A reading log is short; a response journal is long.",
+                ],
+                "correct_answer": "A reading log records what you have read (titles, dates); a response journal responds to your reading (reactions, questions, connections, reflections).",
+                "hints": [
+                    "Log = record; journal = response.",
+                ],
+                "explanation": (
+                    "The log keeps track of what you've read; the response journal explores what your reading made "
+                    "you think, feel, and wonder. They are companions: the log gives you the inventory; the journal "
+                    "gives you the inner life of the reading."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "Which of these would be a strong response journal entry?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "A summary of the plot.",
+                    "'Charlotte's web today made me cry when Charlotte died. I keep wondering if a real friend can really do that for someone. It reminded me of when Grandma helped me even when she was sick.'",
+                    "A list of every character's name.",
+                    "An answer to 'who is the main character?'",
+                ],
+                "correct_answer": "'Charlotte's web today made me cry when Charlotte died. I keep wondering if a real friend can really do that for someone. It reminded me of when Grandma helped me even when she was sick.'",
+                "hints": [
+                    "A real response moves beyond summary into reaction, question, and connection.",
+                ],
+                "explanation": (
+                    "The strong entry uses three response modes: REACTION ('made me cry'), QUESTION ('I keep wondering "
+                    "if...'), and CONNECTION ('reminded me of Grandma'). The other options are summary or fact recall, "
+                    "which do not show the reader thinking with the book."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Why is it important NOT to grade or correct reading response journal entries?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "It saves time.",
+                    "Grading or correcting turns the journal into a school task and shuts down the honest thinking and voice that make response journals valuable. The journal works only when it is a thinking space, not a graded one.",
+                    "It is too hard to grade them.",
+                    "They are too long to read.",
+                ],
+                "correct_answer": "Grading or correcting turns the journal into a school task and shuts down the honest thinking and voice that make response journals valuable. The journal works only when it is a thinking space, not a graded one.",
+                "hints": [
+                    "Think about what makes a child willing to write what they really think.",
+                ],
+                "explanation": (
+                    "Response journals depend on the child feeling safe to think on the page. Grading or correcting "
+                    "introduces evaluation; the child begins to write for approval rather than for their own thinking. "
+                    "Mechanics work belongs in other writing settings; the journal is for thinking and voice."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Pick a book you read recently. Write a response journal entry using two or more of the four "
+                    "modes (reaction, question, connection, reflection)."
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Be honest; don't worry about mechanics or polish; let your thinking show.",
+                ],
+                "explanation": (
+                    "A complete answer uses two or more modes, shows real thinking, and reflects the child's voice. "
+                    "With practice these entries grow longer and more reflective; the journal becomes a record of "
+                    "the child's inner life as a reader."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Maintain a response journal across this term. At the end of the term, show three entries and tell me about each: which mode(s) you used, what you were thinking, why this book mattered.",
+                "type": "open_response",
+                "target_concept": "journal_practice_with_modes",
+                "rubric": (
+                    "Mastery: regular journal maintained; three entries discussed with awareness of modes used and "
+                    "thinking shown. Proficient: journal kept; entries somewhat surface-level. Developing: journal "
+                    "irregular or entries are summary-only."
+                ),
+            },
+            {
+                "prompt": "Write a response entry that uses all four modes (reaction, question, connection, reflection) on a book you have just finished.",
+                "type": "open_response",
+                "target_concept": "all_four_modes_in_one_entry",
+                "rubric": (
+                    "Mastery: all four modes present and authentic. Proficient: three of four modes. Developing: "
+                    "fewer than three or modes feel forced."
+                ),
+            },
+            {
+                "prompt": "Look back at your earliest journal entries and your most recent ones. What has changed? What stays the same?",
+                "type": "open_response",
+                "target_concept": "self_awareness_of_growth_in_journal",
+                "rubric": (
+                    "Mastery: identifies real growth in thinking, voice, depth, or range. Proficient: notices some "
+                    "differences but reflection thin. Developing: cannot reflect on own writing."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "a notebook the child likes for their response journal (the notebook matters; let the child choose)",
+                "a pen or pencil they enjoy writing with",
+                "a regular time for journal writing (after read-aloud, at quiet time, before bed)",
+            ],
+            "recommended": [
+                "the parent's own response journal as a model (children copy what they see; a parent who keeps one models the habit)",
+                "a wall card with the four response modes as starter prompts",
+                "occasional sharing time when the child wants to read an entry aloud to family",
+                "a folder or box for finished journals (children later treasure these)",
+            ],
+        },
+        "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 30},
+        "accommodations": {
+            "dyslexia": "Spoken response into a recording works; the parent or sibling can transcribe if desired. The thinking is the substance; the writing form is flexible.",
+            "adhd": "Keep entries brief; 'one sentence each on two modes' is a starting point. Build up gradually.",
+            "gifted": "Allow expansive entries; the response journal can become a true reading journal with quotation collection, extended reflection, and the early signs of essay-writing.",
+            "visual_learner": "Allow drawings, doodles, color, mind-maps within the journal. Visual response is real response.",
+            "kinesthetic_learner": "Some children think better while moving; walk-and-talk first, then write the entry afterward.",
+            "auditory_learner": "Speak the response aloud before writing; many strong entries start as spoken thinking that is then captured on the page.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we set up a response journal: a notebook where you write your reactions, questions, "
+                    "connections, and reflections on the books you read. The journal helps you think on the page. "
+                    "It belongs to you; it will not be graded or corrected. The four response modes are starting "
+                    "points, not requirements."
+                ),
+                "gradual_release": {
+                    "i_do": "Parent sets up the journal with the child, demonstrates a sample entry, explains the four modes and the no-grading rule.",
+                    "we_do": "Parent and child write entries on the same book and share them voluntarily for the first weeks.",
+                    "you_do": "Child maintains the journal independently; sharing entries by invitation.",
+                },
+                "guided_practice": [
+                    "Entry at each finished book using one or more modes",
+                    "Periodic mid-book entries when something strikes the child",
+                    "Periodic review of past entries by the child alone or with the parent (only by child's invitation)",
+                ],
+                "independent_practice": [
+                    "Sustain the journal across terms",
+                    "Develop a recognizable voice and a growing depth across time",
+                ],
+                "mastery_check": [
+                    "Journal maintained consistently across a term",
+                    "Multiple modes used naturally",
+                    "Entries show real thinking, not just summary",
+                ],
+                "spiral_review": [
+                    "Annual look back: read entries from a year ago; notice growth in voice and depth",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "The commonplace book and the reading journal are old companions to the well-read mind. Locke, "
+                    "Jefferson, Virginia Woolf, and many other readers kept books of reflection and response. To "
+                    "begin a response journal is to enter this tradition: thinking on the page is one of the oldest "
+                    "and richest practices of literate life."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the four response modes: reaction, question, connection, reflection",
+                        "Recite the rule: the journal is the writer's, not for grading",
+                    ],
+                    "recitations": [
+                        "Memorize a brief passage from a great reader's journal (e.g., a passage from Anne Frank's diary or May Sarton's journals) as an example",
+                    ],
+                },
+                "copywork": [
+                    "Copy a favorite line or moment from current reading into the journal as a starting point for response",
+                ],
+                "recitation_routine": "At each book's completion the child offers an oral response before writing the journal entry.",
+                "history_integration": "The history of personal writing, from commonplace books to journals to diaries to blogs, is a long tradition. Show the child this lineage; they are joining it.",
+                "read_aloud_suggestions": [
+                    "Books featuring children who write or keep journals (Harriet the Spy, Anne Frank, Cassandra Mortmain in I Capture the Castle for older readers)",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "Living books that invite reflection; books worth journaling about",
+                ],
+                "short_lesson_flow": "After narration, a brief journal entry. The journal is the written companion to narration; together they capture the child's response to reading.",
+                "narration_prompt": "Tell me about what you read. Now choose: do you want to write a reaction, a question, a connection, or a reflection?",
+                "real_world_objects": [
+                    "A beautiful notebook the child chose for their journal",
+                    "A favorite pen kept with the journal",
+                    "A peaceful place for journal writing (a window seat, a quiet corner)",
+                ],
+                "nature_connection": "Many great nature writers (Thoreau, John Muir, Annie Dillard) kept journals; pair the response journal with the nature journal as practices of attention.",
+                "habit_focus": "The habit of thinking on the page. The habit of responding to what one reads rather than only consuming.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A response journal the child owns",
+                    "Mode prompt cards: one per mode with examples",
+                    "A small set of sample entries (from the parent's or an older child's journal) for inspiration",
+                    "A folder or shelf for keeping finished journals",
+                ],
+                "presentation": {
+                    "three_period_lesson": "This is a reaction; this is a question; this is a connection; this is a reflection. Show me a reaction entry. Is this a connection or a reflection?",
+                    "steps": [
+                        "The guide introduces the journal and the four modes",
+                        "The child writes entries using mode prompts as needed",
+                        "Across the term the child writes entries without prompts, blending modes naturally",
+                        "Periodic review of past entries by the child alone",
+                    ],
+                },
+                "control_of_error": "The journal is its own measure; an entry that does not feel like thinking can be set aside and re-tried another day.",
+                "abstraction_pathway": "From simple one-mode entries to multi-mode entries; from short entries to longer reflective pieces; from journal to true essay over years.",
+                "extensions": [
+                    "Quotation collection within the journal",
+                    "Letter-to-the-author entries in the journal",
+                    "Cross-book reflection entries (responding to multiple books at once)",
+                ],
+                "observation_focus": "Watch for the child returning to the journal on their own. Watch for the child reaching for the journal when something strikes them mid-reading.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep notebooks visible in the home; have the materials available without pressure to use them",
+                    "Talk about your own thinking about books openly; model the response habit in conversation",
+                    "Welcome the child's response in any form (talk, drawing, writing) without demanding a particular format",
+                ],
+                "real_world_contexts": [
+                    "Family conversation as a kind of oral response journal",
+                    "Online journals, blogs, fan fiction as modern response practices",
+                    "Letters, postcards, and texts that respond to books and shows",
+                ],
+                "conversation_starters": [
+                    "How did that book make you feel?",
+                    "What did it make you think about?",
+                    "Does this remind you of anything?",
+                ],
+                "resource_bank": [
+                    "Notebooks and pens the child likes",
+                    "Family conversation about reading as a daily practice",
+                    "Examples of adult journaling visible in the home",
+                ],
+                "parent_role": "Keep your own response journal openly. Welcome the child's responses in whatever form they take. Make response a normal part of reading life rather than a separate exercise.",
+                "observation_documentation": "Note when the child reaches for a notebook on their own. Note when they want to share an entry. The unprompted move signals a real journal habit forming.",
+            },
+        },
+        "connections": {
+            "math": "Math journaling (writing about how a problem was solved, what was hard, what was discovered) parallels reading response journaling; the same habit of thinking on the page",
+            "science": "Science notebooks invite response to experiments and observations; the response habit transfers directly",
+            "history": "Reading historical fiction and biography invites strong personal response; the journal is a natural place for it",
+            "writing": "The response journal is one of the most natural doorways into the writing life; the child who responds to books on the page begins to write more freely in many other settings",
+        },
+    },
 }
