@@ -3426,4 +3426,263 @@ MATH_DEVELOPING_CONTENT = {
             "history": "Reading about historical money systems and conversions (shillings, pence, denarii) and reasoning about coin value",
         },
     },
+    "md-14": {
+        "enriched": True,
+        "learning_objectives": [
+            "Read an analog clock to the minute (every minute, not just the five-minute marks)",
+            "Write a given time in standard hour-and-minute notation",
+            "Solve elapsed-time problems within an hour and across an hour boundary",
+            "Use a number line of minutes to compute elapsed time",
+        ],
+        "teaching_guidance": {
+            "introduction": "Reading time to the minute extends the work already done at the five-minute marks. The minute hand passes one numeral every five minutes, so every numeral is a multiple of five (12 is 0, 1 is 5, 2 is 10, and so on). The small tick marks between numerals are individual minutes. Once the child sees this structure, reading any minute is straightforward. Elapsed time is the harder skill: a number line of minutes is the most reliable strategy.",
+            "scaffolding_sequence": [
+                "Review the five-minute marks: minute hand at 12 is 0, at 1 is 5, at 2 is 10, ..., at 11 is 55",
+                "Read times where the minute hand is exactly on a numeral (e.g., 3:25, 7:40)",
+                "Observe the tick marks between numerals and explain that each is one minute",
+                "Read times where the minute hand is between numerals (e.g., 4:13, 9:47)",
+                "Practice writing the time in standard notation: hour:minute (e.g., 3:25)",
+                "Introduce elapsed time within an hour using a number line of minutes: start at 3:15, jump 20 minutes to 3:35",
+                "Introduce elapsed time across an hour: start at 9:50, jump 10 minutes to 10:00, then 5 minutes more to 10:05; total 15 minutes",
+                "Practice with real schedules, real cooking times, real game timers",
+            ],
+            "socratic_questions": [
+                "If the minute hand is between the 4 and the 5, what is the minute?",
+                "From 3:25 to 4:00, how many minutes is that?",
+                "From 9:50 to 10:15, what is the elapsed time? How can a number line help?",
+                "Why does each numeral represent five minutes and not one?",
+            ],
+            "practice_activities": [
+                "Clock-reading drill: show the time on a manipulable analog clock, child reads to the minute",
+                "Time-writing practice: write the time shown on ten clock pictures",
+                "Elapsed-time number line: solve five elapsed-time problems by drawing a minute number line and jumping",
+                "Daily schedule practice: read times on a real or pretend daily schedule and compute durations",
+            ],
+            "real_world_connections": [
+                "Reading the clock to know when a TV show starts or ends",
+                "Computing how long a baking time will take from now",
+                "Reading bus or train schedules to compute waiting times",
+                "Timing a game or activity and computing how long it lasted",
+            ],
+            "common_misconceptions": [
+                "Treating each numeral on the clock face as a one-minute mark (reading 4:5 instead of 4:25)",
+                "Reading the minute hand position only at the nearest numeral, ignoring the tick marks",
+                "Computing elapsed time across an hour boundary by simple subtraction (e.g., 10:15 - 9:50 = 0:65)",
+                "Confusing the hour hand and minute hand when both point near the same numeral",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Reads any analog clock time to the exact minute",
+                "Writes any shown time in standard hour-and-minute notation",
+                "Computes elapsed time within an hour and across an hour boundary using a number line strategy",
+            ],
+            "assessment_methods": ["clock reading task", "time writing from clock pictures", "elapsed-time problems with reasoning shown"],
+            "sample_assessment_prompts": [
+                "Read the time shown on this clock to the minute.",
+                "Maya started reading at 3:25 and stopped at 3:48. How many minutes did she read?",
+                "A bus leaves at 9:50 and the trip is 25 minutes. What time will it arrive?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "The hour hand points just past the 3 and the minute hand points at the 6. What time is it?",
+                "expected_type": "text",
+                "hints": ["Minute hand at 6 means 30 minutes past the hour"],
+                "explanation": "3:30. The minute hand at the 6 is 30 minutes past the hour (6 x 5 = 30).",
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "The minute hand is exactly halfway between the 4 and the 5. What minute is it?",
+                "expected_type": "number",
+                "correct_answer": "22",
+                "hints": ["The 4 is 20 minutes, the 5 is 25 minutes, halfway is 22 or 23"],
+                "explanation": "Halfway between 4 (20 minutes) and 5 (25 minutes), counting tick marks: 20, 21, 22, 23, 24, 25. Halfway is 22 (with two ticks on each side) or 23 if there are even-number ticks; commonly 22.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "Maya started reading at 3:25 and stopped at 3:48. How many minutes did she read?",
+                "expected_type": "number",
+                "correct_answer": "23",
+                "hints": ["48 - 25", "Or count up: 25 to 48 is 23"],
+                "explanation": "From 3:25 to 3:48 is 48 - 25 = 23 minutes.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": "A bus leaves at 9:50 and the trip is 25 minutes. What time does it arrive?",
+                "expected_type": "text",
+                "hints": ["From 9:50 to 10:00 is 10 minutes; then 15 more minutes to 10:15"],
+                "explanation": "9:50 + 10 minutes = 10:00. Then 10:00 + 15 more minutes = 10:15. The bus arrives at 10:15. Total elapsed: 25 minutes.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": "A movie starts at 7:35 and ends at 8:50. How long is the movie?",
+                "expected_type": "text",
+                "hints": ["From 7:35 to 8:00 is 25 minutes; from 8:00 to 8:50 is 50 minutes"],
+                "explanation": "7:35 to 8:00 is 25 minutes; 8:00 to 8:50 is 50 minutes. Total: 25 + 50 = 75 minutes (1 hour and 15 minutes).",
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Maya started reading at 3:25 and stopped at 3:48. How many minutes did she read?",
+                "type": "number",
+                "correct_answer": "23",
+                "target_concept": "elapsed_time_within_hour",
+            },
+            {
+                "prompt": "A bus leaves at 9:50 and the trip is 25 minutes. What time will it arrive? Show your reasoning.",
+                "type": "open_response",
+                "rubric": "Mastery: 10:15 with a number-line or step-by-step reasoning (10 minutes to 10:00, 15 more minutes to 10:15). Proficient: 10:15 only. Developing: error in time or reasoning.",
+                "target_concept": "elapsed_time_across_hour",
+            },
+            {
+                "prompt": "Read this time: the hour hand is just past 4 and the minute hand is one tick past the 7.",
+                "type": "text",
+                "correct_answer": "4:36",
+                "target_concept": "reading_to_the_minute",
+            },
+        ],
+        "resource_guidance": {
+            "required": ["manipulable analog clock with movable hands", "minute number line printout", "real wall clock visible during work"],
+            "recommended": ["sand timers for elapsed-time activities", "real schedule (TV, bus, school) for practice", "digital clock alongside for comparison"],
+        },
+        "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 15},
+        "accommodations": {
+            "dyslexia": "Use color-coded clock with hours in one color and minutes in another. Read every time aloud as 'three twenty-five' and 'three colon twenty-five.'",
+            "adhd": "Use real timers and short activities timed by the clock so the child sees time pass. Keep elapsed-time problems story-based.",
+            "gifted": "Move quickly to elapsed time across several hours, and to working with both 12-hour and 24-hour notation.",
+            "visual_learner": "Always show the analog clock alongside the digital notation. Use a minute number line for elapsed-time problems.",
+            "kinesthetic_learner": "Manipulate the hands of a real clock to set times. Walk a minute number line for elapsed time.",
+            "auditory_learner": "Read every time aloud in two forms ('three twenty-five' and 'twenty-five past three'). Time aloud with verbal countdowns.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Today we read the clock to the minute. The minute hand at a numeral means that numeral times five minutes. Between numerals, the tick marks count individual minutes. We also compute elapsed time, especially across an hour boundary, using a number line.",
+                "gradual_release": {
+                    "i_do": "Set the manipulable clock to 3:42, name the hour hand position (just past 3), the minute hand position (between 8 and 9, two ticks past 8), and read 3:42 aloud. Demonstrate an elapsed-time problem: 9:50 + 25 minutes = ? using a number line.",
+                    "we_do": "Read five clock times together, child manipulating the hands while the parent names the time, then swap. Solve three elapsed-time problems together using number lines.",
+                    "you_do": "Child reads ten times from pictures and solves five elapsed-time problems independently.",
+                },
+                "guided_practice": [
+                    "Read ten analog-clock times to the minute",
+                    "Solve five elapsed-time problems within an hour",
+                    "Solve three elapsed-time problems across an hour boundary using a number line",
+                ],
+                "independent_practice": [
+                    "Worksheet: write the time shown on ten clock pictures",
+                    "Worksheet: solve ten elapsed-time problems, including some across an hour boundary",
+                ],
+                "mastery_check": [
+                    "Reads any clock time to the exact minute",
+                    "Computes elapsed time across an hour boundary correctly",
+                    "Uses the number-line strategy on a previously unseen problem",
+                ],
+                "spiral_review": [
+                    "Daily clock reading: read the real wall clock at the start of each session",
+                    "Continue addition fluency practice; elapsed time depends on it",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Time is the ordered work of the day. The Romans called their hours by number, the medieval monks by the office of prayer, and the modern child by the analog clock that hangs in the kitchen. To read the clock to the minute is to take up one of the great inheritances of civilization: the measured, named hour and minute of a real, ordered life.",
+                "memory_work": {
+                    "chants": [
+                        "Recite the five-minute landmarks: at 12 is 0, at 1 is 5, at 2 is 10, at 3 is 15, at 4 is 20, at 5 is 25, at 6 is 30",
+                        "Recite the second half: at 7 is 35, at 8 is 40, at 9 is 45, at 10 is 50, at 11 is 55",
+                        "Recite the elapsed-time rule: to jump across an hour, first jump to the hour, then beyond it",
+                    ],
+                    "recitations": [
+                        "Daily recitation of the full minute hand landmarks, around the clock once",
+                    ],
+                },
+                "copywork": [
+                    "Copy a small list of times (3:25, 4:13, 9:47, ...) into the math copybook, neatly, with the matching clock face drawn beside each",
+                ],
+                "recitation_routine": "Begin each lesson by reading the real wall clock aloud to the exact minute, and reciting the elapsed time from the last time it was read.",
+                "history_integration": "Tell that the modern clock face we read came down through centuries of careful measure, from the sundial to the water clock to the mechanical clock of the medieval cathedral, and that the child today reads what monks and merchants and sailors once read with the same hands.",
+                "read_aloud_suggestions": [
+                    "A short children's history of timekeeping (Around the Clock, or a clear illustrated history)",
+                    "A passage from a book where a clock or hourglass marks the structure of the story",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 12,
+                "living_book_suggestions": [
+                    "A real, beautifully illustrated book about telling time or the history of the clock",
+                    "A short biography of a clockmaker or a master of timekeeping",
+                ],
+                "short_lesson_flow": "Look together at the real wall clock and read the exact time to the minute. Set the manipulable clock to a chosen time (a favorite hour of the day) and read it aloud. Pose one real, lifelike elapsed-time question (how long until lunch, how long the bread has been baking). Close while interest is high.",
+                "narration_prompt": "Tell me the time we just read and what you noticed about the hands. How long until dinner?",
+                "real_world_objects": [
+                    "The real wall clock",
+                    "A manipulable analog clock at the math table",
+                    "A real timer or hourglass for short activities",
+                    "A real schedule of the family day",
+                ],
+                "nature_connection": "Note the time of sunrise and sunset across the week; compute the lengthening or shortening of the day in minutes. The clock reads the rhythm of the sun.",
+                "habit_focus": "The habit of attention to time: a child who reads the clock and knows where time is going is on the road to a careful, ordered adult life.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Movable analog clock with synchronized hour and minute hands",
+                    "Clock-face cards with written times to match",
+                    "Daily-schedule strip with hours and minutes filled in",
+                    "Minute number line for elapsed-time work",
+                ],
+                "presentation": {
+                    "three_period_lesson": "Naming: set the clock to a chosen time, name it ('this is three twenty-five'). Recognition: 'show me three forty-eight; show me four oh-five.' Recall: 'what time is this?' Move slowly.",
+                    "steps": [
+                        "Set the clock to a chosen time and name it",
+                        "Move the minute hand around through the landmarks and name the time at each",
+                        "Move the minute hand between landmarks and count tick marks for individual minutes",
+                        "Pose elapsed-time problems on a minute number line, with physical jumps shown",
+                    ],
+                },
+                "control_of_error": "The synchronized hands on the movable clock are the control: when the minute hand passes 12, the hour hand advances; an incorrect setting reveals itself in the disagreement of the hands.",
+                "abstraction_pathway": "From the physical clock and number line (time felt as a thing moved through) to written time notation and elapsed-time calculation with no material.",
+                "extensions": [
+                    "Build the child's own daily schedule strip with hours and minutes filled in",
+                    "Use elapsed-time problems in real cooking, gardening, or play activities",
+                    "Move to 24-hour time as a parallel notation",
+                ],
+                "observation_focus": "Watch whether the child checks the clock during real activities, and whether the movable clock is reached for during free-choice math time.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave a real analog clock visible in the kitchen and read it together casually throughout the day",
+                    "Hand the child a kitchen timer for a chosen activity and let them set and read it",
+                    "Post a real family schedule on the fridge with times to the minute, and reference it together",
+                ],
+                "real_world_contexts": [
+                    "Knowing when a favorite show starts or ends",
+                    "Timing how long an activity took (a bike ride, a board game)",
+                    "Reading bus or train schedules with the family",
+                    "Cooking with timed steps that must align",
+                ],
+                "conversation_starters": [
+                    "What time is it now? Show me on the clock.",
+                    "If the movie starts at 7:30 and lasts 90 minutes, when will it end?",
+                    "How long until dinner if it's 5:25 now and we eat at 6:10?",
+                ],
+                "resource_bank": [
+                    "A real analog clock in a prominent place",
+                    "A kitchen timer, sand timer, or stopwatch for short activities",
+                    "Real schedules from the family's week",
+                    "Picture books about telling time, available not assigned",
+                ],
+                "parent_role": "Read the clock aloud in real life often, and reference elapsed times in real activities. Welcome rough estimates and refine them by the real clock. Never quiz; let time be a real, useful part of life.",
+                "observation_documentation": "Note across weeks where time reading came up, whether the child reads the analog clock fluently and computes elapsed time correctly in real situations.",
+            },
+        },
+        "connections": {
+            "reading": "Reading times in stories, schedules, and instructions",
+            "science": "Recording times of observations in nature work (sunrise, sunset, sprouting)",
+            "history": "Reading times on historical documents (battles, treaties, letters) and computing durations between events",
+        },
+    },
 }
