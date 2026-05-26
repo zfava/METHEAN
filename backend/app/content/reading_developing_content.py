@@ -7049,4 +7049,377 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Writing brief biographical sketches of family members or admired figures is a natural extension; biography teaches the structure of nonfiction narrative",
         },
     },
+    "rd-18": {
+        "enriched": True,
+        "learning_objectives": [
+            "Use headings and subheadings to predict what a section is about and to find specific information quickly",
+            "Use captions to extract information about images, photos, diagrams, and maps in nonfiction",
+            "Use bold words to identify key terms that the text will define or use repeatedly",
+            "Use a glossary at the back of a book to look up unfamiliar key terms",
+            "Use a table of contents and an index to locate specific information in a nonfiction book",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "Foundational nonfiction reading (rf-09) and chapter book reading (rd-02) gave the child the building "
+                "blocks of nonfiction. Text features are the navigation tools the child needs to read nonfiction "
+                "efficiently. HEADINGS and SUBHEADINGS organize a text into sections; the reader scans these to "
+                "preview content and to locate specific information. CAPTIONS carry the meaning of images, photos, "
+                "diagrams, and maps. BOLD WORDS mark key terms the text will define. A GLOSSARY at the back gives "
+                "definitions; a TABLE OF CONTENTS at the front lists chapters; an INDEX at the back lists topics "
+                "alphabetically with page numbers. Strong nonfiction readers use all these features fluently; weak "
+                "readers ignore them and lose efficiency."
+            ),
+            "scaffolding_sequence": [
+                "Begin with a well-designed children's nonfiction book (DK, Scholastic, National Geographic Kids). Open to a page and name every text feature on it.",
+                "Practice using headings to predict: read the heading, predict what the section will discuss, then read to check",
+                "Practice reading captions for content: cover the text, read the caption of an image, name what the image is about, then read the text to confirm",
+                "Practice bold-word notice: scan a page for bold words; predict that each will be defined nearby; check by finding the definition in the surrounding text or glossary",
+                "Practice using the glossary: encounter a bold word; turn to the back of the book to look it up; return to the text",
+                "Practice using the table of contents: 'Find the section on volcanoes' becomes 'open the table of contents, find the relevant chapter, turn to that page'",
+                "Practice using the index: 'Find pages that mention sharks' becomes 'turn to the index, find sharks, list the pages, turn to each one'",
+                "Apply text-feature reading to research-style tasks: the child has a question, uses the features to locate the answer in a nonfiction book",
+            ],
+            "socratic_questions": [
+                "What is this section about? What in the heading told you?",
+                "What does this caption tell you that the image alone doesn't?",
+                "What bold words are on this page? Where is each one defined?",
+                "Where in this book would you go to find information about X?",
+                "How do the text features help you read this book faster and better?",
+            ],
+            "practice_activities": [
+                "Text-feature spotting: open a nonfiction page; list every text feature visible (heading, subheading, caption, bold word, sidebar, map, diagram, etc.)",
+                "Heading-prediction practice: read a heading; predict the section's content; read to check",
+                "Caption-only practice: cover the text; read only captions of images; produce a brief summary of what the page is about",
+                "Glossary use: track use of the glossary across a week of nonfiction reading; note words looked up",
+                "Information-locating task: given a question and a nonfiction book, use the table of contents and the index to find the answer",
+            ],
+            "real_world_connections": [
+                "Reading textbooks (math, science, history) efficiently using text features",
+                "Reading magazines and websites where headings, captions, and bold words structure the page",
+                "Reading reference works (encyclopedias, field guides, cookbooks) using table of contents and index",
+                "Reading newspapers and online news where headlines and captions organize the page",
+                "Reading manuals and instructions where headings break information into useable steps",
+            ],
+            "common_misconceptions": [
+                "Believing headings are decoration to skip. Headings carry meaning; skipping them costs comprehension and speed.",
+                "Believing captions are optional. Captions often carry information the text doesn't repeat; skipping them misses content.",
+                "Believing bold words are just style. Bold words mark key terms; the text will define them and use them repeatedly.",
+                "Believing the table of contents and index are for adults. These are tools the child can and should use from this band on.",
+                "Believing fluent reading means reading every word in order. Fluent nonfiction reading uses text features to skim, scan, and dive selectively.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Names and uses the common text features (heading, subheading, caption, bold word, glossary, table of contents, index)",
+                "Uses headings to predict and to locate sections",
+                "Uses captions to extract image information",
+                "Uses the glossary to look up bold words",
+                "Uses the table of contents and the index to locate specific information",
+            ],
+            "proficiency_indicators": [
+                "Recognizes text features but uses them inconsistently",
+                "Uses some features but not others",
+            ],
+            "developing_indicators": [
+                "Reads nonfiction as if it were continuous prose, ignoring text features",
+                "Cannot locate specific information in a nonfiction book",
+            ],
+            "assessment_methods": [
+                "text-feature spotting tasks on prepared nonfiction pages",
+                "information-locating tasks using table of contents and index",
+                "real-time observation: does the child use features automatically during nonfiction reading?",
+                "scored answers to questions that require text-feature use",
+            ],
+            "sample_assessment_prompts": [
+                "Open this nonfiction book. List five text features on this page and what each one tells you.",
+                "Find the answer to this question in this book. Tell me how you used the table of contents or index.",
+                "Read this page using only the headings and captions (cover the body text). What is this page about?",
+                "Find three bold words on this page. Where is each one defined?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What is a heading in a nonfiction book?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Decoration; you can skip it.",
+                    "A title for a section that tells you what the section is about.",
+                    "The first word of every paragraph.",
+                    "Words that are in capital letters.",
+                ],
+                "correct_answer": "A title for a section that tells you what the section is about.",
+                "hints": [
+                    "Headings introduce sections.",
+                ],
+                "explanation": (
+                    "A heading is a title for a section of a book, telling the reader what the section will be about. "
+                    "Subheadings divide sections further. Strong readers use headings to predict, preview, and locate "
+                    "content. Headings are not decoration; they are navigation."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "You want to find information about whales in a book about ocean animals. Which tool helps you "
+                    "most?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "The cover.",
+                    "The table of contents or the index.",
+                    "The author's biography.",
+                    "The dedication page.",
+                ],
+                "correct_answer": "The table of contents or the index.",
+                "hints": [
+                    "Both list where to find information; the index lists topics alphabetically.",
+                ],
+                "explanation": (
+                    "The table of contents (at the front) lists chapters and sections in order; the index (at the "
+                    "back) lists topics alphabetically with page numbers. Either tool helps you find whales quickly. "
+                    "Fluent nonfiction readers use both."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "What does a bold word in a nonfiction book usually signal?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "The word is angry.",
+                    "The word is a key term that the text will define or use repeatedly.",
+                    "The word is misspelled.",
+                    "The word is unimportant.",
+                ],
+                "correct_answer": "The word is a key term that the text will define or use repeatedly.",
+                "hints": [
+                    "Bold print marks importance.",
+                ],
+                "explanation": (
+                    "Bold words mark key terms the author wants the reader to notice. These terms are typically "
+                    "defined nearby (in the surrounding text or in a glossary at the back). Bold words are a signal: "
+                    "stop here, learn this term, expect to meet it again."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": "What is the purpose of a caption under an image in a nonfiction book?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Decoration.",
+                    "To tell you what the image is showing and to add information about it that the text may not repeat.",
+                    "To name the artist.",
+                    "Captions are optional and most readers skip them.",
+                ],
+                "correct_answer": "To tell you what the image is showing and to add information about it that the text may not repeat.",
+                "hints": [
+                    "Captions extend the image into language.",
+                ],
+                "explanation": (
+                    "A caption identifies what the image is showing and often adds information the text does not "
+                    "repeat (the date a photo was taken, the location, a specific name, a scientific note). Strong "
+                    "readers read captions; weak readers skip them. Captions are real content."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Pick a nonfiction book in your home. Open to a page. Use the text features (headings, captions, "
+                    "bold words, glossary, table of contents, index) to navigate. Describe how each one helped you "
+                    "understand the page faster."
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Use as many features as the page offers.",
+                ],
+                "explanation": (
+                    "A complete answer names the book, the page, the features used, and what each contributed. With "
+                    "practice this kind of feature-aware reading becomes automatic; the child reads nonfiction much "
+                    "faster and with better comprehension than a reader who ignores features."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Open this assigned nonfiction page. Identify five text features and explain what each one tells you.",
+                "type": "open_response",
+                "target_concept": "text_feature_identification",
+                "rubric": (
+                    "Mastery: five features named with clear explanation of each. Proficient: four features. "
+                    "Developing: three or fewer, or cannot explain function."
+                ),
+            },
+            {
+                "prompt": "I need to find information about (specific topic) in this book. Use the table of contents or index to find it. Show me how.",
+                "type": "open_response",
+                "target_concept": "information_locating_task",
+                "rubric": (
+                    "Mastery: locates information using table of contents or index efficiently, explains process. "
+                    "Proficient: locates with prompting. Developing: cannot locate."
+                ),
+            },
+            {
+                "prompt": "Read this page using only the headings and captions (cover the body text). In one sentence, what is this page about? Then uncover the text and check.",
+                "type": "open_response",
+                "target_concept": "headings_and_captions_only_reading",
+                "rubric": (
+                    "Mastery: accurate one-sentence summary from features alone; close match after uncovering text. "
+                    "Proficient: summary general but accurate. Developing: cannot use features alone."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "well-designed children's nonfiction books with rich text features (DK Eyewitness series, National Geographic Kids, Scholastic nonfiction)",
+                "a children's encyclopedia or reference book with table of contents and index",
+                "a textbook the child uses for any subject, as a real-world site for text-feature practice",
+            ],
+            "recommended": [
+                "a magazine subscription with strong design (National Geographic Kids, Kids Discover) for text-feature practice in a different medium",
+                "field guides (birds, trees, rocks) where text features carry much of the information",
+                "cookbooks, which use headings, captions, and indexes heavily and offer real-world feature use",
+            ],
+        },
+        "time_estimates": {"first_exposure": 30, "practice_session": 20, "assessment": 25},
+        "accommodations": {
+            "dyslexia": "Practice text-feature reading on books with large clear print. Audio versions help with text bodies, but headings, captions, and bold words still need to be visually used. Verbal naming of features supports the visual recognition.",
+            "adhd": "Brief text-feature spotting sessions: one page, one feature focus per session. Build up across days.",
+            "gifted": "Move to denser reference works (junior versions of encyclopedias, atlases, almanacs) where text-feature fluency unlocks much faster reading.",
+            "visual_learner": "Use highlighters or sticky notes to mark different text features on a sample page with consent of book owner; color-code headings, captions, bold words.",
+            "kinesthetic_learner": "Physical scavenger hunts: 'find a heading; find a caption; find a bold word; find the glossary entry for that word' across the book.",
+            "auditory_learner": "Say each text feature aloud and what it does. Discuss the function of each feature in conversation.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we learn the navigation tools of nonfiction. Strong nonfiction readers use headings to "
+                    "predict, captions to extract image information, bold words to spot key terms, the glossary to "
+                    "look them up, the table of contents to find chapters, and the index to find topics. Weak readers "
+                    "ignore these features and read more slowly with less comprehension."
+                ),
+                "gradual_release": {
+                    "i_do": "Parent opens a nonfiction book, points out every text feature on a page, names what each does and demonstrates use.",
+                    "we_do": "Together work through a nonfiction page using all the text features.",
+                    "you_do": "Child uses text features independently on their own nonfiction reading; uses table of contents and index to answer specific questions.",
+                },
+                "guided_practice": [
+                    "Daily text-feature use during nonfiction reading",
+                    "Weekly information-locating tasks using table of contents and index",
+                    "Periodic feature-only reading: extract meaning from headings and captions alone",
+                ],
+                "independent_practice": [
+                    "Use text features automatically across all nonfiction reading",
+                    "Apply text-feature skills to textbooks and reference materials",
+                ],
+                "mastery_check": [
+                    "Identifies all common text features",
+                    "Uses table of contents and index efficiently",
+                    "Reads nonfiction faster and with better comprehension using features",
+                ],
+                "spiral_review": [
+                    "Periodically test feature use on unfamiliar nonfiction books",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "The book itself is an invention; the table of contents, the index, the page number, and the "
+                    "heading were all developed over centuries to help readers find what they needed. Medieval "
+                    "manuscripts had no page numbers; the index was a revolution in scholarship. To use these tools "
+                    "is to honor the long tradition of careful reading."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the common text features: heading, subheading, caption, bold word, glossary, table of contents, index",
+                        "Recite the rule: headings predict; captions extend; bold words mark key terms; glossary defines; table of contents lists chapters; index lists topics",
+                    ],
+                    "recitations": [
+                        "Memorize the order of the front matter and back matter in a typical book (title page, table of contents, body, glossary, index)",
+                    ],
+                },
+                "copywork": [
+                    "Copy three well-formed headings from a current nonfiction book into the copybook as models of concise informative title-writing",
+                ],
+                "recitation_routine": "At each nonfiction reading the child names a text feature they used and what it told them.",
+                "history_integration": "The history of the book is itself worth a lesson: how the table of contents, the index, the page number, the chapter, the heading, and the caption developed across centuries to make reading more efficient.",
+                "read_aloud_suggestions": [
+                    "Well-structured reference books used together; pause periodically to talk about how the features help",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "Living nonfiction books with strong design (Holling C. Holling's Paddle-to-the-Sea has captioned illustrations; many high-quality children's nonfiction books carry rich features)",
+                ],
+                "short_lesson_flow": "During nonfiction reading, pause briefly to name and use the text features. Across weeks the child uses features automatically. Do not separate feature-instruction from reading; weave them together.",
+                "narration_prompt": "Tell me about the page. What did the heading tell you? What did the captions show?",
+                "real_world_objects": [
+                    "A handful of well-designed children's nonfiction books in the reading area",
+                    "A magnifying glass or a finger pointer to highlight features as they are noticed",
+                ],
+                "nature_connection": "Field guides are nature books that depend entirely on text features: each entry uses captions, bold names, and clear headings. Reading a field guide is a strong text-feature practice.",
+                "habit_focus": "The habit of using the tools the book provides. The child who uses text features reads more efficiently and remembers more.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A small set of nonfiction books with rich text features available on the shelf",
+                    "Text-feature cards: heading, subheading, caption, bold word, glossary, table of contents, index, each with explanation",
+                    "Information-locating cards: questions to be answered using a specific book on the shelf",
+                    "A magnifying glass and a card pointer for highlighting features as the child works",
+                ],
+                "presentation": {
+                    "three_period_lesson": "This is a heading; this is a caption; this is a bold word; this is a glossary entry. Show me a heading; show me a caption. Is this a heading or a caption?",
+                    "steps": [
+                        "The guide presents each text feature with a worked example in a real book",
+                        "The child sorts text-feature cards",
+                        "The child uses features to answer information-locating cards",
+                        "The child applies feature use to their own nonfiction reading",
+                        "Across the term feature use becomes automatic",
+                    ],
+                },
+                "control_of_error": "The book itself is the control: a wrong page can be checked against the index or table of contents.",
+                "abstraction_pathway": "From naming and pointing to features, to using them deliberately to navigate, to using them automatically without thinking.",
+                "extensions": [
+                    "Reading textbooks for other subjects using feature fluency",
+                    "Using primary reference works (atlas, encyclopedia, dictionary)",
+                    "Beginning to design simple text features in the child's own writing (headings for a report)",
+                ],
+                "observation_focus": "Watch for the child using features without prompting during reading. Watch for the child reaching for the table of contents or index when they have a question.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Have well-designed nonfiction books, magazines, and reference works visible and accessible in the home",
+                    "Use text features openly when reading nonfiction with the child; say 'let me check the index' or 'the caption says X'",
+                    "Welcome the child's curiosity about reference works and let them spend time browsing",
+                ],
+                "real_world_contexts": [
+                    "Using cookbooks (table of contents, index, headings)",
+                    "Using field guides on walks (headings, captions, bold names)",
+                    "Using websites and apps where headings and search are the text-feature equivalents",
+                ],
+                "conversation_starters": [
+                    "Where in this book would we look up X?",
+                    "What does the caption on this picture say?",
+                    "How could we find the answer without reading the whole book?",
+                ],
+                "resource_bank": [
+                    "Reference works (children's encyclopedia, atlas, almanac)",
+                    "Field guides for nature interests",
+                    "Magazines, cookbooks, manuals as everyday feature-rich texts",
+                ],
+                "parent_role": "Use text features visibly in your own reading. Show the child your own table-of-contents check or index lookup. Make feature use a natural part of family reading life.",
+                "observation_documentation": "Note the child's spontaneous use of text features. Note the child reaching for index, table of contents, or glossary without being told.",
+            },
+        },
+        "connections": {
+            "math": "Math textbooks rely heavily on headings, bold terms, and indexes; text-feature fluency is essential for math learning",
+            "science": "Science writing uses headings, captions on diagrams, bold key terms, and glossaries; mastering features is mastering science reading",
+            "history": "History textbooks use timelines, maps, captions, and indexes; text-feature use is the key to reading history",
+            "writing": "When the child writes their own nonfiction (a report, a short article), they can now use headings and captions deliberately to structure their writing",
+        },
+    },
 }
