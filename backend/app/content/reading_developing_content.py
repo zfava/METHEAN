@@ -5524,4 +5524,384 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Writing a summary is itself a writing exercise; the discipline of compression strengthens the child's own writing across genres",
         },
     },
+    "rd-14": {
+        "enriched": True,
+        "learning_objectives": [
+            "Distinguish what the text says explicitly from what the text implies (what is stated versus what is inferred)",
+            "Combine text evidence with prior knowledge to draw a logical inference about character feeling, motive, setting, or implied event",
+            "Name the text evidence that supports an inference: 'I think X because the text says Y'",
+            "Recognize when an inference is supported by the text and when it is a guess that goes beyond the text",
+            "Apply the skill to both narrative and nonfiction (an author's implied stance; an experiment's implied conclusion)",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "Inference is the conceptual turn of the developing reading band. Foundational comprehension (rf-12 "
+                "through rf-14) asked the child to retrieve what the text says. Developing summarization (rd-13) asked "
+                "the child to judge what mattered. Inference (rd-14) asks the child to read between the lines: to "
+                "understand what the author IMPLIES but does not state directly. The skill rests on two ingredients: "
+                "TEXT EVIDENCE (the words actually on the page) and PRIOR KNOWLEDGE (what the reader already knows "
+                "about the world). The child combines the two to draw a logical conclusion. The discipline is that "
+                "every inference must be supportable: 'I think X because the text says Y.' Without text evidence, an "
+                "inference becomes a guess; with text evidence, it becomes real reading."
+            ),
+            "scaffolding_sequence": [
+                "Begin with the simplest inference frame: 'It is raining. The puddles are spreading on the sidewalk.' What does this text tell you? (It is raining.) What does it imply? (It has been raining long enough to make puddles spread.) Show how the inference combines text plus knowledge.",
+                "Introduce the I-think-X-because-the-text-says-Y sentence frame. Every inference uses it.",
+                "Practice inferring character feeling: 'Tom slammed the door and refused to come down for dinner.' What is Tom feeling? (Angry / upset / hurt.) What text evidence? (He slammed the door; he refused dinner.)",
+                "Practice inferring setting: 'They lit the lamps and pulled the curtains. The fire crackled.' When? (Evening or night, before electric light.) Why? (Lamps and fire suggest the era and time of day.)",
+                "Practice inferring motive: 'Anna left the cookies on the windowsill and waited by the gate.' Why? (She was probably waiting for someone she expected to be lured by the cookies.) What in the text suggests it?",
+                "Distinguish supported inferences from wild guesses: an inference must rest on text evidence; a guess does not.",
+                "Apply to nonfiction: 'The early settlers carried very little with them; what they took, they made themselves.' What does this imply? (They made things by hand; they could not buy what they needed.) Inference works in nonfiction too.",
+                "Read longer passages and identify multiple inferences with their supporting text evidence",
+            ],
+            "socratic_questions": [
+                "What does the text actually say? What does it not say?",
+                "What can you figure out from what the text says, even though the text doesn't say it directly?",
+                "What in the text makes you think that?",
+                "Is that an inference (supported by the text) or a guess (not supported by the text)?",
+                "What do you already know about the world that helped you make that inference?",
+            ],
+            "practice_activities": [
+                "Inference frame practice: read a short passage; answer 'what does the text imply?'; complete the I-think-X-because-the-text-says-Y sentence",
+                "Stated-versus-implied sort: read a passage with several statements; for each, label STATED or IMPLIED",
+                "Inference-versus-guess discrimination: present pairs of claims about a passage; for each, label INFERENCE (supported) or GUESS (unsupported)",
+                "Character-feeling inference practice on chapters of current reading: stop at moments and ask 'how is the character feeling? what tells you?'",
+                "Nonfiction inference practice: a science or history paragraph; what does the author imply about a topic? what evidence?",
+            ],
+            "real_world_connections": [
+                "Reading other people's feelings and intentions in everyday social life (a friend's body language; a sibling's tone)",
+                "Reading advertising critically (what does the ad imply about the product without saying it?)",
+                "Reading news and opinion writing (what does the author imply about the subject?)",
+                "Reading visual media (what does a movie scene imply through lighting, music, and setting?)",
+                "Reading silence (when someone does not say something, what does that imply?)",
+            ],
+            "common_misconceptions": [
+                "Believing inference is the same as guessing. Guesses are unsupported; inferences are supported by text evidence.",
+                "Believing inference is finding information the text states. That is retrieval, not inference. Inference is what the text implies but does not state.",
+                "Believing every interpretation is valid. Interpretations supported by text are valid; interpretations unsupported by text are not.",
+                "Believing inference is only for fiction. Nonfiction writers also imply much: an author's stance, an experiment's significance, a historical figure's character.",
+                "Believing prior knowledge alone produces inference. Prior knowledge plus text evidence produces inference; prior knowledge alone produces assumption.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Distinguishes stated information from implied information in a passage",
+                "Makes inferences that combine text evidence with prior knowledge",
+                "Cites text evidence using the I-think-X-because-the-text-says-Y frame",
+                "Discriminates supported inferences from unsupported guesses",
+                "Applies inference to nonfiction as well as narrative",
+            ],
+            "proficiency_indicators": [
+                "Makes inferences with some text support; may sometimes guess",
+                "Distinguishes inference from retrieval with prompting",
+            ],
+            "developing_indicators": [
+                "Cannot reliably distinguish stated from implied",
+                "Inferences are guesses unsupported by text",
+            ],
+            "assessment_methods": [
+                "scored inference items on assigned passages",
+                "stated-versus-implied sort tasks",
+                "inference-versus-guess discrimination tasks",
+                "real-time reading observation: does the child notice implication during discussion?",
+            ],
+            "sample_assessment_prompts": [
+                "Read this passage. What does it say directly? What does it imply? Use the I-think-X-because-the-text-says-Y frame.",
+                "Label each of these statements about the passage STATED or IMPLIED.",
+                "Which of these claims is a supported inference, and which is a guess? Defend your answer with text evidence.",
+                "Read this nonfiction paragraph. What does the author imply about the topic?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": (
+                    "Read the sentence: 'Tom slammed the door and refused to come down for dinner.' What is Tom most "
+                    "likely feeling?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Happy and excited.",
+                    "Angry or upset.",
+                    "Sleepy.",
+                    "Hungry.",
+                ],
+                "correct_answer": "Angry or upset.",
+                "hints": [
+                    "Slamming a door and refusing dinner are clues about feeling.",
+                ],
+                "explanation": (
+                    "The text doesn't say 'Tom is angry'; it shows actions (slamming the door, refusing dinner) that "
+                    "imply anger or upset. The reader combines text evidence (the actions) with prior knowledge (people "
+                    "slam doors when angry) to infer the feeling. This is a clean inference."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "What is the difference between an inference and a guess?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "There is no difference.",
+                    "An inference is supported by text evidence and prior knowledge; a guess is not supported by the text.",
+                    "An inference is for fiction; a guess is for nonfiction.",
+                    "An inference uses harder words than a guess.",
+                ],
+                "correct_answer": "An inference is supported by text evidence and prior knowledge; a guess is not supported by the text.",
+                "hints": [
+                    "Inference rests on evidence.",
+                ],
+                "explanation": (
+                    "Inference combines text evidence with prior knowledge to reach a conclusion the text doesn't "
+                    "state directly. A guess goes beyond the text without support. The discipline of inference is "
+                    "always being able to say 'I think X because the text says Y'."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "Read: 'They lit the lamps and pulled the curtains. The fire crackled on the hearth.' When does "
+                    "this scene most likely take place?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "A summer afternoon.",
+                    "An evening or night, in a time before electric lights.",
+                    "A modern morning in a city apartment.",
+                    "Inside a moving car.",
+                ],
+                "correct_answer": "An evening or night, in a time before electric lights.",
+                "hints": [
+                    "Lamps, curtains pulled, fire on a hearth: what do these clues suggest about time and era?",
+                ],
+                "explanation": (
+                    "The text doesn't state the time or era. The reader infers from the details: lamps (rather than "
+                    "electric lights) and a fire on a hearth (rather than central heating) suggest an earlier era; "
+                    "lit lamps and pulled curtains suggest evening or night. Text plus prior knowledge produces a "
+                    "confident inference about setting."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "The text says: 'Anna left a plate of cookies on the windowsill and waited by the gate.' Which is "
+                    "an INFERENCE (supported by the text), and which is a GUESS (not supported)?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Inference: Anna was expecting someone she wanted to lure with cookies. Guess: Anna had a brown dog named Max.",
+                    "Inference: Anna had a brown dog named Max. Guess: Anna was expecting someone.",
+                    "Both are inferences.",
+                    "Both are guesses.",
+                ],
+                "correct_answer": "Inference: Anna was expecting someone she wanted to lure with cookies. Guess: Anna had a brown dog named Max.",
+                "hints": [
+                    "Which claim has text evidence behind it?",
+                ],
+                "explanation": (
+                    "The text supports 'Anna was expecting someone she wanted to lure with cookies' (the cookies plus "
+                    "the waiting are evidence). The text says nothing about a dog named Max, so that claim is a guess "
+                    "unsupported by the text. The discipline: every inference must rest on text evidence."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Read a chapter of your current book. Find one moment where the text implies something it does "
+                    "not say directly. Complete: 'I think ____ because the text says ____.'"
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Look for moments of character feeling, motive, or setting that the text shows but does not state.",
+                ],
+                "explanation": (
+                    "A complete answer names a real moment of implication, the inference itself, and the specific text "
+                    "evidence behind it. With practice the child runs inference automatically while reading; this "
+                    "explicit frame is the training wheel that lets the skill settle in."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Read this passage. List two things the text states directly and two things the text implies. Use the I-think-X-because-the-text-says-Y frame for each implication.",
+                "type": "open_response",
+                "target_concept": "stated_versus_implied_discrimination",
+                "rubric": (
+                    "Mastery: identifies two stated and two implied items, each with text evidence for the implied "
+                    "ones. Proficient: identifies stated and implied but text evidence is partial. Developing: "
+                    "cannot distinguish stated from implied."
+                ),
+            },
+            {
+                "prompt": "Read this passage. Make three inferences about character, setting, or motive. Cite text evidence for each.",
+                "type": "open_response",
+                "target_concept": "inference_with_evidence",
+                "rubric": (
+                    "Mastery: three inferences each tied to specific text evidence. Proficient: inferences correct "
+                    "but evidence is general. Developing: claims are guesses without text support."
+                ),
+            },
+            {
+                "prompt": "Read this nonfiction paragraph. What does the author imply about the topic? Cite text evidence.",
+                "type": "open_response",
+                "target_concept": "nonfiction_inference",
+                "rubric": (
+                    "Mastery: identifies the author's implied stance with text evidence. Proficient: identifies the "
+                    "implication but evidence is partial. Developing: misses the implication."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "a current chapter book with character-rich moments suitable for inference work",
+                "short nonfiction passages with a clear authorial stance",
+                "the child's reading notebook for written inference work",
+            ],
+            "recommended": [
+                "a wall card with the I-think-X-because-the-text-says-Y frame",
+                "picture books that imply more than they state (Chris Van Allsburg, Anthony Browne) as low-decoding inference practice",
+                "wordless picture books and short films for inference practice without text load",
+            ],
+        },
+        "time_estimates": {"first_exposure": 30, "practice_session": 20, "assessment": 20},
+        "accommodations": {
+            "dyslexia": "Practice inference on read-aloud passages and on wordless or low-text picture books. The skill is about implication, not decoding; remove the decoding load.",
+            "adhd": "Brief, frequent inference moments rather than long inference exercises. One inference per chapter is enough at first; build from there.",
+            "gifted": "Move to texts with subtler implication: poetry, literary fiction, persuasive nonfiction. Introduce the idea of unreliable narration and how it complicates inference.",
+            "visual_learner": "Use two-column notes: text says / I infer. The visual layout makes the structure of inference explicit.",
+            "kinesthetic_learner": "Act out the inferred feeling or motive. The body's enactment confirms the inference.",
+            "auditory_learner": "Discuss inferences aloud before writing. Hearing the I-think-X-because-the-text-says-Y frame spoken helps the structure settle.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we learn to read between the lines. Inference is the skill of figuring out what the author "
+                    "implies but does not state directly. We learn the I-think-X-because-the-text-says-Y frame, and "
+                    "we practice the difference between an inference (supported by the text) and a guess (not "
+                    "supported by the text)."
+                ),
+                "gradual_release": {
+                    "i_do": "Parent reads a passage aloud, names what the text states and what the text implies, and demonstrates the inference frame with text evidence.",
+                    "we_do": "Together with the child, work through several passages identifying stated, implied, and the supporting evidence.",
+                    "you_do": "Child applies inference to their own current reading and records inferences with text evidence in the reading notebook.",
+                },
+                "guided_practice": [
+                    "Daily inference moment in current reading: one stated, one implied, with evidence",
+                    "Weekly nonfiction inference: what does the author imply?",
+                    "Stated-versus-implied sort tasks on prepared passages",
+                ],
+                "independent_practice": [
+                    "Run inference automatically during chapter book reading",
+                    "Record memorable inferences with evidence in the reading notebook",
+                ],
+                "mastery_check": [
+                    "Distinguishes stated from implied",
+                    "Cites text evidence for inferences",
+                    "Discriminates inference from guess",
+                ],
+                "spiral_review": [
+                    "Return to earlier inferences in the reading notebook; check that the evidence still supports them",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "Reading between the lines is the mark of the educated reader. Ancient writers prized the reader "
+                    "who could draw the implied meaning, the moral, the unspoken truth. To infer is to honor a text by "
+                    "reading what it really says, both on the surface and beneath."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the rule: I think X because the text says Y",
+                        "Recite the discipline: an inference rests on text evidence; a guess does not",
+                    ],
+                    "recitations": [
+                        "Memorize a short passage rich in implication and recite it; discuss what the passage implies as well as states",
+                    ],
+                },
+                "copywork": [
+                    "Copy a sentence rich in implication into the copybook; write below it 'this implies _____ because _____'",
+                ],
+                "recitation_routine": "At each reading session the child names one inference with evidence from the day's reading.",
+                "history_integration": "Reading history depends heavily on inference: a historical document or letter implies much that is not stated. Letters of George Washington or Anne Frank's diary practice inference under real conditions.",
+                "read_aloud_suggestions": [
+                    "Books with strong characterization that imply much through action: Charlotte's Web, The Wind in the Willows, The Lion the Witch and the Wardrobe",
+                    "Short stories with a turn or twist that depend on the reader's inference",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "Living books that imply more than they state; books whose characters reveal themselves through action",
+                ],
+                "short_lesson_flow": "During reading, pause at moments where the text implies something not stated. The child names the implication and the text evidence. Inference becomes a habit woven into reading aloud, not a separate exercise.",
+                "narration_prompt": "What did the text say about this moment? What did it imply about how the character felt? What in the words made you think so?",
+                "real_world_objects": [
+                    "The reading notebook for recorded inferences",
+                    "A wall card with the I-think-X-because-the-text-says-Y frame",
+                ],
+                "nature_connection": "Nature observation invites inference: tracks in the snow imply an animal; pressed grass implies it bedded down; the broken branch implies wind or weight. Nature reading and text reading share the same discipline.",
+                "habit_focus": "The habit of attention to implication. The careful reader notices what is shown without being told.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Inference card sets: a short passage on one side, possible inferences on the other, with text-evidence prompts",
+                    "Stated-versus-implied sort cards",
+                    "Inference-versus-guess sort cards",
+                    "A reading notebook for the child's own inferences with evidence",
+                ],
+                "presentation": {
+                    "three_period_lesson": "This is what the text says; this is what the text implies; this is the text evidence. Show me what the text says; show me what the text implies. Is this stated or implied?",
+                    "steps": [
+                        "The guide presents an inference with explicit naming of stated, implied, and evidence",
+                        "The child sorts stated-versus-implied cards",
+                        "The child works through inference-versus-guess sorts",
+                        "The child applies inference to their own reading and keeps an inference log",
+                        "Across the term the child runs inference fluently without explicit framing",
+                    ],
+                },
+                "control_of_error": "The control is the text itself: an inference holds if the evidence really is in the text. The child can always return to the passage to check.",
+                "abstraction_pathway": "From sorting prepared cards, to making inferences with explicit frame, to running inference automatically during reading.",
+                "extensions": [
+                    "Unreliable narration and how it complicates inference",
+                    "Inference about an author's stance in persuasive writing",
+                    "Inference across multiple texts (what do two accounts of the same event together imply?)",
+                ],
+                "observation_focus": "Watch for spontaneous inferences with evidence during reading discussion. Watch for the child distinguishing supported inference from unsupported guess.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Talk about characters' feelings and motives during shared reading; welcome the child's interpretations",
+                    "Discuss advertising, news, and shows in inference terms: what is the maker implying without saying?",
+                    "Read picture books that imply more than they state; talk about what is shown but not told",
+                ],
+                "real_world_contexts": [
+                    "Reading other people's feelings in everyday social life",
+                    "Reading what advertising and media imply",
+                    "Reading body language, tone, silence, and other non-spoken signals",
+                ],
+                "conversation_starters": [
+                    "What do you think the character was feeling? What made you think so?",
+                    "Is that something the text actually says, or something you figured out from what the text says?",
+                    "What is the writer or maker hinting at without saying it out loud?",
+                ],
+                "resource_bank": [
+                    "Picture books that imply rather than state (Chris Van Allsburg, Anthony Browne)",
+                    "Wordless picture books and short films for inference practice",
+                    "Family conversations about characters, motives, and implications",
+                ],
+                "parent_role": "Model inference openly. Share your own inferences about characters and situations with the I-think-X-because-the-text-says-Y frame. Welcome the child's inferences and ask 'what made you think so?'",
+                "observation_documentation": "Note when the child spontaneously talks about a character's implied feeling, motive, or situation; note when the child distinguishes supported inference from guess. These are the real markers of internalization.",
+            },
+        },
+        "connections": {
+            "math": "Reading word problems demands inference: what is the problem really asking? what is implied by the numbers?",
+            "science": "Reading science writing demands inference: what does the data suggest beyond what the writer states? what is the experiment's implied conclusion?",
+            "history": "History writing is built on inference: a letter, a treaty, a journal entry implies much about a person or period beyond what is stated",
+            "writing": "Strong writing implies as well as states; learning to read for implication informs the child's own writing toward show-don't-tell technique",
+        },
+    },
 }
