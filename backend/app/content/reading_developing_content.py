@@ -3223,4 +3223,387 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Knowing the plot mountain is the precondition for writing one's own structured stories with clear turning points",
         },
     },
+    "rd-08": {
+        "enriched": True,
+        "learning_objectives": [
+            "Identify cause-and-effect relationships in both fiction and nonfiction texts: this happened, and BECAUSE OF THAT, this followed",
+            "Recognize signal words and phrases that mark cause and effect: because, so, therefore, as a result, due to, consequently, since",
+            "Distinguish a cause-and-effect relationship from a sequence: 'A happened, then B happened' is sequence; 'A happened, and BECAUSE OF A, B happened' is cause and effect",
+            "Trace a chain of causes and effects through a story or explanatory passage",
+            "Apply the same skill in nonfiction (history, science): name the cause of an event and trace its effects",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "Cause and effect is the logical glue that makes stories and explanations cohere. In a story, the "
+                "character's choices have consequences; in a science passage, the conditions produce the result; in a "
+                "history passage, the situation gives rise to the event. The skill at this band is twofold: recognize "
+                "the SIGNAL WORDS that mark cause-and-effect relationships, and distinguish cause-and-effect from "
+                "simple sequence (A happened then B happened, vs A happened and BECAUSE OF A, B happened). The signal "
+                "words because, so, therefore, since, as a result, consequently, due to are the workhorse vocabulary; "
+                "the child learns to notice them in reading and to use them in their own talking and writing."
+            ),
+            "scaffolding_sequence": [
+                "Start with everyday cause-and-effect: 'I went outside without a coat, SO I got cold.' Notice the signal word.",
+                "Introduce the signal words explicitly: because, so, therefore, as a result, since, due to, consequently. Make a wall chart.",
+                "Find signal words in a real text. Read a paragraph; circle every signal word; notice what came before and what came after each one.",
+                "Distinguish cause-effect from sequence with a clear contrast: 'I ate breakfast, then I went to school' (sequence) vs 'I ate breakfast, SO I had energy for school' (cause and effect).",
+                "Trace a single cause-and-effect in a story: 'Wilbur was scared he would be killed; BECAUSE of that, Charlotte made a plan to save him.' The because is the engine of plot.",
+                "Build a cause-and-effect chain: in a longer passage, one effect becomes the cause of the next thing. Draw it as a chain of arrows.",
+                "Apply the same skill to nonfiction: 'The Pilgrims came to North America BECAUSE they wanted religious freedom; AS A RESULT, they founded a colony in Plymouth.' Cause-effect is how history is told.",
+                "Apply to science: 'The water was heated to 100C; AS A RESULT, it boiled.' Cause-effect is how science is explained.",
+            ],
+            "socratic_questions": [
+                "Did A cause B, or did A just happen before B?",
+                "What signal word would you use to connect these two events?",
+                "Why did the character do that? What caused that decision?",
+                "Trace it back: what caused the cause? Can you go one more step back?",
+                "Trace it forward: what did this effect cause next?",
+                "If A had not happened, would B still have happened? (This is a cause check.)",
+            ],
+            "practice_activities": [
+                "Signal-word hunt: in a chosen paragraph, circle every signal word the child finds; for each, draw an arrow from cause to effect",
+                "Cause-and-effect chain: in a story, pick a major event and trace the chain back and forward (what caused this? what did it cause? what did that cause?)",
+                "Sequence-vs-cause sort: parent gives sentences; child sorts each as 'sequence only' or 'cause and effect'",
+                "Why-because game: parent makes a statement ('the character got lost in the woods'); child must explain WHY, using a signal word",
+                "Apply across subjects: name a cause-and-effect from yesterday's history reading; name one from yesterday's science reading; name one from the chapter book",
+            ],
+            "real_world_connections": [
+                "Naming the cause and effect in family decisions: 'we left early SO we wouldn't hit traffic'",
+                "Tracing the consequences of choices in everyday life",
+                "Recognizing the signal words in news headlines and articles",
+                "Tracing the chain of causes in a real-world event the family discusses",
+                "Applying the skill to the child's own behavior: 'I didn't sleep enough last night, AS A RESULT I'm tired today'",
+            ],
+            "common_misconceptions": [
+                "Confusing sequence with cause-and-effect. Sequence is order; cause-and-effect is causation. Two events can be in sequence without one causing the other.",
+                "Assuming every signal word marks cause-and-effect. 'Since' can mean 'because' OR 'from the time that'; 'so' can mean 'therefore' OR 'very' ('so cold!'). Context is key.",
+                "Treating cause-and-effect as a single link. Many real causes are chains, and one effect can have multiple causes.",
+                "Stopping at the first cause. Asking 'what caused the cause?' opens up depth.",
+                "Believing cause-and-effect lives only in nonfiction. Fiction runs on it: every plot is a chain of causes and effects.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Identifies cause-and-effect relationships in unfamiliar texts (fiction and nonfiction) using signal words",
+                "Distinguishes cause-and-effect from sequence in mixed sentences",
+                "Traces a chain of three or more cause-and-effect links in a story or explanation",
+                "Uses cause-and-effect signal words correctly in their own talking and writing",
+                "Applies the skill across subjects: literature, history, science",
+            ],
+            "proficiency_indicators": [
+                "Recognizes cause-and-effect in clearly-signaled passages",
+                "Uses 'because' and 'so' in own talking; other signal words still emerging",
+            ],
+            "developing_indicators": [
+                "Confuses sequence with cause-and-effect",
+                "Cannot identify a cause-and-effect link without prompting",
+            ],
+            "assessment_methods": [
+                "signal-word identification in a chosen passage",
+                "sequence-vs-cause-and-effect sort",
+                "cause-and-effect chain diagram for a major story event",
+                "cross-subject application: name cause-and-effect from history, science, and literature in the same week",
+            ],
+            "sample_assessment_prompts": [
+                "Read this paragraph. Circle every signal word for cause-and-effect.",
+                "For each sentence, tell me whether it shows sequence only or cause-and-effect.",
+                "Take this event from the book and trace it back: what caused it? What caused that?",
+                "Tell me one cause-and-effect from your history reading this week.",
+                "Use 'as a result' in your own sentence about today.",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What is the difference between 'sequence' and 'cause and effect'?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "They are the same thing.",
+                    "Sequence is the order things happened; cause and effect is when one thing makes another thing happen.",
+                    "Sequence is in fiction; cause and effect is in nonfiction.",
+                    "Sequence is short; cause and effect is long.",
+                ],
+                "correct_answer": "Sequence is the order things happened; cause and effect is when one thing makes another thing happen.",
+                "hints": [
+                    "Sequence is A then B. Cause and effect is A so B (because of A).",
+                ],
+                "explanation": (
+                    "Sequence is the order things happened: A, then B. Cause and effect is causal: A happened, and BECAUSE "
+                    "OF A, B followed. The two often look similar but are different."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "Which of these is a cause-and-effect signal word?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Tomorrow.",
+                    "Because.",
+                    "Maybe.",
+                    "Quickly.",
+                ],
+                "correct_answer": "Because.",
+                "hints": [
+                    "Signal words for cause-and-effect: because, so, therefore, as a result, since, due to, consequently.",
+                ],
+                "explanation": (
+                    "'Because' is the most common signal word for cause-and-effect. Others include so, therefore, as a "
+                    "result, since (when it means 'because'), due to, and consequently."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "Read these two sentences: 'I ate breakfast, then I went to school.' 'I ate breakfast, so I had energy "
+                    "for school.' Which one shows cause-and-effect?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "The first sentence (I ate breakfast, then I went to school).",
+                    "The second sentence (I ate breakfast, so I had energy for school).",
+                    "Both equally.",
+                    "Neither.",
+                ],
+                "correct_answer": "The second sentence (I ate breakfast, so I had energy for school).",
+                "hints": [
+                    "Look for the signal word 'so'.",
+                    "The first sentence is just sequence (one event then another); the second sentence shows that eating CAUSED having energy.",
+                ],
+                "explanation": (
+                    "The first sentence is sequence: A then B. The second sentence has 'so', which signals that eating "
+                    "breakfast CAUSED having energy. The 'so' makes it cause-and-effect."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "In Charlotte's Web, Wilbur is scared he will be killed for bacon. Charlotte decides to save him. She "
+                    "writes 'SOME PIG' in her web. The townspeople come to see the miracle pig. Wilbur becomes famous and "
+                    "is saved. Trace one cause-and-effect link in this chain."
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Pick any two consecutive events and connect them with a signal word.",
+                    "For example: 'Charlotte wrote SOME PIG in her web, AS A RESULT the townspeople came to see Wilbur.'",
+                ],
+                "explanation": (
+                    "Each event in the chain causes the next: Wilbur was scared he would be killed BECAUSE he was going "
+                    "to be slaughtered. AS A RESULT Charlotte decided to save him. SO she wrote SOME PIG in her web. "
+                    "BECAUSE of the words in the web, the townspeople came. AS A RESULT Wilbur became famous. THEREFORE "
+                    "he was saved. Every link is a cause-and-effect."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Cause-and-effect is everywhere in real life and in real subjects. Name one cause-and-effect from "
+                    "yesterday's chapter book reading, one from yesterday's history reading, and one from yesterday's "
+                    "science reading. Use a different signal word for each."
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Pick three different sources and three different signal words.",
+                ],
+                "explanation": (
+                    "Cause-and-effect is the engine of stories, histories, and science explanations alike. A typical "
+                    "answer might be: 'In my chapter book, the character ran away BECAUSE her parents wouldn't listen. "
+                    "In history, the colonists protested THEREFORE the king made it worse. In science, the cup got cold "
+                    "AS A RESULT of being in the freezer.' Three subjects, three signal words, three real cause-and-"
+                    "effects."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Read this paragraph and identify every cause-and-effect signal word. For each, draw an arrow from cause to effect.",
+                "type": "open_response",
+                "target_concept": "signal_word_identification",
+                "rubric": (
+                    "Mastery: identifies all cause-and-effect signal words with arrows correctly drawn. Proficient: "
+                    "identifies most. Developing: identifies sequence words as cause-and-effect or misses signals."
+                ),
+            },
+            {
+                "prompt": "Sort these sentences: which show sequence only, and which show cause-and-effect?",
+                "type": "open_response",
+                "target_concept": "sequence_vs_cause_distinction",
+                "rubric": (
+                    "Mastery: sorts correctly with reasons. Proficient: sorts correctly without reasons. Developing: "
+                    "sorts incorrectly or confuses the categories."
+                ),
+            },
+            {
+                "prompt": "Trace a cause-and-effect chain through a major event in the book you are reading. At least three links.",
+                "type": "open_response",
+                "target_concept": "cause_effect_chain_tracing",
+                "rubric": (
+                    "Mastery: three or more links with signal words connecting each. Proficient: two-link chain. "
+                    "Developing: cannot trace a chain."
+                ),
+            },
+            {
+                "prompt": "Name one cause-and-effect from each of literature, history, and science this week.",
+                "type": "open_response",
+                "target_concept": "cross_subject_application",
+                "rubric": (
+                    "Mastery: three different subjects, three different signal words, three real cause-and-effect "
+                    "relationships. Proficient: three subjects with similar signal words. Developing: cannot apply "
+                    "across subjects."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "a wall chart or reference card with the signal words (because, so, therefore, as a result, since, due to, consequently)",
+                "a chapter book and a nonfiction reading the child is currently working with",
+                "a signal-word hunt template (a paragraph with space for circling)",
+            ],
+            "recommended": [
+                "a cause-and-effect chain template (boxes connected by labeled arrows)",
+                "news articles for cause-and-effect practice in real-world writing",
+                "a chosen science or history reading with strong cause-and-effect structure",
+            ],
+        },
+        "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 15},
+        "accommodations": {
+            "dyslexia": "Begin with oral cause-and-effect work (real-life examples, family conversations). The skill is logical, not decoding-dependent. Move to written work as fluency permits.",
+            "adhd": "Use the signal-word chart and physical arrow-drawing rather than long discussion. Quick verbal back-and-forth ('what caused that? what did THAT cause?') keeps engagement.",
+            "gifted": "Move to multi-causal events (events with several causes). Introduce the idea that history and science often involve chains of causes rather than single causes. Begin to notice when cause-and-effect arguments are weak or contested.",
+            "visual_learner": "Use chain-of-arrows diagrams. Color-code causes and effects.",
+            "kinesthetic_learner": "Physical sort: print sentences on cards, sort into 'sequence' and 'cause-and-effect' piles. Walk through a cause-and-effect chain by stepping from event to event on the floor.",
+            "auditory_learner": "Discuss cause-and-effect aloud with a real partner. Listening for signal words in family conversation is a real practice.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we learn to recognize cause-and-effect, the logical glue of stories and explanations. We "
+                    "learn the signal words (because, so, therefore, as a result, since, due to, consequently) and "
+                    "practice distinguishing cause-and-effect from sequence. The skill applies across reading, history, "
+                    "and science."
+                ),
+                "gradual_release": {
+                    "i_do": "Parent reads a paragraph aloud and points out the signal words; explains the cause-effect link each one marks.",
+                    "we_do": "Together with the child, hunt for signal words in a second paragraph and discuss the links.",
+                    "you_do": "Child works through a third paragraph independently, identifying signals and tracing links.",
+                },
+                "guided_practice": [
+                    "Signal-word hunt in a chosen paragraph",
+                    "Sequence-vs-cause sort with parent-prepared sentence cards",
+                    "Cause-and-effect chain for one major event in the current book",
+                ],
+                "independent_practice": [
+                    "Daily noticing: name one cause-and-effect from today's reading across subjects",
+                    "Apply the signal words in writing: use 'because' or 'as a result' in a written narration",
+                ],
+                "mastery_check": [
+                    "Identifies cause-and-effect in unfamiliar texts using signal words",
+                    "Distinguishes cause-and-effect from sequence",
+                    "Traces a multi-link chain",
+                ],
+                "spiral_review": [
+                    "Return to earlier readings and find cause-and-effect that was missed on first reading",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "Cause-and-effect is the logical structure of all explanation. Aristotle named the four causes; the "
+                    "medieval logicians refined them; modern history and science still rest on the same habit of asking "
+                    "WHY. To learn cause-and-effect is to take up the central question of every careful reader: not "
+                    "just what happened, but WHY."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the signal words: because, so, therefore, as a result, since, due to, consequently",
+                        "Recite the question: not just what happened, but why? what caused this? what did this cause?",
+                    ],
+                    "recitations": [
+                        "Memorize one well-formed cause-and-effect sentence from each week's reading; the language of causation lives in the ear",
+                    ],
+                },
+                "copywork": [
+                    "Copy one well-formed cause-and-effect sentence per week into the copybook; the signal words and the structure live in the hand",
+                ],
+                "recitation_routine": "After each reading, the child names one cause-and-effect aloud, using a signal word.",
+                "history_integration": "History is the chronicle of cause-and-effect: the king did this AS A RESULT of that; the war broke out BECAUSE of these tensions. Apply the vocabulary to history daily.",
+                "read_aloud_suggestions": [
+                    "Real history (D'Aulaire, Foster, Fritz) and real science writing where causes and effects are clearly chained",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "Living books across the subjects where cause-and-effect is the logical structure of the writing",
+                    "Aesop's fables, where every story turns on a cause-and-effect lesson",
+                ],
+                "short_lesson_flow": "After a reading, the parent asks a 'why?' or 'what caused that?' question. The child answers with a signal word. The conversation is brief and real.",
+                "narration_prompt": "What happened in the reading, and why did it happen? Use 'because' or 'as a result' in your telling.",
+                "real_world_objects": [
+                    "The signal-word chart on the wall of the reading area",
+                    "A small notebook where the child notes one cause-and-effect per day across subjects",
+                ],
+                "nature_connection": "Cause-and-effect in nature observation: 'the leaves changed color BECAUSE of the cold'; 'the bird returned to the feeder AS A RESULT of the warm afternoon'. The signal words apply to real observation as much as to texts.",
+                "habit_focus": "The habit of asking why. The careful reader and the careful observer both ask not just what but why.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Signal-word cards: a card for each signal word with example sentences on the back",
+                    "Sentence-sort cards: sentences printed individually for sorting into sequence and cause-and-effect piles",
+                    "Cause-and-effect chain templates the child can fill in for stories and explanations",
+                ],
+                "presentation": {
+                    "three_period_lesson": "This is a cause-and-effect sentence; this is a sequence-only sentence. Show me a cause-and-effect; show me a sequence. Is this one cause-and-effect or sequence?",
+                    "steps": [
+                        "The guide presents the signal-word cards and reads examples aloud",
+                        "The child sorts sentence cards into sequence and cause-and-effect piles",
+                        "The child traces a cause-and-effect chain for an event in a chosen story",
+                        "Across the term, the child notices cause-and-effect spontaneously during reading",
+                    ],
+                },
+                "control_of_error": "The signal-word cards are the control: a sentence sorted into 'cause-and-effect' should contain a signal word or imply causation; if it doesn't, the child can move it.",
+                "abstraction_pathway": "From sorting concrete sentence cards, to identifying cause-and-effect in unfamiliar passages, toward writing one's own cause-and-effect explanations across subjects.",
+                "extensions": [
+                    "Notice cause-and-effect in nature observation",
+                    "Apply cause-and-effect to history and science readings",
+                    "Begin to notice multi-causal events (more than one cause for an effect)",
+                ],
+                "observation_focus": "Watch for the child reaching for signal words in their own talking and writing across subjects.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Pose 'why' questions casually in family conversation: 'Why do you think she said that?' 'What do you think caused that?'",
+                    "Welcome the child's cause-and-effect noticings without making them a lesson",
+                    "Leave a few interesting cause-and-effect-themed books available (Rube Goldberg machines, science of dominoes, history of events)",
+                ],
+                "real_world_contexts": [
+                    "Discussing why something happened in a family decision, a news story, or a personal experience",
+                    "Naming the consequences of choices in real life",
+                    "Talking about cause-and-effect in shows and movies",
+                ],
+                "conversation_starters": [
+                    "Why do you think that happened?",
+                    "What do you think caused that?",
+                    "What do you think the result will be?",
+                    "If we hadn't done that, what would have happened?",
+                ],
+                "resource_bank": [
+                    "Books and shows that explore cause-and-effect at every level",
+                    "Real-world conversation about why things happen",
+                    "A discussion partner who welcomes 'why' questions",
+                ],
+                "parent_role": "Be a curious 'why' asker yourself. Model cause-and-effect thinking in your own talk. Welcome the child's own questions.",
+                "observation_documentation": "Across a term, note when the child reaches for signal words spontaneously in their own talking and writing. This is the real sign of internalization.",
+            },
+        },
+        "connections": {
+            "math": "Cause-and-effect in word problems: the SAME signal words mark mathematical relationships ('she had 10 apples and gave 3 away, AS A RESULT she had 7 left')",
+            "science": "Cause-and-effect is the logical structure of all scientific explanation: condition X causes result Y",
+            "history": "History is the chronicle of cause-and-effect; the central skill of history-reading is identifying causes and tracing effects",
+            "writing": "Using cause-and-effect signal words in writing makes the writing logical and connected; this is the precondition for expository writing",
+        },
+    },
 }
