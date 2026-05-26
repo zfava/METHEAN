@@ -1492,4 +1492,405 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
             "standard_refs": [],
         },
     },
+    "elc-002": {
+        "node_type": "technique",
+        "trade": "electrical",
+        "competency_name": (
+            "Identify residential electrical components from diagrams and with covers closed: "
+            "service entrance, panel, branch-circuit devices, grounding electrode system, "
+            "and low-voltage components"
+        ),
+        "progression_band": "helper",
+        "prerequisites": ["els-001"],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "Reaching toward an energized busbar or breaker terminal while "
+                    "'identifying' inside a panel. The rule is the cover stays on at this "
+                    "band; identification is performed visually from outside the enclosure, "
+                    "from diagrams, and from photographs the licensed electrician has taken "
+                    "with the panel verified dead per elc-021."
+                ),
+                (
+                    "Touching a receptacle, switch, fixture base, or junction box cover "
+                    "with bare hands while the circuit is energized. Identification at this "
+                    "band is visual only with cover closed; bare-hand contact is acceptable "
+                    "for cover identification only when the cover is intact and unbroken "
+                    "and the device is undamaged."
+                ),
+                (
+                    "Operating a breaker, disconnect, or switch as part of identification. "
+                    "The rule is no operation at this band; identification is identification "
+                    "only. Operating any device is part of elc-021 with the licensed "
+                    "electrician present."
+                ),
+                (
+                    "Misidentifying a component on a diagram and propagating the error to a "
+                    "later step. Not a direct hazard at this band, but a real downstream "
+                    "error if the wrong component identity is used in elc-021 or later."
+                ),
+                (
+                    "Misreading a schematic symbol and confusing series for parallel, or "
+                    "confusing the equipment grounding conductor for a current-carrying "
+                    "neutral. Not a direct hazard at this band but a foundational "
+                    "literacy error that compounds in elc-005 (schematic reading) and "
+                    "every downstream competency."
+                ),
+                (
+                    "Slip or trip hazards in panel rooms, basements, and behind appliances "
+                    "where the equipment lives. Tools and equipment in walkways are real "
+                    "hazards; the rule is no tools on the floor in path lines."
+                ),
+            ],
+            "ppe_required": [
+                "Trade PPE per els-001 (closed-toe shoes, the trade's general defaults)",
+                "Safety glasses for any close inspection inside a panel room or attic",
+                (
+                    "Bare hands acceptable for identifying intact covers, intact receptacle "
+                    "faces, and intact switch faces; cut-resistant gloves on if any "
+                    "handling of damaged or sharp covers is anticipated"
+                ),
+                "No metal jewelry on hands or wrists near panels or distribution equipment",
+            ],
+            "supervision_required": False,
+            "supervision_basis": (
+                "Visual identification with the cover closed and no enclosure opening "
+                "involves no tool use, no live circuit contact, no disconnect operation, "
+                "and no rotating equipment contact. The AI tutor mentors this competency "
+                "end-to-end: the learner photographs each component (with the enclosure "
+                "cover closed; the cover is opened only under elc-021 with a licensed "
+                "electrician present, which is a different competency), and the AI "
+                "confirms each identification. Trade-level supervision from el-root still "
+                "applies in the sense that no enclosure is opened and no energized work "
+                "is performed."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "The household's actual residential electrical service",
+                "specification": (
+                    "The household's main panel (cover closed), any subpanels (cover "
+                    "closed), branch-circuit devices (receptacles, switches, fixtures, "
+                    "junction-box covers, all intact and cover-closed), grounding "
+                    "electrode system (where visible: ground rod, water-pipe bond if "
+                    "accessible), and any low-voltage components (doorbell transformer, "
+                    "thermostat at the wall, security panel, smoke / CO alarms). "
+                    "Identification is from outside the enclosure only."
+                ),
+                "alternatives": [
+                    "Clear photographs of a residential service from manufacturer or "
+                    "published-textbook documentation, used as a learning aid when the "
+                    "household's equipment is not accessible",
+                ],
+            },
+            {
+                "name": "A residential one-line diagram (or a sample residential diagram from a recognized publisher)",
+                "specification": (
+                    "A one-line diagram or schematic of a residential electrical service "
+                    "the learner can study. The AI tutor provides sample diagrams matched "
+                    "to the household's actual service configuration where possible."
+                ),
+                "alternatives": [
+                    "A reproducible sample diagram from a recognized educational publisher",
+                ],
+            },
+            {
+                "name": "A residential schematic-symbol reference",
+                "specification": (
+                    "A standard reference of the electrical schematic symbols used on "
+                    "residential one-line and wiring diagrams (switch, receptacle, "
+                    "fixture, ground, ungrounded / hot conductor, grounded / neutral "
+                    "conductor, equipment grounding conductor, breaker, fuse, motor, "
+                    "transformer, GFCI, AFCI, smoke detector). The AI tutor provides the "
+                    "reference."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Camera (cell phone is sufficient)",
+                "specification": (
+                    "A camera that produces images clear enough to identify components in "
+                    "the AI tutor's review."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Component identification card or notebook",
+                "specification": (
+                    "A sheet or notebook page listing each named component with its "
+                    "function in one sentence as the learner identifies it. The card "
+                    "travels with the learner across later sessions on that equipment."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Flashlight or headlamp",
+                "specification": "Panel rooms, basements, and attics are commonly dark; a flashlight is on the person",
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [],
+        "workspace_requirements": {
+            "surface": "Wherever the equipment is installed; the work is the visit itself",
+            "ventilation": "Per els-001 for the space",
+            "lighting": "Daylight, room lighting, or flashlight as needed",
+            "power": (
+                "Energy state immaterial for cover-closed visual ID; for any "
+                "cover-removed view, the disconnect is verified open under elc-021 by a "
+                "licensed electrician (a different competency)"
+            ),
+            "containment": "None required",
+        },
+        "skill_description": (
+            "The learner visits the household's residential electrical service and "
+            "identifies each major component by sight with all enclosure covers closed, "
+            "and identifies the corresponding component on a one-line diagram or "
+            "schematic. The learner photographs each component and writes its name and "
+            "function in one sentence on an ID card. The components, in order from the "
+            "utility inward: weatherhead or service lateral (the entrance point of the "
+            "supply conductors); meter (the utility's metering enclosure); main "
+            "disconnect (the breaker or switch that de-energizes the entire service); "
+            "main panel (the enclosure containing the main disconnect on combination "
+            "panels, and the branch-circuit breakers); subpanels if any (downstream "
+            "panels fed from the main, with their own neutral and ground busbars "
+            "isolated per the AHJ-adopted NEC); branch-circuit breakers (the "
+            "individual-circuit overcurrent devices); the neutral busbar and the ground "
+            "busbar inside the panel (covers closed; identified from manufacturer "
+            "diagrams and from the panel's published one-line layout); the "
+            "neutral-to-ground bond (located at the main service equipment ONLY per the "
+            "AHJ-adopted NEC); branch-circuit cables exiting the panel (NM, MC, AC, "
+            "conduit-and-wire as applicable; identified by the visible sheathing or "
+            "raceway); junction boxes along the circuit (covers closed; identified by "
+            "the visible box and cover); receptacles (standard duplex, GFCI, AFCI, "
+            "tamper-resistant where required by the AHJ-adopted NEC); switches (single-"
+            "pole, three-way, four-way, dimmer); fixtures (ceiling, wall, fluorescent, "
+            "LED); the grounding electrode system (ground rod or rods, water-pipe bond "
+            "if accessible, intersystem bonding termination if present); low-voltage "
+            "components (doorbell transformer typically mounted on the panel exterior or "
+            "in the basement; thermostat at the wall; smoke and CO alarms; security and "
+            "communication panels). On the schematic / one-line side, the learner "
+            "matches each physical component to its standard symbol and names the "
+            "convention (ungrounded conductor is hot; grounded conductor is neutral; "
+            "equipment grounding conductor is the bare or green wire; the bond between "
+            "neutral and ground exists at the main service equipment only)."
+        ),
+        "demonstration_criteria": [
+            (
+                "Names every visible exterior component of the residential service from "
+                "outside the enclosure: weatherhead or service-lateral entry, meter, "
+                "main disconnect location, main-panel exterior, any subpanel exterior, "
+                "grounding electrode system (where visible)"
+            ),
+            (
+                "Names every visible branch-circuit and low-voltage component from "
+                "outside the enclosure: receptacles (standard, GFCI by face marking, "
+                "AFCI by face marking, tamper-resistant by face marking), switches "
+                "(single-pole, three-way by appearance), fixtures (by mounting and "
+                "lamp type), junction-box covers, doorbell transformer, thermostat, "
+                "smoke and CO alarms"
+            ),
+            (
+                "Matches each physical component identified above to its standard "
+                "symbol on a residential one-line diagram or schematic; the AI tutor "
+                "confirms each match"
+            ),
+            (
+                "Names the conventions: ungrounded conductor (hot) is typically black "
+                "or red insulation; grounded conductor (neutral) is white insulation; "
+                "equipment grounding conductor is bare or green; identifies these on a "
+                "diagram and (where the household has accessible visible conductors at "
+                "a fixture or device after the licensed electrician has verified dead) "
+                "on the real wiring"
+            ),
+            (
+                "Names that the neutral-to-ground bond exists at the main service "
+                "equipment ONLY per the AHJ-adopted NEC, and that subpanels must have "
+                "their neutral and ground busbars isolated; demonstrates locating where "
+                "the bond would be in a one-line diagram"
+            ),
+            (
+                "Names that all access panels and covers are NOT opened at this band; "
+                "opening any cover is part of elc-021 with the licensed electrician "
+                "physically present"
+            ),
+            (
+                "Names that switches, breakers, and disconnects are NOT operated at "
+                "this band; operating any device is part of elc-021"
+            ),
+            (
+                "Photographs each component and matches each to the diagram; submits "
+                "the ID card and photographs to the AI tutor; AI tutor confirms each "
+                "identification"
+            ),
+            (
+                "Names the standard cable types likely in the household's service "
+                "(NM-B nonmetallic-sheathed cable for residential branch circuits, "
+                "MC armored cable in some installations, conduit-and-wire in service "
+                "or feeder runs); identifies the visible cable type at the panel exit "
+                "without contacting the cable"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Trying to identify breaker busbar or neutral busbar by opening the panel cover",
+                "cause": "The learner expected the components named in the description to be visible inside",
+                "remedy": (
+                    "The cover stays on at this band. Internal panel components are "
+                    "identified from manufacturer diagrams, from the panel's published "
+                    "one-line layout, and from photographs the licensed electrician took "
+                    "during a prior verified-dead session per elc-021."
+                ),
+            },
+            {
+                "error": "Operating a breaker as part of 'identifying' which circuit it controls",
+                "cause": "The learner thought turning the breaker would help identify the circuit",
+                "remedy": (
+                    "Operating a breaker is elc-021 work, not elc-002 work. Identifying "
+                    "the circuit a breaker controls is part of the apprentice band with "
+                    "the licensed electrician present, who performs the live-dead-live "
+                    "verification at the work point. Trust no panel label at the work "
+                    "point regardless."
+                ),
+            },
+            {
+                "error": "Misidentifying the equipment grounding conductor on a diagram",
+                "cause": "The learner read the schematic symbol for ground as if it were a neutral",
+                "remedy": (
+                    "The equipment grounding conductor symbol is distinct from the "
+                    "neutral symbol; the AI tutor confirms on the diagram. The learner "
+                    "memorizes the standard symbol set; it is the basis of elc-005 "
+                    "schematic reading."
+                ),
+            },
+            {
+                "error": "Treating the neutral as 'safe to touch' on a diagram exercise",
+                "cause": "The learner thought neutral being at ground potential meant safe contact",
+                "remedy": (
+                    "Even on a paper exercise, the rule is the same as on real equipment: "
+                    "the neutral is a current-carrying conductor whenever the circuit is "
+                    "energized, and is not contacted hands-on without verification per "
+                    "elc-021. The rule is the safety habit; it is practiced in the "
+                    "diagram exercise."
+                ),
+            },
+            {
+                "error": "Confusing a subpanel's neutral and ground busbars",
+                "cause": "The learner did not know subpanels must have neutral and ground isolated",
+                "remedy": (
+                    "Per the AHJ-adopted NEC, the neutral-to-ground bond exists at the "
+                    "main service equipment only; subpanels have a separate ground "
+                    "busbar bonded to the enclosure and a separate neutral busbar "
+                    "ISOLATED from the enclosure. The AI tutor confirms on the diagram "
+                    "and explains the failure mode if the bond is duplicated at a "
+                    "subpanel (parallel return paths via grounding conductors, potential "
+                    "shock on metal equipment)."
+                ),
+            },
+            {
+                "error": "Treating a 'GFCI receptacle' face as if it protected the entire circuit",
+                "cause": "The learner did not know a GFCI receptacle has LINE and LOAD terminals",
+                "remedy": (
+                    "A GFCI receptacle protects itself and any downstream receptacles "
+                    "wired to its LOAD terminals; receptacles wired ahead of it (on the "
+                    "LINE side) are NOT protected. The AHJ-adopted NEC governs which "
+                    "circuits require GFCI protection. The learner will revisit this at "
+                    "apprentice band; at this band the rule is identification by face "
+                    "marking only."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "photo",
+            "what_to_capture": (
+                "A series of photographs of the household's electrical service and "
+                "branch-circuit components, each accompanied by a card naming the "
+                "component, its function in one sentence, and the matching standard "
+                "schematic symbol. At minimum: the main panel exterior, the meter, two "
+                "branch-circuit components of different kinds (receptacle, switch, "
+                "fixture, or junction-box cover), and one low-voltage component "
+                "(doorbell, thermostat, smoke / CO alarm). The cards and photographs "
+                "are submitted to the AI tutor for field-by-field confirmation."
+            ),
+            "what_the_evidence_shows": (
+                "That the learner identified each visible component correctly, matched "
+                "each to its standard schematic symbol, distinguished hot / neutral / "
+                "ground conventions, and named which components and operations are in "
+                "band and which are gated for later"
+            ),
+        },
+        "mentor_signoff_required": False,
+        "pedagogy": {
+            "i_do": (
+                "The AI tutor walks the learner through a sample residential one-line "
+                "diagram and the corresponding photographs (provided by the AI), "
+                "naming each component aloud, pointing out the distinguishing features "
+                "(GFCI vs standard receptacle by face marking, three-way switch by "
+                "toggle and screw count, etc.), and naming which components are "
+                "external and which are internal."
+            ),
+            "we_do": (
+                "The AI tutor and the learner work through a second sample together. "
+                "The learner names a component; the AI confirms or corrects; the next "
+                "component is the AI's, then back to the learner. At the end the "
+                "learner reads the whole ID card back."
+            ),
+            "you_do_supervised": (
+                "The learner visits the household's actual service, photographs each "
+                "component, writes the name and function on the card, and matches each "
+                "to the schematic symbol on the reference. Submits to the AI tutor for "
+                "confirmation. The supervising adult is on premises only for the visit "
+                "itself; the AI mentors the actual identification."
+            ),
+            "you_do_unsupervised": (
+                "Once the learner can produce accurate ID cards across the household's "
+                "service and the schematic-symbol match across at least two sessions, "
+                "they may identify components on new services unsupervised. The AI "
+                "tutor remains available for component confirmation; this is not a "
+                "supervision rule, it is a double-check rule that stays in place across "
+                "bands."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 4,
+        "session_length_minutes": 45,
+        "related_projects": [],
+        "certification_alignment": {
+            "ladder_rung": "helper",
+            "notes": (
+                "Knowledge competency the AI tutor mentors end-to-end. Visual literacy "
+                "of the residential service and schematic-symbol fluency are "
+                "foundational across every credential."
+            ),
+            "certifications_supported": [
+                {
+                    "id": "elcert-nec",
+                    "domains": [
+                        "the residential one-line as the basis of the NEC's Chapter 2 "
+                        "wiring and protection requirements",
+                        "service-equipment vs subpanel neutral-to-ground bond rules per "
+                        "the AHJ-adopted NEC",
+                        "GFCI / AFCI required locations per the AHJ-adopted NEC",
+                    ],
+                    "notes": (
+                        "The journeyman exam tests reading and applying the residential "
+                        "one-line and the symbol set."
+                    ),
+                },
+                {
+                    "id": "elcert-licensing",
+                    "domains": [
+                        "component identification across the residential scope of the "
+                        "state license",
+                    ],
+                    "notes": "Foundational across every state licensing exam.",
+                },
+            ],
+        },
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
+    },
 }
