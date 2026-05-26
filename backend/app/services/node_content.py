@@ -329,6 +329,49 @@ NODE_CONTENT_SCHEMA = {
         "session_length_minutes": 30,
         "related_projects": ["ids of project nodes that exercise this competency"],
     },
+    # Certification preparation: study-only nodes that map a trade's
+    # competencies and bands to a real, externally administered credential
+    # (federal, state, or industry). METHEAN prepares understanding and a
+    # portfolio toward the credential; the exam and any required supervised
+    # hours are taken through the official body, never administered by
+    # METHEAN. No reproduced exam content. The shape is enforced by
+    # validate_competency: credential_body must be named, a deferral
+    # statement (exam_taken_through or exam_administration_deferred_to)
+    # must be present, and reproduced-exam fields are rejected.
+    "trade_certification_prep": {
+        "node_type": "certification_prep",
+        "trade": "the trade id",
+        "credential_name": "the official name of the credential, exactly as the body names it",
+        "credential_body": "the official organization that administers the credential (e.g. 'U.S. Environmental Protection Agency')",
+        "credential_body_url": "optional; the official URL of the credential body (no fabricated URLs)",
+        "authorizing_scope": "in plain language, what the credential legally authorizes the holder to do",
+        "knowledge_domains_covered": [
+            "general list of domains the official body publishes as covered by the credential; not reproduced exam content",
+        ],
+        "eligibility": {
+            "minimum_age": "per the credential body's published rules; null if none",
+            "experience_requirements": "per the credential body; varies",
+            "prerequisites": ["list per the credential body"],
+        },
+        "exam_format_general": "general description (multiple choice, practical demo, oral, etc.); never specific questions",
+        "legal_status": "legally_required | optional | jurisdiction_specific",
+        "prepares_understanding_only": "true; this node prepares understanding only, does not administer the exam",
+        "exam_taken_through": "the official body or its authorized testing partners; not METHEAN",
+        "supervised_hours_through": "official apprenticeship / vocational program / employer; not METHEAN; null if no hours requirement",
+        "progression_band": "the trades progression band at which the learner is genuinely ready for this credential",
+        "where_in_ladder": "human-readable placement (e.g. 'late apprentice; before any refrigerant hands-on')",
+        "aligned_competencies": ["ids of competencies in this trade that build toward this credential"],
+        "study_resources_pointers": [
+            "names of official study materials published by the credential body or recognized publishers; not reproduced",
+        ],
+        "mentor_model": "AI tutor mentors end-to-end (study, not hands-on)",
+        "safety_review": {
+            "reviewed": "false by default; set true by a qualified human reviewer with credentials in this trade and (where applicable) legal counsel",
+            "reviewer": "name and credentials",
+            "reviewed_on": "ISO 8601 date",
+            "standard_refs": ["named standards and authorities, never reproduced text"],
+        },
+    },
 }
 
 
@@ -758,6 +801,67 @@ def validate_competency(content: dict, authored_nodes: dict | None = None) -> li
             raise ValueError("trade root node missing trade")
         if not content.get("safety_node"):
             raise ValueError("trade root node missing safety_node (id of the entry safety competency)")
+
+    if node_type == "certification_prep":
+        # certification_prep nodes prepare understanding toward a real,
+        # externally administered credential. They must name the credential
+        # body, must defer the exam to the body, and must not reproduce
+        # exam content. This validator enforces those rules so the trades
+        # pipeline cannot ship a node that implies METHEAN administers the
+        # exam or that contains copyrighted/regulated exam material.
+        credential_body = content.get("credential_body")
+        if not isinstance(credential_body, str) or not credential_body.strip():
+            raise ValueError(
+                "certification_prep node must name credential_body "
+                "(the official organization that administers the credential)"
+            )
+        if not content.get("credential_name"):
+            raise ValueError("certification_prep node must name credential_name")
+        if not content.get("authorizing_scope"):
+            raise ValueError(
+                "certification_prep node must state authorizing_scope "
+                "(what the credential legally authorizes the holder to do)"
+            )
+        # The deferral statement is required: either an exam_taken_through
+        # field or an explicit exam_administration_deferred_to field, naming
+        # who the exam is taken through (always external to METHEAN).
+        deferral_present = bool(
+            content.get("exam_taken_through") or content.get("exam_administration_deferred_to")
+        )
+        if not deferral_present:
+            raise ValueError(
+                "certification_prep node must defer exam administration: "
+                "set exam_taken_through (or exam_administration_deferred_to) "
+                "naming the official body or its authorized testing partners"
+            )
+        # The understanding-only flag must be explicitly true if present;
+        # absence is acceptable (the schema names it as a documentation
+        # field). Presence with any non-true value is rejected, to prevent
+        # silent claims that METHEAN administers the credential.
+        understanding_only = content.get("prepares_understanding_only")
+        if understanding_only is not None and understanding_only is not True:
+            raise ValueError(
+                "certification_prep node prepares_understanding_only must be True "
+                "if present (no implicit claim that METHEAN administers the exam)"
+            )
+        # Prohibited fields: any field whose name suggests reproduced exam
+        # content. The presence of any such field is a hard fail; the node
+        # must describe knowledge domains generally and point to the
+        # credential body's own materials, not reproduce them.
+        prohibited_field_names = {
+            "exam_questions",
+            "exam_content",
+            "reproduced_exam",
+            "sample_questions",
+            "practice_exam_questions",
+            "exam_answer_key",
+        }
+        for prohibited in prohibited_field_names:
+            if prohibited in content:
+                raise ValueError(
+                    f"certification_prep node must not contain field {prohibited!r}; "
+                    "this trade does not reproduce or administer exam content"
+                )
 
     if authored_nodes is not None and node_type in {"safety", "technique", "knowledge"}:
         prereqs = content.get("prerequisites") or []

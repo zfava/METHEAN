@@ -1946,4 +1946,489 @@ HVAC_CONTENT: dict[str, dict] = {
             ],
         },
     },
+    "hcert-epa608": {
+        "node_type": "certification_prep",
+        "trade": "hvac",
+        "credential_name": "EPA Section 608 Technician Certification",
+        "credential_body": "U.S. Environmental Protection Agency (EPA)",
+        "credential_body_url": "https://www.epa.gov/section608",
+        "authorizing_scope": (
+            "Section 608 of the Clean Air Act requires that persons who maintain, service, "
+            "repair, or dispose of appliances that contain regulated refrigerants be certified "
+            "by an EPA-approved certifying body. The certification is the legal precondition in "
+            "the United States to purchase regulated refrigerants in quantity and to handle "
+            "refrigerant in any way that could release it to the atmosphere. Without it, a "
+            "person may not legally open a refrigerant circuit, recover or recycle refrigerant, "
+            "or service systems containing regulated refrigerant. The certification has four "
+            "types issued by EPA-approved bodies: Type I (small appliances containing 5 lb or "
+            "less of refrigerant); Type II (high- or very-high-pressure appliances except small "
+            "appliances and motor vehicle air conditioning, which covers most residential and "
+            "commercial split-system air conditioning and heat-pump equipment); Type III "
+            "(low-pressure appliances, primarily chillers using low-pressure refrigerants); and "
+            "Universal (all three types combined). The specific authorizing scope of each type, "
+            "and the equipment covered, is defined by EPA at 40 CFR Part 82 Subpart F and at "
+            "the EPA Section 608 program's published guidance."
+        ),
+        "knowledge_domains_covered": [
+            (
+                "Core: regulations and stratospheric ozone topics common to all four certification "
+                "types; environmental basis of Section 608; recovery and recycling concepts at the "
+                "introductory level; refrigerant safety practices; refrigerant identification and "
+                "leak-detection concepts; record-keeping; venting prohibition under the Clean Air "
+                "Act"
+            ),
+            (
+                "Type I: small-appliance recovery techniques; passive vs. active recovery; "
+                "system-dependent and self-contained recovery devices; safe handling of small "
+                "appliances per EPA published guidance"
+            ),
+            (
+                "Type II: high-pressure system service, recovery, and recycling; leak repair "
+                "obligations under Section 608 for industrial process refrigeration, commercial "
+                "refrigeration, and comfort cooling above thresholds published by EPA; "
+                "evacuation and dehydration; oil change and filter procedures at the descriptive "
+                "level; refrigerant transition guidance (R-410A to R-454B and R-32 under the AIM "
+                "Act and the EPA SNAP program)"
+            ),
+            (
+                "Type III: low-pressure appliance characteristics; rupture-disk and pressure-"
+                "relief considerations; purge-unit operation at the descriptive level"
+            ),
+            (
+                "Universal: the combined knowledge of all three types"
+            ),
+        ],
+        "eligibility": {
+            "minimum_age": (
+                "no federal age minimum set by EPA; testing programs may set their own age "
+                "policies and the household confirms with the chosen testing program"
+            ),
+            "experience_requirements": (
+                "none required by EPA for sitting the certification exam; some employers and "
+                "vocational programs build the exam into a structured course"
+            ),
+            "prerequisites": [
+                "none required by EPA; the learner takes the certification exam through an "
+                "EPA-approved certifying body listed on the EPA Section 608 program page",
+            ],
+        },
+        "exam_format_general": (
+            "Multiple-choice examination administered by an EPA-approved certifying body. The "
+            "Core section is taken once and is common to all four types. Each of Type I, II, "
+            "and III is a separate section; passing all three plus Core grants Universal. Type "
+            "I may be offered as an open-book mail-in exam through some approved bodies; Types "
+            "II, III, and Universal are typically proctored. The current passing thresholds, "
+            "section lengths, and any open-book / proctored designations are set and updated by "
+            "EPA and the certifying body; the household and learner consult the EPA Section 608 "
+            "program page and the chosen certifying body for current specifics."
+        ),
+        "legal_status": "legally_required",
+        "prepares_understanding_only": True,
+        "exam_taken_through": (
+            "an EPA-approved certifying body (the EPA Section 608 program page lists the "
+            "current approved certifying bodies; recognized examples have historically included "
+            "ESCO Institute, RSES, Mainstream Engineering, and others; the household confirms "
+            "current approval status on the EPA program page before paying for an exam). "
+            "METHEAN does not administer or proctor the exam."
+        ),
+        "supervised_hours_through": None,
+        "progression_band": "apprentice",
+        "where_in_ladder": (
+            "Late helper to early apprentice. Authored as a study-only credential the learner "
+            "can earn before any hands-on refrigerant work, because the certification is "
+            "legally required before any hands-on refrigerant work in the United States. "
+            "Possession of EPA Section 608 certification is the precondition for the trade's "
+            "refrigerant competencies (not yet authored in this batch); without it, hands-on "
+            "refrigerant work is forbidden, with or without a mentor."
+        ),
+        "aligned_competencies": ["hs-001", "hc-001", "hc-002"],
+        "study_resources_pointers": [
+            (
+                "The EPA Section 608 program page and EPA's published technician manual (the "
+                "EPA manual is the authoritative reference)."
+            ),
+            (
+                "Study guides published by EPA-approved certifying bodies (ESCO Institute, "
+                "RSES, Mainstream Engineering, and others currently approved). The learner uses "
+                "the study guide from the same body through which they will sit the exam."
+            ),
+            (
+                "40 CFR Part 82 Subpart F (the federal regulation that Section 608 implements). "
+                "The regulation itself is the authoritative legal text; the EPA program page is "
+                "the user-facing summary."
+            ),
+        ],
+        "mentor_model": (
+            "AI tutor mentors end-to-end. This is study, not hands-on work. The AI tutor walks "
+            "the learner through the published knowledge domains, quizzes against the official "
+            "study guide's structure, and tracks readiness. METHEAN does not administer the "
+            "exam; the learner sits the exam through an EPA-approved certifying body. Hands-on "
+            "refrigerant work remains gated by the refrigerant competencies (not yet authored) "
+            "which require a 608-certified person physically present even after the learner "
+            "themselves earns the certification, per the apprenticeship pedagogy of supervised "
+            "practice before independent practice."
+        ),
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [
+                "Section 608 of the Clean Air Act and 40 CFR Part 82 Subpart F (the federal regulation)",
+                "The current EPA Section 608 program page and published technician manual",
+                "The current list of EPA-approved certifying bodies (status changes; the household confirms current approval before paying for an exam)",
+                "The AIM Act of 2020 and EPA SNAP program rulemaking, for the R-410A to A2L (R-454B, R-32) transition",
+            ],
+        },
+    },
+    "hcert-licensing": {
+        "node_type": "certification_prep",
+        "trade": "hvac",
+        "credential_name": "State HVAC apprenticeship and journeyman / master licensing path",
+        "credential_body": (
+            "The Authority Having Jurisdiction (AHJ) for HVAC licensing in the learner's state, "
+            "county, or municipality. In the United States, HVAC licensing is regulated at the "
+            "state level (and in some states at the county or municipal level); there is no "
+            "single federal HVAC license. The learner identifies their AHJ before pursuing "
+            "this credential."
+        ),
+        "credential_body_url": None,
+        "authorizing_scope": (
+            "Licensing authorizes the holder to perform HVAC work as an employee (apprentice or "
+            "journeyman) or as a contractor (master / contractor license), within the scope and "
+            "the geographic jurisdiction the license names. Specific scopes (residential, "
+            "commercial, refrigeration, gas-fitting, hydronics, mechanical contracting) vary by "
+            "AHJ. In states with no statewide HVAC license, municipal or county licenses may "
+            "still apply; in states with statewide licensing, the AHJ publishes the apprenticeship "
+            "hours, the journeyman experience requirement, the master experience requirement, "
+            "the bonding and insurance requirements for contractors, and the continuing-education "
+            "requirements. The credential's authorizing scope is what the AHJ publishes, not what "
+            "this node summarizes."
+        ),
+        "knowledge_domains_covered": [
+            (
+                "Core technical knowledge typically tested at the journeyman level: the NEC "
+                "(NFPA 70) for HVAC-related electrical; the NFPA 54 National Fuel Gas Code "
+                "where the license includes gas; the IMC (International Mechanical Code) or "
+                "UMC (Uniform Mechanical Code) per the AHJ's adoption; the local jurisdiction's "
+                "adopted codes and amendments; refrigeration theory; load calculations (Manual J "
+                "or equivalent); duct design (Manual D or equivalent); equipment selection "
+                "(Manual S or equivalent); controls; combustion fundamentals; HVAC safety "
+                "practices including NFPA 70E"
+            ),
+            (
+                "Business and contract knowledge typically tested at the master / contractor "
+                "level: the state's contracting law; lien law; estimating; bonding and "
+                "insurance; OSHA general industry and construction; tax and employment basics"
+            ),
+            (
+                "The specific exam blueprint per the AHJ; the household and learner obtain the "
+                "current blueprint from the AHJ before scheduling an exam"
+            ),
+        ],
+        "eligibility": {
+            "minimum_age": (
+                "varies by AHJ; commonly 18 for journeyman and master; some states allow "
+                "younger registered apprentices"
+            ),
+            "experience_requirements": (
+                "apprenticeship hours and journeyman experience varies widely by AHJ; common "
+                "ranges are several thousand hours for journeyman eligibility and additional "
+                "years of journeyman experience for master eligibility, but the AHJ's current "
+                "published requirements are authoritative and the learner confirms them"
+            ),
+            "prerequisites": [
+                (
+                    "registered apprenticeship through a state-approved apprenticeship sponsor "
+                    "or an equivalent pathway the AHJ recognizes (employer-based, vocational "
+                    "program, joint labor-management committee); the learner confirms recognized "
+                    "pathways with the AHJ"
+                ),
+                (
+                    "for master / contractor licensing additionally: passing the journeyman "
+                    "exam OR documenting equivalent experience the AHJ accepts; insurance; "
+                    "bonding; possibly a contractor's business exam"
+                ),
+            ],
+        },
+        "exam_format_general": (
+            "Format varies by AHJ; commonly proctored multiple-choice for journeyman and master "
+            "trade exams, plus a business and law exam for contractor licensing in many states. "
+            "Some AHJs offer practical components. The exam blueprint, format, passing score, "
+            "and any open-book provisions are published by the AHJ; the learner consults the "
+            "AHJ for current specifics."
+        ),
+        "legal_status": "jurisdiction_specific",
+        "prepares_understanding_only": True,
+        "exam_taken_through": (
+            "The AHJ or its authorized testing partner (commonly Prov Inc., PSI, or another "
+            "state-approved testing service). METHEAN does not administer or proctor the exam."
+        ),
+        "supervised_hours_through": (
+            "A state-approved apprenticeship program or recognized employer-based "
+            "apprenticeship. METHEAN's practice sessions and portfolio work are NOT a "
+            "substitute for registered apprenticeship hours; the household confirms with the "
+            "AHJ which programs are recognized for hours-credit toward licensing eligibility."
+        ),
+        "progression_band": "journeyman",
+        "where_in_ladder": (
+            "Journeyman exam: at the late apprentice to early journeyman band, after the "
+            "learner has completed the AHJ's hours requirement through a recognized "
+            "apprenticeship and is ready to test. Master / contractor exam: at the qualified "
+            "band, after several years of journeyman work plus the additional master "
+            "eligibility the AHJ requires. The METHEAN trade prepares conceptual understanding "
+            "and a portfolio that demonstrates competence; the hours and the exam are taken "
+            "outside METHEAN."
+        ),
+        "aligned_competencies": ["hs-001", "hc-001", "hc-002", "hc-021"],
+        "study_resources_pointers": [
+            "The AHJ's published exam blueprint and approved reference list",
+            (
+                "The NEC (NFPA 70), NFPA 54, and the IMC or UMC (per AHJ adoption), the current "
+                "adopted editions"
+            ),
+            (
+                "NFPA 70E and OSHA 29 CFR 1910 / 1926 (the relevant subparts for HVAC), as "
+                "supporting safety references"
+            ),
+            (
+                "ACCA Manuals J, S, D (load, equipment selection, duct design); ASHRAE "
+                "Handbooks (HVAC Systems and Equipment, Refrigeration, Fundamentals, "
+                "Applications) at the depth the AHJ's exam expects"
+            ),
+            (
+                "AHJ-recommended study courses (commonly offered by the apprenticeship sponsor, "
+                "the state community-college system, or recognized commercial providers)"
+            ),
+        ],
+        "mentor_model": (
+            "AI tutor mentors the conceptual study end-to-end. The AI walks the learner "
+            "through code structure, load and duct calculation methods, controls, and the "
+            "AHJ's published exam blueprint. The portfolio of demonstrated work from METHEAN "
+            "(competency artifacts, service-call write-ups, install documentation) is presented "
+            "as supporting evidence of experience, but the AHJ's recognized hours come from a "
+            "state-approved apprenticeship program, not from METHEAN. The hands-on competencies "
+            "stay gated by the trade's existing supervision policy regardless of credential "
+            "status; possession of a journeyman license does not by itself authorize "
+            "unsupervised practice on hazardous subsystems until the learner has demonstrated "
+            "the specific competencies at the qualified band."
+        ),
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [
+                "The learner's state (or county / municipality) HVAC licensing AHJ's currently published rules and exam blueprint",
+                "NFPA 70 (NEC), NFPA 54 (National Fuel Gas Code), IMC or UMC per AHJ adoption",
+                "NFPA 70E for electrical safety in the workplace",
+                "OSHA 29 CFR 1910 (general industry) and 1926 (construction), the relevant subparts",
+                "ACCA Manuals J / S / D and ASHRAE Handbooks for design domains the AHJ tests",
+                "State approved apprenticeship program rules and any recognized alternate-pathway rules the AHJ publishes",
+            ],
+        },
+    },
+    "hcert-nate": {
+        "node_type": "certification_prep",
+        "trade": "hvac",
+        "credential_name": "NATE (North American Technician Excellence) certifications",
+        "credential_body": "North American Technician Excellence (NATE)",
+        "credential_body_url": "https://natex.org",
+        "authorizing_scope": (
+            "NATE is an industry-recognized, voluntary technician-certification program. NATE "
+            "certifications do not legally authorize work that a state license does not (they "
+            "are not a substitute for state HVAC licensing where licensing is required, and "
+            "they are not a substitute for EPA Section 608 for refrigerant handling). NATE "
+            "attests to a technician's demonstrated knowledge in a specific specialty area, and "
+            "is widely recognized by employers, contractors, and customers as a mark of "
+            "professional competence. NATE offers entry-level (Ready to Work, HVAC Support "
+            "Technician) and core / specialty / senior-level certifications across air "
+            "conditioning, air distribution, gas heating, oil heating, heat pumps, light "
+            "commercial refrigeration, commercial refrigeration, hydronics gas, hydronics oil, "
+            "ground-source heat pumps, and others. The specific current certification offerings "
+            "and exam blueprints are published on the NATE website."
+        ),
+        "knowledge_domains_covered": [
+            (
+                "Per specialty: the NATE Knowledge Areas of Technician Expertise (KATE) for "
+                "that specialty, published by NATE on the natex.org website. KATEs vary by "
+                "specialty and cover the technical knowledge a competent technician needs in "
+                "that area (diagnostics, installation, service)."
+            ),
+            (
+                "Across all specialties: refrigeration cycle theory, electrical fundamentals "
+                "for HVAC, controls, safety, and code-aware service practice at the depth "
+                "NATE's current published exam blueprint expects"
+            ),
+        ],
+        "eligibility": {
+            "minimum_age": "no NATE-published minimum; testing partners may set their own policies",
+            "experience_requirements": (
+                "NATE recommends but does not require specific experience for the core / "
+                "specialty certifications; the senior-level certification has additional "
+                "experience and credential prerequisites. The current eligibility per "
+                "certification is on the NATE website."
+            ),
+            "prerequisites": [
+                "Per certification: see the current NATE published eligibility on natex.org",
+            ],
+        },
+        "exam_format_general": (
+            "Proctored multiple-choice examinations administered by NATE-approved testing "
+            "partners. Format, exam length, and passing scores are set by NATE and published "
+            "on the NATE website. Some certifications require a Core exam plus a specialty "
+            "exam."
+        ),
+        "legal_status": "optional",
+        "prepares_understanding_only": True,
+        "exam_taken_through": (
+            "NATE-approved testing partners listed on the NATE website. METHEAN does not "
+            "administer or proctor the exam."
+        ),
+        "supervised_hours_through": None,
+        "progression_band": "journeyman",
+        "where_in_ladder": (
+            "Entry-level NATE certifications (Ready to Work, HVAC Support Technician) at the "
+            "late helper to apprentice band as an industry-recognized acknowledgment of basic "
+            "readiness. Core / specialty certifications at the late apprentice to journeyman "
+            "band as the learner builds competence in a chosen subsystem (gas heating, heat "
+            "pumps, light commercial refrigeration, etc.). Senior-level certifications at the "
+            "qualified band, after several years of practice and the journeyman state license "
+            "(where applicable). NATE complements the state license; it does not replace it."
+        ),
+        "aligned_competencies": ["hs-001", "hc-001", "hc-002", "hc-021"],
+        "study_resources_pointers": [
+            (
+                "The NATE website's current published Knowledge Areas of Technician Expertise "
+                "(KATE) for the chosen specialty"
+            ),
+            "NATE-recognized study materials and exam-prep courses listed on the NATE website",
+            (
+                "The technical references (manufacturer service literature, ACCA manuals, "
+                "ASHRAE Handbooks) covering the specialty area's subject matter"
+            ),
+        ],
+        "mentor_model": (
+            "AI tutor mentors end-to-end study. The AI walks the learner through the published "
+            "KATE for the chosen specialty, quizzes against the structure NATE publishes, and "
+            "tracks readiness. METHEAN does not administer the exam; the learner sits the exam "
+            "through a NATE-approved testing partner. NATE certification is complementary to "
+            "state licensing and EPA Section 608; the safety and supervision gates on hands-on "
+            "competencies are unchanged by possession of NATE certifications."
+        ),
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [
+                "The current NATE website (natex.org) for certification offerings, KATE, eligibility, exam format, and approved testing partners",
+                "NATE's relationship to state licensing and EPA Section 608 (NATE is complementary, not a substitute)",
+            ],
+        },
+    },
+    "hcert-osha": {
+        "node_type": "certification_prep",
+        "trade": "hvac",
+        "credential_name": "OSHA 10-Hour and 30-Hour Outreach Training (General Industry and Construction)",
+        "credential_body": (
+            "U.S. Occupational Safety and Health Administration (OSHA), through OSHA-authorized "
+            "Outreach Training Program trainers"
+        ),
+        "credential_body_url": "https://www.osha.gov/training/outreach",
+        "authorizing_scope": (
+            "The OSHA 10-Hour and 30-Hour Outreach courses are voluntary worker-orientation "
+            "training programs administered by OSHA-authorized trainers. They are not licenses "
+            "or certifications in the legal sense, do not authorize the holder to perform any "
+            "specific work, and are not a substitute for site-specific safety training or for "
+            "employer training required by specific OSHA standards (lockout-tagout, fall "
+            "protection, confined-space entry, etc.). They are widely required or recommended "
+            "by employers, by general contractors on construction projects, and by some states "
+            "or municipalities for entry to particular work sites, as evidence the worker has "
+            "received baseline OSHA orientation. Many HVAC employers and apprenticeship "
+            "sponsors require at least the OSHA 10 for new technicians and the OSHA 30 for "
+            "supervisors or lead technicians."
+        ),
+        "knowledge_domains_covered": [
+            (
+                "OSHA 10-Hour General Industry / Construction: introduction to OSHA; general "
+                "safety and health provisions; recognition of common workplace hazards "
+                "including electrical, fall, struck-by, caught-in/between, fire, and chemical "
+                "hazards; PPE; basic introduction to OSHA 1910 (general industry) or OSHA 1926 "
+                "(construction) depending on which version is taken. HVAC technicians on "
+                "construction projects commonly take the construction version (1926); HVAC "
+                "technicians in service-only work commonly take the general industry version "
+                "(1910). The exact topic list and time allocation is set by OSHA and the "
+                "authorized trainer."
+            ),
+            (
+                "OSHA 30-Hour General Industry / Construction: a deeper version of the same "
+                "topics with additional depth and additional elective topics, intended for "
+                "workers with supervisory responsibility. The exact topic list and time "
+                "allocation is set by OSHA and the authorized trainer."
+            ),
+        ],
+        "eligibility": {
+            "minimum_age": "no OSHA-published minimum",
+            "experience_requirements": "none",
+            "prerequisites": [
+                (
+                    "registration with an OSHA-authorized Outreach Training Program trainer "
+                    "(online or in-person); the OSHA Outreach Training Program page lists "
+                    "authorized providers and the rules trainers must follow"
+                ),
+            ],
+        },
+        "exam_format_general": (
+            "The 10-Hour and 30-Hour courses are training programs, not exams. Successful "
+            "completion (attending the required hours, completing any in-course assessments "
+            "per the authorized trainer's rules per OSHA) results in OSHA-issued Department of "
+            "Labor completion cards. The exact in-course assessment format is set by the "
+            "authorized trainer per OSHA's Outreach Training Program rules."
+        ),
+        "legal_status": "optional",
+        "prepares_understanding_only": True,
+        "exam_taken_through": (
+            "An OSHA-authorized Outreach Training Program trainer. METHEAN does not deliver "
+            "the 10-Hour or 30-Hour course and does not issue the completion cards; only "
+            "OSHA-authorized trainers may do so per OSHA's Outreach Training Program rules. "
+            "The learner enrolls with an authorized trainer (online or in-person) listed via "
+            "the OSHA Outreach Training Program page."
+        ),
+        "supervised_hours_through": None,
+        "progression_band": "helper",
+        "where_in_ladder": (
+            "Helper to early apprentice. Authored here because the OSHA 10 in particular is a "
+            "common employer prerequisite for entry to HVAC work, and because the topics it "
+            "covers (electrical hazard recognition, fall protection awareness, struck-by and "
+            "caught-in/between, PPE, hazard communication) reinforce the safety walkthrough in "
+            "hs-001 and prepare the learner for the safety vocabulary used across all higher "
+            "bands. OSHA 30 typically arrives at the apprentice to journeyman band as the "
+            "learner takes on more responsibility on a job site."
+        ),
+        "aligned_competencies": ["hs-001", "hc-021"],
+        "study_resources_pointers": [
+            "The OSHA Outreach Training Program page on osha.gov for current rules, authorized trainer lists, and any updates",
+            "OSHA's published General Industry standards (29 CFR 1910) and Construction standards (29 CFR 1926), free on osha.gov",
+            (
+                "Training materials from OSHA-authorized Outreach Training Program trainers; "
+                "the learner uses the materials from the same trainer through whom they will "
+                "take the course"
+            ),
+        ],
+        "mentor_model": (
+            "AI tutor mentors the conceptual orientation and reinforces the topics that "
+            "overlap with the HVAC trade's existing safety competency (hs-001) and the "
+            "live-dead-live verification (hc-021). The actual 10-Hour or 30-Hour course is "
+            "delivered by an OSHA-authorized trainer; the OSHA-issued completion card is the "
+            "credential and comes from the trainer, not from METHEAN."
+        ),
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [
+                "OSHA Outreach Training Program page on osha.gov (the authoritative reference for current rules)",
+                "OSHA 29 CFR 1910 (General Industry) and 29 CFR 1926 (Construction), the relevant subparts",
+                "OSHA's published Outreach Training Program Guidelines and Procedures, which set the rules authorized trainers must follow",
+            ],
+        },
+    },
 }
