@@ -943,4 +943,458 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Reading whole chapter books is the precondition for writing one's own short stories with chapters",
         },
     },
+    "rd-03": {
+        "enriched": True,
+        "learning_objectives": [
+            "Narrate a multi-paragraph passage (3 to 6 paragraphs, 300 to 800 words) in coherent order after a single attentive reading or hearing",
+            "Retain and report specific details: names of characters, settings, key events, and the order in which events happened",
+            "Organize the retelling: a beginning that names who and where, a middle that carries the main events, an end that resolves",
+            "Listen or read with the narration in mind: attend on first hearing knowing the retelling will come",
+            "Distinguish between narration (the child's own retelling of the text) and personal response (what the child thought or felt about it); both have a place, narration is the prior skill",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "Foundational oral narration (rf-15) lived inside the single paragraph or short page: read or hear one "
+                "paragraph, retell it. At the developing level the passage stretches to several paragraphs, sometimes a "
+                "whole short chapter or a several-page nonfiction explanation. The skill grows in three ways: the child "
+                "holds more text in mind before retelling, organizes a longer retelling into a sensible order, and "
+                "attends with the narration in mind on the first reading or hearing. This is the central Charlotte Mason "
+                "practice, and it is also a workhorse comprehension assessment across philosophies; a child who can "
+                "narrate a passage clearly has understood it."
+            ),
+            "scaffolding_sequence": [
+                "Start with a single paragraph the child can retell easily (rf-15 level) to refresh the habit",
+                "Move to a two-paragraph passage; before reading, tell the child they will narrate it at the end",
+                "Read or have the child read a 3-paragraph passage attentively, once and well; ask for the narration",
+                "If the narration is thin, ask one specific follow-up (who was in the passage? what happened first? what happened next?); do not re-read the passage",
+                "Across a week, extend to 4, 5, and 6 paragraphs as the child can hold them",
+                "Vary the source: a chapter of a chapter book, a science passage, a history passage, a poem with narrative content",
+                "Practice both modes: oral narration of a passage read aloud by the parent, AND oral narration of a passage the child has just read silently themselves",
+                "Introduce the organizing prompt for longer passages: 'tell me first who is in the story and where it is, then tell me what happened, then tell me how it ended'",
+            ],
+            "socratic_questions": [
+                "Before we read, what would help you remember this passage well enough to tell me about it after?",
+                "You told me about the second part of the passage but skipped the first. Can you go back and start at the beginning?",
+                "You said the boy went into the forest. What happened in the forest, in the order it happened?",
+                "Was there a part of the passage you forgot? Listen again to just this sentence... does that bring it back?",
+                "If you were going to tell this passage to someone who has never heard it, what would they need to know first?",
+            ],
+            "practice_activities": [
+                "Read-aloud-and-narrate: the parent reads a chosen 3 to 6 paragraph passage attentively once; the child narrates",
+                "Silent-and-narrate: the child reads a chosen passage silently themselves; immediately tells it back",
+                "Tell-it-to-someone-else: after the child narrates the parent, the child then tells the same passage to a sibling, grandparent, or recorder; the second telling is often more organized",
+                "Daily narration habit: choose one passage a day, in one subject (reading, science, history, biography); the child narrates and the parent simply listens",
+                "Narrate across days: read a chapter today, narrate it; tomorrow, narrate yesterday's chapter before reading today's",
+            ],
+            "real_world_connections": [
+                "Telling a parent about a movie or show the child watched without you",
+                "Reporting on a field trip or a visit to a relative's house",
+                "Recounting a chapter of a book to a younger sibling at bedtime",
+                "Telling a grandparent over the phone what the family did this week",
+                "Explaining a science demonstration or a history story to a parent who missed it",
+            ],
+            "common_misconceptions": [
+                "Confusing narration with summary. Narration is the child's full telling in their own words, with the events in order; summary is shorter and more abstract. Narration is the prior skill and is the developing-band target.",
+                "Asking the child to write down the narration. Oral narration is the band-appropriate practice; written narration is the next skill (rd-04). Mixing them too early burdens both.",
+                "Re-reading the passage when the child's narration is thin. The point of narration is attention on the first reading; re-reading on demand teaches the child to attend less the first time.",
+                "Grading or correcting the narration in real time. Narration is the child's own work; the parent listens. If a detail is misremembered, the next narration is the place to do better, not the current one.",
+                "Letting personal response replace narration ('I liked the part where...'). Personal response is welcome AFTER the narration; the narration itself stays in the text.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Narrates a 4 to 6 paragraph passage coherently after a single attentive reading or hearing",
+                "Includes the main characters, the setting, the main events in order, and the resolution",
+                "Organizes the retelling clearly: beginning, middle, end",
+                "Distinguishes narration from personal response when prompted",
+                "Sustains the habit of narrating without resentment or struggle across a daily practice",
+            ],
+            "proficiency_indicators": [
+                "Narrates a 3 to 4 paragraph passage with main events in order, some prompting on omissions",
+                "Sometimes skips a part or jumbles the order; recovers with one follow-up prompt",
+            ],
+            "developing_indicators": [
+                "Narrates only the most recent or most striking part; cannot give the passage in order",
+                "Needs a re-read to narrate anything; cannot attend with the narration in mind on the first hearing",
+            ],
+            "assessment_methods": [
+                "daily oral narration of a passage of increasing length",
+                "narration across days (yesterday's chapter narrated today)",
+                "narration to a real audience (sibling, grandparent, recording)",
+                "narration of varied source types (fiction, science, history, biography)",
+            ],
+            "sample_assessment_prompts": [
+                "Tell me about the passage you just read, in your own words. Start at the beginning.",
+                "Tell me what we read yesterday in the chapter book, before we start today's chapter.",
+                "Tell your little sister what happened in the science reading today, so she knows.",
+                "Tell this passage to the recorder so we can listen back to it together.",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What does it mean to 'narrate' a passage you have just read?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "To read the passage again out loud, word for word.",
+                    "To tell the passage back in your own words, in the order it happened.",
+                    "To write a list of every detail in the passage.",
+                    "To say whether you liked it.",
+                ],
+                "correct_answer": "To tell the passage back in your own words, in the order it happened.",
+                "hints": [
+                    "Narration is the child's own retelling, not a re-reading.",
+                ],
+                "explanation": (
+                    "Narration is telling the passage back in your own words. It includes the main events in the order they "
+                    "happened. It is NOT re-reading the passage and it is NOT just saying you liked it."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "You are about to read a chapter and your parent says: 'I'll ask you to tell it to me when you are done.' "
+                    "What is the best thing to do while you read?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Skim quickly so you finish faster.",
+                    "Read attentively and notice who is in the chapter and what happens, knowing you will tell it back.",
+                    "Memorize the exact words of the chapter.",
+                    "Skip to the end so you know what happens.",
+                ],
+                "correct_answer": "Read attentively and notice who is in the chapter and what happens, knowing you will tell it back.",
+                "hints": [
+                    "Narration rewards attention on the first reading. You don't need to memorize words; you need to follow the story.",
+                ],
+                "explanation": (
+                    "The point of narration is to learn to attend with full attention the first time. You don't memorize "
+                    "exact words; you notice the characters, the setting, and the events as they unfold, so you can tell "
+                    "them back."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "You narrate a chapter, and you forget to mention the part where the dog ran away. What is the best "
+                    "thing to do?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Insist you didn't forget anything.",
+                    "Add the part about the dog when you remember, even if it's out of order. Next time, try to attend to the whole chapter.",
+                    "Refuse to narrate again.",
+                    "Re-read the whole chapter immediately.",
+                ],
+                "correct_answer": "Add the part about the dog when you remember, even if it's out of order. Next time, try to attend to the whole chapter.",
+                "hints": [
+                    "Forgetting a part is normal; the practice grows over time, not in one session.",
+                ],
+                "explanation": (
+                    "Forgetting parts is normal at first; the practice grows over weeks. Add what you remember, and try to "
+                    "attend to the whole chapter next time. Re-reading on demand teaches you to attend less the first time."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "After narrating the chapter, your parent asks: 'And what did you think of it?' Is this part of the "
+                    "narration?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Yes, it is exactly what narration means.",
+                    "No, but it is welcome after the narration. Narration is the retelling of the text itself; personal response comes after.",
+                    "Yes, and the narration is unnecessary if you give a strong opinion.",
+                    "No, and your parent should not ask.",
+                ],
+                "correct_answer": "No, but it is welcome after the narration. Narration is the retelling of the text itself; personal response comes after.",
+                "hints": [
+                    "Narration is the child's own telling of the text. Personal response is a separate, welcome practice.",
+                ],
+                "explanation": (
+                    "Narration is the retelling of the text itself, in the child's own words, in order. Personal response "
+                    "('I liked the part where...', 'I thought the character was wrong to...') is a different welcome "
+                    "practice that lives alongside narration. Both have a place; they are not the same."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Practice now: take a passage you have recently read (a chapter of your chapter book, a science "
+                    "reading, a history reading), and narrate it to whoever is around. Was it easier or harder than "
+                    "you expected? Why?"
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Notice what you did to remember the order of events.",
+                    "Notice what you forgot, and how you noticed you forgot it.",
+                ],
+                "explanation": (
+                    "Self-noticing during narration is part of the practice. With time the child develops their own "
+                    "internal sense of 'have I told the main parts in order'. Naming what was easy and what was hard "
+                    "feeds the next narration."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": (
+                    "Read this 4 to 6 paragraph passage attentively once, then tell it back to me in your own words. "
+                    "(Use any grade-level reading or chapter excerpt.)"
+                ),
+                "type": "open_response",
+                "target_concept": "extended_oral_narration",
+                "rubric": (
+                    "Mastery: includes main characters, setting, main events in order, and resolution; coherent organization "
+                    "(beginning / middle / end); little or no prompting needed. Proficient: most main events in order with "
+                    "one or two prompts. Developing: only the most striking part; events out of order; needs re-read."
+                ),
+            },
+            {
+                "prompt": (
+                    "Yesterday we read a chapter of your chapter book. Before we read today's chapter, tell me what "
+                    "happened in yesterday's chapter."
+                ),
+                "type": "open_response",
+                "target_concept": "narration_across_days",
+                "rubric": (
+                    "Mastery: clear retelling of yesterday's chapter with main events in order. Proficient: gist with some "
+                    "prompting. Developing: cannot recall without a reread."
+                ),
+            },
+            {
+                "prompt": (
+                    "Tell this same passage to your sibling (or to a recording). Did the second telling change?"
+                ),
+                "type": "open_response",
+                "target_concept": "narration_to_real_audience",
+                "rubric": (
+                    "Mastery: organizes the retelling better for the second audience; adds context the listener needs. "
+                    "Proficient: similar retelling, audience-aware. Developing: identical or worse second telling."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "passages at the child's reading or listening level, 3 to 6 paragraphs in length (chapters, science readings, history readings, biographies)",
+                "a real audience for narrations (parent, sibling, grandparent, recorder)",
+                "a daily narration habit slot in the day",
+            ],
+            "recommended": [
+                "a narration notebook the parent keeps with brief notes on what the child narrated each day across the term, to see growth",
+                "audiobooks of beloved passages for narration after listening (a different mode from narration after reading)",
+                "a small recorder or phone for self-narrations the child can listen back to",
+            ],
+        },
+        "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 15},
+        "accommodations": {
+            "dyslexia": (
+                "Start narration on parent-read-aloud passages, not silent-reading passages, so the comprehension is not "
+                "limited by decoding effort. Long oral narration of a listened passage is a real strength path for many "
+                "dyslexic readers. Extend to silent-read narration gradually as fluency builds."
+            ),
+            "adhd": (
+                "Short passages (3 paragraphs) and frequent narration (daily) rather than long passages with weekly "
+                "narration. Allow the child to walk or fidget during narration. Real audiences (sibling, grandparent on "
+                "video call) add motivation and structure."
+            ),
+            "gifted": (
+                "Extend to longer passages (whole short chapters or full nonfiction articles) sooner. Introduce narration "
+                "of more complex texts (Plutarch's Lives at age, simpler Shakespeare in prose retelling at age). The child "
+                "narrates not only what happened but begins to organize the retelling by theme as well as by sequence."
+            ),
+            "visual_learner": "Allow the child to make a small sketch alongside the narration if it helps them organize the retelling.",
+            "kinesthetic_learner": "Let the child walk while narrating. Some children narrate best while doing something else with their hands (drawing, building, knitting).",
+            "auditory_learner": "Record-and-listen-back is especially effective for self-noticing. Narrating to a real listener strengthens the practice.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Oral narration of longer passages is one of the central comprehension practices at this band. The "
+                    "child reads or hears a 3 to 6 paragraph passage attentively once, then tells it back in their own "
+                    "words, in order. The practice grows the habit of attending to a whole passage the first time and of "
+                    "organizing a coherent retelling."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "The parent models a narration of a passage they have just read aloud: 'this passage was about a "
+                        "boy named Jack who lived in a small village. He went into the forest to gather wood. In the "
+                        "forest he met a fox who could speak...' The model is the child's first sight of what a narration "
+                        "is."
+                    ),
+                    "we_do": (
+                        "Parent and child take turns narrating sections of a passage: the parent narrates paragraph one, "
+                        "the child paragraph two, the parent paragraph three. Then the child narrates the whole passage "
+                        "by stringing the sections together."
+                    ),
+                    "you_do": (
+                        "The child reads or hears a 3 to 6 paragraph passage attentively, once and well, then narrates it "
+                        "back to the parent without prompts. The parent listens without correcting in real time."
+                    ),
+                },
+                "guided_practice": [
+                    "Daily oral narration of one passage from the day's reading",
+                    "Vary the source type across the week (fiction, science, history, biography)",
+                    "Practice narration across days: yesterday's chapter today, before today's chapter",
+                ],
+                "independent_practice": [
+                    "Child narrates to a real audience (sibling, grandparent, recorder) at the child's chosen time",
+                    "Child develops the habit of attending with the narration in mind on the first reading",
+                ],
+                "mastery_check": [
+                    "Narrates a 4 to 6 paragraph passage coherently after a single attentive reading",
+                    "Includes main characters, setting, main events in order, and resolution",
+                    "Sustains the daily habit without resentment",
+                ],
+                "spiral_review": [
+                    "Return to easier and shorter passages occasionally to keep the practice fluent",
+                    "Re-narrate a passage from earlier in the term to notice growth",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "Narration is among the oldest of the grammar-stage practices: the child attends to a text once and "
+                    "well, then tells it back. The practice trains the memory, the order of mind, and the tongue all at "
+                    "once. The Greeks and the medieval schoolmen knew it; Charlotte Mason brought it to a fine point; we "
+                    "carry it on."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the narration prompt: tell me first who is in the passage and where it is, then tell me what happened, then tell me how it ended",
+                        "Recite the narration rule: attend on the first reading; tell it back in your own words; in order",
+                    ],
+                    "recitations": [
+                        "Memorize one fine sentence from each week's narrated passage and recite it cumulatively across the term, so the language of the readings is held in the ear",
+                    ],
+                },
+                "copywork": [
+                    "Copy one well-formed sentence from each week's narrated passage into the copybook, attending to its rhythm and punctuation, so the language is held by the hand as well as by the tongue",
+                ],
+                "recitation_routine": (
+                    "Begin each lesson with the prior day's narration recited from memory; then read or hear the new "
+                    "passage and narrate it; the practice grows cumulatively across the term."
+                ),
+                "history_integration": (
+                    "Choose narration passages from history along the chronological spine: Plutarch in age-appropriate "
+                    "form, Bible stories, the lives of great figures, the founding documents at age. The narration "
+                    "practice and the history sequence reinforce each other."
+                ),
+                "read_aloud_suggestions": [
+                    "Worthy short prose for daily narration: Aesop's fables, biographies in plain language, well-written nature writing, the great stories told well",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "Living books with truly beautiful, careful language across the subjects: A Child's History of the World, Burgess's Bird Book and Animal Book, James Herriot's stories, the Boxcar Children for fiction, Hans Christian Andersen, the Blue Fairy Book",
+                    "Avoid twaddle: narration is shaped by what is narrated; thin texts make thin narrations",
+                ],
+                "short_lesson_flow": (
+                    "Sit together with the book. Read aloud (or have the child read) one passage attentively, once and "
+                    "well. The child immediately narrates it in their own words. The parent listens without correcting "
+                    "in the moment. Stop while the practice is still alive; the next day continues."
+                ),
+                "narration_prompt": (
+                    "Tell me back the passage we just read. In your own words. Take your time."
+                ),
+                "real_world_objects": [
+                    "A living book the family is reading together",
+                    "The reading nook or table where narration happens daily",
+                    "A small notebook the parent keeps with brief notes on what the child narrated each day across the term",
+                ],
+                "nature_connection": (
+                    "After a nature walk, the child narrates what they saw and did, in order; the same skill that narrates "
+                    "a chapter narrates a real experience"
+                ),
+                "habit_focus": (
+                    "The habit of attention sustained across a whole passage. The narration is its own discipline: one "
+                    "careful reading, one careful retelling. Across years this grows into the adult's habit of saying what "
+                    "they have understood in their own words."
+                ),
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A shelf of passages at the child's level for daily narration: short chapters, science readings, history readings, biographies",
+                    "A small recorder or phone the child may use to narrate to themselves and play back",
+                    "A simple notebook the child may keep with the date and topic of each narration",
+                ],
+                "presentation": {
+                    "three_period_lesson": (
+                        "This is a narration: you tell me back what you have read in your own words. Show me how you start "
+                        "your narration; how you keep it in order; how you bring it to an end. The form is shown, then "
+                        "handed to the child as the child's own practice."
+                    ),
+                    "steps": [
+                        "The child chooses or is offered a passage of appropriate length",
+                        "The child reads or hears the passage attentively, once and well",
+                        "The child immediately narrates it, either to an adult, to a small listener, or to a recorder",
+                        "The child notices for themselves what they remembered well and what was harder to hold",
+                    ],
+                },
+                "control_of_error": (
+                    "The recorder is the control: the child plays back their own narration and hears what is clear, what "
+                    "is jumbled, and what was forgotten. The adult does not correct; the child mends on the next narration."
+                ),
+                "abstraction_pathway": (
+                    "From narrating a single paragraph (rf-15) to narrating a multi-paragraph passage to narrating a chapter "
+                    "to narrating an entire short book; each step taken when the prior one is effortless."
+                ),
+                "extensions": [
+                    "Narrate across days: yesterday's chapter today before starting today's chapter",
+                    "Narrate a passage to a real audience the child has chosen (a younger sibling at bedtime, a grandparent on a video call)",
+                    "Narrate from multiple subject areas across a week (chapter book, science, history, biography)",
+                ],
+                "observation_focus": (
+                    "Watch for the narration becoming more organized over the term: a clear beginning that names who and "
+                    "where, a middle that carries events in order, an end that resolves. Watch also for the child noticing "
+                    "their own forgetting and attending more carefully on the next reading."
+                ),
+            },
+            "unschooling": {
+                "invitations": [
+                    "Read aloud generously and let the child tell you about it when they want to, without pressure",
+                    "Make space at meals or in the car for the child to tell about what they have been reading, watching, or doing",
+                    "Set up real audiences for the child's tellings (a grandparent on a video call, a younger sibling at bedtime, a friend over for the afternoon)",
+                ],
+                "real_world_contexts": [
+                    "Telling a parent about a chapter of a chapter book at bedtime",
+                    "Telling a grandparent about the week in a phone call",
+                    "Telling a sibling about a show or book they didn't see",
+                    "Recapping a field trip or visit to a relative",
+                ],
+                "conversation_starters": [
+                    "What's been happening in your book lately? I want to hear all about it.",
+                    "I missed that part of the show. Tell me what happened.",
+                    "Want to tell your sister about the chapter you read today?",
+                    "What was the science reading about? I love hearing you explain things.",
+                ],
+                "resource_bank": [
+                    "Many real audiences for tellings (family, friends, video calls, audio recorders)",
+                    "Generous reading-aloud time where the child can tell back as much or as little as they want",
+                    "No forced narration sessions; narration grows from the child's own wish to tell",
+                ],
+                "parent_role": (
+                    "Be a real listener. Welcome the child's tellings of books, shows, days, conversations. Notice when the "
+                    "tellings grow longer, more organized, more confident across months. Never grade a telling; respond to "
+                    "it as a real listener responds to a real story."
+                ),
+                "observation_documentation": (
+                    "Across a term, note the kinds of things the child narrates spontaneously, the length and coherence of "
+                    "tellings, the audiences chosen, and the topics returned to. This noticing replaces any test."
+                ),
+            },
+        },
+        "connections": {
+            "math": "The order-of-events skill in narration is the same skill that orders the steps of a multi-step math problem in writing",
+            "science": "Narrating a science passage is the comprehension check for that passage; a child who can narrate it has understood it",
+            "history": "Plutarch and other historical narrations have been the central history texts of the classical tradition for centuries; narration is the way they were learned",
+            "writing": "Oral narration is the prior skill to written narration (rd-04), which is the prior skill to all of expository writing",
+        },
+    },
 }
