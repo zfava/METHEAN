@@ -425,4 +425,723 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
             "standard_refs": [],
         },
     },
+    "els-001": {
+        "node_type": "safety",
+        "trade": "electrical",
+        "competency_name": (
+            "Electrical shop and site safety: line-voltage and low-voltage shock hazards, "
+            "arc flash, stored energy, backfeed sources, multiwire branch circuits, the "
+            "neutral conductor, GFCI / AFCI protection, lockout-tagout, multimeter Category "
+            "ratings, PPE, working space and clearance, fire and CO from electrical sources, "
+            "and the scope boundaries of the foundation"
+        ),
+        "progression_band": "helper",
+        "prerequisites": [],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "Electrocution from line voltage. Residential branch circuits are typically "
+                    "120V/60Hz/1-phase or 240V/60Hz/1-phase in the US; the nameplate per "
+                    "elc-001 and the panel labeling are the authorities for the specific "
+                    "circuit. Across the heart at residential fault current, line voltage can "
+                    "stop the heart. The default in this trade is to de-energize, lock out, "
+                    "and verify dead before any contact with a conductor; elc-021 is the "
+                    "competency that teaches the verification."
+                ),
+                (
+                    "Shock from low-voltage and control circuits. Doorbell, thermostat, "
+                    "communication, and limited-energy systems run at 24VAC or lower in most "
+                    "residential applications; shock risk is lower than line voltage but real, "
+                    "and the involuntary-reaction risk (jerking a hand into a sharp edge or a "
+                    "fan blade) is not lower. The control side of any equipment is treated as "
+                    "live until verified dead."
+                ),
+                (
+                    "Arc flash from a short during energized work. Arc-flash hazard on "
+                    "residential 120V and 240V is smaller than commercial 480V but real, with "
+                    "real burn and concussive-injury risk. NFPA 70E provides the boundary "
+                    "calculation methodology and the arc-rated PPE requirements; the default "
+                    "in this trade is to de-energize and verify dead before opening, which "
+                    "removes the arc-flash hazard at the work point."
+                ),
+                (
+                    "Stored energy in capacitors. Capacitors in HVAC equipment, motor "
+                    "starters, light ballasts (older), and some electronic equipment can hold "
+                    "lethal charge for minutes to hours after the system is de-energized. "
+                    "Capacitor discharge is its own competency, not authored in this batch; "
+                    "the rule at this band is no capacitor contact without a licensed "
+                    "electrician present and the manufacturer's discharge procedure in hand."
+                ),
+                (
+                    "Backfeed from a generator. A residential standby or portable generator "
+                    "connected without a transfer switch or interlock per the AHJ-adopted NEC "
+                    "and NFPA 70 can backfeed power onto a circuit the utility has "
+                    "de-energized. This is a documented failure mode that has killed line "
+                    "workers and homeowners. Any premises with a generator is treated as a "
+                    "backfeed source until the transfer arrangement is verified by a licensed "
+                    "electrician."
+                ),
+                (
+                    "Backfeed from solar PV. A residential solar PV inverter connected without "
+                    "proper anti-islanding (rapid-shutdown per the AHJ-adopted NEC for "
+                    "rooftop arrays, supply-side or load-side interconnection per the AHJ) "
+                    "can backfeed power onto a circuit the utility or the main breaker has "
+                    "de-energized. Any premises with solar PV is treated as a backfeed source "
+                    "until the interconnection and rapid-shutdown arrangement is verified by "
+                    "a licensed electrician."
+                ),
+                (
+                    "Multiwire branch circuit (MWBC) shared-neutral hazard. An MWBC shares a "
+                    "single neutral conductor between two hot legs of opposite phases; "
+                    "opening the neutral on an energized MWBC can place the full line-to-line "
+                    "voltage across whatever load was connected to the smaller leg, and can "
+                    "produce a voltage on the supposedly-neutral wire that will shock a "
+                    "person who touches it. MWBC identification and the rule against opening "
+                    "the neutral on an energized circuit are covered in the apprentice band "
+                    "alongside elc-021; at this safety band the rule is the learner does NOT "
+                    "open any neutral on any circuit without a licensed electrician present."
+                ),
+                (
+                    "Neutral-to-ground bond fault. The neutral and the ground are bonded "
+                    "together only at the main service equipment per the AHJ-adopted NEC; "
+                    "downstream of the main, they must remain separate. A fault that places "
+                    "the neutral and ground at different potentials at a downstream point can "
+                    "energize metal that is normally at ground potential. This is the reason "
+                    "verification at the work point is mandatory in elc-021."
+                ),
+                (
+                    "Thermal burns from hot conductors and heated components. Overloaded "
+                    "conductors, undersized breakers run at peak load, and damaged splices "
+                    "can heat to combustion temperatures. Visual inspection alone is "
+                    "unreliable; a damaged splice may not look damaged. Discoloration of "
+                    "conductor insulation, scorch marks at terminations, and warm cover "
+                    "plates are stop-work signals."
+                ),
+                (
+                    "Fire from arcing faults, overloaded circuits, damaged insulation, and "
+                    "improper terminations. AFCI (arc-fault circuit interrupter) protection "
+                    "is required by the AHJ-adopted NEC on most dwelling-unit branch circuits "
+                    "in current editions, specifically to detect the arcing-fault failure "
+                    "mode. Damaged extension cords, undersized cords, and improperly stapled "
+                    "or terminated nonmetallic-sheathed cable are common arc-fault initiators."
+                ),
+                (
+                    "Carbon monoxide from electrical sources is rare directly but secondary "
+                    "to electrical failure in some installations (a failed thermostat that "
+                    "fires a furnace incorrectly, a generator running indoors). A working CO "
+                    "alarm in the household is required by code in most US jurisdictions per "
+                    "the AHJ-adopted NFPA 720; the rule for an active CO alarm during "
+                    "electrical work is stop work and evacuate."
+                ),
+                (
+                    "Sheet-metal and conductor-end cuts. Stripped conductor ends and cut "
+                    "sheathing have sharp edges; junction box and panel edges are often "
+                    "sharp; cut-resistant gloves are the default for any conductor handling "
+                    "and any panel work."
+                ),
+                (
+                    "Eye injury from metal swarf (cutting cable, drilling boxes), insulation "
+                    "fragments, arc flash, and solvent splash. Safety glasses are the default "
+                    "in this trade for any work inside an enclosure; face shield per NFPA 70E "
+                    "for any energized work."
+                ),
+                (
+                    "Falls from ladders and elevated work. Reaching panels mounted high, "
+                    "fixtures in stairwells, and any attic or crawl-space work all involve "
+                    "ladder or elevated risk. OSHA 29 CFR 1910.23 (ladders) and 1926 Subpart "
+                    "M (fall protection) govern; elevated work is not authored in this "
+                    "batch."
+                ),
+                (
+                    "Confined-space exposure. Crawl spaces, attics in summer, panel rooms "
+                    "with poor ventilation are confined or potentially confined spaces. OSHA "
+                    "29 CFR 1910.146 governs permit-required confined-space entry; "
+                    "confined-space work is not authored in this batch."
+                ),
+                (
+                    "Wrong-circuit and wrong-disconnect failure. A learner who misidentifies "
+                    "the breaker or disconnect for the circuit being worked, or who trusts a "
+                    "panel label that is wrong (panel labels are commonly wrong in older or "
+                    "remodeled homes), can de-energize the wrong circuit and walk into a live "
+                    "one. The verification at the work point (elc-021) is the safeguard; the "
+                    "rule at this band is verify, never assume."
+                ),
+                (
+                    "Wrong meter Category (CAT) rating. A multimeter at insufficient CAT "
+                    "rating for the circuit can read zero on a live circuit, can fail "
+                    "internally during the measurement, or can explode in the user's hand "
+                    "during a fault. CAT III at 600V minimum is the residential standard per "
+                    "NFPA 70E for 240V branch-circuit verification; IEC 61010-1 / UL 61010-1 "
+                    "define the Categories. This is one of the documented causes of "
+                    "electrocution and burn injuries in working electricians."
+                ),
+                (
+                    "Working space and clearance. NEC working-space and headroom requirements "
+                    "(per the AHJ-adopted edition) exist precisely so that a person working "
+                    "on or near energized equipment has room to step back if the work goes "
+                    "wrong. Working in cramped quarters around a panel violates the code and "
+                    "removes the escape path. The rule is no work begins where the working "
+                    "space is below the AHJ-adopted minimum."
+                ),
+                (
+                    "Wet conditions. Working on or near electrical equipment in rain, "
+                    "standing water, or on a wet pad significantly increases shock risk. The "
+                    "default is to defer; if the situation is urgent, the licensed "
+                    "electrician present decides whether additional PPE per NFPA 70E "
+                    "justifies proceeding."
+                ),
+                (
+                    "Scope boundary. The foundation explicitly stops at the load side of the "
+                    "main disconnect. Service-entrance work (line side of the main, meter "
+                    "work, the utility supply) is regulated more strictly than branch-circuit "
+                    "work, may require utility involvement, and is NOT in scope at the "
+                    "foundation. Any work on the supply side is deferred to the licensed "
+                    "electrician with the appropriate scope and the AHJ-permitted "
+                    "arrangement."
+                ),
+            ],
+            "ppe_required": [
+                (
+                    "Closed-toe leather work boots with non-slip soles. No sneakers in the "
+                    "panel room, on a service-entrance work site, or near energized "
+                    "equipment. Electrical-rated (EH-rated) soles preferred for any tier-3 "
+                    "energized work."
+                ),
+                (
+                    "Safety glasses (ANSI Z87.1) as the shop-wide default any time an "
+                    "enclosure is open, any time conductor ends are being cut or stripped, "
+                    "any time work near energized equipment is performed. A full face shield "
+                    "(in addition to safety glasses) for any energized work per NFPA 70E for "
+                    "the calculated arc-flash incident energy at the work point."
+                ),
+                (
+                    "Insulating gloves rated for the voltage actually being worked are "
+                    "required for any energized electrical work per NFPA 70E. Class 00 "
+                    "(rated 500V) minimum for 240V residential branch-circuit verification; "
+                    "the licensed electrician present confirms the class and the inspection "
+                    "(visual for cuts and ozone cracking; air-roll test per the manufacturer "
+                    "where applicable) before each use."
+                ),
+                (
+                    "Leather protectors over insulating gloves for any work where the "
+                    "insulating glove can be punctured or cut (handling sharp tools, "
+                    "reaching into panels with sharp edges); per NFPA 70E."
+                ),
+                (
+                    "Arc-rated clothing per NFPA 70E for the calculated arc-flash incident "
+                    "energy at the work point. The licensed electrician present confirms the "
+                    "PPE category. The default in this trade is to de-energize and verify "
+                    "dead before opening, removing the arc-flash hazard at the work point; "
+                    "energized work is not in this first batch."
+                ),
+                (
+                    "Cut-resistant gloves (ANSI/ISEA 105 cut level A4 or higher recommended) "
+                    "for any conductor handling, any cable stripping, and any panel work "
+                    "after voltage is verified dead per elc-021; not for energized work, "
+                    "where insulating gloves take precedence. The household or employer "
+                    "program names the actual cut level."
+                ),
+                (
+                    "Hearing protection (ANSI/ASA S3.19) in any space with running equipment "
+                    "loud enough to require raised voice; per current OSHA / NIOSH "
+                    "occupational noise-exposure guidance."
+                ),
+                (
+                    "No metal jewelry on hands, wrists, or neck for any work near energized "
+                    "equipment. No watches with metal bands, no rings, no chains, no metal "
+                    "earrings near the work point."
+                ),
+                (
+                    "Long sleeves rolled down near energized equipment, hot conductors, or "
+                    "any operation where falling sparks or molten metal is possible. Hair "
+                    "tied back if long enough to fall into the work."
+                ),
+                (
+                    "Multimeter at CAT III for 600V minimum (CAT IV acceptable; CAT II or "
+                    "unrated meters NOT acceptable per NFPA 70E) for any residential 240V "
+                    "verification, with intact test leads, current battery, current fuse, "
+                    "and current calibration where the household or employer program "
+                    "requires calibration tracking. The licensed electrician present "
+                    "confirms the CAT rating before any tier-3 verification begins."
+                ),
+                (
+                    "Fall protection per OSHA 29 CFR 1926 Subpart M for any work above the "
+                    "OSHA-defined threshold. The personal fall arrest system (harness, "
+                    "lanyard, anchor) is inspected before each use per the manufacturer and "
+                    "OSHA. Elevated work is not authored in this first batch; the "
+                    "requirement is named here so it is in the safety walkthrough."
+                ),
+                (
+                    "Insulated tools (rated 1000V or higher per IEC 60900 / ASTM F1505) for "
+                    "any work near energized equipment per NFPA 70E. The licensed electrician "
+                    "present confirms tool rating before any tier-3 work begins."
+                ),
+            ],
+            "supervision_required": True,
+            "supervision_basis": (
+                "The safety competency is itself supervised: an adult on premises walks the "
+                "learner through every hazard in the actual electrical equipment and the "
+                "actual tool kit, and signs off only when the learner can name and locate "
+                "each. The supervising adult does not need electrical credentials for the "
+                "walkthrough itself; a parent or other resident adult counts. The AI tutor "
+                "may guide what to look for and review the recorded walkthrough video. "
+                "There is no self-attestation on safety. The mentor confirms the "
+                "household's plans for: working CO alarm presence and function per current "
+                "NFPA 720 and the AHJ; fire extinguisher rating and placement per local "
+                "fire-safety authority confirmation; first aid kit per ANSI/ISEA Z308.1 or "
+                "current American Red Cross guidance; tetanus immunization status per each "
+                "household member's healthcare provider; the location of the main "
+                "disconnect; the labeling state of the panel (panel labels are commonly "
+                "wrong in older or remodeled homes and must be verified at the work point); "
+                "any backfeed sources on the property (generator, solar PV); and the "
+                "household's understanding that any tier-3 energized work requires a "
+                "licensed electrician physically present per the trade root's "
+                "default_supervision_policy."
+            ),
+            "fresh_safety_signoff_within_days": None,
+        },
+        "tools_required": [
+            {
+                "name": "First aid kit",
+                "specification": (
+                    "A kit that meets a recognized standard for first-aid contents: ANSI/ISEA "
+                    "Z308.1 (Minimum Requirements for Workplace First Aid Kits and Supplies) or "
+                    "current American Red Cross guidance. The authoritative contents list is "
+                    "the named standard. The kit accompanies the work area; on a service call "
+                    "the kit is in the truck."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Working CO alarm",
+                "specification": (
+                    "A CO alarm listed (UL 2034 residential or UL 2075 commercial) and placed "
+                    "per current NFPA 720 and the local AHJ. Installation date and "
+                    "manufacturer service life tracked. Any CO alarm activation during "
+                    "electrical service is a stop-work event."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Fire extinguisher",
+                "specification": (
+                    "An A:B:C rated multipurpose extinguisher within reach of the work area "
+                    "is the conservative default. The household confirms the appropriate "
+                    "rating with a local fire-safety authority. For electrical fires, only a "
+                    "rating that includes Class C is appropriate; do not use a Class A-only "
+                    "(water) extinguisher on energized electrical equipment."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Working flashlight or headlamp",
+                "specification": (
+                    "Panels, crawl spaces, attics, and behind-equipment areas are commonly "
+                    "dark. A headlamp leaves both hands free; preferred for electrical work."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Cell phone or way to call for help",
+                "specification": (
+                    "A way to reach emergency services quickly. The household's standing "
+                    "instructions cover when to call for: severe electrical shock; arc-flash "
+                    "burn; serious fall; fire from an electrical source; CO alarm activation."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "The household's adopted-edition NEC and a current NFPA 70E reference",
+                "specification": (
+                    "The current NEC edition adopted by the local AHJ, and current NFPA 70E "
+                    "(both obtained through NFPA or recognized publishers; the household "
+                    "identifies their AHJ's current adopted edition). The codes themselves "
+                    "are the authority for any specific rule; this node names that authority "
+                    "without reproducing code text."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "The household's panel-labeling state and main-disconnect location",
+                "specification": (
+                    "The main disconnect is located, labeled, and clear (working space and "
+                    "headroom per the AHJ-adopted NEC). The panel labeling is verified by "
+                    "the licensed electrician on a service visit; the labels are not "
+                    "trusted at the work point. Panel labels in older or remodeled homes "
+                    "are commonly wrong; the verification at the work point (elc-021) is "
+                    "the safeguard."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Tetanus immunization status (household-level)",
+                "specification": (
+                    "Every household member working in or near electrical panels and junction "
+                    "boxes has a tetanus immunization status current per their healthcare "
+                    "provider's recommendation. Sharp panel edges and cut conductor ends are "
+                    "the primary in-trade tetanus exposures."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Tool storage for sharp and insulated tools",
+                "specification": (
+                    "Sharp tools (wire strippers / cutters, utility knives, conduit "
+                    "reamers), insulated tools (rated screwdrivers, pliers, nut drivers), "
+                    "and insulating gloves have a designated home in the truck or the shop "
+                    "and are returned to it at end of session. Insulated tools are "
+                    "inspected for insulation damage before each use per NFPA 70E."
+                ),
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [],
+        "workspace_requirements": {
+            "surface": (
+                "Real residential electrical service (main panel location, subpanels if "
+                "present, branch circuits in the actual rooms), the household's actual "
+                "equipment, and the household's tool kit. The walkthrough is in the actual "
+                "environment, not on paper or in a classroom."
+            ),
+            "ventilation": "Adequate to detect any thermal or burning smell from electrical equipment",
+            "lighting": (
+                "Daylight or strong task lighting; portable flashlight or headlamp "
+                "available for panel interiors and dark corners"
+            ),
+            "power": (
+                "Energy state immaterial for the cover-closed walkthrough at this safety "
+                "band; for any cover-removed view of the panel or any junction box, the "
+                "disconnect is verified open under elc-021 by a licensed electrician "
+                "(which is a different competency, not in scope for this node's "
+                "unsupervised practice)"
+            ),
+            "containment": "Clear floor space around panels; pets and small children excluded from the work area",
+        },
+        "skill_description": (
+            "The learner walks the actual residential electrical service and the actual "
+            "tool kit with an adult on premises, and learns where every safety element "
+            "lives, what every hazard looks like, and how the safe habits work. They "
+            "learn the PPE rules and when each item is required; the rule that the absence "
+            "of voltage is verified by a meter before any contact with wiring per elc-021; "
+            "the rule that capacitors are treated as charged until discharged per the "
+            "manufacturer and never contacted at this band; the rule that backfeed sources "
+            "(generators, solar PV) on the property are treated as live until the transfer "
+            "arrangement is verified by a licensed electrician; the rule that the neutral "
+            "is treated as a current-carrying conductor and not opened on an energized "
+            "circuit; the rule that panel labels are not trusted at the work point and are "
+            "verified by the licensed electrician; the rule that working-space and "
+            "headroom around any panel must meet the AHJ-adopted NEC minimum before work "
+            "begins; the rule that wet conditions defer any tier-3 work; the rule that hot "
+            "work (where any) is gated separately; the rule that elevated and "
+            "confined-space work is gated separately; the rule that the foundation stops "
+            "at the load side of the main disconnect; the rule that any work above 600V is "
+            "outside the foundation entirely. They learn where the first aid kit, the CO "
+            "alarm, the fire extinguisher, the flashlight, the phone for help, and the "
+            "household's NEC and NFPA 70E references live. They learn that the "
+            "manufacturer's service literature and the AHJ's adopted codes are the "
+            "authorities for the specific equipment and the specific work, not the AI "
+            "tutor and not a general reference."
+        ),
+        "demonstration_criteria": [
+            "Names every PPE item on the list and explains when each is required and when each is permitted",
+            (
+                "Locates the first aid kit and confirms it meets a recognized standard "
+                "(ANSI/ISEA Z308.1 or current American Red Cross guidance)"
+            ),
+            (
+                "Locates the fire extinguisher within reach of the work area, names its "
+                "rating, and confirms the rating includes Class C for electrical fires per "
+                "household confirmation with local fire-safety authority"
+            ),
+            (
+                "Locates the CO alarm(s) covering the household's combustion equipment and "
+                "confirms each is listed (UL 2034 or UL 2075), within the manufacturer's "
+                "service-life window, and placed per current NFPA 720 and the local AHJ"
+            ),
+            (
+                "Locates the main disconnect, names that it is the device used to "
+                "de-energize the entire household electrical service, and confirms working "
+                "space and headroom per the AHJ-adopted NEC minimum at the panel"
+            ),
+            (
+                "Names any backfeed sources on the property (generator, solar PV) and "
+                "confirms that the transfer or interconnection arrangement was installed "
+                "by a licensed electrician and verified by the AHJ"
+            ),
+            (
+                "Names the household's tetanus immunization status arrangement and "
+                "confirms with the mentor that every working household member is current "
+                "per their healthcare provider's recommendation"
+            ),
+            (
+                "Names the rule that the absence of voltage is verified by a meter before "
+                "any contact with wiring per NFPA 70E (the live-dead-live sequence) and "
+                "OSHA 29 CFR 1910.147, and points to where elc-021 lives in the "
+                "helper-to-apprentice path"
+            ),
+            (
+                "Names the rule that capacitors are treated as charged until discharged "
+                "per the manufacturer, and that capacitor contact is NOT in scope at this "
+                "band without a licensed electrician present and the manufacturer's "
+                "discharge procedure in hand"
+            ),
+            (
+                "Names the rule that the neutral is a current-carrying conductor and is "
+                "never opened on an energized circuit, and names the MWBC shared-neutral "
+                "case as the specific failure mode"
+            ),
+            (
+                "Names the rule that panel labels in older or remodeled homes are commonly "
+                "wrong and are verified at the work point, not trusted from the label"
+            ),
+            (
+                "Names the wrong-CAT-rating multimeter failure mode and identifies the "
+                "household's multimeter's CAT rating; confirms CAT III at 600V minimum is "
+                "available for any tier-3 work"
+            ),
+            (
+                "Names the rule that wet conditions defer any tier-3 energized work; names "
+                "the no-ignition-source rule for any work that might produce arc or spark"
+            ),
+            (
+                "Names the rule that hot work, elevated work, and confined-space work are "
+                "each gated separately and not in scope at this band"
+            ),
+            (
+                "Names the scope boundary: the foundation stops at the load side of the "
+                "main disconnect; service-entrance work is out of scope; any voltage above "
+                "600V is out of scope; three-phase work is out of scope at the foundation"
+            ),
+            (
+                "Locates the household's NEC (AHJ-adopted edition) and NFPA 70E references "
+                "and demonstrates looking up one general topic (e.g. NEC Article 250 for "
+                "grounding and bonding) in each; names the rule that the AHJ-adopted "
+                "edition governs"
+            ),
+            (
+                "Names the trade rule that the manufacturer's service literature and the "
+                "AHJ's adopted codes are the authorities for specific work, not a general "
+                "reference and not the AI tutor"
+            ),
+            (
+                "Demonstrates safe tool storage at the end of a session: sharp tools "
+                "sheathed or cased, insulated tools inspected and returned, insulating "
+                "gloves inspected and stored per the manufacturer, no tools in walkways"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Assuming a circuit is dead because the breaker was thrown",
+                "cause": "The learner trusted the breaker position or the panel label without verifying with a meter",
+                "remedy": (
+                    "The absence of voltage is verified by a meter, never assumed. The "
+                    "live-dead-live sequence is the rule: verify the meter on a known-live "
+                    "source first, verify dead at the work point, then re-verify the meter "
+                    "on the known-live source. This is what elc-021 teaches; the safety "
+                    "walkthrough establishes the rule in advance. Panel labels are not "
+                    "trusted at the work point."
+                ),
+            },
+            {
+                "error": "Opening the neutral on an energized multiwire branch circuit",
+                "cause": "The learner did not recognize the MWBC and treated the neutral as not-current-carrying",
+                "remedy": (
+                    "The neutral is a current-carrying conductor whenever the circuit is "
+                    "energized. On an MWBC, opening the neutral places the full line-to-line "
+                    "voltage across the loads, and produces a voltage on the formerly-"
+                    "neutral wire. The rule is the neutral is verified dead at the work "
+                    "point and is never opened on an energized circuit. MWBC identification "
+                    "is part of elc-021 with the licensed electrician present."
+                ),
+            },
+            {
+                "error": "Working near a generator transfer switch or solar inverter without verifying the backfeed isolation",
+                "cause": "The learner assumed the main disconnect at the panel cuts everything",
+                "remedy": (
+                    "Generators and solar PV inverters can backfeed power onto circuits "
+                    "the main disconnect cannot reach. Any backfeed source on the property "
+                    "is verified isolated by the licensed electrician before any work "
+                    "downstream; the AHJ-required transfer switch or interlock is the "
+                    "protective device. The work at the panel is not begun until the "
+                    "backfeed isolation is confirmed."
+                ),
+            },
+            {
+                "error": "Using a CAT II or unrated meter for a 120V or 240V residential measurement",
+                "cause": "The learner used the meter that was in the toolbag without checking the CAT rating",
+                "remedy": (
+                    "The CAT rating addresses the transient voltage the meter is designed "
+                    "to survive. A CAT II meter on a CAT III circuit can read zero on a "
+                    "live conductor, can fail internally during the measurement, or can "
+                    "explode in the user's hand during a fault. CAT III at 600V minimum is "
+                    "the rule per NFPA 70E for this measurement. The licensed electrician "
+                    "present confirms the CAT rating before any tier-3 work begins."
+                ),
+            },
+            {
+                "error": "Trusting a panel label that says BREAKER 12 controls the work circuit",
+                "cause": "The learner read the label and threw the breaker; the label was wrong from a remodel",
+                "remedy": (
+                    "Panel labels in older or remodeled homes are commonly wrong. The "
+                    "verification at the work point (live-dead-live per elc-021) catches "
+                    "the wrong-circuit failure mode. Every elc-021 act verifies dead at the "
+                    "work point regardless of what the label said. The label is corrected "
+                    "after the work point is verified."
+                ),
+            },
+            {
+                "error": "Working on or near a panel in a wet basement after a flood",
+                "cause": "The learner saw water on the floor and proceeded anyway",
+                "remedy": (
+                    "Wet conditions significantly increase shock risk. The work is deferred "
+                    "to dry conditions; if the situation is urgent (a real outage from a "
+                    "real flood), the licensed electrician present decides whether to "
+                    "proceed with additional PPE per NFPA 70E or to call the utility. The "
+                    "default is to defer."
+                ),
+            },
+            {
+                "error": "Reaching into a panel with metal jewelry on the hands or wrists",
+                "cause": "The learner forgot a watch, ring, or bracelet",
+                "remedy": (
+                    "Metal jewelry on the hands, wrists, or neck near energized equipment "
+                    "is a documented cause of severe burn injuries. Jewelry comes off "
+                    "before any work near a panel or any energized equipment. The "
+                    "supervising adult confirms before the work begins."
+                ),
+            },
+            {
+                "error": "Standing on a chair to reach an overhead light fixture",
+                "cause": "The learner skipped getting a ladder for what felt like a quick reach",
+                "remedy": (
+                    "A real ladder rated for the duty and the height, set up per the "
+                    "manufacturer's instructions and OSHA 1910.23, is the rule. No chairs, "
+                    "no buckets, no stacked stools. Elevated work is gated separately at "
+                    "later bands."
+                ),
+            },
+            {
+                "error": "Opening a junction box to 'see what's inside' on an old circuit",
+                "cause": "The learner was curious about how the existing wiring was run",
+                "remedy": (
+                    "Opening any junction box exposes conductors that may be live, may "
+                    "include shared neutrals from an MWBC, may be old aluminum or "
+                    "knob-and-tube wiring with specific hazards, and is tier-3 work. "
+                    "Opening is deferred to a session with a licensed electrician present "
+                    "performing the verification per elc-021."
+                ),
+            },
+            {
+                "error": "Touching the panel bus or any conductor on the line side of the main disconnect",
+                "cause": "The learner thought the main disconnect cut all power",
+                "remedy": (
+                    "The line side of the main disconnect (the conductors from the meter to "
+                    "the main breaker, the meter itself, and the supply from the utility) "
+                    "remains energized even when the main is open. Service-entrance work is "
+                    "regulated more strictly than branch-circuit work, may require utility "
+                    "involvement, and is OUT OF SCOPE at the foundation. The learner does "
+                    "NOT touch the line side at this band."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "video",
+            "what_to_capture": (
+                "A short walkthrough by the learner of the household's actual electrical "
+                "service and the tool kit (under ten minutes), pointing at and naming each "
+                "item on the demonstration_criteria list, with the supervising adult "
+                "offscreen or beside the learner. The AI tutor reviews the walkthrough "
+                "video for completeness and correctness against the demonstration_criteria "
+                "list."
+            ),
+            "what_the_evidence_shows": (
+                "That the learner can identify, locate, and explain every safety element "
+                "in the electrical service they will be working in, can demonstrate the "
+                "stop-work rules for wet conditions and CO alarm activation, can locate "
+                "and look up a topic in the AHJ-adopted NEC and NFPA 70E, and can name "
+                "the bands at which each hazard-class operation enters scope and the "
+                "licensed-electrician-present rule for those bands"
+            ),
+        },
+        "mentor_signoff_required": True,
+        "pedagogy": {
+            "i_do": (
+                "The supervising adult walks the learner through the actual residential "
+                "electrical service and the tool kit, naming each hazard and each piece of "
+                "safety equipment, demonstrating the safe-carry and safe-pass habits, "
+                "demonstrating tool inspection (insulated screwdriver insulation, insulating "
+                "glove visual check), demonstrating the location of the main disconnect "
+                "and any subpanels, demonstrating the location of any backfeed sources "
+                "(generator, solar PV) on the property and the AHJ-permitted transfer "
+                "arrangement, demonstrating the location of the household's NEC and NFPA "
+                "70E references and looking up one topic in each. The adult names what is "
+                "forbidden as well as what is required, and explicitly names the bands at "
+                "which each higher-hazard operation enters scope and the licensed-"
+                "electrician-physically-present rule for tier-3 work. The AI tutor "
+                "provides the walkthrough script and the demonstration_criteria list so "
+                "the adult and the learner know what to cover."
+            ),
+            "we_do": (
+                "Supervising adult and learner walk the service together. At each station "
+                "the learner names the item and the adult confirms or corrects. The "
+                "learner takes a turn inspecting an insulated tool, locating the main "
+                "disconnect, and looking up a topic (e.g. NEC Article 250 grounding) in "
+                "the household's adopted-edition NEC. The learner walks through the "
+                "wrong-CAT-rating failure-mode story in narration, and walks through the "
+                "MWBC shared-neutral hazard in narration."
+            ),
+            "you_do_supervised": (
+                "The learner walks the supervising adult through the electrical service "
+                "and the tool kit, naming and locating each item without prompting. The "
+                "adult asks at least one follow-up question per item, drawn from the AI "
+                "tutor's suggested questions ('what is the rule on the panel labels?', "
+                "'where is the gas shutoff in case of fire?', 'what is the rule on the "
+                "neutral?'). The video is recorded at this stage and uploaded for the AI "
+                "tutor's review against the demonstration_criteria list."
+            ),
+            "you_do_unsupervised": (
+                "Once signed off (by the supervising adult, with the AI tutor's "
+                "confirmation that the walkthrough video covers every demonstration "
+                "criterion), the learner does the same walkthrough at the start of any "
+                "session in a new or modified electrical service, after any change to the "
+                "equipment or the household's plans (new generator installation, solar PV "
+                "installation, breaker replacement, panel replacement), and at any change "
+                "of seasons when the load profile changes. In any case the signoff is "
+                "refreshed annually as the freshness check. There is no unsupervised work "
+                "on hazardous subsystems below the qualified band; even at the qualified "
+                "band, every tier-3 energized act follows the licensed-electrician-"
+                "physically-present rule on elc-021 as the safety habit."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 3,
+        "session_length_minutes": 60,
+        "signoff_validity_days": 365,
+        "related_projects": [],
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [
+                "ANSI/ISEA Z308.1 (Workplace First Aid Kits)",
+                "American Red Cross home/shop first-aid kit guidance",
+                "OSHA 29 CFR 1910.147 (The Control of Hazardous Energy / Lockout-Tagout)",
+                "OSHA 29 CFR 1910.146 (Permit-Required Confined Spaces)",
+                "OSHA 29 CFR 1910.137 (Electrical Protective Equipment)",
+                "OSHA 29 CFR 1910.335 (Electrical Safety-Related Work Practices)",
+                "OSHA 29 CFR 1910.145 (Specifications for Accident Prevention Signs and Tags)",
+                "OSHA 29 CFR 1910.23 (Walking-Working Surfaces, including ladders)",
+                "OSHA 29 CFR 1926 Subpart M (Fall Protection)",
+                "NFPA 70 (NEC; current edition adopted by the local AHJ)",
+                "NFPA 70E (Standard for Electrical Safety in the Workplace; current edition)",
+                "NFPA 720 (CO Detection and Warning Equipment)",
+                "IEC 61010-1 and UL 61010-1 (Multimeter Category Ratings: CAT II / III / IV)",
+                "IEC 60900 and ASTM F1505 (Insulated and Insulating Hand Tools)",
+                "UL 2034 (residential CO alarms) and UL 2075 (commercial CO alarms)",
+                "Tetanus immunization status per each household member's healthcare provider per current ACIP / CDC guidance",
+                "The local AHJ adopted codes (NEC, IECC, IRC, IBC, local amendments) — vary by jurisdiction; the household identifies their AHJ's current adopted editions",
+                "The household's employer's written lockout-tagout program (for an apprentice working under a contractor or vocational program)",
+                "Manufacturer service literature for the specific equipment",
+            ],
+        },
+    },
 }
