@@ -31,7 +31,7 @@ export function LandingHowItWorks() {
             aria-hidden="true"
             className="mx-auto block h-[2px] w-8 bg-[var(--gold-deep)] mb-6"
           />
-          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold-deep)] mb-6">
+          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold-text)] mb-6">
             The Path
           </p>
           <h2

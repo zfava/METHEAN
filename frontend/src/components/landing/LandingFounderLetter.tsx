@@ -22,7 +22,7 @@ export function LandingFounderLetter() {
           />
 
           <div className="text-center mb-10">
-            <p className="font-[family-name:var(--font-jetbrains)] text-[10px] uppercase tracking-[0.32em] text-[var(--gold-deep)] mb-6">
+            <p className="font-[family-name:var(--font-jetbrains)] text-[10px] uppercase tracking-[0.32em] text-[var(--gold-text)] mb-6">
               A Letter From the Founders
             </p>
             <h2
@@ -34,7 +34,7 @@ export function LandingFounderLetter() {
           </div>
 
           <div className="space-y-6 font-[family-name:var(--font-cormorant)] text-[19px] leading-[1.7] text-[var(--ink-soft)]">
-            <p className="text-center italic text-[var(--gold-deep)] text-[20px]">
+            <p className="text-center italic text-[var(--navy)] text-[20px]">
               To the family considering this work,
             </p>
             <p>

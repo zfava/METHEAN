@@ -68,7 +68,7 @@ export function LandingFAQ() {
     >
       <div className="max-w-[820px] mx-auto">
         <div className="text-center mb-12">
-          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold-deep)] mb-6">
+          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold-text)] mb-6">
             Before You Begin
           </p>
           <h2

@@ -25,7 +25,7 @@ export function LandingStats() {
             aria-hidden="true"
             className="mx-auto block h-[2px] w-8 bg-[var(--gold)] mb-6"
           />
-          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold)] mb-6">
+          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold-soft)] mb-6">
             The Build
           </p>
           <h2
@@ -48,7 +48,7 @@ export function LandingStats() {
               <dd className="font-[family-name:var(--font-cormorant)] font-medium text-[var(--gold-soft)] text-[clamp(44px,5vw,64px)] leading-none mb-4">
                 {s.value}
               </dd>
-              <dd className="font-[family-name:var(--font-jetbrains)] text-[10px] uppercase tracking-[0.18em] text-white/60 leading-snug max-w-[200px] mx-auto">
+              <dd className="font-[family-name:var(--font-jetbrains)] text-[10px] uppercase tracking-[0.18em] text-white/85 leading-snug max-w-[200px] mx-auto">
                 {s.label}
               </dd>
             </div>

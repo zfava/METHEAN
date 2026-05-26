@@ -76,6 +76,7 @@
   /* ── Editorial palette (cinematic landing) ── */
   --gold-deep: #A6843A;
   --gold-soft: #D9BB6A;
+  --gold-text: #8B6914; /* WCAG AA gold for eyebrows/labels on cream */
   --navy-soft: #1A2740;
   --navy-deep: #0A1320;
   --parchment: #F5F1E8;
@@ -437,4 +438,25 @@ input:-webkit-autofill:focus {
   outline: 2px solid var(--gold);
   outline-offset: 4px;
   border-radius: 2px;
+}
+
+/* Section-reveal: opacity-only fade-in driven by scroll position. Uses
+   animation-timeline: view() where supported; in unsupported browsers
+   and with prefers-reduced-motion, content renders in final position
+   with no animation. Critically: no translate-y, so no scroll-jump. */
+@keyframes section-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.section-reveal {
+  opacity: 1;
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .section-reveal {
+      animation: section-fade-in 0.5s ease-out both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 25%;
+    }
+  }
 }

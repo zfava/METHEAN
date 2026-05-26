@@ -40,7 +40,7 @@ export function LandingPhilosophies() {
       />
       <div className="relative max-w-[1200px] mx-auto">
         <div className="text-center max-w-[860px] mx-auto mb-16">
-          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold)] mb-6">
+          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold-soft)] mb-6">
             The Traditions
           </p>
           <h2
@@ -71,7 +71,7 @@ export function LandingPhilosophies() {
               <h3 className="font-[family-name:var(--font-cormorant)] text-white text-[22px] font-medium mb-3 leading-tight">
                 {a.name}
               </h3>
-              <p className="text-[14px] leading-[1.65] text-white/60">{a.detail}</p>
+              <p className="text-[14px] leading-[1.65] text-white/85">{a.detail}</p>
             </li>
           ))}
         </ul>

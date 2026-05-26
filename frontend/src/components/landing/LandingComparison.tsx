@@ -52,7 +52,7 @@ export function LandingComparison() {
       />
       <div className="relative max-w-[1200px] mx-auto">
         <div className="text-center max-w-[860px] mx-auto mb-16">
-          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold)] mb-6">
+          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold-soft)] mb-6">
             The Difference
           </p>
           <h2
@@ -64,11 +64,11 @@ export function LandingComparison() {
         </div>
 
         {/* Header row */}
-        <div className="hidden md:grid grid-cols-[1.2fr_1fr_1.4fr] gap-x-8 border-b border-white/[0.08] pb-5 mb-2">
-          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.18em] text-white/45">
+        <div className="hidden md:grid grid-cols-[1.2fr_1fr_1.4fr] gap-x-8 border-b border-white/[0.18] pb-5 mb-2">
+          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.18em] text-white/85">
             The Question
           </p>
-          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.18em] text-white/45">
+          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.18em] text-white/85">
             Everyone Else
           </p>
           <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.18em] text-[var(--gold-soft)]">
@@ -87,7 +87,7 @@ export function LandingComparison() {
               <p className="font-[family-name:var(--font-cormorant)] italic text-[20px] sm:text-[22px] text-white leading-snug">
                 {row.q}
               </p>
-              <p className="text-[15px] leading-[1.6] text-white/55">
+              <p className="text-[15px] leading-[1.6] text-white/85">
                 <span className="text-[var(--ink-faint)] mr-2" aria-hidden="true">
                   ,
                 </span>

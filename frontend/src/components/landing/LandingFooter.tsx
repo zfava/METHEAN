@@ -29,7 +29,7 @@ export function LandingFooter() {
               <li key={l.label}>
                 <a
                   href={l.href}
-                  className="cinematic-focus font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.18em] text-white/50 hover:text-[var(--gold)] transition-colors"
+                  className="cinematic-focus font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.18em] text-white/75 hover:text-[var(--gold)] transition-colors"
                 >
                   {l.label}
                 </a>
@@ -37,7 +37,7 @@ export function LandingFooter() {
             ))}
           </ul>
         </nav>
-        <p className="mt-4 font-[family-name:var(--font-jetbrains)] text-[10px] uppercase tracking-[0.22em] text-white/30">
+        <p className="mt-4 font-[family-name:var(--font-jetbrains)] text-[10px] uppercase tracking-[0.22em] text-white/60">
           © 2026 METHEAN, Inc. · Delaware · zack@methean.io
         </p>
       </div>

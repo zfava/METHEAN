@@ -88,8 +88,8 @@ function ActivityCard({ activity }: { activity: Activity }) {
       </span>
       <p className="text-[12px] text-white/[0.88] leading-snug font-medium">{activity.name}</p>
       <div className="mt-2 flex items-center justify-between font-[family-name:var(--font-jetbrains)] text-[9.5px] uppercase tracking-[0.12em]">
-        <span className="text-white/40">{activity.minutes} min</span>
-        <span className={pending ? "text-[var(--gold)]" : "text-white/35"}>{activity.status}</span>
+        <span className="text-white/70">{activity.minutes} min</span>
+        <span className={pending ? "text-[var(--gold)]" : "text-white/70"}>{activity.status}</span>
       </div>
     </div>
   );
@@ -104,7 +104,7 @@ export function LandingCurriculumBuilder() {
       <div className="max-w-[1200px] mx-auto">
         {/* Section header */}
         <div className="text-center max-w-[820px] mx-auto mb-16">
-          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold-deep)] mb-6">
+          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold-text)] mb-6">
             The Curriculum Builder
           </p>
           <h2
@@ -172,7 +172,7 @@ export function LandingCurriculumBuilder() {
                     key={d.day}
                     className="bg-[var(--navy)] px-3.5 py-5 min-h-[220px]"
                   >
-                    <p className="border-b border-white/[0.05] pb-2 mb-3 font-[family-name:var(--font-jetbrains)] text-[10px] uppercase tracking-[0.18em] text-white/40">
+                    <p className="border-b border-white/[0.05] pb-2 mb-3 font-[family-name:var(--font-jetbrains)] text-[10px] uppercase tracking-[0.18em] text-white/75">
                       {d.day}
                     </p>
                     <div className="space-y-2.5">
@@ -187,7 +187,7 @@ export function LandingCurriculumBuilder() {
 
             {/* Footer row */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-6 sm:px-8 py-5 border-t border-white/[0.06]">
-              <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.14em] text-white/55">
+              <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.14em] text-white/80">
                 Next: <strong className="text-[var(--gold)] font-medium">Week 13 · Review Week</strong>
               </p>
               <div className="flex items-center gap-2">
@@ -240,7 +240,7 @@ export function LandingCurriculumBuilder() {
                 <dd className="font-[family-name:var(--font-cormorant)] font-medium text-[var(--gold-deep)] text-[clamp(36px,4.5vw,56px)] leading-none mb-3">
                   {s.value}
                 </dd>
-                <dd className="font-[family-name:var(--font-jetbrains)] text-[10px] uppercase tracking-[0.16em] text-[var(--ink-mute)] leading-snug max-w-[180px] mx-auto">
+                <dd className="font-[family-name:var(--font-jetbrains)] text-[10px] uppercase tracking-[0.16em] text-[var(--navy)] leading-snug max-w-[180px] mx-auto">
                   {s.label}
                 </dd>
               </div>

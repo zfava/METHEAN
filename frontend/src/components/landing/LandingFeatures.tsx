@@ -64,7 +64,7 @@ export function LandingFeatures() {
     >
       <div className="max-w-[1200px] mx-auto">
         <div className="text-center max-w-[820px] mx-auto mb-16">
-          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold-deep)] mb-6">
+          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold-text)] mb-6">
             The Capabilities
           </p>
           <h2

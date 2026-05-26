@@ -25,7 +25,7 @@ export function LandingPricing() {
     >
       <div className="max-w-[640px] mx-auto">
         <div className="text-center mb-14">
-          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold-deep)] mb-6">
+          <p className="font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold-text)] mb-6">
             Membership
           </p>
           <h2
@@ -54,7 +54,7 @@ export function LandingPricing() {
             <MetheanMark size={56} color="#C6A24E" />
           </div>
 
-          <p className="text-center font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold-deep)] mb-8">
+          <p className="text-center font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.28em] text-[var(--gold-text)] mb-8">
             METHEAN Family
           </p>
 

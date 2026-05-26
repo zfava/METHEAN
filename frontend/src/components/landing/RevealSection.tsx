@@ -1,7 +1,8 @@
-"use client";
-
-import { useScrollReveal } from "@/lib/useScrollReveal";
-
+// Sections render in their final position by default. A subtle CSS-only
+// opacity fade-in is applied via the `.section-reveal` class, which uses
+// `animation-timeline: view()` where supported and falls back to a no-op
+// when not. No JS observer, no translate-y, no zero-height reservation:
+// content never disappears and the page never visibly jumps on scroll.
 export function RevealSection({
   id,
   ariaLabelledBy,
@@ -13,15 +14,11 @@ export function RevealSection({
   className?: string;
   children: React.ReactNode;
 }) {
-  const { ref, visible } = useScrollReveal<HTMLElement>();
   return (
     <section
-      ref={ref}
       id={id}
       aria-labelledby={ariaLabelledBy}
-      className={`transition-all duration-700 ease-out ${
-        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-      } ${className}`}
+      className={`section-reveal ${className}`}
     >
       {children}
     </section>
