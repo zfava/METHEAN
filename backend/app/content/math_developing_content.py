@@ -2643,4 +2643,261 @@ MATH_DEVELOPING_CONTENT = {
             "history": "Reading old accounting records where remainders are reported alongside quotients in tithes, taxes, and harvests",
         },
     },
+    "md-11": {
+        "enriched": True,
+        "learning_objectives": [
+            "Identify a unit fraction (one part of a whole divided into equal parts) and write it with a numerator of 1",
+            "Use the words numerator and denominator correctly",
+            "Recognize that the denominator names the number of equal parts and the numerator names how many of those parts are taken",
+            "Represent unit fractions with area models (rectangles, circles) and on a number line between 0 and 1",
+        ],
+        "teaching_guidance": {
+            "introduction": "A fraction begins not with a symbol but with a careful cut: a whole divided into equal parts. The unit fraction is the simplest: one of those equal parts. The denominator names how many equal parts the whole has been cut into, and the numerator says we are taking one of them. Build with real things, fold paper into equal parts, share an apple, before any notation. The word 'equal' is the careful part; unequal parts do not give a fraction.",
+            "scaffolding_sequence": [
+                "Fold a paper strip in half; name each piece 'one half' and write 1/2; talk about the equal cut",
+                "Fold a paper strip into fourths; name each piece 'one fourth' and write 1/4",
+                "Cut a real apple, sandwich, or pancake into equal parts and name one part as a unit fraction",
+                "Introduce the words: the bottom number (denominator) tells how many equal parts; the top (numerator) tells how many we take",
+                "Show that 1/2 of one strip and 1/4 of another strip can be compared by laying them next to each other; the larger denominator makes smaller parts",
+                "Plot unit fractions on a number line between 0 and 1: divide the segment into equal parts, label 1/2, 1/3, 1/4, 1/5, 1/6, 1/8",
+                "Move to area models: rectangles divided into equal parts, one shaded, written as 1/n",
+            ],
+            "socratic_questions": [
+                "How do we make sure the parts are equal?",
+                "Which is more, 1/2 or 1/4? Show me with the paper strips.",
+                "If a pizza is cut into 8 slices and I eat one, what fraction did I eat?",
+                "Why is 1/2 of a small thing different from 1/2 of a big thing? When is that important?",
+            ],
+            "practice_activities": [
+                "Paper-folding lab: fold strips into halves, thirds, fourths, sixths, eighths and label each unit fraction",
+                "Apple sharing: cut a real apple into halves, thirds, fourths, and quarters and name each unit fraction aloud",
+                "Number-line plotting: mark 1/2, 1/3, 1/4, 1/5, 1/6 on a line between 0 and 1",
+                "Equal-vs.-unequal challenge: shown several cuts of a rectangle, decide which represent a valid fraction and which do not",
+            ],
+            "real_world_connections": [
+                "Sharing food fairly: half a sandwich, a third of an orange, a quarter of a pie",
+                "Measuring cups in cooking: 1/2 cup, 1/3 cup, 1/4 cup",
+                "Reading a clock: half past, quarter past, quarter to",
+                "Sharing time on a swing or device fairly: half hour each",
+            ],
+            "common_misconceptions": [
+                "Believing unequal parts can still be called a fraction (e.g., calling 1 of 3 unequal slices 'one third')",
+                "Reading 1/4 as 'one-four' or as 4 (confusing the symbol)",
+                "Thinking 1/4 is larger than 1/2 because 4 is larger than 2",
+                "Treating the fraction bar as a subtraction or addition rather than a 'parts-of' relation",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Identifies and writes any unit fraction from 1/2 through 1/12 from a shown model",
+                "Names numerator and denominator correctly in a unit fraction",
+                "Plots given unit fractions on a number line with correct equal spacing",
+            ],
+            "assessment_methods": ["model-to-fraction matching", "fraction-to-model drawing", "number-line plotting"],
+            "sample_assessment_prompts": [
+                "A rectangle is divided into 6 equal parts. One part is shaded. What fraction does the shaded part represent?",
+                "Plot 1/3 on a number line between 0 and 1.",
+                "Name the numerator and denominator of 1/8.",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "A rectangle is divided into 4 equal parts. One part is shaded. What fraction is shaded?",
+                "expected_type": "text",
+                "hints": ["The bottom number is the total equal parts; the top is the number shaded"],
+                "explanation": "1/4 (one fourth). Four equal parts, one shaded.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What is the denominator of 1/8?",
+                "expected_type": "number",
+                "correct_answer": "8",
+                "hints": ["The denominator is the bottom number"],
+                "explanation": "8. The denominator tells the number of equal parts the whole is divided into.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "Which is bigger: 1/3 or 1/6?",
+                "expected_type": "text",
+                "hints": ["A larger denominator makes smaller parts"],
+                "explanation": "1/3 is bigger than 1/6, because dividing into fewer equal parts makes each part larger.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "Plot 1/4 on a number line between 0 and 1. Where is it?",
+                "expected_type": "text",
+                "hints": ["Divide the segment into 4 equal parts; 1/4 is at the first mark"],
+                "explanation": "1/4 sits one fourth of the way from 0 to 1, at the first of four equal divisions.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": "A pizza is cut into 8 equal slices. You eat 1 slice. What fraction of the pizza did you eat?",
+                "expected_type": "text",
+                "hints": ["The whole pizza is 8 equal slices, you ate 1"],
+                "explanation": "1/8 of the pizza. The denominator is the total slices (8) and the numerator is what was eaten (1).",
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "A rectangle is divided into 6 equal parts; one part is shaded. What fraction does the shaded part represent?",
+                "type": "text",
+                "correct_answer": "1/6",
+                "target_concept": "unit_fraction_identification",
+            },
+            {
+                "prompt": "Plot 1/3 on a number line from 0 to 1. Describe where it goes.",
+                "type": "open_response",
+                "rubric": "Mastery: divides into three equal parts, marks first division as 1/3, explains. Proficient: correct placement, weaker explanation. Developing: unequal divisions or wrong placement.",
+                "target_concept": "unit_fraction_on_number_line",
+            },
+            {
+                "prompt": "Which is bigger, 1/4 or 1/8? Explain why.",
+                "type": "open_response",
+                "rubric": "Mastery: 1/4 is bigger, larger denominator means smaller parts. Proficient: 1/4 only. Developing: 1/8 chosen (denominator misconception).",
+                "target_concept": "unit_fraction_comparison",
+            },
+        ],
+        "resource_guidance": {
+            "required": ["paper strips for folding", "real food for sharing demonstrations (apple, sandwich)", "fraction circles or bars (set of unit fractions 1/2 through 1/12)"],
+            "recommended": ["number line printout 0-1", "measuring cups in fraction sizes", "fraction tiles or rods"],
+        },
+        "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {
+            "dyslexia": "Read every fraction aloud as 'one of n parts' the first time and 'one nth' as the formal name. Use color-coded fraction circles where each unit fraction has its own color.",
+            "adhd": "Use paper folding and cutting as the active part of every session. Keep the symbolic notation brief.",
+            "gifted": "Move quickly to comparing two unit fractions on a number line and to identifying non-unit fractions (the next node).",
+            "visual_learner": "Always show the unit fraction as both an area model and a number-line point. Use color.",
+            "kinesthetic_learner": "Fold, cut, share real things. Walk a floor number line to a unit fraction.",
+            "auditory_learner": "Read each fraction aloud: 'one half, one third, one fourth.' Sing or chant the fraction names.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Today we begin fractions. A fraction names a part of a whole that has been divided into equal parts. The simplest fraction is the unit fraction, where we take just one of those equal parts. We will fold paper, cut food, and write fractions.",
+                "gradual_release": {
+                    "i_do": "Fold a paper strip in half and label each half '1/2.' Fold a second strip into fourths and label each fourth '1/4.' Read aloud: 'one half, one fourth.' Identify the denominator and numerator.",
+                    "we_do": "Fold five strips together into halves, thirds, fourths, sixths, and eighths. Label each unit fraction. Compare pairs by laying strips side by side.",
+                    "you_do": "Child folds and labels strips independently, then plots each unit fraction on a number line from 0 to 1.",
+                },
+                "guided_practice": [
+                    "Identify the unit fraction shown in five rectangle models",
+                    "Plot five unit fractions on a number line from 0 to 1",
+                    "Decide which of two given unit fractions is bigger and explain why",
+                ],
+                "independent_practice": [
+                    "Worksheet: identify the unit fraction shown in ten different area models",
+                    "Worksheet: plot ten unit fractions on number lines",
+                ],
+                "mastery_check": [
+                    "Identifies any unit fraction from 1/2 through 1/12 from a model",
+                    "Names numerator and denominator correctly",
+                    "Compares two unit fractions and explains the relation by denominator",
+                ],
+                "spiral_review": [
+                    "Daily fraction reading: name one unit fraction shown in a quick model at the start of each session",
+                    "Continue division-with-remainder practice; fractions extend the same idea of fair sharing",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The Greeks did not yet write fractions as we do, but they reckoned them carefully in geometry: the part of a line, the part of a circle, the part of an area. The medieval scribes wrote the half, the third, the quarter into ledgers of corn and coin. The unit fraction is the smallest brick of a great craft.",
+                "memory_work": {
+                    "chants": [
+                        "Recite the rule: the denominator names the equal parts, the numerator names how many are taken",
+                        "Recite the unit fractions in order: one half, one third, one fourth, one fifth, one sixth, one eighth, one tenth, one twelfth",
+                        "Recite the comparison rule: the larger the denominator, the smaller each part",
+                    ],
+                    "recitations": [
+                        "Daily recitation of one comparison: 'one half is greater than one fourth, because dividing into fewer equal parts makes each part larger'",
+                    ],
+                },
+                "copywork": [
+                    "Copy the unit fractions 1/2, 1/3, 1/4, 1/5, 1/6, 1/8, 1/10, 1/12 into the math copybook, each with a labeled area model beside it",
+                ],
+                "recitation_routine": "Begin each lesson by reciting yesterday's unit fractions and adding today's.",
+                "history_integration": "Tell that the Egyptians wrote only unit fractions and combined them to express other parts, and that for centuries the unit fraction stood at the head of the great craft of arithmetic; we take up an ancient brick.",
+                "read_aloud_suggestions": [
+                    "A short children's book or article about ancient Egyptian arithmetic and the unit fractions",
+                    "A children's biography of a Greek geometer (Euclid, Archimedes) where the part-of-a-whole appears",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A real, beautifully illustrated picture book that quietly uses fair sharing of a whole",
+                    "A real cookbook where measuring cups in fractions appear naturally",
+                ],
+                "short_lesson_flow": "Begin by folding a real paper strip in half together, then in fourths. Cut a real apple into equal pieces. Name the unit fraction of one piece. Write the fraction. Plot it on a small number line. Close while interest is high.",
+                "narration_prompt": "Tell me what one fourth means. Show me with the paper strip or the apple.",
+                "real_world_objects": [
+                    "Paper strips and scissors at the math table",
+                    "A real apple, sandwich, or pancake for sharing into equal parts",
+                    "Measuring cups in fraction sizes",
+                ],
+                "nature_connection": "Find unit fractions in nature: one petal of a five-petaled flower (one fifth of the petals), one segment of a sectioned orange (one of several equal parts). Name each as a unit fraction.",
+                "habit_focus": "The habit of attention to equal: a child who notices whether the parts are truly equal is on the road to honest, careful fraction work.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Fraction circles (the Montessori metal insets, divided into halves, thirds, fourths, fifths, sixths, eighths, tenths)",
+                    "Fraction skittles (smaller wooden circles divided similarly)",
+                    "Paper strips for folding and cutting",
+                    "Number-line strips with markings for plotting unit fractions",
+                ],
+                "presentation": {
+                    "three_period_lesson": "Naming: hold up one piece of the halved circle, 'this is one half'; one piece of the thirded circle, 'this is one third.' Recognition: 'show me one half; show me one fifth.' Recall: 'what is this called?' Move slowly through the unit fractions.",
+                    "steps": [
+                        "Show the whole circle and name it 'one whole'",
+                        "Remove one piece of the halved circle and name 'one half'; continue across the unit fractions to one tenth",
+                        "Place pieces side by side to compare sizes",
+                        "Move to writing the symbol 1/n alongside each piece",
+                        "Plot unit fractions on a number line",
+                    ],
+                },
+                "control_of_error": "The fraction circle metal insets are the control: an unequal cut would not fit back into the frame, and the size relations among the fractions are physically obvious.",
+                "abstraction_pathway": "From the fraction circles (quantity and equality felt) to written unit fractions alongside the materials to written unit fractions alone and plotted on a number line.",
+                "extensions": [
+                    "Compare any two unit fractions by laying the pieces side by side",
+                    "Build the equivalence of fractions by stacking (the next node)",
+                    "Begin fraction work in real cooking and sharing situations",
+                ],
+                "observation_focus": "Watch for the spontaneous comparison of unit fraction pieces in free work, and for the careful checking that every piece of a divided whole is the same size.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Bake or cook a real recipe that asks for 1/2, 1/3, 1/4 of a cup, with the child measuring",
+                    "Set out a real apple and a sharp safe knife and a small question: 'how could we share this fairly among us?'",
+                    "Put a paper strip and a pair of scissors on the table with a casual prompt: 'fold this into four equal pieces and label them'",
+                ],
+                "real_world_contexts": [
+                    "Sharing food fairly at meals",
+                    "Reading a clock: half past, quarter to",
+                    "Measuring cups in cooking",
+                    "Splitting time on a swing, a screen, or a game fairly",
+                ],
+                "conversation_starters": [
+                    "How much of this pizza is yours if we share it among five of us?",
+                    "Half a cup of flour. What does that mean? How would you measure it?",
+                    "It's quarter past three. What does the word 'quarter' mean about time?",
+                ],
+                "resource_bank": [
+                    "A real kitchen with fraction measuring cups",
+                    "A real apple and a safe knife for sharing demonstrations",
+                    "A clock with both analog and digital faces",
+                    "Picture books on fair sharing, available not assigned",
+                ],
+                "parent_role": "Use unit fractions aloud in real life often: in cooking, time, sharing. When the child asks 'what's a half?' show with real things, never with a worksheet. Welcome rough first attempts and refine in real use.",
+                "observation_documentation": "Note across weeks where unit fractions came up in real life, whether the child uses the words 'half, third, fourth' naturally, and whether they correctly compare two unit fractions in real situations.",
+            },
+        },
+        "connections": {
+            "reading": "Reading fraction words and symbols in real recipes, clocks, and stories",
+            "science": "Naming equal parts of natural wholes: petals, segments, sections",
+            "history": "Reading old units of measure expressed as fractions (a half-pint, a quarter-day, a third of a league)",
+        },
+    },
 }
