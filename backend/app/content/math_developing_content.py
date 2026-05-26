@@ -3946,4 +3946,263 @@ MATH_DEVELOPING_CONTENT = {
             "history": "Reading about historical surveying (the Roman groma, the colonial surveyor's chain) and the importance of accurate boundary measurement",
         },
     },
+    "md-16": {
+        "enriched": True,
+        "learning_objectives": [
+            "Define area as the amount of space inside a closed two-dimensional figure",
+            "Measure area by covering a region with non-overlapping unit squares and counting",
+            "Compute the area of a rectangle by multiplying length by width",
+            "Distinguish between area and perimeter and choose the right measure for a real problem",
+        ],
+        "teaching_guidance": {
+            "introduction": "Area is the inside of a shape, the floor that has to be covered. The first activity is covering: lay unit squares on a real region and count them. From counting unit squares the child naturally discovers that a rectangle's squares can be counted by multiplication, not one at a time. Distinguish area from perimeter early and often; the two are often confused. A real example helps: the fence around the garden is perimeter; the soil inside is area.",
+            "scaffolding_sequence": [
+                "Cover a small square or rectangle with unit-square tiles; count the tiles to find the area",
+                "Notice that the tiles arrange in rows and columns; count by rows or by columns",
+                "Discover the shortcut: rows times columns gives the same total as counting one at a time",
+                "Connect the shortcut to multiplication: area of a rectangle = length x width",
+                "Practice on rectangles drawn on grid paper, where the unit squares are visible",
+                "Practice on rectangles given dimensions, without the grid, computing area by multiplication",
+                "Compare two rectangles with the same perimeter but different areas (and vice versa), to draw the distinction sharply",
+                "Apply to real-world problems: floor space, garden area, table top",
+            ],
+            "socratic_questions": [
+                "Why do we count area in 'square units' and perimeter in just 'units'?",
+                "Show me with tiles why the area of a 4 by 3 rectangle is 12.",
+                "Two rectangles both have perimeter 12. Must they have the same area?",
+                "The fence around the garden is perimeter; what is the soil inside?",
+            ],
+            "practice_activities": [
+                "Tile-covering lab: cover small rectangles drawn on the floor or large paper with unit-square tiles and count",
+                "Grid-paper practice: outline rectangles of given dimensions on grid paper and count the squares",
+                "Compute by multiplication: find the area of ten given rectangles using length x width",
+                "Compare-and-contrast: given a list of rectangles, find those with equal perimeter, equal area, or both",
+            ],
+            "real_world_connections": [
+                "Tiling or carpeting a small room (how many tiles or how much carpet)",
+                "Painting a wall (how much paint needed)",
+                "Laying turf in a garden bed",
+                "Wrapping a rectangular gift (how much paper)",
+            ],
+            "common_misconceptions": [
+                "Confusing area with perimeter (the boundary vs. the inside)",
+                "Forgetting that area is measured in square units, not just units",
+                "Believing two rectangles with the same area must have the same shape (a 1 by 12 and a 3 by 4 both have area 12)",
+                "Using length plus width instead of length times width",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Measures the area of any rectangle by counting unit squares or by multiplying length x width",
+                "Reports the area with the correct square unit",
+                "Distinguishes area from perimeter on a previously unseen problem",
+            ],
+            "assessment_methods": ["tile-counting tasks", "rectangle area by multiplication", "area vs. perimeter discrimination"],
+            "sample_assessment_prompts": [
+                "Find the area of a rectangle that is 5 units long and 4 units wide.",
+                "A room is 8 feet by 6 feet. What is the area of the floor? Include the units.",
+                "Which of these problems is about area and which is about perimeter: 'how much fencing for the garden' versus 'how much grass seed for the garden'?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "A rectangle is 4 units long and 3 units wide. What is the area in square units?",
+                "expected_type": "number",
+                "correct_answer": "12",
+                "hints": ["4 x 3 = 12"],
+                "explanation": "Area = length x width = 4 x 3 = 12 square units.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "A square has each side 6 inches. What is its area in square inches?",
+                "expected_type": "number",
+                "correct_answer": "36",
+                "hints": ["A square has length = width", "6 x 6 = ?"],
+                "explanation": "Area = 6 x 6 = 36 square inches.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "A floor is 8 feet by 5 feet. What is the area?",
+                "expected_type": "number",
+                "correct_answer": "40",
+                "hints": ["8 x 5"],
+                "explanation": "Area = 8 x 5 = 40 square feet.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": "Two rectangles both have area 24 square units. One is 4 by 6. What might the other be?",
+                "expected_type": "text",
+                "hints": ["What other pairs of factors give 24?"],
+                "explanation": "Other rectangles with area 24: 1 x 24, 2 x 12, 3 x 8 (and the other is 6 x 4, same as the given). Any of 1x24, 2x12, 3x8 would work.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": "A rectangular garden is 10 feet long and 7 feet wide. What is the area? What is the perimeter?",
+                "expected_type": "text",
+                "hints": ["Area is L x W; perimeter is 2 x (L + W)"],
+                "explanation": "Area = 10 x 7 = 70 square feet. Perimeter = 2 x (10 + 7) = 34 feet.",
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Find the area of a rectangle that is 5 units long and 4 units wide. Include the units.",
+                "type": "text",
+                "correct_answer": "20 square units",
+                "target_concept": "rectangle_area_with_units",
+            },
+            {
+                "prompt": "A room floor is 8 feet by 6 feet. Find the area.",
+                "type": "number",
+                "correct_answer": "48",
+                "target_concept": "real_world_area",
+            },
+            {
+                "prompt": "Which problem is about area and which is about perimeter: (a) how much fencing for the garden; (b) how much grass seed to cover the garden?",
+                "type": "open_response",
+                "rubric": "Mastery: (a) perimeter, (b) area, with brief reasoning. Proficient: correct identification only. Developing: one or both incorrect.",
+                "target_concept": "area_vs_perimeter",
+            },
+        ],
+        "resource_guidance": {
+            "required": ["set of unit-square tiles", "grid paper", "rulers in inches and centimeters"],
+            "recommended": ["large paper rectangles for floor-scale tile covering", "real rectangular spaces to measure (rug, tabletop, garden bed)", "computational area cards for abstract practice"],
+        },
+        "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 15},
+        "accommodations": {
+            "dyslexia": "Always show 'square units' in writing and read it aloud; use color to distinguish area (inside) from perimeter (boundary) on every diagram.",
+            "adhd": "Use tile covering as the active first activity in every session. Keep abstract computation brief.",
+            "gifted": "Move quickly to areas of L-shapes (combining two rectangles), to area on a coordinate grid, and to introducing the area formulas for triangles and parallelograms.",
+            "visual_learner": "Color the inside of every rectangle for area work and the outline for perimeter work. Show every rectangle on grid paper at first.",
+            "kinesthetic_learner": "Cover real rectangles with real tiles. Step on each tile or count by walking.",
+            "auditory_learner": "Read every area aloud with units: 'twelve square units.' Say the area formula like a chant: 'area equals length times width.'",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Today we learn area: the amount of space inside a shape, measured by covering with unit squares. For rectangles, the area is the length times the width, and we always report the area in square units.",
+                "gradual_release": {
+                    "i_do": "Cover a 4-by-3 rectangle on the floor with unit tiles. Count them all (12). Notice that 4 rows of 3 makes 12, and write A = 4 x 3 = 12 square units. Compare to a different rectangle.",
+                    "we_do": "Tile and compute the area of five rectangles together. Then move to rectangles with given dimensions and compute area by multiplication.",
+                    "you_do": "Child computes the area of ten rectangles independently, half by tiling and half by multiplication.",
+                },
+                "guided_practice": [
+                    "Tile five rectangles and count the unit squares",
+                    "Compute the area of five rectangles by multiplication",
+                    "Solve three real-world area problems with correct units",
+                ],
+                "independent_practice": [
+                    "Worksheet: compute the area of ten given rectangles in square units",
+                    "Word-problem set: five real-world area problems (floor, garden, painting)",
+                ],
+                "mastery_check": [
+                    "Computes any rectangle's area correctly by multiplication",
+                    "Reports area in square units consistently",
+                    "Distinguishes area from perimeter on a real-world problem",
+                ],
+                "spiral_review": [
+                    "Daily perimeter-and-area warm-up: compute both for one given rectangle each day",
+                    "Continue multiplication fact practice; area depends on it",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Area is the breadth of a surface, the amount of ground a thing covers. The Egyptian surveyors measured the area of fields beside the Nile so they could be re-marked after the flood; the Greek geometers proved that the area of a rectangle is the length times the width; the medieval builder reckoned the area of a wall before he knew how many stones to lay. Area is an old, careful work.",
+                "memory_work": {
+                    "chants": [
+                        "Recite the rule: area is the amount of space inside a shape, measured in square units",
+                        "Recite the rectangle formula: area equals length times width",
+                        "Recite the difference: perimeter goes around, area covers inside",
+                    ],
+                    "recitations": [
+                        "Daily recitation of one worked area problem in full sentence form",
+                    ],
+                },
+                "copywork": [
+                    "Copy three worked area problems with neat diagrams into the math copybook",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the area formula and the area-vs-perimeter distinction, then take up today's work.",
+                "history_integration": "Tell that the very word 'geometry' means 'earth-measure' and grew out of the Egyptian work of measuring fields, and that the area formula we now learn is one of the oldest results in mathematics, proved by Euclid himself.",
+                "read_aloud_suggestions": [
+                    "A short passage from a children's history of Egyptian mathematics",
+                    "A picture book about Euclid or about ancient geometers measuring fields",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A real, beautifully illustrated picture book about quilting, tiling, or laying out a garden",
+                    "A children's biography of a builder, gardener, or quilter where the area of real surfaces matters",
+                ],
+                "short_lesson_flow": "Lay a real rectangle on the floor (a piece of paper, a rug). Cover it with real unit tiles or square sticky notes. Count by rows. Note the dimensions and the area. Pose one real, lifelike question (how many square tiles for the bathroom floor). Close while interest is high.",
+                "narration_prompt": "Tell me how you found the area. Why is it different from the perimeter?",
+                "real_world_objects": [
+                    "Unit tiles or square sticky notes",
+                    "Real rectangular surfaces: a rug, a tabletop, a window pane, a quilt",
+                    "Grid paper for drawing",
+                ],
+                "nature_connection": "Estimate the area of a real garden bed, a flower bed, a flat stone patio in nature. Cover a small natural rectangle with leaves of nearly the same size and count.",
+                "habit_focus": "The habit of distinguishing: the perimeter is the boundary, the area is the inside; the careful child names each by its right name and uses the right tool for each.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Set of unit-square tiles in graduated denominations (square centimeter, square inch)",
+                    "Rectangular metal insets in various dimensions",
+                    "Multiplication facts chart for connecting area to multiplication",
+                    "Grid paper for drawing and counting",
+                ],
+                "presentation": {
+                    "three_period_lesson": "Naming: lay tiles inside a rectangular inset and name 'this is the area, the amount inside.' Recognition: 'show me the area; show me the perimeter.' Recall: 'what is this called?' Move to computation.",
+                    "steps": [
+                        "Cover the inset with unit tiles, naming the area as the count of tiles",
+                        "Notice the rows-and-columns arrangement; count by rows",
+                        "Connect to multiplication: rows x columns = area",
+                        "Move to abstract problems with given dimensions",
+                    ],
+                },
+                "control_of_error": "The tiles and inset are the control: the tiles must fit exactly, and the count must equal the rows-times-columns product.",
+                "abstraction_pathway": "From tile-covering (area felt as a real covering) to grid paper (squares drawn) to multiplication (computed without drawing).",
+                "extensions": [
+                    "Investigate which rectangles share a given area and how they differ",
+                    "Combine two rectangles into an L-shape and find the total area by addition of two simple areas",
+                    "Apply to real surfaces in the home (floor, wall, window)",
+                ],
+                "observation_focus": "Watch for the spontaneous use of multiplication on a new rectangle, and for the child's natural curiosity about the relation between area and perimeter.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Lay out a real rug with unit-square paper sheets and propose: 'how many squares to cover this rug?'",
+                    "Plan a real garden bed and compute how much soil or sod is needed by the area",
+                    "Wrap a real rectangular gift together and figure out how much paper is needed",
+                ],
+                "real_world_contexts": [
+                    "Carpeting or tiling a small room",
+                    "Laying sod in a yard",
+                    "Painting a wall",
+                    "Wrapping rectangular gifts",
+                ],
+                "conversation_starters": [
+                    "How big is this rug? In square feet? Want to figure it out?",
+                    "If the wall is 8 by 10 feet, how much paint do we need to cover it?",
+                    "How many of these tiles to cover the floor?",
+                ],
+                "resource_bank": [
+                    "Real unit tiles, square paper sheets, or large square sticky notes",
+                    "Real surfaces in the home and yard to measure",
+                    "Real projects (tiling, painting, gardening) for joint planning",
+                    "Picture books on building, quilting, or gardening, available not assigned",
+                ],
+                "parent_role": "Use area aloud in real projects often. When the family plans a real surface (floor, wall, garden), compute the area together as a real need. Welcome rough estimates and refine in the project. Never quiz; let the project carry the math.",
+                "observation_documentation": "Note across weeks where area came up in real life, whether the child distinguished area from perimeter, and whether they reached for multiplication on a new rectangle.",
+            },
+        },
+        "connections": {
+            "reading": "Reading word problems for area-vs-perimeter cues and the meaning of 'inside' vs. 'around'",
+            "science": "Measuring the area of leaves, plots of land, or surfaces in real observation",
+            "history": "Reading about the measurement of fields and lands in historical surveying (Egyptian, Roman, colonial)",
+        },
+    },
 }
