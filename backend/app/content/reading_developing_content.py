@@ -8544,4 +8544,383 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Writing develops in dialogue; the child who discusses books well brings the same care and evidence-handling to their own writing",
         },
     },
+    "rd-22": {
+        "enriched": True,
+        "learning_objectives": [
+            "Identify the THEME of a story: the larger idea or insight about life the story explores (friendship, courage, justice, growing up)",
+            "Identify the central CONFLICT of a story and recognize the common types: character vs character, character vs self, character vs nature, character vs society",
+            "Identify the POINT OF VIEW used: first person (I), third person limited (he or she, single perspective), third person omniscient (knowing all characters' thoughts)",
+            "Identify the TONE of a passage: serious, playful, sad, hopeful, ironic, ominous; recognize that tone is the writer's attitude toward the subject",
+            "Build vocabulary for discussing literature analytically (the words above plus mood, setting-as-character, character arc)",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "rd-06 worked on character analysis and rd-07 on setting and plot; rd-22 introduces the literary "
+                "elements that lift discussion above retelling into analysis. Four central elements at this band: "
+                "THEME (the larger insight about life the story explores: friendship, courage, justice; what is the "
+                "story really about beyond the plot?), CONFLICT (what tension drives the story: character vs "
+                "character, character vs self, character vs nature, character vs society), POINT OF VIEW (whose eyes "
+                "we see through: first person, third person limited, third person omniscient), and TONE (the writer's "
+                "attitude toward the subject: serious, playful, ironic, ominous). These are not just labels; they are "
+                "the tools that let the reader see how a story works."
+            ),
+            "scaffolding_sequence": [
+                "Introduce theme using a familiar story: in Charlotte's Web, the plot is about a pig and a spider; the theme is about friendship, sacrifice, and what makes a life meaningful",
+                "Practice theme identification: at the end of a finished book, ask 'what was this story really about, beneath the plot?'",
+                "Introduce conflict types with examples: character vs character (rivalry, a villain), character vs self (the inner struggle), character vs nature (a storm, a wilderness), character vs society (an unjust rule the character must navigate)",
+                "Identify the central conflict in current reading: which type? how does the character respond?",
+                "Introduce point of view with read-alouds: first-person narrators (Harry in The Lightning Thief; the narrator in The Magic Tree House), third-person limited (most chapter books), third-person omniscient (older novels)",
+                "Identify point of view in current reading: who is telling the story? whose thoughts do we know?",
+                "Introduce tone: read aloud two short passages on similar topics with different tones (Beverly Cleary's playful tone; Katherine Paterson's serious tone); name what each writer's attitude is",
+                "Build the vocabulary across the term: theme, conflict, point of view, tone, mood, character arc become available words the child uses naturally",
+            ],
+            "socratic_questions": [
+                "What is this story really about, beneath the plot?",
+                "What is the central conflict? Which type?",
+                "Who is telling the story? Whose thoughts do we know?",
+                "What is the tone of this passage? What is the writer's attitude toward what is happening?",
+                "Did the main character change across the story? How?",
+            ],
+            "practice_activities": [
+                "Theme identification on finished books: state the theme in one sentence",
+                "Conflict-type sort: read several short passages or summaries; sort each into the conflict type",
+                "Point of view identification on assigned passages: name the point of view; cite text evidence (pronouns, access to thought)",
+                "Tone identification on read-aloud passages: name the tone; cite text evidence (word choice, sentence rhythm)",
+                "Character-arc tracking: for a current chapter book, track how the main character changes across the chapters",
+            ],
+            "real_world_connections": [
+                "Recognizing themes in movies and shows: what is the story really about beyond the plot?",
+                "Recognizing conflict types in real life: what is this disagreement really about?",
+                "Recognizing point of view in news writing: whose perspective is being told?",
+                "Recognizing tone in conversation and in writing: what is the speaker's or writer's attitude?",
+                "Building the vocabulary of literary analysis that adult readers use",
+            ],
+            "common_misconceptions": [
+                "Believing theme is the same as plot. Plot is what happens; theme is what the story is about beneath the events.",
+                "Believing there is only one conflict in a story. Many stories have layered conflicts; identify the central one but recognize others.",
+                "Believing point of view is just first person or third person. Within third person there is limited (one character's thoughts) and omniscient (all characters' thoughts); the distinction matters.",
+                "Believing tone is the same as mood. Tone is the writer's attitude; mood is the feeling created in the reader. Related but distinct.",
+                "Believing literary terms are pretentious. They are precision tools; using them lets the reader say what they see more exactly.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Identifies the theme of a finished book in own words",
+                "Identifies the central conflict and names its type",
+                "Identifies the point of view with text evidence",
+                "Identifies the tone of an unfamiliar passage with text evidence",
+                "Uses the literary vocabulary naturally in book discussion",
+            ],
+            "proficiency_indicators": [
+                "Identifies theme and conflict with prompting",
+                "Identifies point of view but tone is weaker",
+            ],
+            "developing_indicators": [
+                "Confuses theme with plot",
+                "Cannot identify point of view or tone",
+            ],
+            "assessment_methods": [
+                "scored theme statements on finished books",
+                "conflict-type sort tasks",
+                "point of view identification on assigned passages",
+                "tone identification on read-aloud passages",
+                "discussion observation: does the child use the vocabulary naturally?",
+            ],
+            "sample_assessment_prompts": [
+                "Tell me the theme of this book in one sentence. Defend your answer with the events of the story.",
+                "What is the central conflict? Which type? How does it drive the plot?",
+                "What point of view is this passage in? What text evidence tells you?",
+                "What is the tone of this passage? Cite specific word choices that establish it.",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What is the difference between theme and plot?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "They are the same.",
+                    "Plot is what happens in the story; theme is what the story is about beneath the events (the larger insight or idea).",
+                    "Plot is for fiction; theme is for nonfiction.",
+                    "Theme is the title.",
+                ],
+                "correct_answer": "Plot is what happens in the story; theme is what the story is about beneath the events (the larger insight or idea).",
+                "hints": [
+                    "Think about events versus deeper meaning.",
+                ],
+                "explanation": (
+                    "Plot is the sequence of events ('a girl raises a pig on a farm'); theme is the larger idea the "
+                    "events explore ('friendship and sacrifice make a life meaningful'). The theme is not always "
+                    "stated; the reader infers it from the plot, the characters, and how the story resolves."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "Which of these are the common types of conflict in stories?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Big, medium, small, tiny.",
+                    "Character vs character, character vs self, character vs nature, character vs society.",
+                    "Comedy, tragedy, romance, mystery.",
+                    "Past, present, future, dream.",
+                ],
+                "correct_answer": "Character vs character, character vs self, character vs nature, character vs society.",
+                "hints": [
+                    "Four common types named by what the character is in conflict with.",
+                ],
+                "explanation": (
+                    "The four common conflict types are: character vs character (against another person), character "
+                    "vs self (inner struggle), character vs nature (a storm, a wilderness, an animal), and character "
+                    "vs society (an unjust rule, a culture, a system). Most stories have one central conflict and "
+                    "often layered secondary conflicts."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "A book uses 'I' and tells the story from one character's perspective, sharing only that "
+                    "character's thoughts and feelings. What point of view is this?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "First person.",
+                    "Third person limited.",
+                    "Third person omniscient.",
+                    "Second person.",
+                ],
+                "correct_answer": "First person.",
+                "hints": [
+                    "The narrator uses 'I'; we get only their thoughts.",
+                ],
+                "explanation": (
+                    "First person uses 'I' and tells the story from one character's perspective. Third person "
+                    "limited uses 'he' or 'she' but stays in one character's perspective. Third person omniscient "
+                    "uses 'he' or 'she' and can enter many characters' thoughts. The point of view shapes what the "
+                    "reader knows and how the story feels."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Two writers describe the same rainy day. Writer A writes: 'The gentle rain pattered cheerfully "
+                    "on the windowpane; inside it felt cozy and warm.' Writer B writes: 'The rain hammered against "
+                    "the glass; the house seemed small and cold.' What is the difference?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "There is no difference.",
+                    "The tone is different; writer A's tone is warm and cozy; writer B's tone is ominous or cold. The writer's attitude toward the same event shapes the language.",
+                    "Writer A is correct; writer B is wrong.",
+                    "Writer B is more poetic.",
+                ],
+                "correct_answer": "The tone is different; writer A's tone is warm and cozy; writer B's tone is ominous or cold. The writer's attitude toward the same event shapes the language.",
+                "hints": [
+                    "Same event, different word choices, different tone.",
+                ],
+                "explanation": (
+                    "Tone is the writer's attitude toward the subject. The same event ('it is raining') becomes warm "
+                    "and cozy or ominous and cold depending on word choice ('gentle pattered cheerfully' vs "
+                    "'hammered'). Tone is a precision tool; recognizing it lets the reader feel what the writer is "
+                    "doing."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Pick a book you have read recently. Name its theme, its central conflict (with type), its point "
+                    "of view, and its tone. Defend each with text evidence or with what happens in the book."
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Apply all four literary elements to the same book.",
+                ],
+                "explanation": (
+                    "A complete answer names the book and applies all four elements with grounding evidence. With "
+                    "practice the child runs this analysis automatically on every book they read, and the literary "
+                    "vocabulary becomes natural in their discussion."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "For this assigned book, state the theme in one sentence and defend it using events from the story.",
+                "type": "open_response",
+                "target_concept": "theme_identification_with_defense",
+                "rubric": (
+                    "Mastery: theme stated clearly in own words; defended with three or more story events. "
+                    "Proficient: theme stated but defense thin. Developing: confuses theme with plot."
+                ),
+            },
+            {
+                "prompt": "For this passage, identify the point of view and the tone. Cite text evidence for each.",
+                "type": "open_response",
+                "target_concept": "point_of_view_and_tone_identification",
+                "rubric": (
+                    "Mastery: both identified accurately with specific text evidence. Proficient: one identified with "
+                    "evidence; the other weaker. Developing: cannot identify either."
+                ),
+            },
+            {
+                "prompt": "Name the central conflict of this book and its type. Explain how the conflict drives the plot.",
+                "type": "open_response",
+                "target_concept": "conflict_identification_with_function",
+                "rubric": (
+                    "Mastery: conflict identified, type named, plot connection clear. Proficient: conflict identified "
+                    "but type or plot connection weaker. Developing: cannot identify central conflict."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "current chapter book reading with strong theme, conflict, point of view, and tone (chapter books that have stayed in print are usually rich in these elements)",
+                "the reading notebook for written literary analysis",
+            ],
+            "recommended": [
+                "a wall card with the literary elements vocabulary: theme, conflict (four types), point of view, tone",
+                "passages from very different tones (Beverly Cleary, Katherine Paterson, Lloyd Alexander, E. B. White) for tone comparison",
+                "books with markedly different points of view for comparison (a first-person book and a third-person omniscient book)",
+                "a simple anchor chart of conflict types with examples",
+            ],
+        },
+        "time_estimates": {"first_exposure": 35, "practice_session": 20, "assessment": 30},
+        "accommodations": {
+            "dyslexia": "Practice literary elements on read-aloud books; the analysis is independent of decoding. Use audiobooks freely; the analysis the child does is the same.",
+            "adhd": "Focus on one literary element at a time across multiple sessions rather than all at once. Build the vocabulary gradually.",
+            "gifted": "Move to more sophisticated elements: irony, symbolism, structure (linear vs nonlinear), narrative reliability. Introduce the idea that some elements operate beneath the conscious level of the writer.",
+            "visual_learner": "Use a literary elements chart with rows for each element; fill in for each book read. The visual record builds the vocabulary across time.",
+            "kinesthetic_learner": "Act out conflict types: physically embody a character vs self moment versus a character vs society moment. The body shows what the labels mean.",
+            "auditory_learner": "Discuss elements aloud during reading. The vocabulary settles through hearing it used in real conversation about real books.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we introduce the literary elements that let us discuss stories more precisely: theme, "
+                    "conflict, point of view, and tone. These are the tools good readers use to talk about how a "
+                    "story works. We learn each one with examples and practice them on the books we are already "
+                    "reading."
+                ),
+                "gradual_release": {
+                    "i_do": "Parent demonstrates identifying each element on a familiar book, naming what each is and giving examples.",
+                    "we_do": "Together work through each element on a current shared reading; child identifies elements with support.",
+                    "you_do": "Child identifies elements on their own reading and discusses with confidence.",
+                },
+                "guided_practice": [
+                    "Apply literary elements to each finished book",
+                    "Weekly element-focused discussion",
+                    "Periodic element-comparison across books",
+                ],
+                "independent_practice": [
+                    "Use literary vocabulary naturally in book discussion",
+                    "Run literary analysis automatically across reading life",
+                ],
+                "mastery_check": [
+                    "Identifies all four elements on unfamiliar books",
+                    "Defends identifications with text evidence",
+                    "Uses literary vocabulary naturally in discussion",
+                ],
+                "spiral_review": [
+                    "Return to earlier identifications periodically; refine as understanding grows",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "Aristotle wrote his Poetics two thousand years ago, naming the elements of tragedy and the "
+                    "structure of stories. The classical tradition has always given names to how stories work. To "
+                    "speak of theme and conflict and tone is to join a long conversation about the art of narrative."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the four literary elements: theme, conflict, point of view, tone",
+                        "Recite the four conflict types: character vs character, character vs self, character vs nature, character vs society",
+                        "Recite the three points of view: first person, third person limited, third person omniscient",
+                    ],
+                    "recitations": [
+                        "Memorize a brief passage with a distinct tone and recite it; discuss what makes the tone what it is",
+                    ],
+                },
+                "copywork": [
+                    "Copy a sentence with distinctive tone into the copybook; underline the words that establish the tone",
+                ],
+                "recitation_routine": "At each finished book, the child gives an oral analysis using all four elements.",
+                "history_integration": "Aristotle's Poetics, medieval literary criticism, the Renaissance rebirth of classical analysis: the history of literary analysis is itself a rich tradition. Show the child this lineage where age permits.",
+                "read_aloud_suggestions": [
+                    "Books with strong distinguishable elements: The Lion the Witch and the Wardrobe (clear theme and conflict), A Wrinkle in Time (interesting point of view), Charlotte's Web (warm distinct tone)",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 25,
+                "living_book_suggestions": [
+                    "Living books rich in elements: theme worth discussing, central conflict that drives the story, distinctive point of view, recognizable tone",
+                ],
+                "short_lesson_flow": "During and after reading, name the elements briefly as they appear: 'we are seeing the central conflict here'; 'notice the tone'. The vocabulary becomes part of how the family talks about books.",
+                "narration_prompt": "Tell me the story; then tell me about its theme, its conflict, its point of view, its tone.",
+                "real_world_objects": [
+                    "An anchor chart of the literary elements in the reading area",
+                    "The reading notebook with a literary elements section for each finished book",
+                ],
+                "nature_connection": "Stories about nature (Owls in the Family, Where the Red Fern Grows, Hatchet) often use character vs nature conflict; reading them with literary elements vocabulary makes the conflict explicit.",
+                "habit_focus": "The habit of seeing how a story works, not only what it says. The habit of literary attention.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Literary elements cards: theme, conflict (with four type sub-cards), point of view (with three sub-cards), tone",
+                    "Sort cards: short passages or summaries sorted by conflict type, by point of view, by tone",
+                    "An elements log where the child records each finished book with all four elements named",
+                    "Comparison cards: pairs of books for element comparison",
+                ],
+                "presentation": {
+                    "three_period_lesson": "This is theme; this is conflict; this is point of view; this is tone. Show me a theme statement. Is this a theme or a plot? Is this character vs self or character vs society?",
+                    "steps": [
+                        "The guide presents each element with worked examples on familiar books",
+                        "The child sorts cards by element",
+                        "The child applies all four elements to their own current reading",
+                        "Across the term the vocabulary becomes natural",
+                    ],
+                },
+                "control_of_error": "The text itself is the control: identification can be checked against the text and the events of the story.",
+                "abstraction_pathway": "From sorting prepared cards, to identifying elements on assigned passages, to running automatic analysis on any reading the child encounters.",
+                "extensions": [
+                    "More sophisticated elements (irony, symbolism, structure) as the child is ready",
+                    "Reading the same story told from different points of view (Wicked retells the Wizard of Oz; many modern retellings of fairy tales)",
+                    "Beginning to apply elements to the child's own writing",
+                ],
+                "observation_focus": "Watch for spontaneous use of element vocabulary in discussion. Watch for the child noticing tone in particular; tone is the subtlest element and a marker of real literary attention.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Talk about themes, conflicts, points of view, and tones in shows, movies, and books the family enjoys together",
+                    "Welcome the child's literary observations; do not insist on technical vocabulary if the observation is real",
+                    "Read books with markedly different tones together and talk about the difference",
+                ],
+                "real_world_contexts": [
+                    "Discussing themes in movies and shows",
+                    "Recognizing tone in family conversation, in news, in social media",
+                    "Recognizing different points of view as a habit of mind across all reading",
+                ],
+                "conversation_starters": [
+                    "What do you think this story is really about?",
+                    "What is the writer's attitude toward what is happening here?",
+                    "Whose perspective is this told from? How would it change if it were told by someone else?",
+                ],
+                "resource_bank": [
+                    "Wide and varied family reading",
+                    "Family conversation about story, character, and meaning",
+                    "Different versions of stories told from different perspectives",
+                ],
+                "parent_role": "Use the vocabulary naturally in conversation. Notice tone and theme aloud. Welcome the child's growing literary observation as part of their thinking life.",
+                "observation_documentation": "Note when the child spontaneously identifies a theme, names a tone, or distinguishes a point of view. The marker of internalization is unprompted use.",
+            },
+        },
+        "connections": {
+            "math": "Math doesn't have themes in the literary sense, but the discipline of distinguishing surface (the numbers) from deeper structure (what the numbers mean) is parallel",
+            "science": "Science writing has tone (objective, enthusiastic, cautionary) and point of view (whose perspective is the writer taking); recognizing these is part of science literacy",
+            "history": "History narratives have themes, central conflicts, points of view, and tones; the same elements work; the discipline transfers directly",
+            "writing": "When the child writes their own stories, they make element choices deliberately: theme to explore, conflict to drive the plot, point of view to choose, tone to set",
+        },
+    },
 }
