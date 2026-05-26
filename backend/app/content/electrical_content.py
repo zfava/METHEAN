@@ -3080,4 +3080,316 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
             "standard_refs": [],
         },
     },
+    "elc-007": {
+        "node_type": "knowledge",
+        "trade": "electrical",
+        "competency_name": (
+            "Conductor sizing and ampacity basics for residential branch circuits "
+            "and feeders (concepts and AHJ-adopted NEC reference)"
+        ),
+        "progression_band": "helper",
+        "prerequisites": ["els-001", "elc-003", "elc-004"],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "Undersizing a conductor for a given load is one of the historic "
+                    "causes of residential electrical fires. A conductor carrying "
+                    "more current than its ampacity heats; the insulation fails; "
+                    "the conductor arcs or melts; fire follows. Conductor sizing is "
+                    "a load-bearing knowledge competency precisely because the "
+                    "downstream installation depends on it being correct."
+                ),
+                (
+                    "Treating ampacity as a single fixed number rather than as a "
+                    "table look-up adjusted for installation conditions. The AHJ-"
+                    "adopted NEC's ampacity tables (Article 310 in current editions) "
+                    "apply at a specific ambient temperature and a specific "
+                    "conductor count in the raceway; deviations from those "
+                    "conditions require AHJ-adopted correction factors. The wrong "
+                    "ampacity from missing the correction is a real downstream "
+                    "error."
+                ),
+                (
+                    "Mismatching the conductor's insulation temperature rating with "
+                    "the termination's temperature rating. The AHJ-adopted NEC's "
+                    "termination temperature rule (often called the 60/75/90 rule) "
+                    "limits the ampacity used in sizing to the LOWER of the "
+                    "conductor's insulation rating and the termination device's "
+                    "rating. This is one of the most-missed rules at the journeyman "
+                    "level; the AI tutor names it explicitly at the helper band."
+                ),
+                (
+                    "Using a copper-only table for aluminum conductors (or vice "
+                    "versa). Aluminum has different ampacity at the same size than "
+                    "copper; the AHJ-adopted NEC publishes separate tables. Mixing "
+                    "is a real downstream error."
+                ),
+            ],
+            "ppe_required": [
+                "Trade PPE per els-001; no additional PPE for paper work",
+            ],
+            "supervision_required": False,
+            "supervision_basis": (
+                "Conceptual work with paper, the AHJ-adopted NEC ampacity tables "
+                "(referenced by article and table number, not reproduced), and the "
+                "AI tutor. No real conductors handled, no live work."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "The household's AHJ-adopted-edition NEC for reference",
+                "specification": (
+                    "The current NEC adopted by the local AHJ. The actual table "
+                    "values, the correction factors, and the termination-temperature "
+                    "rule are read from the code itself; this node does NOT "
+                    "reproduce code text or table values. The learner consults the "
+                    "AHJ-adopted edition for each problem."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Pencil, paper, and a calculator",
+                "specification": "Standard arithmetic plus multiplication for correction-factor application",
+                "alternatives": [],
+            },
+            {
+                "name": "Sample problem set provided by the AI tutor",
+                "specification": (
+                    "Worked sample problems matched to the AHJ-adopted edition's "
+                    "ampacity tables; the learner solves with the code in hand"
+                ),
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [],
+        "workspace_requirements": {
+            "surface": "Any flat surface (desk or table)",
+            "ventilation": "Indoor or outdoor; not relevant",
+            "lighting": "Adequate to read the code and the calculator",
+            "power": "None",
+            "containment": "None required",
+        },
+        "skill_description": (
+            "The learner learns the conceptual basis of conductor sizing and the "
+            "structure of the AHJ-adopted NEC's ampacity tables, WITHOUT memorizing "
+            "specific numbers (which change by edition). The conceptual basis: a "
+            "conductor's ampacity is the maximum continuous current it can carry "
+            "without exceeding the insulation's temperature rating at the rated "
+            "ambient conditions and conductor count. The AHJ-adopted NEC's Article "
+            "310 publishes the ampacity tables. The values in the table are at a "
+            "specific ambient temperature (often 30 degrees C / 86 degrees F) and "
+            "for a specific number of current-carrying conductors in a raceway "
+            "(historically three or fewer); ambient temperatures above the table's "
+            "base and conductor counts above the table's base require correction "
+            "factors (also published in Article 310). Insulation temperature rating "
+            "matters: a conductor rated for 90 degrees C insulation can carry more "
+            "current than the same conductor with 60 degrees C insulation in the "
+            "same ambient, because the conductor itself is the same but the "
+            "insulation tolerates more heat. The AHJ-adopted NEC's termination-"
+            "temperature rule limits the actual ampacity used in sizing to the "
+            "LOWER of the conductor's insulation rating and the termination "
+            "device's rating; residential terminations are commonly rated 60 or 75 "
+            "degrees C, and using a 90 degrees C ampacity at a 60 degrees C "
+            "termination is a code violation that produces undersized terminations. "
+            "Copper and aluminum have different ampacities at the same gauge; "
+            "aluminum tables are separate from copper tables. The learner reads "
+            "the relevant tables in the AHJ-adopted edition, names which table "
+            "applies to which conductor material and insulation rating, applies "
+            "correction factors for ambient temperature and conductor count, and "
+            "applies the termination-temperature rule. The learner does NOT "
+            "memorize specific table numbers (they change per edition); the "
+            "learner DOES build the habit of looking up the answer in the code in "
+            "hand."
+        ),
+        "demonstration_criteria": [
+            (
+                "Names that conductor ampacity is set by the AHJ-adopted NEC's "
+                "Article 310 ampacity tables; locates the relevant tables in the "
+                "household's adopted edition; the AI tutor confirms the locator "
+                "is correct"
+            ),
+            (
+                "Names the structure of an ampacity table: rows are conductor sizes "
+                "(AWG or kcmil), columns are insulation temperature ratings (60 "
+                "degrees C, 75 degrees C, 90 degrees C), values are amperes at the "
+                "table's base ambient temperature"
+            ),
+            (
+                "Names the termination-temperature rule (the 60/75/90 rule): the "
+                "ampacity actually used for sizing is the LOWER of the conductor's "
+                "insulation rating and the termination device's rating; in many "
+                "residential installations the termination dictates the 75 degrees "
+                "C or even 60 degrees C column"
+            ),
+            (
+                "Names that ambient temperatures above the table's base and "
+                "conductor counts above the table's base require correction "
+                "factors, also published in Article 310"
+            ),
+            (
+                "Names that copper and aluminum have separate ampacity tables, and "
+                "names that aluminum at the same gauge carries less current than "
+                "copper"
+            ),
+            (
+                "Solves three guided ampacity-look-up problems in the AHJ-adopted "
+                "edition: a 14 AWG copper THHN/THWN conductor in a residential "
+                "raceway at standard ambient; a 12 AWG copper THHN/THWN in the "
+                "same; a #8 AWG copper THHN/THWN feeding a typical residential "
+                "240V branch (the AI tutor confirms the table-look-up technique, "
+                "not the specific value, which the AHJ-adopted edition provides)"
+            ),
+            (
+                "Names the rule that the overcurrent device (the breaker per "
+                "Article 240) must protect the CONDUCTOR'S ampacity; you do not "
+                "use a breaker larger than the conductor can safely carry; "
+                "permitted exceptions per the AHJ-adopted NEC are named without "
+                "reproduction"
+            ),
+            (
+                "Catches at least one unreasonable answer: a 14 AWG copper "
+                "conductor wired to a 30A breaker (the breaker exceeds the "
+                "conductor's ampacity) is the kind of error the conductor-sizing "
+                "rules exist to prevent"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Memorizing 15A = 14 AWG, 20A = 12 AWG, 30A = 10 AWG as if these were the answer",
+                "cause": "The learner picked up rules of thumb without the AHJ-adopted NEC's actual table and correction factors",
+                "remedy": (
+                    "The rules of thumb are starting points, not answers. The "
+                    "AHJ-adopted edition's tables and correction factors are the "
+                    "authority. Many installations use higher ratings (because of "
+                    "the 75 or 90 degrees C column with appropriate terminations); "
+                    "many require lower ratings (because of derating for ambient or "
+                    "conductor count). The habit is to look up, not memorize."
+                ),
+            },
+            {
+                "error": "Using the 90 degrees C column for sizing at a 75 degrees C termination",
+                "cause": "The learner saw a higher ampacity in the 90 degrees C column and used it",
+                "remedy": (
+                    "The termination-temperature rule limits the ampacity to the "
+                    "termination's rating. Using the 90 degrees C column at a 75 "
+                    "degrees C termination overheats the termination and is a "
+                    "code violation. Most residential terminations are 60 or 75 "
+                    "degrees C; verify before sizing."
+                ),
+            },
+            {
+                "error": "Forgetting to apply ambient-temperature correction in a hot attic",
+                "cause": "The learner used the base table value for a conductor that runs through a 120 degrees F attic",
+                "remedy": (
+                    "Ambient temperatures above the table's base require the "
+                    "AHJ-adopted NEC's correction factor (also in Article 310). "
+                    "Attics in summer commonly exceed the base; the correction "
+                    "factor reduces the ampacity. Apply it before sizing."
+                ),
+            },
+            {
+                "error": "Forgetting to apply conductor-count adjustment in a bundled cable run",
+                "cause": "The learner ran six current-carrying conductors in one conduit and used the unadjusted ampacity",
+                "remedy": (
+                    "Conductor counts above the table's base require the "
+                    "adjustment factor. More than three current-carrying "
+                    "conductors in a raceway requires adjustment per the AHJ-"
+                    "adopted NEC."
+                ),
+            },
+            {
+                "error": "Mixing copper and aluminum ampacity values",
+                "cause": "The learner read a copper-table value and applied it to an aluminum conductor",
+                "remedy": (
+                    "Copper and aluminum are different conductor materials with "
+                    "different conductivities; the AHJ-adopted NEC publishes "
+                    "separate tables. Aluminum at the same gauge carries less "
+                    "current than copper; do not mix tables."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "document",
+            "what_to_capture": (
+                "A worked problem set of conductor-sizing look-ups using the "
+                "household's AHJ-adopted NEC: at least three branch-circuit sizing "
+                "problems and one feeder sizing problem, with the table reference "
+                "(article and table number from the adopted edition), the column "
+                "used (60 / 75 / 90 degrees C), any correction factors applied "
+                "(ambient, conductor count), and the resulting ampacity and "
+                "breaker selection; the AI tutor confirms the method and the "
+                "code reference"
+            ),
+            "what_the_evidence_shows": (
+                "That the learner can navigate the AHJ-adopted NEC's ampacity "
+                "tables, apply the termination-temperature rule and the "
+                "correction factors, and arrive at a defensible conductor and "
+                "breaker selection for a residential branch or feeder"
+            ),
+        },
+        "mentor_signoff_required": False,
+        "pedagogy": {
+            "i_do": (
+                "The AI tutor walks the learner through one worked problem with "
+                "the AHJ-adopted edition open: a residential 20A branch on 12 AWG "
+                "copper THHN/THWN at standard ambient with a 75 degrees C "
+                "termination. Names the table, the column, and the resulting "
+                "ampacity. Names the termination-temperature rule explicitly."
+            ),
+            "we_do": (
+                "The AI tutor and the learner work a second problem together with "
+                "a non-standard condition (a hot attic ambient). The learner reads "
+                "the correction factor from the AHJ-adopted edition; the AI tutor "
+                "confirms the method. They work a third problem with a non-"
+                "standard conductor count (a six-conductor raceway)."
+            ),
+            "you_do_supervised": (
+                "The learner solves a three-problem set in the AHJ-adopted "
+                "edition. The AI tutor confirms each method and the code "
+                "reference."
+            ),
+            "you_do_unsupervised": (
+                "Once the learner can navigate the ampacity tables independently "
+                "and apply the termination and correction rules, they may "
+                "continue to deeper Article-310 work (Type SE service-entrance "
+                "cable, conductors in conduit underground, parallel conductors) "
+                "at the apprentice band. The AI tutor remains available for "
+                "code-reference confirmation."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 5,
+        "session_length_minutes": 45,
+        "related_projects": [],
+        "certification_alignment": {
+            "ladder_rung": "helper",
+            "notes": (
+                "Knowledge competency. Conductor sizing and ampacity is one of the "
+                "most-tested topics on every journeyman and master exam."
+            ),
+            "certifications_supported": [
+                {
+                    "id": "elcert-nec",
+                    "domains": [
+                        "NEC Article 310 ampacity",
+                        "NEC Article 240 overcurrent protection",
+                        "termination-temperature rule (NEC 110.14(C))",
+                        "ambient and conductor-count correction factors per Article 310",
+                    ],
+                    "notes": "Universally tested at journeyman and master levels.",
+                },
+                {
+                    "id": "elcert-licensing",
+                    "domains": ["conductor sizing across the state licensing exam scope"],
+                    "notes": "Foundational on every state exam.",
+                },
+            ],
+        },
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
+    },
 }
