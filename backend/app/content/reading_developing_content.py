@@ -4374,4 +4374,402 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Reading poetry trains the child to write with attention to sound, rhythm, and specific words; this feeds all later writing",
         },
     },
+    "rd-11": {
+        "enriched": True,
+        "learning_objectives": [
+            "Read and enjoy myths from Greek, Roman, and Norse traditions in age-appropriate retellings",
+            "Understand mythology as the literature of ancient peoples: how they explained the natural world, their gods, their heroes, and the human condition",
+            "Identify the major gods, heroes, and origin stories of at least one mythological tradition",
+            "Recognize common myth-types: origin stories (creation, why the seasons change), hero quests, transformations, cautionary tales",
+            "Distinguish reading myth as literature (which we do) from reading myth as belief instruction (which we do not); read the traditions on their own terms without imposing modern judgments",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "Mythology is the literature of the ancient world: how Greeks and Romans, Norse peoples, and many other "
+                "traditions explained the natural world, named their gods, told the stories of their heroes, and "
+                "passed down their wisdom and their warnings. At this band the child reads mythology as literature — "
+                "for the stories, the characters, the moral and literary substance — not as belief instruction and not "
+                "as religion in any practicing sense. The child meets Athena and Odysseus and Thor and Loki and "
+                "Persephone as characters in foundational stories of Western (and other) traditions. Honest content "
+                "note: classical mythology includes violence, family conflict, and adult themes; age-appropriate "
+                "retellings (D'Aulaire, Padraic Colum, Edith Hamilton in the upper edge) handle the content "
+                "responsibly. The child reads the traditions ON THEIR OWN TERMS: ancient peoples are not naive; their "
+                "myths carry real human truth alongside the imagination."
+            ),
+            "scaffolding_sequence": [
+                "Begin with Greek mythology in retellings: D'Aulaire's Book of Greek Myths is the standard starting point; Padraic Colum's The Children's Homer is a longer prose retelling",
+                "Introduce the twelve Olympian gods: Zeus, Hera, Poseidon, Demeter, Athena, Apollo, Artemis, Ares, Hephaestus, Aphrodite, Hermes, Dionysus (and Hades, often counted alongside)",
+                "Read the origin stories: Gaia and Uranus, the Titans, the rise of the Olympians, the creation of humans, Pandora's jar",
+                "Read several hero stories: Perseus and Medusa, Theseus and the Minotaur, Atalanta, Hercules and his twelve labors, Jason and the Argonauts",
+                "Move to Norse mythology: D'Aulaire's Book of Norse Myths is the parallel starting point; meet Odin, Thor, Loki, Freya, Frigg, Heimdall; the Aesir vs the Vanir; the trickster figure Loki; Ragnarok",
+                "Read parallel myth-types across traditions: the creation story (Greek vs Norse vs others); the trickster (Hermes / Loki / many traditions); the hero quest",
+                "Discuss the function of myth: explaining seasons (Persephone), teaching consequences (Icarus, Pandora), naming the world (constellations come from myth)",
+                "Honor each tradition on its own terms: Greek gods are different from Norse gods in temperament and structure; the child notices the differences without ranking them",
+            ],
+            "socratic_questions": [
+                "What does this myth explain about the world?",
+                "What kind of myth is this: origin, hero, transformation, or cautionary?",
+                "Who is the trickster in this tradition? What does the trickster do?",
+                "How is this Greek god different from this Norse god? Same role, different temperament — what changes?",
+                "What does this myth teach about consequences? About courage? About hubris?",
+                "Why might ancient peoples have made this story up? What in their lives might it have answered for them?",
+            ],
+            "practice_activities": [
+                "Read a myth a day from D'Aulaire's Greek or Norse myths across the term",
+                "Build a gods chart: name, domain, symbols, relationships, key stories",
+                "Map the hero quest: pick one hero (Perseus, Theseus, Hercules, Sigurd), trace their quest in the plot-mountain form from rd-07",
+                "Compare two traditions: Greek and Norse creation stories side by side; Greek and Norse views of the afterlife",
+                "Retell a favorite myth orally and in writing, applying rd-03 and rd-04 narration skills",
+                "Notice myth references in modern stories, names (Apollo, Athena, Mercury are everywhere), and brands",
+            ],
+            "real_world_connections": [
+                "Recognizing mythological names in space (planets, moons, missions), in brands (Nike, Athena, Apollo), and in everyday English (panic from Pan, herculean, narcissistic)",
+                "Recognizing mythological allusions in books, movies, and shows the family watches (Percy Jackson is built entirely on Greek myth; Marvel's Thor draws on Norse)",
+                "Talking about the constellations and naming the myths behind them (Orion, Cassiopeia, Andromeda)",
+                "Visiting a museum's classical or Viking collection if available; recognizing the figures depicted",
+                "Reading parallel myths from other traditions the family knows (West African Anansi stories, Indigenous origin stories, Hindu epics) with the same respect and attention",
+            ],
+            "common_misconceptions": [
+                "Treating myths as childish or naive. Myths carry real human truth; the ancient peoples who told them were as wise about people as we are.",
+                "Imposing modern moral judgments on ancient stories. Read the stories on their own terms first; the child can think about them critically AFTER understanding them as they were told.",
+                "Confusing mythology with religion. The child reads myth as literature; they are not learning Greek religion or Norse religion as a practicing matter. (Reverence for the traditions and curiosity about their meaning are both fine.)",
+                "Treating one tradition as 'better' than another. Greek and Norse mythology have different temperaments and shapes; neither is superior; both are worth reading.",
+                "Reading edited-for-children versions as if they were the originals. The retellings are doors into the originals; the originals (Homer, the Eddas) wait for later bands.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Names the twelve Olympian gods with their domains",
+                "Tells at least three Greek hero stories in their own words",
+                "Names the major Norse gods (Odin, Thor, Loki, Freya, Frigg) with their characters",
+                "Identifies the type of a myth (origin, hero, transformation, cautionary) when given one to read",
+                "Compares a Greek and a Norse myth on the same type (creation, hero, trickster)",
+                "Recognizes mythological allusions in modern names, places, and stories",
+            ],
+            "proficiency_indicators": [
+                "Names several Olympian gods and tells one or two hero stories",
+                "Identifies myth type with prompting",
+            ],
+            "developing_indicators": [
+                "Knows the names of one or two gods but cannot place their domain or stories",
+            ],
+            "assessment_methods": [
+                "gods chart compilation",
+                "hero quest plot mountain",
+                "myth-type identification on unfamiliar myths",
+                "two-tradition comparison (Greek vs Norse)",
+                "modern-allusion recognition: name the myth behind a modern reference",
+            ],
+            "sample_assessment_prompts": [
+                "Name the twelve Olympian gods and one thing each is the god of.",
+                "Tell me the story of Perseus and Medusa in your own words.",
+                "Compare the Greek creation story (Gaia and Uranus) with the Norse creation story (Ymir, the Aesir).",
+                "What kind of myth is the story of Pandora? Why is it that kind?",
+                "Where do we see Greek mythology in modern names and stories?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "Who is the king of the Greek Olympian gods?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Apollo.",
+                    "Zeus.",
+                    "Hades.",
+                    "Hermes.",
+                ],
+                "correct_answer": "Zeus.",
+                "hints": [
+                    "He throws lightning bolts and rules from Mount Olympus.",
+                ],
+                "explanation": (
+                    "Zeus is the king of the Olympian gods, ruler of the sky, thrower of lightning, husband of Hera. "
+                    "His Roman name is Jupiter."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "What is a 'myth'?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "A lie someone made up.",
+                    "A traditional story, often involving gods or heroes, that ancient peoples told to explain the world or pass down wisdom.",
+                    "A modern fantasy novel.",
+                    "A history book.",
+                ],
+                "correct_answer": "A traditional story, often involving gods or heroes, that ancient peoples told to explain the world or pass down wisdom.",
+                "hints": [
+                    "Myths are old, traditional, and often involve gods.",
+                ],
+                "explanation": (
+                    "A myth is a traditional story from an ancient tradition, often involving gods or heroes, that "
+                    "explains something about the world or passes down wisdom. Myths are NOT just lies; they are "
+                    "literature that often carries real truth about people."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "Pandora opened a jar that was forbidden to her, and out came all the troubles of the world. What "
+                    "type of myth is this?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Origin myth.",
+                    "Hero quest.",
+                    "Transformation myth.",
+                    "Cautionary tale.",
+                ],
+                "correct_answer": "Cautionary tale.",
+                "hints": [
+                    "What does this myth warn against?",
+                ],
+                "explanation": (
+                    "The Pandora story is a cautionary tale: it warns against curiosity that overrides clear "
+                    "instructions, and it explains how trouble entered the world. (Many myths are mixed types; this "
+                    "one is mostly cautionary with an origin-of-trouble element.)"
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Both Greek and Norse traditions have a trickster figure. Who is each, and how are they similar "
+                    "and different?"
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Greek: Hermes. Norse: Loki.",
+                    "Both deceive and cause trouble, but they have different temperaments and roles.",
+                ],
+                "explanation": (
+                    "Greek trickster: Hermes, messenger of the gods, thief in his childhood (he stole Apollo's cattle), "
+                    "charming and clever, generally on the side of the Olympians. Norse trickster: Loki, blood-brother "
+                    "of Odin, often makes mischief and sometimes catastrophe, increasingly opposed to the Aesir, plays "
+                    "a major role in Ragnarok. Both deceive; Hermes is generally benevolent in the Greek stories, while "
+                    "Loki turns destructive over the Norse arc."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Name three mythological references you can find in the modern world (places, names, brands, "
+                    "stories) and explain the myth behind each."
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Look at planets, brands, sports teams, book titles, names you know.",
+                ],
+                "explanation": (
+                    "Examples: the planet Mars is named for the Roman god of war (Greek Ares); the brand Nike is named "
+                    "for the Greek goddess of victory; the Apollo space program was named for the Greek god of "
+                    "(among other things) reason and the sun; the word 'panic' comes from the god Pan; 'herculean' "
+                    "means as strong as Hercules; 'narcissistic' comes from Narcissus who fell in love with his own "
+                    "reflection. Mythology is everywhere in modern English and modern culture."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Name the twelve Olympian gods and give one detail about each (their domain, their symbol, or a famous story).",
+                "type": "open_response",
+                "target_concept": "olympian_gods_recall",
+                "rubric": (
+                    "Mastery: names at least 10 of the 12 with details for most. Proficient: 6 to 9 with some "
+                    "details. Developing: fewer than 6 named."
+                ),
+            },
+            {
+                "prompt": "Tell me the story of Perseus and Medusa in your own words. Apply the rd-03 narration skill.",
+                "type": "open_response",
+                "target_concept": "hero_quest_narration",
+                "rubric": (
+                    "Mastery: complete narration with main events in order, including the divine help (Athena, Hermes), "
+                    "the encounter with the Graeae, the defeat of Medusa, and the return. Proficient: gist with some "
+                    "events. Developing: scattered events out of order."
+                ),
+            },
+            {
+                "prompt": "Compare a Greek and a Norse myth on the same type (creation, trickster, hero, end-of-world). Use the rd-09 comparison skill.",
+                "type": "open_response",
+                "target_concept": "cross_tradition_comparison",
+                "rubric": (
+                    "Mastery: substantive comparison naming what is shared and what is different across the two "
+                    "traditions on the same myth type. Proficient: surface comparison. Developing: cannot compare."
+                ),
+            },
+            {
+                "prompt": "Find three mythological references in modern names, places, or stories you encounter this week. Tell me the myth behind each.",
+                "type": "open_response",
+                "target_concept": "modern_allusion_recognition",
+                "rubric": (
+                    "Mastery: three real references with the myths correctly named. Proficient: two references. "
+                    "Developing: cannot identify mythological allusions."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "D'Aulaire's Book of Greek Myths (the standard age-appropriate starting point)",
+                "D'Aulaire's Book of Norse Myths",
+                "A gods-chart template the child fills in across the term",
+            ],
+            "recommended": [
+                "Padraic Colum's The Children's Homer for a longer prose retelling of the Iliad and Odyssey",
+                "Edith Hamilton's Mythology for the upper edge of the band",
+                "Roger Lancelyn Green's Tales of the Greek Heroes",
+                "Kevin Crossley-Holland's The Norse Myths for the upper edge",
+                "A children's atlas of the ancient world to ground the geography",
+            ],
+        },
+        "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 20},
+        "accommodations": {
+            "dyslexia": "Audiobooks of D'Aulaire are excellent; the language is rich and the stories carry well by ear. Mythology lives in the oral tradition; audio is honest.",
+            "adhd": "Short individual myth chapters at a time. Hero stories with clear plot arcs (Perseus, Theseus, Hercules's labors) hold attention better than the more diffuse god-relationship material.",
+            "gifted": "Move to Edith Hamilton, then to direct (age-appropriate) reading of the Iliad and Odyssey in prose retelling. Begin to notice the structural elements of myth (the hero's journey as a pattern). Introduce comparative mythology lightly.",
+            "visual_learner": "The D'Aulaire illustrations are themselves great teaching. Build a wall chart of the Olympian gods with images.",
+            "kinesthetic_learner": "Act out a myth with the family. Build a 3D model of Mount Olympus or Asgard. Walk the constellations outside at night.",
+            "auditory_learner": "Audiobooks of myth collections. Discuss the stories aloud with a real listener.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today and across this term we read the myths of the Greeks and the Norse: how they told the world, "
+                    "named their gods, and remembered their heroes. We read them as literature, with attention and "
+                    "respect, on their own terms. We learn the twelve Olympian gods, several hero stories, the major "
+                    "Norse gods, and the types of myth (origin, hero, transformation, cautionary)."
+                ),
+                "gradual_release": {
+                    "i_do": "Parent reads aloud a D'Aulaire myth, naming each god as they appear and explaining one detail.",
+                    "we_do": "Together with the child, read the next myth; the child names the gods that appear and the parent fills in.",
+                    "you_do": "Child reads a myth independently and tells it back, naming the gods and identifying the type.",
+                },
+                "guided_practice": [
+                    "Myth-a-day reading from D'Aulaire",
+                    "Gods chart compilation across the term",
+                    "Hero quest plot mountain for each major hero",
+                ],
+                "independent_practice": [
+                    "Reading favorite myths from the household library",
+                    "Recognizing mythological allusions in real-world contexts (names, brands, modern stories)",
+                ],
+                "mastery_check": [
+                    "Names twelve Olympian gods with domains",
+                    "Tells three hero stories in own words",
+                    "Identifies myth types on unfamiliar myths",
+                    "Compares Greek and Norse on the same myth type",
+                ],
+                "spiral_review": [
+                    "Return to early myths after several weeks; the child sees connections they did not see before",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "The myths of the Greeks and Romans are the foundational literature of the Western tradition. "
+                    "Homer is the father of European poetry; Ovid's Metamorphoses shaped two millennia of Western art "
+                    "and literature; the gods and heroes are everywhere in the language, the names, the imagination. "
+                    "Norse mythology is the parallel inheritance of northern Europe and is itself foundational. To "
+                    "learn these is to take up the long inheritance of careful storytelling."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the twelve Olympians: Zeus, Hera, Poseidon, Demeter, Athena, Apollo, Artemis, Ares, Hephaestus, Aphrodite, Hermes, Dionysus",
+                        "Recite the four types of myth: origin, hero, transformation, cautionary",
+                        "Recite the major Norse gods: Odin, Thor, Loki, Freya, Frigg, Heimdall, Tyr",
+                    ],
+                    "recitations": [
+                        "Memorize and recite a passage from a beloved myth across the term (Homer's invocation, a passage from D'Aulaire, a Viking saga line)",
+                    ],
+                },
+                "copywork": [
+                    "Copy the genealogies and the Olympian table into the copybook; the structure of the pantheon lives in the hand",
+                ],
+                "recitation_routine": "At each new myth, recite the gods that appear and place them in the family tree of Olympus.",
+                "history_integration": "Mythology is the literature of the ancient world along the chronological spine: Bronze Age Greece, Viking Age Scandinavia. Pair mythology reading with the history of the period.",
+                "read_aloud_suggestions": [
+                    "D'Aulaire's Greek and Norse myth books, Padraic Colum's prose retellings, Edith Hamilton for the upper edge",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "D'Aulaire's Book of Greek Myths and Book of Norse Myths (living books par excellence)",
+                    "Padraic Colum's The Children's Homer, The Golden Fleece, The Children of Odin",
+                    "Roger Lancelyn Green's Tales of the Greek Heroes and Tales of Troy and Greece",
+                ],
+                "short_lesson_flow": "Read one myth aloud per session; the child narrates it back; talk briefly about the type of myth and the gods involved. Stop while interest is still high.",
+                "narration_prompt": "Tell me the myth in your own words. Which gods were in it? What type of myth was it?",
+                "real_world_objects": [
+                    "A growing gods chart on the wall of the reading area",
+                    "A map of ancient Greece and ancient Scandinavia",
+                    "A constellation chart that shows the mythological names",
+                ],
+                "nature_connection": "The constellations are mythology written in the night sky. Walk outside on a clear night and find Orion, the Big Dipper (the Great Bear), Cassiopeia. The names are the myths.",
+                "habit_focus": "The habit of reading the great stories with attention and respect, on their own terms.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "D'Aulaire's myth books in the reading area",
+                    "A gods chart the child completes across the term, with cards for each god the child meets",
+                    "A myth-type sort: cards naming origin, hero, transformation, cautionary; the child sorts known myths into the types",
+                    "A constellation chart with the mythological figures",
+                ],
+                "presentation": {
+                    "three_period_lesson": "This is Zeus; this is Athena; this is Hermes. Show me Zeus; show me Athena; show me Hermes. Who is this god?",
+                    "steps": [
+                        "The guide presents each Olympian god with their symbol and domain",
+                        "The child fills in the gods chart as they encounter each in reading",
+                        "The child sorts myths into types as they read them",
+                        "Across the term the child builds their own gods library and myth-type collection",
+                    ],
+                },
+                "control_of_error": "The text itself is the control: a child can return to D'Aulaire to confirm a god's domain or a myth's type.",
+                "abstraction_pathway": "From individual myths, to recognizing types and gods across many myths, toward seeing the structure of an entire tradition.",
+                "extensions": [
+                    "Compare multiple traditions (Greek, Norse, others the family knows) on shared myth types",
+                    "Build a constellation map with the mythological figures",
+                    "Move toward direct reading of age-appropriate Iliad and Odyssey",
+                ],
+                "observation_focus": "Watch for the child reaching for mythological vocabulary in their own talking and for recognizing references in modern contexts.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep D'Aulaire and the other myth retellings on the shelf within reach",
+                    "Watch age-appropriate films and shows that draw on mythology (Disney's Hercules, Percy Jackson, Marvel's Thor for the upper edge with a critical eye)",
+                    "Visit museums with classical or Viking collections when possible",
+                    "Talk about the constellations on summer nights outside",
+                ],
+                "real_world_contexts": [
+                    "Recognizing mythological names in space (planets, missions)",
+                    "Recognizing mythological names in sports teams and brands",
+                    "Recognizing mythological allusions in books and movies the family enjoys",
+                    "Visiting a museum's mythological collection",
+                ],
+                "conversation_starters": [
+                    "Did you know that planet is named for a god? Want to know what they were the god of?",
+                    "I noticed your book mentioned Athena. Do you know her story?",
+                    "Want to hear the Greek version of how the world was made? It's wild.",
+                ],
+                "resource_bank": [
+                    "D'Aulaire and other myth books on the shelf",
+                    "Audiobooks for car trips",
+                    "Films and shows that draw on mythology",
+                    "A constellation chart or app",
+                ],
+                "parent_role": "Love the myths yourself, visibly. Welcome the child's questions. Read aloud with energy.",
+                "observation_documentation": "Across a term, note which gods the child returns to, which heroes captivate them, and which traditions they want more of. Follow the interest.",
+            },
+        },
+        "connections": {
+            "math": "Many myths involve genealogies and family trees; reading the Olympian family tree is the same skill as reading any structured chart",
+            "science": "The constellations are mythology in the night sky; many planetary and stellar names are mythological; astronomy and myth are entwined",
+            "history": "Mythology is the literature of the ancient world; reading myth supports the history sequence in the period",
+            "writing": "Many modern stories are built on mythological frameworks; learning to read myth prepares the child to recognize and use mythological structures in their own writing",
+        },
+    },
 }
