@@ -1144,4 +1144,352 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
             ],
         },
     },
+    "elc-001": {
+        "node_type": "technique",
+        "trade": "electrical",
+        "competency_name": (
+            "Read and interpret an electrical nameplate / rating label to extract voltage, "
+            "current, power, frequency, phase, listing marks, AIC rating, and any "
+            "circuit-protection specifications"
+        ),
+        "progression_band": "helper",
+        "prerequisites": ["els-001"],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "Misreading the voltage rating and applying the wrong meter range or the "
+                    "wrong PPE downstream. Not a direct hazard at this band because the "
+                    "reading is done with the cover closed, but a real downstream error if "
+                    "the wrong number propagates to elc-021 or to any later energized work."
+                ),
+                (
+                    "Misreading the current draw or full-load ampacity and concluding the "
+                    "wrong conductor size or breaker size downstream. Not a direct hazard at "
+                    "this band because no wiring is changed, but the wrong number compounds "
+                    "in any later install (NEC Article 240, 310 — AHJ-adopted edition "
+                    "governs)."
+                ),
+                (
+                    "Misreading the AIC (ampere interrupting capacity) on a breaker or fuse "
+                    "rating and concluding the device can safely interrupt the available "
+                    "fault current at that location. The AIC is a critical safety rating; "
+                    "a breaker with insufficient AIC for the available fault current can "
+                    "explode during a short. This is not a direct hazard at the reading band "
+                    "but is a critical downstream input for any breaker selection or panel "
+                    "work in later batches."
+                ),
+                (
+                    "Reaching into a panel or enclosure to find a hidden rating label. The "
+                    "rule is the cover stays on at this band; any label not visible from "
+                    "outside is photographed by a licensed electrician with the disconnect "
+                    "open and verified dead per elc-021."
+                ),
+            ],
+            "ppe_required": [
+                (
+                    "Trade PPE per els-001 (closed-toe shoes, the trade's general defaults); "
+                    "no additional PPE required for reading a label visible from outside the "
+                    "enclosure. Eye protection optional but recommended in a dusty mechanical "
+                    "space."
+                ),
+            ],
+            "supervision_required": False,
+            "supervision_basis": (
+                "Reading a rating label visible from outside the enclosure involves no tool "
+                "use, no opened enclosure, no live circuit contact, no moving parts, and no "
+                "chemical or refrigerant exposure. The AI tutor mentors this competency "
+                "end-to-end: the learner photographs the label, the AI confirms each "
+                "extracted field, the learner builds a nameplate card. Trade-level "
+                "supervision from el-root still applies in the sense that no enclosure is "
+                "opened and no energized work is performed; the reading itself is "
+                "low-hazard and AI-mentorable."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "A real electrical nameplate or rating label visible from outside the enclosure",
+                "specification": (
+                    "The household's actual equipment (the main panel's manufacturer label, "
+                    "any subpanel labels, a breaker's amp / AIC marking, a receptacle's "
+                    "amp / volt marking, a fixture's wattage / volt rating, an appliance's "
+                    "nameplate, a transformer's rating label, a low-voltage adapter's input "
+                    "and output ratings). The label is typically on the side or front of the "
+                    "enclosure, on the breaker face, on the receptacle face, on the fixture "
+                    "label, on the appliance back, or molded into the device housing. If the "
+                    "household's equipment has its rating only inside an enclosure that "
+                    "requires opening, the work is deferred to a session with a licensed "
+                    "electrician present per the trade root's supervision policy."
+                ),
+                "alternatives": [
+                    "A clear photograph of a rating label from the manufacturer's published "
+                    "service literature, used as a learning aid",
+                ],
+            },
+            {
+                "name": "A nameplate card or notebook page",
+                "specification": (
+                    "A sheet of paper or a notebook page where the learner writes down each "
+                    "operative field from the label. The card is the working reference for "
+                    "every later step on that piece of equipment."
+                ),
+                "alternatives": [
+                    "A structured digital form per the household's record-keeping practice; "
+                    "the AI tutor can render the form",
+                ],
+            },
+            {
+                "name": "Camera (cell phone is sufficient)",
+                "specification": (
+                    "A camera that produces an image clear enough to read every printed "
+                    "field. The photo is uploaded to the AI tutor for confirmation of each "
+                    "extracted field."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Flashlight or headlamp",
+                "specification": (
+                    "Panel labels and equipment labels are commonly in shadow or behind "
+                    "equipment. A flashlight is on the person for the visit."
+                ),
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [],
+        "workspace_requirements": {
+            "surface": "Wherever the equipment is installed; the work is the visit itself",
+            "ventilation": "Adequate per els-001",
+            "lighting": "Daylight, room lighting, or flashlight as needed",
+            "power": (
+                "Energy state immaterial for reading a label visible from outside the "
+                "enclosure; no enclosure opened at this band"
+            ),
+            "containment": "None required",
+        },
+        "skill_description": (
+            "The learner visits a piece of electrical equipment in the household and "
+            "locates the rating label without opening any enclosure. The label is typically "
+            "on the side or front of the enclosure, on a breaker face, on a receptacle "
+            "face, on a fixture label, or on an appliance nameplate. The learner "
+            "photographs the label clearly and reads each operative field onto a nameplate "
+            "card. The fields read across the kinds of equipment in scope: panel and "
+            "subpanel labels (manufacturer, model, series, voltage rating, current rating "
+            "in amps, AIC short-circuit rating, listing marks UL/ETL/CSA, neutral and "
+            "ground busbar configuration, date code if present); breaker labels (amp "
+            "rating, voltage rating, AIC, single- or two-pole, GFCI or AFCI marking if "
+            "present, manufacturer and series); receptacle labels (amp rating typically 15A "
+            "or 20A, voltage typically 125V or 250V, NEMA configuration, GFCI or AFCI "
+            "marking, listing); fixture labels (input voltage, wattage, replacement-lamp "
+            "type and wattage, listing, damp- or wet-location rating); appliance nameplates "
+            "(voltage, full-load amps, watts or kilowatts, frequency, phase, "
+            "manufacturer/model/serial, listing); transformer labels (primary and "
+            "secondary voltage, kVA rating, primary and secondary current); low-voltage "
+            "adapter labels (input voltage and frequency, output voltage and current, "
+            "polarity marking). The learner then submits the nameplate card and the "
+            "photograph to the AI tutor for field-by-field confirmation. If any field is "
+            "missing, illegible, or unfamiliar, the learner names it on the card and the "
+            "AI tutor explains what the field typically represents and where the "
+            "manufacturer's service literature or the AHJ-adopted code defines it. The "
+            "card is filed with the household's equipment records and travels with the "
+            "learner for every later session on that equipment."
+        ),
+        "demonstration_criteria": [
+            (
+                "Locates a rating label on each of: a panel, a breaker, a receptacle, a "
+                "fixture, an appliance, and (where applicable) a low-voltage adapter, "
+                "without opening any enclosure"
+            ),
+            (
+                "Photographs each label clearly enough that every printed field is legible "
+                "in the image"
+            ),
+            (
+                "Extracts every operative field onto a nameplate card: voltage rating, "
+                "current rating (amps), wattage or kilowatts (where present), frequency, "
+                "phase, AIC (where present), manufacturer / model / series / serial, "
+                "listing marks (UL / ETL / CSA), location rating (dry / damp / wet, where "
+                "present), GFCI / AFCI marking (where present)"
+            ),
+            (
+                "Submits each card and photograph to the AI tutor; AI tutor confirms each "
+                "field or names a discrepancy; learner reconciles"
+            ),
+            (
+                "Names which fields the label did not supply (some fields are not on every "
+                "label; the AI tutor confirms which are normal omissions and which would "
+                "warrant looking up the manufacturer's service literature)"
+            ),
+            (
+                "Names what the AIC field on a breaker means in plain language: the "
+                "maximum short-circuit current the breaker is rated to safely interrupt; "
+                "names that a breaker installed in a system where the available fault "
+                "current exceeds the breaker's AIC is a documented cause of explosion "
+                "during a fault, and that AIC selection is licensed-electrician work per "
+                "the AHJ"
+            ),
+            (
+                "Names the listing-mark requirement: equipment intended for installation in "
+                "the electrical system carries a listing mark from a recognized testing "
+                "laboratory (UL, ETL, CSA, others recognized by OSHA as Nationally "
+                "Recognized Testing Laboratories); unlisted equipment is not used per the "
+                "AHJ-adopted NEC"
+            ),
+            (
+                "Reads three different rating labels across three different equipment types "
+                "(at minimum one panel or breaker, one receptacle, one fixture or "
+                "appliance) and submits a complete card for each"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Reading the voltage as a single number when the label shows a range",
+                "cause": "Some labels print '120/240V' meaning the unit will operate on either; the learner picked one number",
+                "remedy": (
+                    "Record the label as printed. The actual supply voltage is measured "
+                    "later under elc-021; the label range tells what the equipment will "
+                    "accept."
+                ),
+            },
+            {
+                "error": "Confusing amp rating with AIC",
+                "cause": "Both are amp values on a breaker label and may sit near each other",
+                "remedy": (
+                    "Amp rating is the continuous-load current the breaker will pass before "
+                    "tripping (typically 15A, 20A, 30A, etc. on residential branch "
+                    "breakers). AIC (or 'Interrupting Rating' or 'kAIC') is the maximum "
+                    "short-circuit current the breaker can safely interrupt (typically 10kA "
+                    "or higher; the AHJ-adopted NEC governs minimum required AIC for "
+                    "available fault current). They are labeled differently; the AI tutor "
+                    "confirms the labeling per the specific manufacturer."
+                ),
+            },
+            {
+                "error": "Opening an enclosure to find a label",
+                "cause": "The visible label was missing or illegible and the learner reached inside",
+                "remedy": (
+                    "The cover stays on at this band. If the visible label is missing or "
+                    "illegible, the work is deferred to a session with a licensed "
+                    "electrician present who opens the enclosure under elc-021 and "
+                    "photographs the internal label."
+                ),
+            },
+            {
+                "error": "Skipping the listing mark and the location rating on a fixture",
+                "cause": "The learner read voltage and wattage and moved on",
+                "remedy": (
+                    "The listing mark is the safety-certification check; the location "
+                    "rating tells whether the fixture is approved for dry, damp, or wet "
+                    "installation. A fixture in a bathroom or outdoors that is rated for "
+                    "dry-only is an AHJ violation and a safety hazard. Read every printed "
+                    "field."
+                ),
+            },
+            {
+                "error": "Treating a low-voltage adapter rating as the device's primary rating",
+                "cause": "The learner read the small print on a wall wart and reported it as the appliance's rating",
+                "remedy": (
+                    "Low-voltage adapters have an input rating (typically 120VAC, 60Hz, in "
+                    "the US) and an output rating (the DC or low-voltage AC that powers the "
+                    "device). The adapter's output rating is the input to the downstream "
+                    "device. Read both and write both on the card."
+                ),
+            },
+            {
+                "error": "Confusing 'amps' with 'amp-hours' on a battery-backed system",
+                "cause": "The learner saw 'Ah' and recorded it as amps",
+                "remedy": (
+                    "Amps (A) is current; amp-hours (Ah) is battery capacity. They are not "
+                    "interchangeable. The AI tutor confirms the unit on the photo."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "photo",
+            "what_to_capture": (
+                "A series of nameplate cards (one per piece of equipment), each accompanied "
+                "by the clear photograph of the corresponding rating label, with every "
+                "operative field filled in on the card in the learner's handwriting (or "
+                "typed in the household's record system). At minimum: one panel or "
+                "breaker, one receptacle, and one fixture or appliance."
+            ),
+            "what_the_evidence_shows": (
+                "That the learner extracted every operative field from each label, that "
+                "the AI tutor confirmed each field, and that any unfamiliar field was "
+                "named on the card and resolved with the AI tutor's lookup against the "
+                "manufacturer's service literature"
+            ),
+        },
+        "mentor_signoff_required": False,
+        "pedagogy": {
+            "i_do": (
+                "The AI tutor walks the learner through a sample rating-label photograph "
+                "(provided by the AI), naming each field aloud, pointing out the typical "
+                "layout (manufacturer top, model and series next, electrical specs grouped, "
+                "listing marks bottom), and explaining what each field is for and where it "
+                "will be used in later competencies. The AI explicitly names the AIC field "
+                "and the listing-mark requirement."
+            ),
+            "we_do": (
+                "The AI tutor and the learner work through a second sample label together. "
+                "The learner names a field; the AI confirms or corrects; the next field is "
+                "the AI's, then back to the learner. At the end the learner reads the "
+                "whole card back."
+            ),
+            "you_do_supervised": (
+                "The learner visits the household's actual equipment, photographs each "
+                "rating label, and reads it onto a card. The card and photograph are "
+                "submitted to the AI tutor for field-by-field confirmation. The AI tutor "
+                "names any discrepancy and the learner reconciles. The supervising adult "
+                "is on premises only for the visit itself (because the learner is in the "
+                "mechanical space); the AI mentors the actual reading."
+            ),
+            "you_do_unsupervised": (
+                "Once the learner can produce three accurate nameplate cards across at "
+                "least two sessions, they may read labels unsupervised. The AI tutor "
+                "remains available for field confirmation; this is not a supervision rule, "
+                "it is a double-check rule that stays in place across bands."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 3,
+        "session_length_minutes": 30,
+        "related_projects": [],
+        "certification_alignment": {
+            "ladder_rung": "helper",
+            "notes": (
+                "Knowledge competency the AI tutor mentors end-to-end. Foundational across "
+                "every credential the trade builds toward; the rating label is the first "
+                "thing read on every service call."
+            ),
+            "certifications_supported": [
+                {
+                    "id": "elcert-nec",
+                    "domains": [
+                        "AIC selection per the AHJ-adopted NEC's interrupting-rating "
+                        "requirements",
+                        "voltage and current ratings used in load calculations per NEC",
+                        "listing requirement per NEC for equipment used in the system",
+                    ],
+                    "notes": (
+                        "The journeyman exam tests reading and applying nameplate values "
+                        "into load calculations and AIC selection."
+                    ),
+                },
+                {
+                    "id": "elcert-licensing",
+                    "domains": [
+                        "nameplate literacy across the residential equipment scope of the "
+                        "state license",
+                    ],
+                    "notes": "Foundational across every state licensing exam.",
+                },
+            ],
+        },
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
+    },
 }
