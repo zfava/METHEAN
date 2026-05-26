@@ -1397,4 +1397,453 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Oral narration is the prior skill to written narration (rd-04), which is the prior skill to all of expository writing",
         },
     },
+    "rd-04": {
+        "enriched": True,
+        "learning_objectives": [
+            "After narrating a passage orally, write one to three sentences capturing the main events of the passage",
+            "Use complete sentences with capitals at the start and periods at the end",
+            "Choose words for clarity, not just length: the written narration is shorter than the spoken one by design",
+            "Write a beginning sentence that names who and where, and an ending sentence that says how the passage resolved or what it left to think about",
+            "Develop the habit of sitting down to a daily short writing without resistance: the page is short, the topic is known, the prior oral narration has done the cognitive work",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "Written narration is the bridge from oral narration to all of expository writing. The child has already "
+                "told the passage out loud (rd-03); now they pick up a pencil and write one to three sentences that "
+                "capture the main events. The skill is not generating new ideas (oral narration already did that) but "
+                "transferring an organized telling onto the page in a few well-formed sentences. The keys: keep it short, "
+                "let the oral narration carry the thinking, do not let the writing burden the reading. The writing here is "
+                "in service of comprehension, not in service of writing-as-a-subject; the writing-as-a-subject work lives "
+                "in the writing strand, not in reading-developing."
+            ),
+            "scaffolding_sequence": [
+                "Begin with a one-sentence written narration: after the child has narrated orally, ask 'in one sentence, what was the passage about?'",
+                "Have the child say the sentence aloud first, then write it down; the saying-it-aloud is the planning step",
+                "Move to a two-sentence written narration: the first sentence names who and where; the second sentence carries the main event",
+                "Move to a three-sentence written narration: beginning (who and where), middle (what happened), end (how it resolved or what it leaves us with)",
+                "Always keep the writing short: 3 sentences maximum at this band; the temptation to write more is the temptation that ruins the habit",
+                "Read what the child wrote back aloud together; the child notices for themselves whether it captures the passage",
+                "Vary the source: chapter-book chapter, science reading, history passage, biography; one short written narration a day across one term builds the habit",
+                "Allow strategic scribe support: for the youngest in this band, the parent may write down the child's spoken sentence the first few times, then the child takes over the pencil",
+            ],
+            "socratic_questions": [
+                "You just told me the passage. If you had to write only one sentence, which sentence would catch the most of it?",
+                "Read what you wrote back to yourself. Does it say what the passage said?",
+                "Is there anything important you left out? Is there anything you put in that does not need to be there?",
+                "If you read your sentence to someone who had never read the passage, what would they know? What would they not know?",
+                "How do you start a sentence on the page? How do you end one?",
+            ],
+            "practice_activities": [
+                "Daily 1-to-3 sentence written narration habit, the same time as the oral narration, with a chosen passage from the day's reading",
+                "Read-aloud back: the child reads their written narration aloud and notices whether it captures the passage",
+                "Across-the-week growth: start the week at 1 sentence, end the week at 3 sentences, on the same kind of passage",
+                "Share the written narrations: the child reads their week's narrations to a parent at the end of the week, the parent simply listens",
+                "Keep a small narration notebook with the date, the source, and the 1-to-3 sentences for each day; across a term the notebook becomes the child's own evidence of growth",
+            ],
+            "real_world_connections": [
+                "Writing a short text message or note about a book to a relative who shares the child's reading",
+                "Writing a sentence under a drawing in a nature notebook",
+                "Writing a card to thank a grandparent who sent a book",
+                "Writing the bedtime gist of what the family read aloud, before sleep",
+                "Writing the title and one sentence about each chapter in a reading journal as the child finishes a chapter",
+            ],
+            "common_misconceptions": [
+                "Treating written narration as a long composition. The point at this band is one to three sentences. Long writing burns the habit.",
+                "Letting handwriting struggle dominate the practice. If handwriting is hard, the parent may scribe the first few times. The point is the comprehension and sentence-level expression, not the handwriting workout.",
+                "Skipping the oral narration before writing. Oral narration is the planning step. Without it, written narration feels like blank-page composition, which is a different harder skill.",
+                "Correcting every spelling and punctuation error in the moment. Note one or two corrections per day at most; the writing habit is more fragile than the editing habit.",
+                "Reading-developing written narration is NOT a writing-strand replacement. The writing strand has its own work; this is reading-comprehension-expressed-in-writing, kept short on purpose.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Writes 1 to 3 well-formed sentences after oral narration that capture the main events of the passage in order",
+                "Uses capitals at the start of sentences and end punctuation",
+                "Names who and where in the first sentence; names how it resolved or what it leaves us with in the last sentence",
+                "Sustains a daily short written narration habit across a term without resistance",
+            ],
+            "proficiency_indicators": [
+                "Writes 1 to 2 sentences capturing the gist with some support on word choice or sentence boundaries",
+                "Most sentences have capitals and end punctuation",
+            ],
+            "developing_indicators": [
+                "Writes a fragment or a single word; needs scribe support to capture a sentence",
+                "Capitals and end punctuation inconsistent",
+            ],
+            "assessment_methods": [
+                "daily written narration entry of 1 to 3 sentences",
+                "weekly review of the week's narrations: does the set show growth?",
+                "read-aloud-back check: the child reads what they wrote and confirms it captures the passage",
+            ],
+            "sample_assessment_prompts": [
+                "You just narrated the chapter aloud. Now write me one sentence that captures the main thing that happened.",
+                "Write two sentences about today's reading: the first names who and where; the second tells what happened.",
+                "Write three sentences about your science passage: beginning, middle, end.",
+                "Read me back the sentences you just wrote. Do they capture the passage?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": (
+                    "What is a 'written narration' at this stage?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "A long composition about your reading.",
+                    "One to three sentences capturing the main events of a passage you have just narrated aloud.",
+                    "Copying the passage word for word.",
+                    "A drawing instead of writing.",
+                ],
+                "correct_answer": "One to three sentences capturing the main events of a passage you have just narrated aloud.",
+                "hints": [
+                    "Written narration at this band is SHORT on purpose: 1 to 3 sentences.",
+                ],
+                "explanation": (
+                    "Written narration at this band is short by design. The child has already done the oral narration; the "
+                    "writing is the brief capture, not a long composition."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": (
+                    "What should you do BEFORE you write your written narration?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Read the passage three more times.",
+                    "Narrate the passage aloud first; the oral narration is the planning step.",
+                    "Skip the writing entirely.",
+                    "Copy the first sentence of the passage.",
+                ],
+                "correct_answer": "Narrate the passage aloud first; the oral narration is the planning step.",
+                "hints": [
+                    "Oral narration prepares the writing.",
+                ],
+                "explanation": (
+                    "Oral narration is the planning step. After saying the gist aloud, the writing becomes much easier. "
+                    "Skipping the oral step makes the writing feel like a hard blank-page composition."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "Read this short passage in your head: 'Maya went to the lake with her grandfather. They sat on a log "
+                    "and watched the herons fish in the shallow water. When the sun got low, they walked home along the "
+                    "path.' Now write a one-sentence written narration."
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Name who, where, and the main thing that happened.",
+                    "Start with a capital, end with a period.",
+                ],
+                "explanation": (
+                    "A strong one-sentence narration might be: 'Maya and her grandfather went to the lake to watch the "
+                    "herons fish, and then walked home at sunset.' It names who, where, what they did, and how it ended, "
+                    "all in one sentence."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "You wrote: 'maya and her grandfather went to the lake they watched herons'. What are the two things "
+                    "to fix?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Add a drawing and a date.",
+                    "Capitalize 'Maya' at the start, and split into two sentences with end punctuation.",
+                    "Make it longer.",
+                    "Use more interesting words.",
+                ],
+                "correct_answer": "Capitalize 'Maya' at the start, and split into two sentences with end punctuation.",
+                "hints": [
+                    "Sentence boundaries are the editing focus at this band.",
+                ],
+                "explanation": (
+                    "At this band the two editing points are: capital at the start of each sentence, and end punctuation. "
+                    "The content is fine; the form is fixed up."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "You have been writing a 1-to-3 sentence narration every day for two weeks. You read this week's "
+                    "narrations next to last week's. What should you look for to notice your growth?"
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Look at sentence completeness, at capturing the main event, at order, and at the habit itself.",
+                ],
+                "explanation": (
+                    "Look for: sentences that are more complete and well-formed; narrations that capture the main events "
+                    "rather than just one striking detail; events more often in order; the writing happening more easily "
+                    "and willingly. Across weeks the growth is small but real."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": (
+                    "After your daily oral narration, write 1 to 3 sentences capturing the main events of the passage. "
+                    "Read what you wrote back to me."
+                ),
+                "type": "open_response",
+                "target_concept": "daily_short_written_narration",
+                "rubric": (
+                    "Mastery: 1 to 3 well-formed sentences capturing the main events; capitals and end punctuation; "
+                    "first sentence names who and where. Proficient: gist captured with some sentence-form issues. "
+                    "Developing: fragment, single word, or scribe-dependent."
+                ),
+            },
+            {
+                "prompt": "Read me the written narrations from this week. Where do you see growth from Monday to Friday?",
+                "type": "open_response",
+                "target_concept": "self_noticing_of_growth",
+                "rubric": (
+                    "Mastery: names a real change (longer sentences, better capture, more in order). Proficient: notices "
+                    "with prompting. Developing: cannot articulate."
+                ),
+            },
+            {
+                "prompt": "Write three sentences about today's reading: beginning, middle, end.",
+                "type": "open_response",
+                "target_concept": "three_sentence_structured_narration",
+                "rubric": (
+                    "Mastery: three sentences in beginning / middle / end order, well-formed. Proficient: three sentences "
+                    "with some structural issues. Developing: fewer than three sentences or out of order."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "a passage at the child's reading or listening level for the daily oral-then-written narration",
+                "a notebook or composition book for the daily written narration",
+                "a pencil and eraser; legible handwriting on lined paper",
+            ],
+            "recommended": [
+                "a parent-scribe option for the youngest in the band (the parent writes the child's spoken sentence the first few times)",
+                "a weekly read-back ritual where the child reads the week's narrations aloud to a parent",
+                "a small, well-bound notebook the child takes pride in (the physical object matters at this band)",
+            ],
+        },
+        "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 10},
+        "accommodations": {
+            "dyslexia": (
+                "Allow parent-scribe support for as long as it serves the child; the comprehension goal does not require "
+                "the child to do the handwriting in this practice. Phonetic spelling is acceptable; the editing focus is "
+                "sentence boundaries (capital and period), not spelling. A keyboard is an acceptable substitute for the "
+                "pencil if it serves the child."
+            ),
+            "adhd": (
+                "Keep the writing short: 1 sentence, often, is enough. Allow standing or movement before sitting down to "
+                "the write. The daily 5-minute write is easier than the weekly 30-minute write."
+            ),
+            "gifted": (
+                "Move to longer written narrations (5 to 8 sentences with paragraph structure) sooner. Introduce variations: "
+                "narrating the same passage to two different audiences. Keep the written narration short relative to the "
+                "oral narration; the temptation to over-write is real for gifted writers and the habit is more important "
+                "than the length."
+            ),
+            "visual_learner": (
+                "Allow a small sketch alongside the narration. Use lined paper with a generous space between lines."
+            ),
+            "kinesthetic_learner": (
+                "Let the child walk or pace while saying the sentence aloud before writing it down. The motion is the "
+                "planning step; the writing is the capture."
+            ),
+            "auditory_learner": (
+                "Say the sentence aloud before writing it. Read the written narration aloud at the end. The voice is the "
+                "guide to the sentence boundary."
+            ),
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Written narration is the bridge from oral narration to all of expository writing. The child orally "
+                    "narrates a passage, then writes 1 to 3 sentences capturing the main events. The practice grows the "
+                    "habit of writing short, clear sentences in service of comprehension."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "The parent models a one-sentence written narration after their own oral narration. The parent "
+                        "writes the sentence on a piece of paper for the child to see, and reads it back aloud."
+                    ),
+                    "we_do": (
+                        "Parent and child compose a one-sentence narration together: the child says the sentence aloud, "
+                        "the parent suggests adjustments, the child writes it down. The capital and the period are "
+                        "explicitly noted."
+                    ),
+                    "you_do": (
+                        "After the daily oral narration, the child writes 1 to 3 sentences independently. The parent "
+                        "listens to the read-aloud-back and notes one or two small things; corrections are minimal at "
+                        "this band."
+                    ),
+                },
+                "guided_practice": [
+                    "Daily 1-to-3 sentence written narration after the oral narration",
+                    "Read-aloud-back: the child reads what they wrote",
+                    "Weekly week-review: read the week's narrations aloud at the end of the week",
+                ],
+                "independent_practice": [
+                    "Keep the narration notebook with the date and the source",
+                    "Across the term, the notebook becomes the child's own evidence of growth",
+                ],
+                "mastery_check": [
+                    "Writes 1 to 3 well-formed sentences daily after oral narration",
+                    "Sentence boundaries (capital and period) consistent",
+                    "Sustains the daily habit across the term without resistance",
+                ],
+                "spiral_review": [
+                    "Re-read narrations from earlier in the term to notice growth",
+                    "Re-narrate (orally and in writing) an earlier passage to see how the practice has matured",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "Written narration is the grammar-stage move from telling to writing. The child has already learned "
+                    "to attend, to remember, and to retell aloud; now the pencil takes up the same act. The hand learns "
+                    "what the tongue already knows. This is the practice that, daily and patiently, makes the later "
+                    "expository writing easy."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the rule of the sentence: a sentence begins with a capital, ends with a period or other mark, and tells one thing whole",
+                        "Recite the narration prompt: say it aloud first, then write what you said",
+                    ],
+                    "recitations": [
+                        "Recite cumulative favorite sentences from the week's narrations; the child's own well-formed sentences are worth keeping",
+                    ],
+                },
+                "copywork": [
+                    "Copy one well-formed sentence from the day's reading into the copybook before writing the narration; the sentence the child sees becomes the model for the sentence the child writes",
+                ],
+                "recitation_routine": (
+                    "Each lesson: oral narration first, then written narration of 1 to 3 sentences. The week's written "
+                    "narrations are read aloud on Friday cumulatively."
+                ),
+                "history_integration": (
+                    "Choose narration passages from the chronological spine; the written narrations across a term form a "
+                    "running gloss on the history sequence in the child's own hand"
+                ),
+                "read_aloud_suggestions": [
+                    "Worthy short prose for daily narration: Aesop, Plutarch in age-appropriate retellings, biographies, well-written nature writing; the child's written narrations will be as good as the language being narrated",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "Living books with truly fine language across the subjects (see rd-03); narration is shaped by what is narrated",
+                    "Avoid twaddle for narration: thin sources make thin narrations",
+                ],
+                "short_lesson_flow": (
+                    "After the daily oral narration, the child writes 1 to 3 sentences in the narration notebook. The "
+                    "parent listens to the read-aloud-back and welcomes the writing without correcting in the moment. The "
+                    "next day continues."
+                ),
+                "narration_prompt": (
+                    "Now write me one or two sentences about what you just told me. Read it back to me when you are done."
+                ),
+                "real_world_objects": [
+                    "A simple, well-bound narration notebook the child takes pride in",
+                    "A sharpened pencil and an eraser kept with the notebook",
+                    "A quiet table or lap-desk where the daily writing happens",
+                ],
+                "nature_connection": (
+                    "After a nature observation, write one or two sentences in the nature notebook about what was seen; "
+                    "the same narration habit, on the natural world"
+                ),
+                "habit_focus": (
+                    "The habit of short, daily, sustained writing in service of comprehension. The hand learns what the "
+                    "tongue already knows. Across years this grows into the adult's ability to write a short clear "
+                    "account of what they have understood."
+                ),
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A composition book the child manages as their own narration notebook",
+                    "Sentence-strip cards modeling well-formed sentences with capitals and end marks, available in the writing area",
+                    "Date and source stamp or template the child uses to head each day's entry",
+                ],
+                "presentation": {
+                    "three_period_lesson": (
+                        "This is a one-sentence written narration: it begins with a capital, ends with a period, and "
+                        "tells one whole thing. Show me a one-sentence written narration of the passage you just told me. "
+                        "How would you change it to be a two-sentence narration?"
+                    ),
+                    "steps": [
+                        "After the oral narration, the child opens the notebook to the next page",
+                        "The child says the sentence aloud first, then writes it",
+                        "The child reads back what they wrote",
+                        "Across the term the child moves from one to two to three sentences without prompting",
+                    ],
+                },
+                "control_of_error": (
+                    "The read-aloud-back is the control: the child hears whether what they wrote says what they meant. "
+                    "Sentence-strip cards in the writing area show the form of a well-made sentence; the child compares "
+                    "their own sentence to the model and adjusts without correction from outside."
+                ),
+                "abstraction_pathway": (
+                    "From the parent scribing the child's spoken sentence, to the child writing one sentence after oral "
+                    "narration, to the child writing 2 to 3 sentences with clear structure, toward writing without the "
+                    "prior oral narration step (which lives in the writing strand, not here)"
+                ),
+                "extensions": [
+                    "Add a date and source to each entry; the notebook becomes a real reading journal",
+                    "Copy one beautiful sentence from each week's reading alongside the narration",
+                    "Read a finished narration aloud to a real audience (sibling, grandparent, recorder)",
+                ],
+                "observation_focus": (
+                    "Watch for sentence form firming up across the term, for the child writing without resistance, for "
+                    "narrations capturing main events rather than scattered details, and for the child's own pride in the "
+                    "notebook as it grows."
+                ),
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a small notebook the child likes (a chosen cover, a chosen size) where they may write about their reading whenever they want",
+                    "Pin or tape the child's short written narrations on the fridge or a family bulletin board where the household sees them",
+                    "Welcome any short writing about books, days, events: birthday cards, thank-you notes, a sentence under a drawing, a recipe tried",
+                ],
+                "real_world_contexts": [
+                    "Writing a thank-you card to a relative who sent a book",
+                    "Writing a one-sentence label for a drawing in a nature notebook",
+                    "Writing a text or email to a grandparent about a book or a day",
+                    "Writing a recipe card the family uses",
+                    "Writing a one-sentence book recommendation to a friend",
+                ],
+                "conversation_starters": [
+                    "Want to write a sentence about your book on a card to grandma?",
+                    "I love what you just said about the chapter. Want to write it down?",
+                    "Should we put a sentence under your drawing?",
+                ],
+                "resource_bank": [
+                    "Notebooks, cards, paper, pens, and pencils kept available",
+                    "Real audiences for the child's short writings (family on the fridge, grandparents by mail, friends in cards)",
+                    "No forced writing sessions; written narration grows from the oral narration habit and from real reasons to write",
+                ],
+                "parent_role": (
+                    "Welcome the child's short writings warmly. Honor the spelling that gets the meaning across. Notice "
+                    "growth across months. Never grade a written narration; respond to it as a real reader responds to "
+                    "a real note."
+                ),
+                "observation_documentation": (
+                    "Across a term, note the short writings that have entered the family life (cards, labels, notes, the "
+                    "child's own notebook), the kinds of things the child writes spontaneously, and the growing sentence "
+                    "form. This noticing replaces any test."
+                ),
+            },
+        },
+        "connections": {
+            "math": "The sentence-boundary skill (one thought, complete, with a capital and a period) is the same orderly habit that frames a math-problem answer",
+            "science": "Short written narrations of science readings are the precursor to the science notebook and to lab-report writing",
+            "history": "Daily written narrations of history passages accumulate into the child's own running history journal across the term",
+            "writing": "Written narration is the bridge from oral narration to all of expository writing; the writing strand picks up here and goes further",
+        },
+    },
 }
