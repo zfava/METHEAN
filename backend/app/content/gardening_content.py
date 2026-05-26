@@ -1018,4 +1018,358 @@ GARDENING_CONTENT: dict[str, dict] = {
             "standard_refs": [],
         },
     },
+    "gc-021": {
+        "node_type": "technique",
+        "trade": "agriculture",
+        "competency_name": "Transplant a tray of started seedlings to a prepared garden bed at correct spacing",
+        "progression_band": "apprentice",
+        "prerequisites": ["gs-001", "gc-001", "gc-002"],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "Sharp tool: a trowel or hori-hori is in use for every hole; the hazards from "
+                    "gc-002 carry forward (off-hand-in-path, slip into the leg or hand)"
+                ),
+                (
+                    "Sun and heat exposure: transplanting is typically done at the season's "
+                    "warmest moments and the learner is outdoors for an hour or more; the "
+                    "sun-and-water habit from gs-001 governs"
+                ),
+                (
+                    "Stooping and kneeling for an extended session: a tray of twelve to fifty "
+                    "seedlings transplanted in one session compounds back and knee strain"
+                ),
+                (
+                    "Damage to the seedling: rough handling of the root ball, planting at the "
+                    "wrong depth for the crop, or planting on a hot afternoon when the seedling "
+                    "wilts before recovering can kill a young plant. Not a safety hazard for the "
+                    "learner but a real wasted-work error if the work is not done correctly."
+                ),
+                (
+                    "Transplant shock: even correct transplanting causes some shock; the learner "
+                    "learns to recognize normal shock (wilting on day one, recovering by day three) "
+                    "from abnormal shock (collapse, root rot, sun scald)"
+                ),
+                (
+                    "Soil contact in cuts: any small hand cut during the session is in immediate "
+                    "contact with soil; the wound-wash and tetanus-status habits from gs-001 govern"
+                ),
+            ],
+            "ppe_required": [
+                "Garden PPE per gs-001 (closed-toe shoes, hat, water, sun protection)",
+                "Garden gloves on for soil handling; OFF for the moment of root-ball release and seedling placement, where touch matters",
+                "Kneeling pad or low stool",
+                "Eye protection optional; recommended in dry, windy conditions",
+            ],
+            "supervision_required": True,
+            "supervision_basis": (
+                "Transplanting is the apprentice band's first multi-step technique that combines "
+                "a sharp tool, a living organism, and a real bed. Mentor on premises with sight "
+                "of the work for the first three transplants of each new crop. Mentor steps back "
+                "to apprentice-level supervision (on premises, attention divided) once the "
+                "learner has demonstrated correct depth, spacing, root-ball handling, and "
+                "watering-in on three transplants of the crop. Mentor returns to direct watch "
+                "for any new crop the learner has not transplanted before, because the planting "
+                "depth and root-ball handling rules differ across crop families."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "Hand trowel or hori-hori knife",
+                "specification": "Per gc-002; in sound condition with a sheath for the hori-hori",
+                "alternatives": [],
+            },
+            {
+                "name": "A tray of hardened-off seedlings of one or more known crops",
+                "specification": (
+                    "Seedlings started by the household or purchased from a nursery, hardened off "
+                    "for the household's stated duration (commonly 7 to 10 days of progressive "
+                    "outdoor exposure, but the exact duration is a teaching tolerance; the mentor "
+                    "confirms the seedlings are ready). Each cell shows a healthy root mass when "
+                    "the plug is gently lifted: pale, branching roots filling the cell without "
+                    "becoming a tight spiral (root-bound)."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "A prepared garden bed",
+                "specification": (
+                    "A bed cleared of weeds, loosened to a depth at least equal to the planned "
+                    "planting depth, raked roughly level, and at a soil temperature suitable for "
+                    "the crop per the planting card or the seed company's instructions. Bed "
+                    "preparation is its own competency (not authored in this first batch); the "
+                    "bed is prepared by the mentor for the first transplants."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Planting cards from gc-001 for the crops in the tray",
+                "specification": "Each card carries the in-row spacing, between-row spacing, planting depth, sun, and water for its crop",
+                "alternatives": [],
+            },
+            {
+                "name": "A measuring tape or a marked stick for spacing",
+                "specification": (
+                    "A real tape graduated to the inch, or a stick the mentor has marked with "
+                    "the household's standard spacings. Eyeballed spacing is acceptable only "
+                    "after the learner has demonstrated correct measured spacing for the crop"
+                ),
+                "alternatives": ["A row marker or planting board with the household's standard spacings"],
+            },
+            {
+                "name": "Watering can or hose with a gentle rose or breaker",
+                "specification": (
+                    "A watering can with a rose, OR a hose with a watering breaker that produces "
+                    "a gentle shower, not a jet. The watering-in flow must not blast the seedling "
+                    "or wash soil away from the root ball."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Mulch (if the household's practice includes mulching after transplant)",
+                "specification": (
+                    "A clean straw, shredded leaf, or other named mulch per the household's "
+                    "practice. The mentor chooses the mulch; the node does not name a material."
+                ),
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [
+            {
+                "name": "A tray of hardened-off seedlings",
+                "quantity": "12 to 50 cells, depending on the crop and the bed",
+                "approximate_cost_usd": None,
+            },
+            {
+                "name": "Water at the bed",
+                "quantity": "Enough to water in every transplant immediately after planting",
+                "approximate_cost_usd": None,
+            },
+        ],
+        "workspace_requirements": {
+            "surface": "Prepared garden bed at ground level, with kneeling pad alongside",
+            "ventilation": "Open air",
+            "lighting": "Daylight; transplanting is best done in cool conditions (evening, morning, or an overcast day) to reduce transplant shock",
+            "power": "None",
+            "containment": "None required",
+        },
+        "skill_description": (
+            "The learner lays out the planting cards and the spacing stick alongside the bed, "
+            "and marks each plant's position with a small finger-press or a tick before any "
+            "hole is dug. The in-row spacing comes from the card; the between-row spacing comes "
+            "from the card; the layout is rectangular or a deliberate staggered pattern that "
+            "the mentor names. For each transplant: the learner digs the hole to the depth and "
+            "width specified for the crop (per gc-002); they lift the cell from the tray by "
+            "gently squeezing the bottom of the cell with their thumb to release the plug, "
+            "supporting the plant by the leaves and the root ball, not by the stem (the stem "
+            "is the most easily damaged structure on a young plant); they set the plug into "
+            "the hole, attending to the planting depth rule for that crop. Tomatoes and "
+            "tomato-family crops are planted deeper than they grew in the cell (the stem grows "
+            "roots when buried); brassicas, lettuces, and most herbs are planted at the soil "
+            "line of the original cell (no deeper); alliums (onions, leeks) are planted shallow "
+            "with the tip of the bulblet just at or above the soil line; the planting card or "
+            "the mentor names the rule per crop. The learner backfills loose soil around the "
+            "root ball, firms gently with the fingertips (not the palm, which would compact too "
+            "much) to remove air pockets, and waters in immediately with a gentle flow at the "
+            "base of the plant until the soil settles and water visibly pools and drains. The "
+            "learner returns to the next mark and repeats. After the tray is set, the learner "
+            "mulches if the household's practice includes mulching and waters once more lightly "
+            "across the row."
+        ),
+        "demonstration_criteria": [
+            (
+                "Every transplant in the row is at the in-row spacing the planting card "
+                "specifies, within roughly 1 inch, measured by tape or marked stick"
+            ),
+            (
+                "Every row is at the between-row spacing the planting card specifies, within "
+                "roughly 1 inch"
+            ),
+            (
+                "Every transplant is at the correct planting depth for its crop: tomato-family "
+                "deeper than the cell soil line; brassicas, lettuces, and most herbs at the cell "
+                "soil line; alliums shallow with the tip just at or above the soil line; the "
+                "learner names which rule applies to each crop and the mentor confirms"
+            ),
+            (
+                "Every root ball is intact at the moment of placement: the plug came out of the "
+                "cell without fracturing, the roots are pale and branching, no major root mass "
+                "left in the cell"
+            ),
+            (
+                "Every transplant is held by the leaves and the root ball, never by the stem, "
+                "during transfer from the cell to the hole; the mentor confirms by watching "
+                "the hand position"
+            ),
+            (
+                "Every transplant is firmed gently by fingertip, not compacted by palm; the soil "
+                "around the root ball is in full contact with the root ball, no visible air gaps"
+            ),
+            (
+                "Every transplant is watered in immediately after planting, with a gentle flow at "
+                "the base, until water visibly pools and drains; the learner does not blast the "
+                "seedling with a jet of water"
+            ),
+            (
+                "The off-hand was clear of the trowel path throughout each hole; the mentor "
+                "confirms"
+            ),
+            (
+                "The learner completes a row of six to twelve transplants in a single session "
+                "without leaving any plant out of the soil for more than the time it takes to dig "
+                "its hole (roots exposed to sun and air for prolonged periods dry out)"
+            ),
+            (
+                "On the next session (24 to 72 hours later), the learner observes the transplants "
+                "and names which look healthy (perked up, leaves firm), which are in normal "
+                "transplant shock (slight wilt, recovering), and any that need attention (severe "
+                "wilt, collapse, sun scald, signs of pest damage)"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Pulling the seedling out of the cell by the stem",
+                "cause": "The cell did not release easily and the learner tugged",
+                "remedy": (
+                    "Squeeze the bottom of the cell gently with the thumb to push the plug up; "
+                    "if it still does not release, slide a thin tool around the inside edge of "
+                    "the cell. The plant comes out into the hand by the root ball, not by the "
+                    "stem."
+                ),
+            },
+            {
+                "error": "Planting a tomato at the cell's soil line (the same depth it grew in the tray)",
+                "cause": "The learner used the general at-the-soil-line rule from brassicas or lettuces",
+                "remedy": (
+                    "Tomatoes and tomato-family plants (tomatoes, tomatillos, ground cherries) "
+                    "are planted deeper, with one or two sets of lower leaves pinched off and the "
+                    "bare stem buried. They grow roots from the buried stem. The planting card or "
+                    "the mentor names this for the crop."
+                ),
+            },
+            {
+                "error": "Planting an onion or leek bulblet too deep",
+                "cause": "The learner over-corrected from the tomato rule",
+                "remedy": (
+                    "Alliums are planted shallow with the tip of the bulblet at or just above the "
+                    "soil line. The bulb forms above ground or at the surface; planting deep "
+                    "produces poor bulbs."
+                ),
+            },
+            {
+                "error": "Spacing eyeballed without the stick or tape",
+                "cause": "The learner skipped the layout step",
+                "remedy": (
+                    "Mark every plant's position with a finger-press or a tick before digging "
+                    "any hole. Walk the row with the tape or the marked stick. Eyeballed "
+                    "spacing is for a learner who has internalized the spacing through years of "
+                    "the crop; the apprentice band still measures."
+                ),
+            },
+            {
+                "error": "Watering with a jet that washes soil away from the root ball",
+                "cause": "The learner used a hose without a breaker or a watering can without a rose",
+                "remedy": (
+                    "Use a rose on the can or a breaker on the hose. The water flows gently at "
+                    "the base of the plant; the soil settles around the root ball; the plant is "
+                    "not flattened."
+                ),
+            },
+            {
+                "error": "Transplanting in the heat of a sunny midday",
+                "cause": "The session was scheduled by convenience, not by the day's heat",
+                "remedy": (
+                    "Transplant in the evening, the early morning, or on an overcast day. The "
+                    "seedling has hours of cool, shaded soil contact before it must face the "
+                    "next noon. Hot-day transplanting can be done if necessary with extra water "
+                    "and a temporary shade, but the cool-time rule is the default."
+                ),
+            },
+            {
+                "error": "Leaving seedlings out of the soil while digging the next hole",
+                "cause": "The learner pulled out two cells at once or set a cell down to dig",
+                "remedy": (
+                    "One at a time: pull the cell, plant it, then move to the next. If multiple "
+                    "cells are out of the tray, keep them in the shade of the tray itself with "
+                    "their roots covered."
+                ),
+            },
+            {
+                "error": "Firming the soil with the palm hard enough to compact it",
+                "cause": "The learner pressed down on the planted seedling to be sure it was set",
+                "remedy": (
+                    "Fingertips, not palm. The soil is in contact with the root ball, no air "
+                    "gaps, but is not compressed into a hardpan. The watering-in finishes the "
+                    "settling."
+                ),
+            },
+            {
+                "error": "Skipping the next-session check",
+                "cause": "The transplants looked fine at the end of the session",
+                "remedy": (
+                    "Walk the row 24 to 72 hours later. Normal transplant shock (slight wilt, "
+                    "recovery in two or three days) is expected; severe wilt, collapse, sun "
+                    "scald, or pest damage needs attention now, not later."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "photo",
+            "what_to_capture": (
+                "Two photos: (1) the completed row immediately after watering-in, with the "
+                "spacing tape or marked stick laid alongside one section of the row so the "
+                "spacing is visible; (2) the same row 24 to 72 hours later, showing the "
+                "transplants standing or in normal transplant shock. Include the planting card "
+                "in the frame of photo 1."
+            ),
+            "what_the_evidence_shows": (
+                "Spacing within roughly 1 inch of the card specification; correct depth for the "
+                "crops planted; root balls set in firm contact with soil; the next-session check "
+                "showing the row stable and recovering"
+            ),
+        },
+        "mentor_signoff_required": True,
+        "pedagogy": {
+            "i_do": (
+                "The mentor lays out the planting cards, the spacing stick, the tray, and the "
+                "watering can. The mentor transplants the first three seedlings narrating each "
+                "step: the mark, the hole per gc-002, the gentle release of the plug, the depth "
+                "rule for the crop, the placement, the firming, the watering-in. The mentor "
+                "explicitly names the depth rule for the crop and points to the planting card."
+            ),
+            "we_do": (
+                "Mentor and learner alternate transplants in the next section of the row. The "
+                "learner takes a transplant; the mentor watches the hand position on the plug, "
+                "the depth, the firming, the watering-in. The mentor names what was correct and "
+                "what could be smoother before the learner takes the next one."
+            ),
+            "you_do_supervised": (
+                "The learner completes a row of six to twelve transplants under the mentor's "
+                "watch. The mentor watches the planting depth, the root-ball handling, the "
+                "spacing, and the watering-in technique. After the row, the learner names which "
+                "depth rule applied to which crop and shows the spacing against the card. The "
+                "next-session check (24 to 72 hours later) is also under the mentor's watch."
+            ),
+            "you_do_unsupervised": (
+                "The learner is signed off for unsupervised transplanting of crops they have "
+                "transplanted before (the depth rule for that crop is known and demonstrated) "
+                "once they can complete three rows across two sessions with no off-hand-in-path "
+                "moment, correct spacing within 1 inch, correct depth per crop, and a successful "
+                "next-session check, with the gs-001 safety signoff current within the last "
+                "twelve months. The mentor returns to direct watch for any new crop family the "
+                "learner has not transplanted before; the depth rule must be demonstrated for "
+                "each new crop family before unsupervised work resumes on that family."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 6,
+        "session_length_minutes": 60,
+        "related_projects": [],
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
+    },
 }
