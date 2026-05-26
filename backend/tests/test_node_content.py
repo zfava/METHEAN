@@ -13,6 +13,7 @@ Covers:
 import pytest
 
 from app.content.history_foundational_content import HISTORY_FOUNDATIONAL_CONTENT
+from app.content.math_developing_content import MATH_DEVELOPING_CONTENT
 from app.content.math_foundational_content import MATH_FOUNDATIONAL_CONTENT
 from app.content.reading_foundational_content import READING_FOUNDATIONAL_CONTENT
 from app.content.science_foundational_content import SCIENCE_FOUNDATIONAL_CONTENT
@@ -94,6 +95,8 @@ UNSCHOOLING_FORBIDDEN: set[str] = {
 def _node_content(node_key: str) -> dict:
     if node_key in MATH_FOUNDATIONAL_CONTENT:
         return MATH_FOUNDATIONAL_CONTENT[node_key]
+    if node_key in MATH_DEVELOPING_CONTENT:
+        return MATH_DEVELOPING_CONTENT[node_key]
     if node_key in READING_FOUNDATIONAL_CONTENT:
         return READING_FOUNDATIONAL_CONTENT[node_key]
     if node_key in SCIENCE_FOUNDATIONAL_CONTENT:
@@ -344,6 +347,7 @@ class TestAuthoredPhilosophyContent:
             "mf-28",
             "mf-29",
             "mf-30",
+            "md-01",
             "rf-01",
             "rf-02",
             "rf-03",
@@ -475,6 +479,7 @@ class TestAuthoredPhilosophyContent:
             "mf-28",
             "mf-29",
             "mf-30",
+            "md-01",
             "rf-01",
             "rf-02",
             "rf-03",
