@@ -2329,4 +2329,457 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Recognizing the kinds of writing in published books prepares the child to write within those kinds (writing a how-to, writing a short biography, writing a story); writing-strand connections continue from here",
         },
     },
+    "rd-06": {
+        "enriched": True,
+        "learning_objectives": [
+            "Describe a character's traits, motivations, and changes using specific evidence from the text",
+            "Distinguish character TRAITS (what the character is like, generally) from MOTIVATIONS (why the character did this specific thing) from CHANGES (how the character grew or shifted across the story)",
+            "Cite a specific page, paragraph, or scene as evidence when claiming a character trait",
+            "Compare two characters within one story (or one character across two stories) on trait, motivation, and change",
+            "Distinguish what the text actually says about a character from what the reader has imagined or assumed",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "Foundational comprehension (rf-14) named characters and noticed what they did. Developing character "
+                "analysis is a genuine step up: the child describes WHO the character is (traits), WHY they do what they "
+                "do (motivations), and HOW they change across the story (arc), and they support each claim with specific "
+                "evidence from the text. This is the entry to all of literary reading: from this skill grow theme "
+                "(rd-22), inference about character (rd-14), and eventually full literary analysis at the intermediate "
+                "and advanced bands. The discipline of CITING EVIDENCE is the key habit: the child says 'I think Wilbur "
+                "is humble because on page 47 he says...' rather than 'I think Wilbur is humble'. The evidence is the "
+                "whole point."
+            ),
+            "scaffolding_sequence": [
+                "Choose a chapter book or story the child has read with characters worth thinking about (Charlotte's Web, Mrs. Frisby, The Lion the Witch and the Wardrobe, Roald Dahl, anything with characters who change)",
+                "Name a character together. Ask: what is this character like? Take three or four words the child offers (brave, lonely, curious, stubborn)",
+                "For each trait word, ask: where in the book does that show? Find the page or scene. This is the evidence move.",
+                "Move to motivation: 'why did the character do X in chapter Y?' The motivation is in the situation plus what the character is like; find the evidence in the surrounding pages",
+                "Move to change: 'how is the character at the end different from at the beginning?' Find an early scene and a late scene; compare",
+                "Practice the language of evidence: 'on page X' or 'in the chapter where Y happens' or 'when the character says Z'",
+                "Compare two characters in one story (Wilbur and Templeton; Lucy and Edmund) on trait, motivation, change",
+                "Distinguish what the text says from what the reader assumed: 'where in the book does it actually say that?' — if the answer is 'it doesn't, I just thought so', name the assumption and look again",
+            ],
+            "socratic_questions": [
+                "What is this character like? Give me three words.",
+                "For each word, where in the book does that show?",
+                "Why did the character do that specific thing in chapter Y? What in the story makes that make sense?",
+                "How is the character at the end of the book different from at the beginning? What changed them?",
+                "You said the character was kind. Where does that show? Read me the sentence.",
+                "You said the character was bad. Does the book actually say that, or have you decided that yourself? Is there evidence for both sides?",
+            ],
+            "practice_activities": [
+                "Character profile card: pick a character from the current book; on a card, name three traits with one piece of text evidence for each",
+                "Two-character comparison: pick two characters in one story; draw a two-column chart with traits, motivations, and arcs for each; note where they overlap and where they differ",
+                "Why-did-they-do-that exercise: pick one decision a character made and walk through the motivations using the text",
+                "Beginning-and-end snapshot: pick a character; describe them in three sentences at the beginning of the book and three sentences at the end; compare",
+                "Find-the-evidence game: parent makes a claim about a character ('I think Wilbur is humble'); child finds the page that supports or challenges the claim",
+            ],
+            "real_world_connections": [
+                "Talking about characters in family read-alouds at dinner ('Why did she say that to him?')",
+                "Discussing characters in movies and shows with the same evidence discipline ('Where does it show that the character changed?')",
+                "Recognizing similar character types across many stories (the loyal friend, the wise teacher, the trickster)",
+                "Talking about real people (in biographies, in family stories) with the same vocabulary of traits, motivations, and arcs",
+            ],
+            "common_misconceptions": [
+                "Confusing what the child has imagined or assumed about a character with what the text actually says. The evidence move is the antidote.",
+                "Treating character traits as a static label. A character can be brave AND afraid; the both-at-once is what makes characters real.",
+                "Skipping motivation and going straight to judgment ('she was mean'). The why is the harder, richer question.",
+                "Believing a character must change to be a good character. Some characters in some stories do not change, and that's part of the story; the absence of change is itself worth noticing.",
+                "Treating the parent's reading of a character as the right answer. Multiple readings of a character can be valid as long as each is grounded in the text.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Names three or more traits for a chosen character with specific text evidence for each",
+                "Articulates the motivation for at least one significant character decision, with evidence",
+                "Describes how a character changes across the story with a clear beginning and end snapshot",
+                "Compares two characters within or across stories on trait, motivation, and arc",
+                "Distinguishes evidence-grounded claims from assumptions and revises when the evidence challenges the claim",
+            ],
+            "proficiency_indicators": [
+                "Names traits and one or two pieces of evidence",
+                "Can describe character change at a general level",
+            ],
+            "developing_indicators": [
+                "Names what the character did, but cannot articulate traits",
+                "Cannot cite evidence for claims about the character",
+            ],
+            "assessment_methods": [
+                "character profile card with text evidence",
+                "two-character comparison chart",
+                "oral discussion with the parent on a chapter book the child has read",
+                "find-the-evidence challenge on parent-made claims",
+            ],
+            "sample_assessment_prompts": [
+                "Tell me three things about [character] and where in the book each one shows.",
+                "Why did [character] do [specific thing] in [chapter / scene]? What in the book made that make sense?",
+                "How is [character] at the end of the book different from at the beginning?",
+                "Compare [character A] and [character B]. How are they alike? How are they different?",
+                "I think [character] is [trait]. Do you agree? Where does the book support or challenge that?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What is a 'character trait'?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "What the character does in one scene.",
+                    "A general thing that is true about who the character is.",
+                    "The character's name.",
+                    "What the character looks like.",
+                ],
+                "correct_answer": "A general thing that is true about who the character is.",
+                "hints": [
+                    "Think of words like brave, kind, curious, stubborn, lonely.",
+                ],
+                "explanation": (
+                    "A character trait is a general thing about who the character is, not just what they did in one "
+                    "scene. Brave, kind, curious, stubborn, lonely are all traits."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "When you claim a character is 'brave', what should you do next?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Just trust your feeling.",
+                    "Find a specific scene in the book where the character was brave; that scene is the evidence.",
+                    "Ask someone else if they agree.",
+                    "Read the book again from the beginning.",
+                ],
+                "correct_answer": "Find a specific scene in the book where the character was brave; that scene is the evidence.",
+                "hints": [
+                    "Character analysis at this band requires evidence from the text.",
+                ],
+                "explanation": (
+                    "The discipline of character analysis is to support every claim with specific text evidence. 'I "
+                    "think Wilbur is brave because on page X he...' is the form. The scene is the evidence."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "What is the difference between a character trait and a character motivation?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "They are the same thing.",
+                    "A trait is what the character is like in general; a motivation is WHY the character did one specific thing.",
+                    "A trait is good; a motivation is bad.",
+                    "A trait is in the book; a motivation is what you imagine.",
+                ],
+                "correct_answer": "A trait is what the character is like in general; a motivation is WHY the character did one specific thing.",
+                "hints": [
+                    "Trait is general (kind); motivation is specific (she helped him because she remembered being lost herself).",
+                ],
+                "explanation": (
+                    "A trait answers 'what is this character like?' and a motivation answers 'why did this character do "
+                    "this thing?' Both come from the text; both call for evidence."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Pick a character from a chapter book you have read. In one paragraph, tell me: three traits, with "
+                    "evidence; one motivation, with evidence; and one way the character changed across the book."
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Three traits, each with a page or scene where it shows.",
+                    "One motivation: a specific decision the character made, and why.",
+                    "One change: who the character was at the start vs at the end.",
+                ],
+                "explanation": (
+                    "A complete character analysis at this band has: traits (with evidence), motivation (for a specific "
+                    "decision, with evidence), and arc (the change from start to end). The paragraph reads like: 'X is "
+                    "[trait] because in [scene] she [act]. X is also [trait] and [trait]. When she did [specific thing] "
+                    "she did it because [motivation grounded in story]. At the start of the book she was [snapshot], by "
+                    "the end she had [become / learned / lost...].'"
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "You and your sister are reading the same book. You think the character is brave. Your sister thinks "
+                    "the character is reckless. Can you both be right? What should you do with this disagreement?"
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Both views may be grounded in different scenes from the text.",
+                    "A real reader-discussion welcomes both readings if both are evidence-grounded.",
+                ],
+                "explanation": (
+                    "Both can be right. The character may be brave in one scene and reckless in another; many real "
+                    "characters are both. The honest discussion compares the scenes each reader is drawing from, "
+                    "rather than insisting on one reading. This is how real literary conversation works."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Tell me three traits of [character] from your chapter book. For each trait, name a scene that shows it.",
+                "type": "open_response",
+                "target_concept": "character_trait_with_evidence",
+                "rubric": (
+                    "Mastery: three distinct traits with specific scene-level evidence for each. Proficient: two traits "
+                    "with evidence, or three with general evidence. Developing: traits named without evidence or actions "
+                    "named as traits."
+                ),
+            },
+            {
+                "prompt": "Why did [character] do [specific significant act] in the book? Walk me through the motivation.",
+                "type": "open_response",
+                "target_concept": "character_motivation_with_evidence",
+                "rubric": (
+                    "Mastery: motivation grounded in character traits and story situation, with evidence. Proficient: "
+                    "motivation named but not fully grounded. Developing: cannot articulate motivation."
+                ),
+            },
+            {
+                "prompt": "How is [character] at the end of the book different from at the beginning? Give me a snapshot of each.",
+                "type": "open_response",
+                "target_concept": "character_arc",
+                "rubric": (
+                    "Mastery: clear beginning snapshot, clear end snapshot, named change. Proficient: rough snapshots, "
+                    "general change. Developing: cannot describe change or insists there is none without considering."
+                ),
+            },
+            {
+                "prompt": "Compare [character A] and [character B] in this book. How are they alike? How are they different?",
+                "type": "open_response",
+                "target_concept": "character_comparison",
+                "rubric": (
+                    "Mastery: alike-and-different across trait, motivation, and arc with evidence. Proficient: alike-and-"
+                    "different at trait level. Developing: cannot compare or compares only on what they did."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "a chapter book with characters worth thinking about (Charlotte's Web, The Lion the Witch and the Wardrobe, Mrs. Frisby and the Rats of NIMH, Roald Dahl, Sarah Plain and Tall, The Penderwicks, anything with characters who change)",
+                "a character profile card template (three trait boxes with evidence space; one motivation box; one change box)",
+                "a two-character comparison chart template",
+            ],
+            "recommended": [
+                "a wide variety of characters across reading: villains, sidekicks, mentors, tricksters",
+                "biographies (real people analyzed with the same vocabulary)",
+                "discussion partner: a parent, sibling, or friend who has read the same book and will discuss it as a real reader",
+            ],
+        },
+        "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 20},
+        "accommodations": {
+            "dyslexia": (
+                "Build character analysis on listened books (read-alouds, audiobooks). The skill is interpretive, not "
+                "decoding. The child can give rich character analysis on books they cannot yet read alone."
+            ),
+            "adhd": (
+                "Use short character cards rather than long written analyses. Quick verbal back-and-forth with the parent "
+                "is often more productive than written work at this band. Choose chapters with action-driven character "
+                "moments so the evidence is vivid."
+            ),
+            "gifted": (
+                "Move to more complex characters with mixed motives (Edmund in Narnia, Templeton in Charlotte's Web, "
+                "Snape later). Introduce the idea that great characters resist simple labels. Begin the conversation "
+                "about character archetypes (the trickster, the mentor, the foil) lightly."
+            ),
+            "visual_learner": "Use the character profile card with sketches alongside trait words. Visual maps of character relationships help.",
+            "kinesthetic_learner": "Act out a scene to feel the character's motivation. Role-play a character interview ('if I were the character, why did I do X?').",
+            "auditory_learner": "Discuss character traits aloud with a real reader (parent, sibling, friend who has read the book). The conversation IS the practice.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we move from naming characters to analyzing them. We will describe what characters are like "
+                    "(traits), why they do what they do (motivations), and how they change across the story (arc). The "
+                    "central discipline is citing specific evidence from the text for every claim."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "The parent picks a character from a shared book and models the analysis aloud: 'I think Wilbur "
+                        "is humble because on page 47 he says he doesn't deserve all this attention. He is also fearful "
+                        "(see chapter 4 when Charlotte first speaks to him) and grateful (see how he treats Charlotte "
+                        "throughout). When he does X he does it because Y. At the start of the book he was Z; by the "
+                        "end he had become...'"
+                    ),
+                    "we_do": (
+                        "Parent and child build a character profile card together for a second character, taking turns "
+                        "proposing a trait and finding evidence."
+                    ),
+                    "you_do": (
+                        "Child builds a character profile card for a third character independently, then shares with the "
+                        "parent in conversation."
+                    ),
+                },
+                "guided_practice": [
+                    "Character profile card for one character per finished book",
+                    "Two-character comparison chart at the end of each book",
+                    "Find-the-evidence challenge: parent makes a claim, child finds the page",
+                ],
+                "independent_practice": [
+                    "Daily character noticing during chapter book reading: keep a small character notebook",
+                    "Across a term, build a portrait of how characters change across multiple books",
+                ],
+                "mastery_check": [
+                    "Names traits, motivations, and arc for a character with text evidence",
+                    "Compares characters within and across books",
+                    "Distinguishes evidence-grounded claims from assumptions",
+                ],
+                "spiral_review": [
+                    "Re-analyze a character from an earlier book; notice what the child can see now that they could not see then",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "Character is at the heart of every great story. The Greeks gave us the names of the moral types; "
+                    "the Romans wrote lives that taught by their characters; the Christian and medieval traditions told "
+                    "the saints' lives and the romance heroes. To analyze a character is to take up a long, deep human "
+                    "habit: noticing what kind of person this is, why they do what they do, and how they grow."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the three character questions: what is the character like (trait), why did they do that (motivation), how did they change (arc)",
+                        "Recite the evidence rule: every claim about a character is backed by a specific scene or line from the book",
+                    ],
+                    "recitations": [
+                        "Memorize a passage that shows a character's essential quality (Charlotte's spider-web messages; Lucy's first words in Narnia; the moment a hero shows themselves)",
+                    ],
+                },
+                "copywork": [
+                    "Copy one passage that reveals a character's essence into the copybook; the language of revelation is held in the hand",
+                ],
+                "recitation_routine": (
+                    "At the close of each chapter book, the child gives a brief oral character analysis: trait, "
+                    "motivation, arc, with evidence. The analyses across the term form the child's own running gallery "
+                    "of characters they have met."
+                ),
+                "history_integration": (
+                    "Plutarch's Lives and the biographies of great figures in history are the classical ground of "
+                    "character analysis. Apply the same vocabulary of trait, motivation, and arc to real people in the "
+                    "history sequence."
+                ),
+                "read_aloud_suggestions": [
+                    "Chapter books with characters worthy of analysis: Charlotte's Web, The Lion the Witch and the Wardrobe, Mrs. Frisby, The Wind in the Willows, Little House series, A Wrinkle in Time",
+                    "Age-appropriate biographies and lives: D'Aulaire, Genevieve Foster, Jean Fritz",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "Living chapter books with rich characters: Charlotte's Web, The Wind in the Willows, Wind in the Door, the Little House series, anything by Beverly Cleary, Roald Dahl, Madeleine L'Engle",
+                    "Living biographies: D'Aulaire's, Genevieve Foster, Jean Fritz, James Daugherty",
+                ],
+                "short_lesson_flow": (
+                    "After a chapter or at the end of a book, sit together and talk about a character as real readers "
+                    "do. The parent asks one question (what is this character like? what is this character's most "
+                    "important moment?) and listens. The child's noticings are honored; the evidence move is invited "
+                    "gently ('where in the book does that show?')."
+                ),
+                "narration_prompt": (
+                    "Tell me about [character]. What is the character like? Why did they do [specific thing]? How are "
+                    "they different at the end of the book?"
+                ),
+                "real_world_objects": [
+                    "The chapter book or biography in hand, ready to flip to specific pages",
+                    "A character notebook the child keeps with one page per character they have met across the term",
+                    "A discussion partner (parent, sibling, friend) who reads the same books",
+                ],
+                "nature_connection": (
+                    "Notice how nature observation also calls for evidence-grounded claims: 'the cardinal returns to "
+                    "the feeder each morning' rests on the same habit as 'Wilbur is grateful'; both rest on what has "
+                    "actually been seen or read"
+                ),
+                "habit_focus": (
+                    "The habit of careful noticing grounded in evidence. The character is what the text shows; the "
+                    "reader is the one who notices and is honest about what they see."
+                ),
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Character profile cards as a template the child uses with each finished book",
+                    "A character library the child keeps: one card per character with traits, motivations, and arc, growing across the term",
+                    "Two-character comparison charts as a separate template",
+                    "A 'find the evidence' card set: parent-made claims about characters from books the child has read",
+                ],
+                "presentation": {
+                    "three_period_lesson": (
+                        "This is a character trait: a general thing about who the character is. This is a motivation: "
+                        "why the character did one specific thing. This is an arc: how the character changed across "
+                        "the story. Show me a trait, a motivation, and an arc for this character; for this one; for "
+                        "this one. The three are introduced slowly across many days; the third period is only when the "
+                        "distinction is sure."
+                    ),
+                    "steps": [
+                        "The guide presents one term at a time across a few days (trait, then motivation, then arc)",
+                        "The child fills out a character profile card for a chosen character",
+                        "Across the term the child's character library grows; the child returns to old cards and "
+                        "deepens them as they re-read or remember more",
+                        "The child compares characters across books they have read",
+                    ],
+                },
+                "control_of_error": (
+                    "The text itself is the control: the child returns to the book to confirm or correct a claim. The "
+                    "adult does not correct; the text does."
+                ),
+                "abstraction_pathway": (
+                    "From naming what the character did, to naming what the character is like with evidence, to "
+                    "articulating motivations and arcs, toward seeing characters as full constructed persons whose "
+                    "traits, motivations, and growth can be read with attention and discussed with respect"
+                ),
+                "extensions": [
+                    "Build a character map of relationships across a book (lines between characters showing affection, opposition, change)",
+                    "Compare characters across books that share a theme (the orphan child, the loyal friend, the wise teacher)",
+                    "Apply the character vocabulary to a real person in a biography",
+                ],
+                "observation_focus": (
+                    "Watch for the child reaching for evidence on their own when making a character claim, for the "
+                    "character library growing organically, and for the child's spontaneous comparison of characters "
+                    "across books they have read."
+                ),
+            },
+            "unschooling": {
+                "invitations": [
+                    "Talk about characters in books, movies, and shows at dinner the way real readers talk about characters they love",
+                    "Welcome the child's strong opinions about characters and probe gently for evidence",
+                    "Read books with great characters together and discuss them as real readers (not as a lesson)",
+                ],
+                "real_world_contexts": [
+                    "Dinner conversation about a chapter book read at bedtime",
+                    "Family movie nights followed by character discussion",
+                    "Talking about real people in a biography or family story with the same vocabulary",
+                    "Discussing characters in shared books with friends or cousins",
+                ],
+                "conversation_starters": [
+                    "What did you think of [character] in your book? Are they brave or reckless?",
+                    "Why do you think [character] did that? What in the story makes that make sense?",
+                    "Has [character] changed since the beginning? How?",
+                    "Who do you like better, [A] or [B]? Why?",
+                ],
+                "resource_bank": [
+                    "A varied library of books with rich characters",
+                    "A discussion partner: parent, older sibling, grandparent, friend",
+                    "Audiobooks for shared listening that enables family character discussion",
+                ],
+                "parent_role": (
+                    "Be a real reader-conversation partner. Welcome the child's readings of characters and ask, "
+                    "gently, where in the book the evidence is. Notice across months whether the child reaches for "
+                    "evidence on their own."
+                ),
+                "observation_documentation": (
+                    "Across a term, note the characters the child has analyzed, the depth of their readings, the "
+                    "discussions that have happened, and the moments when the child has changed their reading of a "
+                    "character based on evidence. This noticing replaces any test."
+                ),
+            },
+        },
+        "connections": {
+            "math": "The discipline of citing evidence for a claim is the same as the math habit of showing the work that supports an answer",
+            "science": "Evidence-grounded claims about characters parallel evidence-grounded claims about natural phenomena; both rest on what was actually observed or read",
+            "history": "Character analysis applied to real historical figures is one of the central history-and-biography reading skills",
+            "writing": "Knowing how characters work in published stories prepares the child to write their own characters with traits, motivations, and arcs",
+        },
+    },
 }
