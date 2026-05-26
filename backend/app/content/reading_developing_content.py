@@ -9675,4 +9675,403 @@ READING_DEVELOPING_CONTENT = {
             "writing": "The response journal is one of the most natural doorways into the writing life; the child who responds to books on the page begins to write more freely in many other settings",
         },
     },
+    "rd-25": {
+        "enriched": True,
+        "learning_objectives": [
+            "Demonstrate fluent oral and silent reading on age-appropriate chapter books and short nonfiction",
+            "Demonstrate the four developing-band comprehension strategies as a working repertoire: summarizing, inferring, identifying author's purpose, and recognizing literary elements",
+            "Demonstrate analytical reading vocabulary in real discussion (theme, conflict, point of view, tone, simile, metaphor, personification, hyperbole, biography, autobiography, fable, fairy tale)",
+            "Demonstrate sustained independent reading habits (reading log, response journal, book discussions, research) across the term",
+            "Determine readiness for the intermediate reading band: literature study with longer texts, more abstract themes, and the beginnings of analytical writing",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "rd-25 is the capstone of the developing reading band. It is celebration and readiness check, not a "
+                "gatekeeping test. The child has spent the term building fluency, comprehension strategies, literary "
+                "vocabulary, and reading habits. This node gathers them: a demonstration of fluent reading, a "
+                "demonstration of the four comprehension strategies in real use, a demonstration of analytical "
+                "vocabulary in discussion, and a review of the reading life (log, journal, books finished, research "
+                "done). The assessment is conversational and book-based, not a paper test. The goal is to see the "
+                "reader the child has become and to determine whether they are ready for intermediate-band reading: "
+                "longer texts, deeper themes, the beginnings of analytical writing. Honest content note: readiness "
+                "is not the same as 'finished'; many children benefit from another term consolidating the developing "
+                "skills before moving on. The capstone honors growth and helps decide what's next."
+            ),
+            "scaffolding_sequence": [
+                "Plan the capstone as a celebration of the term: choose a chapter book the child loves to discuss, gather the reading log and response journal, prepare to talk about the reading life",
+                "Conduct the fluency demonstration: child reads aloud a short chapter book passage and a short nonfiction passage; observe pace, expression, accuracy",
+                "Conduct the silent reading and summary check: child reads a brief unfamiliar passage silently and provides a summary using the rd-13 frames",
+                "Conduct the inference check: child reads a passage and demonstrates inference using the rd-14 I-think-X-because-the-text-says-Y frame",
+                "Conduct the author's purpose check: child reads a short ad or news clip and a story excerpt; identifies purpose and audience for each",
+                "Conduct the literary elements check: discussion of a favorite finished book; child names theme, conflict, point of view, tone with examples; identifies figurative language",
+                "Conduct the reading life review: walk through reading log, response journal, research projects; talk about growth across the term",
+                "Determine readiness together: parent and child reflect on what is strong, what could use another term, and what intermediate-band reading might look like",
+            ],
+            "socratic_questions": [
+                "Looking across your reading life this term, what are you proudest of?",
+                "What kind of book do you most want to read next?",
+                "What's a skill you've gained that you didn't have at the start?",
+                "What's a habit that you want to keep going into the next band?",
+                "Looking at the books you've read, what theme keeps showing up that you care about?",
+            ],
+            "practice_activities": [
+                "Fluency demonstration: chapter book passage and nonfiction passage read aloud",
+                "Silent reading and summary: brief unfamiliar passage; verbal or written summary using developing-band frames",
+                "Inference demonstration: read a moment of implication; explain with text evidence",
+                "Author's purpose demonstration: identify purpose of an ad, a news item, and a story excerpt",
+                "Literary elements discussion: pick a favorite finished book; discuss theme, conflict, point of view, tone, figurative language",
+                "Reading life review: discussion of reading log, response journal, research projects, book discussions across the term",
+            ],
+            "real_world_connections": [
+                "Adult reading life uses every skill the child has built at this band: fluent reading, comprehension strategies, critical reading, literary discussion",
+                "Readiness for intermediate work parallels real-world readiness for harder books, harder ideas, deeper conversations",
+                "Self-assessment as a reader is a real adult practice; readers know what they can read and what is still too hard",
+                "Celebration of growth is real: a year of careful reading work deserves to be marked",
+                "The reading life is now established; intermediate work builds on a settled habit",
+            ],
+            "common_misconceptions": [
+                "Believing the capstone is a pass-fail test. It is a readiness conversation, not a gate.",
+                "Believing readiness means finished. The skills will continue to deepen across all later bands; the developing band builds the working repertoire.",
+                "Believing failing to demonstrate one skill means the child is not ready. Skills mature unevenly; the question is whether the working repertoire is in place, not whether every skill is mastered.",
+                "Believing the assessment is the parent's job alone. The child is part of the conversation; their self-assessment matters.",
+                "Believing rd-25 must happen at a specific moment. The capstone happens when the child and parent are ready to take stock; it can be done late spring, end of year, or whenever the term feels complete.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Reads fluently aloud at grade level with pace, expression, and accuracy",
+                "Reads silently at grade level with strong comprehension",
+                "Uses all four developing-band comprehension strategies (summarize, infer, identify purpose, recognize literary elements) in real reading",
+                "Uses analytical reading vocabulary naturally in book discussion",
+                "Has maintained reading log, response journal, and book discussion practice across the term",
+                "Demonstrates readiness for intermediate-band reading work",
+            ],
+            "proficiency_indicators": [
+                "Demonstrates most skills with some gaps",
+                "Reading life habits are present but inconsistent",
+            ],
+            "developing_indicators": [
+                "Some skills not yet in place",
+                "Reading life habits not established",
+            ],
+            "assessment_methods": [
+                "fluency observation on read-aloud passages",
+                "comprehension demonstration on silent-read passages",
+                "discussion-based assessment of literary vocabulary and analytical skills",
+                "portfolio review of reading log, response journal, research, and discussion work across the term",
+                "parent-child reflection on readiness for intermediate work",
+            ],
+            "sample_assessment_prompts": [
+                "Read this chapter book passage aloud, then this nonfiction passage. Tell me how each one felt different to read.",
+                "Read this short passage silently. Summarize it for me. Then make one inference from it with text evidence.",
+                "Read this short ad and this news item. What is each one's purpose? Who is the audience?",
+                "Pick a favorite book from this term. Tell me its theme, its central conflict, its point of view, and its tone. Note any figurative language that stood out.",
+                "Show me your reading log and your response journal. Tell me about your reading life this term.",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What is the purpose of the developing-reading capstone (rd-25)?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "To pass or fail the child.",
+                    "To celebrate the term's reading growth and to determine readiness for intermediate-band reading work through a conversational, book-based assessment.",
+                    "To assign grades.",
+                    "To rank the child against others.",
+                ],
+                "correct_answer": "To celebrate the term's reading growth and to determine readiness for intermediate-band reading work through a conversational, book-based assessment.",
+                "hints": [
+                    "Celebration and readiness check, not a gate.",
+                ],
+                "explanation": (
+                    "The capstone celebrates the work of the term and helps decide what's next: intermediate band, or "
+                    "another term consolidating developing-band skills. The assessment is conversational and "
+                    "book-based, not a paper test. Readiness is not the same as 'finished'; the skills keep deepening "
+                    "across all later bands."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "What are the four comprehension strategies that the developing band built?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Phonics, decoding, fluency, retelling.",
+                    "Summarizing, inferring, identifying author's purpose, recognizing literary elements.",
+                    "Reading, writing, speaking, listening.",
+                    "Adding, subtracting, multiplying, dividing.",
+                ],
+                "correct_answer": "Summarizing, inferring, identifying author's purpose, recognizing literary elements.",
+                "hints": [
+                    "These are the four big developing-band strategies (rd-13, rd-14, rd-15, rd-22).",
+                ],
+                "explanation": (
+                    "The four developing-band comprehension strategies are summarizing (rd-13), inferring (rd-14), "
+                    "identifying author's purpose (rd-15), and recognizing literary elements (rd-22). These together "
+                    "form the working repertoire of the developing reader."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "What reading life habits does the developing-band capstone check for?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Only book count.",
+                    "Reading log, response journal, book discussions, research projects, sustained independent reading across the term.",
+                    "Only the longest book read.",
+                    "Only test scores.",
+                ],
+                "correct_answer": "Reading log, response journal, book discussions, research projects, sustained independent reading across the term.",
+                "hints": [
+                    "Multiple habits across the term make a real reading life.",
+                ],
+                "explanation": (
+                    "The reading life is a constellation of habits: log (record), journal (response), discussion "
+                    "(shared engagement), research (purposeful inquiry), and independent reading (sustained practice). "
+                    "The capstone reviews all of these across the term as evidence of the reader the child has become."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "A child demonstrates strong fluency, comprehension, and analytical vocabulary at the capstone, "
+                    "but their reading log is sparse and their response journal has only a few entries. What is the "
+                    "right move?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Decide the child is not ready for intermediate work; they failed.",
+                    "Honor the skills demonstrated while noting that the reading life habits need more support; intermediate work can begin with a continued focus on building the log and journal habits.",
+                    "Pretend the gap does not exist.",
+                    "Punish the child for the gap.",
+                ],
+                "correct_answer": "Honor the skills demonstrated while noting that the reading life habits need more support; intermediate work can begin with a continued focus on building the log and journal habits.",
+                "hints": [
+                    "Uneven growth is normal; the question is what to support, not whether to fail.",
+                ],
+                "explanation": (
+                    "Skills mature unevenly. A strong reader with weak habits has different needs from a weak reader "
+                    "with strong habits. The capstone is conversational and identifies what to support next, not a "
+                    "gate. Intermediate work can begin while specific habits get continued support; this is the "
+                    "right call for a child whose comprehension is ready but whose recording habit is still forming."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Looking across the term, write a brief reflection: what reading skill did you grow most in, and "
+                    "what habit is most settled in your reading life?"
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Be specific; growth is in particular skills and habits, not in 'reading' as a whole.",
+                ],
+                "explanation": (
+                    "A complete answer names a specific skill (e.g., 'inferring with text evidence') and a specific "
+                    "habit (e.g., 'I write in my response journal whenever I finish a book'). The reflection is the "
+                    "deepest demonstration: a reader who knows themselves as a reader has internalized the band."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Read this chapter book passage aloud. Then read this nonfiction passage aloud. Tell me how each one felt different to read.",
+                "type": "open_response",
+                "target_concept": "fluency_across_text_types",
+                "rubric": (
+                    "Mastery: reads both fluently with pace, expression, and accuracy; reflects on differences "
+                    "between the two text types. Proficient: reads fluently with some weaker moments. Developing: "
+                    "fluency not yet at grade level."
+                ),
+            },
+            {
+                "prompt": "Read this short passage silently. Summarize it using the developing-band frames. Then make one inference from it using text evidence.",
+                "type": "open_response",
+                "target_concept": "summary_and_inference_demonstration",
+                "rubric": (
+                    "Mastery: clean summary; inference grounded in text. Proficient: summary or inference accurate "
+                    "but one is weaker. Developing: cannot summarize or infer."
+                ),
+            },
+            {
+                "prompt": "Pick a favorite book from this term. Discuss its theme, conflict, point of view, tone, and any figurative language that stood out. Defend each with story evidence.",
+                "type": "open_response",
+                "target_concept": "literary_elements_in_discussion",
+                "rubric": (
+                    "Mastery: all five elements named with evidence and natural use of vocabulary. Proficient: four "
+                    "of five named; some vocabulary use awkward. Developing: cannot apply elements in discussion."
+                ),
+            },
+            {
+                "prompt": "Walk me through your reading log, response journal, and any research projects from this term. Tell me about the reader you have become.",
+                "type": "open_response",
+                "target_concept": "reading_life_portfolio_review",
+                "rubric": (
+                    "Mastery: habits maintained across the term; child can articulate growth and identity as a reader. "
+                    "Proficient: habits present but uneven; self-reflection partial. Developing: habits inconsistent; "
+                    "self-reflection weak."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "the child's reading log from the term",
+                "the child's response journal from the term",
+                "any research projects or reports the child completed",
+                "a chapter book passage and a nonfiction passage for fluency demonstration (one familiar, one unfamiliar)",
+                "a short unfamiliar passage for silent reading and summary",
+            ],
+            "recommended": [
+                "a small gathering of family or friends to celebrate the capstone if the child likes",
+                "a special book gift to mark the end of the developing band and the entry into intermediate reading",
+                "time for unhurried conversation (set aside an hour rather than squeezing it in)",
+                "a written or oral letter from parent to child reflecting on the term's reading growth",
+            ],
+        },
+        "time_estimates": {"first_exposure": 60, "practice_session": 30, "assessment": 90},
+        "accommodations": {
+            "dyslexia": "Allow audiobook-supported fluency demonstration if helpful; the strategies and vocabulary work do not depend on decoding. Many strong readers with dyslexia demonstrate the developing-band skills powerfully through audio and discussion.",
+            "adhd": "Break the capstone across multiple shorter sessions over a week or two rather than one long session. Keep the energy positive throughout.",
+            "gifted": "Extend the capstone with deeper questions: how have your tastes changed; what kind of reader do you want to become; what intermediate-band work most excites you. Allow the child to suggest what should be assessed.",
+            "visual_learner": "Allow the child to present a visual portfolio of the term's reading: timeline of books, mind maps of themes, drawings of memorable moments.",
+            "kinesthetic_learner": "Hold the capstone discussion in a place that allows movement: a walk, a hike, a bench in a garden. Conversation while moving works well for many children.",
+            "auditory_learner": "Most of the capstone is conversational by nature; this is the natural mode. Record the conversation if the family wants a keepsake.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we mark the end of the developing reading band. We celebrate the work of the term, look "
+                    "back at all you've read and done, and look forward to what's next. This is not a test; it is a "
+                    "reading-life conversation. Together we decide whether to move to intermediate reading or to take "
+                    "another term to consolidate."
+                ),
+                "gradual_release": {
+                    "i_do": "Parent prepares the capstone materials and structure; explains the conversational nature; sets a positive tone.",
+                    "we_do": "Together walk through the fluency, comprehension, vocabulary, and reading life demonstrations.",
+                    "you_do": "Child reflects independently on growth and readiness and contributes to the readiness decision.",
+                },
+                "guided_practice": [
+                    "Demonstrate fluency",
+                    "Demonstrate comprehension strategies",
+                    "Demonstrate literary vocabulary in discussion",
+                    "Review reading life portfolio",
+                    "Reflect on readiness together",
+                ],
+                "independent_practice": [
+                    "Apply skills and habits across the next reading band",
+                    "Carry the reading life forward as habits, not assignments",
+                ],
+                "mastery_check": [
+                    "Capstone demonstrations completed",
+                    "Reading life portfolio reviewed",
+                    "Readiness decision made together",
+                ],
+                "spiral_review": [
+                    "Periodic look back at this capstone across future years; honor the reading-life document it created",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "In classical tradition, the end of an apprenticeship was marked with a demonstration of the "
+                    "skills learned. The developing band is the apprenticeship of careful reading; the capstone is "
+                    "the demonstration. The child stands before family and books, reads, discusses, and reflects. "
+                    "The mark of mastery is not just skill but the love of the work."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the four developing-band comprehension strategies",
+                        "Recite the four literary elements: theme, conflict, point of view, tone",
+                        "Recite the four figures of speech: simile, metaphor, personification, hyperbole",
+                    ],
+                    "recitations": [
+                        "Recite a passage memorized during the developing band as a capstone offering",
+                    ],
+                },
+                "copywork": [
+                    "Copy a chosen passage that the child loved most from the term's reading into the copybook; date and sign",
+                ],
+                "recitation_routine": "The capstone is itself a recitation: oral demonstration of the term's work.",
+                "history_integration": "The end of the developing band is a moment to look back at the years the child has been a reader and forward to the years to come. The history of education has always marked transitions like this; we mark this one too.",
+                "read_aloud_suggestions": [
+                    "A read-aloud at the end of the term that the family loves and that marks the closing of the developing band",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 60,
+                "living_book_suggestions": [
+                    "A favorite book from the term that the child wants to discuss as part of the capstone",
+                ],
+                "short_lesson_flow": "The capstone is unhurried; allow a full afternoon for it. Tea, a beautiful place, the books gathered, conversation flowing. The form of the capstone matches the form of Mason reading life: peaceful, attentive, deep.",
+                "narration_prompt": "Tell me about your reading life this term. What stayed with you? What surprised you?",
+                "real_world_objects": [
+                    "The term's reading log and response journal gathered",
+                    "Favorite books from the term on the table",
+                    "Tea and something good to eat",
+                ],
+                "nature_connection": "Hold the capstone in a place close to nature if possible: a garden, a porch, near a window with a view. Reading life and nature life are both lives of attention.",
+                "habit_focus": "The capstone honors the habits the child has built. Celebration of habit is itself a habit-strengthener.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A portfolio for the term's work organized by the child",
+                    "The capstone demonstration cards (fluency, comprehension, vocabulary, reading life)",
+                    "A self-assessment card the child completes before the capstone conversation",
+                    "A ceremony card or certificate marking the completion of the developing band",
+                ],
+                "presentation": {
+                    "three_period_lesson": "This is fluency; this is comprehension; this is literary vocabulary; this is reading life. Show me your fluency. Tell me about your reading life.",
+                    "steps": [
+                        "The child prepares the portfolio in advance",
+                        "The capstone conversation walks through each part",
+                        "The child completes the self-assessment before discussing with the guide",
+                        "Together the child and guide determine readiness for intermediate work",
+                        "A ceremony marks the close of the developing band",
+                    ],
+                },
+                "control_of_error": "The child's own demonstrations are the control: a reader who can read fluently and discuss with vocabulary is demonstrably ready; gaps point to specific further work.",
+                "abstraction_pathway": "From the term's daily work, to the portfolio gathering, to the capstone demonstration, to readiness for the more abstract intermediate work.",
+                "extensions": [
+                    "A summer reading plan agreed together",
+                    "An intermediate-band preview reading list",
+                    "A keepsake document recording the developing-band reading life",
+                ],
+                "observation_focus": "Watch for the child's self-knowledge as a reader. Watch for confidence and curiosity about what comes next.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Mark the end of the term with a family conversation about the year of reading life",
+                    "Let the child design the form the capstone takes: a tea, a hike, a meal, a written letter, a recorded conversation",
+                    "Welcome the child's self-assessment as the primary measure; their sense of themselves as a reader matters",
+                ],
+                "real_world_contexts": [
+                    "Adult readers reflect on their reading life regularly (year-end lists, book journals, conversations); the capstone parallels this practice",
+                    "Family rituals of looking back and looking forward",
+                    "Real recognition of growth as a normal part of an unschooling life",
+                ],
+                "conversation_starters": [
+                    "What was your favorite book this year?",
+                    "What's something you can do now that you couldn't do at the start?",
+                    "What kind of reader do you want to be next?",
+                ],
+                "resource_bank": [
+                    "The reading log and journal from the year",
+                    "Family ritual: a meal, a walk, a fireside conversation",
+                    "Time and attention from a parent who knows the child as a reader",
+                ],
+                "parent_role": "Be present, be celebratory, be honest. Honor the reader the child has become. Listen more than you speak. The capstone is the child's; you are the witness.",
+                "observation_documentation": "Note the child's own words about themselves as a reader. Save these as a keepsake; the child will treasure them later.",
+            },
+        },
+        "connections": {
+            "math": "The math developing band has a parallel capstone (md-30); both honor the year's work and determine readiness for intermediate study",
+            "science": "Reading is the foundation of science learning; the developing reader is ready for more substantial science reading at the intermediate band",
+            "history": "History reading at intermediate band will demand biography, primary source work, and sustained reading; the developing band has built the foundation",
+            "writing": "The capstone celebrates the reading life that grew through the term; writing life grows in parallel and will be a major part of intermediate work",
+        },
+    },
 }
