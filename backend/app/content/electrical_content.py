@@ -4184,4 +4184,725 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
             "standard_refs": [],
         },
     },
+    "elc-021": {
+        "node_type": "technique",
+        "trade": "electrical",
+        "competency_name": (
+            "De-energize, lock out / tag out, and perform live-dead-live "
+            "verification on a residential branch circuit (apprentice-band "
+            "gold standard; ELECTRICAL HAZARD; licensed electrician "
+            "physically present at the live moment)"
+        ),
+        "progression_band": "apprentice",
+        "prerequisites": [
+            "els-001",
+            "elc-001",
+            "elc-002",
+            "elc-006",
+            "elc-007",
+            "elc-008",
+            "elc-009",
+        ],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "ELECTROCUTION RISK. Residential branch circuits are typically "
+                    "120V/60Hz/1-phase or 240V/60Hz/1-phase in the US; the nameplate "
+                    "per elc-001 and the panel labeling are the authorities for the "
+                    "specific circuit. Across the heart at residential fault current, "
+                    "line voltage can stop the heart. The entire purpose of this "
+                    "competency is to verify, with a meter, that the conductors at "
+                    "the work point are dead before any further work. A learner who "
+                    "skips or mis-performs this competency and then contacts a live "
+                    "conductor in a downstream task can be killed."
+                ),
+                (
+                    "ARC FLASH. A short between conductors during energized work "
+                    "releases an arc that can cause severe burns and concussive "
+                    "injury. Arc-flash hazard on residential 120V and 240V is "
+                    "smaller than commercial 480V but real. NFPA 70E governs "
+                    "arc-flash boundaries and PPE selection; the default in this "
+                    "trade is to de-energize and verify dead before opening any "
+                    "enclosure, which removes the arc-flash hazard at the work "
+                    "point."
+                ),
+                (
+                    "WRONG-CIRCUIT or WRONG-DISCONNECT FAILURE. A mis-identified or "
+                    "mis-operated breaker leaves the wrong circuit dead and the "
+                    "intended one live. Panel labels in older or remodeled homes "
+                    "are commonly wrong; the verification at the work point is the "
+                    "safeguard. The licensed electrician confirms the circuit at "
+                    "the work point regardless of the label."
+                ),
+                (
+                    "METER FAILURE. A digital multimeter with a depleted battery, "
+                    "a blown fuse, a broken probe lead, or a wrong CAT rating can "
+                    "read zero on a live conductor and mislead the user into "
+                    "thinking the circuit is dead. The live-dead-live (or "
+                    "test-dead-test) sequence per NFPA 70E exists precisely to "
+                    "catch this: verify the meter on a known live source FIRST, "
+                    "verify dead at the work point, then re-verify the meter on "
+                    "the known live source. All three readings must agree with "
+                    "the expected state. If the third reading fails, the second "
+                    "reading is invalid and the procedure is restarted."
+                ),
+                (
+                    "BACKFEED from a generator or solar PV. Residential standby and "
+                    "portable generators connected without a transfer switch or "
+                    "interlock per the AHJ-adopted NEC, and residential solar PV "
+                    "inverters without proper anti-islanding, can backfeed power "
+                    "onto a circuit that the panel main breaker has de-energized. "
+                    "Any backfeed source on the property is verified isolated by "
+                    "the licensed electrician before any work downstream."
+                ),
+                (
+                    "MULTIWIRE BRANCH CIRCUIT (MWBC) SHARED-NEUTRAL HAZARD. An MWBC "
+                    "shares a single neutral conductor between two hot legs of "
+                    "opposite phases; opening the neutral on an energized MWBC "
+                    "places the full line-to-line voltage across the loads, and "
+                    "produces a voltage on the formerly-neutral wire that will "
+                    "shock a person who touches it. MWBC identification at the "
+                    "panel and the rule against opening the neutral on an "
+                    "energized circuit are part of this competency."
+                ),
+                (
+                    "NEUTRAL-TO-GROUND BOND FAULT. The neutral and the ground are "
+                    "bonded only at the main service equipment per the AHJ-adopted "
+                    "NEC; downstream of the main they must remain separate. A "
+                    "fault that places the neutral and ground at different "
+                    "potentials at a downstream point can energize metal that is "
+                    "normally at ground potential, and the live-dead-live "
+                    "verification at the work point may not catch it unless every "
+                    "pair of conductors that should be dead is tested."
+                ),
+                (
+                    "STORED ENERGY IN CAPACITORS. Capacitors in motor starters, "
+                    "ballasts, switched-mode supplies, and some equipment can "
+                    "hold lethal charge for minutes to hours after de-energization. "
+                    "Capacitor contact is NOT part of this competency; it is a "
+                    "separate competency gated separately."
+                ),
+                (
+                    "WET CONDITIONS. Performing this verification in rain, "
+                    "standing water, or on a wet floor significantly increases "
+                    "shock risk. The verification is deferred to dry conditions; "
+                    "if the situation is urgent, the licensed electrician present "
+                    "decides whether to proceed with additional PPE per NFPA 70E "
+                    "or to defer."
+                ),
+                (
+                    "SHARP SHEET-METAL EDGES on the panel cover, breaker openings, "
+                    "and conductor ends if the cover is removed; cut-resistant "
+                    "gloves on for any handling of the cover."
+                ),
+            ],
+            "ppe_required": [
+                "Trade PPE per els-001 (closed-toe shoes, the trade's general defaults)",
+                "Safety glasses (ANSI Z87.1) required throughout the procedure",
+                (
+                    "Insulating gloves rated for the voltage actually being "
+                    "verified (residential 120V or 240V: Class 00 rated 500V "
+                    "minimum per NFPA 70E and the glove manufacturer); inspected "
+                    "per the manufacturer and OSHA before use. The licensed "
+                    "electrician present confirms the glove rating and the "
+                    "inspection."
+                ),
+                "Leather protectors over insulating gloves per NFPA 70E",
+                (
+                    "Long sleeves and arc-rated clothing per NFPA 70E for the "
+                    "calculated arc-flash incident energy at the work point; the "
+                    "licensed electrician present confirms PPE category"
+                ),
+                "No metal jewelry on hands, wrists, or neck during the procedure",
+                (
+                    "Multimeter (DMM) with CAT III at minimum rated for 600V or "
+                    "higher (CAT IV acceptable), with intact test leads, current "
+                    "battery, current fuse, and finger-guard probes per IEC "
+                    "61010-031. CAT II or unrated meters are NOT acceptable per "
+                    "NFPA 70E."
+                ),
+                (
+                    "Insulated tools (rated 1000V per IEC 60900 / ASTM F1505) for "
+                    "any work near energized equipment; the licensed electrician "
+                    "confirms"
+                ),
+                (
+                    "Lockout-tagout hardware appropriate to the breaker type: a "
+                    "breaker lockout device that fits the breaker handle, a "
+                    "padlock that fits the lockout device, a danger tag legible "
+                    "per OSHA 1910.145, and the key kept exclusively by the "
+                    "person performing the work for the duration of the lockout"
+                ),
+            ],
+            "supervision_required": True,
+            "supervision_basis": (
+                "ELECTRICAL HAZARD. A licensed electrician (or equivalent "
+                "journeyman/master per the AHJ) is PHYSICALLY PRESENT at the "
+                "live-dead-live verification. The licensed electrician watches "
+                "the meter reading, watches the probe placement, watches the "
+                "lockout-tagout sequence, and is in position to intervene "
+                "physically if the learner makes a mistake. The AI tutor "
+                "mentors the procedure walkthrough on paper and reviews the "
+                "artifact evidence (photos of the LOTO setup, written procedure "
+                "read-back) but does NOT stand in for the licensed electrician "
+                "at the live moment. A learner working alone with only AI "
+                "mentoring at the live moment is in mortal danger of "
+                "electrocution if the procedure fails, the meter fails, the "
+                "wrong meter CAT rating is in hand, the probes slip, the wrong "
+                "circuit or disconnect is identified, or a backfeed source is "
+                "present (generator, solar PV inverter, MWBC shared neutral, "
+                "neutral-to-ground bond fault). This is the one hard line in "
+                "the trade's supervision policy. Households without a resident "
+                "licensed electrician arrange a paid professional supervision "
+                "session, a vocational-school program day, an apprentice "
+                "arrangement with a working contractor, or defer the "
+                "competency until the qualified human is arranged. The AI "
+                "tutor and the supervising adult on premises do NOT substitute "
+                "for the licensed electrician at the live moment."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "Digital multimeter (DMM) at CAT III for 600V minimum",
+                "specification": (
+                    "CAT III rated for 600V or higher (CAT IV acceptable); intact "
+                    "test leads with finger-guard probes per IEC 61010-031; "
+                    "current battery; current fuse on the current-measurement "
+                    "range; calibration current per the household's or "
+                    "employer's program if applicable. CAT II or unrated meters "
+                    "are NOT acceptable per NFPA 70E for residential 240V "
+                    "verification."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "A known live voltage source for the live-dead-live verification",
+                "specification": (
+                    "A standard 120V receptacle near the work area whose live "
+                    "status has been confirmed by the licensed electrician, OR "
+                    "a manufactured proving unit (also called a voltage tester "
+                    "proving unit) that provides a verifiable voltage. The live "
+                    "source is used to verify the meter is reading correctly "
+                    "BEFORE and AFTER the dead test at the work point. The "
+                    "licensed electrician confirms the live source is actually "
+                    "live before the learner uses it."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Breaker lockout device and padlock",
+                "specification": (
+                    "A device that fits the specific breaker style on the "
+                    "household's panel (a single-pole breaker lockout, a "
+                    "two-pole breaker lockout for 240V branches, a panel-"
+                    "specific lockout for some panel types). A padlock that "
+                    "fits the lockout device; key kept exclusively by the "
+                    "person performing the work for the duration of the "
+                    "lockout."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Tagout tag",
+                "specification": (
+                    "A danger tag per OSHA 29 CFR 1910.145, signed and dated by "
+                    "the person performing the work, naming the reason for the "
+                    "lockout and the date. The tag is attached to the locked "
+                    "breaker along with the lock; the tag is NOT a substitute "
+                    "for the lock."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "The nameplate cards from elc-001 and the component identification from elc-002",
+                "specification": "Used to confirm the expected voltage and identify the correct breaker for the work circuit",
+                "alternatives": [],
+            },
+            {
+                "name": "Insulating gloves rated for the voltage",
+                "specification": (
+                    "Class 00 (rated 500V) or higher per NFPA 70E for residential "
+                    "120V or 240V verification, inspected per the manufacturer "
+                    "and OSHA before use, with leather protectors. The licensed "
+                    "electrician confirms the rating and inspection."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Safety glasses (ANSI Z87.1)",
+                "specification": "Worn throughout the procedure",
+                "alternatives": [],
+            },
+            {
+                "name": "Insulated tools rated 1000V per IEC 60900 / ASTM F1505",
+                "specification": "For any work near energized equipment during the verification",
+                "alternatives": [],
+            },
+            {
+                "name": "Camera (cell phone is sufficient) for the LOTO and procedure photographs",
+                "specification": "Used to photograph the locked breaker with the tag attached, for the artifact",
+                "alternatives": [],
+            },
+            {
+                "name": "The household's or employer's written lockout-tagout procedure",
+                "specification": (
+                    "OSHA 29 CFR 1910.147 requires a written, equipment-specific "
+                    "LOTO procedure for service work. The household's or "
+                    "employer's procedure for the specific panel and circuit is "
+                    "read and followed; this node defers to that procedure for "
+                    "the specific steps and confirms the procedure exists per "
+                    "OSHA. If no written procedure exists for the equipment, "
+                    "the licensed electrician present produces one before the "
+                    "work begins."
+                ),
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [],
+        "workspace_requirements": {
+            "surface": "Dry workspace at the panel and at the work point",
+            "ventilation": "Adequate; weather conditions dry (no rain, no standing water)",
+            "lighting": "Adequate to clearly see the meter face, the test leads, the breaker terminals, and the lockout hardware; portable headlamp commonly required at the panel",
+            "power": (
+                "Power state is the work itself: the procedure begins with the "
+                "circuit energized (to verify the live state), proceeds through "
+                "breaker operation and lockout, verifies dead at the work point, "
+                "and re-verifies the meter on the known live source after the "
+                "dead test. The breaker is restored only after the lockout is "
+                "released by the person who applied it and only after the work "
+                "for which the lockout was applied is complete."
+            ),
+            "containment": "Clear floor space at the panel and at the work point; pets and small children excluded from the work area; working space and headroom per the AHJ-adopted NEC at the panel",
+        },
+        "skill_description": (
+            "The learner, with a licensed electrician (or equivalent journeyman / "
+            "master per the AHJ) PHYSICALLY PRESENT, performs the live-dead-live "
+            "voltage verification on a residential branch circuit using a CAT "
+            "III or higher rated digital multimeter and the lockout-tagout "
+            "procedure per OSHA 29 CFR 1910.147 and NFPA 70E. The procedure: "
+            "(1) review the nameplate from elc-001 and component identification "
+            "from elc-002 to confirm the expected voltage and identify the "
+            "correct branch and breaker; (2) confirm no active backfeed sources "
+            "on the property (generator off and isolated; solar PV inverter "
+            "off / no sun / rapid-shutdown engaged per the AHJ-adopted NEC); "
+            "(3) put on insulating gloves with leather protectors and safety "
+            "glasses; (4) inspect the multimeter, its leads, the lockout "
+            "hardware, and the panel working space (headroom and clearance per "
+            "the AHJ-adopted NEC); (5) verify the meter on a known live source "
+            "(a nearby 120V receptacle confirmed live by the licensed "
+            "electrician, or a proving unit), reading the expected voltage; "
+            "this is the FIRST live test; (6) operate the branch breaker to "
+            "the OFF position; (7) apply the breaker lockout device, the "
+            "padlock, and the signed and dated tag, keeping the key "
+            "exclusively with the person performing the work; (8) at the work "
+            "point (typically a junction box, a receptacle, a switch, or a "
+            "fixture base on the circuit), verify voltage is now zero by "
+            "testing every pair of conductors that should be dead: for a 120V "
+            "branch, test hot-to-neutral, hot-to-ground, and neutral-to-"
+            "ground; for a 240V branch, test L1-to-ground, L2-to-ground, "
+            "L1-to-L2, L1-to-neutral, and L2-to-neutral; for any MWBC, "
+            "additionally test each hot-to-neutral and explicitly confirm "
+            "with the licensed electrician that the neutral is NOT shared "
+            "with another energized hot; (9) re-verify the meter on the known "
+            "live source from step 5, reading the expected voltage; this is "
+            "the SECOND live test, confirming the meter is still functioning "
+            "correctly and the dead reading from step 8 is valid; (10) "
+            "document the verification by photographing the locked breaker "
+            "with the tag in place. The circuit is now safe to open for "
+            "downstream service work, which is its own competency. The "
+            "learner narrates each step aloud as they perform it; the "
+            "licensed electrician watches the meter readings, the probe "
+            "placements, and the lockout sequence; the licensed electrician "
+            "signs off on the verification before any downstream work begins. "
+            "At the end of the service work, the lockout is released by the "
+            "same person who applied it: tag removed, lock removed, breaker "
+            "operated to the ON position, system restored to operating state. "
+            "The AI tutor reviews the written procedure, the LOTO photograph, "
+            "and the learner's narrated walkthrough after the session; the "
+            "AI does NOT replace the licensed electrician at the live moment."
+        ),
+        "demonstration_criteria": [
+            (
+                "Reviews the nameplate card from elc-001 and the component "
+                "identification from elc-002 BEFORE starting; names the expected "
+                "voltage and identifies the correct branch and breaker"
+            ),
+            (
+                "Confirms no active backfeed sources on the property: generator "
+                "off and isolated by the transfer switch or interlock per the "
+                "AHJ-adopted NEC; solar PV inverter off / no sun / rapid-shutdown "
+                "engaged where required by the AHJ-adopted NEC; the licensed "
+                "electrician confirms the backfeed isolation"
+            ),
+            (
+                "Inspects the multimeter and leads BEFORE the live test: battery "
+                "indicator OK, leads visually intact and finger-guarded, fuse "
+                "intact, CAT III at 600V minimum confirmed on the meter face; "
+                "the licensed electrician confirms"
+            ),
+            (
+                "Inspects the insulating gloves (visual and air-roll test per "
+                "the manufacturer) BEFORE wearing; the licensed electrician "
+                "confirms the inspection"
+            ),
+            (
+                "Confirms the panel working space and headroom per the AHJ-"
+                "adopted NEC before opening the panel cover; if working space "
+                "is inadequate, the work is deferred"
+            ),
+            (
+                "Performs the FIRST live test on the known live source (120V "
+                "receptacle confirmed live by the licensed electrician, or a "
+                "proving unit), reads the expected voltage, and announces the "
+                "reading aloud; the licensed electrician confirms"
+            ),
+            (
+                "Operates the branch breaker to the OFF position correctly per "
+                "the panel type"
+            ),
+            (
+                "Applies the breaker lockout device, the padlock, and the "
+                "signed and dated tag; keeps the key exclusively with the "
+                "person performing the work; the licensed electrician confirms "
+                "the lock is properly engaged and the tag is legible per OSHA "
+                "1910.145"
+            ),
+            (
+                "Performs the DEAD test at the work point, testing every pair "
+                "of conductors that should be dead. For a 120V branch: hot-to-"
+                "neutral, hot-to-ground, neutral-to-ground. For a 240V branch: "
+                "L1-to-ground, L2-to-ground, L1-to-L2, L1-to-neutral, L2-to-"
+                "neutral. For any MWBC: each hot-to-neutral plus explicit "
+                "confirmation that the neutral is not shared with another "
+                "energized hot. Announces each reading aloud; the licensed "
+                "electrician confirms each probe placement and each reading"
+            ),
+            (
+                "Performs the SECOND live test on the same known live source "
+                "from the first live test, reads the expected voltage, and "
+                "announces the reading aloud; the licensed electrician "
+                "confirms the reading and signs off that the dead test from "
+                "the previous step is valid"
+            ),
+            (
+                "Photographs the locked breaker with the tag in place and "
+                "submits the photo to the AI tutor with a written narration "
+                "of every procedure step as performed, countersigned by the "
+                "licensed electrician"
+            ),
+            (
+                "Names the rule that the lockout is released ONLY by the "
+                "person who applied it, and ONLY after the work for which the "
+                "lockout was applied is complete; demonstrates the release "
+                "sequence at the end of the practice session (restoring the "
+                "breaker to ON) under the licensed electrician's supervision"
+            ),
+            (
+                "Names what would invalidate the dead reading and require "
+                "restarting the sequence: meter fails the second live test; "
+                "tag or lock disturbed during the work; procedure deviates "
+                "from OSHA 1910.147 in any material way; the wrong breaker "
+                "is identified mid-procedure; a backfeed source is suspected"
+            ),
+            (
+                "Names that this competency covers ONLY line-voltage "
+                "verification at the work point on a residential branch; "
+                "low-voltage control circuits are verified separately; the "
+                "capacitor discharge competency is separate; service-"
+                "entrance work is OUT OF SCOPE at the foundation entirely"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Skipping the first live test",
+                "cause": "The learner felt the procedure was familiar and went straight to the breaker",
+                "remedy": (
+                    "The live-dead-live sequence is non-negotiable. Without the "
+                    "first live test, a dead reading at the work point could "
+                    "mean (a) the circuit is really dead OR (b) the meter is "
+                    "broken. The first live test rules out (b). The licensed "
+                    "electrician halts the procedure and requires the live "
+                    "test before the dead test. This is what NFPA 70E mandates."
+                ),
+            },
+            {
+                "error": "Skipping the second live test",
+                "cause": "The learner read zero at the work point and assumed the meter was still good",
+                "remedy": (
+                    "The meter could have failed between the first live test "
+                    "and the dead test (a blown fuse during a current attempt "
+                    "is a classic failure mode). The second live test confirms "
+                    "the meter is still functioning AND that the dead reading "
+                    "is valid. The licensed electrician requires the second "
+                    "live test before the lockout is considered complete."
+                ),
+            },
+            {
+                "error": "Testing only hot-to-neutral on a 240V branch",
+                "cause": "The learner ran one test and called it done",
+                "remedy": (
+                    "On a 240V branch, every pair that should be dead must be "
+                    "tested: L1-to-ground, L2-to-ground, L1-to-L2, L1-to-"
+                    "neutral, L2-to-neutral. Each pair represents a different "
+                    "fault possibility. All must read zero."
+                ),
+            },
+            {
+                "error": "Trusting a panel label that says BREAKER 12 controls the work circuit",
+                "cause": "The learner read the label and threw the breaker; the label was wrong from a remodel",
+                "remedy": (
+                    "Panel labels in older or remodeled homes are commonly "
+                    "wrong. The verification at the work point catches the "
+                    "wrong-circuit failure mode. Every elc-021 act verifies "
+                    "dead at the work point regardless of label. The label is "
+                    "corrected after the verification."
+                ),
+            },
+            {
+                "error": "Using a CAT II or unrated meter for the 240V measurement",
+                "cause": "The learner used the meter that was in the toolbag without checking the CAT rating",
+                "remedy": (
+                    "The CAT rating addresses the transient voltage the meter "
+                    "is designed to survive. A CAT II meter on a CAT III "
+                    "circuit can explode in the user's hand during a fault. "
+                    "CAT III at 600V minimum is the rule per NFPA 70E for "
+                    "residential 240V measurement. The licensed electrician "
+                    "confirms the CAT rating before the procedure begins."
+                ),
+            },
+            {
+                "error": "Trusting the breaker position without verifying",
+                "cause": "The learner saw the breaker in the OFF position and skipped the meter test",
+                "remedy": (
+                    "Position is not verification. The breaker could be "
+                    "mechanically off but electrically passing voltage (broken "
+                    "switch, miswire, backfeed). The meter verification at the "
+                    "work point is the only safeguard. Every time."
+                ),
+            },
+            {
+                "error": "Leaving the key in the lock or giving it to someone else",
+                "cause": "The learner walked away to get a tool and handed the key to the supervising adult",
+                "remedy": (
+                    "The key is kept EXCLUSIVELY with the person performing "
+                    "the work for the duration of the lockout per OSHA "
+                    "1910.147. No shared keys, no temporary handoffs. If the "
+                    "learner must leave, the lock comes off and the procedure "
+                    "is restarted on return."
+                ),
+            },
+            {
+                "error": "Performing the procedure in a wet basement after a flood",
+                "cause": "The learner saw water on the floor and proceeded anyway",
+                "remedy": (
+                    "Wet conditions significantly increase shock risk. The "
+                    "procedure is deferred to dry conditions. If urgent (a "
+                    "real outage from a real flood), the licensed electrician "
+                    "decides whether to proceed with additional PPE per NFPA "
+                    "70E or to call the utility. The default is to defer."
+                ),
+            },
+            {
+                "error": "Opening a junction box on an MWBC without verifying the neutral",
+                "cause": "The learner did not recognize the MWBC and assumed neutral was always safe",
+                "remedy": (
+                    "On an MWBC, opening the neutral on an energized circuit "
+                    "produces dangerous voltages. The neutral on every MWBC is "
+                    "verified dead at the work point before any contact. The "
+                    "licensed electrician identifies the MWBC at the panel and "
+                    "walks the verification at the work point."
+                ),
+            },
+            {
+                "error": "Reaching for a capacitor or device with stored energy after the disconnect is verified dead",
+                "cause": "The learner thought the work point was now fully safe",
+                "remedy": (
+                    "Some equipment (motor starters, ballasts, switched-mode "
+                    "supplies) holds stored charge after de-energization. "
+                    "Capacitor contact is a SEPARATE competency, not part of "
+                    "elc-021. After the line-voltage dead verification, the "
+                    "work point is safe to OPEN; contact with internal "
+                    "components requires its own qualifications and "
+                    "competencies."
+                ),
+            },
+            {
+                "error": "Removing the lock to test a downstream component before completing the work",
+                "cause": "The learner felt the procedure was 'paused' and could be resumed",
+                "remedy": (
+                    "The lockout is in place for the duration of the work. If "
+                    "a downstream test requires the system to be energized, "
+                    "the lock comes off in the OSHA-compliant sequence (tools "
+                    "cleared, personnel cleared, lock removed, breaker "
+                    "restored), the test is performed energized, and a NEW "
+                    "LOTO sequence is performed before any further work. The "
+                    "licensed electrician manages this sequencing."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "photo",
+            "what_to_capture": (
+                "A photograph showing: (1) the locked breaker with the padlock "
+                "engaged through the breaker lockout device and the signed-"
+                "and-dated tag attached; (2) the multimeter display reading the "
+                "dead voltage at the work point (the photo can be of the meter "
+                "on the leads, with the reading visible) for at least one of "
+                "the conductor pairs tested; (3) a separate photo of the meter "
+                "reading the live voltage on the known live source, taken "
+                "AFTER the dead test (the second live test). Submitted with a "
+                "written narration of every step of the procedure as actually "
+                "performed, including the announced readings at each test "
+                "point. The licensed electrician COUNTERSIGNS the narration."
+            ),
+            "what_the_evidence_shows": (
+                "That the live-dead-live sequence was performed correctly per "
+                "NFPA 70E, that the lockout was applied per OSHA 1910.147, "
+                "that the dead test covered every conductor pair, and that "
+                "the licensed electrician physically present confirmed each "
+                "step. The AI tutor reviews the artifact for completeness "
+                "against the demonstration criteria; the AI tutor does NOT "
+                "countersign the live verification (only the licensed "
+                "electrician can do that)."
+            ),
+        },
+        "mentor_signoff_required": True,
+        "pedagogy": {
+            "i_do": (
+                "The licensed electrician performs the full live-dead-live "
+                "verification with formal LOTO on a real residential branch "
+                "circuit, narrating each step aloud and explaining why each "
+                "step exists: the reason for the first live test (verify the "
+                "meter), the reason for the LOTO before the dead test "
+                "(defense in depth), the reason for every-pair-to-ground (catch "
+                "both-live faults), the reason for the second live test "
+                "(verify the meter still works after the dead test), the "
+                "reason for the MWBC-specific neutral check (catch the "
+                "shared-neutral hazard). The learner watches and the AI tutor "
+                "(post-session, on the recorded narration) confirms the "
+                "procedure walkthrough matches NFPA 70E and OSHA 1910.147."
+            ),
+            "we_do": (
+                "The licensed electrician and the learner perform the "
+                "procedure together on a second real branch. The learner "
+                "takes the meter and announces each step; the licensed "
+                "electrician watches every probe placement, confirms every "
+                "reading, and applies the lock (or watches the learner apply "
+                "it). At each transition (live test, breaker off, LOTO "
+                "applied, dead test, second live test, lockout released), the "
+                "licensed electrician pauses and the learner narrates aloud "
+                "what happens next and why."
+            ),
+            "you_do_supervised": (
+                "The learner performs the full procedure on a third real "
+                "branch with the licensed electrician physically present, "
+                "watching the meter readings, the probe placements, and the "
+                "LOTO sequence. The licensed electrician intervenes only if "
+                "the learner is about to make a mistake that would "
+                "invalidate the verification or create a hazard. After the "
+                "procedure, the learner submits the LOTO photograph, the "
+                "meter-reading photographs, and the written narration to the "
+                "AI tutor; the AI tutor confirms the artifact covers every "
+                "demonstration criterion. The licensed electrician countersigns "
+                "the narration as having watched the live moment."
+            ),
+            "you_do_unsupervised": (
+                "There is NO unsupervised band for this competency. Every "
+                "live-dead-live verification on a real circuit happens with a "
+                "licensed electrician physically present. This is the rule "
+                "that holds across the trade: the verification of the "
+                "absence of voltage is a moment where a meter failure or a "
+                "procedure failure can kill, and the licensed electrician is "
+                "the safeguard against meter failure and procedure failure. "
+                "The learner becomes journeyman-level proficient in this "
+                "competency by having performed the verification correctly on "
+                "at least ten branches across at least five sessions, with "
+                "at least two different licensed electricians countersigning, "
+                "and the rule then becomes that the licensed-electrician-"
+                "physically-present is the safety habit on every elc-021 act "
+                "regardless of the learner's own licensure (per the "
+                "credentials_NOT_substitutable_for clause in el-root's "
+                "mastery_ladder). The AI tutor continues to mentor the "
+                "procedure walkthrough and review artifacts at every band."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 10,
+        "session_length_minutes": 45,
+        "signoff_validity_days": 365,
+        "related_projects": [],
+        "certification_alignment": {
+            "ladder_rung": "apprentice",
+            "supervision_rung": "licensed_electrician_physically_present",
+            "notes": (
+                "Apprentice-band gold standard. ELECTRICAL HAZARD. The "
+                "licensed-electrician-physically-present rule is non-negotiable "
+                "and unchanged by any credential the learner holds: the "
+                "supervision rung stays at licensed-electrician-physically-"
+                "present even when the learner themselves holds a state "
+                "license, because this is the safety habit, not a credential "
+                "gate. Adding the alignment metadata does not weaken any "
+                "supervision rule; safety_basis and supervision_basis are the "
+                "load-bearing rules."
+            ),
+            "certifications_supported": [
+                {
+                    "id": "elcert-safety",
+                    "domains": [
+                        "lockout-tagout per OSHA 29 CFR 1910.147",
+                        "electrical safety practices per OSHA 29 CFR 1910.137 and 1910.335",
+                        "NFPA 70E live-dead-live verification",
+                        "NFPA 70E PPE selection (insulating gloves, insulated tools, arc-rated clothing)",
+                    ],
+                    "notes": (
+                        "OSHA 10 / 30 covers LOTO and electrical safety as "
+                        "orientation; NFPA 70E training covers the verification "
+                        "procedure in depth; elc-021 is the demonstrated "
+                        "competency."
+                    ),
+                },
+                {
+                    "id": "elcert-nec",
+                    "domains": [
+                        "NEC service-equipment and branch-circuit identification",
+                        "NEC working space and headroom at panels",
+                        "NEC equipment grounding conductor and bonding (the verification at the work point reads the EGC's role)",
+                    ],
+                    "notes": "Every NEC chapter touching service work assumes live-dead-live competence.",
+                },
+                {
+                    "id": "elcert-licensing",
+                    "domains": [
+                        "NFPA 70E live-dead-live procedure and PPE at journeyman "
+                        "and master depth",
+                        "AHJ-adopted code application during service work",
+                    ],
+                    "notes": (
+                        "The state journeyman and master exams test the "
+                        "live-dead-live discipline and the PPE selection "
+                        "directly."
+                    ),
+                },
+            ],
+        },
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [
+                "OSHA 29 CFR 1910.147 (The Control of Hazardous Energy / Lockout-Tagout)",
+                "OSHA 29 CFR 1910.145 (Specifications for Accident Prevention Signs and Tags)",
+                "OSHA 29 CFR 1910.137 (Electrical Protective Equipment)",
+                "OSHA 29 CFR 1910.335 (Electrical Safety-Related Work Practices)",
+                "NFPA 70E (Standard for Electrical Safety in the Workplace; current edition)",
+                "NFPA 70 (NEC; current edition adopted by the local AHJ)",
+                "IEC 61010-1 / UL 61010-1 (test and measurement equipment Category Ratings: CAT II / III / IV)",
+                "IEC 61010-031 (handheld probe finger-guard requirements)",
+                "IEC 60900 / ASTM F1505 (Insulated and Insulating Hand Tools)",
+                "The household's or employer's written equipment-specific lockout-tagout procedure per OSHA 1910.147",
+                "Manufacturer service literature for the specific multimeter, insulating gloves, lockout hardware, and panel equipment",
+                "The licensed electrician's professional license per the local AHJ and current NFPA 70E familiarity",
+            ],
+        },
+    },
 }
