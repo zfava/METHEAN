@@ -5904,4 +5904,382 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Strong writing implies as well as states; learning to read for implication informs the child's own writing toward show-don't-tell technique",
         },
     },
+    "rd-15": {
+        "enriched": True,
+        "learning_objectives": [
+            "Identify an author's purpose in a passage as one of the four common purposes: inform, persuade, entertain, or explain",
+            "Recognize the text clues that reveal each purpose: tone, structure, word choice, evidence, vivid description, opinion words",
+            "Identify the intended audience the author is writing for (children, adults, specialists, general readers)",
+            "Recognize that one passage may have more than one purpose, with one purpose primary",
+            "Apply purpose-and-audience reading to advertising and persuasive nonfiction as critical reading skill",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "Building on genre identification (rd-05) which named fiction versus nonfiction, author's purpose asks "
+                "the deeper question: WHY did the author write this? At this band the four common purposes are: "
+                "INFORM (give the reader facts: encyclopedia entries, science writing, news), PERSUADE (move the "
+                "reader to think or do something: ads, editorials, opinion pieces), ENTERTAIN (give the reader "
+                "pleasure: novels, stories, poems, jokes), and EXPLAIN (show the reader how something works or why "
+                "something happened: how-to writing, instructional writing). Closely related: WHO is the author "
+                "writing for? Different audiences (children, adults, specialists) get different writing. Purpose plus "
+                "audience together teach the child to read CRITICALLY: not only what the text says but why it says it "
+                "and to whom. This is the foundation of media literacy."
+            ),
+            "scaffolding_sequence": [
+                "Introduce the four common purposes with one clear example of each: an encyclopedia entry (inform), an ad (persuade), a chapter from a chapter book (entertain), a how-to recipe (explain)",
+                "Show the text clues for each purpose: inform uses facts and neutral tone; persuade uses opinion words ('best', 'must', 'should') and emotional appeal; entertain uses vivid description and story structure; explain uses steps, sequence words, and how-or-why structure",
+                "Practice the discrimination on a set of short passages: read each, name the purpose, name one text clue",
+                "Introduce audience: who is the author writing for? Compare a children's encyclopedia entry on whales with a marine biology textbook on the same topic. Same purpose; different audience; very different writing.",
+                "Move to mixed-purpose passages: a science writer might both inform and entertain; a memoir might both entertain and persuade. Name the primary purpose and the secondary purpose.",
+                "Apply the skill to advertising: every ad is persuade-purpose; what are the persuasion techniques? what claims does it make? what does it leave out?",
+                "Apply the skill to news versus opinion: a news article informs (or tries to); an opinion piece persuades. Show the child examples of each from a real newspaper or magazine.",
+                "Sustain the practice across genres and texts so 'why did the author write this?' becomes a habit alongside 'what did the author say?'",
+            ],
+            "socratic_questions": [
+                "Why do you think the author wrote this? To inform, persuade, entertain, or explain?",
+                "What in the text makes you think that? Tone, word choice, structure, evidence, opinions?",
+                "Who is the author writing for? How can you tell?",
+                "Is this trying to convince you of something? What is it trying to convince you of, and how?",
+                "Could this passage have more than one purpose? Which is primary?",
+            ],
+            "practice_activities": [
+                "Purpose identification on prepared short passages: read each, name purpose and one text clue",
+                "Purpose-and-audience sort cards: a stack of short passages sorted into inform / persuade / entertain / explain piles",
+                "Same-topic-different-purpose comparison: read two pieces on the same topic written for different purposes (e.g., an encyclopedia entry on dogs and an ad for dog food). Compare.",
+                "Ad analysis: bring in or describe an ad; name its purpose (always persuade); name the persuasion techniques; name what the ad omits",
+                "News-versus-opinion practice: read a news article and an opinion piece from the same publication; name how each reveals its purpose",
+            ],
+            "real_world_connections": [
+                "Recognizing the purpose of an advertisement (always persuade) is core media literacy",
+                "Distinguishing news from opinion in newspapers and online (the line is increasingly blurred and worth teaching young)",
+                "Recognizing the purpose of school assignments, instructions, and consent forms",
+                "Reading product packaging critically: which claims are informational, which are persuasive?",
+                "Recognizing persuasion in everyday situations: a sibling asking for something, a friend recommending something, a sales pitch",
+            ],
+            "common_misconceptions": [
+                "Believing all writing has one and only one purpose. Many passages mix purposes; the question is which is PRIMARY.",
+                "Believing inform and explain are the same. Inform gives facts; explain shows how or why. Different purposes; different structures.",
+                "Believing entertainment is the lowest purpose. All four purposes are equally important; great writing can serve any of them well.",
+                "Believing only ads persuade. Opinion pieces, editorials, persuasive essays, and many social-media posts also persuade.",
+                "Believing purpose is hidden. Purpose is usually clear from text clues if the reader looks for them.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Names the four common purposes and gives one example of each",
+                "Identifies the purpose of an unfamiliar passage with text clues",
+                "Identifies the intended audience and how the author addresses that audience",
+                "Recognizes mixed purposes and names the primary purpose",
+                "Applies purpose-and-audience reading to advertising and persuasive nonfiction",
+            ],
+            "proficiency_indicators": [
+                "Identifies purpose with prompting",
+                "Identifies audience with prompting",
+            ],
+            "developing_indicators": [
+                "Cannot reliably distinguish the four purposes",
+                "Treats all writing as the same regardless of purpose",
+            ],
+            "assessment_methods": [
+                "scored purpose-identification items on prepared passages",
+                "sort tasks across the four purposes",
+                "ad analysis tasks",
+                "real-time discussion of purpose during reading",
+            ],
+            "sample_assessment_prompts": [
+                "Read this passage. What is the author's purpose? What text clue tells you?",
+                "Sort these short passages into inform / persuade / entertain / explain piles.",
+                "Read this advertisement. What is its purpose? What persuasion techniques are used? What is left out?",
+                "Read this news article and this opinion piece on the same topic. How does each reveal its purpose?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What are the four common purposes for which an author writes?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Beginning, middle, end, epilogue.",
+                    "Inform, persuade, entertain, explain.",
+                    "Fiction, nonfiction, poetry, drama.",
+                    "Comedy, tragedy, history, romance.",
+                ],
+                "correct_answer": "Inform, persuade, entertain, explain.",
+                "hints": [
+                    "Four reasons an author has for writing.",
+                ],
+                "explanation": (
+                    "The four common author's purposes are: INFORM (give facts), PERSUADE (move the reader), ENTERTAIN "
+                    "(give pleasure), and EXPLAIN (show how or why). These four cover most of what writers do."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "What is the purpose of an advertisement?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "To inform you about a product.",
+                    "To persuade you to buy or want the product.",
+                    "To entertain you with funny pictures.",
+                    "To explain how the product was made.",
+                ],
+                "correct_answer": "To persuade you to buy or want the product.",
+                "hints": [
+                    "Ads may inform or entertain on the surface, but their real purpose is something else.",
+                ],
+                "explanation": (
+                    "Every advertisement has the same primary purpose: to persuade the reader to buy or want the "
+                    "product. Ads may inform (give facts about the product) or entertain (be funny) along the way, "
+                    "but persuasion is the goal. Recognizing this is the first step of media literacy."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "A passage uses words like 'best', 'must', 'should', and gives strong opinions. What is the most "
+                    "likely purpose?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Inform.",
+                    "Persuade.",
+                    "Entertain.",
+                    "Explain.",
+                ],
+                "correct_answer": "Persuade.",
+                "hints": [
+                    "Opinion words and strong claims are clues to purpose.",
+                ],
+                "explanation": (
+                    "Opinion words ('best', 'must', 'should'), strong claims, and emotional appeals are the text clues "
+                    "of persuade-purpose writing. Inform-purpose writing uses neutral tone and presents facts without "
+                    "trying to move the reader."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "A children's science book about volcanoes uses vivid description, sound words, and exciting "
+                    "comparisons (a volcano is described as 'a mountain breathing fire'). What are the purposes, and "
+                    "which is primary?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Only inform.",
+                    "Both inform and entertain, with inform primary; the vivid language is meant to teach about volcanoes in a memorable way.",
+                    "Only entertain.",
+                    "Only persuade.",
+                ],
+                "correct_answer": "Both inform and entertain, with inform primary; the vivid language is meant to teach about volcanoes in a memorable way.",
+                "hints": [
+                    "Mixed purposes are common; ask which one drives the rest.",
+                ],
+                "explanation": (
+                    "The book combines two purposes. The primary purpose is to INFORM (it teaches about volcanoes); "
+                    "the secondary purpose is to ENTERTAIN (vivid language and sound words keep the reader engaged). "
+                    "Recognizing mixed purposes is more sophisticated than naming one alone."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Pick a piece of writing in your home (a book, an ad, a sign, a letter, a packaging label). Name "
+                    "its purpose and audience, with the text clues that reveal each."
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Anything written has a purpose and an audience; apply the four-purpose vocabulary.",
+                ],
+                "explanation": (
+                    "A complete answer names the piece, the purpose (one of the four), the audience the author is "
+                    "addressing, and the specific text clues for each. With practice the child runs purpose-and-"
+                    "audience reading automatically on everything they encounter."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "For each of these four short passages, name the author's purpose and one text clue that reveals it.",
+                "type": "open_response",
+                "target_concept": "four_purpose_identification",
+                "rubric": (
+                    "Mastery: identifies all four purposes correctly with text clue for each. Proficient: three of four. "
+                    "Developing: confuses purposes or cannot name clues."
+                ),
+            },
+            {
+                "prompt": "Read this advertisement. Name its purpose, the persuasion techniques used, and what the ad does not say or leaves out.",
+                "type": "open_response",
+                "target_concept": "ad_analysis_for_purpose",
+                "rubric": (
+                    "Mastery: identifies persuade purpose; names two or more techniques; names what the ad omits. "
+                    "Proficient: identifies purpose and one technique. Developing: cannot read the ad critically."
+                ),
+            },
+            {
+                "prompt": "Read this passage. Identify the audience the author is writing for. How can you tell?",
+                "type": "open_response",
+                "target_concept": "audience_identification",
+                "rubric": (
+                    "Mastery: identifies audience with multiple text clues (vocabulary level, examples used, "
+                    "assumptions made). Proficient: identifies audience with one clue. Developing: cannot identify "
+                    "audience."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "a small library of short passages representing the four purposes (an encyclopedia entry, an ad, a story excerpt, a how-to passage)",
+                "a real advertisement (from a magazine, online, or junk mail) for analysis",
+                "a news article and an opinion piece on the same topic for purpose comparison",
+            ],
+            "recommended": [
+                "a wall card listing the four purposes with their text clues",
+                "a children's magazine subscription (Cricket, Cobblestone, Highlights) for varied purposes in one place",
+                "a media-literacy resource for older developing-band children",
+            ],
+        },
+        "time_estimates": {"first_exposure": 30, "practice_session": 15, "assessment": 20},
+        "accommodations": {
+            "dyslexia": "Practice purpose identification on read-aloud passages. Use audio (a radio news segment versus a radio ad versus a podcast story) so purpose is heard, not decoded.",
+            "adhd": "Brief purpose identification: one passage, one purpose, one clue. Repeat across several short sessions rather than one long session.",
+            "gifted": "Move to subtler purposes: literary nonfiction that informs and entertains; persuasive essays that hide their persuasion behind information; satire whose purpose is layered. Introduce bias and propaganda concepts.",
+            "visual_learner": "Use color-coded sort cards: blue for inform, red for persuade, green for entertain, yellow for explain. Visual sort builds the discrimination quickly.",
+            "kinesthetic_learner": "Physically sort passage cards into four piles on the floor or table.",
+            "auditory_learner": "Read purposes aloud and listen for tone differences. Tone (neutral, urgent, vivid, instructional) often signals purpose.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we learn to ask 'why did the author write this?' We name the four common purposes: inform, "
+                    "persuade, entertain, explain. We learn the text clues that reveal each one. We learn that one "
+                    "passage may have more than one purpose, with one primary. And we learn to read advertising and "
+                    "persuasive writing critically."
+                ),
+                "gradual_release": {
+                    "i_do": "Parent reads four short passages aloud, names each purpose, points out the text clues that reveal each one.",
+                    "we_do": "Together with the child, work through several more passages, naming purpose and clues. Discuss mixed-purpose passages.",
+                    "you_do": "Child identifies purpose and audience on assigned passages and on real-world materials they find at home.",
+                },
+                "guided_practice": [
+                    "Daily purpose identification on a chosen short passage",
+                    "Weekly ad analysis: one ad, examined for purpose and technique",
+                    "Periodic news-versus-opinion practice",
+                ],
+                "independent_practice": [
+                    "Apply purpose-and-audience reading automatically across all reading",
+                    "Recognize and name persuasion in real-world contexts",
+                ],
+                "mastery_check": [
+                    "Names the four purposes",
+                    "Identifies purpose with text clues on unfamiliar passages",
+                    "Reads advertising critically",
+                ],
+                "spiral_review": [
+                    "Return to earlier ad analyses; have the techniques changed in the ads the child sees this week?",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "Ancient rhetoricians named the purposes of speech and writing carefully: to inform, to persuade, "
+                    "to delight, to instruct. Aristotle and Cicero wrote on this directly. The educated reader has "
+                    "always known to ask not only what a writer says but why they say it. The skill is older than "
+                    "literacy itself."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the four purposes: inform, persuade, entertain, explain",
+                        "Recite the rule: every ad's purpose is to persuade",
+                    ],
+                    "recitations": [
+                        "Memorize a brief definition of each purpose with one example",
+                    ],
+                },
+                "copywork": [
+                    "Copy a sentence from each purpose into the copybook; label each with its purpose",
+                ],
+                "recitation_routine": "At each reading session the child names the purpose of the day's passage with text evidence.",
+                "history_integration": "Reading historical documents demands purpose identification: the Declaration of Independence persuades; an old recipe explains; a journal entertains and informs. The classical tradition of rhetoric is the parent of this skill.",
+                "read_aloud_suggestions": [
+                    "Anthologies with mixed-purpose pieces (informational essays, persuasive editorials, narrative stories) so the child meets each purpose in turn",
+                    "Aesop's Fables and similar works where purpose mixes entertainment with moral instruction",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "Living books across the four purposes; the child meets each purpose in good company",
+                ],
+                "short_lesson_flow": "After reading, ask 'why did this writer write this?' and 'who were they writing for?'. Discuss briefly. Across weeks the child builds the habit of asking these questions of everything they read.",
+                "narration_prompt": "What was the writer trying to do in this passage, and how could you tell?",
+                "real_world_objects": [
+                    "A wall card with the four purposes and their clues",
+                    "A small folder for collecting examples of each purpose from real reading",
+                ],
+                "nature_connection": "Books about nature serve different purposes: a field guide informs; a poem about a tree entertains; an essay on conservation persuades. The same topic, different purposes; different writing.",
+                "habit_focus": "The habit of asking why a writer wrote what they wrote. This is the habit of critical reading.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Sort cards for the four purposes: a passage on the card, the four purposes labeled on the sorting tray",
+                    "Cards showing text clues for each purpose",
+                    "A small library of real-world examples (an ad, a news clip, a story excerpt, a how-to passage)",
+                    "A media-literacy work for ad analysis",
+                ],
+                "presentation": {
+                    "three_period_lesson": "This is inform; this is persuade; this is entertain; this is explain. Show me inform; show me persuade. Is this inform or persuade?",
+                    "steps": [
+                        "The guide presents the four purposes with clear examples",
+                        "The child sorts passage cards into the four piles",
+                        "The child analyzes a real advertisement for purpose and technique",
+                        "The child applies purpose identification to their own reading",
+                        "Across the term purpose recognition becomes automatic",
+                    ],
+                },
+                "control_of_error": "The control is the text and its clues: a sort can be checked by re-reading the passage and locating the purpose clues.",
+                "abstraction_pathway": "From sorting prepared cards by purpose, to identifying purpose in unfamiliar passages, to reading advertising and media critically without prompting.",
+                "extensions": [
+                    "Bias and propaganda as advanced purpose questions",
+                    "Mixed-purpose writing and how to weight purposes",
+                    "Audience analysis beyond children-versus-adults",
+                ],
+                "observation_focus": "Watch for the child spontaneously naming purpose during reading. Watch for the child recognizing persuasion in everyday materials without prompting.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Talk about why writers, advertisers, and makers create what they create; welcome the child's noticing",
+                    "Read the same topic across different purposes (a magazine article on dogs and a dog food ad) and discuss the differences",
+                    "Welcome the child's critical reading of media they encounter; treat persuasion as something to name openly",
+                ],
+                "real_world_contexts": [
+                    "Recognizing the purpose of ads in everyday life",
+                    "Distinguishing news from opinion in shared reading",
+                    "Reading product packaging, signs, and instructions with purpose-eyes",
+                ],
+                "conversation_starters": [
+                    "Why do you think the writer wrote this?",
+                    "Who do you think they were writing it for?",
+                    "Is this trying to convince you of something? How is it doing it?",
+                ],
+                "resource_bank": [
+                    "Newspapers, magazines, and websites with mixed-purpose content",
+                    "Advertising in many forms for critical reading practice",
+                    "Family conversation about media and persuasion",
+                ],
+                "parent_role": "Model critical reading of purpose. Talk openly about the persuasion in ads you encounter. Ask the child why they think a writer wrote what they wrote. Welcome the child's purpose-and-audience analysis as part of normal reading life.",
+                "observation_documentation": "Note when the child spontaneously identifies the purpose of an ad, a news headline, or a sign. Note their growing critical reading of media.",
+            },
+        },
+        "connections": {
+            "math": "Math word problems are written to inform and explain; recognizing the purpose helps the child read them clearly",
+            "science": "Science writing crosses multiple purposes: research papers inform; science journalism informs and entertains; advocacy writing persuades. Recognizing these is part of scientific literacy.",
+            "history": "Historical documents serve purposes: laws persuade or instruct; chronicles inform; memoirs entertain and inform. Purpose-reading is central to historical literacy.",
+            "writing": "Knowing the author's purposes lets the child choose their own purpose deliberately when writing; they learn to write to inform, persuade, entertain, or explain on purpose",
+        },
+    },
 }
