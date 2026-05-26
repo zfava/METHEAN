@@ -50,7 +50,11 @@ MATH_DEVELOPING_CONTENT = {
                 "Explains regrouping in place-value language: ten ones is one ten, ten tens is one hundred",
                 "Catches an unreasonable answer by comparing it to an estimate before declaring the work done",
             ],
-            "assessment_methods": ["mixed paper computation", "oral place-value explanation", "block-based demonstration"],
+            "assessment_methods": [
+                "mixed paper computation",
+                "oral place-value explanation",
+                "block-based demonstration",
+            ],
             "sample_assessment_prompts": [
                 "Solve 247 + 365 and show your work in place-value language",
                 "Solve 503 - 178 and explain what you traded and why",
@@ -82,7 +86,10 @@ MATH_DEVELOPING_CONTENT = {
                 "prompt": "What is 503 - 178?",
                 "expected_type": "number",
                 "correct_answer": "325",
-                "hints": ["The ones place needs to borrow", "You will need to borrow from the hundreds to make the tens column usable"],
+                "hints": [
+                    "The ones place needs to borrow",
+                    "You will need to borrow from the hundreds to make the tens column usable",
+                ],
                 "explanation": "503 - 178. Cannot do 3 - 8 in ones, borrow from tens, but tens is 0, so borrow from hundreds first. 503 becomes 4 hundreds, 9 tens, 13 ones. 13-8 = 5, 9-7 = 2, 4-1 = 3. Answer: 325.",
             },
             {
@@ -125,7 +132,11 @@ MATH_DEVELOPING_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["base-ten blocks (hundreds, tens, ones)", "place-value mat", "pencil and paper for column work"],
+            "required": [
+                "base-ten blocks (hundreds, tens, ones)",
+                "place-value mat",
+                "pencil and paper for column work",
+            ],
             "recommended": ["hundred chart", "three-digit number cards", "play money in $1, $10, $100 denominations"],
         },
         "time_estimates": {"first_exposure": 30, "practice_session": 20, "assessment": 20},
@@ -384,8 +395,16 @@ MATH_DEVELOPING_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["base-ten material including a thousand cube", "place-value chart with a thousands column", "digit cards 0 through 9"],
-            "recommended": ["large numeral cards including 1000, 2000, ... 9000", "real receipts and headlines with four-digit numbers", "expanded-form notation cards"],
+            "required": [
+                "base-ten material including a thousand cube",
+                "place-value chart with a thousands column",
+                "digit cards 0 through 9",
+            ],
+            "recommended": [
+                "large numeral cards including 1000, 2000, ... 9000",
+                "real receipts and headlines with four-digit numbers",
+                "expanded-form notation cards",
+            ],
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 15},
         "accommodations": {
@@ -570,7 +589,11 @@ MATH_DEVELOPING_CONTENT = {
                 "Lines up columns correctly even when addends have different numbers of digits",
                 "Estimates before solving and uses the estimate to catch errors",
             ],
-            "assessment_methods": ["timed and untimed paper algorithm work", "oral explanation of one worked problem", "estimation comparison"],
+            "assessment_methods": [
+                "timed and untimed paper algorithm work",
+                "oral explanation of one worked problem",
+                "estimation comparison",
+            ],
             "sample_assessment_prompts": [
                 "Solve 3,478 + 2,659 by the standard algorithm. Show every carry.",
                 "Solve 47 + 1,205 + 836. Be careful to line up the columns.",
@@ -646,7 +669,11 @@ MATH_DEVELOPING_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["grid paper or place-value chart", "pencil and eraser"],
-            "recommended": ["base-ten blocks for review when algorithm slips", "real receipts for practice", "calculator for self-check after manual work"],
+            "recommended": [
+                "base-ten blocks for review when algorithm slips",
+                "real receipts for practice",
+                "calculator for self-check after manual work",
+            ],
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 15},
         "accommodations": {
@@ -830,7 +857,11 @@ MATH_DEVELOPING_CONTENT = {
                 "Borrows correctly across at least one zero in a multi-step problem",
                 "Verifies the answer by adding the difference to the subtrahend",
             ],
-            "assessment_methods": ["paper algorithm work", "oral explanation of one borrow-across-zero problem", "self-check by addition"],
+            "assessment_methods": [
+                "paper algorithm work",
+                "oral explanation of one borrow-across-zero problem",
+                "self-check by addition",
+            ],
             "sample_assessment_prompts": [
                 "Solve 5,003 - 1,478 by the standard algorithm. Show every borrow.",
                 "Solve 4,000 - 2,569.",
@@ -871,7 +902,10 @@ MATH_DEVELOPING_CONTENT = {
                 "prompt": "Solve 5,003 - 1,478 and check your answer by adding the difference and 1,478.",
                 "expected_type": "number",
                 "correct_answer": "3525",
-                "hints": ["Borrow across the zeros to make the ones column workable", "Check: 3,525 + 1,478 should equal 5,003"],
+                "hints": [
+                    "Borrow across the zeros to make the ones column workable",
+                    "Check: 3,525 + 1,478 should equal 5,003",
+                ],
                 "explanation": "5,003 - 1,478. Borrow ripples from thousands. After ripple: 4 thousands, 9 hundreds, 9 tens, 13 ones. 13-8=5, 9-7=2, 9-4=5, 4-1=3. Answer: 3,525. Check: 3,525 + 1,478 = 5,003.",
             },
             {
@@ -906,7 +940,11 @@ MATH_DEVELOPING_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["grid paper or place-value chart", "pencil and eraser"],
-            "recommended": ["base-ten blocks for review when borrowing across zeros confuses", "play money up to thousand-dollar bills", "calculator for self-check after manual work"],
+            "recommended": [
+                "base-ten blocks for review when borrowing across zeros confuses",
+                "play money up to thousand-dollar bills",
+                "calculator for self-check after manual work",
+            ],
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 15},
         "accommodations": {
@@ -1091,7 +1129,11 @@ MATH_DEVELOPING_CONTENT = {
                 "Writes both a multiplication and a repeated addition for any equal-groups situation",
                 "Explains why multiplication is faster than addition when the groups are equal",
             ],
-            "assessment_methods": ["array building with counters", "writing matching sentences", "oral explanation of the equal-groups idea"],
+            "assessment_methods": [
+                "array building with counters",
+                "writing matching sentences",
+                "oral explanation of the equal-groups idea",
+            ],
             "sample_assessment_prompts": [
                 "Build 3 x 4 with counters as an array. Write the multiplication and the matching repeated addition.",
                 "There are 5 plates with 2 cookies on each. How many cookies in total? Show the situation and write the multiplication.",
@@ -1165,7 +1207,11 @@ MATH_DEVELOPING_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["counters (at least 50)", "array mat or grid paper", "number line 0-30"],
-            "recommended": ["egg cartons and other real equal-groups objects", "linking cubes that can snap into rows", "story-problem cards involving real groupings"],
+            "recommended": [
+                "egg cartons and other real equal-groups objects",
+                "linking cubes that can snap into rows",
+                "story-problem cards involving real groupings",
+            ],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -1354,7 +1400,11 @@ MATH_DEVELOPING_CONTENT = {
                 "States and demonstrates the zero, identity, and commutative properties",
                 "Self-corrects a forgotten fact by skip counting back to it",
             ],
-            "assessment_methods": ["oral flash-card drill", "timed written quiz (40 mixed facts)", "property statement and example"],
+            "assessment_methods": [
+                "oral flash-card drill",
+                "timed written quiz (40 mixed facts)",
+                "property statement and example",
+            ],
             "sample_assessment_prompts": [
                 "Recite the 4-times table from 4 x 0 to 4 x 10.",
                 "Solve a mixed 40-fact written quiz of all facts within 5 x 10 in five minutes.",
@@ -1438,8 +1488,16 @@ MATH_DEVELOPING_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["multiplication facts chart (0-5 by 0-10)", "flash cards for facts within 5 x 10", "skip-counting strip or hundred chart"],
-            "recommended": ["multiplication board with red counter and beads", "multiplication bead bars", "online or app drill timed for fluency once meaning is solid"],
+            "required": [
+                "multiplication facts chart (0-5 by 0-10)",
+                "flash cards for facts within 5 x 10",
+                "skip-counting strip or hundred chart",
+            ],
+            "recommended": [
+                "multiplication board with red counter and beads",
+                "multiplication bead bars",
+                "online or app drill timed for fluency once meaning is solid",
+            ],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 10, "assessment": 10},
         "accommodations": {
@@ -1628,7 +1686,11 @@ MATH_DEVELOPING_CONTENT = {
                 "Names and applies at least two derived-fact strategies",
                 "Recognizes and explains the nines pattern",
             ],
-            "assessment_methods": ["timed mixed-fact written quiz (50 facts)", "oral flash-card drill", "strategy explanation on one chosen fact"],
+            "assessment_methods": [
+                "timed mixed-fact written quiz (50 facts)",
+                "oral flash-card drill",
+                "strategy explanation on one chosen fact",
+            ],
             "sample_assessment_prompts": [
                 "Solve quickly: 7 x 8.",
                 "Find 9 x 6 using the nines pattern. Explain.",
@@ -1712,8 +1774,16 @@ MATH_DEVELOPING_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["complete multiplication facts chart (0-10 by 0-10)", "flash cards for all facts within 10 x 10", "skip-counting strips for 6 through 10"],
-            "recommended": ["multiplication board", "online drill timed for fluency", "derived-fact reference card showing strategies for each table"],
+            "required": [
+                "complete multiplication facts chart (0-10 by 0-10)",
+                "flash cards for all facts within 10 x 10",
+                "skip-counting strips for 6 through 10",
+            ],
+            "recommended": [
+                "multiplication board",
+                "online drill timed for fluency",
+                "derived-fact reference card showing strategies for each table",
+            ],
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 10, "assessment": 10},
         "accommodations": {
@@ -1900,7 +1970,11 @@ MATH_DEVELOPING_CONTENT = {
                 "Solves an unknown product by decomposing into known facts using the distributive property",
                 "Identifies which property is being used in a given worked problem",
             ],
-            "assessment_methods": ["property identification on worked problems", "decomposition of one unknown product", "array justification of one property"],
+            "assessment_methods": [
+                "property identification on worked problems",
+                "decomposition of one unknown product",
+                "array justification of one property",
+            ],
             "sample_assessment_prompts": [
                 "Solve 7 x 9 by breaking 9 into 5 + 4 and using the distributive property. Show every step.",
                 "Name the property used: (3 x 4) x 5 = 3 x (4 x 5).",
@@ -1974,7 +2048,11 @@ MATH_DEVELOPING_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["snap cubes or counters for arrays", "grid paper for drawn arrays", "property reference card"],
-            "recommended": ["multiplication facts chart for cross-reference", "two-color tiles for showing the split in distribution", "real-life problem cards involving the properties in shopping or cooking"],
+            "recommended": [
+                "multiplication facts chart for cross-reference",
+                "two-color tiles for showing the split in distribution",
+                "real-life problem cards involving the properties in shopping or cooking",
+            ],
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 15},
         "accommodations": {
@@ -2157,7 +2235,11 @@ MATH_DEVELOPING_CONTENT = {
                 "Solves a sharing word problem and a grouping word problem with materials and explains the difference",
                 "Writes the full fact family for a given product",
             ],
-            "assessment_methods": ["division-fact recall", "two word-problem solutions (sharing and grouping)", "fact-family writing"],
+            "assessment_methods": [
+                "division-fact recall",
+                "two word-problem solutions (sharing and grouping)",
+                "fact-family writing",
+            ],
             "sample_assessment_prompts": [
                 "Solve 28 / 7 and write the multiplication fact that tells you the answer.",
                 "There are 24 cookies shared evenly among 6 children. How many does each child get? What kind of division is this?",
@@ -2240,8 +2322,16 @@ MATH_DEVELOPING_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["counters and small plates or bags", "fact-family cards", "multiplication facts chart for cross-reference"],
-            "recommended": ["division flash cards for facts within 100", "division board (Montessori) where appropriate", "real-life sharing situations (snacks, supplies)"],
+            "required": [
+                "counters and small plates or bags",
+                "fact-family cards",
+                "multiplication facts chart for cross-reference",
+            ],
+            "recommended": [
+                "division flash cards for facts within 100",
+                "division board (Montessori) where appropriate",
+                "real-life sharing situations (snacks, supplies)",
+            ],
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 15},
         "accommodations": {
@@ -2427,7 +2517,11 @@ MATH_DEVELOPING_CONTENT = {
                 "States and applies the constraint that the remainder must be less than the divisor",
                 "Interprets the remainder correctly in three context types: drop, round up, report",
             ],
-            "assessment_methods": ["written division-with-remainder problems", "context-interpretation word problems", "find-the-mistake task"],
+            "assessment_methods": [
+                "written division-with-remainder problems",
+                "context-interpretation word problems",
+                "find-the-mistake task",
+            ],
             "sample_assessment_prompts": [
                 "Solve 23 / 4 and write the remainder.",
                 "Forty-five children need vans that hold 6 each. How many vans? Why?",
@@ -2506,8 +2600,16 @@ MATH_DEVELOPING_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["counters and small plates or bags", "multiplication facts chart for finding the largest fitting multiple", "context-problem cards for the three interpretation types"],
-            "recommended": ["division board with extra slot for remainder beads", "real-life division situations (groups of children, supplies into boxes)", "ribbon and scissors for length-division practice"],
+            "required": [
+                "counters and small plates or bags",
+                "multiplication facts chart for finding the largest fitting multiple",
+                "context-problem cards for the three interpretation types",
+            ],
+            "recommended": [
+                "division board with extra slot for remainder beads",
+                "real-life division situations (groups of children, supplies into boxes)",
+                "ribbon and scissors for length-division practice",
+            ],
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 15},
         "accommodations": {
@@ -2764,7 +2866,11 @@ MATH_DEVELOPING_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["paper strips for folding", "real food for sharing demonstrations (apple, sandwich)", "fraction circles or bars (set of unit fractions 1/2 through 1/12)"],
+            "required": [
+                "paper strips for folding",
+                "real food for sharing demonstrations (apple, sandwich)",
+                "fraction circles or bars (set of unit fractions 1/2 through 1/12)",
+            ],
             "recommended": ["number line printout 0-1", "measuring cups in fraction sizes", "fraction tiles or rods"],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
@@ -3004,7 +3110,9 @@ MATH_DEVELOPING_CONTENT = {
                 "difficulty": 3,
                 "prompt": "Two pizzas are the same size. Marco eats 3/8 of his and Lin eats 5/12 of hers. Who eats more?",
                 "expected_type": "text",
-                "hints": ["Compare each to 1/2: 3/8 is less than 1/2 (3 < 4); 5/12 is less than 1/2 (5 < 6); but which is closer?"],
+                "hints": [
+                    "Compare each to 1/2: 3/8 is less than 1/2 (3 < 4); 5/12 is less than 1/2 (5 < 6); but which is closer?"
+                ],
                 "explanation": "Both are less than 1/2. 3/8 needs 1 more eighth to reach 1/2; 5/12 needs 1 more twelfth to reach 1/2. Twelfths are smaller pieces, so 5/12 is closer to 1/2. Lin eats more.",
             },
         ],
@@ -3029,8 +3137,16 @@ MATH_DEVELOPING_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["fraction bars or circles for unit fractions and non-unit fractions through twelfths", "number line printout 0-1", "comparison cards for sorting"],
-            "recommended": ["fraction tiles in a tray for free comparison", "real food for portion comparisons", "benchmark reference card showing 0, 1/2, 1"],
+            "required": [
+                "fraction bars or circles for unit fractions and non-unit fractions through twelfths",
+                "number line printout 0-1",
+                "comparison cards for sorting",
+            ],
+            "recommended": [
+                "fraction tiles in a tray for free comparison",
+                "real food for portion comparisons",
+                "benchmark reference card showing 0, 1/2, 1",
+            ],
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 15},
         "accommodations": {
@@ -3255,7 +3371,9 @@ MATH_DEVELOPING_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Make 47 cents using the fewest coins. List the coins.",
                 "expected_type": "text",
-                "hints": ["Start with the largest that fits: a quarter is 25, leaving 22. Then a dime is 10, leaving 12. Another dime leaves 2. Then 2 pennies."],
+                "hints": [
+                    "Start with the largest that fits: a quarter is 25, leaving 22. Then a dime is 10, leaving 12. Another dime leaves 2. Then 2 pennies."
+                ],
                 "explanation": "Fewest coins for 47 cents: 1 quarter + 2 dimes + 2 pennies = 5 coins total.",
             },
             {
@@ -3289,8 +3407,16 @@ MATH_DEVELOPING_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["real coins (pennies, nickels, dimes, quarters, half-dollars)", "real one-dollar, five-dollar, and ten-dollar bills", "small play store with priced items"],
-            "recommended": ["a real receipt collection for parents to share", "coin sorting tray", "cash register with drawer if available"],
+            "required": [
+                "real coins (pennies, nickels, dimes, quarters, half-dollars)",
+                "real one-dollar, five-dollar, and ten-dollar bills",
+                "small play store with priced items",
+            ],
+            "recommended": [
+                "a real receipt collection for parents to share",
+                "coin sorting tray",
+                "cash register with drawer if available",
+            ],
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 15},
         "accommodations": {
@@ -3477,7 +3603,11 @@ MATH_DEVELOPING_CONTENT = {
                 "Writes any shown time in standard hour-and-minute notation",
                 "Computes elapsed time within an hour and across an hour boundary using a number line strategy",
             ],
-            "assessment_methods": ["clock reading task", "time writing from clock pictures", "elapsed-time problems with reasoning shown"],
+            "assessment_methods": [
+                "clock reading task",
+                "time writing from clock pictures",
+                "elapsed-time problems with reasoning shown",
+            ],
             "sample_assessment_prompts": [
                 "Read the time shown on this clock to the minute.",
                 "Maya started reading at 3:25 and stopped at 3:48. How many minutes did she read?",
@@ -3549,8 +3679,16 @@ MATH_DEVELOPING_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["manipulable analog clock with movable hands", "minute number line printout", "real wall clock visible during work"],
-            "recommended": ["sand timers for elapsed-time activities", "real schedule (TV, bus, school) for practice", "digital clock alongside for comparison"],
+            "required": [
+                "manipulable analog clock with movable hands",
+                "minute number line printout",
+                "real wall clock visible during work",
+            ],
+            "recommended": [
+                "sand timers for elapsed-time activities",
+                "real schedule (TV, bus, school) for practice",
+                "digital clock alongside for comparison",
+            ],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 15},
         "accommodations": {
@@ -3736,7 +3874,11 @@ MATH_DEVELOPING_CONTENT = {
                 "Uses the rectangle shortcut correctly: P = 2L + 2W or P = 2(L + W)",
                 "Solves a real-world perimeter problem with the right unit",
             ],
-            "assessment_methods": ["measurement and computation tasks", "rectangle shortcut application", "real-world word problem"],
+            "assessment_methods": [
+                "measurement and computation tasks",
+                "rectangle shortcut application",
+                "real-world word problem",
+            ],
             "sample_assessment_prompts": [
                 "Find the perimeter of a triangle with sides 7 cm, 5 cm, and 9 cm.",
                 "Find the perimeter of a rectangle with length 8 inches and width 5 inches using the shortcut.",
@@ -3811,8 +3953,16 @@ MATH_DEVELOPING_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["ruler in centimeters and inches", "string for wrapping real shapes", "polygon worksheets for measuring"],
-            "recommended": ["measuring tape for larger real shapes (rug, room)", "grid paper for drawing polygons", "tape measure for outdoor perimeter (garden, fence line)"],
+            "required": [
+                "ruler in centimeters and inches",
+                "string for wrapping real shapes",
+                "polygon worksheets for measuring",
+            ],
+            "recommended": [
+                "measuring tape for larger real shapes (rug, room)",
+                "grid paper for drawing polygons",
+                "tape measure for outdoor perimeter (garden, fence line)",
+            ],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 15},
         "accommodations": {
@@ -3997,7 +4147,11 @@ MATH_DEVELOPING_CONTENT = {
                 "Reports the area with the correct square unit",
                 "Distinguishes area from perimeter on a previously unseen problem",
             ],
-            "assessment_methods": ["tile-counting tasks", "rectangle area by multiplication", "area vs. perimeter discrimination"],
+            "assessment_methods": [
+                "tile-counting tasks",
+                "rectangle area by multiplication",
+                "area vs. perimeter discrimination",
+            ],
             "sample_assessment_prompts": [
                 "Find the area of a rectangle that is 5 units long and 4 units wide.",
                 "A room is 8 feet by 6 feet. What is the area of the floor? Include the units.",
@@ -4071,7 +4225,11 @@ MATH_DEVELOPING_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["set of unit-square tiles", "grid paper", "rulers in inches and centimeters"],
-            "recommended": ["large paper rectangles for floor-scale tile covering", "real rectangular spaces to measure (rug, tabletop, garden bed)", "computational area cards for abstract practice"],
+            "recommended": [
+                "large paper rectangles for floor-scale tile covering",
+                "real rectangular spaces to measure (rug, tabletop, garden bed)",
+                "computational area cards for abstract practice",
+            ],
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 15},
         "accommodations": {
@@ -4329,8 +4487,16 @@ MATH_DEVELOPING_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["scissors and paper for cutting and folding", "mirror for testing symmetry by reflection", "shape and letter worksheets"],
-            "recommended": ["pattern blocks for testing polygon symmetry", "real symmetric and asymmetric objects from around the home", "symmetry-themed picture books"],
+            "required": [
+                "scissors and paper for cutting and folding",
+                "mirror for testing symmetry by reflection",
+                "shape and letter worksheets",
+            ],
+            "recommended": [
+                "pattern blocks for testing polygon symmetry",
+                "real symmetric and asymmetric objects from around the home",
+                "symmetry-themed picture books",
+            ],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -4517,7 +4683,11 @@ MATH_DEVELOPING_CONTENT = {
                 "Tests a real corner for being a right angle using a paper tester",
                 "Names the rays and vertex of a drawn angle correctly",
             ],
-            "assessment_methods": ["angle classification on drawn angles", "right-angle testing on real corners", "polygon angle inventory"],
+            "assessment_methods": [
+                "angle classification on drawn angles",
+                "right-angle testing on real corners",
+                "polygon angle inventory",
+            ],
             "sample_assessment_prompts": [
                 "Classify each of these angles as right, acute, obtuse, or straight.",
                 "Find three right angles in the room and verify each with a paper-corner tester.",
@@ -4588,8 +4758,16 @@ MATH_DEVELOPING_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["paper for right-angle tester", "polygon worksheets for angle inventory", "pencil and ruler for drawing angles"],
-            "recommended": ["protractor (introduced lightly here for later use)", "geoboards or pattern blocks", "real angle-finder tools from the workshop or kitchen"],
+            "required": [
+                "paper for right-angle tester",
+                "polygon worksheets for angle inventory",
+                "pencil and ruler for drawing angles",
+            ],
+            "recommended": [
+                "protractor (introduced lightly here for later use)",
+                "geoboards or pattern blocks",
+                "real angle-finder tools from the workshop or kitchen",
+            ],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
         "accommodations": {
@@ -4849,7 +5027,11 @@ MATH_DEVELOPING_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["grid paper for bar graph construction", "ruler", "tally-chart template"],
-            "recommended": ["real bar graphs from magazines or news for reading practice", "survey forms for small classroom or family surveys", "stickers or small drawings for picture graphs"],
+            "recommended": [
+                "real bar graphs from magazines or news for reading practice",
+                "survey forms for small classroom or family surveys",
+                "stickers or small drawings for picture graphs",
+            ],
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 15},
         "accommodations": {
@@ -5111,7 +5293,11 @@ MATH_DEVELOPING_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["paper and pencil for showing both steps", "story-problem cards across operations"],
-            "recommended": ["a hidden-question prompt card for the desk", "real-life two-step problems from family or school", "counters or coins for modeling the steps"],
+            "recommended": [
+                "a hidden-question prompt card for the desk",
+                "real-life two-step problems from family or school",
+                "counters or coins for modeling the steps",
+            ],
         },
         "time_estimates": {"first_exposure": 30, "practice_session": 20, "assessment": 20},
         "accommodations": {
@@ -5374,7 +5560,11 @@ MATH_DEVELOPING_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["number line for rounding", "rounding rule card on the desk", "paper and pencil"],
-            "recommended": ["real receipts and bills for shopping estimation", "calculator for self-check after estimation", "real maps with distances for travel estimation"],
+            "recommended": [
+                "real receipts and bills for shopping estimation",
+                "calculator for self-check after estimation",
+                "real maps with distances for travel estimation",
+            ],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 15},
         "accommodations": {
@@ -5635,8 +5825,16 @@ MATH_DEVELOPING_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["pattern blocks or snap cubes for geometric patterns", "input-output table template", "pattern card set across rule types"],
-            "recommended": ["calendar for finding date-based patterns", "real growing patterns from cooking or building (recipe scaling)", "function machine printout"],
+            "required": [
+                "pattern blocks or snap cubes for geometric patterns",
+                "input-output table template",
+                "pattern card set across rule types",
+            ],
+            "recommended": [
+                "calendar for finding date-based patterns",
+                "real growing patterns from cooking or building (recipe scaling)",
+                "function machine printout",
+            ],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 15},
         "accommodations": {
@@ -5898,7 +6096,11 @@ MATH_DEVELOPING_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["mental-math problem cards", "stopwatch or timer for drill", "paper for verification only"],
-            "recommended": ["mental-math strategy reference card", "real-life scenarios for application (grocery list, bill split)", "deck of cards for quick number generation"],
+            "recommended": [
+                "mental-math strategy reference card",
+                "real-life scenarios for application (grocery list, bill split)",
+                "deck of cards for quick number generation",
+            ],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 10, "assessment": 15},
         "accommodations": {
@@ -6084,7 +6286,12 @@ MATH_DEVELOPING_CONTENT = {
                 "Finds a missing middle term in an arithmetic sequence",
                 "Distinguishes arithmetic and multiplicative sequences",
             ],
-            "assessment_methods": ["common-difference identification", "sequence extension", "missing-term completion", "sequence classification"],
+            "assessment_methods": [
+                "common-difference identification",
+                "sequence extension",
+                "missing-term completion",
+                "sequence classification",
+            ],
             "sample_assessment_prompts": [
                 "Find the common difference: 6, 13, 20, 27, 34.",
                 "Extend the sequence by three terms: 5, 11, 17, 23, ...",
@@ -6160,7 +6367,11 @@ MATH_DEVELOPING_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["sequence cards across types", "paper for extension", "number line for visual support"],
-            "recommended": ["calendar for daily-pattern sequences", "real schedules with fixed intervals", "blocks or counters for visualizing growing sequences"],
+            "recommended": [
+                "calendar for daily-pattern sequences",
+                "real schedules with fixed intervals",
+                "blocks or counters for visualizing growing sequences",
+            ],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 15},
         "accommodations": {
@@ -6345,7 +6556,11 @@ MATH_DEVELOPING_CONTENT = {
                 "Reads the equal sign as a balance, not as a 'compute' instruction",
                 "Verifies a solution by substituting back",
             ],
-            "assessment_methods": ["written equation-solving", "translate-and-solve word problems", "substitution check"],
+            "assessment_methods": [
+                "written equation-solving",
+                "translate-and-solve word problems",
+                "substitution check",
+            ],
             "sample_assessment_prompts": [
                 "Solve: n + 7 = 15. Check your answer.",
                 "Solve: 4n = 28.",
@@ -6421,7 +6636,11 @@ MATH_DEVELOPING_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["balance scale or simulated balance (paper sketch)", "equation card set", "paper and pencil"],
-            "recommended": ["counters or coins to represent values", "real-life word problem cards", "calculator for verification"],
+            "recommended": [
+                "counters or coins to represent values",
+                "real-life word problem cards",
+                "calculator for verification",
+            ],
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 15},
         "accommodations": {
@@ -6609,7 +6828,11 @@ MATH_DEVELOPING_CONTENT = {
                 "Estimates capacity or mass within a reasonable range before measuring",
                 "Converts correctly between liters and milliliters and between kilograms and grams",
             ],
-            "assessment_methods": ["capacity measurement task", "mass measurement task", "estimation and conversion problems"],
+            "assessment_methods": [
+                "capacity measurement task",
+                "mass measurement task",
+                "estimation and conversion problems",
+            ],
             "sample_assessment_prompts": [
                 "How many milliliters are in 2.5 liters?",
                 "Estimate the mass of a typical apple, then weigh it. Is your estimate close?",
@@ -6684,8 +6907,16 @@ MATH_DEVELOPING_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["graduated cylinder or measuring cup in mL", "kitchen scale or balance in grams", "water and a basin or sink"],
-            "recommended": ["set of liter bottles and milliliter containers", "set of standard masses (gram weights)", "real kitchen for cooking-related practice"],
+            "required": [
+                "graduated cylinder or measuring cup in mL",
+                "kitchen scale or balance in grams",
+                "water and a basin or sink",
+            ],
+            "recommended": [
+                "set of liter bottles and milliliter containers",
+                "set of standard masses (gram weights)",
+                "real kitchen for cooking-related practice",
+            ],
         },
         "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 15},
         "accommodations": {
@@ -6872,7 +7103,11 @@ MATH_DEVELOPING_CONTENT = {
                 "Applies the chosen strategy correctly and reaches the solution",
                 "Reflects on the strategy choice and considers whether another would also work",
             ],
-            "assessment_methods": ["strategy-choice and application on mixed problems", "drawing or table construction", "work-backward reasoning"],
+            "assessment_methods": [
+                "strategy-choice and application on mixed problems",
+                "drawing or table construction",
+                "work-backward reasoning",
+            ],
             "sample_assessment_prompts": [
                 "A frog climbs up 3 feet, then slides back 1 foot, every minute. How long to climb out of a 10-foot well? Use a drawing.",
                 "I doubled a number, then added 5, and got 17. What was the original?",
@@ -6894,7 +7129,9 @@ MATH_DEVELOPING_CONTENT = {
                 "difficulty": 2,
                 "prompt": "Maya has nickels and dimes totaling 35 cents. She has 5 coins in all. How many of each? (Use a table.)",
                 "expected_type": "text",
-                "hints": ["Try 0 nickels and 5 dimes (50 cents, too much), 1 nickel and 4 dimes (45 cents, too much), 3 nickels and 2 dimes (35 cents)"],
+                "hints": [
+                    "Try 0 nickels and 5 dimes (50 cents, too much), 1 nickel and 4 dimes (45 cents, too much), 3 nickels and 2 dimes (35 cents)"
+                ],
                 "explanation": "Table: 5 dimes 0 nickels = 50; 4 dimes 1 nickel = 45; 3 dimes 2 nickels = 40; 2 dimes 3 nickels = 35. So 2 dimes and 3 nickels = 35 cents, 5 coins.",
             },
             {
@@ -6947,7 +7184,11 @@ MATH_DEVELOPING_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["paper for drawing", "blank table templates", "pencil"],
-            "recommended": ["problem-solving strategy card with the three strategies named", "real puzzles and brainteasers for application", "graph paper for visual problems"],
+            "recommended": [
+                "problem-solving strategy card with the three strategies named",
+                "real puzzles and brainteasers for application",
+                "graph paper for visual problems",
+            ],
         },
         "time_estimates": {"first_exposure": 30, "practice_session": 20, "assessment": 20},
         "accommodations": {
@@ -7208,8 +7449,16 @@ MATH_DEVELOPING_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["fact-family cards or triangles", "multiplication and division facts charts", "counters for array models"],
-            "recommended": ["fact-family flash cards across all facts within 10 x 10", "missing-factor problem cards", "real-world story problems"],
+            "required": [
+                "fact-family cards or triangles",
+                "multiplication and division facts charts",
+                "counters for array models",
+            ],
+            "recommended": [
+                "fact-family flash cards across all facts within 10 x 10",
+                "missing-factor problem cards",
+                "real-world story problems",
+            ],
         },
         "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 15},
         "accommodations": {
@@ -7468,7 +7717,11 @@ MATH_DEVELOPING_CONTENT = {
         ],
         "resource_guidance": {
             "required": ["mixed-operation drill sets", "timer", "paper and pencil"],
-            "recommended": ["error-spotting practice worksheets", "real-world word-problem cards", "calculator for self-check after manual work"],
+            "recommended": [
+                "error-spotting practice worksheets",
+                "real-world word-problem cards",
+                "calculator for self-check after manual work",
+            ],
         },
         "time_estimates": {"first_exposure": 15, "practice_session": 10, "assessment": 15},
         "accommodations": {
@@ -7653,7 +7906,12 @@ MATH_DEVELOPING_CONTENT = {
                 "Applies developing-band skills to a real-world scenario successfully",
                 "Demonstrates readiness for the intermediate band",
             ],
-            "assessment_methods": ["mixed computation across all four operations", "word problems requiring various strategies", "oral explanation of chosen problems", "hands-on tasks (measurement, geometry, fractions)"],
+            "assessment_methods": [
+                "mixed computation across all four operations",
+                "word problems requiring various strategies",
+                "oral explanation of chosen problems",
+                "hands-on tasks (measurement, geometry, fractions)",
+            ],
             "sample_assessment_prompts": [
                 "Solve a five-problem mixed computation set drawn from all four operations.",
                 "Solve a two-step word problem and explain your strategy.",
@@ -7749,8 +8007,16 @@ MATH_DEVELOPING_CONTENT = {
             },
         ],
         "resource_guidance": {
-            "required": ["mixed problem set spanning all developing-band topics", "paper and pencil", "manipulatives available for any topic that benefits"],
-            "recommended": ["portfolio of the child's work from across the band", "calculator for self-check after manual work", "a special celebratory treat or activity to honor the completion"],
+            "required": [
+                "mixed problem set spanning all developing-band topics",
+                "paper and pencil",
+                "manipulatives available for any topic that benefits",
+            ],
+            "recommended": [
+                "portfolio of the child's work from across the band",
+                "calculator for self-check after manual work",
+                "a special celebratory treat or activity to honor the completion",
+            ],
         },
         "time_estimates": {"first_exposure": 60, "practice_session": 30, "assessment": 60},
         "accommodations": {
