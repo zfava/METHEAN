@@ -4466,4 +4466,262 @@ MATH_DEVELOPING_CONTENT = {
             "history": "Reading about the use of symmetry in architecture and art across cultures and centuries",
         },
     },
+    "md-18": {
+        "enriched": True,
+        "learning_objectives": [
+            "Define an angle as the figure formed by two rays sharing a common endpoint (vertex)",
+            "Identify and name a right angle, an acute angle, and an obtuse angle",
+            "Recognize a straight angle and a complete turn",
+            "Find right angles in the real world using a corner of paper as a tester",
+        ],
+        "teaching_guidance": {
+            "introduction": "An angle is the opening between two rays that share an endpoint. The child does not need to measure angles in degrees yet; today's work is to recognize three sizes of angle by sight and by comparison: right angles (the corner of a square), acute angles (less than a right angle), and obtuse angles (more than a right angle but less than a straight line). Provide a real tester: the corner of a piece of paper or a pattern block held against an angle reveals whether it is right, smaller, or larger.",
+            "scaffolding_sequence": [
+                "Look at real corners around the room (book, picture frame, door): these are right angles, also called square corners",
+                "Use the corner of a piece of paper as a right-angle tester",
+                "Practice testing: any angle that exactly matches the paper corner is right; smaller is acute; larger (but less than a straight line) is obtuse",
+                "Name the parts of an angle: the two rays and the shared endpoint (the vertex)",
+                "Practice naming angles in polygons: a square has four right angles; a triangle may have one right and two acute, or three acute, or one obtuse and two acute",
+                "Introduce the straight angle: a flat line, formed by two rays pointing in opposite directions",
+                "Introduce the complete turn: a full revolution back to the starting direction (also called 360 degrees, named here but not measured)",
+                "Practice finding right, acute, and obtuse angles in real objects and in drawn polygons",
+            ],
+            "socratic_questions": [
+                "How can you tell if an angle is right without a protractor?",
+                "Look at this triangle: which angles are acute and which are obtuse?",
+                "What is the difference between a straight angle and a right angle?",
+                "Can a square have an acute angle? Why or why not?",
+            ],
+            "practice_activities": [
+                "Right-angle hunt: find ten right angles in the room and check each with a paper-corner tester",
+                "Angle classification: shown ten drawn angles, classify each as right, acute, obtuse, or straight",
+                "Polygon angle survey: identify and count the right, acute, and obtuse angles in several polygons",
+                "Build-an-angle game: open a pair of scissors or a folder to make right, acute, and obtuse angles",
+            ],
+            "real_world_connections": [
+                "Right angles in buildings, books, picture frames, doorways",
+                "Acute angles in the tips of pencils, scissors barely opened, slices of pizza",
+                "Obtuse angles in open scissors, the spread of fingers, the angle of a ramp",
+                "Straight angles in flat surfaces or fully opened folders",
+            ],
+            "common_misconceptions": [
+                "Believing the longer rays make a bigger angle (angle size is about the opening, not the ray length)",
+                "Confusing right angles with straight angles (a right angle is a quarter turn; a straight angle is a half turn)",
+                "Thinking all corners are right (a star or zigzag has many acute and obtuse angles)",
+                "Naming the vertex incorrectly (treating one of the rays' far ends as the vertex)",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Classifies any drawn angle as right, acute, obtuse, or straight",
+                "Tests a real corner for being a right angle using a paper tester",
+                "Names the rays and vertex of a drawn angle correctly",
+            ],
+            "assessment_methods": ["angle classification on drawn angles", "right-angle testing on real corners", "polygon angle inventory"],
+            "sample_assessment_prompts": [
+                "Classify each of these angles as right, acute, obtuse, or straight.",
+                "Find three right angles in the room and verify each with a paper-corner tester.",
+                "How many right angles, acute angles, and obtuse angles are in this triangle?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "An angle that looks like the corner of a square is called what?",
+                "expected_type": "text",
+                "hints": ["The word starts with 'r'"],
+                "explanation": "A right angle. It looks like the corner of a square.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "An angle smaller than a right angle is called what?",
+                "expected_type": "text",
+                "hints": ["The word starts with 'a'"],
+                "explanation": "Acute (sharper, smaller than a right angle).",
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "How many right angles does a rectangle have?",
+                "expected_type": "number",
+                "correct_answer": "4",
+                "hints": ["All corners are square"],
+                "explanation": "A rectangle has 4 right angles, one at each corner.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "Is a 'straight angle' the same as a 'right angle'?",
+                "expected_type": "text",
+                "hints": ["A straight angle is a flat line; a right angle is the corner of a square"],
+                "explanation": "No. A right angle is a quarter turn (like a square corner). A straight angle is a half turn (a flat line). Two right angles make one straight angle.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": "A triangle has angles 35 degrees, 100 degrees, and 45 degrees (no need to measure; classify each). What kind of angles are these?",
+                "expected_type": "text",
+                "hints": ["Compare each to a right angle (90 degrees)"],
+                "explanation": "35 degrees is acute (less than a right angle); 100 degrees is obtuse (more than a right angle but less than a straight angle); 45 degrees is acute.",
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Classify each of these angles as right, acute, obtuse, or straight: (a) a square corner; (b) a slightly opened pair of scissors; (c) the spread of an open book lying flat; (d) the angle made by a fully open file folder.",
+                "type": "open_response",
+                "rubric": "Mastery: (a) right, (b) acute, (c) obtuse (or straight if fully flat), (d) straight, with brief reasoning. Proficient: correct identification only. Developing: one or more incorrect.",
+                "target_concept": "angle_classification_in_real_objects",
+            },
+            {
+                "prompt": "Find three right angles in the room. How do you know they are right?",
+                "type": "open_response",
+                "rubric": "Mastery: three real right angles found and verified with a paper-corner tester. Proficient: three right angles found, no verification described. Developing: angles incorrectly identified.",
+                "target_concept": "right_angle_recognition_in_real_world",
+            },
+            {
+                "prompt": "An equilateral triangle has three equal angles. Are they right, acute, or obtuse?",
+                "type": "open_response",
+                "rubric": "Mastery: acute (each is 60 degrees, less than a right angle). Proficient: acute. Developing: incorrect.",
+                "target_concept": "polygon_angle_classification",
+            },
+        ],
+        "resource_guidance": {
+            "required": ["paper for right-angle tester", "polygon worksheets for angle inventory", "pencil and ruler for drawing angles"],
+            "recommended": ["protractor (introduced lightly here for later use)", "geoboards or pattern blocks", "real angle-finder tools from the workshop or kitchen"],
+        },
+        "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 10},
+        "accommodations": {
+            "dyslexia": "Color-code the three angle types (right = blue, acute = red, obtuse = green). Read each name aloud with the visual.",
+            "adhd": "Use angle hunts and physical opening of scissors or folders to keep the work active.",
+            "gifted": "Introduce degree measurement and the protractor; investigate the sum of angles in a triangle (180 degrees).",
+            "visual_learner": "Show all four angle types side by side on a chart; use a real paper-corner tester on every angle.",
+            "kinesthetic_learner": "Build angles with two pipe cleaners pinned together at one end and opened to various widths.",
+            "auditory_learner": "Read the angle names aloud with their meanings: 'right is square, acute is sharp, obtuse is wide.'",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Today we name the basic angles. A right angle is the corner of a square. An acute angle is smaller. An obtuse angle is larger but still less than a straight line. A straight angle is a flat line.",
+                "gradual_release": {
+                    "i_do": "Hold up the corner of a piece of paper and name it the right-angle tester. Show how to compare any angle against it: matching is right, smaller is acute, larger is obtuse. Demonstrate on five drawn angles.",
+                    "we_do": "Classify ten drawn angles together, child holding the tester while the parent names the classification, then swap. Inventory the angles of three polygons.",
+                    "you_do": "Child classifies ten angles independently and inventories the angles of five polygons.",
+                },
+                "guided_practice": [
+                    "Classify ten drawn angles as right, acute, obtuse, or straight",
+                    "Inventory the angles of five polygons (square, rectangle, triangle, pentagon, hexagon)",
+                    "Find ten right angles in the room with a paper tester",
+                ],
+                "independent_practice": [
+                    "Worksheet: classify fifteen drawn angles",
+                    "Worksheet: inventory the angles of ten given polygons",
+                ],
+                "mastery_check": [
+                    "Classifies any drawn angle as right, acute, obtuse, or straight on first sight",
+                    "Verifies a right angle with a paper tester correctly",
+                    "Inventories the angles of any polygon correctly",
+                ],
+                "spiral_review": [
+                    "Daily angle observation: classify one angle in the room at the start of each session",
+                    "Continue geometry vocabulary practice",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The right angle is the cornerstone of every building and the steady measure of every careful work. The Greeks named it ortho, the straight, and built their temples upon it; the Romans surveyed every field by it; the medieval mason set every wall to it. To know the right angle, the acute, and the obtuse is to take up the language of every builder.",
+                "memory_work": {
+                    "chants": [
+                        "Recite the rule: a right angle is the corner of a square",
+                        "Recite the names: acute is sharper, obtuse is wider, straight is flat",
+                        "Recite the relations: two right angles make a straight angle; four right angles make a complete turn",
+                    ],
+                    "recitations": [
+                        "Daily recitation of the four angle types with one example of each",
+                    ],
+                },
+                "copywork": [
+                    "Copy a small chart of the four angle types with neat diagrams of each into the math copybook",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the four angle names with examples, then take up today's work.",
+                "history_integration": "Tell that the Egyptian rope-stretchers used knotted rope to lay out right angles for the great temples and pyramids, and that the right angle has been the steady measure of careful work for over four thousand years.",
+                "read_aloud_suggestions": [
+                    "A short passage about the Egyptian rope-stretchers or the pyramid builders",
+                    "A children's biography of an architect or a great builder",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 12,
+                "living_book_suggestions": [
+                    "A real, beautifully illustrated book about architecture, building, or natural patterns",
+                    "A children's biography of a builder or carpenter where the right angle is the central tool",
+                ],
+                "short_lesson_flow": "Walk around the room and notice right angles in real things: a book, a doorframe, a picture. Test each with the corner of a paper. Find an acute angle (the tip of a pencil) and an obtuse angle (open scissors). Close while interest is high.",
+                "narration_prompt": "Tell me what a right angle is and show me two more in this room.",
+                "real_world_objects": [
+                    "A real piece of paper for the right-angle tester",
+                    "Real scissors, books, picture frames, and doors for finding angles",
+                    "Pencil and ruler for drawing",
+                ],
+                "nature_connection": "Look for right, acute, and obtuse angles in real nature: the joints of branches, the angles of leaves, the bend of a stem. Record observations in the nature notebook.",
+                "habit_focus": "The habit of careful comparison: a right angle is not eyeballed but tested, and the child who tests every doubtful angle is on the way to careful, accurate work.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Constructive triangles in the geometry cabinet, where angles are central",
+                    "Angle-name cards with diagrams (right, acute, obtuse, straight)",
+                    "Paper for cutting right-angle testers",
+                    "Drawing tools for sketching angles",
+                ],
+                "presentation": {
+                    "three_period_lesson": "Naming: show a right angle in the constructive triangles material and name 'this is a right angle.' Recognition: 'show me a right angle; show me an acute angle.' Recall: 'what is this angle called?' Move through all four angle types.",
+                    "steps": [
+                        "Show each of the four angle types in turn with the materials",
+                        "Cut a right-angle tester from a piece of paper",
+                        "Use the tester to classify drawn angles and angles in the constructive triangles",
+                        "Inventory the angles of each constructive triangle",
+                        "Move to drawing and classifying angles freely",
+                    ],
+                },
+                "control_of_error": "The constructive triangles and the paper tester are the controls: a right angle matches the tester exactly, an acute angle leaves space, an obtuse angle overflows.",
+                "abstraction_pathway": "From physical comparison with the tester (angle felt as size) to verbal classification (angle named without tester) to written angle work and eventually to degree measurement.",
+                "extensions": [
+                    "Investigate which polygons have which angles",
+                    "Build a chart of polygons by angle type (rectangle has four right, equilateral triangle has three acute, etc.)",
+                    "Introduce degree measurement with a protractor when ready",
+                ],
+                "observation_focus": "Watch for the spontaneous use of the paper tester on new angles, and the natural curiosity about how the angles of a polygon relate to each other.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave a pair of scissors on the table and propose: 'open them to a right angle, then to an acute, then to an obtuse'",
+                    "Cut a paper right-angle tester together and go on an angle hunt around the home",
+                    "Notice angles in real architecture, art, or nature in casual walks and conversation",
+                ],
+                "real_world_contexts": [
+                    "Carpentry and woodworking (right angles are constant)",
+                    "Drawing and art (angles of view, perspective)",
+                    "Cooking with cutting at angles",
+                    "Sports (angles of trajectory, banking)",
+                ],
+                "conversation_starters": [
+                    "Is this corner a right angle? How do you know?",
+                    "Look at how steep that hill is. Is that an acute or obtuse angle from the ground?",
+                    "What angle do scissors make when they are barely open?",
+                ],
+                "resource_bank": [
+                    "Real paper and scissors for testing angles",
+                    "Real angle-finding tools from a workshop or kitchen",
+                    "Books about architecture, geometry, or natural patterns",
+                    "Outdoor and indoor spaces for free observation",
+                ],
+                "parent_role": "Use the angle vocabulary aloud in real life often. Welcome the child's noticing of angles in their world. Test with a paper tester when there is doubt. Never quiz; let the real angles teach.",
+                "observation_documentation": "Note across weeks where angle vocabulary came up in the child's speech, whether they recognized right angles in real corners, and whether they used acute and obtuse correctly.",
+            },
+        },
+        "connections": {
+            "reading": "Reading geometric and architectural words in real text and images",
+            "science": "Observing angles of branches, leaves, and animal joints in real nature work",
+            "history": "Reading about the right angle in ancient architecture (Egyptian, Greek, Roman) and the tools used to measure it",
+        },
+    },
 }
