@@ -6667,4 +6667,386 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Children often write their own fables and fairy tales naturally; the conventions of the forms give the child a structure to build their own stories on",
         },
     },
+    "rd-17": {
+        "enriched": True,
+        "learning_objectives": [
+            "Read biographies and autobiographies of notable people at the child's reading level",
+            "Identify key life events, achievements, and character qualities that made each person significant",
+            "Distinguish biography (written about a person by someone else) from autobiography (written by the person)",
+            "Recognize that biographies vary in honesty: hagiography idealizes; honest biography includes both strengths and flaws",
+            "Make connections between a biographical subject's life context and their accomplishments",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "Building on chapter book reading (rd-02), the child now reads biography and autobiography: the lives "
+                "of real people. The form teaches the child that real people did real things, with effort, character, "
+                "and often hardship. Strong biography names KEY EVENTS (the moments that shaped the person), "
+                "ACHIEVEMENTS (what they accomplished and why it mattered), and CHARACTER QUALITIES (the traits that "
+                "made the accomplishment possible). Distinguish BIOGRAPHY (written about a person) from AUTOBIOGRAPHY "
+                "(written by the person themselves). Honest content note: many children's biographies are HAGIOGRAPHIC "
+                "(presenting the subject as a saint without faults); good biography includes both strengths and "
+                "flaws, both achievements and mistakes. Choose biographies that honor the child's intelligence."
+            ),
+            "scaffolding_sequence": [
+                "Begin with the David Adler / Kathleen Krull / Russell Freedman tradition of well-written biographies for children",
+                "Start with figures the child already knows by name: George Washington, Harriet Tubman, Helen Keller, Jackie Robinson, Marie Curie, Anne Frank, Leonardo da Vinci",
+                "Practice the three-part frame: key events, achievements, character qualities. Read a biography; identify each.",
+                "Distinguish biography from autobiography: read examples of each; note the first-person voice in autobiography",
+                "Move beyond the single canonical figure: read biographies of people in the same field across cultures (scientists from many countries; civil rights leaders from many movements)",
+                "Introduce the idea of honest biography: a person's flaws and mistakes are part of the real story; idealizing them teaches less than the honest account",
+                "Read short autobiography: passages from Helen Keller, Anne Frank, Roald Dahl's Boy, Ji-li Jiang's Red Scarf Girl",
+                "Make life-context connections: how did the person's time and place shape what they did? what might they have done if born in a different era?",
+            ],
+            "socratic_questions": [
+                "What were the key events of this person's life?",
+                "What did they achieve? Why did it matter?",
+                "What character qualities made the achievement possible?",
+                "What was difficult or imperfect about this person? How does honest reading of their flaws help us understand them?",
+                "How did their time and place shape what they could and could not do?",
+            ],
+            "practice_activities": [
+                "Three-part frame practice: read a biography; in three sentences, name key events, achievements, character qualities",
+                "Biography-versus-autobiography sort: read short passages, label each form, name the clue (third person versus first person)",
+                "Cross-cultural figure pairing: read biographies of two scientists, two leaders, or two artists from different cultures; compare their lives and contexts",
+                "Honest biography practice: read a biography that includes the subject's flaws; discuss how the flaws make the achievements clearer",
+                "Subject choice and reading: child picks a figure they want to know about; reads a biography about them; presents what they learned",
+            ],
+            "real_world_connections": [
+                "Recognizing biography as the form most adult nonfiction reading takes (history, science writing, memoir)",
+                "Recognizing biographical accounts in news (profiles of public figures, athletes, artists)",
+                "Family biography: hearing the life stories of grandparents and family members",
+                "Recognizing autobiography in interview formats: podcasts and articles where people tell their own stories",
+                "Understanding that every person's life is a kind of biography; their own life is the autobiography they are still writing",
+            ],
+            "common_misconceptions": [
+                "Believing biography is the same as fiction. Biographies are nonfiction; events and details are meant to be true, even when narrative is used.",
+                "Believing biography subjects were always great. People who did great things were often ordinary in many ways and flawed in others; honest biography shows this.",
+                "Believing biography means hero-worship. Biography means accurate portrayal; a strong biography lets the reader judge the subject rather than telling them how to feel.",
+                "Believing only famous people get biographies. Many strong biographies are of ordinary people whose lives illuminate a time or place.",
+                "Believing autobiography is more honest than biography. Autobiography can hide as much as it reveals; both forms require critical reading.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Identifies key events, achievements, and character qualities of a biographical subject",
+                "Distinguishes biography from autobiography",
+                "Recognizes when a biography is hagiographic versus when it is honest",
+                "Makes life-context connections (how did time and place shape the person)",
+                "Has read a substantial body of biographies across fields and cultures",
+            ],
+            "proficiency_indicators": [
+                "Identifies key events and achievements with prompting",
+                "Distinguishes biography from autobiography with prompting",
+            ],
+            "developing_indicators": [
+                "Cannot identify what made a subject significant",
+                "Treats biography as just another story",
+            ],
+            "assessment_methods": [
+                "three-part frame writing on assigned biographies",
+                "biography-versus-autobiography sort",
+                "cross-cultural biography comparison",
+                "discussion of read biographies for depth of understanding",
+            ],
+            "sample_assessment_prompts": [
+                "Read this biography. Name three key events, the subject's main achievement, and two character qualities.",
+                "Read these passages. Which is biography and which is autobiography? How can you tell?",
+                "Read these two biographies of scientists. How were their lives shaped by their times?",
+                "Tell me about a biography you read recently. Why was the subject significant?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What is the difference between a biography and an autobiography?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "There is no difference.",
+                    "A biography is written about a person by someone else; an autobiography is written by the person themselves.",
+                    "A biography is fiction; an autobiography is nonfiction.",
+                    "A biography is long; an autobiography is short.",
+                ],
+                "correct_answer": "A biography is written about a person by someone else; an autobiography is written by the person themselves.",
+                "hints": [
+                    "Bio = life; the auto-prefix means self.",
+                ],
+                "explanation": (
+                    "A biography is the story of a person's life written by someone else (third person). An "
+                    "autobiography is the story of a person's life written by that person themselves (first person). "
+                    "Both are nonfiction; both tell about a real life; the voice differs."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "When reading a biography, what three things should you look for to understand why the person was "
+                    "significant?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Their height, weight, and birthday.",
+                    "Key life events, achievements, and character qualities.",
+                    "Their favorite color, food, and hobby.",
+                    "How many siblings they had.",
+                ],
+                "correct_answer": "Key life events, achievements, and character qualities.",
+                "hints": [
+                    "Three things that explain why the person mattered.",
+                ],
+                "explanation": (
+                    "Key events shaped the person's life. Achievements are what they accomplished. Character qualities "
+                    "are the traits that made the achievements possible. These three together explain why a person was "
+                    "significant and how their life unfolded."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "A biography says only good things about its subject and leaves out any mistakes or flaws. What "
+                    "kind of biography is this?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "An honest biography.",
+                    "A hagiographic biography (one that idealizes its subject without showing their flaws).",
+                    "An autobiography.",
+                    "A fictional biography.",
+                ],
+                "correct_answer": "A hagiographic biography (one that idealizes its subject without showing their flaws).",
+                "hints": [
+                    "When a biography only praises, something is missing.",
+                ],
+                "explanation": (
+                    "Hagiographic biography (the word comes from the Greek for 'writing about saints') idealizes its "
+                    "subject without showing flaws. Honest biography includes both strengths and flaws; the flaws make "
+                    "the achievements clearer and the person more real. Critical readers recognize hagiography and "
+                    "look for honest accounts."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Why does the time and place a person lives in matter for understanding their biography?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "It doesn't; people achieve the same things regardless of time and place.",
+                    "Time and place shape what is possible and what is hard; a scientist in 1850 worked differently from one today; a leader in one country faced different challenges from one in another.",
+                    "Only the time matters, not the place.",
+                    "Only the place matters, not the time.",
+                ],
+                "correct_answer": "Time and place shape what is possible and what is hard; a scientist in 1850 worked differently from one today; a leader in one country faced different challenges from one in another.",
+                "hints": [
+                    "Context shapes a life; a person's choices happen within their world.",
+                ],
+                "explanation": (
+                    "Time and place shape what is possible, what is difficult, and what counts as significant. "
+                    "Marie Curie's achievements in physics took place when women were rarely admitted to laboratories. "
+                    "Harriet Tubman's work happened under slavery in the United States. Understanding the context "
+                    "deepens understanding of the person."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Read a biography of your choice. Write three sentences: key events, achievements, character qualities."
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "One sentence on each part of the three-part frame.",
+                ],
+                "explanation": (
+                    "A complete answer names the biography read, then writes one sentence each on the three parts of "
+                    "the frame. With practice this kind of brief summary becomes natural and is a real reader's tool "
+                    "for absorbing biographical reading."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Read this assigned biography. Write a three-sentence summary using the key-events / achievements / character-qualities frame.",
+                "type": "open_response",
+                "target_concept": "biography_three_part_frame",
+                "rubric": (
+                    "Mastery: three sentences, one per part, all accurate. Proficient: three sentences but one part "
+                    "weak. Developing: cannot apply the frame."
+                ),
+            },
+            {
+                "prompt": "Read these two biographies of figures from different cultures who did similar work. Compare their lives. How did their times and places shape what they did?",
+                "type": "open_response",
+                "target_concept": "cross_cultural_biography_compare",
+                "rubric": (
+                    "Mastery: identifies parallel work; names how context shaped each life; notes both similarities "
+                    "and differences. Proficient: identifies parallels but weaker on context. Developing: cannot compare."
+                ),
+            },
+            {
+                "prompt": "Read this biography passage. Is it hagiographic (idealizing) or honest (including flaws as well as achievements)? Cite text evidence.",
+                "type": "open_response",
+                "target_concept": "honest_versus_hagiographic",
+                "rubric": (
+                    "Mastery: identifies the type with evidence; explains why the type matters for readers. "
+                    "Proficient: identifies type with weak evidence. Developing: cannot distinguish."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "biographies for children at the child's reading level (the David Adler 'A Picture Book of...' series and the Kathleen Krull 'Lives of...' series are widely available starting points)",
+                "at least one autobiography or first-person account (Anne Frank's Diary in an age-suited edition; passages from Helen Keller's The Story of My Life)",
+                "biographies of figures from multiple cultures and fields (science, art, history, civil rights, exploration)",
+            ],
+            "recommended": [
+                "Russell Freedman's biographies (Lincoln, Eleanor Roosevelt, the Wright Brothers) as exemplars of strong children's biography",
+                "Ji-li Jiang's Red Scarf Girl, Roald Dahl's Boy, and other accessible autobiographies",
+                "Children's reference works on notable figures across history",
+            ],
+        },
+        "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 25},
+        "accommodations": {
+            "dyslexia": "Read biographies aloud or use audiobooks. Many of the most engaging biographies for children are also strong audiobooks.",
+            "adhd": "Picture book biographies (David Adler, Doreen Rappaport) suit shorter attention. Build up to longer biographies gradually.",
+            "gifted": "Move to longer, more analytical biographies. Introduce the idea of historiography (how biographers approach their subjects differently). Read multiple biographies of the same figure and compare them.",
+            "visual_learner": "Use illustrated biographies. The Kathleen Krull 'Lives of...' series uses portraits and visual elements heavily.",
+            "kinesthetic_learner": "Pair biography reading with hands-on activity: build a small model of an invention, cook a food from a historical period, walk a famous historical route.",
+            "auditory_learner": "Audiobook biographies and biographical podcasts. The audio form often works particularly well for biography.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we read biographies: the stories of real people who did real things. We learn the three-part "
+                    "frame for understanding a biography: key events, achievements, character qualities. We distinguish "
+                    "biography (about a person) from autobiography (by the person). We learn to read with honesty, "
+                    "seeing both strengths and flaws."
+                ),
+                "gradual_release": {
+                    "i_do": "Parent reads a biography aloud, names key events, achievements, and character qualities as they appear; demonstrates how to read for these.",
+                    "we_do": "Together work through a second biography; child names elements with support.",
+                    "you_do": "Child reads a biography of their choice, applies the three-part frame, and presents what they learned.",
+                },
+                "guided_practice": [
+                    "Weekly biography reading from the family or library collection",
+                    "Apply the three-part frame after each biography",
+                    "Periodic cross-cultural biography comparison",
+                ],
+                "independent_practice": [
+                    "Read biographies widely across fields and cultures",
+                    "Begin to write brief biographical sketches of figures the child admires",
+                ],
+                "mastery_check": [
+                    "Applies three-part frame to unfamiliar biographies",
+                    "Distinguishes biography from autobiography",
+                    "Recognizes honest versus hagiographic accounts",
+                ],
+                "spiral_review": [
+                    "Return to biographies read earlier; what does the older reader see that the younger reader missed?",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "Plutarch wrote his Lives of the Greeks and Romans more than two thousand years ago, and his "
+                    "biographies are still read. The classical tradition holds biography as essential reading: the "
+                    "study of great lives shapes the reader's own character. The classical reader meets virtuous and "
+                    "flawed figures alike and reflects on their lives."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the three-part frame: key events, achievements, character qualities",
+                        "Name three figures from each major era the child is studying (ancient, medieval, modern)",
+                    ],
+                    "recitations": [
+                        "Memorize one short passage from a notable autobiography or biography",
+                    ],
+                },
+                "copywork": [
+                    "Copy a notable quotation from a biographical subject (Lincoln, Anne Frank, Marie Curie) into the copybook with attribution",
+                ],
+                "recitation_routine": "At each biography reading the child gives a one-paragraph oral summary using the three-part frame.",
+                "history_integration": "Biography is the soul of history at this level. Read biographies of the major figures of each historical period the child studies; the events of history become the lives of the people who lived them.",
+                "read_aloud_suggestions": [
+                    "Children's adaptations of Plutarch's Lives (if available; otherwise modern biographical anthologies of ancient figures)",
+                    "Russell Freedman's biographies of major figures (Lincoln, the Wright Brothers, Eleanor Roosevelt)",
+                    "Lives of leaders, scientists, artists, and reformers across cultures",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 25,
+                "living_book_suggestions": [
+                    "Russell Freedman's biographies as exemplars of the living biography",
+                    "Kathleen Krull's 'Lives of...' series for shorter biographical sketches",
+                    "Autobiographies suited to the child's age: Helen Keller, Anne Frank (in age-suited editions), Roald Dahl",
+                ],
+                "short_lesson_flow": "Read a chapter or section of a biography during reading time. Narrate. Across weeks the child reads the full biography and absorbs the person's life.",
+                "narration_prompt": "Tell me about this person's life. What did they do, and what qualities made it possible?",
+                "real_world_objects": [
+                    "A reading log of biographies read with brief notes",
+                    "A wall of portraits of figures the child has read about",
+                ],
+                "nature_connection": "Read biographies of naturalists and scientists (Audubon, Beatrix Potter, John Muir, Rachel Carson, Jane Goodall) whose work emerged from nature observation. Their lives and their nature work entwine.",
+                "habit_focus": "The habit of attentive reading of a person's life; the habit of looking for what made their life significant rather than skimming.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A shelf of biographies of figures from many cultures and fields",
+                    "Cards for each biographical subject with portrait, key events, and main achievement",
+                    "A timeline (paper or fabric) where the child places biographical subjects in their historical context",
+                    "A biography-versus-autobiography sort set",
+                ],
+                "presentation": {
+                    "three_period_lesson": "This is a key event; this is an achievement; this is a character quality. Show me a key event from this person's life. Is this an achievement or a character quality?",
+                    "steps": [
+                        "The guide introduces the three-part frame with a worked example",
+                        "The child reads a biography from the shelf and applies the frame in writing or speaking",
+                        "The child places the subject on the timeline",
+                        "The child compares biographies of two figures from different times or cultures",
+                        "Across the term the child develops a wide knowledge of significant lives",
+                    ],
+                },
+                "control_of_error": "The biography itself is the control: the reader can return to it to verify events, achievements, and qualities.",
+                "abstraction_pathway": "From picture-book biographies, to longer biographies, to autobiographies and primary sources, to writing one's own brief biographical sketches.",
+                "extensions": [
+                    "Reading multiple biographies of the same figure to compare interpretations",
+                    "Reading primary sources (letters, diaries) alongside biography",
+                    "Beginning genealogical work on the family's own history",
+                ],
+                "observation_focus": "Watch for the child's growing curiosity about real lives. Watch for the child seeking out biographies on their own.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a wide collection of biographies in the home and visible",
+                    "Tell stories from your own life and your family's; oral biography is the start",
+                    "Welcome the child's interest in any figure; help them find a good biography on that person",
+                ],
+                "real_world_contexts": [
+                    "Watching documentaries and biographical films together",
+                    "Hearing grandparents and relatives tell their life stories",
+                    "Recognizing biographical content in news, podcasts, and shows",
+                ],
+                "conversation_starters": [
+                    "Whose life would you most like to read about? Why?",
+                    "What is the most interesting thing you learned about this person?",
+                    "What qualities did they have that you might want to develop?",
+                ],
+                "resource_bank": [
+                    "A wide and varied biography collection in the home library",
+                    "Documentary films and biographical podcasts",
+                    "Family oral history",
+                ],
+                "parent_role": "Be a biographer yourself: tell the child about your life, your parents' lives, your relatives' lives. Welcome the child's biographical curiosity. Read biographies alongside the child.",
+                "observation_documentation": "Note which figures the child is drawn to. Note what they take from a life: not the facts but the qualities and questions.",
+            },
+        },
+        "connections": {
+            "math": "Biographies of mathematicians (Pythagoras, Newton, Ramanujan, Emmy Noether, Katherine Johnson) make math feel like a human enterprise",
+            "science": "Biographies of scientists ground the science the child is learning in the lives of those who discovered or invented it",
+            "history": "Biography and history are continuous at this level; the events of history are the lives of the people who lived them",
+            "writing": "Writing brief biographical sketches of family members or admired figures is a natural extension; biography teaches the structure of nonfiction narrative",
+        },
+    },
 }
