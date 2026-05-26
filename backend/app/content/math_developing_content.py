@@ -262,4 +262,263 @@ MATH_DEVELOPING_CONTENT = {
             "history": "Reading dates in the hundreds and reasoning about how many years separate two events",
         },
     },
+    "md-02": {
+        "enriched": True,
+        "learning_objectives": [
+            "Read, write, and compare four-digit numbers up to 10,000",
+            "Express four-digit numbers in standard form, expanded form, and word form",
+            "Identify the value of each digit by its place (thousands, hundreds, tens, ones)",
+            "Order a small set of four-digit numbers from least to greatest",
+        ],
+        "teaching_guidance": {
+            "introduction": "The thousand is a leap. The child knows that ten ones make a ten and ten tens make a hundred; today the rule extends one more rung: ten hundreds make a thousand. Build a four-digit number with base-ten materials (a thousand cube, hundred flats, tens rods, ones cubes) before any writing is done, and read the number in place-value language every time. The new column is the thousands.",
+            "scaffolding_sequence": [
+                "Show a thousand cube alongside ten hundred flats and confirm by stacking that they are equal",
+                "Build small four-digit numbers (1,000 to 3,000) with materials and read them in place-value language",
+                "Write the standard form from a built quantity: 2,347 = two thousand three hundred forty-seven",
+                "Decompose a written four-digit number into expanded form: 2,347 = 2,000 + 300 + 40 + 7",
+                "Compare two four-digit numbers by looking at the leftmost differing digit",
+                "Order three or four four-digit numbers from least to greatest and back",
+                "Read and write the word form of four-digit numbers, attending to the comma and the word 'thousand'",
+            ],
+            "socratic_questions": [
+                "Which digit in 4,728 is worth the most, and what is its value?",
+                "Two numbers begin with 6 in the thousands place; how do you decide which is bigger?",
+                "If we add one to 9,999, what number do we get, and what happens in every column?",
+                "What does the comma in 5,283 actually tell us?",
+            ],
+            "practice_activities": [
+                "Build-a-number game: roll four digit cards, arrange to form the largest possible four-digit number and the smallest, then compare",
+                "Treasure-chest counting: imagine a chest of pretend gold and silver coins running into the thousands; read and write the total each day",
+                "Newspaper hunt: find four-digit numbers in real headlines (population, distance, dates of the future) and write each in expanded and word form",
+            ],
+            "real_world_connections": [
+                "Reading the year in dates, the population of a nearby town, distances between cities",
+                "Reading miles on a car's odometer and predicting what it will say tomorrow",
+                "Reading the page count on a long encyclopedia or atlas",
+                "Counting steps across a multi-day adventure or a sports season's points",
+            ],
+            "common_misconceptions": [
+                "Reading 2,047 as 'two thousand and forty seven' but writing it as 247 or 2,470",
+                "Believing the comma changes the value, rather than just helping us read it",
+                "Comparing four-digit numbers by total digit count rather than digit position (thinking 999 > 1,012)",
+                "Confusing expanded form 2,000 + 300 + 40 + 7 with the addition 2,347 vs. the written digits",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Reads aloud and writes from dictation any four-digit number up to 9,999 without error",
+                "Writes any given four-digit number in standard, expanded, and word form",
+                "Orders four four-digit numbers from least to greatest with correct reasoning about leading digits",
+            ],
+            "assessment_methods": ["oral reading of numbers", "written conversion among forms", "ordering tasks"],
+            "sample_assessment_prompts": [
+                "Write 4,506 in expanded form and in word form",
+                "Order from least to greatest: 4,705, 4,075, 5,047, 4,750",
+                "What is the value of the 8 in 6,820? In 6,082? In 8,206?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "How many hundreds are in 1 thousand?",
+                "expected_type": "number",
+                "correct_answer": "10",
+                "hints": ["Stack hundred flats until they make a thousand cube"],
+                "explanation": "Ten hundreds make one thousand: 100 + 100 + 100 + 100 + 100 + 100 + 100 + 100 + 100 + 100 = 1,000.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What is the value of the 4 in 4,329?",
+                "expected_type": "number",
+                "correct_answer": "4000",
+                "hints": ["The 4 is in the thousands place"],
+                "explanation": "The 4 is in the thousands place, so its value is 4,000.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "Write 3,608 in expanded form.",
+                "expected_type": "text",
+                "hints": ["Break each digit into its place value"],
+                "explanation": "3,608 = 3,000 + 600 + 0 + 8, usually written 3,000 + 600 + 8 (the zero tens are skipped).",
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "Which number is greater: 4,705 or 4,075?",
+                "expected_type": "number",
+                "correct_answer": "4705",
+                "hints": ["Both have 4 thousands; compare the hundreds place next"],
+                "explanation": "Both numbers have 4 thousands. In the hundreds place, 4,705 has 7 and 4,075 has 0, so 4,705 > 4,075.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": "Order these numbers from least to greatest: 5,280, 5,028, 5,820, 5,208.",
+                "expected_type": "text",
+                "hints": ["All have 5 thousands; compare the hundreds digit first"],
+                "explanation": "Thousands all equal 5. Hundreds digits: 5,028 (0), 5,208 (2), 5,280 (2), 5,820 (8). Two share hundreds=2; compare tens: 5,208 (0) < 5,280 (8). Final order: 5,028; 5,208; 5,280; 5,820.",
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Write the standard form for: six thousand, two hundred forty.",
+                "type": "number",
+                "correct_answer": "6240",
+                "target_concept": "word_form_to_standard",
+            },
+            {
+                "prompt": "Write 4,506 in expanded form and in word form.",
+                "type": "open_response",
+                "rubric": "Mastery: writes 4,000 + 500 + 6 and 'four thousand, five hundred six' with the zero tens correctly skipped. Proficient: minor wording slip. Developing: includes 'zero tens' as a written term or miscounts a place.",
+                "target_concept": "form_conversion",
+            },
+            {
+                "prompt": "What is the value of the 8 in each number: 6,820, 6,082, 8,206?",
+                "type": "open_response",
+                "rubric": "Mastery: 800, 80, 8000 with correct place names. Proficient: correct values without naming the place. Developing: any value mis-identified.",
+                "target_concept": "digit_value_by_position",
+            },
+        ],
+        "resource_guidance": {
+            "required": ["base-ten material including a thousand cube", "place-value chart with a thousands column", "digit cards 0 through 9"],
+            "recommended": ["large numeral cards including 1000, 2000, ... 9000", "real receipts and headlines with four-digit numbers", "expanded-form notation cards"],
+        },
+        "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 15},
+        "accommodations": {
+            "dyslexia": "Always pair the spoken number with the written numeral, and use a place-value chart with named columns to anchor every digit. Read aloud slowly and let the child point to each digit as it is named.",
+            "adhd": "Use building games (roll-and-build, race to write) so the practice has movement and immediate feedback. Short sessions, frequent re-encounters.",
+            "gifted": "Extend into five- and six-digit numbers, and introduce the names ten thousand and hundred thousand briefly; revisit when intermediate band arrives.",
+            "visual_learner": "Use color-coded place-value columns (thousands one color, hundreds another) and large numeral cards laid out spatially.",
+            "kinesthetic_learner": "Build every four-digit number with materials at least once before writing it. Trade ten hundred-flats for a thousand-cube physically.",
+            "auditory_learner": "Read every number aloud in place-value language; chant the place names in order (ones, tens, hundreds, thousands).",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Today we add a new column: the thousands. Ten hundreds make one thousand, just as ten ones make a ten. We will read, write, and compare four-digit numbers up to 9,999.",
+                "gradual_release": {
+                    "i_do": "Show a thousand cube next to ten hundred-flats and confirm by stacking that they are equal. Build the number 2,347 and read it aloud, naming each place: two thousand, three hundred, four tens, seven ones.",
+                    "we_do": "Build three four-digit numbers together, child placing the materials while the parent says the place names, then swap roles. Convert each to expanded and word form on paper.",
+                    "you_do": "Child reads, writes, and compares ten four-digit numbers independently, including some that share leading digits and require careful column-by-column comparison.",
+                },
+                "guided_practice": [
+                    "Match standard-form and expanded-form cards for ten four-digit numbers",
+                    "Order three sets of four numbers from least to greatest",
+                    "Write the value of a circled digit in five different four-digit numbers",
+                ],
+                "independent_practice": [
+                    "Worksheet: convert ten four-digit numbers among standard, expanded, and word form",
+                    "Worksheet: compare and order three sets of four-digit numbers",
+                ],
+                "mastery_check": [
+                    "Convert any four-digit number among the three forms with no error",
+                    "Order four four-digit numbers correctly and explain reasoning by leading digits",
+                    "Identify the value of any digit in any four-digit number",
+                ],
+                "spiral_review": [
+                    "Continue three-digit place-value warm-ups for a week to keep the earlier work fluent",
+                    "Daily reading of any four-digit number encountered in real life (sign, page, year)",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Numbers run on and on, in the same orderly pattern, only the names change as we climb. To learn the thousand is to climb one more rung of a ladder that has no end. The scribes of old kept tallies running into the thousands, marking the harvest, the soldiers, the years, and they did it on the same place-value pattern we use now.",
+                "memory_work": {
+                    "chants": [
+                        "Recite the climb of the columns: ones, tens, hundreds, thousands",
+                        "Recite the rule: ten of a kind makes one of the next",
+                        "Recite a worked example aloud in word form: four thousand, five hundred, sixty-eight",
+                    ],
+                    "recitations": [
+                        "Recite the names of the four-digit numbers in a chosen list (population of a familiar city, distances between two places) until each runs without hesitation",
+                    ],
+                },
+                "copywork": [
+                    "Copy a small list of four-digit numbers in all three forms (standard, expanded, word) into the math copybook, neatly",
+                ],
+                "recitation_routine": "Begin each lesson by reciting the names of the columns and then reading aloud yesterday's set of four-digit numbers before introducing today's.",
+                "history_integration": "Read a brief account of an old census or a great army numbered in the thousands, where the four-digit total mattered to the story.",
+                "read_aloud_suggestions": [
+                    "A passage from a history of cities or kingdoms in which populations, distances, or harvests are reported in the thousands",
+                    "A short biography of an early census-taker, surveyor, or scribe",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A real, beautifully written book that names large quantities in their natural setting: the population of a town, the leagues to a distant city, the years since an old event",
+                    "An atlas or simple geography book that lists real four-digit numbers as a matter of course",
+                ],
+                "short_lesson_flow": "Open with a four-digit number found yesterday in real life (the year on a coin, the page count of a long book, the miles to a relative's home). Build the number with materials. Read it aloud in word form. Write it in expanded form together. Close while interest is still high.",
+                "narration_prompt": "Tell me what 4,506 means in your own words. Where does each digit live, and what does it stand for?",
+                "real_world_objects": [
+                    "Base-ten material including a thousand cube",
+                    "Coins, stamps, or buttons in a jar with the running total kept across days",
+                    "An atlas open to a page of real distances, populations, and elevations",
+                ],
+                "nature_connection": "Estimate the leaves on a single tree, the blades of grass on a small lawn patch, or the steps along a familiar trail, and write the four-digit estimate in standard and word form.",
+                "habit_focus": "The habit of attention to detail: every digit holds its place by its position, and reading carelessly across a comma leads to error. Read once, accurately.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Golden bead material: unit beads, ten-bars, hundred-squares, and the thousand cube",
+                    "Large numeral cards 1 through 9000 (the hierarchy cards) for building four-digit numbers",
+                    "Small numeral cards 1 through 9000 for the child's own work",
+                    "Stamp game with the green thousand stamps for the next level of abstraction",
+                ],
+                "presentation": {
+                    "three_period_lesson": "Show the thousand cube and name it; show the relation by stacking ten hundred-squares against the cube. Build a four-digit number with materials and the large hierarchy cards: lay each card over the next so the number is read as a whole.",
+                    "steps": [
+                        "Lay out the thousand cube and the hundred-squares; confirm by stacking that ten hundreds equals one thousand",
+                        "Build a four-digit number in golden beads on a tray",
+                        "Lay the large hierarchy cards over each other to display the same number in standard form",
+                        "Read the number aloud: 'two thousand, three hundred, four tens, seven ones'",
+                        "Move to small numeral cards for the child's independent work",
+                        "When fluent, move to the stamp game with green thousand stamps",
+                    ],
+                },
+                "control_of_error": "The materials and the hierarchy cards form the control: a misplaced card produces a number that does not match the beads on the tray, and the child sees and corrects without correction from outside.",
+                "abstraction_pathway": "From golden beads (quantity felt) to hierarchy cards laid over beads (symbol over quantity) to small numeral cards (symbol alone) to the written numeral, then to the stamp game where color stands for category. Each step is taken when the prior one is effortless.",
+                "extensions": [
+                    "Build numbers with two zeros (3,007; 4,090) and read them, attending to the silent columns",
+                    "Compare two built four-digit numbers and put them in order on the mat",
+                    "Read aloud a list of four-digit numbers from a real geography book or atlas",
+                ],
+                "observation_focus": "Watch whether the child reads the silent zero columns correctly. Watch for the spontaneous comparison of two built numbers, the natural impulse to order, which signals readiness for the next operation.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave an old atlas, an almanac, or a population-of-cities book on the table, open to a real list of four-digit numbers",
+                    "Put a coin jar with a visible running total in the kitchen and add to it daily",
+                    "Set out a digit-card game (four cards, build the biggest number you can) on the shelf without explanation",
+                ],
+                "real_world_contexts": [
+                    "Reading the year on a coin, a date on a tombstone, a page count on a long book",
+                    "Tracking video-game high scores or sports statistics that run into the thousands",
+                    "Reading the population of the family's town, the next town, and the nearest big city, and comparing",
+                    "Watching the car's odometer roll over and predicting what comes next",
+                ],
+                "conversation_starters": [
+                    "Which number is bigger, do you think? How can you tell quickly?",
+                    "I wonder how many people live in our town. Want to look it up?",
+                    "If our car has 8,742 miles on it, what will it say after a thousand more?",
+                ],
+                "resource_bank": [
+                    "A real almanac or atlas accessible to the child",
+                    "Number-themed picture books that quietly use four-digit values in context",
+                    "A coin jar with a real running total kept openly",
+                    "Online lookups for real four-digit facts: population, distance, year, when the child wonders",
+                ],
+                "parent_role": "Read four-digit numbers aloud in real life, often and casually. When the child asks how big or how far, look it up together. Never quiz; offer the wondering and follow the child's interest.",
+                "observation_documentation": "Note across weeks where four-digit numbers came up in real life, whether the child reads them with confidence, and whether they spontaneously compare or estimate.",
+            },
+        },
+        "connections": {
+            "reading": "Reading and writing four-digit numerals fluently in real text: years, populations, distances, page counts",
+            "science": "Reading population and species counts that run into the thousands in real natural-history sources",
+            "history": "Reading dates in the thousands and reasoning about the gap between two historical events",
+        },
+    },
 }
