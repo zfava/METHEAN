@@ -926,14 +926,8 @@ HVAC_CONTENT: dict[str, dict] = {
             "learner for every later session on that equipment."
         ),
         "demonstration_criteria": [
-            (
-                "Locates the nameplate on a piece of household HVAC equipment without opening "
-                "any enclosure"
-            ),
-            (
-                "Photographs the nameplate clearly enough that every printed field is legible "
-                "in the image"
-            ),
+            ("Locates the nameplate on a piece of household HVAC equipment without opening any enclosure"),
+            ("Photographs the nameplate clearly enough that every printed field is legible in the image"),
             (
                 "Extracts every operative field onto a nameplate card: manufacturer; model; "
                 "serial; manufacture date (decoded if encoded in serial); equipment type; "
@@ -1199,8 +1193,7 @@ HVAC_CONTENT: dict[str, dict] = {
             {
                 "name": "Flashlight or headlamp",
                 "specification": (
-                    "Mechanical-space lighting is commonly poor; a flashlight is on the person "
-                    "for the visit"
+                    "Mechanical-space lighting is commonly poor; a flashlight is on the person for the visit"
                 ),
                 "alternatives": [],
             },
