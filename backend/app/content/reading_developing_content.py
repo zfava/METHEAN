@@ -2782,4 +2782,445 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Knowing how characters work in published stories prepares the child to write their own characters with traits, motivations, and arcs",
         },
     },
+    "rd-07": {
+        "enriched": True,
+        "learning_objectives": [
+            "Identify the setting of a story: where and when it takes place, and the relevant details (weather, season, era, social context)",
+            "Explain how setting influences events and characters: a story set on a frozen island in winter is shaped by that fact",
+            "Map the plot structure of a story: exposition, rising action, climax, falling action, resolution (with age-appropriate vocabulary)",
+            "Identify the central PROBLEM (or conflict) the story raises and how it is resolved (or left unresolved)",
+            "Compare two stories on how each uses setting to shape its plot",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "Foundational reading let the child enjoy the story's events without naming the underlying structure. "
+                "Developing-level setting-and-plot work makes the structure visible. The child names WHERE and WHEN the "
+                "story happens, sees how the setting shapes what can happen (Sarah Plain and Tall could not happen in a "
+                "city; Charlotte's Web could not happen in a desert), and traces the plot's curve from the situation at "
+                "the start (exposition), through the building tension (rising action), to the turning point (climax), "
+                "and through the falling action to the resolution. The vocabulary (exposition, climax, resolution) is "
+                "introduced at age but used precisely: these are real terms that will serve the child through all of "
+                "literary study."
+            ),
+            "scaffolding_sequence": [
+                "Begin with setting alone: pick a story the child knows well. Ask: where does this story happen? When does it happen? What is the place like?",
+                "Move to setting-influences-plot: ask 'could this story happen anywhere else? What if it were set in a city instead of a farm?' The child sees that setting is not just backdrop",
+                "Introduce the plot vocabulary slowly: exposition (the situation at the beginning), rising action (events that build tension), climax (the turning point), falling action (what happens after the climax), resolution (how things settle)",
+                "Use a plot-mountain diagram (a triangle shape) and place the major events of a known story on it",
+                "Identify the central problem (or conflict): every story poses a problem (person vs person, person vs nature, person vs self, person vs society) and resolves it (or leaves it open)",
+                "Apply to a second story; then a third; the vocabulary settles in through repeated use across books",
+                "Compare two stories with different settings: how does each setting shape what is possible in the story?",
+                "Move to noticing setting and plot during first reading, not just after: 'we are in the rising action now; the tension is building'",
+            ],
+            "socratic_questions": [
+                "Where and when does this story happen? What details show it?",
+                "Could this story happen in a different setting? What would change?",
+                "What is the main problem in this story? Who is involved in the problem?",
+                "Where on the plot mountain are we right now in the book?",
+                "What was the turning point of the story? What changed at that moment?",
+                "How does the story end? Is the problem fully resolved, partly resolved, or left open?",
+            ],
+            "practice_activities": [
+                "Plot mountain for a finished chapter book: draw the triangle, place the major events on it, label exposition / rising action / climax / falling action / resolution",
+                "Setting analysis card: for a chosen book, describe place, time, weather, season, era, social context; then describe how each of these shapes the story",
+                "Setting-swap thought experiment: pick a beloved story and imagine it in a different setting; what changes? What stays the same?",
+                "Conflict naming: for several books, name the central conflict by type (person vs person, person vs nature, person vs self, person vs society)",
+                "Two-book comparison: pick two books with very different settings; chart how each setting shapes its plot",
+            ],
+            "real_world_connections": [
+                "Recognizing setting in movies and shows: where and when does this take place? How does that shape the story?",
+                "Recognizing plot structure in family stories told at the table: where is the rising action, the turning point?",
+                "Noticing how a setting changes a real-life story: a road trip story and a stay-at-home story differ in what can happen",
+                "Discussing news stories with the same vocabulary of conflict (person vs nature in a hurricane story; person vs society in a civil-rights story)",
+            ],
+            "common_misconceptions": [
+                "Treating setting as decoration. Setting shapes what is possible in the story; a good author does not pick the setting arbitrarily.",
+                "Thinking the climax is the most exciting scene. Climax is the TURNING POINT, where the story shifts from rising action to falling action; the most exciting and the turning are often the same but not always.",
+                "Believing every story must have a clean five-part plot mountain. Many fine stories blend, restart, or refuse the shape; the plot mountain is a useful map, not a requirement.",
+                "Naming conflict only as person vs person. The four classical conflict types (person vs person, person vs nature, person vs self, person vs society) are the starter vocabulary; some stories involve more than one.",
+                "Insisting the resolution must be happy or clean. Resolution means HOW the problem ends; it can be sad, ambiguous, or open.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Names the setting of a story with specific details (place, time, era, season, social context)",
+                "Explains how setting shapes the events or characters of the story with a specific example",
+                "Maps the plot of a finished story on a plot mountain with major events placed correctly",
+                "Identifies the central conflict by type (person vs person / nature / self / society)",
+                "Compares two stories on how each setting shapes its plot",
+            ],
+            "proficiency_indicators": [
+                "Names setting at place-and-time level with some detail",
+                "Maps plot with most events in correct order; one or two structural labels confused",
+            ],
+            "developing_indicators": [
+                "Names setting only as 'where it happens'; misses time and detail",
+                "Cannot place events on a plot structure; lists events without structure",
+            ],
+            "assessment_methods": [
+                "plot mountain diagram for a finished book",
+                "setting analysis card",
+                "two-book setting comparison",
+                "oral discussion of plot structure during chapter reading",
+            ],
+            "sample_assessment_prompts": [
+                "Draw a plot mountain for the book you just finished. Label the parts and place the major events.",
+                "Tell me about the setting of this story. Where, when, and what details matter?",
+                "How does the setting shape the story? What couldn't happen if the setting were different?",
+                "What is the central conflict in this story, and what type is it?",
+                "Compare the setting of [book A] and [book B]. How does each setting shape its story differently?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What is the 'setting' of a story?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "The main character.",
+                    "Where and when the story takes place, with the details that matter.",
+                    "The author's name.",
+                    "How long the book is.",
+                ],
+                "correct_answer": "Where and when the story takes place, with the details that matter.",
+                "hints": [
+                    "Think place, time, and the world the story is set in.",
+                ],
+                "explanation": (
+                    "Setting is where and when a story takes place, plus the details that matter (weather, era, social "
+                    "context). It is not just the background; it shapes what can happen."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What is the 'climax' of a story?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "The very last sentence of the book.",
+                    "The turning point of the story, where things shift from building tension to settling toward an ending.",
+                    "The funniest scene.",
+                    "The first time the main character appears.",
+                ],
+                "correct_answer": "The turning point of the story, where things shift from building tension to settling toward an ending.",
+                "hints": [
+                    "Climax is the turning point on the plot mountain.",
+                ],
+                "explanation": (
+                    "The climax is the turning point: the moment where the story stops building tension and starts moving "
+                    "toward its resolution. It is often the most exciting scene, but the key feature is the TURN, not the "
+                    "excitement."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "Charlotte's Web is set on a farm. Could the same story happen if it were set in a city apartment? "
+                    "Why or why not?"
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "What couldn't happen in an apartment? Why does the farm setting matter?",
+                ],
+                "explanation": (
+                    "Charlotte's Web could not happen in a city apartment. The barn animals, the freedom Wilbur has to "
+                    "explore, the County Fair plot, the rhythms of farm seasons are all woven into what makes the story "
+                    "possible. The farm is not background; it is what allows the story."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "What are the four classical types of conflict in stories?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Person vs person, person vs nature, person vs self, person vs society.",
+                    "Beginning, middle, end, epilogue.",
+                    "Hero, villain, mentor, sidekick.",
+                    "Past, present, future, dream.",
+                ],
+                "correct_answer": "Person vs person, person vs nature, person vs self, person vs society.",
+                "hints": [
+                    "Conflict types: who or what is the main character struggling with?",
+                ],
+                "explanation": (
+                    "The four classical conflict types are person vs person, person vs nature, person vs self, person vs "
+                    "society. Many stories involve more than one; the strongest stories often have a person-vs-self "
+                    "thread under the surface conflict."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Draw a plot mountain (or describe it in words) for a chapter book you have read. Label the five "
+                    "parts and place at least one major event in each."
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Exposition (the situation at the start), rising action (events building tension), climax (the "
+                    "turning point), falling action (what happens after), resolution (how it settles).",
+                ],
+                "explanation": (
+                    "A complete plot mountain has: exposition (who and where at the start, before the problem is in full "
+                    "force); rising action (events that build the tension toward the turning point); climax (the turn); "
+                    "falling action (what unfolds because of the turn); resolution (how the problem ends). Each part "
+                    "has at least one major event from the book."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Tell me about the setting of [book the child has just finished]: place, time, era, and the details that matter.",
+                "type": "open_response",
+                "target_concept": "setting_with_details",
+                "rubric": (
+                    "Mastery: place, time, era, and at least two relevant details. Proficient: place and time. "
+                    "Developing: just place."
+                ),
+            },
+            {
+                "prompt": "How does the setting shape this story? What couldn't happen if the setting were different?",
+                "type": "open_response",
+                "target_concept": "setting_shapes_plot",
+                "rubric": (
+                    "Mastery: specific example of how setting enables a specific event or character choice. Proficient: "
+                    "general statement that setting matters. Developing: cannot articulate."
+                ),
+            },
+            {
+                "prompt": "Draw a plot mountain for the book. Place the major events on it and label each part.",
+                "type": "open_response",
+                "target_concept": "plot_mountain_mapping",
+                "rubric": (
+                    "Mastery: five parts labeled correctly, major events placed accurately. Proficient: most parts "
+                    "labeled, events mostly in order. Developing: cannot use the plot mountain structure."
+                ),
+            },
+            {
+                "prompt": "What is the central conflict in this story? What type is it? Are there any other conflicts running alongside?",
+                "type": "open_response",
+                "target_concept": "conflict_identification_and_type",
+                "rubric": (
+                    "Mastery: central conflict named correctly with type; secondary conflict noticed. Proficient: central "
+                    "conflict named and typed. Developing: cannot articulate conflict."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "a chapter book or short novel the child has finished and can think back through",
+                "a plot mountain template (a printable triangle with the five labels)",
+                "a setting analysis card template",
+            ],
+            "recommended": [
+                "a pair of books with strikingly different settings for comparison work (Sarah Plain and Tall vs The Tale of Despereaux; Charlotte's Web vs Stuart Little)",
+                "movies and shows for parallel setting-and-plot conversation outside reading time",
+                "a story notebook where the child collects plot mountains across the year",
+            ],
+        },
+        "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 20},
+        "accommodations": {
+            "dyslexia": (
+                "Work with read-aloud books and audiobooks. The plot-and-setting work is interpretive, not decoding. "
+                "The child can give rich analysis of stories they cannot yet read alone."
+            ),
+            "adhd": (
+                "Use the plot mountain as a visible artifact rather than long verbal discussion. Drawing on a big sheet "
+                "of paper with markers engages the kinesthetic channel."
+            ),
+            "gifted": (
+                "Introduce more sophisticated plot structures: nested stories, dual timelines, in medias res openings. "
+                "Discuss how some great books deliberately resist the simple plot mountain."
+            ),
+            "visual_learner": (
+                "The plot mountain is itself a visual tool. Add color and event illustrations to the mountain."
+            ),
+            "kinesthetic_learner": (
+                "Act out the climax of a story. Walk a real plot mountain on the floor (chalked outline) with major "
+                "events posted along it."
+            ),
+            "auditory_learner": "Discuss plot and setting aloud with a real reader who has read the same book.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we name the structure that lives inside every story. Setting is where and when, with the "
+                    "details that matter. Plot is the curve from the start situation, through rising tension, to the "
+                    "turning point, and on to the resolution. The vocabulary (exposition, rising action, climax, "
+                    "falling action, resolution) is the same vocabulary the child will use through all of literary "
+                    "study; we introduce it now precisely."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "The parent draws a plot mountain on a sheet of paper. Names each part. Walks through a story "
+                        "they both know, placing the major events on the mountain with the parts labeled."
+                    ),
+                    "we_do": (
+                        "Parent and child build a plot mountain together for a recently finished book. Take turns "
+                        "proposing events; agree where on the mountain each event sits."
+                    ),
+                    "you_do": (
+                        "Child builds a plot mountain independently for a next book; reads it back to the parent."
+                    ),
+                },
+                "guided_practice": [
+                    "Plot mountain for each finished chapter book",
+                    "Setting analysis card for each finished book",
+                    "Two-book setting comparison once a term",
+                ],
+                "independent_practice": [
+                    "Keep a story-structure notebook with plot mountains across the year",
+                    "Notice setting and plot during first reading: 'we are in the rising action now'",
+                ],
+                "mastery_check": [
+                    "Names setting with details and explains how it shapes the story",
+                    "Builds a complete plot mountain with major events placed correctly",
+                    "Identifies central conflict by type",
+                ],
+                "spiral_review": [
+                    "Re-map a plot mountain for an early-term book; notice what the child sees now that they did not see then",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "Aristotle named the parts of plot in his Poetics: the beginning, the middle, the end, and the "
+                    "turning that joins them. Twenty-three centuries later we still teach his shape, because it is the "
+                    "honest shape of how stories work. To learn it is to enter a tradition of careful naming that runs "
+                    "through every later literary study."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the five parts of plot: exposition, rising action, climax, falling action, resolution",
+                        "Recite the four conflict types: person vs person, person vs nature, person vs self, person vs society",
+                        "Recite the setting questions: where, when, and what details matter",
+                    ],
+                    "recitations": [
+                        "Memorize one passage that opens a story (the exposition) and one passage that resolves it (the resolution) from a beloved book; the beginnings and endings of great stories are worth keeping",
+                    ],
+                },
+                "copywork": [
+                    "Copy one well-formed opening sentence and one well-formed closing sentence from a finished book; the shape of stories lives in their first and last words",
+                ],
+                "recitation_routine": (
+                    "At the close of each chapter book, the child recites the plot mountain aloud and names the central "
+                    "conflict; across the term the child's repertoire of story structures grows."
+                ),
+                "history_integration": (
+                    "The great myths and the great histories all have plot structure: name the rising action in the "
+                    "Iliad, the turning in Odyssey, the resolution in Aeneid (in age-appropriate retellings). The "
+                    "vocabulary serves the entire chronological spine."
+                ),
+                "read_aloud_suggestions": [
+                    "Books with strong plot structure for analysis: Charlotte's Web, The Lion the Witch and the Wardrobe, Sarah Plain and Tall, The Boxcar Children, The Tale of Despereaux",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "Living chapter books with clear plot and rich setting: Charlotte's Web, The Wind in the Willows, Sarah Plain and Tall, The Boxcar Children, The Tale of Despereaux",
+                    "Living biographies for parallel work on plot of a real life",
+                ],
+                "short_lesson_flow": (
+                    "After a chapter book is finished, sit together and trace the plot in conversation. The parent asks "
+                    "one or two structural questions ('where do you think the story turned?'); the child answers in "
+                    "their own words; the parent listens and asks for the evidence."
+                ),
+                "narration_prompt": (
+                    "Tell me about the setting and the plot of [book]. Where and when does it happen? What is the central "
+                    "problem? How does the story turn and how does it end?"
+                ),
+                "real_world_objects": [
+                    "A simple plot mountain drawn on a notebook page",
+                    "The book itself, ready to flip to specific scenes",
+                    "A story notebook where the child collects plot maps across the year",
+                ],
+                "nature_connection": (
+                    "Setting in books often mirrors real settings the child knows: notice how a real meadow or a real "
+                    "winter day matches the setting of a book"
+                ),
+                "habit_focus": (
+                    "The habit of seeing the shape of a thing: a story has a shape, and the careful reader notices it"
+                ),
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A plot mountain template laminated for repeated use with dry-erase markers",
+                    "A setting analysis card template",
+                    "Event cards from a known story that the child arranges on the plot mountain",
+                    "A two-book comparison chart template",
+                ],
+                "presentation": {
+                    "three_period_lesson": (
+                        "This is the exposition; this is the rising action; this is the climax; this is the falling "
+                        "action; this is the resolution. Show me the climax of this story; show me the exposition. What "
+                        "part of the plot is this event from?"
+                    ),
+                    "steps": [
+                        "The guide presents one plot term at a time across several days",
+                        "The child arranges event cards from a known story on the plot mountain",
+                        "The child builds a plot mountain for a chosen book independently",
+                        "Across the term the child's gallery of plot mountains grows",
+                    ],
+                },
+                "control_of_error": (
+                    "The book itself is the control: the child can flip to a scene and check whether their placement on "
+                    "the plot mountain holds up. The adult does not correct; the text does."
+                ),
+                "abstraction_pathway": (
+                    "From naming events in order, to placing events on a plot mountain, to noticing the plot mountain "
+                    "during first reading, toward seeing the shape of a story without needing the template"
+                ),
+                "extensions": [
+                    "Compare plot mountains across books in the same genre",
+                    "Notice how some great books resist the simple plot mountain (cyclic plots, frame stories, nested stories)",
+                    "Apply the plot mountain to a real life (a biography, a family story)",
+                ],
+                "observation_focus": (
+                    "Watch for the child noticing plot structure during reading, not just after; for the spontaneous use "
+                    "of the vocabulary (climax, rising action); and for the recognition of conflict type across books"
+                ),
+            },
+            "unschooling": {
+                "invitations": [
+                    "Talk about story structure in books and movies the family enjoys together",
+                    "Leave a few story-structure books on the shelf (How to Read Literature Like a Professor for Kids, etc.) for casual browsing",
+                    "Welcome the child's own plot-mountain drawings without making them assigned work",
+                ],
+                "real_world_contexts": [
+                    "Discussing the plot of a family movie at dinner",
+                    "Noticing the plot of a real story (a family adventure, a news event)",
+                    "Talking about the setting of a book the family is reading aloud and how it shapes what can happen",
+                ],
+                "conversation_starters": [
+                    "Where do you think the story turned in your book?",
+                    "Could this story happen if it were set somewhere else?",
+                    "What is the main problem in the story? Does it get solved?",
+                ],
+                "resource_bank": [
+                    "A varied library of books with strong plots and rich settings",
+                    "Discussion partners (parent, sibling, friends) who read the same books",
+                    "Story-structure picture books and reference books left available",
+                ],
+                "parent_role": (
+                    "Talk about plot and setting the way real readers talk about the books they love. Welcome the child's "
+                    "noticings. Notice across months whether the child reaches for the vocabulary on their own."
+                ),
+                "observation_documentation": (
+                    "Across a term, note how the child has come to see and describe the structure of stories. Plot "
+                    "vocabulary appearing in casual conversation is the real sign of mastery."
+                ),
+            },
+        },
+        "connections": {
+            "math": "The plot mountain is a graphical structure; mapping events onto its shape is a literary version of the line-graph skill in math",
+            "science": "Setting in stories parallels environment in science: both shape what is possible in the system",
+            "history": "Historical fiction's settings are real historical settings; learning to read setting carefully supports the history sequence",
+            "writing": "Knowing the plot mountain is the precondition for writing one's own structured stories with clear turning points",
+        },
+    },
 }
