@@ -3606,4 +3606,388 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Using cause-and-effect signal words in writing makes the writing logical and connected; this is the precondition for expository writing",
         },
     },
+    "rd-09": {
+        "enriched": True,
+        "learning_objectives": [
+            "Compare and contrast two texts on a shared topic or by the same author, identifying both similarities and differences",
+            "Use a Venn diagram or a two-column comparison chart as the visual tool for comparison",
+            "Compare across dimensions: theme, setting, characters, point of view, style, conclusion",
+            "Compare a fiction and a nonfiction text on the same topic, noticing how genre shapes the treatment",
+            "Move beyond surface comparison ('they both have a dog') to substantive comparison ('they both treat loyalty as the central virtue, but one tests it through danger and the other through patience')",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "Comparing texts is the move from reading one book to reading books in conversation. The child puts two "
+                "books side by side and notices what they share and where they differ. The skill grows in two ways: the "
+                "child learns the visual tools (Venn diagram, two-column chart) that hold comparison clearly, and the "
+                "child learns to compare across DIMENSIONS rather than at a single point. Theme, setting, characters, "
+                "point of view, style, conclusion: each is a dimension along which two texts can be compared. The best "
+                "comparisons move past 'both have X' to 'both treat Y, but in different ways'. This is the entry to all "
+                "of comparative literary reading."
+            ),
+            "scaffolding_sequence": [
+                "Start with two clearly similar texts: two picture-book retellings of the same fairy tale; two books on the same animal; two books by the same author",
+                "Use a Venn diagram (two overlapping circles): one circle for unique-to-book-A, one for unique-to-book-B, the overlap for what they share",
+                "Fill in the diagram together: surface items first (both have a girl named Cinderella; only one has fairy godmother) then deeper items (both treat goodness as rewarded; the older version's reward is different from the newer version's)",
+                "Move to a two-column comparison chart: each row is a DIMENSION (theme, setting, characters, point of view, style, conclusion); each column is one book; fill in the cells",
+                "Practice the comparison sentence form: 'Both books X. But book A Y, while book B Z.' This sentence structure carries substantive comparison.",
+                "Compare a fiction and a nonfiction text on the same topic: a novel about a hurricane and a science book about hurricanes; notice how genre shapes treatment",
+                "Compare two books by the same author: how is the author's style consistent? Where does it differ?",
+                "Move toward author-level comparison: two authors writing about the same theme; how does each take it on?",
+            ],
+            "socratic_questions": [
+                "What do these two books have in common? Start with one obvious thing, then go deeper.",
+                "Where do these two books differ? What does each book do that the other doesn't?",
+                "How do they treat the same theme differently?",
+                "If you had to recommend one of these to a friend who liked the other, what would you say?",
+                "Why might an author choose to write about the same topic as another author? What does each one add?",
+                "Can a fiction and a nonfiction book on the same topic both be 'true'? What kind of truth does each offer?",
+            ],
+            "practice_activities": [
+                "Venn diagram of two fairy-tale retellings: one classical version, one modern retelling",
+                "Two-column chart of two books by the same author: dimensions in rows, books in columns, child fills in cells",
+                "Fiction-and-nonfiction pairing: pick a topic the child loves (whales, knights, volcanoes, dogs); read a fiction book and a nonfiction book on the topic; compare them",
+                "Comparison sentence drill: parent provides two books the child has read; child writes three comparison sentences using the 'Both books X. But A Y, while B Z' form",
+                "Same-theme-different-authors pair: pick a theme (friendship, courage, loss); find two books that treat it differently; compare",
+            ],
+            "real_world_connections": [
+                "Comparing movie adaptations of the same book ('the book and the movie both show X, but the book Y while the movie Z')",
+                "Comparing two news sources on the same event",
+                "Comparing two recipes for the same dish (a grandparent's recipe vs a cookbook's recipe)",
+                "Comparing two field guides on the same plant or animal",
+                "Discussing two retellings of a family story told by different relatives",
+            ],
+            "common_misconceptions": [
+                "Stopping at the surface ('both have a dog'). Surface comparisons are the warm-up; substantive comparison happens at the level of theme, treatment, or stance.",
+                "Forcing every comparison into the same number of similarities and differences. Some comparisons have many similarities and few differences, or vice versa; the comparison should follow the texts.",
+                "Treating comparison as a contest ('which one is better?'). Comparison is not ranking; it is noticing.",
+                "Believing two books on the same topic must say the same things. Different authors with different purposes can produce very different books on the same topic; the comparison shows the difference.",
+                "Skipping fiction-nonfiction pairs because they 'aren't the same kind'. Fiction and nonfiction on the same topic make for some of the richest comparisons.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Builds a complete Venn diagram or two-column chart comparing two books across multiple dimensions",
+                "Writes comparison sentences in the 'Both X, but A Y while B Z' form with substantive content",
+                "Notices similarities and differences beyond the surface level",
+                "Compares a fiction and a nonfiction text on the same topic, noting how genre shapes treatment",
+                "Can compare two authors or two stylistic approaches",
+            ],
+            "proficiency_indicators": [
+                "Fills in a Venn diagram at the surface level reliably",
+                "Comparison sentences are correct but stay at one level",
+            ],
+            "developing_indicators": [
+                "Names what each book is about but cannot articulate a comparison",
+                "Confuses comparison with judgment ('this one is better')",
+            ],
+            "assessment_methods": [
+                "Venn diagram of two books",
+                "two-column comparison chart across dimensions",
+                "comparison sentence-writing in 'Both X, but A Y while B Z' form",
+                "fiction-and-nonfiction pairing analysis on a chosen topic",
+            ],
+            "sample_assessment_prompts": [
+                "Build a Venn diagram for these two books. What do they share? What is unique to each?",
+                "Fill in this two-column chart. The rows are theme, setting, characters, point of view, conclusion.",
+                "Write three comparison sentences about these two books using the 'Both X, but A Y while B Z' form.",
+                "Compare this fiction book and this nonfiction book on the same topic. How does the genre change what each book does?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What is a Venn diagram, and how is it used for comparing texts?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "A list of all the events in one book.",
+                    "Two overlapping circles where unique-to-A goes in one, unique-to-B in the other, and shared things go in the overlap.",
+                    "A drawing of the main character.",
+                    "A plot mountain.",
+                ],
+                "correct_answer": "Two overlapping circles where unique-to-A goes in one, unique-to-B in the other, and shared things go in the overlap.",
+                "hints": [
+                    "Visual tool: two circles that overlap in the middle.",
+                ],
+                "explanation": (
+                    "A Venn diagram is two overlapping circles. Things unique to book A go in A's circle; things unique "
+                    "to book B go in B's; things they share go in the overlap. It is the simplest visual tool for "
+                    "comparison."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "Which comparison is more substantive: 'Both books have a dog' OR 'Both books treat loyalty as the "
+                    "central virtue, but one tests it through danger and the other through patience'?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "The first one (both books have a dog).",
+                    "The second one (both treat loyalty, in different ways).",
+                    "They are equally substantive.",
+                    "Neither is a real comparison.",
+                ],
+                "correct_answer": "The second one (both treat loyalty, in different ways).",
+                "hints": [
+                    "Surface comparison vs deep comparison.",
+                ],
+                "explanation": (
+                    "The second comparison is substantive: it identifies a shared THEME (loyalty) and names the DIFFERENT "
+                    "TREATMENT (danger vs patience). The first is a surface observation. Both have a place, but the "
+                    "substantive comparison is the goal at this band."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "What are some DIMENSIONS along which you can compare two books?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Theme, setting, characters, point of view, style, conclusion.",
+                    "Color of the cover, number of pages, year published, price.",
+                    "Just plot.",
+                    "Comparison is not by dimension.",
+                ],
+                "correct_answer": "Theme, setting, characters, point of view, style, conclusion.",
+                "hints": [
+                    "Substantive dimensions, not surface ones.",
+                ],
+                "explanation": (
+                    "The dimensions of comparison include theme, setting, characters, point of view, style, and "
+                    "conclusion. Cover color and price are surface; theme and treatment are substantive."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Write a comparison sentence about two books you have read, in the form: 'Both books X. But book A "
+                    "Y, while book B Z.'"
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Name something both books share (theme or topic), then name how each treats it differently.",
+                ],
+                "explanation": (
+                    "A strong comparison sentence might read: 'Both Charlotte's Web and The Tale of Despereaux treat "
+                    "courage as the central virtue. But Charlotte's Web shows courage as quiet, patient, planning "
+                    "ahead, while The Tale of Despereaux shows courage as a small mouse facing dangers larger than "
+                    "himself.' Shared theme; different treatment; named specifically."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "You are comparing a fiction book about whales (a novel where a whale is a character) with a "
+                    "nonfiction book about whales (an informational book). How does the genre change what each book "
+                    "can do?"
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "What does fiction add that nonfiction can't? What does nonfiction add that fiction shouldn't?",
+                ],
+                "explanation": (
+                    "Fiction can give a whale interiority, motivation, a relationship with humans; the truth fiction "
+                    "offers is about feeling and meaning. Nonfiction can give accurate facts about whale biology, "
+                    "behavior, migration, conservation; the truth nonfiction offers is about reality. Both are valuable; "
+                    "neither is a substitute for the other."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Build a Venn diagram comparing two books the child has recently read. Fill in unique-to-A, unique-to-B, and shared.",
+                "type": "open_response",
+                "target_concept": "venn_diagram_comparison",
+                "rubric": (
+                    "Mastery: at least three items in each section, with substantive items in the overlap (theme, "
+                    "treatment, not just surface). Proficient: items in each section at the surface level. Developing: "
+                    "diagram incomplete or items confused."
+                ),
+            },
+            {
+                "prompt": "Fill in a two-column comparison chart. Rows: theme, setting, characters, point of view, conclusion. Columns: book A, book B.",
+                "type": "open_response",
+                "target_concept": "multi_dimension_comparison",
+                "rubric": (
+                    "Mastery: all five rows filled in for both books with specific content. Proficient: most rows "
+                    "filled in. Developing: chart incomplete or general."
+                ),
+            },
+            {
+                "prompt": "Write three comparison sentences in the 'Both X, but A Y while B Z' form about two books you have read.",
+                "type": "open_response",
+                "target_concept": "comparison_sentence_writing",
+                "rubric": (
+                    "Mastery: three substantive comparison sentences with shared element and named different treatments. "
+                    "Proficient: three sentences at the surface level. Developing: cannot produce three sentences in "
+                    "the form."
+                ),
+            },
+            {
+                "prompt": "Compare this fiction and this nonfiction book on the same topic. How does the genre change what each book can do?",
+                "type": "open_response",
+                "target_concept": "fiction_nonfiction_pairing",
+                "rubric": (
+                    "Mastery: substantive comparison identifying what each genre adds and what each cannot do. "
+                    "Proficient: surface-level comparison. Developing: cannot articulate genre difference."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "two finished books for the comparison (same topic, same author, or same theme)",
+                "a Venn diagram template (two overlapping circles)",
+                "a two-column comparison chart template",
+            ],
+            "recommended": [
+                "fairy-tale retellings: a classical version and a modern retelling (Cinderella, Snow White, Little Red Riding Hood)",
+                "fiction-nonfiction pairs on the child's favorite topics (whales, knights, dragons, volcanoes, dogs)",
+                "two books by the same author (Beverly Cleary, Roald Dahl, Kate DiCamillo, E. B. White)",
+            ],
+        },
+        "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 20},
+        "accommodations": {
+            "dyslexia": "Use audiobooks for one or both books to remove decoding load. Comparison is an interpretive skill that lives at the level of meaning, not decoding.",
+            "adhd": "Use the Venn diagram on a large sheet of paper as a visible artifact. Fill it in over multiple short sessions rather than one long one.",
+            "gifted": "Compare three books at once instead of two. Compare across more sophisticated dimensions (style, voice, structure, the author's stance). Begin to compare authors rather than just books.",
+            "visual_learner": "The Venn diagram and the two-column chart are themselves visual tools. Add color coding to highlight shared themes.",
+            "kinesthetic_learner": "Sort comparison statements onto a large floor Venn diagram by stepping into each section.",
+            "auditory_learner": "Discuss the comparison aloud with a real partner who has read both books.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we put two books side by side and notice what they share and where they differ. We use Venn "
+                    "diagrams and two-column charts as the visual tools. We compare across dimensions (theme, setting, "
+                    "characters, point of view, style, conclusion) and we move beyond surface comparison to substantive "
+                    "comparison."
+                ),
+                "gradual_release": {
+                    "i_do": "Parent builds a Venn diagram for two books, naming what is unique to each and what they share.",
+                    "we_do": "Parent and child build a Venn diagram for a second pair, taking turns proposing items.",
+                    "you_do": "Child builds a comparison chart for a third pair independently.",
+                },
+                "guided_practice": [
+                    "Venn diagram of two books",
+                    "Two-column chart across five dimensions",
+                    "Comparison sentence writing in the 'Both X, but A Y while B Z' form",
+                ],
+                "independent_practice": [
+                    "Compare each new chapter book to one already read",
+                    "Build a comparison chart at the end of each pair",
+                ],
+                "mastery_check": [
+                    "Substantive Venn diagram across two books",
+                    "Multi-dimension comparison chart",
+                    "Three substantive comparison sentences",
+                ],
+                "spiral_review": [
+                    "Return to earlier comparisons; refine them with the deeper reading the child can now bring",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "Comparison is one of the oldest acts of reading. The Greeks compared their heroes; Plutarch's Lives "
+                    "explicitly paired one Greek with one Roman so the reader could compare. To compare two texts is to "
+                    "enter a long tradition of reading books in conversation, not in isolation."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the six dimensions of comparison: theme, setting, characters, point of view, style, conclusion",
+                        "Recite the comparison sentence form: both X, but A Y, while B Z",
+                    ],
+                    "recitations": [
+                        "Memorize one comparison sentence per week from the child's reading; the language of comparison lives in the ear",
+                    ],
+                },
+                "copywork": [
+                    "Copy one well-formed comparison sentence per week into the copybook; the structure of comparison lives in the hand",
+                ],
+                "recitation_routine": "At the end of each chapter book, the child compares it to one previously read book using the dimension vocabulary.",
+                "history_integration": "Plutarch's Lives is the central classical model: parallel lives of Greek and Roman figures compared side by side. Apply the comparison vocabulary to history and biography.",
+                "read_aloud_suggestions": [
+                    "Pairs worth comparing: two retellings of a fairy tale, two books by the same author, two biographies of the same historical figure",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "Pairs of living books that compare richly: two by the same author, two on the same topic, two retellings of the same tale",
+                ],
+                "short_lesson_flow": "Lay two finished books side by side. Ask one good comparison question. The child answers in their own words; the parent listens and asks for the evidence in each book.",
+                "narration_prompt": "Tell me what these two books share and where they differ. Take your time.",
+                "real_world_objects": [
+                    "Two finished books side by side on the reading table",
+                    "A Venn diagram drawn on a notebook page",
+                    "A comparison notebook kept across the term",
+                ],
+                "nature_connection": "Comparison in nature observation: two species of birds at the feeder; two leaves from different trees; two days of weather. The skill of comparison applies to the natural world as readily as to texts.",
+                "habit_focus": "The habit of seeing books in conversation rather than in isolation.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Venn diagram template laminated for dry-erase use",
+                    "Two-column chart template with dimension labels (theme, setting, characters, point of view, conclusion)",
+                    "Pairs of books arranged for comparison work (same topic, same author, same theme pairs)",
+                    "Comparison sentence cards modeling the 'Both X, but A Y while B Z' form",
+                ],
+                "presentation": {
+                    "three_period_lesson": "This is what these books share; this is what is unique to A; this is what is unique to B. Show me a shared element; show me an A-only element; show me a B-only element.",
+                    "steps": [
+                        "The guide presents a pair of books and a blank Venn diagram",
+                        "Child fills in the diagram freely, returning to the books for evidence",
+                        "Child moves to the multi-dimension chart for a deeper comparison",
+                        "Across the term the child develops a library of comparisons in their notebook",
+                    ],
+                },
+                "control_of_error": "The books themselves are the control: a child returns to the books to confirm or refine each comparison item.",
+                "abstraction_pathway": "From filling in surface items in a Venn diagram, to filling in substantive items, to writing comparison sentences without the diagram, toward seeing two books in conversation at the first reading.",
+                "extensions": [
+                    "Three-way comparisons of three books on a theme",
+                    "Author comparisons: how does one author's stance differ from another's?",
+                    "Fiction-and-nonfiction pairings as a regular practice",
+                ],
+                "observation_focus": "Watch for the child reaching for comparison spontaneously when reading two books in proximity.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep pairs of books visible: two retellings of a tale, two books on the child's favorite topic, two books by a favorite author",
+                    "Welcome comparison talk at the table: 'I noticed both books had X' or 'these two books are different in Y way'",
+                    "Make fiction-and-nonfiction pairs on the child's interest topics",
+                ],
+                "real_world_contexts": [
+                    "Comparing a book and its movie adaptation",
+                    "Comparing two grandparents' versions of a family story",
+                    "Comparing two news sources on the same event",
+                    "Comparing two recipes for the same dish",
+                ],
+                "conversation_starters": [
+                    "What did these two books have in common?",
+                    "What did each one do that the other didn't?",
+                    "Which one did you prefer, and what made the difference?",
+                    "If you had to pick one to recommend to a friend, which would it be and why?",
+                ],
+                "resource_bank": [
+                    "Pairs of books on the child's interest topics",
+                    "Movie adaptations of beloved books",
+                    "A discussion partner who reads alongside",
+                ],
+                "parent_role": "Welcome the child's comparisons as real reader-conversation. Ask 'where in each book does that show?' to invite evidence-grounded comparison.",
+                "observation_documentation": "Across a term, note the comparisons the child makes spontaneously in conversation. These are the real signs of internalized comparison habits.",
+            },
+        },
+        "connections": {
+            "math": "Comparison in mathematics (greater than, less than, equal to) shares the same logical move as comparison in reading: noticing where two things differ and where they share",
+            "science": "Compare-and-contrast is a central scientific skill: two species, two specimens, two conditions, two results",
+            "history": "Comparing two historical figures or two events is the central skill of historical reading; Plutarch's Lives is the classical model",
+            "writing": "Writing a compare-and-contrast essay is the writing-strand application of this reading skill",
+        },
+    },
 }
