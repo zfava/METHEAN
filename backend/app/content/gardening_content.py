@@ -889,10 +889,7 @@ GARDENING_CONTENT: dict[str, dict] = {
                 "The displaced soil is in the bucket or on the tarp, not scattered across the "
                 "bed where the next plant will go"
             ),
-            (
-                "The off-hand was clear of the trowel path throughout the demonstration; the "
-                "mentor confirms"
-            ),
+            ("The off-hand was clear of the trowel path throughout the demonstration; the mentor confirms"),
             "The learner is kneeling on a pad (or seated on a stool) with the back roughly straight, not bent over from a standing position",
             (
                 "The trowel was set down on a known surface (the bucket, the tarp, beside the "
@@ -1182,10 +1179,7 @@ GARDENING_CONTENT: dict[str, dict] = {
                 "Every transplant in the row is at the in-row spacing the planting card "
                 "specifies, within roughly 1 inch, measured by tape or marked stick"
             ),
-            (
-                "Every row is at the between-row spacing the planting card specifies, within "
-                "roughly 1 inch"
-            ),
+            ("Every row is at the between-row spacing the planting card specifies, within roughly 1 inch"),
             (
                 "Every transplant is at the correct planting depth for its crop: tomato-family "
                 "deeper than the cell soil line; brassicas, lettuces, and most herbs at the cell "
@@ -1211,10 +1205,7 @@ GARDENING_CONTENT: dict[str, dict] = {
                 "the base, until water visibly pools and drains; the learner does not blast the "
                 "seedling with a jet of water"
             ),
-            (
-                "The off-hand was clear of the trowel path throughout each hole; the mentor "
-                "confirms"
-            ),
+            ("The off-hand was clear of the trowel path throughout each hole; the mentor confirms"),
             (
                 "The learner completes a row of six to twelve transplants in a single session "
                 "without leaving any plant out of the soil for more than the time it takes to dig "
