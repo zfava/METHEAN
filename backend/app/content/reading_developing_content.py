@@ -4772,4 +4772,378 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Many modern stories are built on mythological frameworks; learning to read myth prepares the child to recognize and use mythological structures in their own writing",
         },
     },
+    "rd-12": {
+        "enriched": True,
+        "learning_objectives": [
+            "Use context clues to determine the meaning of an unfamiliar word in a sentence or passage",
+            "Recognize the four common types of context clue: definition, example, synonym, antonym",
+            "Distinguish when context is sufficient (the word's meaning is clear from the surrounding text) from when it is insufficient (the word must be looked up or asked about)",
+            "Develop the habit of trying context first before stopping to look up or ask, so reading flow is preserved",
+            "Track new words learned across a term as a real-world vocabulary log",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "Foundational reading (rf-19) built vocabulary through direct instruction. Developing vocabulary takes "
+                "up the central skill that an independent reader uses for the rest of their reading life: figuring out "
+                "an unfamiliar word from the words around it. The skill rests on four types of context clue: "
+                "DEFINITION (the sentence defines the word for you), EXAMPLE (the sentence gives an example), SYNONYM "
+                "(the sentence pairs the word with a known synonym), ANTONYM (the sentence pairs the word with its "
+                "opposite, often signaled by 'but' or 'unlike'). The child also learns when context is INSUFFICIENT "
+                "and the word should be looked up or asked about; the habit of trying context first is what keeps "
+                "reading flow alive."
+            ),
+            "scaffolding_sequence": [
+                "Begin with a sentence that defines its key word explicitly: 'A philologist, that is, a person who studies the history of language, traveled the world collecting old words.' Show the child the definition clue.",
+                "Introduce the example clue: 'The bird had carnivorous habits — it ate small mice, frogs, and other live prey.' Show how 'small mice, frogs, and other live prey' is the example that reveals 'carnivorous'.",
+                "Introduce the synonym clue: 'The path was narrow and constricted by the trees on both sides.' Show how 'narrow' is the synonym that reveals 'constricted'.",
+                "Introduce the antonym clue: 'Unlike his lazy brother, Tom was diligent and finished his work early.' Show how 'lazy' (the opposite) reveals 'diligent'.",
+                "Practice each clue type on multiple sentences from the child's actual reading",
+                "Move to passages where the context clue is across multiple sentences, not within one",
+                "Practice the 'context-first, look-up-second' habit: when the child meets an unfamiliar word, try context first; if context is insufficient or the meaning is critical, then look up",
+                "Keep a vocabulary log: title of the book, the new word, the sentence it appeared in, the meaning the child worked out, and (if looked up) the dictionary confirmation",
+            ],
+            "socratic_questions": [
+                "What words around this unfamiliar word might tell you what it means?",
+                "Does the sentence give a definition? An example? A synonym? An opposite?",
+                "Can you make a smart guess at the meaning from what you read? Does the guess make the rest of the sentence make sense?",
+                "Is this a word you can figure out, or one where context isn't enough? How do you know?",
+                "What was the new word from yesterday's reading? Did you remember it today?",
+            ],
+            "practice_activities": [
+                "Context-clue type identification: in a passage, find an unfamiliar word and name which type of clue (definition / example / synonym / antonym) the surrounding text uses",
+                "Make-a-smart-guess practice: read a sentence with an unfamiliar word; guess the meaning from context; check against a dictionary",
+                "Vocabulary log: across a term, log every new word the child meets and figures out (with the sentence, the guess, and the confirmation)",
+                "Word-of-the-day from current reading: pick one good context-rich sentence each day and work through it together",
+                "Read-aloud-and-pause: parent reads a passage aloud; pauses on an unfamiliar word; child works out the meaning from context",
+            ],
+            "real_world_connections": [
+                "Working out unfamiliar words during chapter book reading without stopping the flow",
+                "Working out unfamiliar terms in nonfiction (science vocabulary, history vocabulary) where context often defines explicitly",
+                "Recognizing the same skill in adult conversation: most new words an adult learns are picked up from context",
+                "Working out signs, menus, and instructions in real-world situations",
+                "Recognizing context clues in subtitles and dubbed media",
+            ],
+            "common_misconceptions": [
+                "Believing every unfamiliar word should be looked up. Looking up every word destroys reading flow. Context first is the rule.",
+                "Believing context is always sufficient. Sometimes context is too thin (especially for technical vocabulary or precise meanings); the dictionary or asking is the correct move then.",
+                "Treating a context-guess as a final answer. A smart guess from context is a working hypothesis; the next several sentences usually confirm or correct it.",
+                "Skipping unfamiliar words entirely. Skipping costs comprehension; context-from-trying is much better than skipping.",
+                "Believing dictionary work is always more careful than context. A dictionary gives one or two definitions; a context-grounded guess is the meaning IN THIS SENTENCE, which is what reading actually needs.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Names the four context-clue types and gives an example of each",
+                "Determines the meaning of an unfamiliar word from context in unfamiliar passages",
+                "Distinguishes when context is sufficient from when it is insufficient and chooses to look up or ask appropriately",
+                "Sustains the context-first habit during chapter book reading without stopping the flow",
+                "Keeps a vocabulary log across a term as evidence of growth",
+            ],
+            "proficiency_indicators": [
+                "Identifies clear context clues with prompting",
+                "Makes reasonable guesses at meaning from context",
+            ],
+            "developing_indicators": [
+                "Stops at every unfamiliar word; cannot proceed without looking up",
+                "Skips unfamiliar words without trying context",
+            ],
+            "assessment_methods": [
+                "context-clue type identification on prepared passages",
+                "make-a-smart-guess exercises with dictionary confirmation",
+                "vocabulary log review across the term",
+                "real-time reading observation during chapter book reading",
+            ],
+            "sample_assessment_prompts": [
+                "Read this sentence. What does the underlined word mean? What clue helped you?",
+                "For each of these four sentences, name which type of context clue is used.",
+                "Show me your vocabulary log. What word was hardest? What word do you remember best?",
+                "When you read your chapter book and meet a new word, what do you do?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": (
+                    "What does 'feline' mean in this sentence? 'The feline, a small black cat, slept in the sunbeam.'"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "A type of bird.",
+                    "A cat.",
+                    "A piece of furniture.",
+                    "A kind of weather.",
+                ],
+                "correct_answer": "A cat.",
+                "hints": [
+                    "Look for the example clue in the sentence.",
+                ],
+                "explanation": (
+                    "The sentence gives an EXAMPLE: 'the feline, a small black cat'. The example tells you that a "
+                    "feline is a cat. This is the example context-clue type."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "What does 'diligent' mean? 'Unlike his lazy brother, Tom was diligent and finished his homework "
+                    "early every day.'"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Lazy.",
+                    "Hardworking.",
+                    "Tired.",
+                    "Funny.",
+                ],
+                "correct_answer": "Hardworking.",
+                "hints": [
+                    "Look for the antonym clue: 'unlike his lazy brother'.",
+                ],
+                "explanation": (
+                    "The sentence pairs 'diligent' with its opposite ('unlike his lazy brother'). The antonym tells you "
+                    "that diligent is the OPPOSITE of lazy, which is hardworking. The 'unlike' signal word marks the "
+                    "antonym context-clue type."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "What are the four common types of context clue?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Beginning, middle, end, epilogue.",
+                    "Definition, example, synonym, antonym.",
+                    "Fiction, nonfiction, poetry, drama.",
+                    "Past, present, future, dream.",
+                ],
+                "correct_answer": "Definition, example, synonym, antonym.",
+                "hints": [
+                    "Four ways a sentence can reveal an unfamiliar word.",
+                ],
+                "explanation": (
+                    "The four common context-clue types are: DEFINITION (the sentence defines the word), EXAMPLE (the "
+                    "sentence gives an example), SYNONYM (the sentence pairs the word with a known synonym), and "
+                    "ANTONYM (the sentence pairs the word with its opposite, often with 'unlike' or 'but')."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "You meet an unfamiliar word in your chapter book. What should you do FIRST?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Stop and look it up immediately.",
+                    "Try context first: re-read the sentence and see if the surrounding words tell you what it means. If context is enough, keep reading. If not, look up or ask.",
+                    "Skip it and keep reading.",
+                    "Give up on the book.",
+                ],
+                "correct_answer": "Try context first: re-read the sentence and see if the surrounding words tell you what it means. If context is enough, keep reading. If not, look up or ask.",
+                "hints": [
+                    "Context first preserves reading flow; look-up second when needed.",
+                ],
+                "explanation": (
+                    "The context-first habit preserves reading flow. Most unfamiliar words can be figured out from "
+                    "context. When context isn't enough (technical terms, precise meanings, words where the meaning "
+                    "really matters), looking up or asking is the right second step. Stopping at every word destroys "
+                    "reading; skipping every word destroys comprehension."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Read this passage and find an unfamiliar word. Use context to guess its meaning. Then say what "
+                    "type of context clue helped you."
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Pick any word the child does not immediately know; apply the four-type vocabulary.",
+                ],
+                "explanation": (
+                    "A complete answer names the unfamiliar word, the guess at meaning from context, and which of the "
+                    "four types (definition / example / synonym / antonym) helped. With practice this becomes "
+                    "automatic; the child reads without conscious effort, and context-from-trying handles 90% of "
+                    "unfamiliar words."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "For each of these four sentences (one per type), name the type of context clue used and the meaning of the underlined word.",
+                "type": "open_response",
+                "target_concept": "four_type_clue_identification",
+                "rubric": (
+                    "Mastery: identifies type and meaning for all four. Proficient: identifies type for three. "
+                    "Developing: confuses types or cannot identify meaning."
+                ),
+            },
+            {
+                "prompt": "Read this passage and find three unfamiliar words. For each, work out the meaning from context and name the clue type.",
+                "type": "open_response",
+                "target_concept": "context_application_in_passage",
+                "rubric": (
+                    "Mastery: three words with meanings and clue types correctly identified. Proficient: two words. "
+                    "Developing: cannot apply in extended passage."
+                ),
+            },
+            {
+                "prompt": "Show me your vocabulary log from this term. What word was hardest to figure out? What word stuck best?",
+                "type": "open_response",
+                "target_concept": "vocabulary_log_review",
+                "rubric": (
+                    "Mastery: log shows consistent entries across the term with reflection. Proficient: log shows "
+                    "entries but less reflection. Developing: log empty or scattered."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "a current chapter book or nonfiction reading with appropriate vocabulary stretch",
+                "a vocabulary log (a notebook page with columns for book title, the new word, the sentence, the guess, the confirmation)",
+                "a dictionary at the child's level (a children's dictionary, the family dictionary)",
+            ],
+            "recommended": [
+                "an online or app-based dictionary the child can use for quick check after context",
+                "a thesaurus for exploring synonyms and antonyms",
+                "subscription to a vocabulary-rich children's magazine (Cricket, Cobblestone, Highlights) for context-clue practice",
+            ],
+        },
+        "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 15},
+        "accommodations": {
+            "dyslexia": "Practice context-clue work on read-aloud passages, not just silent reading. The skill is about meaning, not decoding; remove the decoding load when teaching the skill.",
+            "adhd": "Short context-clue exercises rather than long ones. The vocabulary log can be brief: a one-line entry per word.",
+            "gifted": "Move to harder texts where context clues are more subtle. Introduce Latin and Greek roots as another context resource. Begin to notice when a single English word has multiple meanings and context disambiguates.",
+            "visual_learner": "Highlight the context clue in color on a printed passage. Color-code the four clue types.",
+            "kinesthetic_learner": "Sort sentence-strip cards into the four clue-type piles. Physical movement helps the category settle.",
+            "auditory_learner": "Discuss context clues aloud. Read sentences aloud to hear how the clue works in the rhythm.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we learn the central reader's skill of figuring out unfamiliar words from context. We learn "
+                    "the four types of context clue (definition, example, synonym, antonym) and we practice the "
+                    "context-first habit that preserves reading flow."
+                ),
+                "gradual_release": {
+                    "i_do": "Parent reads aloud a sentence with an unfamiliar word and works through the context to determine meaning, naming the clue type.",
+                    "we_do": "Together with the child, work through several sentences identifying clue types and meanings.",
+                    "you_do": "Child applies context-clue skill to their own current reading and keeps the vocabulary log.",
+                },
+                "guided_practice": [
+                    "Daily context-clue practice on a chosen sentence from current reading",
+                    "Weekly vocabulary log review",
+                    "Apply context-first habit during chapter book reading",
+                ],
+                "independent_practice": [
+                    "Keep vocabulary log across the term",
+                    "Read widely with the context-first habit",
+                ],
+                "mastery_check": [
+                    "Names four clue types with examples",
+                    "Applies context-clue skill to unfamiliar passages",
+                    "Keeps a real vocabulary log",
+                ],
+                "spiral_review": [
+                    "Return to vocabulary log entries from weeks ago; check that the words are remembered",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "Vocabulary built by wide reading and careful attention is the mark of the educated reader. The "
+                    "child who learns to figure out words from context owns a tool that serves the rest of their "
+                    "reading life. This is the central reader's skill, older than printed dictionaries."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the four clue types: definition, example, synonym, antonym",
+                        "Recite the rule: context first, look-up second",
+                    ],
+                    "recitations": [
+                        "Memorize one well-formed sentence containing a rich vocabulary word each week",
+                    ],
+                },
+                "copywork": [
+                    "Copy the day's vocabulary log entry into the copybook with the sentence and the meaning",
+                ],
+                "recitation_routine": "At each reading, the child names one new word and its context-derived meaning.",
+                "history_integration": "Many English words have Latin and Greek roots; etymology supports context clues. Introduce a few common roots and prefixes lightly as the child encounters them.",
+                "read_aloud_suggestions": [
+                    "Books with rich vocabulary at and just above the child's reading level (E. B. White, Roald Dahl, the Magic Tree House series)",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "Living books with rich vocabulary that invite context-clue practice naturally",
+                ],
+                "short_lesson_flow": "During reading aloud or silent reading, when the child meets an unfamiliar word, pause briefly to try context together. If context is enough, continue; if not, look up. The flow of reading is preserved.",
+                "narration_prompt": "Tell me about a new word you met today. How did you figure it out?",
+                "real_world_objects": [
+                    "A vocabulary log in the child's reading notebook",
+                    "A family dictionary kept near the reading area",
+                ],
+                "nature_connection": "Nature writing often introduces rich vocabulary (specific species names, weather and landform terms) that the child works out from context.",
+                "habit_focus": "The habit of attention to language. The careful reader notices an unfamiliar word and works it out; the careless reader skips.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Context-clue type cards with examples on the back",
+                    "Sentence-strip cards for sorting into the four clue types",
+                    "A vocabulary log the child manages",
+                    "A children's dictionary in the reading area",
+                ],
+                "presentation": {
+                    "three_period_lesson": "This is a definition clue; this is an example clue; this is a synonym clue; this is an antonym clue. Show me an example clue; show me a synonym clue. What type is this sentence?",
+                    "steps": [
+                        "The guide presents the four clue types with worked examples",
+                        "The child sorts sentence strips into the four piles",
+                        "The child applies context-clue skill to their own reading and keeps the vocabulary log",
+                        "Across the term the child develops fluency in context-clue work without thinking about types",
+                    ],
+                },
+                "control_of_error": "The dictionary is the control: a context-guess can be confirmed against the dictionary entry.",
+                "abstraction_pathway": "From sorting concrete sentence strips, to identifying clue types in unfamiliar passages, to applying context-clue skill automatically during reading.",
+                "extensions": [
+                    "Latin and Greek roots as another context resource",
+                    "Multiple-meaning words and how context disambiguates",
+                    "Vocabulary growth measurement across a term",
+                ],
+                "observation_focus": "Watch for the child applying context first during reading without prompting.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a children's dictionary visible in the reading area",
+                    "Welcome the child's questions about new words; share your own questions about words you encounter",
+                    "Read widely and aloud, with rich vocabulary, so context-clue practice happens naturally",
+                ],
+                "real_world_contexts": [
+                    "Figuring out new words during chapter book reading",
+                    "Asking about words encountered in conversation, on signs, in shows",
+                    "Building vocabulary through wide and varied reading",
+                ],
+                "conversation_starters": [
+                    "Did you meet any interesting new words today?",
+                    "How did you figure out what that meant?",
+                    "What does that word mean to you in this sentence?",
+                ],
+                "resource_bank": [
+                    "A wide and rich home library",
+                    "A children's dictionary or family dictionary kept available",
+                    "Audiobooks for hearing rich vocabulary in use",
+                ],
+                "parent_role": "Be a curious word-lover yourself. Look up words in front of the child. Welcome the child's questions about words. Read aloud books with rich vocabulary.",
+                "observation_documentation": "Across a term, note the child's spontaneous vocabulary in talking and writing. New words used easily are the real sign of internalization.",
+            },
+        },
+        "connections": {
+            "math": "Word-problem reading often hinges on understanding key vocabulary; context-clue skill supports math reading directly",
+            "science": "Science vocabulary is often introduced with explicit definitions in the text; the definition clue is especially common in science writing",
+            "history": "Historical vocabulary is often unfamiliar; context-clue skill is the key to reading history at this level",
+            "writing": "A growing vocabulary supports the child's own writing; words met in reading appear in writing weeks or months later",
+        },
+    },
 }
