@@ -1851,4 +1851,261 @@ MATH_DEVELOPING_CONTENT = {
             "history": "Counting Roman legions of large numbers, medieval years in dynasties, weeks in old calendars",
         },
     },
+    "md-08": {
+        "enriched": True,
+        "learning_objectives": [
+            "State and apply the commutative property of multiplication: a x b = b x a",
+            "State and apply the associative property: (a x b) x c = a x (b x c)",
+            "State and apply the distributive property: a x (b + c) = a x b + a x c",
+            "Use the properties to decompose unfamiliar products into easier ones (e.g., 7 x 8 = 7 x (5 + 3) = 35 + 21 = 56)",
+        ],
+        "teaching_guidance": {
+            "introduction": "The properties are not new facts; they are patterns the child has been using all along without naming them. Today we name them, see why each is true with an array, and start using them as tools to attack products the child does not yet have by heart. The distributive property in particular is the workhorse: it turns any unknown one-digit fact into the sum of two known ones, and it sets the stage for multi-digit multiplication later.",
+            "scaffolding_sequence": [
+                "Show two arrays of 3 x 4 and 4 x 3 with snap cubes; observe the same total in different orientations; name the commutative property",
+                "Show (2 x 3) x 4 by building three groups of two cubes and then making four such groups; show 2 x (3 x 4) by building the 3-by-4 array and doubling; observe equal totals; name the associative property",
+                "Show 4 x 7 by decomposing 7 into 5 + 2 with a 4-by-7 array split into a 4-by-5 block and a 4-by-2 block; observe that the two blocks add to the whole; name the distributive property",
+                "Practice using each property in turn on chosen problems",
+                "Bring the distributive property to the fact table: 8 x 6 = 8 x (5 + 1) = 40 + 8 = 48; 7 x 8 = 7 x (10 - 2) = 70 - 14 = 56",
+                "Combine: solve a small problem by commuting first (3 x 9 = 9 x 3) and then distributing (9 x 3 = 9 x (1 + 2) = 9 + 18 = 27)",
+            ],
+            "socratic_questions": [
+                "Show me with cubes why 3 x 4 = 4 x 3.",
+                "If you know 5 x 6 and 2 x 6, how can you find 7 x 6 without computing it from scratch?",
+                "What does the associative property let you do with three factors?",
+                "Why is the distributive property the most useful of the three?",
+            ],
+            "practice_activities": [
+                "Property-naming drill: shown a worked problem (e.g., 7 x 6 = 7 x 5 + 7 x 1 = 35 + 7 = 42), the child names the property used",
+                "Decomposition practice: solve five products by breaking one factor into two friendly parts and distributing",
+                "Three-factor practice: solve (2 x 3) x 5 in two different orderings using the associative property",
+                "Array-split: take a 6 x 8 array and split it three different ways, showing the distribution each time",
+            ],
+            "real_world_connections": [
+                "Splitting a calculation into easier parts in real shopping (e.g., 6 items at $7 each = 6 x $5 + 6 x $2)",
+                "Multiplying two groups in either order in a recipe doubling (2 batches of 3 cups vs. 3 cups of 2 batches)",
+                "Rearranging seats: 4 rows of 6 versus 6 rows of 4 fits the same room differently but seats the same number",
+                "Building rectangular spaces and noticing that a 3-by-12 layout holds the same as a 12-by-3 layout",
+            ],
+            "common_misconceptions": [
+                "Believing the commutative property applies to subtraction or division (it does not: 5 - 3 is not 3 - 5)",
+                "Treating the distributive property as 'multiplying through' without seeing the array justification",
+                "Confusing the associative property (regrouping factors) with the commutative property (swapping factors)",
+                "Forgetting to multiply both pieces when distributing (e.g., writing 7 x 8 = 7 x 5 + 3 instead of 7 x 5 + 7 x 3)",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Names the commutative, associative, and distributive properties with one example each",
+                "Solves an unknown product by decomposing into known facts using the distributive property",
+                "Identifies which property is being used in a given worked problem",
+            ],
+            "assessment_methods": ["property identification on worked problems", "decomposition of one unknown product", "array justification of one property"],
+            "sample_assessment_prompts": [
+                "Solve 7 x 9 by breaking 9 into 5 + 4 and using the distributive property. Show every step.",
+                "Name the property used: (3 x 4) x 5 = 3 x (4 x 5).",
+                "Show with an array why 4 x 6 = 6 x 4.",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "Fill in the blank: 8 x 5 = 5 x ____. What property is this?",
+                "expected_type": "text",
+                "hints": ["The commutative property lets factors swap"],
+                "explanation": "8 x 5 = 5 x 8. The commutative property of multiplication.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "Use the distributive property to find 6 x 7 by breaking 7 into 5 + 2.",
+                "expected_type": "number",
+                "correct_answer": "42",
+                "hints": ["6 x 7 = 6 x 5 + 6 x 2"],
+                "explanation": "6 x 7 = 6 x (5 + 2) = 6 x 5 + 6 x 2 = 30 + 12 = 42.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "Solve (2 x 3) x 4 two ways: first as (2 x 3) x 4, then as 2 x (3 x 4). Are the answers the same?",
+                "expected_type": "text",
+                "hints": ["Compute the parentheses first each time"],
+                "explanation": "(2 x 3) x 4 = 6 x 4 = 24. 2 x (3 x 4) = 2 x 12 = 24. Same answer, by the associative property.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "Use the distributive property to find 8 x 6. Show your work.",
+                "expected_type": "number",
+                "correct_answer": "48",
+                "hints": ["Try 8 x (5 + 1) = 8 x 5 + 8 x 1"],
+                "explanation": "8 x 6 = 8 x (5 + 1) = 8 x 5 + 8 x 1 = 40 + 8 = 48.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": "Use the distributive property to find 7 x 13 by breaking 13 into 10 + 3.",
+                "expected_type": "number",
+                "correct_answer": "91",
+                "hints": ["7 x 13 = 7 x 10 + 7 x 3"],
+                "explanation": "7 x 13 = 7 x (10 + 3) = 7 x 10 + 7 x 3 = 70 + 21 = 91. This is the seed of two-digit multiplication.",
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Solve 7 x 9 by breaking 9 into 5 + 4 and using the distributive property. Show every step.",
+                "type": "open_response",
+                "rubric": "Mastery: 7 x (5 + 4) = 35 + 28 = 63 written cleanly. Proficient: correct answer with informal steps. Developing: missing one piece of the distribution.",
+                "target_concept": "distributive_property_in_use",
+            },
+            {
+                "prompt": "Name the property used in each: (a) 4 x 7 = 7 x 4; (b) (2 x 3) x 5 = 2 x (3 x 5); (c) 6 x (4 + 1) = 6 x 4 + 6 x 1.",
+                "type": "open_response",
+                "rubric": "Mastery: commutative, associative, distributive. Proficient: two of three. Developing: one or zero.",
+                "target_concept": "property_identification",
+            },
+            {
+                "prompt": "Show with an array why 5 x 6 equals 6 x 5.",
+                "type": "open_response",
+                "rubric": "Mastery: builds or draws a rectangle in both orientations and notes equal total. Proficient: correct claim with weak visual. Developing: unclear.",
+                "target_concept": "commutative_array_justification",
+            },
+        ],
+        "resource_guidance": {
+            "required": ["snap cubes or counters for arrays", "grid paper for drawn arrays", "property reference card"],
+            "recommended": ["multiplication facts chart for cross-reference", "two-color tiles for showing the split in distribution", "real-life problem cards involving the properties in shopping or cooking"],
+        },
+        "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 15},
+        "accommodations": {
+            "dyslexia": "Always pair the property's name with an example written and read aloud. Color-code each property's reference card.",
+            "adhd": "Keep array-building short and active; alternate building and writing in the same session.",
+            "gifted": "Move quickly to two-digit times one-digit problems using distribution, and to comparing the properties of multiplication with those of addition.",
+            "visual_learner": "Always use arrays to justify each property; color the two parts of a distributed array in different colors.",
+            "kinesthetic_learner": "Build every property's example with snap cubes; physically rotate a rectangle to show the commutative property.",
+            "auditory_learner": "State each property aloud at the start of each session: 'commutative: order does not matter. associative: grouping does not matter. distributive: split and multiply each part.'",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Today we name three properties of multiplication: the commutative property, the associative property, and the distributive property. Each is something you already use; today they get their names and become tools you can call by name.",
+                "gradual_release": {
+                    "i_do": "Model 3 x 4 and 4 x 3 with cubes and confirm same total; name the commutative property and write a x b = b x a. Repeat for the associative and distributive properties with worked examples.",
+                    "we_do": "Work five problems together: name the property at use in each. Then solve three unknown facts by distribution, child suggesting the split and the parent confirming.",
+                    "you_do": "Child solves a ten-problem set: half identifying the property in worked examples, half decomposing a product by distribution.",
+                },
+                "guided_practice": [
+                    "Five property-identification problems on worked examples",
+                    "Five decomposition problems using the distributive property to find an unfamiliar product",
+                    "One three-factor problem worked in two different groupings using the associative property",
+                ],
+                "independent_practice": [
+                    "Worksheet of ten property problems: five identification, five application",
+                    "Word-problem set: three problems whose solution invites a distributive strategy",
+                ],
+                "mastery_check": [
+                    "Names all three properties and gives a clear example of each",
+                    "Uses the distributive property to find at least one previously unknown product",
+                    "Identifies the correct property in a worked example",
+                ],
+                "spiral_review": [
+                    "Daily mental-math warm-up using the distributive property on one fact",
+                    "Continue mixed-fact drill so the properties have something to work with",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "The Greeks loved the properties of number, the steady laws that hold no matter the example. The commutative and associative properties they found beautiful, and the distributive property they used in geometry to split rectangles into smaller rectangles. To know these properties is to know the laws beneath arithmetic, not only the facts of it.",
+                "memory_work": {
+                    "chants": [
+                        "Recite the commutative property: a times b equals b times a, the order of factors does not matter",
+                        "Recite the associative property: the grouping of factors does not matter, you may multiply in either order",
+                        "Recite the distributive property: a times the sum of b and c equals a times b plus a times c",
+                    ],
+                    "recitations": [
+                        "Daily recitation of one fully worked example for each property until the form is automatic",
+                    ],
+                },
+                "copywork": [
+                    "Copy each property's statement and a worked example into the math copybook, neat and exact, once per week",
+                ],
+                "recitation_routine": "Recite the three property names and their statements at the start of each math lesson for a week. After that, recite as needed when a property is used.",
+                "history_integration": "Tell that Euclid in his Elements used the distributive property again and again in geometry, splitting a long rectangle into two smaller rectangles to prove a result, and that the same property the child now learns has carried mathematics for over two thousand years.",
+                "read_aloud_suggestions": [
+                    "A short children's biography of Euclid or Archimedes where the love of mathematical pattern is central",
+                    "A passage from a children's history of mathematics about the Greek discoveries of numerical law",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A real, beautifully written arithmetic book that names the properties in their natural place, never a busy workbook",
+                    "A geometry-flavored picture book that shows the splitting of rectangles into smaller rectangles",
+                ],
+                "short_lesson_flow": "Begin with a short reading of a passage on the discovery of mathematical laws. Take up cubes and build one example of each property. Name each by its name and write the statement. Pose one lifelike question whose answer uses the distributive property (the cost of seven of an item at twelve dollars each). Close while interest is high.",
+                "narration_prompt": "Tell me what the distributive property does. Where would you use it in real life?",
+                "real_world_objects": [
+                    "Snap cubes or counters to build and split arrays",
+                    "Grid paper to draw and color split rectangles",
+                    "A real shopping receipt to find a distribution in real prices",
+                ],
+                "nature_connection": "Find a real natural rectangle that splits into smaller rectangles in nature (a window in a barn, a section of a garden bed, a portion of a brick wall). Notice that the smaller rectangles still add to the whole.",
+                "habit_focus": "The habit of seeing the law beneath the example: a child who notices that order does not matter, grouping does not matter, and a sum may be distributed across a product is on the road to abstract mathematical thinking.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Snap cubes or tiles to build arrays and split them",
+                    "Multiplication bead bars for verifying products",
+                    "The decanomial layout (the full one-to-ten product square) for visual confirmation of the commutative property",
+                    "Stamp game for the distributive property in larger numbers",
+                ],
+                "presentation": {
+                    "three_period_lesson": "Naming: build 3 x 4 and 4 x 3 with cubes, observe equal totals, name 'this is the commutative property.' Recognition: 'show me a commutative pair.' Recall: 'what is this called?' Move slowly. Repeat for associative and distributive.",
+                    "steps": [
+                        "Build an array; rotate it ninety degrees; observe the same total: commutative",
+                        "Build three sets of (a x b); regroup as a x (b x c) without changing the cubes: associative",
+                        "Build an a x (b + c) array; color the a x b portion one color and the a x c portion another; observe the addition: distributive",
+                        "Move to written notation only after several physical examples",
+                    ],
+                },
+                "control_of_error": "The cubes are the control: a wrong rearrangement produces the wrong total visibly, and the child sees and corrects without correction from outside. The decanomial layout, fully built, is itself a control for the commutative property across the whole table.",
+                "abstraction_pathway": "From cubes and tiles (quantity felt) to colored split arrays on grid paper (symbol and quantity together) to the written property statements with no material. Each step taken only when the prior is effortless.",
+                "extensions": [
+                    "Use the decanomial layout to confirm the commutative property across the full one-to-ten times table",
+                    "Apply the distributive property to two-digit-by-one-digit problems on the stamp game (7 x 13 = 7 x 10 + 7 x 3)",
+                    "Begin word problems where the distributive property is the natural strategy",
+                ],
+                "observation_focus": "Watch for spontaneous splitting: the child who breaks an unfamiliar product into two known parts without being told is showing the property internalized.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Leave a tray of square tiles and a small challenge: 'find two different ways to make a rectangle that holds twenty-four tiles'",
+                    "Set out a board game like Prime Climb where decomposition into factors is part of play",
+                    "Put a real receipt on the table for an unusual purchase (seven items at twelve dollars) and wonder aloud how to find the total without a calculator",
+                ],
+                "real_world_contexts": [
+                    "Doubling and tripling recipes",
+                    "Calculating cost in the head at the grocery store by breaking a price into friendly parts",
+                    "Rearranging chairs in a room and noticing that two layouts hold the same number",
+                    "Splitting a long calculation into easier chunks in any real situation",
+                ],
+                "conversation_starters": [
+                    "Six items at seven dollars each, what does that cost? Want to do it as six fives plus six twos?",
+                    "Three rows of eight versus four rows of six, which fits better here? Which holds more?",
+                    "If I know seven sevens is forty-nine, what is seven eights?",
+                ],
+                "resource_bank": [
+                    "Snap cubes or tiles available for the child to experiment with",
+                    "Real receipts and grocery lists for real-world distribution",
+                    "Card and board games using multiplication",
+                    "Picture books on mathematical patterns, available not assigned",
+                ],
+                "parent_role": "Use the properties in real life often, aloud and casually. When the child asks 'how did you do that so fast?' explain the property used. Welcome any reasonable decomposition. Never quiz; let the patterns emerge from real situations the child cares about.",
+                "observation_documentation": "Note across weeks whether the child spontaneously uses the commutative property to ease a problem (swapping the factors), the distributive property to break an unfamiliar product, or the associative property to regroup three factors usefully.",
+            },
+        },
+        "connections": {
+            "reading": "Reading and reasoning about word problems whose solution invites a decomposition strategy",
+            "science": "Calculating totals across multiple equal-group measurements by decomposing or rearranging factors",
+            "history": "Reckoning long calculations in real historical contexts (a Roman legion's strength, a medieval tithe) by clever decomposition",
+        },
+    },
 }
