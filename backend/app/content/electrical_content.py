@@ -1893,4 +1893,299 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
             "standard_refs": [],
         },
     },
+    "elc-003": {
+        "node_type": "knowledge",
+        "trade": "electrical",
+        "competency_name": (
+            "Ohm's law and basic DC and AC-resistive circuit theory: voltage, current, "
+            "resistance, and power"
+        ),
+        "progression_band": "helper",
+        "prerequisites": ["els-001"],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "Misapplying Ohm's law and concluding the wrong current draw for a "
+                    "stated voltage and resistance, or the wrong load wattage for a "
+                    "stated current and voltage. Not a direct hazard at this band (pure "
+                    "paper work), but a real downstream error if the wrong calculation "
+                    "propagates into elc-004 load calculation, elc-007 ampacity, or any "
+                    "later install."
+                ),
+                (
+                    "Treating Ohm's law as the only equation needed for AC circuits. "
+                    "Ohm's law (V = I R) applies to purely resistive AC loads (heaters, "
+                    "incandescent bulbs); inductive loads (motors, transformers, "
+                    "fluorescent ballasts, LED drivers with non-unity power factor) "
+                    "introduce reactance and a power factor below 1, where apparent "
+                    "power (V x I in volt-amps) differs from real power (in watts). Not "
+                    "a direct hazard at this band but a foundational distinction; the "
+                    "AI tutor introduces real / reactive / apparent power and power "
+                    "factor at this band and the AHJ-adopted NEC's load-calculation "
+                    "rules govern downstream."
+                ),
+                (
+                    "Mistaking voltage for the cause of injury. Voltage is the driving "
+                    "force; CURRENT through the body is what causes injury or death. A "
+                    "few hundred milliamps across the heart at 60 Hz can fibrillate. The "
+                    "rule the learner takes from elc-003 into elc-021 is that any "
+                    "voltage capable of pushing dangerous current through the body's "
+                    "resistance is dangerous, and residential 120V at hand-to-hand "
+                    "contact CAN push that current."
+                ),
+            ],
+            "ppe_required": [
+                "Trade PPE per els-001; no additional PPE required for paper work",
+            ],
+            "supervision_required": False,
+            "supervision_basis": (
+                "Pure conceptual work with paper, calculator, and the AI tutor's "
+                "interactive problem set. No real equipment, no live circuits, no tool "
+                "use. AI tutor mentors end-to-end: the learner solves problems, the AI "
+                "confirms answers, names misconceptions, and re-quizzes where needed."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "Pencil, paper, and a calculator",
+                "specification": "A real calculator (handheld or phone) capable of basic arithmetic, division, and a square root function",
+                "alternatives": [],
+            },
+            {
+                "name": "A reference card for Ohm's law and the power equations",
+                "specification": (
+                    "A card or printout showing V = I R, P = V I, P = I^2 R, P = V^2 / R, "
+                    "and the Ohm's-law triangle / power-rose. The AI tutor provides one."
+                ),
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [],
+        "workspace_requirements": {
+            "surface": "Any flat surface (desk or table); the work is paper and arithmetic",
+            "ventilation": "Indoor or outdoor; not relevant",
+            "lighting": "Adequate to read calculator and paper",
+            "power": "None required (handheld calculator); a phone calculator works",
+            "containment": "None required",
+        },
+        "skill_description": (
+            "The learner builds a working command of the fundamental electrical "
+            "relationships. Voltage (V, volts) is the potential difference that drives "
+            "current through a conductor; current (I, amperes) is the rate of charge "
+            "flow; resistance (R, ohms) is the opposition to current flow; power (P, "
+            "watts) is the rate at which electrical energy is converted to heat, light, "
+            "motion, or other forms. Ohm's law states V = I R; equivalently I = V / R "
+            "and R = V / I. Power has three forms derived from Ohm's law: P = V I (the "
+            "general form for purely resistive circuits), P = I^2 R (useful when the "
+            "current and resistance are known), P = V^2 / R (useful when the voltage and "
+            "resistance are known). The learner solves problems of all six rearrangements "
+            "(V from I and R; I from V and R; R from V and I; P from V and I; P from I "
+            "and R; P from V and R). The learner names the units: volts, amperes, ohms, "
+            "watts, milliamperes, kilowatts, kilo-ohms. The learner names that current "
+            "(not voltage) is what causes injury in the human body, and that 120V "
+            "residential is fully capable of pushing fatal current at hand-to-hand "
+            "contact through normal skin resistance, particularly when the skin is wet "
+            "or broken. The learner is introduced to the distinction between purely "
+            "resistive AC loads (where Ohm's law applies directly) and inductive AC "
+            "loads (motors, transformers, fluorescent ballasts, switched-mode LED "
+            "drivers and power supplies, where reactance enters and the power factor is "
+            "below 1); apparent power in volt-amps (S = V I), real power in watts (P = "
+            "V I cos(theta) where theta is the phase angle), and power factor (PF = "
+            "cos(theta) = P / S) are named at the introductory level, with deeper "
+            "treatment reserved for the apprentice band."
+        ),
+        "demonstration_criteria": [
+            (
+                "Given any two of V, I, R, computes the third using Ohm's law correctly "
+                "across at least ten problems spanning DC and AC-resistive cases"
+            ),
+            (
+                "Given any combination of two of V, I, R, computes power P correctly "
+                "using the appropriate form (V I, I^2 R, or V^2 / R) across at least "
+                "five problems"
+            ),
+            (
+                "Uses correct units in every answer (volts, amperes, ohms, watts) and "
+                "uses sensible engineering prefixes (milliamperes for small currents, "
+                "kilowatts for large loads, kilo-ohms for high resistances)"
+            ),
+            (
+                "Names that current (not voltage) is what causes injury in the human "
+                "body, and explains in one sentence why this matters for the trade's "
+                "safety habits"
+            ),
+            (
+                "Names the distinction between purely resistive AC loads and inductive "
+                "AC loads at the introductory level; names that apparent power (volt-"
+                "amps) and real power (watts) are not the same for inductive loads, "
+                "and that the power factor is the ratio of real to apparent power"
+            ),
+            (
+                "Solves three short word problems involving real residential equipment "
+                "(a 120V hair dryer at 1500W: what is the current draw?; a 240V "
+                "electric range at 40A: what is the wattage at unity power factor?; a "
+                "9V battery driving a 100-ohm resistor: what is the current?)"
+            ),
+            (
+                "Catches at least one unreasonable answer in a set by sanity-checking "
+                "against expected residential values (a 120V lamp drawing 100A is "
+                "wrong; a kitchen receptacle on a 15A circuit can support no more than "
+                "1800W at unity PF)"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Computing power as V x R or I x R instead of V x I",
+                "cause": "The learner mixed up the variables in the power equation",
+                "remedy": (
+                    "Power is V x I in the general form. The other two forms (I^2 R "
+                    "and V^2 / R) are derived by substituting Ohm's law into V x I. "
+                    "The reference card carries all three forms; the AI tutor confirms "
+                    "the substitution."
+                ),
+            },
+            {
+                "error": "Forgetting the units, or using inconsistent units (mixing milliamperes with amperes in the same calculation)",
+                "cause": "The learner did the arithmetic without tracking units",
+                "remedy": (
+                    "Every answer carries its unit. When using a sub-unit (milliampere, "
+                    "kilo-ohm), convert to the base unit before applying Ohm's law, OR "
+                    "use the matched sub-unit consistently (V = milliamperes x "
+                    "kilo-ohms is dimensionally correct for V in volts because the "
+                    "milli and kilo cancel). The AI tutor names the convention."
+                ),
+            },
+            {
+                "error": "Assuming Ohm's law applies to a motor or LED driver",
+                "cause": "The learner read the device's voltage and current rating and applied V = I R as if there were a single fixed R",
+                "remedy": (
+                    "Motors, transformers, fluorescent ballasts, and switched-mode LED "
+                    "drivers and power supplies do NOT present a fixed resistance; "
+                    "their current draw at a given voltage depends on the load they "
+                    "are driving and on reactance / power-factor effects. For these "
+                    "loads, the device's NAMEPLATE current at the rated voltage is "
+                    "the authoritative value (per elc-001), not Ohm's law applied to "
+                    "a calculated resistance."
+                ),
+            },
+            {
+                "error": "Treating voltage as the cause of injury",
+                "cause": "The learner heard 'high voltage' and conflated voltage with danger",
+                "remedy": (
+                    "Voltage is the driving force; CURRENT through the body is what "
+                    "injures and kills. Across the heart, a few hundred milliamperes "
+                    "at 60 Hz can fibrillate. 120V household voltage is fully capable "
+                    "of pushing that current through normal skin resistance, "
+                    "especially when wet or broken. This is the safety habit elc-003 "
+                    "carries into elc-021."
+                ),
+            },
+            {
+                "error": "Confusing apparent power (VA) with real power (W) for inductive loads",
+                "cause": "The learner multiplied volts and amps and called it watts",
+                "remedy": (
+                    "For a purely resistive load (heater, incandescent bulb), apparent "
+                    "power (V x I in VA) equals real power (W). For an inductive load "
+                    "(motor, transformer, fluorescent ballast, switched-mode supply), "
+                    "real power is V x I x cos(theta) where theta is the phase angle, "
+                    "and cos(theta) = power factor. Apparent power exceeds real power. "
+                    "This affects load calculations at the apprentice band; at this "
+                    "band the rule is name the distinction and reach for the nameplate."
+                ),
+            },
+            {
+                "error": "Forgetting that resistance varies with temperature",
+                "cause": "The learner used a cold-resistance value at operating temperature",
+                "remedy": (
+                    "Conductor resistance rises with temperature; an incandescent "
+                    "filament has a much higher resistance hot than cold. For "
+                    "introductory problems, the AI tutor names the temperature at "
+                    "which a resistance value is taken; for downstream conductor-"
+                    "sizing work (elc-007), the AHJ-adopted NEC tables provide the "
+                    "correct temperature-rated values."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "document",
+            "what_to_capture": (
+                "A worked problem set: at least 10 Ohm's law problems and 5 power "
+                "problems, each with units, with the learner's work shown and the AI "
+                "tutor's confirmation of each answer; plus three real-residential-"
+                "equipment word problems worked end-to-end"
+            ),
+            "what_the_evidence_shows": (
+                "That the learner can apply V = I R and P = V I (and derivatives) "
+                "across the full set of rearrangements with correct units, and can "
+                "sanity-check answers against expected residential values"
+            ),
+        },
+        "mentor_signoff_required": False,
+        "pedagogy": {
+            "i_do": (
+                "The AI tutor walks the learner through Ohm's law and the power "
+                "equation with worked examples: starting with simple DC (a 9V battery "
+                "driving a 100-ohm resistor), then resistive AC (a 120V incandescent "
+                "bulb at 60W), then a residential example (a 1500W hair dryer on a "
+                "120V circuit). Names the units, the rearrangements, and the sanity-"
+                "check habit."
+            ),
+            "we_do": (
+                "The AI tutor and the learner alternate problems. The AI poses; the "
+                "learner solves and names the units; the AI confirms or corrects. The "
+                "AI introduces the apparent / real / power-factor distinction once "
+                "Ohm's law is solid for resistive cases."
+            ),
+            "you_do_supervised": (
+                "The learner solves a 10-problem Ohm's law set and a 5-problem power "
+                "set independently, then submits to the AI tutor. The AI tutor "
+                "confirms each answer; on any miss, the AI names the misconception "
+                "and re-quizzes a similar problem."
+            ),
+            "you_do_unsupervised": (
+                "Once the learner can produce a complete and correct problem set "
+                "across at least two sessions, they may continue to work problems "
+                "unsupervised. The AI tutor remains available for confirmation and "
+                "for the apprentice-band deeper treatment of AC theory."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 4,
+        "session_length_minutes": 30,
+        "related_projects": [],
+        "certification_alignment": {
+            "ladder_rung": "helper",
+            "notes": (
+                "Knowledge competency the AI tutor mentors end-to-end. Ohm's law and "
+                "the power equation are the foundation of every load calculation, "
+                "every conductor-sizing decision, and every troubleshooting framework "
+                "in the trade."
+            ),
+            "certifications_supported": [
+                {
+                    "id": "elcert-nec",
+                    "domains": [
+                        "load calculation (NEC Article 220) rests on Ohm's law and the "
+                        "power equation",
+                        "ampacity selection (NEC Article 310) uses the power and "
+                        "current relationship",
+                    ],
+                    "notes": "Every NEC chapter touching loads and conductors assumes Ohm's-law fluency.",
+                },
+                {
+                    "id": "elcert-licensing",
+                    "domains": [
+                        "Ohm's law and basic circuit theory at the journeyman-exam depth",
+                    ],
+                    "notes": "Universal across every state licensing exam at the journeyman and master level.",
+                },
+            ],
+        },
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
+    },
 }
