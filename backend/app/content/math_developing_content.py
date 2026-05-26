@@ -7084,4 +7084,263 @@ MATH_DEVELOPING_CONTENT = {
             "history": "Reading about famous problem-solvers in mathematics, science, and engineering",
         },
     },
+    "md-28": {
+        "enriched": True,
+        "learning_objectives": [
+            "State that multiplication and division are inverse operations",
+            "Write the full fact family for any given product",
+            "Solve a missing-factor problem (e.g., 4 x __ = 28) by using division",
+            "Use the inverse relationship to check a division by multiplication and a multiplication by division",
+        ],
+        "teaching_guidance": {
+            "introduction": "Multiplication and division are not two separate operations to memorize separately; they are two ways of looking at the same relationship. If 6 x 7 = 42, then 42 / 6 = 7 and 42 / 7 = 6. The four facts form a fact family. Once the inverse relationship is internalized, every division becomes a multiplication question in disguise ('what times the divisor gives the dividend?') and every multiplication can be checked by division. This is the heart of arithmetic fluency.",
+            "scaffolding_sequence": [
+                "Review one multiplication fact: 6 x 7 = 42. Build with an array and write the fact",
+                "Rearrange the array as 7 x 6: same total, commutative property review",
+                "Now ask: '42 divided by 6 is what?' Find 7 by counting columns of the array, then by inverse reasoning",
+                "Write all four facts: 6 x 7 = 42, 7 x 6 = 42, 42 / 6 = 7, 42 / 7 = 6",
+                "Practice writing fact families from given products",
+                "Solve missing-factor problems by division: 4 x __ = 28; solve __ = 28 / 4 = 7",
+                "Solve missing-dividend or missing-divisor problems by multiplication: __ / 5 = 7; solve __ = 5 x 7 = 35",
+                "Use the inverse relationship to verify answers in all four operations",
+            ],
+            "socratic_questions": [
+                "If 6 x 7 = 42, what is 42 / 6? And 42 / 7? And 7 x 6?",
+                "How can division help you find a missing factor?",
+                "How can multiplication help you check a division?",
+                "Why are these called a fact family?",
+            ],
+            "practice_activities": [
+                "Fact-family writing: given ten products, write the full four-fact family for each",
+                "Missing-factor drill: solve ten problems of the form a x __ = c by division",
+                "Inverse-verification: solve five divisions and check each by multiplication",
+                "Mixed multiplication and division drill: solve thirty mixed facts in three minutes",
+            ],
+            "real_world_connections": [
+                "Sharing the same amount among different numbers of people",
+                "Multiplying and then dividing to check (in real budgeting or planning)",
+                "Reading recipes that scale: if 4 cookies need 1 cup of flour, 12 cookies need 3 cups (multiplication); 12 cookies are baked, divided among 4 friends, 3 each (division)",
+                "Sports stats: total points and games played to find points per game (and inverse)",
+            ],
+            "common_misconceptions": [
+                "Treating multiplication and division as unrelated and memorizing each separately",
+                "Writing only three of the four facts in a fact family",
+                "Forgetting that for a square fact (e.g., 5 x 5 = 25), the fact family has only two facts (5 x 5 = 25 and 25 / 5 = 5)",
+                "Choosing the wrong operation when faced with a missing-piece problem",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Writes the full fact family for any given multiplication fact",
+                "Solves any missing-factor problem by division",
+                "Uses inverse operations to verify answers",
+            ],
+            "assessment_methods": ["fact-family writing", "missing-factor problems", "verify-by-inverse task"],
+            "sample_assessment_prompts": [
+                "Write the full fact family for 8 x 9 = 72.",
+                "Solve: 6 x __ = 48.",
+                "Solve 56 / 7 and verify your answer by multiplication.",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "If 6 x 7 = 42, what is 42 / 6?",
+                "expected_type": "number",
+                "correct_answer": "7",
+                "hints": ["Division undoes multiplication"],
+                "explanation": "42 / 6 = 7 because 6 x 7 = 42.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "Write the full fact family for 4 x 5 = 20.",
+                "expected_type": "text",
+                "hints": ["Two multiplications and two divisions"],
+                "explanation": "Fact family: 4 x 5 = 20, 5 x 4 = 20, 20 / 4 = 5, 20 / 5 = 4.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "Solve: 6 x __ = 48.",
+                "expected_type": "number",
+                "correct_answer": "8",
+                "hints": ["Use division: __ = 48 / 6"],
+                "explanation": "__ = 48 / 6 = 8. Check: 6 x 8 = 48.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "Solve: __ / 9 = 7. What is the dividend?",
+                "expected_type": "number",
+                "correct_answer": "63",
+                "hints": ["Use multiplication: __ = 9 x 7"],
+                "explanation": "__ = 9 x 7 = 63. Check: 63 / 9 = 7.",
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": "Solve 56 / 7 and verify your answer by multiplication.",
+                "expected_type": "text",
+                "hints": ["56 / 7 = ? Then check: 7 x ? = 56"],
+                "explanation": "56 / 7 = 8. Check: 7 x 8 = 56.",
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Write the full fact family for 8 x 9 = 72.",
+                "type": "open_response",
+                "rubric": "Mastery: 8x9=72, 9x8=72, 72/8=9, 72/9=8. Proficient: three of four. Developing: two or fewer.",
+                "target_concept": "fact_family",
+            },
+            {
+                "prompt": "Solve: 6 x __ = 48.",
+                "type": "number",
+                "correct_answer": "8",
+                "target_concept": "missing_factor",
+            },
+            {
+                "prompt": "Solve 56 / 7 and verify by multiplication.",
+                "type": "open_response",
+                "rubric": "Mastery: 8 with verification 7 x 8 = 56. Proficient: 8 only. Developing: incorrect.",
+                "target_concept": "verify_by_inverse",
+            },
+        ],
+        "resource_guidance": {
+            "required": ["fact-family cards or triangles", "multiplication and division facts charts", "counters for array models"],
+            "recommended": ["fact-family flash cards across all facts within 10 x 10", "missing-factor problem cards", "real-world story problems"],
+        },
+        "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 15},
+        "accommodations": {
+            "dyslexia": "Use fact-family triangles (a card with three numbers, e.g., 6, 7, 42, in three corners) so the relationship is visible. Read every fact aloud.",
+            "adhd": "Use card games and short drill bursts. Keep written work brief.",
+            "gifted": "Move quickly to two-digit by one-digit missing-factor problems and to introducing the formal algebra notation (n) for the unknown.",
+            "visual_learner": "Use the fact-family triangle on every problem. Show every division as an array divided into rows.",
+            "kinesthetic_learner": "Build arrays for stubborn fact families. Use snap cubes that can be rearranged.",
+            "auditory_learner": "Read every fact family aloud as a four-line chant. Hear the relationship in the sound.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": "Today we make explicit the relationship between multiplication and division. They are inverse operations: division undoes multiplication, multiplication undoes division. Together, they form fact families of four facts. We use this relationship to solve missing-factor problems and to verify our work.",
+                "gradual_release": {
+                    "i_do": "Build a 6-by-7 array with counters. Write 6 x 7 = 42. Rearrange as 7 x 6 = 42. Then count rows to find 42 / 7 = 6, and columns to find 42 / 6 = 7. State: 'this is a fact family.'",
+                    "we_do": "Write five fact families together, child producing the four facts and parent confirming, then swap. Solve five missing-factor problems together.",
+                    "you_do": "Child writes ten fact families and solves ten missing-factor problems independently.",
+                },
+                "guided_practice": [
+                    "Write the full fact family for ten given products",
+                    "Solve ten missing-factor problems using division",
+                    "Solve five divisions and verify each by multiplication",
+                ],
+                "independent_practice": [
+                    "Worksheet of fifteen fact families to complete",
+                    "Worksheet of ten missing-factor and missing-divisor problems",
+                ],
+                "mastery_check": [
+                    "Writes the full fact family for any product within 10 x 10",
+                    "Solves any missing-factor problem using division",
+                    "Verifies a division by multiplication and a multiplication by division",
+                ],
+                "spiral_review": [
+                    "Daily two-minute mixed-operation fact drill at the start of each session",
+                    "Continue multiplication and division fact practice",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": "Multiplication and division are the two faces of one truth. The Greek mathematicians knew this, and the medieval scholars stated it as a law: every multiplication has its inverse, every division its product. To see them as one family is the deeper understanding that frees the child from memorizing twice.",
+                "memory_work": {
+                    "chants": [
+                        "Recite the rule: multiplication and division are inverse operations",
+                        "Recite the fact family: two multiplications and two divisions, all from the same three numbers",
+                        "Recite the missing-factor rule: when a factor is missing, use division to find it",
+                    ],
+                    "recitations": [
+                        "Daily recitation of one fact family aloud in full: 'six times seven is forty-two; seven times six is forty-two; forty-two divided by six is seven; forty-two divided by seven is six'",
+                    ],
+                },
+                "copywork": [
+                    "Copy ten fact families into the math copybook, each in its four-line form",
+                ],
+                "recitation_routine": "Begin each lesson by reciting one fact family from memory, then add today's.",
+                "history_integration": "Tell that the great Greek mathematicians proved that multiplication and division are inverse, and that this is one of the laws of arithmetic that holds in every number system; the child takes up a deep, ancient truth.",
+                "read_aloud_suggestions": [
+                    "A short children's passage on the laws of arithmetic",
+                    "A children's biography of a mathematician who valued the inverse relationship",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 12,
+                "living_book_suggestions": [
+                    "A real arithmetic book with worthy fact-family problems",
+                    "A children's book about careful reasoning in real life",
+                ],
+                "short_lesson_flow": "Take any real fact-family situation: 24 cookies, 6 children, 4 each. Write the fact family aloud. Then pose a missing-factor question from real life ('we have 28 stickers and want each of 4 friends to get an equal share, how many each?'). Close while interest is high.",
+                "narration_prompt": "Tell me the fact family for this situation. Which fact answers the question?",
+                "real_world_objects": [
+                    "Counters and real items for building arrays",
+                    "Real situations from family life: sharing, totaling",
+                    "Fact-family triangle cards",
+                ],
+                "nature_connection": "Apply fact-family thinking to real natural counts: 24 seeds in 4 rows, 6 each; 6 chicks per hen in 4 nests, 24 chicks total. The natural situation gives the family.",
+                "habit_focus": "The habit of seeing the inverse: a child who naturally sees both faces of a fact has gained a habit of mind that will serve in all later mathematics.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Fact-family cards or triangles",
+                    "Multiplication and division boards",
+                    "Bead bars and arrays for verifying",
+                    "Missing-factor problem cards",
+                ],
+                "presentation": {
+                    "three_period_lesson": "Naming: show 6 x 7 = 42 with bead bars; rearrange and name the inverse divisions. Recognition: 'show me the inverse of 6 x 7.' Recall: 'what is the inverse of multiplication?' Move slowly.",
+                    "steps": [
+                        "Build a product with bead bars or counters",
+                        "Write the full fact family on a card",
+                        "Solve a missing-factor problem by reaching for the inverse division",
+                        "Verify a division by multiplication using the materials",
+                    ],
+                },
+                "control_of_error": "The array is the control: the rows and columns give all four facts, and a wrong fact family disagrees with the visible structure.",
+                "abstraction_pathway": "From physical arrays (relationship felt) to written fact families to mental use of inverse for missing-factor problems and verification.",
+                "extensions": [
+                    "Build the full fact family for every fact within 10 x 10",
+                    "Move to missing-factor word problems and to fact-family puzzles",
+                    "Introduce algebra notation (n) for the missing factor when ready",
+                ],
+                "observation_focus": "Watch for the spontaneous reach for the inverse on a new problem, and for the natural use of multiplication to verify a division.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Pose a real sharing problem and find the answer two ways (by multiplication and by division)",
+                    "Play a fact-family card game where matching the four members wins the round",
+                    "Notice in real life when a multiplication-and-division pair are useful at once (recipes, sports stats)",
+                ],
+                "real_world_contexts": [
+                    "Sharing items into groups",
+                    "Computing rate (points per game, miles per hour)",
+                    "Scaling recipes",
+                    "Game scoring with multipliers",
+                ],
+                "conversation_starters": [
+                    "Six teams of seven players. How many players? Then 42 stickers among the 6 teams, how many each?",
+                    "What's 56 divided by 8? How could you check?",
+                    "If 4 packs of cards have 32 cards, how many per pack?",
+                ],
+                "resource_bank": [
+                    "Real sharing situations",
+                    "Card and board games where multiplication-and-division pairs appear",
+                    "Picture books on number families",
+                    "Real recipes for scaling",
+                ],
+                "parent_role": "Use the inverse relationship aloud in real life often. Welcome the child's reach for either operation as appropriate. Never quiz; let real situations carry the math.",
+                "observation_documentation": "Note across weeks where fact-family thinking came up in real life, and whether the child uses the inverse to verify.",
+            },
+        },
+        "connections": {
+            "reading": "Reading word problems for the structure that calls for multiplication or for division",
+            "science": "Computing rates and totals in real data (per-day measurements, per-trial averages)",
+            "history": "Reading about old proportional problems (tithes, ratios) that use the inverse relationship",
+        },
+    },
 }
