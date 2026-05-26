@@ -344,7 +344,9 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
                     "knowledge_competencies": [
                         "advanced controls and building automation; commercial design; lighting and energy modeling; project management; business and contract law (master / contractor level) (future batches)",
                     ],
-                    "safety_competencies": ["els-001 (current per the annual freshness check; learner now leads the walkthrough for helpers)"],
+                    "safety_competencies": [
+                        "els-001 (current per the annual freshness check; learner now leads the walkthrough for helpers)"
+                    ],
                     "low_hazard_hands_on_competencies": [
                         "full design-and-install of a residential branch-circuit addition (future batch; a project node)",
                     ],
@@ -1300,10 +1302,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
                 "fixture, an appliance, and (where applicable) a low-voltage adapter, "
                 "without opening any enclosure"
             ),
-            (
-                "Photographs each label clearly enough that every printed field is legible "
-                "in the image"
-            ),
+            ("Photographs each label clearly enough that every printed field is legible in the image"),
             (
                 "Extracts every operative field onto a nameplate card: voltage rating, "
                 "current rating (amps), wattage or kilowatts (where present), frequency, "
@@ -1465,8 +1464,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
                 {
                     "id": "elcert-nec",
                     "domains": [
-                        "AIC selection per the AHJ-adopted NEC's interrupting-rating "
-                        "requirements",
+                        "AIC selection per the AHJ-adopted NEC's interrupting-rating requirements",
                         "voltage and current ratings used in load calculations per NEC",
                         "listing requirement per NEC for equipment used in the system",
                     ],
@@ -1478,8 +1476,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
                 {
                     "id": "elcert-licensing",
                     "domains": [
-                        "nameplate literacy across the residential equipment scope of the "
-                        "state license",
+                        "nameplate literacy across the residential equipment scope of the state license",
                     ],
                     "notes": "Foundational across every state licensing exam.",
                 },
@@ -1610,8 +1607,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
             {
                 "name": "Camera (cell phone is sufficient)",
                 "specification": (
-                    "A camera that produces images clear enough to identify components in "
-                    "the AI tutor's review."
+                    "A camera that produces images clear enough to identify components in the AI tutor's review."
                 ),
                 "alternatives": [],
             },
@@ -1867,20 +1863,17 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
                     "domains": [
                         "the residential one-line as the basis of the NEC's Chapter 2 "
                         "wiring and protection requirements",
-                        "service-equipment vs subpanel neutral-to-ground bond rules per "
-                        "the AHJ-adopted NEC",
+                        "service-equipment vs subpanel neutral-to-ground bond rules per the AHJ-adopted NEC",
                         "GFCI / AFCI required locations per the AHJ-adopted NEC",
                     ],
                     "notes": (
-                        "The journeyman exam tests reading and applying the residential "
-                        "one-line and the symbol set."
+                        "The journeyman exam tests reading and applying the residential one-line and the symbol set."
                     ),
                 },
                 {
                     "id": "elcert-licensing",
                     "domains": [
-                        "component identification across the residential scope of the "
-                        "state license",
+                        "component identification across the residential scope of the state license",
                     ],
                     "notes": "Foundational across every state licensing exam.",
                 },
@@ -1897,8 +1890,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
         "node_type": "knowledge",
         "trade": "electrical",
         "competency_name": (
-            "Ohm's law and basic DC and AC-resistive circuit theory: voltage, current, "
-            "resistance, and power"
+            "Ohm's law and basic DC and AC-resistive circuit theory: voltage, current, resistance, and power"
         ),
         "progression_band": "helper",
         "prerequisites": ["els-001"],
@@ -2165,10 +2157,8 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
                 {
                     "id": "elcert-nec",
                     "domains": [
-                        "load calculation (NEC Article 220) rests on Ohm's law and the "
-                        "power equation",
-                        "ampacity selection (NEC Article 310) uses the power and "
-                        "current relationship",
+                        "load calculation (NEC Article 220) rests on Ohm's law and the power equation",
+                        "ampacity selection (NEC Article 310) uses the power and current relationship",
                     ],
                     "notes": "Every NEC chapter touching loads and conductors assumes Ohm's-law fluency.",
                 },
@@ -2191,9 +2181,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
     "elc-004": {
         "node_type": "knowledge",
         "trade": "electrical",
-        "competency_name": (
-            "Series and parallel circuits and basic residential load calculation"
-        ),
+        "competency_name": ("Series and parallel circuits and basic residential load calculation"),
         "progression_band": "helper",
         "prerequisites": ["els-001", "elc-003"],
         "safety_basis": {
@@ -2576,10 +2564,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
             "NEC governs specific cases including re-identification of conductors)."
         ),
         "demonstration_criteria": [
-            (
-                "Names every symbol on the standard residential reference card without "
-                "prompting"
-            ),
+            ("Names every symbol on the standard residential reference card without prompting"),
             (
                 "Reads and annotates a single switched fixture diagram, naming the "
                 "supply, the switch leg, the neutral, and the ground"
@@ -3058,8 +3043,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
                     "domains": [
                         "NEC Article 100 definitions (service, service-entrance, "
                         "service equipment, branch circuit, feeder, etc.)",
-                        "NEC Article 230 services and service-entrance "
-                        "requirements",
+                        "NEC Article 230 services and service-entrance requirements",
                         "NEC Article 250 grounding and bonding",
                         "NEC Article 240 overcurrent protection",
                         "NEC Article 408 panelboards and switchboards",
@@ -3961,10 +3945,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
                 "continuity, diode, capacitance and frequency if present) and "
                 "explains in one sentence what each measures"
             ),
-            (
-                "Identifies the test-lead connectors (COM, V/Ohm, A, mA/uA) "
-                "and the standard color coding"
-            ),
+            ("Identifies the test-lead connectors (COM, V/Ohm, A, mA/uA) and the standard color coding"),
             (
                 "Inspects the test leads visually and reports any damage; "
                 "names the rule that damaged leads are removed from service"
@@ -4557,10 +4538,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
                 "proving unit), reads the expected voltage, and announces the "
                 "reading aloud; the licensed electrician confirms"
             ),
-            (
-                "Operates the branch breaker to the OFF position correctly per "
-                "the panel type"
-            ),
+            ("Operates the branch breaker to the OFF position correctly per the panel type"),
             (
                 "Applies the breaker lockout device, the padlock, and the "
                 "signed and dated tag; keeps the key exclusively with the "
@@ -4873,8 +4851,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
                 {
                     "id": "elcert-licensing",
                     "domains": [
-                        "NFPA 70E live-dead-live procedure and PPE at journeyman "
-                        "and master depth",
+                        "NFPA 70E live-dead-live procedure and PPE at journeyman and master depth",
                         "AHJ-adopted code application during service work",
                     ],
                     "notes": (
@@ -5061,8 +5038,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
         "node_type": "certification_prep",
         "trade": "electrical",
         "credential_name": (
-            "State electrician licensing path (apprentice / journeyman / "
-            "master / low-voltage / limited-energy)"
+            "State electrician licensing path (apprentice / journeyman / master / low-voltage / limited-energy)"
         ),
         "credential_body": (
             "The Authority Having Jurisdiction (AHJ) for electrical licensing "
@@ -5122,8 +5098,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
         ],
         "eligibility": {
             "minimum_age": (
-                "varies by AHJ; commonly 18 for journeyman and master; some "
-                "states allow younger registered apprentices"
+                "varies by AHJ; commonly 18 for journeyman and master; some states allow younger registered apprentices"
             ),
             "experience_requirements": (
                 "apprenticeship hours and journeyman experience vary widely "
@@ -5214,19 +5189,13 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
         ],
         "study_resources_pointers": [
             "The AHJ's published exam blueprint and approved reference list",
-            (
-                "The NEC (NFPA 70) at the AHJ-adopted edition, the current "
-                "NFPA 70E, and the AHJ's published amendments"
-            ),
+            ("The NEC (NFPA 70) at the AHJ-adopted edition, the current NFPA 70E, and the AHJ's published amendments"),
             (
                 "The electrical training ALLIANCE curriculum (the IBEW / NECA "
                 "national apprenticeship program; widely recognized for "
                 "depth)"
             ),
-            (
-                "State community-college electrical programs that include AHJ-"
-                "exam preparation"
-            ),
+            ("State community-college electrical programs that include AHJ-exam preparation"),
             (
                 "Mike Holt's exam-prep courses and books (a widely-used "
                 "third-party resource recognized by many AHJs); matched to "
