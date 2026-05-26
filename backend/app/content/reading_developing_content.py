@@ -7799,4 +7799,373 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Research writing is one of the major modes of nonfiction writing; the short report at this band grows into longer reports, essays, and articles across years",
         },
     },
+    "rd-20": {
+        "enriched": True,
+        "learning_objectives": [
+            "Maintain a simple reading log recording title, author, date started and finished, and a brief reflection on each book",
+            "Track reading volume across a term (number of books, kinds of books, total pages) and see growth across time",
+            "Reflect on personal preferences (favorite authors, genres, themes) and develop self-awareness as a reader",
+            "Use the log as a tool: to revisit books, to plan future reading, to share recommendations with others",
+            "Avoid the failure modes that destroy log habits (mandatory daily pages, performative pretty logs, comparison with siblings or peers)",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "rd-02 introduced chapter book reading; the child has been reading widely across the developing band. "
+                "A reading log gives shape and self-awareness to the growing reading life. The simple log records "
+                "TITLE, AUTHOR, DATES READ, and a BRIEF REFLECTION (one or two sentences: what stood out, did you "
+                "like it, would you recommend it). The log is the child's, not the parent's or teacher's; it serves "
+                "the child's self-knowledge. Honest content note about failure modes: many reading logs FAIL when "
+                "they become surveillance ('did you read your twenty minutes today?'), performance (the prettiest "
+                "log wins), or competition (your sibling read more books than you did). A good log is a private "
+                "ledger of one's own reading life, periodically reviewed with curiosity rather than judgment."
+            ),
+            "scaffolding_sequence": [
+                "Set up a simple notebook or printed log with columns: title, author, date started, date finished, reflection",
+                "Demonstrate filling in one entry together using a recent finished book; keep the reflection short ('liked the dragon; loved the ending; would tell a friend')",
+                "Establish the routine: at the end of each finished book, the child fills in an entry. Not daily; at completion.",
+                "Across a few weeks, fill in entries naturally as books are finished; do not nag or police",
+                "Periodically (once a month, once a term), sit together and look back at the log: what have you read? what patterns do you notice?",
+                "Discuss preferences: 'you seem to love fantasy adventures, look at this stack; what was your favorite this term?'",
+                "Use the log to plan: 'you finished the Narnia books; should we try Edward Eager next?'",
+                "Honor the rule of no mandatory minimum: some weeks the child reads a lot; some weeks little. The log records reality, not a quota.",
+            ],
+            "socratic_questions": [
+                "What was your favorite book this term? Why?",
+                "What kinds of books do you find yourself drawn to?",
+                "Is there a book you started and didn't finish? Why? Do you want to try it again later, or set it aside?",
+                "What would you tell a friend to read next?",
+                "Looking back at the term, what surprised you about your reading?",
+            ],
+            "practice_activities": [
+                "Reading log maintenance: an entry on completion of each book",
+                "Monthly log review: parent and child sit together and look at the month's reading; talk about patterns",
+                "Reading recommendation card: pick a favorite book from the log and write a short recommendation card for the family or a friend",
+                "Term-end reflection: at the end of each term, write a short paragraph reflecting on the term's reading",
+                "Reading-life conversation: the log becomes a starting point for family talk about books and reading life",
+            ],
+            "real_world_connections": [
+                "Adult readers often keep logs (Goodreads accounts, journals, spreadsheets); this habit begins now",
+                "Recognizing reading as a continuous practice rather than a series of one-off books",
+                "Building self-knowledge as a reader: what you love, what bores you, what challenges you",
+                "Sharing book recommendations with family and friends from a real record of read books",
+                "The reading log as the start of a lifelong reading practice",
+            ],
+            "common_misconceptions": [
+                "Believing the log is a chore. The log is a tool for the reader, not for someone else; if it feels like a chore the design is wrong.",
+                "Believing more books equals a better reader. A reader who reads one book deeply and remembers it well is reading better than one who races through twenty.",
+                "Believing the log must be pretty or formal. The simplest notebook works; the value is in the record and the review, not in the aesthetics.",
+                "Believing the parent should police the log. The parent's job is to model, support, and review with curiosity; not to inspect or rate.",
+                "Believing every reading must be logged. Picture book browsing, casual rereading, comic strips do not need to be logged; sustained book reading is what the log records.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Maintains a reading log across a term with consistent entries",
+                "Reflects briefly on each book in own words",
+                "Notices patterns in own reading and uses them to plan future reading",
+                "Treats the log as a personal tool, not a chore",
+                "Has internalized the habit so that logging continues without parent reminder",
+            ],
+            "proficiency_indicators": [
+                "Maintains log with occasional prompting",
+                "Reflections are brief or surface-level",
+            ],
+            "developing_indicators": [
+                "Log entries irregular or absent",
+                "Cannot reflect on or summarize own reading",
+            ],
+            "assessment_methods": [
+                "review of the reading log itself across a term",
+                "discussion of patterns and preferences observed in the log",
+                "the child's ability to recommend books from their log to others",
+                "the child's reading-life self-awareness in conversation",
+            ],
+            "sample_assessment_prompts": [
+                "Show me your reading log for this term. Tell me about what you've been reading.",
+                "What patterns do you notice in your own reading?",
+                "Pick a book from your log to recommend. What would you tell a friend about it?",
+                "How has your reading life changed since you started keeping the log?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What information goes in a simple reading log entry?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Every page number and quote.",
+                    "Title, author, dates read, and a brief reflection.",
+                    "Only the title.",
+                    "A full book report.",
+                ],
+                "correct_answer": "Title, author, dates read, and a brief reflection.",
+                "hints": [
+                    "Keep it simple; the goal is to record, not to write a report.",
+                ],
+                "explanation": (
+                    "A simple log entry records the title, author, dates the book was read, and a brief reflection "
+                    "(one or two sentences). The simplicity is the point: brief enough to actually maintain, with "
+                    "just enough content to be useful when reviewing later."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "What is the main purpose of keeping a reading log?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "To prove to a teacher or parent that you read.",
+                    "To build self-awareness as a reader and to have a record of your reading life that helps you reflect, recommend, and plan.",
+                    "To compete with siblings.",
+                    "To get an award.",
+                ],
+                "correct_answer": "To build self-awareness as a reader and to have a record of your reading life that helps you reflect, recommend, and plan.",
+                "hints": [
+                    "The log is for the reader, not for someone else.",
+                ],
+                "explanation": (
+                    "The log is the reader's tool for self-awareness, reflection, recommendation, and planning. "
+                    "Logs that become tools for surveillance, competition, or performance lose their value. The log "
+                    "belongs to the reader."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "How often should you write an entry in your reading log?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Every day, even if you didn't finish anything.",
+                    "When you finish a book (or set one aside for good).",
+                    "Once a year.",
+                    "Never.",
+                ],
+                "correct_answer": "When you finish a book (or set one aside for good).",
+                "hints": [
+                    "The log records completed reading.",
+                ],
+                "explanation": (
+                    "Log entries happen at completion (or when a book is set aside permanently). Daily entries become "
+                    "burdensome; completion entries become natural. The point is to record real reading, not to "
+                    "perform reading on a schedule."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": "What is a common failure mode that destroys reading log habits?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Writing entries that are too long.",
+                    "Treating the log as a chore or surveillance tool rather than the reader's own record.",
+                    "Reading too many books in one month.",
+                    "Reading only fiction.",
+                ],
+                "correct_answer": "Treating the log as a chore or surveillance tool rather than the reader's own record.",
+                "hints": [
+                    "Logs fail when they stop serving the reader.",
+                ],
+                "explanation": (
+                    "The most common failure modes: treating the log as a chore (mandatory daily entries; nagging "
+                    "review); treating it as surveillance ('did you read your minutes today?'); treating it as "
+                    "competition (sibling comparison). A log that serves the reader and lives in the reader's hands "
+                    "survives."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Look at your reading log (or imagine one from the last term). What patterns do you notice in "
+                    "your reading? What might you choose to read next based on those patterns?"
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Look for repeated authors, genres, themes, lengths.",
+                ],
+                "explanation": (
+                    "A complete answer names patterns (favorite author, genre, theme) and proposes a next-book based "
+                    "on those patterns. This is the log's deepest use: it gives the reader self-knowledge that shapes "
+                    "future reading."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Show your reading log from this term. Pick three entries and tell me what you remember most about each book.",
+                "type": "open_response",
+                "target_concept": "log_maintenance_and_recall",
+                "rubric": (
+                    "Mastery: log is maintained; three entries discussed with clear memory and reflection. "
+                    "Proficient: log maintained; some entries hard to recall. Developing: log irregular or memory weak."
+                ),
+            },
+            {
+                "prompt": "Look at your reading log for this term. What patterns do you see? What might you read next?",
+                "type": "open_response",
+                "target_concept": "self_aware_reading_planning",
+                "rubric": (
+                    "Mastery: identifies real patterns; proposes future reading grounded in them. Proficient: notices "
+                    "some patterns; planning weak. Developing: cannot find patterns in own reading."
+                ),
+            },
+            {
+                "prompt": "Pick a book from your log to recommend to someone. Write a short recommendation card.",
+                "type": "open_response",
+                "target_concept": "recommendation_from_log",
+                "rubric": (
+                    "Mastery: clear recommendation with reasoning grounded in the book. Proficient: recommendation "
+                    "but reasoning weak. Developing: cannot recommend or reason about own reading."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "a notebook or printed reading log template (the simpler the better; columns for title, author, dates, reflection)",
+                "the books being read; the log records actual reading",
+            ],
+            "recommended": [
+                "a small bookcase or shelf for finished books, so the child can see their reading life accumulate physically",
+                "a parent's own reading log as a model (children copy what they see; a parent who logs their own reading models the habit)",
+                "a family book wall or shared log where members of the family can share recommendations",
+                "a reading-life conversation routine (Sunday tea, end of term) where logs are reviewed in family conversation",
+            ],
+        },
+        "time_estimates": {"first_exposure": 15, "practice_session": 5, "assessment": 15},
+        "accommodations": {
+            "dyslexia": "Reflections can be spoken into a recording rather than written. Title and author can be transcribed by parent if the writing load is heavy. The reflection is the substance; the writing form is flexible.",
+            "adhd": "Keep entries very short. One sentence reflection is enough. Build the habit gradually.",
+            "gifted": "Allow more reflective entries; the log can grow into a reading journal with longer reflections, quotation collection, and book recommendations the child writes for others.",
+            "visual_learner": "Allow color-coded entries (genre by color), star ratings, or small drawings as supplements to text. Visual elements are fine if they serve the reader.",
+            "kinesthetic_learner": "Use a physical log (notebook) rather than digital; the act of writing each entry is part of the practice.",
+            "auditory_learner": "Discuss each book aloud at completion; have the parent or older sibling transcribe the spoken reflection if writing is a barrier.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we set up a reading log: a simple record of the books you read. Each time you finish a "
+                    "book, you write one entry: title, author, dates, a sentence or two of reflection. The log helps "
+                    "you remember what you've read, notice your preferences, and plan what to read next."
+                ),
+                "gradual_release": {
+                    "i_do": "Parent sets up the log together with the child, fills in the first entry as a demonstration, explains the why.",
+                    "we_do": "For the first few entries, parent and child fill them in together at book completion.",
+                    "you_do": "Child maintains the log independently. Monthly review with parent.",
+                },
+                "guided_practice": [
+                    "Entry at each book completion",
+                    "Monthly review with parent",
+                    "Term-end reflection paragraph",
+                ],
+                "independent_practice": [
+                    "Maintain the log without prompting",
+                    "Use the log for self-awareness and planning",
+                ],
+                "mastery_check": [
+                    "Log maintained consistently across a term",
+                    "Child can discuss patterns and preferences from the log",
+                    "Child uses the log to plan future reading",
+                ],
+                "spiral_review": [
+                    "Annual review: look back across a full year of logs and notice growth",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "The classical tradition has long honored the commonplace book: a notebook in which the reader "
+                    "records what they have read, what they want to remember, what struck them. A reading log is a "
+                    "modern descendant. To keep a log is to enter a tradition of careful, reflective readers across "
+                    "centuries."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite what goes in an entry: title, author, dates, reflection",
+                        "Recite the rule: the log belongs to the reader",
+                    ],
+                    "recitations": [
+                        "Memorize one favorite passage from a book read this term; copy it as a memory work piece",
+                    ],
+                },
+                "copywork": [
+                    "Copy one favorite quotation from a book recently finished into the log or copybook (the start of a commonplace book)",
+                ],
+                "recitation_routine": "At each book's completion, the child gives a brief oral reflection before writing the log entry.",
+                "history_integration": "The history of commonplace books and reading journals (John Milton, John Locke, Thomas Jefferson all kept such notebooks) shows the long tradition. Show the child historical examples if accessible.",
+                "read_aloud_suggestions": [
+                    "Books on the love of reading itself (Jim Trelease's Read-Aloud Handbook for parents; Daniel Pennac's Better Than Life for older readers)",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 5,
+                "living_book_suggestions": [
+                    "A wide variety of living books across genres for the log to record",
+                ],
+                "short_lesson_flow": "Brief entry at book completion; tea-time review monthly with a beautiful book and a moment of attention. The log is part of a peaceful reading life, not a separate exercise.",
+                "narration_prompt": "Tell me about the book you finished. What stays with you?",
+                "real_world_objects": [
+                    "A simple notebook with hand-drawn columns or a printed template",
+                    "A favorite pen kept with the log for the act of writing entries",
+                    "A shelf or basket for finished books",
+                ],
+                "nature_connection": "Pair the reading log with a nature journal: both record reflection on attention to the world. The child develops the habit of recording what is noticed, in books or in nature.",
+                "habit_focus": "The habit of attention to one's own reading life. Self-awareness as a reader.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A reading log notebook the child owns",
+                    "A pen kept with the log",
+                    "A small shelf or basket for finished books",
+                    "A monthly review work card that prompts pattern-noticing",
+                ],
+                "presentation": {
+                    "three_period_lesson": "This is the title; this is the author; this is the date column; this is the reflection. Show me where the title goes. Where does the reflection go?",
+                    "steps": [
+                        "The guide introduces the log with a clear demonstration entry",
+                        "The child fills in entries at book completion",
+                        "The child reviews the log monthly with the work card",
+                        "Across the term self-awareness as a reader develops",
+                    ],
+                },
+                "control_of_error": "The log is its own control: the reader returns to it to verify what was read. The reader who has lost the habit can see the gap in the log and resume.",
+                "abstraction_pathway": "From bare entries (title, author, dates) to richer reflections, to commonplace-book practice (quotations and reflections), to a true reading journal in later bands.",
+                "extensions": [
+                    "Add a quotation column for favorite lines from each book",
+                    "Add a recommendation column for whom each book might suit",
+                    "Begin to track genre, author origin, and time period as the child's awareness grows",
+                ],
+                "observation_focus": "Watch for the child filling in entries without being asked. Watch for the child consulting the log when choosing the next book.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep your own reading log visible; let the child see your reading life recorded",
+                    "Have a beautiful notebook and a good pen accessible for the child's log if they want one; do not require it",
+                    "Welcome the child's reading choices; let the log be entirely the child's record of what they choose to read",
+                ],
+                "real_world_contexts": [
+                    "Adult readers in the family keeping logs or Goodreads accounts",
+                    "Family conversation about books at meals or in passing",
+                    "Library visits and seeing what the family is reading",
+                ],
+                "conversation_starters": [
+                    "What did you finish this week?",
+                    "What's the most memorable book you've read this year?",
+                    "Have you noticed what kinds of books you tend to love?",
+                ],
+                "resource_bank": [
+                    "Notebooks and pens the child likes",
+                    "A family book wall, shelf, or shared log",
+                    "Family book conversation as a habit",
+                ],
+                "parent_role": "Be a logger yourself. Talk about your own reading life openly. Welcome the child's log if they want to keep one; do not require it. The child sees that recording your reading life is something adults love readers do.",
+                "observation_documentation": "Note when the child returns to their log on their own. Note when they begin to talk about patterns in their reading life. These signal a real reading identity forming.",
+            },
+        },
+        "connections": {
+            "math": "A reading log is a small dataset; over time the child can count pages, books, time spent reading, and see real growth quantified",
+            "science": "Just as a scientist keeps a lab notebook, a reader keeps a reading log; both are records of careful attention",
+            "history": "Many notable readers in history kept reading journals or commonplace books; this is a continuation of a long tradition",
+            "writing": "The reading log is one of the easiest doorways into the writing life; the child who logs their reading often begins to write more freely",
+        },
+    },
 }
