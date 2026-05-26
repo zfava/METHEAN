@@ -8923,4 +8923,382 @@ READING_DEVELOPING_CONTENT = {
             "writing": "When the child writes their own stories, they make element choices deliberately: theme to explore, conflict to drive the plot, point of view to choose, tone to set",
         },
     },
+    "rd-23": {
+        "enriched": True,
+        "learning_objectives": [
+            "Recognize and interpret SIMILE (comparison using 'like' or 'as': 'her smile was like sunshine')",
+            "Recognize and interpret METAPHOR (direct comparison without 'like' or 'as': 'her smile was sunshine')",
+            "Recognize and interpret PERSONIFICATION (giving human qualities to non-human things: 'the wind whispered')",
+            "Recognize and interpret HYPERBOLE (deliberate exaggeration for effect: 'I've told you a thousand times')",
+            "Understand that figurative language creates vivid images and meanings beyond the literal, and that writers use it deliberately to make ideas memorable, sharp, or emotionally vivid",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "Building on chapter book reading (rd-02), the child meets the writer's craft most visible in poetry "
+                "and in literary prose: figurative language. The four common figures at this band are SIMILE "
+                "(comparison using 'like' or 'as'), METAPHOR (direct comparison without 'like' or 'as'), PERSONIFICATION "
+                "(human qualities given to non-human things), and HYPERBOLE (deliberate exaggeration for effect). "
+                "Figurative language is not literal: 'her hair was a river of gold' does not mean her hair was wet; "
+                "it means it was long, flowing, and golden. The reader who interprets figurative language meets the "
+                "writer's intent; the reader who reads it literally misses the meaning. Honest content note: at this "
+                "band the child meets the four common figures; deeper figurative forms (allusion, irony, symbol) come "
+                "in later bands."
+            ),
+            "scaffolding_sequence": [
+                "Begin with simile: many similes use 'like' or 'as'. Read examples: 'as brave as a lion', 'fast like lightning', 'her hair was like spun gold'. Identify the two things being compared and what quality is shared.",
+                "Move to metaphor: a direct comparison without 'like' or 'as'. 'Her hair was spun gold.' Same comparison, more direct. Practice converting similes to metaphors and back.",
+                "Introduce personification: human qualities given to non-human things. 'The wind whispered through the trees.' 'The old house groaned in the storm.' Identify the human quality (whispered, groaned) and the non-human subject (wind, house).",
+                "Introduce hyperbole: deliberate exaggeration for effect. 'I've told you a thousand times.' 'My backpack weighs a ton.' Identify the exaggeration and what it emphasizes.",
+                "Practice interpretation: read figurative language; ask 'what does this mean if taken literally?' (often absurd); then 'what does the writer really mean?' (the figurative meaning).",
+                "Spot the figures in current chapter book reading: each chapter probably contains several. Notice them together.",
+                "Read poetry where figurative language is denser: Robert Frost, Emily Dickinson (selected), Christina Rossetti, Shel Silverstein, Jack Prelutsky. Identify the figures in each poem.",
+                "Discuss why a writer chose a particular figure: 'why a simile rather than a literal description? what does the simile add?'",
+            ],
+            "socratic_questions": [
+                "Is the writer using literal language or figurative language here?",
+                "What is being compared to what? What quality is shared?",
+                "What would this mean if you took it literally? Why is that not the meaning?",
+                "What does the figure add that a plain literal description would not?",
+                "What is the writer asking you to see or feel?",
+            ],
+            "practice_activities": [
+                "Figure-spotting on assigned passages: read a chapter or poem; mark every figurative expression; name the type",
+                "Figure-type sort: cards with figurative expressions; sort into simile / metaphor / personification / hyperbole piles",
+                "Interpret-the-figure practice: read a figure; state the literal absurd meaning; state the intended figurative meaning",
+                "Simile-to-metaphor conversion: take similes and rewrite as metaphors; take metaphors and rewrite as similes",
+                "Daily figurative-language noticing: each chapter book reading session, find one example of each figure type",
+            ],
+            "real_world_connections": [
+                "Recognizing figurative language in song lyrics, in advertising, in everyday conversation",
+                "Recognizing exaggeration ('I'm starving', 'this took forever') in family speech",
+                "Recognizing personification in weather reports ('the storm threatened the coast') and news writing",
+                "Recognizing metaphor in idiom ('a piece of cake', 'spilled the beans', 'cost an arm and a leg')",
+                "Beginning to use figurative language in the child's own writing and speech deliberately",
+            ],
+            "common_misconceptions": [
+                "Believing figurative language is a trick or a code. Figurative language is a regular feature of how writers and speakers convey vivid meaning.",
+                "Believing figurative language must be taken literally. Reading 'her hair was a river of gold' literally produces nonsense; the reader must shift to figurative interpretation.",
+                "Believing only poetry uses figurative language. All literary prose uses figurative language; advertising and conversation are saturated with it.",
+                "Believing simile and metaphor are different in meaning. They make the same comparison; the structure differs (simile uses 'like' or 'as'; metaphor doesn't).",
+                "Believing hyperbole is dishonest. Hyperbole is deliberate exaggeration the reader and speaker both understand; it is not lying, it is emphasis.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Identifies similes, metaphors, personifications, and hyperboles in unfamiliar passages",
+                "Interprets each figure: states the literal versus figurative meaning",
+                "Distinguishes the four types reliably",
+                "Names what each figure adds to the writer's meaning",
+                "Uses figurative language in own speech and writing with deliberate effect",
+            ],
+            "proficiency_indicators": [
+                "Identifies figures with prompting",
+                "Interprets figures but cannot always name the type",
+            ],
+            "developing_indicators": [
+                "Reads figurative language literally and misses meaning",
+                "Cannot distinguish the four types",
+            ],
+            "assessment_methods": [
+                "scored figure-identification items on prepared passages",
+                "figure-type sort tasks",
+                "interpretation tasks: state the figurative meaning",
+                "noticing observation: does the child point out figures during reading?",
+            ],
+            "sample_assessment_prompts": [
+                "Read this passage. Identify two similes, one metaphor, one personification, and one hyperbole.",
+                "Interpret each of these figurative expressions: what is being compared, and what does it mean?",
+                "Rewrite this simile as a metaphor. Rewrite this metaphor as a simile.",
+                "Read this poem. Discuss the figurative language: what does each figure add?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What is the difference between a simile and a metaphor?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "They are the same thing.",
+                    "A simile compares using 'like' or 'as' ('her smile was like sunshine'); a metaphor compares directly without 'like' or 'as' ('her smile was sunshine').",
+                    "A simile is for adults; a metaphor is for children.",
+                    "A simile is short; a metaphor is long.",
+                ],
+                "correct_answer": "A simile compares using 'like' or 'as' ('her smile was like sunshine'); a metaphor compares directly without 'like' or 'as' ('her smile was sunshine').",
+                "hints": [
+                    "Look for the 'like' or 'as' signal.",
+                ],
+                "explanation": (
+                    "Simile uses 'like' or 'as' to make the comparison explicit ('her smile was like sunshine'). "
+                    "Metaphor makes the comparison directly without the signal words ('her smile was sunshine'). Both "
+                    "make the same kind of comparison; the structure differs."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "What is personification?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Giving human qualities to non-human things ('the wind whispered'; 'the house groaned').",
+                    "Exaggerating for effect.",
+                    "Using big words.",
+                    "Writing in the first person.",
+                ],
+                "correct_answer": "Giving human qualities to non-human things ('the wind whispered'; 'the house groaned').",
+                "hints": [
+                    "The 'person' in personification is a clue.",
+                ],
+                "explanation": (
+                    "Personification gives human qualities (speech, feelings, actions) to non-human things (wind, "
+                    "houses, animals, abstract ideas). 'The wind whispered through the trees' personifies the wind. "
+                    "Writers use personification to make natural and abstract things feel vivid and emotionally present."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "What is hyperbole?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Telling the truth exactly.",
+                    "Deliberate exaggeration for effect ('I've told you a thousand times'; 'this bag weighs a ton').",
+                    "Writing without emotion.",
+                    "Using rhyme.",
+                ],
+                "correct_answer": "Deliberate exaggeration for effect ('I've told you a thousand times'; 'this bag weighs a ton').",
+                "hints": [
+                    "Hyperbole exaggerates on purpose.",
+                ],
+                "explanation": (
+                    "Hyperbole is deliberate exaggeration both the writer and reader recognize as such. 'I've told "
+                    "you a thousand times' doesn't mean literally a thousand; it means many times, with the emphasis "
+                    "that exaggeration provides. Hyperbole is not lying; it is emphasis."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "A writer says 'the old house groaned in the wind, and its windows wept rain'. What two figures of "
+                    "speech is the writer using?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Simile and metaphor.",
+                    "Two personifications: the house groans (human verb) and the windows weep (human verb); both give human qualities to non-human things.",
+                    "Hyperbole only.",
+                    "Two metaphors.",
+                ],
+                "correct_answer": "Two personifications: the house groans (human verb) and the windows weep (human verb); both give human qualities to non-human things.",
+                "hints": [
+                    "What human actions are being attributed to the house and windows?",
+                ],
+                "explanation": (
+                    "Both expressions are personification. 'Groaned' is a human sound applied to the house; 'wept' is "
+                    "a human action applied to the windows. The writer gives the old house and its windows feelings "
+                    "and reactions, making the scene emotionally vivid. Personification works through assigning human "
+                    "qualities to non-human subjects."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Pick a chapter from your current reading. Find one example each of simile, metaphor, "
+                    "personification, and hyperbole. Quote each one and explain what the writer meant."
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Strong literary prose contains all four; most chapters have examples of at least three.",
+                ],
+                "explanation": (
+                    "A complete answer quotes one example of each figure type, names the type, and explains the "
+                    "figurative meaning. With practice the child runs this noticing automatically and the writer's "
+                    "craft becomes visible during reading."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Read this passage. Identify and label each instance of simile, metaphor, personification, and hyperbole. Explain what each one means.",
+                "type": "open_response",
+                "target_concept": "four_figure_identification_and_interpretation",
+                "rubric": (
+                    "Mastery: all four types identified correctly with interpretations. Proficient: three of four. "
+                    "Developing: confuses types or cannot interpret."
+                ),
+            },
+            {
+                "prompt": "Read this poem. Discuss the figurative language used: which figures, what they mean, what they add to the poem.",
+                "type": "open_response",
+                "target_concept": "figurative_analysis_of_poem",
+                "rubric": (
+                    "Mastery: identifies multiple figures; explains contribution to poem's meaning and feel. "
+                    "Proficient: identifies figures; analysis weaker. Developing: cannot identify or interpret."
+                ),
+            },
+            {
+                "prompt": "Write three of your own sentences: one simile, one metaphor, one personification. Then write a hyperbolic sentence.",
+                "type": "open_response",
+                "target_concept": "figurative_language_production",
+                "rubric": (
+                    "Mastery: four well-formed examples, one per type. Proficient: three of four well-formed. "
+                    "Developing: cannot produce examples or confuses types."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "current chapter book reading (most chapter books are full of figurative language)",
+                "a small selection of accessible poetry (Shel Silverstein, Jack Prelutsky, classic narrative poems)",
+                "the reading notebook for figure-spotting and interpretation work",
+            ],
+            "recommended": [
+                "a wall card with the four figures defined and one example of each",
+                "a book of children's poems with rich figurative language (A Child's Garden of Verses, Where the Sidewalk Ends, Lift Every Voice)",
+                "song lyrics for figurative-language spotting (many songs are saturated with figurative language)",
+                "a personal book of beautiful figures: the child copies favorite figures from reading into a small book",
+            ],
+        },
+        "time_estimates": {"first_exposure": 30, "practice_session": 20, "assessment": 30},
+        "accommodations": {
+            "dyslexia": "Practice figurative language on read-aloud passages and on song lyrics. The interpretation work is independent of decoding; remove the decoding load.",
+            "adhd": "Brief sessions focused on one figure type at a time. Build up to spotting all four across multiple sessions.",
+            "gifted": "Move to subtler figures: extended metaphor, mixed metaphor (and why it usually doesn't work), allusion (a reference to another text), irony. Begin to discuss figurative language as deliberate authorial choice.",
+            "visual_learner": "Color-code figures on a printed passage: blue for simile, red for metaphor, green for personification, yellow for hyperbole. The visual sort makes the categories settle.",
+            "kinesthetic_learner": "Act out personifications (be the wind that whispers, be the house that groans). The body shows what the figure does.",
+            "auditory_learner": "Read figurative passages aloud and listen for the rhythm and emphasis the figures create. Song lyrics work especially well for this learner.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we meet four common figures of speech: simile, metaphor, personification, and hyperbole. "
+                    "Writers use these to make ideas vivid and meanings sharp. We learn each one with examples and "
+                    "practice spotting them in our own reading."
+                ),
+                "gradual_release": {
+                    "i_do": "Parent reads passages aloud, names each figure as it appears, demonstrates interpreting the figurative meaning.",
+                    "we_do": "Together work through passages spotting figures and interpreting them; child names types with support.",
+                    "you_do": "Child spots and interprets figures in their own reading independently.",
+                },
+                "guided_practice": [
+                    "Daily figure-spotting in current chapter reading",
+                    "Weekly figure-rich poem analysis",
+                    "Periodic figure-type sort tasks",
+                ],
+                "independent_practice": [
+                    "Use figurative language in own speech and writing deliberately",
+                    "Recognize figurative language across genres without prompting",
+                ],
+                "mastery_check": [
+                    "Identifies the four figures in unfamiliar passages",
+                    "Interprets each figure correctly",
+                    "Uses figurative language in own writing",
+                ],
+                "spiral_review": [
+                    "Return periodically to favorite figures the child has collected; discuss what makes each one work",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "Ancient rhetoricians named hundreds of figures of speech and studied them with care. Quintilian, "
+                    "Cicero, and Aristotle all wrote on the figures. The four we learn here, simile, metaphor, "
+                    "personification, and hyperbole, are among the oldest and most powerful. To learn them is to "
+                    "enter a tradition of careful attention to language."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the four figures: simile, metaphor, personification, hyperbole",
+                        "Recite the rule: simile uses 'like' or 'as'; metaphor compares directly",
+                        "Recite the rule: personification gives human qualities to non-human things",
+                        "Recite the rule: hyperbole is deliberate exaggeration for effect",
+                    ],
+                    "recitations": [
+                        "Memorize a short passage or poem rich in figurative language; recite it; discuss the figures",
+                    ],
+                },
+                "copywork": [
+                    "Copy three favorite figurative expressions from current reading into the copybook; label each by type",
+                ],
+                "recitation_routine": "At each reading session the child names one figure from the day's reading with interpretation.",
+                "history_integration": "The history of rhetoric and figurative language goes back to ancient Greece and Rome; many figures have Greek or Latin names (hyperbole, metaphor, simile from Latin similis 'like'). Trace the etymologies as the child meets each figure.",
+                "read_aloud_suggestions": [
+                    "Classical poetry accessible to children: Christina Rossetti, Robert Louis Stevenson, A. A. Milne, Robert Frost (selected)",
+                    "Books with literary prose dense in figurative language: The Wind in the Willows, Charlotte's Web, The Little Prince",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "Living books rich in figurative language; living poetry collections",
+                ],
+                "short_lesson_flow": "During reading aloud, pause briefly when a beautiful figure appears: 'did you hear that simile?' or 'that's personification.' Across weeks the figures become familiar without separate exercise.",
+                "narration_prompt": "Tell me the chapter; then tell me about the figures of speech that stood out.",
+                "real_world_objects": [
+                    "A 'beautiful sentences' book where the child collects favorite figures from reading",
+                    "An anchor chart of the four figures",
+                ],
+                "nature_connection": "Nature writing and nature poetry are saturated with figurative language (the wind whispers; the stars dance; clouds drift). Reading nature writing with figure-eyes shows how writers see the natural world.",
+                "habit_focus": "The habit of attention to language. The habit of noticing how writers say things, not only what they say.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "Figure cards: simile, metaphor, personification, hyperbole, each with definition and example",
+                    "Sort cards: figurative expressions to be sorted by type",
+                    "Interpret-and-write cards: a figurative expression; the child writes the literal meaning and the figurative meaning",
+                    "A small book for the child's own figurative-language collection",
+                ],
+                "presentation": {
+                    "three_period_lesson": "This is a simile; this is a metaphor; this is a personification; this is a hyperbole. Show me a simile. Is this a metaphor or a personification?",
+                    "steps": [
+                        "The guide presents each figure with definition and example",
+                        "The child sorts cards by figure type",
+                        "The child interprets figures with the interpret-and-write cards",
+                        "The child spots figures in their own reading and adds favorites to their collection book",
+                        "Across the term figurative attention becomes automatic",
+                    ],
+                },
+                "control_of_error": "The text and dictionary etymology are the control: a simile must have 'like' or 'as'; a personification must give a human quality to a non-human thing.",
+                "abstraction_pathway": "From sorting prepared cards, to identifying figures in unfamiliar passages, to producing original figures in own writing.",
+                "extensions": [
+                    "Subtler figures (allusion, irony) as the child is ready",
+                    "Etymologies of figure names",
+                    "Analysis of figurative language across genres (poetry, prose, song, ad copy)",
+                ],
+                "observation_focus": "Watch for spontaneous figure-noticing during reading. Watch for the child using figures in their own speech and writing.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Read poetry aloud regularly; welcome the child's noticings about language",
+                    "Use figurative language openly in your own speech; the child absorbs the patterns",
+                    "Discuss the figures in song lyrics, in advertising, in everyday speech",
+                ],
+                "real_world_contexts": [
+                    "Recognizing figures in song lyrics",
+                    "Recognizing figures in advertising",
+                    "Recognizing figures in everyday family speech",
+                    "Using figures in the child's own creative writing and conversation",
+                ],
+                "conversation_starters": [
+                    "Did you hear that comparison? What was the writer doing?",
+                    "What does the writer mean here, if not literally?",
+                    "What kind of figure of speech is that?",
+                ],
+                "resource_bank": [
+                    "Children's poetry collections accessible in the home",
+                    "Song lyrics from a wide variety of music the family enjoys",
+                    "Books with rich literary language",
+                ],
+                "parent_role": "Use figurative language openly. Notice it aloud. Welcome the child's noticings and questions. Make the child feel that paying attention to language is normal and wonderful.",
+                "observation_documentation": "Note when the child spontaneously uses a figure in their own speech or writing. Note when they identify a figure aloud during reading.",
+            },
+        },
+        "connections": {
+            "math": "Math sometimes uses figurative language too ('a tree of factors', 'the path of an equation'); recognizing this softens the boundary between math and the rest of language",
+            "science": "Scientific concepts often arrive through metaphor ('the cell is a tiny factory'; 'electrons are like miniature planets'); identifying these figures is part of science learning",
+            "history": "Historical writing uses figurative language; recognizing it helps the child read between the writer's literal and intended meanings",
+            "writing": "Figurative language enters the child's own writing as soon as they recognize and enjoy it; teaching the figures is teaching writing craft",
+        },
+    },
 }
