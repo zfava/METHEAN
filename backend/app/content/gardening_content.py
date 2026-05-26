@@ -505,4 +505,249 @@ GARDENING_CONTENT: dict[str, dict] = {
             ],
         },
     },
+    "gc-001": {
+        "node_type": "technique",
+        "trade": "agriculture",
+        "competency_name": "Read a seed packet for spacing, depth, sun, water, days-to-maturity, and direct-sow vs. transplant",
+        "progression_band": "helper",
+        "prerequisites": ["gs-001"],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "Misreading the depth instruction can lead to a learner planting seed too "
+                    "deep (it does not germinate) or too shallow (it dries out before germination); "
+                    "not a safety hazard but a real wasted-work error that compounds across a season"
+                ),
+                (
+                    "Misreading direct-sow vs. start-indoors-and-transplant can have a learner "
+                    "sowing a tomato seed outdoors in cold soil where it will rot, or starting "
+                    "indoors a carrot whose taproot dislikes transplanting; not a safety hazard "
+                    "but a real wasted-season error"
+                ),
+                (
+                    "Seed treatment warnings on the packet (some commercial seed is treated with "
+                    "fungicide or insecticide and is labeled with handling and disposal cautions): "
+                    "the learner reads the warning and applies it. The node does not enumerate "
+                    "the chemicals; the packet's label and the EPA-registered information govern."
+                ),
+                (
+                    "Seed storage: opened seed packets stored damp or warm lose viability. Not a "
+                    "safety hazard but the practice is part of the doing."
+                ),
+            ],
+            "ppe_required": [
+                "Garden PPE per gs-001 (closed-toe shoes, garden gloves if handling treated seed); no additional PPE for reading the packet itself",
+            ],
+            "supervision_required": False,
+            "supervision_basis": (
+                "Reading a packet involves no cutting tool, no body load, and no exposure. "
+                "Trade-level supervision from gardening-root still applies through the helper "
+                "band, but the reading itself is low-hazard and can be performed alongside a "
+                "working mentor rather than under constant watch. The mentor confirms the "
+                "learner's extracted numbers before any sowing happens."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "A real seed packet from the household's actual seed for the season",
+                "specification": (
+                    "A commercially printed seed packet from a recognized seed company, in date "
+                    "(the packet's printed date is within the seed company's stated viability "
+                    "window for the crop). A homemade or repackaged seed envelope is acceptable "
+                    "only if it has been labeled with the same fields as a commercial packet."
+                ),
+                "alternatives": [
+                    "A clearly written household record card carrying the same fields, if the seed "
+                    "is the household's own saved seed and the record is current."
+                ],
+            },
+            {
+                "name": "A planting card or notebook",
+                "specification": (
+                    "A sheet of paper or a notebook page where the learner writes down each "
+                    "operative number from the packet before any tool is touched. The planting "
+                    "card travels with the learner to the bed and is the reference during the "
+                    "actual sowing."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Pencil or pen",
+                "specification": "A real writing instrument; this is a written-record task",
+                "alternatives": [],
+            },
+            {
+                "name": "A reference of the household's last frost and first frost dates",
+                "specification": (
+                    "The local last-frost and first-frost dates for the household's location, from "
+                    "the state cooperative extension service or another local source. These are "
+                    "the dates the packet's 'start indoors X weeks before last frost' or 'direct "
+                    "sow after danger of frost has passed' instructions are anchored to. The node "
+                    "does not name dates; the household supplies them per their location."
+                ),
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [],
+        "workspace_requirements": {
+            "surface": "Any flat surface where the packet and the planting card can be laid out together",
+            "ventilation": "Open air or indoors",
+            "lighting": "Strong enough light to read fine print on the packet",
+            "power": "None",
+            "containment": "None required",
+        },
+        "skill_description": (
+            "The learner takes a real seed packet and works through it field by field, writing "
+            "each operative number onto a planting card. The fields read in order: the crop "
+            "name and variety; whether the seed is to be direct-sown or started indoors; if "
+            "indoors, how many weeks before the household's last frost; if direct-sown, what "
+            "soil condition (after last frost, when soil reaches a stated temperature, etc.); "
+            "planting depth (typically a fraction of an inch); spacing between seeds in the row "
+            "and between rows; thinning instructions (sow more, thin to X inches apart); sun "
+            "exposure (full sun, partial sun, shade); water needs; days to maturity (and whether "
+            "DTM is counted from sowing or from transplant; for direct-sown crops this is from "
+            "sowing, for transplanted crops it is from transplant out, and the packet usually "
+            "says); any seed treatment warning. The planting card is then shown to the mentor "
+            "for a check before any sowing or transplant happens. The learner names which "
+            "fields the packet did not supply, and which the household must add from local "
+            "knowledge (last frost date, first frost date, soil temperature in the row at the "
+            "time of sowing)."
+        ),
+        "demonstration_criteria": [
+            (
+                "Extracts every operative field from a real packet onto a planting card: crop "
+                "and variety, direct-sow vs. start-indoors, weeks-before-last-frost (if indoors) "
+                "or soil condition (if direct-sow), depth, in-row spacing, between-row spacing, "
+                "thinning, sun, water, days-to-maturity"
+            ),
+            (
+                "Names which DTM counting convention applies to the crop (from sowing for direct-"
+                "sown crops, from transplant for transplanted crops) and points to where the "
+                "packet says so, or names that the packet did not say and the household defers to "
+                "the seed company's website or the cooperative extension service"
+            ),
+            (
+                "Names the household's last frost and first frost dates from a local source and "
+                "explains how the packet's calendar instructions anchor to them"
+            ),
+            (
+                "Names any seed treatment warning on the packet and the handling rule that follows "
+                "(gloves on, no eating, packet stored away from food); if the packet has no "
+                "treatment warning, names that and confirms with the mentor"
+            ),
+            (
+                "Names the storage rule for any leftover seed: cool, dry, dark, in a labeled "
+                "envelope or jar, with the open date written on the label"
+            ),
+            (
+                "Reads three different packets for three different crops onto three planting "
+                "cards correctly, with the mentor verifying each card before any sowing"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Skipping fields the packet supplies and guessing at the bed",
+                "cause": "The learner glanced at the packet and went straight to the soil",
+                "remedy": (
+                    "Read every field onto the card before any sowing. The card is the working "
+                    "reference; the packet stays clean in the shed. The mentor verifies the card "
+                    "before any sowing begins."
+                ),
+            },
+            {
+                "error": "Confusing direct-sow with start-indoors",
+                "cause": "The packet's icons or wording were not clearly read",
+                "remedy": (
+                    "Find the words on the packet, not the icons. 'Direct sow,' 'sow outdoors,' "
+                    "'after last frost,' 'sow indoors X weeks before last frost.' If unclear, the "
+                    "seed company's website usually has the full instruction sheet for that variety."
+                ),
+            },
+            {
+                "error": "Reading depth in inches when the packet states a fraction",
+                "cause": "The fraction was misread (1/4 inch read as 1 inch, or 1/8 inch read as 1 inch)",
+                "remedy": (
+                    "Slow down on fractions. Most seed plants at 1/8 to 1/2 inch deep; anything "
+                    "stated in whole inches is unusual and worth a second look at the packet."
+                ),
+            },
+            {
+                "error": "Skipping the days-to-maturity counting convention",
+                "cause": "The learner read DTM but did not check from-sowing vs. from-transplant",
+                "remedy": (
+                    "Direct-sown crops count DTM from sowing; transplanted crops count DTM from "
+                    "transplant out, not from indoor start. The packet usually says; if not, the "
+                    "seed company's website does. Knowing this affects when the harvest is expected."
+                ),
+            },
+            {
+                "error": "Ignoring a seed treatment warning",
+                "cause": "The warning was small text near the bottom of the packet",
+                "remedy": (
+                    "Treated seed is labeled. The handling rule on the packet governs: gloves on, "
+                    "no eating, packet stored away from food and out of reach of small children, "
+                    "leftover treated seed disposed of per the packet's instructions or the local "
+                    "waste service's rules."
+                ),
+            },
+            {
+                "error": "Storing the opened packet on the windowsill",
+                "cause": "The packet was left where it was last used",
+                "remedy": (
+                    "Cool, dry, dark, sealed in a labeled envelope or jar. Sun and heat shorten "
+                    "viability. Write the open date on the packet so next year's reader knows."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "photo",
+            "what_to_capture": (
+                "Three planting cards (one per crop), each laid alongside its corresponding seed "
+                "packet, with every operative field filled in on the card in the learner's "
+                "handwriting"
+            ),
+            "what_the_evidence_shows": (
+                "That the learner extracted every operative number from each packet onto the "
+                "planting card, including the DTM counting convention, the seed treatment status, "
+                "and the anchoring to the household's last frost date if applicable"
+            ),
+        },
+        "mentor_signoff_required": False,
+        "pedagogy": {
+            "i_do": (
+                "The mentor takes a real packet and reads it onto a planting card aloud, field by "
+                "field, naming what is on the packet and what the household has to add from "
+                "local knowledge (last frost date). The mentor explicitly names the DTM "
+                "convention and any seed treatment warning. The card is then read aloud as a "
+                "summary."
+            ),
+            "we_do": (
+                "Mentor and learner alternate fields on a second packet. The learner reads a "
+                "field aloud and writes it; the mentor confirms or corrects; the next field is "
+                "the mentor's, then back to the learner. At the end both read the card aloud "
+                "together."
+            ),
+            "you_do_supervised": (
+                "The learner reads three real packets onto three planting cards independently. "
+                "The mentor checks each card after completion. The learner names any field the "
+                "packet did not supply and any field that depended on local knowledge."
+            ),
+            "you_do_unsupervised": (
+                "Once the learner can produce three accurate planting cards across at least two "
+                "sessions, they may read packets unsupervised. The mentor still verifies the "
+                "card before any sowing or transplant; this is not a supervision rule, it is a "
+                "double-check rule that stays in place across bands."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 3,
+        "session_length_minutes": 20,
+        "related_projects": [],
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
+    },
 }
