@@ -750,4 +750,272 @@ GARDENING_CONTENT: dict[str, dict] = {
             "standard_refs": [],
         },
     },
+    "gc-002": {
+        "node_type": "technique",
+        "trade": "agriculture",
+        "competency_name": "Use a trowel or hori-hori knife to dig a planting hole at correct depth and width",
+        "progression_band": "helper",
+        "prerequisites": ["gs-001"],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "Sharp tool: a hori-hori has both a serrated edge and a straight edge; a "
+                    "sharpened trowel has a sharpened front edge. A slip can cut the off-hand "
+                    "or the leg if the tool path is not controlled."
+                ),
+                (
+                    "Off-hand-in-path: the off-hand steadies the soil or the plant, and a "
+                    "learner can put a finger directly under the trowel's tip on a downward "
+                    "stroke if the wrist-line rule is not held"
+                ),
+                (
+                    "Kneeling strain and knee injury on hard or stony ground: the learner is "
+                    "typically kneeling for ten to thirty minutes per session; without a kneeling "
+                    "pad on hard ground the knee bursa can become inflamed"
+                ),
+                (
+                    "Back strain from bending repeatedly at the waist: leaning over to dig from "
+                    "a standing position rather than kneeling can strain the lower back over a "
+                    "long session"
+                ),
+                (
+                    "Soil contact: a hand cut while digging makes immediate contact with soil "
+                    "bacteria; the wound-wash and tetanus-status habits from gs-001 govern"
+                ),
+                (
+                    "Buried hazards (root, rock, glass, or wire in old garden soil): the trowel "
+                    "can strike or be deflected by a buried object; the learner stops on any "
+                    "unexpected resistance and looks before pushing"
+                ),
+            ],
+            "ppe_required": [
+                "Garden PPE per gs-001 (closed-toe shoes, hat, water, sun protection)",
+                "Garden gloves on for general digging; off for the moment of fine placement",
+                "A kneeling pad on any ground harder than soft loam, or a low garden stool",
+                "Eye protection optional but recommended when working in dry, windy conditions where soil or compost might blow into the face",
+            ],
+            "supervision_required": True,
+            "supervision_basis": (
+                "The hori-hori (or sharpened trowel) is the learner's first sharp garden tool in "
+                "the trade. Mentor on premises with sight of the off-hand and the tool path "
+                "throughout helper-band practice. Mentor steps back to apprentice-level "
+                "supervision (on premises, attention divided) once the learner has demonstrated "
+                "the technique on at least ten holes across at least two sessions without an "
+                "off-hand-in-path moment and with correct kneeling form."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "Hand trowel or hori-hori knife",
+                "specification": (
+                    "A hand trowel with a sound handle and a clean (not rusted-through) blade, OR "
+                    "a hori-hori knife with a sheath. The hori-hori is the more versatile tool "
+                    "but is sharper and demands more control. Either is acceptable; the mentor "
+                    "chooses which the learner starts on based on the learner's age and grip."
+                ),
+                "alternatives": [
+                    "A garden dibber for seed-depth holes that do not need width",
+                ],
+            },
+            {
+                "name": "Kneeling pad or low garden stool",
+                "specification": "A foam pad or stool that lets the learner kneel or sit close to the ground without knee or back strain",
+                "alternatives": [],
+            },
+            {
+                "name": "A garden bucket or wheelbarrow for displaced soil",
+                "specification": "A clean container to set excavated soil into so it can be returned to the hole around the plant",
+                "alternatives": ["A clean tarp laid alongside the hole"],
+            },
+            {
+                "name": "Soil amendment (if the planting card calls for it)",
+                "specification": (
+                    "Compost, aged manure, or a named soil amendment per the planting card or the "
+                    "mentor's instruction. The mentor chooses the amendment per the crop and the "
+                    "soil; the node does not name a specific amendment."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "A planting card from gc-001 if planting follows the digging",
+                "specification": "The card carries the depth and width the hole must reach",
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [
+            {
+                "name": "A real bed of prepared garden soil",
+                "quantity": "Enough bed for ten practice holes plus a small margin",
+                "approximate_cost_usd": None,
+            },
+        ],
+        "workspace_requirements": {
+            "surface": "Prepared garden soil at the learner's kneeling height, with the bed already cleared of large weeds and surface debris",
+            "ventilation": "Open air",
+            "lighting": "Daylight",
+            "power": "None",
+            "containment": "None required; the bucket or tarp catches the displaced soil",
+        },
+        "skill_description": (
+            "The learner kneels on the pad facing the spot for the hole, with the bucket or "
+            "tarp on the side of their dominant hand. They hold the trowel or hori-hori with "
+            "the dominant hand and the off-hand stays away from the tool path, on the soil "
+            "well behind the trowel's tip. The first stroke drives the trowel into the soil "
+            "to the depth the planting card or the mentor specifies (typically two to three "
+            "times the depth of the seed for a sown hole, or the height of the root ball for "
+            "a transplant hole). A second and third stroke widen the hole by lifting soil out "
+            "and into the bucket. The width of the hole at the bottom is at least the width "
+            "of the root ball plus a small margin (typically an inch larger all around for a "
+            "seedling); the hole is roughly cylindrical, not conical, so the roots have room "
+            "to spread when the plant is set in. The learner checks the depth with the trowel "
+            "or by holding the plant beside the hole to compare. If the planting card calls "
+            "for soil amendment, a handful is mixed into the bottom of the hole and the loose "
+            "soil to the side. The off-hand stays clear throughout; the trowel returns to the "
+            "bucket or rests beside the hole between strokes, never on the path the learner "
+            "will move through next."
+        ),
+        "demonstration_criteria": [
+            (
+                "The finished hole reaches the depth specified by the planting card or the "
+                "mentor, within roughly 1/2 inch, verified by holding the trowel or the plant "
+                "beside the hole"
+            ),
+            (
+                "The finished hole is at least the width of the intended root ball plus roughly "
+                "1 inch all around at the bottom; the bottom is roughly flat, not pointed"
+            ),
+            (
+                "The displaced soil is in the bucket or on the tarp, not scattered across the "
+                "bed where the next plant will go"
+            ),
+            (
+                "The off-hand was clear of the trowel path throughout the demonstration; the "
+                "mentor confirms"
+            ),
+            "The learner is kneeling on a pad (or seated on a stool) with the back roughly straight, not bent over from a standing position",
+            (
+                "The trowel was set down on a known surface (the bucket, the tarp, beside the "
+                "hole on the soil-tarp side) between strokes, never in the path the learner moves "
+                "through"
+            ),
+            (
+                "On any buried hazard struck during the dig (root, rock, glass, wire), the "
+                "learner stopped, named the object, and asked the mentor before continuing"
+            ),
+            (
+                "The learner can dig three holes for three different specifications (seed depth, "
+                "small transplant, larger transplant) on softer ground in a single session"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "The hole is conical, narrowing at the bottom",
+                "cause": "The learner pushed the trowel straight down repeatedly without lifting soil out to widen the bottom",
+                "remedy": (
+                    "After the first plunge, the next strokes lift soil out by rocking the trowel "
+                    "back and pulling soil up and into the bucket. The bottom should be roughly "
+                    "as wide as the top."
+                ),
+            },
+            {
+                "error": "The hole is shallower than the planting card specifies",
+                "cause": "The learner measured by eye and stopped too soon",
+                "remedy": (
+                    "Hold the trowel into the hole and check the depth against the planting card "
+                    "before declaring the hole done. For transplants, hold the plant in its "
+                    "container beside the hole and compare; the soil level on the plant should "
+                    "match the soil level at the top of the hole."
+                ),
+            },
+            {
+                "error": "Off-hand drifts in front of the trowel during a deepening stroke",
+                "cause": "The learner reached to steady soil or pull a small root with the wrong hand",
+                "remedy": (
+                    "Off-hand stays behind the trowel's tip, on soil well clear of the path. If "
+                    "soil or roots need to be moved by hand, the trowel is set down first."
+                ),
+            },
+            {
+                "error": "Bending at the waist from a standing position to dig",
+                "cause": "The learner did not set up the kneeling pad and the bucket before starting",
+                "remedy": (
+                    "Set up the kneeling pad or stool first, the bucket on the dominant side. "
+                    "Long sessions of bending at the waist hurt the back; the trade's habits "
+                    "include the setup as part of the work."
+                ),
+            },
+            {
+                "error": "Striking a rock or root and forcing the trowel through",
+                "cause": "The learner felt resistance and pushed harder",
+                "remedy": (
+                    "Stop on unexpected resistance. Look. If it is a small root, cut it cleanly "
+                    "with a hori-hori, do not break it with the trowel. If it is a rock, work "
+                    "around it or lever it out with the trowel's tip and the leverage of the "
+                    "handle. If it is glass, wire, or anything sharp, stop and tell the mentor."
+                ),
+            },
+            {
+                "error": "Leaving the trowel in the path or on the soil where the learner will move next",
+                "cause": "The trowel was set down where it was last used, not where it belongs",
+                "remedy": (
+                    "Trowel goes into the bucket, on the tarp, or beside the bucket between "
+                    "strokes. At end of session it goes back to the shed. A trowel in a path "
+                    "line is a foot puncture waiting to happen."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "photo",
+            "what_to_capture": (
+                "Three finished planting holes side by side, with the trowel laid into one for "
+                "scale, the bucket of displaced soil beside, and the kneeling pad in frame. If a "
+                "planting card is in use, lay it visible beside the holes."
+            ),
+            "what_the_evidence_shows": (
+                "That each hole reaches the specified depth and width, that the soil is "
+                "contained in the bucket, and that the setup (pad, bucket, planting card) is in "
+                "place"
+            ),
+        },
+        "mentor_signoff_required": True,
+        "pedagogy": {
+            "i_do": (
+                "The mentor sets up the pad, the bucket, and the trowel, then digs one hole "
+                "narrating each step: the depth and width the card calls for, the wrist-line "
+                "rule, the soil into the bucket, the check of depth, the trowel set down on the "
+                "bucket between strokes. The mentor finishes by setting the plant or a "
+                "stand-in into the hole to show the fit."
+            ),
+            "we_do": (
+                "Mentor and learner alternate strokes on a fresh hole. The learner takes a "
+                "stroke, the mentor takes the next. The mentor watches the off-hand throughout. "
+                "After each pair of strokes both check the depth and width together. The "
+                "learner finishes the hole with the last few strokes alone, the mentor watching."
+            ),
+            "you_do_supervised": (
+                "The learner digs three holes for three different specifications under the "
+                "mentor's watch. The mentor's role is to watch the off-hand position, the "
+                "kneeling form, and the depth-and-width check. After each hole the learner names "
+                "aloud the depth and width achieved and shows it against the card."
+            ),
+            "you_do_unsupervised": (
+                "The learner is signed off for unsupervised hole-digging on prepared garden soil "
+                "for known crops once they can dig ten holes across two sessions without an "
+                "off-hand-in-path moment, with the gs-001 safety signoff current within the last "
+                "twelve months. The mentor is still on premises through the apprentice band. "
+                "Working unsupervised on unknown ground, breaking new beds, or digging deep "
+                "(over 8 inches) remains supervised through the journeyman band."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 4,
+        "session_length_minutes": 30,
+        "related_projects": [],
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
+    },
 }
