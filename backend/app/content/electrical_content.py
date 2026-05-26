@@ -2462,4 +2462,288 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
             "standard_refs": [],
         },
     },
+    "elc-005": {
+        "node_type": "knowledge",
+        "trade": "electrical",
+        "competency_name": (
+            "Read residential wiring diagrams and schematics: one-line diagrams, "
+            "device-level wiring diagrams, and the standard symbol set"
+        ),
+        "progression_band": "helper",
+        "prerequisites": ["els-001", "elc-002"],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "Misreading a wiring diagram and concluding the wrong terminal is "
+                    "LINE or LOAD on a device. Not a direct hazard at this band (paper "
+                    "work), but a real downstream error in elc-021 and any later "
+                    "install where the LINE / LOAD distinction governs whether "
+                    "downstream protection is provided."
+                ),
+                (
+                    "Mistaking the equipment grounding conductor symbol for the "
+                    "neutral. Not a direct hazard at this band, but a foundational "
+                    "literacy error that would result in dangerous wiring downstream."
+                ),
+                (
+                    "Treating a diagram as authoritative when the AHJ-adopted NEC "
+                    "edition (or local amendment) has changed the rule. Diagrams in "
+                    "older textbooks or older manufacturer literature may not reflect "
+                    "current code; the AHJ-adopted edition governs."
+                ),
+            ],
+            "ppe_required": [
+                "Trade PPE per els-001; no additional PPE required for paper work",
+            ],
+            "supervision_required": False,
+            "supervision_basis": (
+                "Pure paper / on-screen diagram reading with the AI tutor. No real "
+                "circuits, no live work. AI tutor mentors end-to-end."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "A standard residential schematic-symbol reference",
+                "specification": (
+                    "A reference of the standard symbols used on residential one-line "
+                    "diagrams, schematics, and wiring diagrams (switch single-pole / "
+                    "three-way / four-way / dimmer; receptacle standard / GFCI / AFCI / "
+                    "tamper-resistant; fixture incandescent / fluorescent / LED; "
+                    "breaker single-pole / two-pole; fuse; ground; ungrounded / hot "
+                    "conductor; grounded / neutral conductor; equipment grounding "
+                    "conductor; junction box; smoke / CO alarm with interconnect; "
+                    "doorbell transformer). The AI tutor provides one."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "A library of sample residential wiring diagrams",
+                "specification": (
+                    "Sample diagrams for common residential circuits: a switched "
+                    "receptacle, a single switched fixture, a three-way switched "
+                    "fixture, a four-way switched fixture (where present), a GFCI "
+                    "receptacle protecting downstream outlets (LINE and LOAD wiring), "
+                    "an AFCI breaker with a branch circuit, interconnected smoke / CO "
+                    "alarms, a doorbell with transformer and chime. Provided by the "
+                    "AI tutor."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Pencil and paper for tracing current paths",
+                "specification": "Standard pencil and paper; the learner traces and annotates",
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [],
+        "workspace_requirements": {
+            "surface": "Any flat surface (desk or table)",
+            "ventilation": "Indoor or outdoor; not relevant",
+            "lighting": "Adequate to read diagrams clearly",
+            "power": "None",
+            "containment": "None required",
+        },
+        "skill_description": (
+            "The learner builds fluency in reading the three main kinds of electrical "
+            "drawing used in residential work. A ONE-LINE (single-line) DIAGRAM shows "
+            "the overall topology of the service: the utility supply, the meter, the "
+            "main disconnect, the main panel, any subpanels, and the major branches, "
+            "each represented as a single line and a standard symbol. A WIRING DIAGRAM "
+            "shows the actual conductors and terminals at the device level, drawn as "
+            "the conductors would actually be connected: the LINE-side wiring of a "
+            "GFCI receptacle vs the LOAD-side wiring; the common, traveler, and load "
+            "conductors of a three-way switched fixture; the interconnect terminal on "
+            "a smoke/CO alarm. A SCHEMATIC shows the circuit's electrical function "
+            "with standard symbols, often abstracted from the physical layout (mostly "
+            "used in equipment-internal documentation rather than residential install "
+            "drawings). The learner reads each of these for common residential "
+            "circuits: a switched fixture from a single switch (a 'hot, neutral, "
+            "ground' supply at the switch box, a switch leg up to the fixture, the "
+            "neutral and ground traveling with); a three-way switched fixture (the "
+            "common terminal of each switch, the two travelers between switches, the "
+            "fixture's hot from one switch's common and neutral from the source); a "
+            "GFCI receptacle's LINE and LOAD terminals and what each protects; an "
+            "AFCI breaker protecting a branch from arcing faults per the AHJ-adopted "
+            "NEC's required locations; a multiwire branch circuit (MWBC) with two "
+            "hots from opposite phases sharing a single neutral; smoke and CO alarms "
+            "with the interconnect terminal so all alarms sound when one detects. The "
+            "learner traces current paths on each diagram by pencil, annotating "
+            "ungrounded / grounded / equipment-grounding conductors and naming where "
+            "the protection (breaker, GFCI, AFCI) lies. The learner names the "
+            "convention for residential color coding (black or red insulation for hot; "
+            "white for neutral; bare or green for equipment ground; the AHJ-adopted "
+            "NEC governs specific cases including re-identification of conductors)."
+        ),
+        "demonstration_criteria": [
+            (
+                "Names every symbol on the standard residential reference card without "
+                "prompting"
+            ),
+            (
+                "Reads and annotates a single switched fixture diagram, naming the "
+                "supply, the switch leg, the neutral, and the ground"
+            ),
+            (
+                "Reads and annotates a three-way switched fixture diagram, naming the "
+                "common terminal of each switch, the two travelers, and the load "
+                "wiring; correctly traces the current path with the switch in each "
+                "position"
+            ),
+            (
+                "Reads and annotates a GFCI receptacle diagram, identifying the LINE "
+                "and LOAD terminals and naming which receptacles downstream are "
+                "protected and which (wired ahead of the LINE side) are NOT protected"
+            ),
+            (
+                "Reads and annotates an AFCI breaker diagram and names that AFCI "
+                "protects against arcing faults along the branch wiring, per the "
+                "AHJ-adopted NEC's required locations"
+            ),
+            (
+                "Reads and annotates a multiwire branch circuit (MWBC) diagram, "
+                "naming the two hots from opposite phases, the shared neutral, and "
+                "the rule that opening the neutral on an energized MWBC produces "
+                "dangerous voltages (the safety habit elc-005 carries into elc-021)"
+            ),
+            (
+                "Reads and annotates an interconnected smoke / CO alarm diagram, "
+                "naming the interconnect terminal and explaining in one sentence "
+                "why interconnect matters (when one alarm detects, all alarms sound)"
+            ),
+            (
+                "Names the residential color-coding convention and the rule that the "
+                "AHJ-adopted NEC governs re-identification of conductors (some "
+                "circuits use a white conductor as a switch leg with re-"
+                "identification by tape or paint)"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Confusing the LINE and LOAD terminals on a GFCI receptacle",
+                "cause": "The learner read the diagram without naming which side is the supply and which is the protected output",
+                "remedy": (
+                    "LINE = supply from the panel; LOAD = downstream receptacles to "
+                    "be protected. Wiring the supply to LOAD terminals leaves the "
+                    "GFCI inoperative and the downstream receptacles unprotected. The "
+                    "AI tutor walks through both wiring methods (LINE-only and LINE-"
+                    "plus-LOAD) and names the consequence of each error."
+                ),
+            },
+            {
+                "error": "Treating the white conductor as always neutral",
+                "cause": "The learner read the color-coding rule without the re-identification exception",
+                "remedy": (
+                    "In some switch-leg configurations the AHJ-adopted NEC permits a "
+                    "white conductor to be used as a hot when re-identified with "
+                    "black tape, paint, or other permanent marking. The learner "
+                    "names the rule and the rule that re-identification must be "
+                    "present; the AHJ-adopted edition governs current requirements."
+                ),
+            },
+            {
+                "error": "Reading a three-way switch as if it had a single ON / OFF position",
+                "cause": "The learner did not internalize the common-and-two-travelers configuration",
+                "remedy": (
+                    "A three-way switch has a common terminal and two travelers; "
+                    "either traveler connects to the common as the toggle moves. The "
+                    "AI tutor traces both positions and shows the current path for "
+                    "each."
+                ),
+            },
+            {
+                "error": "Treating the equipment grounding conductor as if it carries current under normal operation",
+                "cause": "The learner confused the equipment grounding conductor with the neutral",
+                "remedy": (
+                    "Under normal operation the equipment grounding conductor "
+                    "carries NO current; it is a safety bond that carries fault "
+                    "current to ground only when an insulation failure puts hot on "
+                    "metal that should be at ground potential. The neutral carries "
+                    "the return current during normal operation. These are different "
+                    "conductors with different jobs."
+                ),
+            },
+            {
+                "error": "Trusting an older textbook diagram as if it reflected current code",
+                "cause": "The learner did not check the publication date of the reference",
+                "remedy": (
+                    "AHJ-adopted NEC requirements evolve every 3-year cycle. The "
+                    "diagram is correct conceptually but specific code-required "
+                    "locations of GFCI, AFCI, tamper-resistant, and similar features "
+                    "may differ from the diagram's edition. The learner names the "
+                    "rule and defers code-specific requirements to the AHJ-adopted "
+                    "edition."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "document",
+            "what_to_capture": (
+                "A worked diagram-reading set: annotated copies of at least six "
+                "residential wiring diagrams (single switched fixture, three-way "
+                "switched fixture, GFCI receptacle with LINE and LOAD, AFCI branch, "
+                "MWBC, interconnected smoke/CO), with the learner's annotations of "
+                "hot / neutral / ground, switch positions, and protection locations"
+            ),
+            "what_the_evidence_shows": (
+                "That the learner reads the standard residential symbol set and the "
+                "three diagram types (one-line, wiring, schematic), and can trace "
+                "current paths and name protection on common residential circuits"
+            ),
+        },
+        "mentor_signoff_required": False,
+        "pedagogy": {
+            "i_do": (
+                "The AI tutor walks the learner through the symbol reference and one "
+                "diagram of each kind (one-line, wiring, schematic), naming every "
+                "symbol and tracing the current path on each."
+            ),
+            "we_do": (
+                "The AI tutor and the learner alternate diagrams. The AI poses a "
+                "diagram with annotations missing; the learner fills them in; the AI "
+                "confirms or corrects. The MWBC diagram and the GFCI LINE / LOAD "
+                "diagram each get extra walkthrough time."
+            ),
+            "you_do_supervised": (
+                "The learner annotates six diagrams independently and submits to the "
+                "AI tutor. The AI tutor confirms each annotation; on any miss, the AI "
+                "re-quizzes a similar diagram."
+            ),
+            "you_do_unsupervised": (
+                "Once the learner can annotate the six standard diagrams correctly "
+                "across two sessions, they may continue with additional kinds of "
+                "diagrams (sub-feeder layouts, generator transfer arrangements, "
+                "solar interconnections) at the apprentice band."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 4,
+        "session_length_minutes": 45,
+        "related_projects": [],
+        "certification_alignment": {
+            "ladder_rung": "helper",
+            "notes": "Knowledge competency. Diagram-reading fluency is universal across credentials.",
+            "certifications_supported": [
+                {
+                    "id": "elcert-nec",
+                    "domains": [
+                        "diagram interpretation of residential circuits per the NEC",
+                        "MWBC and shared-neutral rules per the AHJ-adopted NEC",
+                        "GFCI / AFCI required locations per the AHJ-adopted NEC",
+                    ],
+                    "notes": "Heavily tested on the journeyman exam.",
+                },
+                {
+                    "id": "elcert-licensing",
+                    "domains": ["diagram fluency across the state licensing exam scope"],
+                    "notes": "Universal across every state licensing exam.",
+                },
+            ],
+        },
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
+    },
 }
