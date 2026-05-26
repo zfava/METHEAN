@@ -12,12 +12,16 @@ Covers:
 
 import pytest
 
+from app.content.electrical_content import ELECTRICAL_CONTENT
+from app.content.gardening_content import GARDENING_CONTENT
 from app.content.history_foundational_content import HISTORY_FOUNDATIONAL_CONTENT
+from app.content.hvac_content import HVAC_CONTENT
 from app.content.math_developing_content import MATH_DEVELOPING_CONTENT
 from app.content.math_foundational_content import MATH_FOUNDATIONAL_CONTENT
 from app.content.reading_developing_content import READING_DEVELOPING_CONTENT
 from app.content.reading_foundational_content import READING_FOUNDATIONAL_CONTENT
 from app.content.science_foundational_content import SCIENCE_FOUNDATIONAL_CONTENT
+from app.content.woodworking_content import WOODWORKING_CONTENT
 from app.content.writing_foundational_content import WRITING_FOUNDATIONAL_CONTENT
 from app.services.node_content import (
     NODE_CONTENT_SCHEMA,
@@ -686,3 +690,52 @@ class TestAuthoredPhilosophyContent:
         assert not forbidden, f"{node_key} unschooling has forbidden keys: {sorted(forbidden)}"
         # validate_philosophy must report no hard-fail for the authored node.
         assert not [i for i in validate_philosophy(content) if i.startswith("error:")]
+
+
+# Cap titles well under the learning_nodes.title varchar(255) column. Trade
+# content nodes were previously authored with multi-clause competency_name
+# strings used directly as the node title, which exceeded 255 chars and
+# blocked inserts. The cap of 120 leaves comfortable headroom and forces
+# authors to write short titles, keeping the descriptive detail in
+# competency_name / description.
+TITLE_LENGTH_LIMIT = 120
+
+TRADE_CONTENT_MODULES = {
+    "electrical": ELECTRICAL_CONTENT,
+    "hvac": HVAC_CONTENT,
+    "woodworking": WOODWORKING_CONTENT,
+    "gardening": GARDENING_CONTENT,
+}
+
+
+def _effective_title_for_db(node: dict) -> str:
+    """The string that would be inserted as learning_nodes.title for this
+    node. Trade content nodes prefer the short `title` field and fall back
+    to `competency_name` for the technique/safety shape, `trade_name` for
+    the root shape, or `credential_name` for the certification_prep shape.
+    """
+    return (
+        node.get("title") or node.get("competency_name") or node.get("trade_name") or node.get("credential_name") or ""
+    )
+
+
+_TRADE_NODE_IDS = tuple((trade, nid) for trade, mod in TRADE_CONTENT_MODULES.items() for nid in sorted(mod.keys()))
+
+
+class TestTradeNodeTitleLength:
+    """Guard: every authored trade node has an effective title that fits the
+    learning_nodes.title column (varchar(255)) with headroom. A cap of 120
+    chars keeps titles concise and prevents the over-length-title CI
+    regression where competency_name was inserted as title and exceeded the
+    column limit.
+    """
+
+    @pytest.mark.parametrize(("trade", "node_id"), _TRADE_NODE_IDS)
+    def test_effective_title_fits_column(self, trade: str, node_id: str) -> None:
+        node = TRADE_CONTENT_MODULES[trade][node_id]
+        effective = _effective_title_for_db(node)
+        assert len(effective) <= TITLE_LENGTH_LIMIT, (
+            f"{trade}/{node_id} effective title is {len(effective)} chars "
+            f"(> {TITLE_LENGTH_LIMIT}); add a short `title` field and keep "
+            f"the detail in competency_name / description"
+        )
