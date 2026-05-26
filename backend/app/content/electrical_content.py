@@ -4905,4 +4905,504 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
             ],
         },
     },
+    "elcert-nec": {
+        "node_type": "certification_prep",
+        "trade": "electrical",
+        "credential_name": "Working familiarity with the NEC (NFPA 70) and NFPA 70E",
+        "credential_body": "National Fire Protection Association (NFPA)",
+        "credential_body_url": "https://www.nfpa.org",
+        "authorizing_scope": (
+            "The NEC (NFPA 70) is the standard that governs electrical "
+            "installations in most of the United States; jurisdictions adopt "
+            "specific editions, sometimes with state-specific amendments. NFPA "
+            "70E is the standard that governs electrical safety in the "
+            "workplace, including live-dead-live verification, arc-flash "
+            "boundaries, PPE selection, and the energized-work permit. Neither "
+            "the NEC nor NFPA 70E is a 'credential' in the legal sense; "
+            "familiarity with them is the foundation of every state electrical "
+            "license and every employer-required safety program. The codes "
+            "themselves are obtained through NFPA or recognized publishers; "
+            "the AHJ-adopted edition governs which version of the NEC applies "
+            "in the learner's jurisdiction. This study competency builds "
+            "working familiarity with the structure of both standards and "
+            "with the residential portion of the NEC at the depth needed for "
+            "the state journeyman exam (elcert-licensing); deeper code study "
+            "follows at the apprentice and journeyman bands."
+        ),
+        "knowledge_domains_covered": [
+            (
+                "NEC structure: Article 100 definitions; Chapter 2 wiring and "
+                "protection (Articles 200-285); Chapter 3 wiring methods and "
+                "materials (Articles 300-398); Chapter 4 equipment for general "
+                "use (Articles 400-490); Chapter 5 special occupancies (Articles "
+                "500-590, light coverage at the apprentice band); Chapter 6 "
+                "special equipment; Chapter 7 special conditions; Chapter 8 "
+                "communications; Chapter 9 tables; Annex references. The exact "
+                "article-number content varies by AHJ-adopted edition; the "
+                "structure is stable."
+            ),
+            (
+                "Residential focus topics in the NEC: Article 210 (branch "
+                "circuits), Article 220 (load calculations), Article 230 "
+                "(services), Article 240 (overcurrent protection), Article 250 "
+                "(grounding and bonding), Article 310 (conductors for general "
+                "wiring), Article 314 (outlet, device, and junction boxes), "
+                "Article 330 / 334 (MC and NM cable), Article 404 (switches), "
+                "Article 406 (receptacles), Article 408 (panelboards), Article "
+                "410 (luminaires), Article 422 (appliances), Article 430 "
+                "(motors), Article 440 (air-conditioning and refrigeration "
+                "equipment), Article 460 (capacitors), Article 690 (solar PV "
+                "systems), Article 702 (optional standby systems). The AHJ-"
+                "adopted edition governs the specific requirements; this study "
+                "covers the structure and the residential applications "
+                "without reproducing code text."
+            ),
+            (
+                "NFPA 70E structure: Article 110 (general safety practices), "
+                "Article 120 (lockout-tagout), Article 130 (working on or "
+                "near live parts; arc-flash hazard analysis and PPE), "
+                "informative annexes on arc-flash calculation, energized-work "
+                "permits, host-and-contract employer responsibilities. "
+                "Residential application is smaller in arc-flash scale than "
+                "commercial but the live-dead-live verification, the PPE "
+                "selection, and the LOTO discipline apply equally."
+            ),
+        ],
+        "eligibility": {
+            "minimum_age": "none for code study; testing programs may set their own",
+            "experience_requirements": "none for code study; the state journeyman exam (elcert-licensing) sets experience requirements",
+            "prerequisites": [
+                "The AHJ-adopted edition of the NEC obtained through NFPA or a recognized publisher; the current NFPA 70E obtained through NFPA or a recognized publisher",
+            ],
+        },
+        "exam_format_general": (
+            "The NEC and NFPA 70E are standards, not exams in themselves. "
+            "Familiarity with them is tested by the state journeyman and master "
+            "exams (see elcert-licensing). The standards themselves are NOT "
+            "tested by NFPA; the journeyman / master exam by the AHJ tests "
+            "applied familiarity. Some NFPA-approved training providers offer "
+            "code-update seminars and end-of-course assessments that issue "
+            "completion certificates; these are recognized for "
+            "continuing-education credit by many AHJs, but they are not a "
+            "license. METHEAN does not administer or issue any certificate."
+        ),
+        "legal_status": "jurisdiction_specific",
+        "prepares_understanding_only": True,
+        "exam_taken_through": (
+            "NFPA-approved training providers for code-update seminars and "
+            "continuing-education credit; the AHJ or its authorized testing "
+            "partner for the journeyman / master exam where code familiarity is "
+            "tested (see elcert-licensing). METHEAN does not administer or "
+            "proctor."
+        ),
+        "supervised_hours_through": None,
+        "progression_band": "apprentice",
+        "where_in_ladder": (
+            "Apprentice-band study, intensifying through the journeyman band. "
+            "The learner builds working familiarity with the NEC structure at "
+            "the helper band (through elc-006, elc-007, elc-008 which all "
+            "reference the AHJ-adopted edition); this competency consolidates "
+            "the structure into NEC fluency at the apprentice band, in "
+            "preparation for the state journeyman exam at the late apprentice "
+            "to early journeyman band (elcert-licensing). NFPA 70E familiarity "
+            "is built alongside elc-021 and is consolidated at the apprentice "
+            "band."
+        ),
+        "aligned_competencies": [
+            "els-001",
+            "elc-001",
+            "elc-002",
+            "elc-005",
+            "elc-006",
+            "elc-007",
+            "elc-008",
+            "elc-021",
+        ],
+        "study_resources_pointers": [
+            "The AHJ-adopted edition of the NEC, obtained through NFPA or recognized publishers (Mike Holt Enterprises, the NFPA's own publications, recognized state-approved providers)",
+            "The current NFPA 70E, obtained through NFPA or recognized publishers",
+            (
+                "NFPA's NEC handbook (the same edition as the AHJ-adopted code, "
+                "with annotations and rationale) for deeper study"
+            ),
+            (
+                "Recognized study courses from state-approved apprenticeship "
+                "programs, community-college HVAC / electrical programs, or "
+                "the electrical training ALLIANCE (the IBEW / NECA "
+                "apprenticeship program)"
+            ),
+            (
+                "Mike Holt's NEC training materials (a widely-used "
+                "third-party study resource recognized by many AHJs); the "
+                "learner uses materials matched to the AHJ-adopted edition"
+            ),
+        ],
+        "mentor_model": (
+            "AI tutor mentors end-to-end study. The AI walks the learner "
+            "through the NEC structure, drills navigation against the AHJ-"
+            "adopted edition open in the learner's hand, and quizzes against "
+            "the published structure of the exam blueprints. METHEAN does NOT "
+            "administer the journeyman / master exam (see elcert-licensing) "
+            "and does NOT issue continuing-education certificates."
+        ),
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [
+                "NFPA 70 (National Electrical Code; current edition adopted by the local AHJ)",
+                "NFPA 70E (Standard for Electrical Safety in the Workplace; current edition)",
+                "NFPA-approved training-provider list (the household confirms current approval)",
+                "The local AHJ's adopted edition of the NEC and any state-specific amendments (the household identifies their AHJ's adopted edition and any continuing-education requirements)",
+            ],
+        },
+    },
+    "elcert-licensing": {
+        "node_type": "certification_prep",
+        "trade": "electrical",
+        "credential_name": (
+            "State electrician licensing path (apprentice / journeyman / "
+            "master / low-voltage / limited-energy)"
+        ),
+        "credential_body": (
+            "The Authority Having Jurisdiction (AHJ) for electrical licensing "
+            "in the learner's state, county, or municipality. In the United "
+            "States, electrician licensing is regulated at the state level "
+            "(and in some states at the county or municipal level); there is "
+            "no single federal electrician license. The learner identifies "
+            "their AHJ before pursuing this credential."
+        ),
+        "credential_body_url": None,
+        "authorizing_scope": (
+            "Licensing authorizes the holder to perform electrical work as "
+            "an apprentice (under a journeyman's supervision), as a "
+            "journeyman (independently within the license scope), or as a "
+            "master / contractor (independently and as a business owner with "
+            "bonding and insurance), within the scope and the geographic "
+            "jurisdiction the license names. Specific scopes vary by AHJ: "
+            "general electrical (residential and commercial); residential-"
+            "only (in some states); low-voltage / limited-energy (a "
+            "distinct license in many states for data, fire alarm, security, "
+            "audio/video, and communications work); specialty licenses (sign, "
+            "elevator, etc.). The credential's authorizing scope is what the "
+            "AHJ publishes, not what this node summarizes."
+        ),
+        "knowledge_domains_covered": [
+            (
+                "Core technical knowledge typically tested at the journeyman "
+                "level: the NEC (NFPA 70) at the AHJ-adopted edition's depth; "
+                "the AHJ's local amendments to the NEC; conductor sizing and "
+                "ampacity (NEC Article 310 plus correction factors); "
+                "overcurrent protection (NEC Article 240); grounding and "
+                "bonding (NEC Article 250); branch-circuit and feeder "
+                "calculations (NEC Article 215 and 220); residential wiring "
+                "methods (NEC Articles 330, 334, etc.); NEC Articles 210, "
+                "240, 250, 310, 314, 406, 408, 410, 422, 430, 440, 690 "
+                "(solar), 702 (standby) at the level of detailed application; "
+                "NFPA 70E electrical-safe-work practices."
+            ),
+            (
+                "Business and contract knowledge typically tested at the "
+                "master / contractor level: the state's contracting law; "
+                "lien law; estimating; bonding and insurance; OSHA general "
+                "industry and construction; employment basics; tax basics."
+            ),
+            (
+                "Low-voltage / limited-energy specialty (in states that "
+                "license it separately): NEC Article 725 (Class 1, 2, 3 "
+                "circuits); NEC Article 760 (fire alarm systems); NEC Article "
+                "770 (optical fiber cables); NEC Article 800 (communications "
+                "circuits); state-specific low-voltage rules."
+            ),
+            (
+                "The specific exam blueprint per the AHJ; the household and "
+                "learner obtain the current blueprint from the AHJ before "
+                "scheduling an exam."
+            ),
+        ],
+        "eligibility": {
+            "minimum_age": (
+                "varies by AHJ; commonly 18 for journeyman and master; some "
+                "states allow younger registered apprentices"
+            ),
+            "experience_requirements": (
+                "apprenticeship hours and journeyman experience vary widely "
+                "by AHJ; common ranges are approximately 8,000 hours / 4 "
+                "years for journeyman eligibility in many states, with "
+                "additional years of journeyman experience for master "
+                "eligibility, but the AHJ's current published requirements "
+                "are authoritative and the learner confirms them. Some AHJs "
+                "have shorter requirements; some have longer; some accept "
+                "vocational-school hours partially; the AHJ governs."
+            ),
+            "prerequisites": [
+                (
+                    "registered apprenticeship through a state-approved "
+                    "apprenticeship sponsor (the electrical training ALLIANCE "
+                    "for IBEW / NECA programs is one widely-recognized "
+                    "national pathway; many states have additional sponsors), "
+                    "or an equivalent employer-based or vocational pathway "
+                    "the AHJ recognizes"
+                ),
+                (
+                    "for master / contractor licensing additionally: passing "
+                    "the journeyman exam (or documenting equivalent experience "
+                    "the AHJ accepts), insurance, bonding, and in many states "
+                    "a contractor's business exam"
+                ),
+                (
+                    "for low-voltage / limited-energy in states that license "
+                    "it separately: AHJ-specific hours and exam per the "
+                    "specialty license"
+                ),
+            ],
+        },
+        "exam_format_general": (
+            "Format varies by AHJ; commonly proctored multiple-choice with "
+            "an open-book provision for the NEC on the trade portion (the "
+            "candidate brings the AHJ-adopted edition of the NEC into the "
+            "exam, tabbed for navigation), plus a closed-book business and "
+            "law portion at the master / contractor level in many states. "
+            "Some AHJs include practical components. The exam blueprint, "
+            "format, passing score, and open-book provisions are published "
+            "by the AHJ; the learner consults the AHJ for current specifics."
+        ),
+        "legal_status": "jurisdiction_specific",
+        "prepares_understanding_only": True,
+        "exam_taken_through": (
+            "The AHJ or its authorized testing partner (commonly PSI, Prov "
+            "Inc., or another state-approved testing service). METHEAN does "
+            "not administer or proctor the exam."
+        ),
+        "supervised_hours_through": (
+            "A state-approved apprenticeship program: the electrical training "
+            "ALLIANCE (the IBEW / NECA national program), a state "
+            "non-union apprenticeship sponsor (varies by state), or an "
+            "employer-based apprenticeship recognized by the AHJ. METHEAN's "
+            "practice sessions and portfolio work are NOT a substitute for "
+            "registered apprenticeship hours; the household confirms with "
+            "the AHJ which programs are recognized for hours-credit toward "
+            "licensing eligibility. Apprenticeship hours specifically include "
+            "the on-the-job training a learner cannot get from study alone."
+        ),
+        "progression_band": "journeyman",
+        "where_in_ladder": (
+            "Journeyman exam: at the late apprentice to early journeyman "
+            "band, after the learner has completed the AHJ's hours "
+            "requirement through a recognized apprenticeship and is ready to "
+            "test. Master / contractor exam: at the qualified band, after "
+            "several years of journeyman work plus the additional master "
+            "eligibility the AHJ requires. Low-voltage / limited-energy "
+            "license: also at the late apprentice to journeyman band for "
+            "states that license it separately, with its own AHJ-specific "
+            "hours and exam. The METHEAN trade prepares conceptual "
+            "understanding and a portfolio that demonstrates competence; "
+            "the hours and the exam are taken outside METHEAN."
+        ),
+        "aligned_competencies": [
+            "els-001",
+            "elc-001",
+            "elc-002",
+            "elc-003",
+            "elc-004",
+            "elc-005",
+            "elc-006",
+            "elc-007",
+            "elc-008",
+            "elc-009",
+            "elc-021",
+        ],
+        "study_resources_pointers": [
+            "The AHJ's published exam blueprint and approved reference list",
+            (
+                "The NEC (NFPA 70) at the AHJ-adopted edition, the current "
+                "NFPA 70E, and the AHJ's published amendments"
+            ),
+            (
+                "The electrical training ALLIANCE curriculum (the IBEW / NECA "
+                "national apprenticeship program; widely recognized for "
+                "depth)"
+            ),
+            (
+                "State community-college electrical programs that include AHJ-"
+                "exam preparation"
+            ),
+            (
+                "Mike Holt's exam-prep courses and books (a widely-used "
+                "third-party resource recognized by many AHJs); matched to "
+                "the AHJ-adopted edition"
+            ),
+            (
+                "AHJ-recommended study courses (commonly offered by the "
+                "apprenticeship sponsor or recognized commercial providers)"
+            ),
+        ],
+        "mentor_model": (
+            "AI tutor mentors the conceptual study end-to-end. The AI walks "
+            "the learner through NEC navigation, code application, load "
+            "calculation, and the AHJ's published exam blueprint. The "
+            "portfolio of demonstrated work from METHEAN (competency "
+            "artifacts including the live-dead-live narrations from "
+            "elc-021) is presented as supporting evidence of experience, "
+            "but the AHJ's recognized hours come from a state-approved "
+            "apprenticeship program, not from METHEAN. The hands-on "
+            "competencies stay gated by the trade's existing supervision "
+            "policy regardless of credential status; possession of a "
+            "journeyman license does not by itself authorize unsupervised "
+            "practice on hazardous subsystems until the learner has "
+            "demonstrated the specific competencies at the qualified band "
+            "AND per the credentials_NOT_substitutable_for clause, even at "
+            "the qualified band, every elc-021 act follows the licensed-"
+            "electrician-physically-present rule as the safety habit."
+        ),
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [
+                "The learner's state (or county / municipality) electrical licensing AHJ's currently published rules, exam blueprint, and apprenticeship hours requirement",
+                "NFPA 70 (NEC) at the AHJ-adopted edition; NFPA 70E at the current edition",
+                "OSHA 29 CFR 1910 (general industry) and 1926 (construction), the relevant subparts",
+                "The electrical training ALLIANCE (IBEW / NECA) curriculum where applicable",
+                "State approved apprenticeship program rules and any recognized alternate-pathway rules the AHJ publishes",
+                "For low-voltage / limited-energy: the state's specific low-voltage license rules per the AHJ",
+            ],
+        },
+    },
+    "elcert-safety": {
+        "node_type": "certification_prep",
+        "trade": "electrical",
+        "credential_name": (
+            "OSHA 10-Hour and 30-Hour Outreach Training, and NFPA 70E "
+            "electrical-safe-work-practices training (adjacent credentials)"
+        ),
+        "credential_body": (
+            "U.S. Occupational Safety and Health Administration (OSHA) "
+            "through OSHA-authorized Outreach Training Program trainers for "
+            "the OSHA 10 / 30; NFPA-approved or employer-program training "
+            "providers for NFPA 70E. METHEAN does not deliver or administer "
+            "either."
+        ),
+        "credential_body_url": "https://www.osha.gov/training/outreach",
+        "authorizing_scope": (
+            "The OSHA 10-Hour and 30-Hour Outreach courses are voluntary "
+            "worker-orientation training programs administered by "
+            "OSHA-authorized trainers. They are not licenses or "
+            "certifications in the legal sense, do not authorize any "
+            "specific work, and are not a substitute for site-specific or "
+            "task-specific OSHA-required training (LOTO per 1910.147, fall "
+            "protection per 1926 Subpart M, confined-space entry per "
+            "1910.146, etc.). NFPA 70E training is the recognized industry "
+            "training program for electrical safe work practices, including "
+            "live-dead-live verification, arc-flash boundaries, PPE "
+            "selection, and the energized-work permit. NFPA 70E itself is a "
+            "standard; training in it is delivered by employer programs, "
+            "the electrical training ALLIANCE for IBEW programs, and "
+            "recognized independent providers. The training is widely "
+            "required or recommended by employers for HVAC, electrical, "
+            "construction, and industrial workers."
+        ),
+        "knowledge_domains_covered": [
+            (
+                "OSHA 10-Hour General Industry / Construction: introduction "
+                "to OSHA; general safety and health provisions; recognition "
+                "of common workplace hazards including electrical, fall, "
+                "struck-by, caught-in/between, fire, and chemical hazards; "
+                "PPE; basic introduction to OSHA 1910 (general industry) or "
+                "OSHA 1926 (construction). Electrical apprentices on "
+                "construction sites commonly take the construction version "
+                "(1926); electrical apprentices in service-only work "
+                "commonly take the general industry version (1910)."
+            ),
+            (
+                "OSHA 30-Hour General Industry / Construction: a deeper "
+                "version of the same topics with additional depth and "
+                "elective topics, intended for workers with supervisory "
+                "responsibility."
+            ),
+            (
+                "NFPA 70E electrical-safe-work-practices: live-dead-live "
+                "verification per NFPA 70E Article 130; arc-flash boundaries "
+                "and PPE selection per NFPA 70E Article 130 and Annex C; "
+                "lockout-tagout per NFPA 70E Article 120; insulating PPE "
+                "and tool requirements per NFPA 70E Article 130 and Annex H; "
+                "the energized-work permit per NFPA 70E Article 130. The "
+                "current edition of NFPA 70E governs."
+            ),
+        ],
+        "eligibility": {
+            "minimum_age": "no OSHA-published minimum for the Outreach programs; no NFPA 70E-published minimum",
+            "experience_requirements": "none for either",
+            "prerequisites": [
+                "registration with an OSHA-authorized Outreach Training Program trainer (online or in-person; the OSHA Outreach Training Program page lists authorized providers)",
+                "for NFPA 70E training: enrollment in a recognized provider's course (employer program, the electrical training ALLIANCE for IBEW, recognized independent providers)",
+            ],
+        },
+        "exam_format_general": (
+            "The OSHA 10 / 30 courses are training programs, not exams. "
+            "Successful completion (attending the required hours, completing "
+            "any in-course assessments per the authorized trainer's rules "
+            "per OSHA) results in OSHA-issued Department of Labor "
+            "completion cards. NFPA 70E training is delivered by employer "
+            "programs and recognized independent providers; the format "
+            "varies (lecture plus assessment, live demonstrations, etc.) "
+            "and successful completion is documented by the provider, not "
+            "by NFPA directly."
+        ),
+        "legal_status": "optional",
+        "prepares_understanding_only": True,
+        "exam_taken_through": (
+            "OSHA-authorized Outreach Training Program trainers for the OSHA "
+            "10 / 30 (METHEAN does NOT deliver the course or issue the "
+            "completion cards); NFPA-approved or employer / electrical "
+            "training ALLIANCE / recognized independent providers for "
+            "NFPA 70E training (METHEAN does NOT deliver or issue "
+            "completion documentation)."
+        ),
+        "supervised_hours_through": None,
+        "progression_band": "helper",
+        "where_in_ladder": (
+            "Helper to early apprentice for OSHA 10 and entry-level NFPA "
+            "70E; apprentice to journeyman for OSHA 30 and deeper NFPA 70E "
+            "training. Authored here because OSHA 10 in particular is a "
+            "common employer prerequisite for entry to electrical work, "
+            "and because NFPA 70E live-dead-live and PPE content directly "
+            "underpins elc-009 and elc-021 in METHEAN's foundation."
+        ),
+        "aligned_competencies": ["els-001", "elc-009", "elc-021"],
+        "study_resources_pointers": [
+            "The OSHA Outreach Training Program page on osha.gov for current rules and authorized trainer lists",
+            "OSHA's published General Industry standards (29 CFR 1910) and Construction standards (29 CFR 1926), free on osha.gov",
+            "NFPA 70E (current edition) obtained through NFPA or recognized publishers",
+            "Training materials from OSHA-authorized Outreach Training Program trainers; the learner uses materials from the same trainer through whom they will take the course",
+            (
+                "NFPA 70E training materials from the employer's program, the "
+                "electrical training ALLIANCE (IBEW / NECA), or recognized "
+                "independent providers"
+            ),
+        ],
+        "mentor_model": (
+            "AI tutor mentors the conceptual orientation and reinforces the "
+            "topics that overlap with els-001, elc-009, and elc-021. The "
+            "actual OSHA 10 / 30 course is delivered by an OSHA-authorized "
+            "trainer; the OSHA-issued completion card comes from the "
+            "trainer, not from METHEAN. The actual NFPA 70E training is "
+            "delivered by an employer program, the electrical training "
+            "ALLIANCE, or a recognized independent provider; completion "
+            "documentation comes from the provider, not from METHEAN."
+        ),
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [
+                "OSHA Outreach Training Program page on osha.gov (the authoritative reference for current rules)",
+                "OSHA 29 CFR 1910 (General Industry) and 29 CFR 1926 (Construction), the relevant subparts",
+                "OSHA's published Outreach Training Program Guidelines and Procedures",
+                "NFPA 70E (Standard for Electrical Safety in the Workplace; current edition)",
+                "The electrical training ALLIANCE (IBEW / NECA) curriculum for NFPA 70E content where applicable",
+                "Employer-program NFPA 70E training materials and the employer's written electrical-safety program per OSHA",
+            ],
+        },
+    },
 }
