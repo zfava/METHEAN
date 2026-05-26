@@ -3754,4 +3754,434 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
             "standard_refs": [],
         },
     },
+    "elc-009": {
+        "node_type": "technique",
+        "trade": "electrical",
+        "competency_name": (
+            "Meter and tool literacy: multimeter Category (CAT) ratings, insulated "
+            "and insulating tools, glove inspection, and tool selection for the "
+            "work; NO live measurement at this band"
+        ),
+        "progression_band": "helper",
+        "prerequisites": ["els-001", "elc-003"],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "Using a multimeter with insufficient Category (CAT) rating on a "
+                    "live circuit. A CAT II meter on a CAT III circuit can read zero "
+                    "on a live conductor, can fail internally during a measurement, "
+                    "OR can explode in the user's hand during a fault transient. "
+                    "The CAT rating is the meter's design strength against transient "
+                    "voltages on the circuit being measured. CAT III at 600V minimum "
+                    "is the residential standard per NFPA 70E for 240V branch-"
+                    "circuit verification; CAT IV is acceptable; CAT II or unrated "
+                    "meters are NOT acceptable per NFPA 70E. This is the most-"
+                    "documented multimeter-related cause of injury in working "
+                    "electricians."
+                ),
+                (
+                    "Using a multimeter with cracked, abraded, or otherwise damaged "
+                    "test leads. A damaged lead can short to the user's hand or to "
+                    "the work surface, causing shock or arc flash. Lead inspection "
+                    "is part of the pre-measurement routine per NFPA 70E."
+                ),
+                (
+                    "Using insulating gloves that have not been inspected (visual "
+                    "for cuts, punctures, ozone cracking; air-roll test per the "
+                    "manufacturer where applicable). Insulating gloves degrade with "
+                    "age, oil exposure, and UV; an undetected pinhole on a "
+                    "supposedly 1000V-rated glove can allow lethal current through "
+                    "the user. NFPA 70E and the glove manufacturer govern inspection."
+                ),
+                (
+                    "Using non-insulated screwdrivers or pliers near energized "
+                    "equipment. A standard screwdriver shaft is a conductor; a "
+                    "slip can short hot to ground or to another phase, causing arc "
+                    "flash. Insulated tools rated for the voltage (IEC 60900 / ASTM "
+                    "F1505) are the standard for any work near energized equipment "
+                    "per NFPA 70E."
+                ),
+                (
+                    "Performing any live measurement at this band. elc-009 is "
+                    "meter and tool LITERACY: identification, inspection, and "
+                    "selection. NO live measurement is part of elc-009; live "
+                    "measurement is part of elc-021 with the licensed electrician "
+                    "physically present."
+                ),
+            ],
+            "ppe_required": [
+                "Trade PPE per els-001 (closed-toe shoes, the trade's general defaults)",
+                "Safety glasses for any work handling tools or meters; no live measurement at this band",
+                (
+                    "Insulating gloves for INSPECTION practice only at this band "
+                    "(the learner inspects an insulating glove with the licensed "
+                    "electrician's coaching, but does not USE the gloves on a live "
+                    "circuit until elc-021)"
+                ),
+            ],
+            "supervision_required": False,
+            "supervision_basis": (
+                "Meter and tool literacy involves handling instruments and tools "
+                "on a workbench, no live circuit contact, no enclosure opening, "
+                "no operation of disconnects. The AI tutor mentors end-to-end: "
+                "the learner photographs the household's actual multimeter (or a "
+                "sample), names each control and the CAT rating, inspects test "
+                "leads, inspects insulated tools, and quizzes against the AI "
+                "tutor on selection scenarios. No live measurement is in scope "
+                "at this band; live measurement is elc-021 with a licensed "
+                "electrician physically present."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "A real multimeter (DMM) the household owns or can obtain",
+                "specification": (
+                    "A digital multimeter the learner can hold, inspect, and "
+                    "photograph. The meter's CAT rating is on the meter face or in "
+                    "the manual. If the household's meter is CAT II or unrated, "
+                    "the AI tutor identifies it as INADEQUATE for any later live "
+                    "measurement per NFPA 70E; the household upgrades to CAT III "
+                    "at 600V minimum (Fluke, Klein, Ideal, Amprobe, and other "
+                    "recognized industrial brands at the named CAT rating are "
+                    "acceptable; inexpensive automotive or hobby meters typically "
+                    "lack the CAT rating and are not acceptable for residential "
+                    "240V work)."
+                ),
+                "alternatives": [
+                    "Manufacturer photos and manuals of a CAT III 600V residential-"
+                    "scope meter, used as a learning aid if the household's meter "
+                    "is being upgraded",
+                ],
+            },
+            {
+                "name": "Standard test leads with manufacturer's CAT marking",
+                "specification": (
+                    "Test leads matched to the meter's CAT rating; leads are "
+                    "inspected for cracked insulation, broken shrouds, exposed "
+                    "conductor, and intact probe tips and connectors. Damaged "
+                    "leads are removed from service."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "A representative set of insulated and insulating tools",
+                "specification": (
+                    "Insulated screwdrivers, pliers, and nut drivers rated 1000V "
+                    "per IEC 60900 / ASTM F1505 (the learner identifies the "
+                    "rating mark on the tool); insulating gloves (Class 00 "
+                    "rated 500V minimum for residential 240V per NFPA 70E) with "
+                    "their leather protectors; a glove inspection kit (visual "
+                    "and air-roll test per the manufacturer)"
+                ),
+                "alternatives": [
+                    "Photos and specifications from manufacturers of recognized "
+                    "insulated tools, used as a learning aid if the household "
+                    "does not yet have a full set",
+                ],
+            },
+            {
+                "name": "The multimeter and tool manufacturer manuals",
+                "specification": "The manuals shipped with the equipment; the AI tutor walks the learner through the relevant pages",
+                "alternatives": [],
+            },
+            {
+                "name": "Notebook for meter and tool cards",
+                "specification": "Pencil and paper to record CAT ratings, calibration dates, inspection results, and replacement schedules",
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [],
+        "workspace_requirements": {
+            "surface": "A workbench or clean table; the work is bench-based, no live circuits",
+            "ventilation": "Indoor or outdoor; not relevant",
+            "lighting": "Strong enough to read the meter face markings clearly",
+            "power": "None (multimeter own battery)",
+            "containment": "None required",
+        },
+        "skill_description": (
+            "The learner builds fluency in identifying, inspecting, and selecting "
+            "the meters and tools used in residential electrical work, with no "
+            "live measurement at this band. MULTIMETER: the learner identifies "
+            "the meter's Category (CAT) rating (CAT II / III / IV) and voltage "
+            "rating on the meter face or in the manual; names what each Category "
+            "is designed to survive (CAT II for receptacles and appliances at "
+            "the end of branch circuits; CAT III for distribution panels, "
+            "feeders, and short branch circuits with significant transient "
+            "exposure; CAT IV for utility connection points and outdoor service "
+            "entrances); names that CAT III at 600V is the residential "
+            "standard per NFPA 70E for 240V branch-circuit verification, CAT IV "
+            "acceptable, CAT II or unrated NOT acceptable. The learner reads "
+            "the meter's range selector and identifies AC voltage, DC voltage, "
+            "AC current (if the meter has a clamp), DC current, resistance, "
+            "continuity, diode, and (where present) capacitance and frequency "
+            "ranges; names the auto-ranging vs manual-ranging distinction. "
+            "The learner identifies the test-lead connectors (COM, V/Ohm, A, "
+            "mA/uA) and the standard color coding (black to COM, red to V/Ohm "
+            "or A as appropriate). The learner inspects the test leads visually "
+            "(cracked insulation, broken shrouds, exposed conductor); damaged "
+            "leads are removed from service. TEST-LEAD PROBES: the learner "
+            "names finger-guard probes (the safety guard between the user's "
+            "finger and the probe tip per IEC 61010-031) and identifies them "
+            "on the household's leads. METER FUSES: the learner identifies the "
+            "current-circuit fuse on the meter and names that a blown fuse "
+            "removes current-measurement capability and that operating a meter "
+            "with a wrong fuse (or no fuse) is a fault-survival failure. "
+            "INSULATED TOOLS: the learner identifies the IEC 60900 / ASTM "
+            "F1505 marking on insulated screwdrivers, pliers, and nut drivers; "
+            "the household's insulated tools should be rated 1000V (the "
+            "residential standard for any work near energized equipment per "
+            "NFPA 70E). The learner inspects the tool insulation for cuts, "
+            "punctures, gouges, melted spots, or exposed metal. INSULATING "
+            "GLOVES: the learner identifies the glove's rating (Class 00 "
+            "rated 500V is the minimum for residential 240V; higher classes "
+            "are acceptable), the inspection date, and the leather protectors. "
+            "The learner inspects the glove visually (cuts, punctures, ozone "
+            "cracking) and performs the manufacturer's air-roll test where "
+            "applicable, with the licensed electrician's coaching the first "
+            "time. Gloves that fail any test are removed from service. The "
+            "learner explicitly NEVER uses any of these tools or the "
+            "multimeter on a live circuit at this band; live measurement is "
+            "elc-021 with a licensed electrician physically present."
+        ),
+        "demonstration_criteria": [
+            (
+                "Identifies the household multimeter's Category (CAT) rating "
+                "and voltage rating from the meter face or manual; names "
+                "whether the rating is adequate (CAT III at 600V minimum) for "
+                "later 240V residential measurement per NFPA 70E"
+            ),
+            (
+                "Names what each CAT Category is designed to survive (CAT II / "
+                "III / IV) and gives one example application of each"
+            ),
+            (
+                "Identifies every range on the meter's selector (AC volts, DC "
+                "volts, AC current if present, DC current, resistance, "
+                "continuity, diode, capacitance and frequency if present) and "
+                "explains in one sentence what each measures"
+            ),
+            (
+                "Identifies the test-lead connectors (COM, V/Ohm, A, mA/uA) "
+                "and the standard color coding"
+            ),
+            (
+                "Inspects the test leads visually and reports any damage; "
+                "names the rule that damaged leads are removed from service"
+            ),
+            (
+                "Identifies finger-guard probes per IEC 61010-031 on the "
+                "household's leads (or names that the leads do not have them "
+                "and that finger-guard leads are the standard per NFPA 70E)"
+            ),
+            (
+                "Identifies the meter's current-circuit fuse and names that a "
+                "blown fuse removes current-measurement capability; names the "
+                "rule that the correct manufacturer fuse is replaced, never a "
+                "substitute"
+            ),
+            (
+                "Identifies the IEC 60900 / ASTM F1505 marking on the "
+                "household's insulated screwdrivers, pliers, and nut drivers; "
+                "names that 1000V-rated is the residential standard per NFPA "
+                "70E"
+            ),
+            (
+                "Inspects an insulated tool visually and reports any damage; "
+                "names the rule that damaged insulation removes the tool from "
+                "energized-work service"
+            ),
+            (
+                "Identifies the household's insulating glove rating (Class 00 "
+                "minimum for residential 240V) and inspection date; performs "
+                "the manufacturer's air-roll test with the licensed "
+                "electrician's coaching"
+            ),
+            (
+                "Names that NO LIVE MEASUREMENT is performed at this band; "
+                "live measurement is elc-021 with a licensed electrician "
+                "physically present"
+            ),
+            (
+                "Builds a meter-and-tool card for the household's equipment: "
+                "meter CAT rating, calibration date if applicable, test-lead "
+                "inspection date, insulated tool inventory with ratings, "
+                "insulating glove rating and last inspection date"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Confusing a CAT III 600V rating with a meter rated for 600V general use",
+                "cause": "The learner read 600V on the meter and assumed it was just the voltage limit",
+                "remedy": (
+                    "The Category rating (CAT II / III / IV) is the meter's "
+                    "transient-survival design rating, NOT the voltage range. A "
+                    "CAT II 1000V meter is rated for 1000V on its working range "
+                    "but is designed to survive only CAT II transients; using it "
+                    "on a CAT III circuit risks meter failure. Both the Category "
+                    "AND the voltage matter. Read both on the meter face."
+                ),
+            },
+            {
+                "error": "Using a hobby or automotive meter on a 240V residential circuit",
+                "cause": "The learner used the meter in the toolbox without checking the rating",
+                "remedy": (
+                    "Inexpensive hobby and automotive meters typically lack a CAT "
+                    "rating or are CAT II only. They are not acceptable for "
+                    "residential 240V work per NFPA 70E. The household upgrades "
+                    "to CAT III at 600V minimum before any live measurement is "
+                    "performed (elc-021)."
+                ),
+            },
+            {
+                "error": "Replacing a blown meter fuse with whatever fits the holder",
+                "cause": "The learner did not understand the role of the meter fuse",
+                "remedy": (
+                    "The meter's current-circuit fuse is a fault-survival "
+                    "device. It must be the manufacturer's specified part (often "
+                    "a high-rupture-capacity HRC fuse with specific voltage and "
+                    "amperage ratings). A substitute fuse can fail to interrupt "
+                    "a fault, allowing the fault energy into the user's hand. "
+                    "Always the manufacturer's part."
+                ),
+            },
+            {
+                "error": "Treating insulating gloves as 'in date forever once bought'",
+                "cause": "The learner did not understand that insulating gloves degrade",
+                "remedy": (
+                    "Insulating gloves degrade with age, oil exposure, ozone, and "
+                    "UV. They have a manufacturer-recommended periodic test "
+                    "interval (commonly 6 months for in-service gloves; the "
+                    "manufacturer and NFPA 70E govern). Gloves are tested before "
+                    "each use (visual and air-roll) and periodically by an "
+                    "accredited lab per the manufacturer."
+                ),
+            },
+            {
+                "error": "Using insulating gloves WITHOUT leather protectors",
+                "cause": "The learner found the protectors uncomfortable and removed them",
+                "remedy": (
+                    "Leather protectors are part of the rated assembly per NFPA "
+                    "70E for any work where the insulating glove can be cut or "
+                    "punctured. Removing them voids the rated assembly. The "
+                    "licensed electrician confirms the protectors are in use on "
+                    "every tier-3 act."
+                ),
+            },
+            {
+                "error": "Performing live measurement at this band 'just to check'",
+                "cause": "The learner forgot the scope boundary",
+                "remedy": (
+                    "elc-009 is meter and tool LITERACY: identification, "
+                    "inspection, and selection. NO LIVE MEASUREMENT is part of "
+                    "this band. Live measurement is elc-021 with a licensed "
+                    "electrician physically present. The supervising adult on "
+                    "premises confirms no live measurement is attempted during "
+                    "elc-009 practice."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "photo",
+            "what_to_capture": (
+                "A meter-and-tool card for the household's equipment: a "
+                "photograph of the household's multimeter showing the CAT "
+                "rating clearly; a photograph of the test leads showing the "
+                "manufacturer's CAT marking and the finger guards (or naming "
+                "the absence of finger guards); photographs of the household's "
+                "insulated tools showing the IEC 60900 / ASTM F1505 marking; "
+                "a photograph of the insulating gloves showing the rating and "
+                "the leather protectors. The card carries each item's "
+                "specifications, inspection date, and any deficiencies "
+                "identified for upgrade. The AI tutor confirms each "
+                "identification and any required upgrade."
+            ),
+            "what_the_evidence_shows": (
+                "That the learner can identify, inspect, and select every "
+                "meter and tool needed for elc-021 and beyond, and that the "
+                "household's equipment is either adequate to NFPA 70E for "
+                "residential work or has been identified for upgrade"
+            ),
+        },
+        "mentor_signoff_required": False,
+        "pedagogy": {
+            "i_do": (
+                "The AI tutor walks the learner through a sample CAT III "
+                "multimeter and its manual, naming the CAT rating, the "
+                "voltage rating, the range selector, the test-lead "
+                "connectors, the finger-guard probes, and the current-"
+                "circuit fuse. Then through insulated tools, naming the IEC "
+                "60900 / ASTM F1505 marking. Then through insulating gloves, "
+                "naming the class and the inspection procedure."
+            ),
+            "we_do": (
+                "The AI tutor and the learner work through the household's "
+                "actual equipment together. The learner photographs and "
+                "names each item; the AI confirms or corrects. If any "
+                "household equipment is inadequate (e.g. a CAT II meter), "
+                "the AI flags the upgrade and explains the failure mode."
+            ),
+            "you_do_supervised": (
+                "The learner builds the full meter-and-tool card for the "
+                "household, photographing and recording every item. Submits "
+                "to the AI tutor for confirmation. The supervising adult on "
+                "premises is present only because the learner is in the "
+                "household's electrical work area; no live measurement is "
+                "attempted."
+            ),
+            "you_do_unsupervised": (
+                "Once the learner can produce a complete meter-and-tool card "
+                "across at least two sessions, they may inspect new "
+                "equipment unsupervised. The AI tutor remains available for "
+                "rating confirmation. Live measurement (elc-021) requires "
+                "the licensed electrician physically present regardless of "
+                "how fluent the learner becomes at this competency."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 4,
+        "session_length_minutes": 45,
+        "related_projects": [],
+        "certification_alignment": {
+            "ladder_rung": "helper",
+            "notes": (
+                "Knowledge competency the AI tutor mentors end-to-end. Meter "
+                "and tool literacy is required by NFPA 70E and is the "
+                "precondition for the gold-standard elc-021."
+            ),
+            "certifications_supported": [
+                {
+                    "id": "elcert-safety",
+                    "domains": [
+                        "NFPA 70E electrical safe work practices (meter "
+                        "selection, insulated tool selection, glove inspection)",
+                        "OSHA 29 CFR 1910.137 electrical PPE",
+                    ],
+                    "notes": (
+                        "NFPA 70E training builds directly on this competency; "
+                        "the meter and tool habits are universal in trade "
+                        "practice."
+                    ),
+                },
+                {
+                    "id": "elcert-nec",
+                    "domains": [
+                        "test instrument requirements per NFPA 70E (referenced "
+                        "by the NEC's safe-work-practice context)",
+                    ],
+                    "notes": "Tested implicitly in journeyman exam scenarios involving live work.",
+                },
+                {
+                    "id": "elcert-licensing",
+                    "domains": ["meter and tool literacy at journeyman depth"],
+                    "notes": "Universal foundational knowledge.",
+                },
+            ],
+        },
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
+    },
 }
