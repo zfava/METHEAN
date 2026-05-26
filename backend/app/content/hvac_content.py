@@ -786,4 +786,315 @@ HVAC_CONTENT: dict[str, dict] = {
             ],
         },
     },
+    "hc-001": {
+        "node_type": "technique",
+        "trade": "hvac",
+        "competency_name": (
+            "Read an HVAC equipment nameplate to extract voltage, phase, MCA, MOP, refrigerant "
+            "type and charge, capacity, efficiency rating, model and serial, and manufacture date"
+        ),
+        "progression_band": "helper",
+        "prerequisites": ["hs-001"],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "Misreading the nameplate voltage and trying to apply the wrong meter range "
+                    "or the wrong PPE; not a direct hazard at this band because the work is "
+                    "purely reading the printed plate, but a real downstream error if the wrong "
+                    "number propagates to hc-021 or to any later electrical work"
+                ),
+                (
+                    "Misreading the refrigerant type and missing the safety class difference "
+                    "(A1 vs A2L vs A3); not a direct hazard at this band because no refrigerant "
+                    "is opened, but a real downstream error if the wrong class propagates to a "
+                    "later refrigerant operation (which is its own gate)"
+                ),
+                (
+                    "Misreading the MCA (minimum circuit ampacity) or MOP (maximum overcurrent "
+                    "protection) and concluding the wrong wire size or breaker size; not a "
+                    "direct hazard at this band because the wiring is not changed, but the "
+                    "wrong number compounds in any later electrical install (NEC-regulated, not "
+                    "in this batch)"
+                ),
+                (
+                    "Reaching into a panel or enclosure to find a hidden nameplate; the rule is "
+                    "the cover stays on at this band, and any nameplate not visible from outside "
+                    "the enclosure is photographed by a qualified human with the disconnect open "
+                    "and verified dead per hc-021"
+                ),
+            ],
+            "ppe_required": [
+                (
+                    "Trade PPE per hs-001 (closed-toe shoes, the trade's general defaults); no "
+                    "additional PPE required for reading a nameplate visible from outside the "
+                    "enclosure. Eye protection optional but recommended if working in a dusty "
+                    "mechanical space."
+                ),
+            ],
+            "supervision_required": False,
+            "supervision_basis": (
+                "Reading a nameplate visible from outside the enclosure involves no tool use, no "
+                "opened enclosure, no live circuit contact, no moving parts, and no chemical or "
+                "refrigerant exposure. The AI tutor mentors this competency end-to-end: the "
+                "learner photographs the nameplate, the AI confirms each extracted field, the "
+                "learner builds a nameplate card. Trade-level supervision from hvac-root still "
+                "applies through the helper band in the sense that no enclosure is opened and no "
+                "energized work is performed; the reading itself is low-hazard and AI-mentorable."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "A real HVAC equipment nameplate visible from outside the enclosure",
+                "specification": (
+                    "The household's actual equipment (outdoor condenser unit, indoor air "
+                    "handler, furnace cabinet, heat pump, mini-split outdoor unit, water heater, "
+                    "boiler). The nameplate is typically on the side panel of the outdoor unit "
+                    "or on the access door of indoor equipment, visible without opening any "
+                    "enclosure. If the household's equipment has its nameplate inside the "
+                    "enclosure only, this competency is deferred to a session with a qualified "
+                    "human present per the trade root's supervision policy."
+                ),
+                "alternatives": [
+                    "A clear photograph of the nameplate from a manufacturer's online service "
+                    "literature, used as a learning aid until the real equipment is visited"
+                ],
+            },
+            {
+                "name": "A nameplate card or notebook page",
+                "specification": (
+                    "A sheet of paper or a notebook page where the learner writes down each "
+                    "operative field from the nameplate. The card is the working reference for "
+                    "every later step on that piece of equipment (parallel to the planting card "
+                    "in gc-001 of the gardening trade)."
+                ),
+                "alternatives": [
+                    "A structured digital form per the household's record-keeping practice; the "
+                    "AI tutor can render the form"
+                ],
+            },
+            {
+                "name": "Camera (cell phone is sufficient) for the nameplate photograph",
+                "specification": (
+                    "A camera that produces an image clear enough to read every printed field. "
+                    "The photo is uploaded to the AI tutor for confirmation of each extracted "
+                    "field."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Flashlight or headlamp",
+                "specification": (
+                    "Mechanical-space lighting is commonly poor; the nameplate often sits in "
+                    "shadow. A flashlight is on the person for the visit."
+                ),
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [],
+        "workspace_requirements": {
+            "surface": "Wherever the equipment is installed; the work is the visit itself",
+            "ventilation": "Adequate per hs-001 for the space",
+            "lighting": "Daylight, room lighting, or flashlight as needed for the nameplate location",
+            "power": "Energy state immaterial for reading a nameplate visible from outside; no enclosure opened",
+            "containment": "None required",
+        },
+        "skill_description": (
+            "The learner visits a piece of HVAC equipment in the household and locates the "
+            "nameplate without opening any enclosure. The nameplate is typically on the side or "
+            "back panel of the outdoor unit and on the access panel or door of the indoor "
+            "equipment. The learner photographs the nameplate clearly and reads each operative "
+            "field onto a nameplate card. The fields read in order: manufacturer; model number; "
+            "serial number; manufacture date (often encoded in the serial number per the "
+            "manufacturer's scheme); equipment type (condensing unit, air handler, furnace, "
+            "heat pump, etc.); voltage (typically printed as '208/230V' or '240V' for residential "
+            "single-phase, '208V/3PH' or '460V/3PH' for commercial); frequency (60 Hz in the US); "
+            "phase (1 or 3); MCA (minimum circuit ampacity, the smallest wire and conductor "
+            "rating the equipment will accept per NEC); MOP (maximum overcurrent protection, "
+            "the largest breaker or fuse the equipment will accept per NEC); refrigerant type "
+            "(R-410A, R-454B, R-32, R-22 on older equipment, etc.) and factory charge (in "
+            "ounces or pounds); rated capacity (in BTU/hr or tons for cooling equipment, in "
+            "BTU/hr input and output for furnaces and boilers); efficiency rating (SEER2 or "
+            "SEER for AC and heat pump cooling; HSPF2 or HSPF for heat pump heating; EER2 or "
+            "EER for AC at a specific condition; AFUE for furnaces; thermal efficiency for "
+            "commercial boilers); any listing or certification marks (UL, ETL, AHRI). The "
+            "learner then submits the nameplate card and the photograph to the AI tutor for "
+            "field-by-field confirmation. If any field is missing, illegible, or unfamiliar, "
+            "the learner names it on the card and the AI tutor explains what the field "
+            "typically represents and where the manufacturer's service literature defines it. "
+            "The card is filed with the household's equipment records and travels with the "
+            "learner for every later session on that equipment."
+        ),
+        "demonstration_criteria": [
+            (
+                "Locates the nameplate on a piece of household HVAC equipment without opening "
+                "any enclosure"
+            ),
+            (
+                "Photographs the nameplate clearly enough that every printed field is legible "
+                "in the image"
+            ),
+            (
+                "Extracts every operative field onto a nameplate card: manufacturer; model; "
+                "serial; manufacture date (decoded if encoded in serial); equipment type; "
+                "voltage; frequency; phase; MCA; MOP; refrigerant type and factory charge "
+                "(if applicable); rated capacity; efficiency rating; listing marks"
+            ),
+            (
+                "Submits the nameplate card and photograph to the AI tutor; the AI tutor "
+                "confirms each field or names a discrepancy; the learner reconciles and "
+                "resubmits"
+            ),
+            (
+                "Names which fields the nameplate did not supply (some fields are not on every "
+                "nameplate; the AI tutor confirms which are normal omissions and which would "
+                "warrant looking up the manufacturer's service literature)"
+            ),
+            (
+                "Names what the MCA and MOP fields mean in plain language: MCA is the smallest "
+                "circuit the equipment will accept; MOP is the largest breaker the equipment "
+                "will accept; both are required for sizing the dedicated branch circuit per NEC. "
+                "The wiring itself is NEC-regulated work, not in this batch."
+            ),
+            (
+                "Names the ASHRAE 34 safety class of the refrigerant on the nameplate (A1, A2L, "
+                "A3, or other) using the AI tutor's lookup; names that the safety class affects "
+                "later refrigerant operations (not in this batch) but does not affect the reading "
+                "of the nameplate"
+            ),
+            (
+                "Reads three different nameplates on three different pieces of equipment (or "
+                "three different photographs if the household has only one piece of equipment) "
+                "and submits a complete card for each"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Reading the voltage as a single number when the plate shows a range",
+                "cause": "Residential plates often print '208/230V' meaning the unit will operate on either; the learner picked one number",
+                "remedy": (
+                    "Record the plate as printed ('208/230V' or '230V', as the plate reads). The "
+                    "unit's actual supply voltage is measured later; the plate range tells what "
+                    "the unit will accept."
+                ),
+            },
+            {
+                "error": "Confusing MCA with MOP",
+                "cause": "Both are amp ratings on the plate, often near each other",
+                "remedy": (
+                    "MCA (minimum circuit ampacity) is the smallest the circuit can be; MOP "
+                    "(maximum overcurrent protection) is the largest the breaker can be. They "
+                    "are named differently on the plate (sometimes 'Min. Circuit Ampacity' and "
+                    "'Max. Fuse / HACR' or similar). The AI tutor confirms the labeling per the "
+                    "specific manufacturer."
+                ),
+            },
+            {
+                "error": "Recording R-22 on an old plate without flagging it",
+                "cause": "The learner read the printed type without recognizing the phase-out status",
+                "remedy": (
+                    "R-22 has been phased out for new equipment production in the US since 2010 "
+                    "and for import / new manufacture per EPA. R-22 systems still exist and are "
+                    "serviced under EPA Section 608 with recovered R-22 or approved drop-in "
+                    "replacements. The nameplate field is recorded as printed; the AI tutor "
+                    "confirms the phase-out status for the household's reference. Service on R-22 "
+                    "is regulated work not in this batch."
+                ),
+            },
+            {
+                "error": "Opening an enclosure to find the nameplate",
+                "cause": "The visible plate was missing or illegible and the learner reached inside",
+                "remedy": (
+                    "The cover stays on at this band. If the visible nameplate is missing or "
+                    "illegible, the work is deferred to a session with a qualified human present "
+                    "who opens the enclosure under lockout-tagout per hc-021 and photographs the "
+                    "internal plate."
+                ),
+            },
+            {
+                "error": "Confusing tons with BTU/hr for cooling capacity",
+                "cause": "Some plates state cooling capacity in tons and some in BTU/hr",
+                "remedy": (
+                    "1 ton of cooling = 12,000 BTU/hr. Residential equipment is commonly 1.5 to "
+                    "5 tons (18,000 to 60,000 BTU/hr). Both are valid; record as the plate "
+                    "reads and the AI tutor can convert if needed."
+                ),
+            },
+            {
+                "error": "Reading SEER instead of SEER2 (or vice versa)",
+                "cause": "The rating standard shifted in 2023 and both ratings exist on equipment of different vintages",
+                "remedy": (
+                    "Read what the plate prints. SEER, SEER2, EER, EER2, HSPF, HSPF2, AFUE are "
+                    "distinct ratings with distinct test conditions; the AI tutor explains the "
+                    "shift and confirms which the plate is using by the printed label."
+                ),
+            },
+            {
+                "error": "Skipping the manufacture date because it is encoded in the serial number",
+                "cause": "Many manufacturers encode the manufacture date in the first characters of the serial; the learner read the serial as opaque",
+                "remedy": (
+                    "Photograph the serial number clearly and submit to the AI tutor; the AI "
+                    "tutor decodes the date per the manufacturer's published serial scheme, or "
+                    "names that the scheme is not publicly documented and the household's "
+                    "service literature or the manufacturer's customer service supplies the date."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "photo",
+            "what_to_capture": (
+                "Three nameplate cards (one per piece of equipment), each accompanied by the "
+                "clear photograph of the corresponding nameplate, with every operative field "
+                "filled in on the card in the learner's handwriting (or typed in the household's "
+                "record system)"
+            ),
+            "what_the_evidence_shows": (
+                "That the learner extracted every operative field from each nameplate, that the "
+                "AI tutor confirmed each field, and that any unfamiliar field was named on the "
+                "card and resolved with the AI tutor's lookup against the manufacturer's "
+                "service literature"
+            ),
+        },
+        "mentor_signoff_required": False,
+        "pedagogy": {
+            "i_do": (
+                "The AI tutor walks the learner through a sample nameplate photograph (provided "
+                "by the AI), naming each field aloud (in chat or in voice), pointing out the "
+                "typical layout (manufacturer top, model and serial mid-plate, electrical specs "
+                "and refrigerant info usually grouped), and explaining what each field is for "
+                "and where it will be used in later competencies. The AI explicitly names the "
+                "ASHRAE 34 safety class of the sample refrigerant and the SEER / HSPF / AFUE "
+                "rating context."
+            ),
+            "we_do": (
+                "The AI tutor and the learner work through a second sample nameplate together. "
+                "The learner names a field; the AI confirms or corrects; the next field is the "
+                "AI's, then back to the learner. At the end the learner reads the whole "
+                "nameplate card back."
+            ),
+            "you_do_supervised": (
+                "The learner visits the household's actual equipment, photographs the nameplate, "
+                "and reads it onto a card. The card and photograph are submitted to the AI tutor "
+                "for field-by-field confirmation. The AI tutor names any discrepancy and the "
+                "learner reconciles. The supervising adult is on premises only for the visit "
+                "itself (because the learner is in the mechanical space); the AI mentors the "
+                "actual reading."
+            ),
+            "you_do_unsupervised": (
+                "Once the learner can produce three accurate nameplate cards across at least "
+                "two sessions, they may read nameplates unsupervised. The AI tutor remains "
+                "available for field confirmation; this is not a supervision rule, it is a "
+                "double-check rule that stays in place across bands."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 3,
+        "session_length_minutes": 30,
+        "related_projects": [],
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
+    },
 }
