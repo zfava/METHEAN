@@ -175,7 +175,7 @@ async def _make_activity_with_content(
         learning_map_id=learning_map.id,
         household_id=household.id,
         node_type=NodeType.skill,
-        title=content.get("competency_name", "test node"),
+        title=content.get("title") or content.get("competency_name", "test node"),
         content=content,
     )
     db_session.add(node)

@@ -398,6 +398,7 @@ HVAC_CONTENT: dict[str, dict] = {
     "hs-001": {
         "node_type": "safety",
         "trade": "hvac",
+        "title": "HVAC Shop and Site Safety",
         "competency_name": (
             "HVAC safety: electrical (line and low voltage), refrigerant handling and classification, "
             "combustion gases and CO, thermal (hot surfaces and refrigerant burns), falls and ladders, "
@@ -1090,6 +1091,7 @@ HVAC_CONTENT: dict[str, dict] = {
     "hc-001": {
         "node_type": "technique",
         "trade": "hvac",
+        "title": "Reading HVAC Equipment Nameplates",
         "competency_name": (
             "Read an HVAC equipment nameplate to extract voltage, phase, MCA, MOP, refrigerant "
             "type and charge, capacity, efficiency rating, model and serial, and manufacture date"
@@ -1439,6 +1441,7 @@ HVAC_CONTENT: dict[str, dict] = {
     "hc-002": {
         "node_type": "technique",
         "trade": "hvac",
+        "title": "Identifying Residential HVAC Components",
         "competency_name": (
             "Identify the major components of a residential split-system air conditioner or "
             "heat pump by sight, without opening any enclosure"
@@ -1809,6 +1812,7 @@ HVAC_CONTENT: dict[str, dict] = {
     "hc-021": {
         "node_type": "technique",
         "trade": "hvac",
+        "title": "Lockout-Tagout for AC Disconnect Voltage Verification",
         "competency_name": (
             "Use a digital multimeter with formal lockout-tagout to verify the absence of voltage "
             "at a residential AC condenser disconnect before service (live-dead-live verification)"

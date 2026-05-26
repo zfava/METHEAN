@@ -72,6 +72,7 @@ GARDENING_CONTENT: dict[str, dict] = {
     "gs-001": {
         "node_type": "safety",
         "trade": "agriculture",
+        "title": "Garden Safety",
         "competency_name": "Garden safety: sun and heat, soil-borne hazards, hand-tool injuries, allergens and toxic plants, water hazards, and lifting",
         "progression_band": "helper",
         "prerequisites": [],

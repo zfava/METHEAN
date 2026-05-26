@@ -430,6 +430,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
     "els-001": {
         "node_type": "safety",
         "trade": "electrical",
+        "title": "Electrical Shop and Site Safety",
         "competency_name": (
             "Electrical shop and site safety: line-voltage and low-voltage shock hazards, "
             "arc flash, stored energy, backfeed sources, multiwire branch circuits, the "
@@ -1149,6 +1150,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
     "elc-001": {
         "node_type": "technique",
         "trade": "electrical",
+        "title": "Reading Electrical Nameplates and Rating Labels",
         "competency_name": (
             "Read and interpret an electrical nameplate / rating label to extract voltage, "
             "current, power, frequency, phase, listing marks, AIC rating, and any "
@@ -1492,6 +1494,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
     "elc-002": {
         "node_type": "technique",
         "trade": "electrical",
+        "title": "Identifying Residential Electrical Components",
         "competency_name": (
             "Identify residential electrical components from diagrams and with covers closed: "
             "service entrance, panel, branch-circuit devices, grounding electrode system, "
@@ -2453,6 +2456,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
     "elc-005": {
         "node_type": "knowledge",
         "trade": "electrical",
+        "title": "Reading Residential Wiring Diagrams and Schematics",
         "competency_name": (
             "Read residential wiring diagrams and schematics: one-line diagrams, "
             "device-level wiring diagrams, and the standard symbol set"
@@ -2734,6 +2738,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
     "elc-006": {
         "node_type": "knowledge",
         "trade": "electrical",
+        "title": "Anatomy of a Residential Electrical Service",
         "competency_name": (
             "Anatomy of a residential electrical service: service entrance, meter, "
             "main disconnect, panel, branch circuits, overcurrent protection, and "
@@ -3067,6 +3072,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
     "elc-007": {
         "node_type": "knowledge",
         "trade": "electrical",
+        "title": "Conductor Sizing and Ampacity Basics",
         "competency_name": (
             "Conductor sizing and ampacity basics for residential branch circuits "
             "and feeders (concepts and AHJ-adopted NEC reference)"
@@ -3379,6 +3385,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
     "elc-008": {
         "node_type": "knowledge",
         "trade": "electrical",
+        "title": "Grounding and Bonding Theory",
         "competency_name": (
             "Grounding and bonding theory for a residential electrical system "
             "(concepts and AHJ-adopted NEC reference; NOT a license to perform "
@@ -3741,6 +3748,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
     "elc-009": {
         "node_type": "technique",
         "trade": "electrical",
+        "title": "Meter and Tool Literacy",
         "competency_name": (
             "Meter and tool literacy: multimeter Category (CAT) ratings, insulated "
             "and insulating tools, glove inspection, and tool selection for the "
@@ -4168,6 +4176,7 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
     "elc-021": {
         "node_type": "technique",
         "trade": "electrical",
+        "title": "Lockout-Tagout and Live-Dead-Live Verification",
         "competency_name": (
             "De-energize, lock out / tag out, and perform live-dead-live "
             "verification on a residential branch circuit (apprentice-band "
