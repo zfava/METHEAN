@@ -2357,7 +2357,7 @@ READING_DEVELOPING_CONTENT = {
                 "Move to change: 'how is the character at the end different from at the beginning?' Find an early scene and a late scene; compare",
                 "Practice the language of evidence: 'on page X' or 'in the chapter where Y happens' or 'when the character says Z'",
                 "Compare two characters in one story (Wilbur and Templeton; Lucy and Edmund) on trait, motivation, change",
-                "Distinguish what the text says from what the reader assumed: 'where in the book does it actually say that?' — if the answer is 'it doesn't, I just thought so', name the assumption and look again",
+                "Distinguish what the text says from what the reader assumed: 'where in the book does it actually say that?'; if the answer is 'it doesn't, I just thought so', name the assumption and look again",
             ],
             "socratic_questions": [
                 "What is this character like? Give me three words.",
@@ -4387,8 +4387,8 @@ READING_DEVELOPING_CONTENT = {
             "introduction": (
                 "Mythology is the literature of the ancient world: how Greeks and Romans, Norse peoples, and many other "
                 "traditions explained the natural world, named their gods, told the stories of their heroes, and "
-                "passed down their wisdom and their warnings. At this band the child reads mythology as literature — "
-                "for the stories, the characters, the moral and literary substance — not as belief instruction and not "
+                "passed down their wisdom and their warnings. At this band the child reads mythology as literature, "
+                "for the stories, the characters, the moral and literary substance, not as belief instruction and not "
                 "as religion in any practicing sense. The child meets Athena and Odysseus and Thor and Loki and "
                 "Persephone as characters in foundational stories of Western (and other) traditions. Honest content "
                 "note: classical mythology includes violence, family conflict, and adult themes; age-appropriate "
@@ -4410,7 +4410,7 @@ READING_DEVELOPING_CONTENT = {
                 "What does this myth explain about the world?",
                 "What kind of myth is this: origin, hero, transformation, or cautionary?",
                 "Who is the trickster in this tradition? What does the trickster do?",
-                "How is this Greek god different from this Norse god? Same role, different temperament — what changes?",
+                "How is this Greek god different from this Norse god? Same role, different temperament: what changes?",
                 "What does this myth teach about consequences? About courage? About hubris?",
                 "Why might ancient peoples have made this story up? What in their lives might it have answered for them?",
             ],
@@ -4794,7 +4794,7 @@ READING_DEVELOPING_CONTENT = {
             ),
             "scaffolding_sequence": [
                 "Begin with a sentence that defines its key word explicitly: 'A philologist, that is, a person who studies the history of language, traveled the world collecting old words.' Show the child the definition clue.",
-                "Introduce the example clue: 'The bird had carnivorous habits — it ate small mice, frogs, and other live prey.' Show how 'small mice, frogs, and other live prey' is the example that reveals 'carnivorous'.",
+                "Introduce the example clue: 'The bird had carnivorous habits; it ate small mice, frogs, and other live prey.' Show how 'small mice, frogs, and other live prey' is the example that reveals 'carnivorous'.",
                 "Introduce the synonym clue: 'The path was narrow and constricted by the trees on both sides.' Show how 'narrow' is the synonym that reveals 'constricted'.",
                 "Introduce the antonym clue: 'Unlike his lazy brother, Tom was diligent and finished his work early.' Show how 'lazy' (the opposite) reveals 'diligent'.",
                 "Practice each clue type on multiple sentences from the child's actual reading",
