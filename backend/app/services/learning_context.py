@@ -14,7 +14,11 @@ from app.models.curriculum import LearningMap, LearningNode, Subject
 from app.models.governance import Activity, Attempt
 from app.models.identity import Child
 from app.services.content_engine import enrich_single_node
-from app.services.node_content import is_enriched
+from app.services.node_content import (
+    is_cleared_for_surfacing,
+    is_enriched,
+    requires_qualified_human_present_at_runtime,
+)
 
 
 async def get_activity_learning_context(
@@ -101,6 +105,48 @@ async def get_activity_learning_context(
         node_result = await db.execute(select(LearningNode).where(LearningNode.id == activity.node_id))
         node = node_result.scalar_one_or_none()
         if node:
+            # SAFETY GATE (content-review): a node that requires human safety
+            # review and is not cleared (safety_review.reviewed is anything
+            # other than the boolean True) MUST NOT be surfaced to a learner.
+            # Fail-closed: malformed or missing safety_review on a hazardous
+            # node blocks surfacing. The check happens BEFORE any on-the-fly
+            # enrichment, so the AI never generates content for a hazardous
+            # uncleared node. is_cleared_for_surfacing is the single source
+            # of truth; see app/services/node_content.py.
+            if not is_cleared_for_surfacing(node.content):
+                context["awaiting_human_safety_review"] = True
+                context["lesson"] = {"widgets": []}
+                context["assessment"] = {}
+                context["practice"] = {"items": []}
+                context["reading"] = {"passages": []}
+                context["tutor_available"] = False
+                context["philosophy"] = {
+                    "approach": context["philosophy"]["approach"],
+                    "content": None,
+                    "is_native": False,
+                }
+                return context
+
+            # TODO (governance integration): for nodes where
+            # requires_qualified_human_present_at_runtime returns True, the
+            # content-review gate above is necessary but NOT sufficient. The
+            # higher governance layer must additionally confirm a qualified
+            # human (named per subsystem in the node's supervision_basis) is
+            # physically present at the work before the activity is
+            # surfaced. The seam below is the single function boundary where
+            # that runtime presence check is wired; this module does NOT
+            # perform the check (it is governance's responsibility) but
+            # it documents which nodes require it and where the check is
+            # invoked.
+            _runtime_presence_required = requires_qualified_human_present_at_runtime(node.content)
+            # When the runtime check is implemented, replace the assignment
+            # above with a callable that consults the session-time
+            # qualified-human-present record and returns / raises
+            # accordingly. Until then, the content-review gate above is the
+            # active enforcement and the governance layer is documented as
+            # the owner of the runtime presence check.
+            _ = _runtime_presence_required  # acknowledge the seam; not used here
+
             # Ensure content exists
             if not is_enriched(node.content):
                 try:

@@ -923,3 +923,91 @@ def requires_human_safety_review(node: dict) -> bool:
         return True
     safety_basis = node.get("safety_basis") or {}
     return bool(safety_basis.get("supervision_required"))
+
+
+def is_cleared_for_surfacing(content: dict | None) -> bool:
+    """Return True iff this node's content is cleared to be surfaced to a learner.
+
+    Cleared iff EITHER:
+    - the node does not require human safety review (requires_human_safety_review returns False), OR
+    - the node requires human safety review AND its safety_review block is a
+      well-formed dict AND safety_review.reviewed is exactly the boolean True.
+
+    Fail-closed: any other state on safety_review.reviewed for a node that
+    requires review (False, None, missing, non-bool truthy, malformed
+    safety_review) means NOT cleared. This is the content-review gate.
+
+    This function is intentionally pure: it takes a content dict and
+    returns a bool, with no side effects and no I/O. It is the single
+    source of truth the surfacing path consults before serving a node.
+
+    Note: this is the CONTENT-REVIEW gate. For nodes where the supervision
+    policy names a qualified human physically present at a live moment
+    (see requires_qualified_human_present_at_runtime), this gate is
+    necessary but NOT sufficient; the higher governance layer must
+    additionally confirm the qualified human at session time.
+    """
+    if not isinstance(content, dict):
+        # A non-dict content payload cannot itself be a hazardous-node
+        # payload (the validator would reject it). Surfacing falls back
+        # to the title-only path; not blocked here.
+        return True
+    if not requires_human_safety_review(content):
+        return True
+    review = content.get("safety_review")
+    if not isinstance(review, dict):
+        return False
+    # Strict boolean True only; truthy strings ("true"), 1, etc. do NOT clear.
+    return review.get("reviewed") is True
+
+
+def requires_qualified_human_present_at_runtime(content: dict | None) -> bool:
+    """Return True iff this node's supervision policy names a qualified human
+    physically present at a live or otherwise irreducibly hazardous moment.
+
+    Signal in authored content: the literal phrase "physically present"
+    (case-insensitive) in safety_basis.supervision_basis, paired with a
+    named qualified-human role (licensed electrician, licensed HVAC
+    technician, licensed gas fitter, EPA-608-certified person, or
+    qualified human). The authoring discipline uses these phrases
+    consistently; see hc-021 and elc-021 for the canonical pattern.
+
+    The content-review gate (is_cleared_for_surfacing) is NECESSARY but
+    NOT SUFFICIENT for nodes where this function returns True. The
+    runtime governance layer must additionally confirm a qualified human
+    is present at the work before the activity is surfaced. This
+    function is the documented seam: it identifies which nodes need the
+    runtime check; the actual confirmation is enforced by the governance
+    layer (not by this module).
+
+    TODO (governance integration): wire a runtime presence check at the
+    activity-surfacing layer that:
+      1. Reads this function on the node's content.
+      2. If True, requires a session-time record (signed by a parent /
+         governance signer / the qualified human themself) that a
+         qualified human matching the named role is confirmed present.
+      3. Refuses to surface the activity until that record is present
+         and current for the session.
+    The check is NOT implemented in this module; this helper names the
+    seam so the higher layer knows where to wire it.
+    """
+    if not isinstance(content, dict):
+        return False
+    safety_basis = content.get("safety_basis")
+    if not isinstance(safety_basis, dict):
+        return False
+    basis = safety_basis.get("supervision_basis", "")
+    if not isinstance(basis, str):
+        return False
+    basis_lower = basis.lower()
+    if "physically present" not in basis_lower:
+        return False
+    qualified_human_phrases = (
+        "licensed electrician",
+        "licensed hvac technician",
+        "licensed gas fitter",
+        "608-certified",
+        "epa-608",
+        "qualified human",
+    )
+    return any(phrase in basis_lower for phrase in qualified_human_phrases)
