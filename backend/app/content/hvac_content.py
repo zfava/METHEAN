@@ -320,7 +320,9 @@ HVAC_CONTENT: dict[str, dict] = {
                     "knowledge_competencies": [
                         "advanced controls and building automation; commercial design; load and energy modeling; project management; business and contract law (master / contractor level) (future batches)",
                     ],
-                    "safety_competencies": ["hs-001 (current per the annual freshness check; learner now leads the walkthrough for helpers)"],
+                    "safety_competencies": [
+                        "hs-001 (current per the annual freshness check; learner now leads the walkthrough for helpers)"
+                    ],
                     "low_hazard_hands_on_competencies": [
                         "full design-and-install of a residential system (future batch; a project node)",
                     ],
@@ -2431,9 +2433,7 @@ HVAC_CONTENT: dict[str, dict] = {
                 "Type III: low-pressure appliance characteristics; rupture-disk and pressure-"
                 "relief considerations; purge-unit operation at the descriptive level"
             ),
-            (
-                "Universal: the combined knowledge of all three types"
-            ),
+            ("Universal: the combined knowledge of all three types"),
         ],
         "eligibility": {
             "minimum_age": (
@@ -2564,8 +2564,7 @@ HVAC_CONTENT: dict[str, dict] = {
         ],
         "eligibility": {
             "minimum_age": (
-                "varies by AHJ; commonly 18 for journeyman and master; some states allow "
-                "younger registered apprentices"
+                "varies by AHJ; commonly 18 for journeyman and master; some states allow younger registered apprentices"
             ),
             "experience_requirements": (
                 "apprenticeship hours and journeyman experience varies widely by AHJ; common "
@@ -2619,14 +2618,8 @@ HVAC_CONTENT: dict[str, dict] = {
         "aligned_competencies": ["hs-001", "hc-001", "hc-002", "hc-021"],
         "study_resources_pointers": [
             "The AHJ's published exam blueprint and approved reference list",
-            (
-                "The NEC (NFPA 70), NFPA 54, and the IMC or UMC (per AHJ adoption), the current "
-                "adopted editions"
-            ),
-            (
-                "NFPA 70E and OSHA 29 CFR 1910 / 1926 (the relevant subparts for HVAC), as "
-                "supporting safety references"
-            ),
+            ("The NEC (NFPA 70), NFPA 54, and the IMC or UMC (per AHJ adoption), the current adopted editions"),
+            ("NFPA 70E and OSHA 29 CFR 1910 / 1926 (the relevant subparts for HVAC), as supporting safety references"),
             (
                 "ACCA Manuals J, S, D (load, equipment selection, duct design); ASHRAE "
                 "Handbooks (HVAC Systems and Equipment, Refrigeration, Fundamentals, "

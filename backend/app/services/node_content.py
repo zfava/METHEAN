@@ -825,9 +825,7 @@ def validate_competency(content: dict, authored_nodes: dict | None = None) -> li
         # The deferral statement is required: either an exam_taken_through
         # field or an explicit exam_administration_deferred_to field, naming
         # who the exam is taken through (always external to METHEAN).
-        deferral_present = bool(
-            content.get("exam_taken_through") or content.get("exam_administration_deferred_to")
-        )
+        deferral_present = bool(content.get("exam_taken_through") or content.get("exam_administration_deferred_to"))
         if not deferral_present:
             raise ValueError(
                 "certification_prep node must defer exam administration: "
