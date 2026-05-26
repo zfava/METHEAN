@@ -1846,4 +1846,487 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Written narration is the bridge from oral narration to all of expository writing; the writing strand picks up here and goes further",
         },
     },
+    "rd-05": {
+        "enriched": True,
+        "learning_objectives": [
+            "Distinguish fiction (a made-up story) from nonfiction (an account of real things) and give the reason for the distinction in one's own words",
+            "Identify common fiction sub-genres in age-appropriate texts: realistic fiction, fantasy, mystery, adventure, historical fiction",
+            "Identify common nonfiction sub-genres: informational text, biography, how-to / procedural, opinion / persuasive (introductory)",
+            "Use text features to confirm genre: a fiction book's cover and chapter structure differ from a nonfiction book's table of contents, headings, captions, and index",
+            "Choose a book for a real purpose and name the genre that fits the purpose ('I want to know about volcanoes, so I need an informational book')",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "Foundational reading let the child enjoy stories and facts side by side without naming the difference: "
+                "Frog and Toad and a book about frogs lived on the same shelf. The developing level makes the category "
+                "explicit. The child learns that fiction is a made-up story (even if it draws on real things) and "
+                "nonfiction is an account of real things (even if it tells the story of a real life). They learn the "
+                "sub-genres within each, and they learn that books announce their genre through their physical and "
+                "structural features: a fiction book typically has a cover with the title and the author, illustrations "
+                "inside, chapters with chapter numbers and sometimes chapter titles, a continuous narrative voice; a "
+                "nonfiction book typically has a table of contents with topics, headings inside the text, captions under "
+                "pictures, bold or italic vocabulary, and often a glossary and an index at the back. This is the first "
+                "metalinguistic turn in reading: the child reads ABOUT books, not just IN them."
+            ),
+            "scaffolding_sequence": [
+                "Lay out three pairs of books on the table: a chapter book and an informational book on a similar topic (e.g. Charlotte's Web and a book about real pigs)",
+                "Pick up each book in turn and ask: is this a story someone made up, or is this an account of real things?",
+                "Open each book and notice the difference in structure: a story has chapters and unfolds in time; an informational book has topics and unfolds by subject",
+                "Introduce the words fiction and nonfiction explicitly; use them across the next several reading sessions",
+                "Move to sub-genres of fiction: realistic fiction (could happen, but didn't), fantasy (could not happen the way the story tells it), mystery (something to figure out), adventure (a journey with stakes), historical fiction (a story set in a real time in the past)",
+                "Move to sub-genres of nonfiction: informational text (tells about a topic), biography (tells about a real person's life), how-to / procedural (tells you how to do something), opinion / persuasive (tells you what the author thinks; introduced lightly)",
+                "Practice with the household's actual book collection: child sorts the family's books into fiction and nonfiction piles, then into sub-genre piles",
+                "Practice choosing for purpose: 'I want to learn about ___; what kind of book do I need?' and 'I want to enjoy a long story tonight; what kind of book do I want?'",
+            ],
+            "socratic_questions": [
+                "Is this book about real things or made-up things? How do you know?",
+                "The cover of this book has a picture of a real volcano on it. Does that mean it is nonfiction? What else should you check?",
+                "Can a nonfiction book tell a story? (Yes, a biography tells the story of a real life.) Can a fiction book teach you real things? (Yes, historical fiction can teach you about a real time period, even though the characters and plot are made up.)",
+                "What kind of book is Charlotte's Web? It has a pig who talks. Is that fiction or nonfiction, and what sub-genre?",
+                "What kind of book is a biography of Harriet Tubman? Is it fiction or nonfiction? Why?",
+                "You want to learn how to build a birdhouse. What kind of book do you need?",
+            ],
+            "practice_activities": [
+                "Book sort: lay out 10 to 15 books from the household library and have the child sort them into fiction and nonfiction piles, then into sub-genre piles within each",
+                "Cover-and-table-of-contents inspection: practice deciding genre from the outside of the book and the first inside pages, before reading",
+                "Library visit with a genre goal: 'today let's find a realistic fiction book' or 'today let's find a how-to book about something you want to learn to do'",
+                "Genre journal: at the end of each chapter book or nonfiction book the child finishes, log the title, the genre, and the sub-genre",
+                "Pair-reading: pair a fiction and a nonfiction book on a similar topic (Charlotte's Web with a book about real farm animals; Magic Tree House about a historical time with a real biography from that time) and read them in parallel",
+            ],
+            "real_world_connections": [
+                "Choosing a book at the library or bookstore for a real reason (a school project, a hobby, a long car trip)",
+                "Recognizing the difference between a story aunt tells at dinner (a real account = nonfiction in spirit) and a story a grandfather makes up at bedtime (fiction in spirit)",
+                "Reading the back cover of a movie or show to decide if it is based on a true story or is entirely made up",
+                "Recognizing news (nonfiction by intent) vs novels (fiction by intent) in the home library",
+                "Recognizing instructions (how-to nonfiction) vs stories about cooking (which might be either fiction or memoir)",
+            ],
+            "common_misconceptions": [
+                "Thinking 'fiction' means 'fake' and so is somehow lesser. Fiction is the made-up story; fiction can be deeply true about human nature even though the events did not happen.",
+                "Thinking 'nonfiction' means 'true in every word'. Nonfiction is an account of real things, but accounts can be more or less accurate; even a true biography is the author's selection of what to tell.",
+                "Treating a single illustration or cover as the genre signal. The cover gives a clue; the structure of the book (chapters with continuous narrative vs topics with headings) is the stronger signal.",
+                "Believing a fiction book cannot teach you anything real. Historical fiction, realistic fiction, and even fantasy can teach about people, places, and times; the difference is the made-up frame, not the truth-value of every detail.",
+                "Forcing every book into a single sub-genre. Real books often blend (a historical fiction mystery; an informational text with a narrative thread). The sub-genre names are tools, not boxes.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Distinguishes fiction from nonfiction with confidence on books the child has not seen before, using structural and content cues",
+                "Names common sub-genres of fiction (realistic fiction, fantasy, mystery, adventure, historical fiction) and nonfiction (informational, biography, how-to, opinion / persuasive) with examples from the child's own reading",
+                "Uses text features (cover, table of contents, headings, captions, glossary, index) to confirm genre",
+                "Chooses books for a real purpose and names the genre that fits the purpose",
+                "Recognizes that fiction and nonfiction are categories, not value judgments: a fiction book can be deeply true and a nonfiction book can be the author's selection",
+            ],
+            "proficiency_indicators": [
+                "Distinguishes fiction from nonfiction reliably; sub-genres named with some prompting",
+                "Uses some text features to confirm genre",
+            ],
+            "developing_indicators": [
+                "Confuses fiction and nonfiction; needs prompting on most books",
+                "Sub-genre names not yet held",
+            ],
+            "assessment_methods": [
+                "book sort against the household library",
+                "cover-and-table-of-contents inspection on unfamiliar books",
+                "genre journal of finished books",
+                "library-trip genre goal: the child finds a book matching a named genre",
+            ],
+            "sample_assessment_prompts": [
+                "Here is a stack of 10 books. Sort them into fiction and nonfiction.",
+                "Now sort the fiction pile into sub-genres. What sub-genres do you have?",
+                "Pick up this book you have never seen. Without reading the inside, tell me what genre you think it is and how you can tell.",
+                "I want to learn how to make bread. What kind of book do I need?",
+                "Read the genre journal entries from last month. What genre did you read the most? What genre have you not read at all?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What is the main difference between fiction and nonfiction?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Fiction is short and nonfiction is long.",
+                    "Fiction is a made-up story; nonfiction is an account of real things.",
+                    "Fiction is for children and nonfiction is for adults.",
+                    "Fiction has illustrations and nonfiction does not.",
+                ],
+                "correct_answer": "Fiction is a made-up story; nonfiction is an account of real things.",
+                "hints": [
+                    "Think about whether the events in the book really happened or were made up.",
+                ],
+                "explanation": (
+                    "Fiction is a made-up story; nonfiction is an account of real things. Both can be long or short, both "
+                    "can have illustrations, both can be for any age."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "Charlotte's Web has a pig named Wilbur and a spider named Charlotte who can write words in her web. "
+                    "Is Charlotte's Web fiction or nonfiction? What sub-genre?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Nonfiction; informational text.",
+                    "Fiction; realistic fiction.",
+                    "Fiction; fantasy.",
+                    "Nonfiction; biography.",
+                ],
+                "correct_answer": "Fiction; fantasy.",
+                "hints": [
+                    "Spiders cannot really write words in webs.",
+                    "Fantasy is fiction that includes things that cannot happen in the real world.",
+                ],
+                "explanation": (
+                    "Charlotte's Web is fiction (the events are made up) and fantasy (a spider writing words in a web "
+                    "cannot happen in the real world). It is a great example of fantasy being deeply true about love, "
+                    "friendship, and loss even though the events did not happen."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "A book is called 'Harriet Tubman: Conductor on the Underground Railroad'. The cover has a portrait of "
+                    "Harriet Tubman. Inside there is a table of contents with chapters like 'Childhood' and 'The First "
+                    "Escape'. What genre is this book?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Fiction; historical fiction.",
+                    "Nonfiction; biography.",
+                    "Fiction; adventure.",
+                    "Nonfiction; how-to.",
+                ],
+                "correct_answer": "Nonfiction; biography.",
+                "hints": [
+                    "A biography tells the story of a real person's life.",
+                    "Harriet Tubman was a real person. The chapters follow her actual life.",
+                ],
+                "explanation": (
+                    "This is a biography: a nonfiction account of a real person's life. Even though it tells a story (her "
+                    "life as a story), it is nonfiction because Harriet Tubman was a real person and the events described "
+                    "really happened."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "You want to learn how to fold a paper airplane. What kind of book do you need?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "A realistic fiction book about a boy who flies a paper airplane.",
+                    "A how-to / procedural book that shows the steps to fold one.",
+                    "A fantasy book about a magic airplane.",
+                    "A biography of a famous paper-airplane folder.",
+                ],
+                "correct_answer": "A how-to / procedural book that shows the steps to fold one.",
+                "hints": [
+                    "What kind of book teaches you to DO something?",
+                ],
+                "explanation": (
+                    "A how-to (procedural) book is the nonfiction sub-genre that teaches the reader to do something with "
+                    "steps. The fiction options might be enjoyable, but they will not teach you how to fold the airplane."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "A book about the American Revolution has chapters and a continuous story about a fictional 12-year-old "
+                    "boy who lives in Boston in 1773 and gets caught up in the Boston Tea Party. The cover shows the boy "
+                    "in colonial clothes, and the author's note at the back says 'the boy is invented, but the events of "
+                    "the Tea Party are described as they really happened'. What genre is this book?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Fiction; historical fiction.",
+                    "Nonfiction; biography.",
+                    "Nonfiction; informational text.",
+                    "Fiction; fantasy.",
+                ],
+                "correct_answer": "Fiction; historical fiction.",
+                "hints": [
+                    "The main character is made up but the historical setting is real.",
+                    "Historical fiction is fiction set in a real time period.",
+                ],
+                "explanation": (
+                    "Historical fiction is the sub-genre that uses a made-up character or plot in a real historical "
+                    "setting. The author's note is the giveaway: the boy is invented, but the events around him really "
+                    "happened. Historical fiction can teach a lot about a real time period even though the foreground story "
+                    "is fiction."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Sort these 10 books into fiction and nonfiction piles. Tell me how you decided for each.",
+                "type": "open_response",
+                "target_concept": "fiction_nonfiction_sort",
+                "rubric": (
+                    "Mastery: correct sort with reasons that name structural or content cues. Proficient: correct sort "
+                    "with reasons that are partial. Developing: incorrect sort or no reasons given."
+                ),
+            },
+            {
+                "prompt": "Now sort the fiction pile into sub-genres. What sub-genres did you find? What sub-genre is missing from the household library?",
+                "type": "open_response",
+                "target_concept": "fiction_sub_genre_recognition",
+                "rubric": (
+                    "Mastery: names at least three common fiction sub-genres present in the sort and one that is missing. "
+                    "Proficient: names two sub-genres. Developing: cannot name sub-genres."
+                ),
+            },
+            {
+                "prompt": "I want to find a book that will teach me about real birds and how to identify them. What genre and sub-genre do I need? Where in the household library should I look?",
+                "type": "open_response",
+                "target_concept": "purpose_to_genre_mapping",
+                "rubric": (
+                    "Mastery: names nonfiction informational text or field guide; points to where in the library it lives. "
+                    "Proficient: names nonfiction without sub-genre. Developing: names a fiction book or cannot answer."
+                ),
+            },
+            {
+                "prompt": "Open this book you have never seen before. Without reading the inside, tell me what genre you think it is and what features helped you decide.",
+                "type": "open_response",
+                "target_concept": "cover_and_text_feature_inspection",
+                "rubric": (
+                    "Mastery: names the genre and cites at least two cues (cover style, table of contents structure, "
+                    "headings, illustrations). Proficient: names the genre with one cue. Developing: names the genre by "
+                    "guess without cues."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "the household library: a mixed collection of fiction and nonfiction books for the child to sort and inspect",
+                "a few clear examples of each major sub-genre (realistic fiction, fantasy, mystery, adventure, historical fiction; informational, biography, how-to, opinion / persuasive)",
+                "library card or regular library access to broaden the genre exposure",
+            ],
+            "recommended": [
+                "a genre journal: a small notebook where the child logs the title, genre, and sub-genre of each book they finish",
+                "a labeled shelf or bin system in the home library that groups books by genre",
+                "a library tour with a librarian: ask the children's librarian to show how the library groups books by genre",
+            ],
+        },
+        "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 15},
+        "accommodations": {
+            "dyslexia": (
+                "Genre awareness builds on listening as much as on reading. Read aloud examples of each sub-genre; the "
+                "child sorts and categorizes by listening to the genre cues. Audiobooks across genres deepen the "
+                "category sense without adding decoding load."
+            ),
+            "adhd": (
+                "The book-sort activity is hands-on and engaging; many children with ADHD prefer this kind of "
+                "categorization to passive instruction. Keep the sort to 10 to 15 books; longer is overwhelming. Use "
+                "physical piles rather than a list."
+            ),
+            "gifted": (
+                "Introduce more sub-genres: science fiction (often grouped under fantasy but worth distinguishing for "
+                "the gifted reader), folktale and legend, memoir as distinct from biography, persuasive vs informational "
+                "as a sharper distinction. Begin to notice cross-genre or hybrid books."
+            ),
+            "visual_learner": (
+                "Build a genre wall: a poster with sub-genre boxes and a representative book cover in each, that grows "
+                "across the year. The visual category map anchors the sub-genre names."
+            ),
+            "kinesthetic_learner": (
+                "The book-sort activity is the central practice for this child; let them physically move and stack the "
+                "books. Set up genre-labeled bins on the floor and sort into them."
+            ),
+            "auditory_learner": (
+                "Discuss genre cues aloud. Listen to a few minutes of audiobook from each sub-genre and notice the "
+                "differences in narrator voice (a how-to book sounds different from a story)."
+            ),
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we learn the basic categories of books: fiction (made-up story) and nonfiction (account of "
+                    "real things), and the sub-genres within each. We will sort the household library, inspect books "
+                    "by their structure, and learn to choose books for a real purpose by their genre."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Hold up three pairs of books and name each as fiction or nonfiction with the reason: 'this is "
+                        "fiction, a made-up story about a pig'; 'this is nonfiction, an account of real pigs'. Show the "
+                        "structural differences inside each: chapters vs headings, narrative voice vs topic structure."
+                    ),
+                    "we_do": (
+                        "Sort a small set of books together with the child, taking turns deciding fiction or nonfiction "
+                        "and naming the sub-genre. Discuss any ambiguous cases together."
+                    ),
+                    "you_do": (
+                        "Child sorts the household library independently and keeps a genre journal of finished books "
+                        "across the term."
+                    ),
+                },
+                "guided_practice": [
+                    "Book sort with the parent's set of 10 to 15 books",
+                    "Cover-and-table-of-contents inspection on unfamiliar books",
+                    "Library trip with a genre goal",
+                ],
+                "independent_practice": [
+                    "Daily genre journal entry for each book finished",
+                    "Sub-genre reading goals across a term ('this month I want to read at least one biography and one how-to')",
+                ],
+                "mastery_check": [
+                    "Distinguishes fiction from nonfiction reliably on unfamiliar books",
+                    "Names sub-genres within each with examples",
+                    "Chooses books for purpose by genre",
+                ],
+                "spiral_review": [
+                    "Re-sort the household library at the end of the term; notice how many books have been read and how the categories have grown",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "The kinds of books are old and worth naming. The Greeks knew that the made-up story (mythos) and the "
+                    "account of real things (historia) were different acts of telling. The medieval scholars named "
+                    "biography (the life of a saint), the chronicle (the account of years), the romance (the made-up "
+                    "adventure). To learn the kinds of books is to take up the long habit of careful naming."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the rule: fiction is a made-up story; nonfiction is an account of real things",
+                        "Recite the sub-genres of fiction: realistic fiction, fantasy, mystery, adventure, historical fiction",
+                        "Recite the sub-genres of nonfiction: informational text, biography, how-to, opinion",
+                    ],
+                    "recitations": [
+                        "Memorize one fine sentence from each sub-genre the child encounters this term, to hold the language of each kind of book",
+                    ],
+                },
+                "copywork": [
+                    "Copy one well-formed sentence from a book of each major sub-genre across the term into the copybook; the language of each genre lives in the hand",
+                ],
+                "recitation_routine": (
+                    "Begin each new reading session with the genre of the book named: 'today we are reading a biography; "
+                    "biography is the nonfiction sub-genre that tells the life of a real person.'"
+                ),
+                "history_integration": (
+                    "Pair historical fiction and biographies and informational texts along the chronological spine. The "
+                    "child sees how three different kinds of books tell about the same time."
+                ),
+                "read_aloud_suggestions": [
+                    "A worthy book from each major sub-genre across the term, so the ear knows the difference: realistic fiction (Charlotte's Web), fantasy (The Lion the Witch and the Wardrobe), mystery (Encyclopedia Brown), adventure (My Side of the Mountain), historical fiction (The Witch of Blackbird Pond, Sarah Plain and Tall), biography (Abraham Lincoln by D'Aulaire), informational text (a beautifully written nature book), how-to (a real craft or cooking book)",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "Beautiful examples of each sub-genre, real books with real literary or expository quality, never twaddle",
+                    "Living biography: D'Aulaire's, Genevieve Foster, Jean Fritz at age",
+                    "Living informational text: Holling C. Holling (Paddle-to-the-Sea), Burgess (Burgess Bird Book), Robert McCloskey, real nature writing",
+                    "Living realistic fiction and historical fiction: McCloskey, Wilder, MacLachlan, Brink, Speare",
+                ],
+                "short_lesson_flow": (
+                    "Sit at the table with a small stack of varied books from the home shelf. Look at one together: who "
+                    "wrote it, what is it about, is it a story made up or an account of real things? Talk about it. The "
+                    "lesson is calm; the categorization is a noticing, not a quiz."
+                ),
+                "narration_prompt": (
+                    "Tell me what kind of book this is and how you know. What sub-genre is it within that kind?"
+                ),
+                "real_world_objects": [
+                    "The household library, real books on real shelves the child can sort and shelve",
+                    "A library card and weekly library visits",
+                    "A simple genre journal kept across the term",
+                ],
+                "nature_connection": (
+                    "Nature writing is a strong example of living informational text. A field guide is a strong example "
+                    "of how-to nonfiction. Both can be brought outside on a walk and used in the field."
+                ),
+                "habit_focus": (
+                    "The habit of careful noticing: knowing the kind of book in hand before deciding how to read it. The "
+                    "fiction reader sinks into the story; the nonfiction reader looks for the topic and the structure; "
+                    "the careful reader knows which mode they are in."
+                ),
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A genre-sort tray with cards (FICTION / NONFICTION; the sub-genre names within each) and a small set of cover-image cards or actual short books for sorting",
+                    "A labeled bookshelf in the reading area with genre sections the child can shelve and reshelve",
+                    "A genre journal the child keeps with the title, genre, and sub-genre of each book finished",
+                    "Field-trip cards: a library tour with the librarian, an introduction to how the library is organized by genre",
+                ],
+                "presentation": {
+                    "three_period_lesson": (
+                        "This is a biography; this is a how-to; this is a fantasy. Show me a biography on the shelf. Show "
+                        "me a fantasy. What kind of book is this one? The names are given slowly across many days; the "
+                        "third period is only when the recognition is sure."
+                    ),
+                    "steps": [
+                        "The guide presents the fiction / nonfiction distinction with a clear pair of books",
+                        "The guide presents one sub-genre at a time, with several examples and the name",
+                        "The child sorts books in the reading area, freely, returning to the sort across days and weeks",
+                        "The child keeps the genre journal as their own work",
+                    ],
+                },
+                "control_of_error": (
+                    "The book itself is the control: the table of contents, the chapter structure, the captions, the "
+                    "author's note all confirm or correct a tentative genre call. The child compares their call to the "
+                    "evidence inside the book and adjusts without correction from outside."
+                ),
+                "abstraction_pathway": (
+                    "From sorting concrete books on a tray, to naming the genre of any new book on first inspection, "
+                    "toward reading a book differently because of its genre (sinking into fiction, looking for the topic "
+                    "and structure in nonfiction)"
+                ),
+                "extensions": [
+                    "Add a sub-genre to the sort each week as the child encounters it",
+                    "Sort the household library and propose a new shelving arrangement to the family",
+                    "Visit the library and notice how the library is organized by genre",
+                ],
+                "observation_focus": (
+                    "Watch for the child reaching for a particular kind of book for a particular purpose, naming the genre "
+                    "in their own talk, and beginning to balance their reading across sub-genres rather than staying in "
+                    "one favorite."
+                ),
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a generous shelf of varied books across all the major sub-genres within reach",
+                    "Take regular library trips and let the child wander the children's section, noticing how the library groups books",
+                    "Leave a small basket of how-to books near the child's hobby or project area",
+                    "Talk about books across genres in the family conversation: 'I'm reading a biography of Lincoln, what are you reading?'",
+                ],
+                "real_world_contexts": [
+                    "Choosing a library book for a real project the child is working on",
+                    "Recognizing the genre of a movie or show ('this is based on a true story, so it's like a biography'; 'this is a fantasy')",
+                    "Sorting the household library together when reorganizing or moving",
+                    "Recommending books to a friend by genre ('if you liked X, you'll like Y, they're both adventure stories')",
+                ],
+                "conversation_starters": [
+                    "Is the book you're reading a made-up story or about real things?",
+                    "What kind of book do you feel like tonight? Story, or learning something?",
+                    "Want me to find you a how-to book about the thing you're trying to build?",
+                ],
+                "resource_bank": [
+                    "A varied home library across all major sub-genres",
+                    "Library card, used freely",
+                    "Audiobooks across genres for car trips and bedtime",
+                    "A bin or shelf for current-interest nonfiction the child has chosen for themselves",
+                ],
+                "parent_role": (
+                    "Talk about books in the family conversation as if genre were a real thing the household notices. "
+                    "Welcome the child's preferences, including the long stretches in one genre. Notice across months "
+                    "whether they're widening or staying in one place; both are fine; widening can be invited but not "
+                    "forced."
+                ),
+                "observation_documentation": (
+                    "Across a term, note the genres the child returns to, the genres the child has not touched, and the "
+                    "real-world choices the child makes by genre. This noticing replaces any test."
+                ),
+            },
+        },
+        "connections": {
+            "math": "Sorting and classification are the same skills used in math when sorting shapes, numbers, or sets; genre is one more sort",
+            "science": "Nonfiction informational text is the central reading mode for science; recognizing it as a category supports the reading-of-science",
+            "history": "Biography and historical fiction together carry much of the elementary history sequence; recognizing the genre tells the child which mode to read in",
+            "writing": "Recognizing the kinds of writing in published books prepares the child to write within those kinds (writing a how-to, writing a short biography, writing a story); writing-strand connections continue from here",
+        },
+    },
 }
