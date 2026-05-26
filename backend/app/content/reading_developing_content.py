@@ -7422,4 +7422,381 @@ READING_DEVELOPING_CONTENT = {
             "writing": "When the child writes their own nonfiction (a report, a short article), they can now use headings and captions deliberately to structure their writing",
         },
     },
+    "rd-19": {
+        "enriched": True,
+        "learning_objectives": [
+            "Generate a good research question from genuine curiosity that is narrow enough to answer in a short report",
+            "Find information in books and approved sources (children's encyclopedia, vetted children's websites, library reference shelf)",
+            "Take simple notes from sources, recording where each piece of information came from",
+            "Organize gathered information into a short informational report with a clear topic and three to five main points",
+            "Recognize that not every source is equally trustworthy; learn the early signs of a strong versus weak source",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "rd-02 introduced chapter books; the child has been reading nonfiction across the developing band. "
+                "Research skills bring nonfiction reading into purposeful use: the child generates a question, finds "
+                "information, takes notes, organizes the findings, and produces a short report. The four core skills "
+                "are QUESTION (narrow enough to answer), SOURCE (find books and approved digital sources), NOTE "
+                "(record information and where it came from), and ORGANIZE (build a short report). Honest content "
+                "note about online sources: at this band, prefer librarian-vetted children's databases (PebbleGo, "
+                "BrainPOP, World Book Kids, Encyclopedia Britannica Kids) over open web search. The child meets "
+                "source-evaluation only at an introductory level here."
+            ),
+            "scaffolding_sequence": [
+                "Begin with question-generation: child names a topic of genuine curiosity (volcanoes, octopuses, Egyptian pyramids); together narrow to a question of right size (not 'tell me about volcanoes' but 'how does a volcano erupt?')",
+                "Demonstrate sources: open a children's encyclopedia entry on the topic; show how to find the answer; show a children's nonfiction book on the topic; demonstrate the text-feature skills from rd-18",
+                "Introduce notes: write each fact found on a card or in a notebook column, with the source noted in shorthand ('World Book p. 124')",
+                "Demonstrate organizing: after several sources are checked, group the notes by sub-topic; identify three to five main points to make in the report",
+                "Demonstrate report-writing: a paragraph for each main point; an opening sentence introducing the topic; a closing sentence wrapping up",
+                "Repeat the cycle on a second topic with less scaffolding",
+                "Introduce simple source evaluation: a children's encyclopedia is more reliable than a random website; a published book with sources is more reliable than a blog post; a primary source (a scientist's actual writing) is more direct than a secondary source (a writer summarizing the scientist)",
+                "Build the habit: across the term, research several topics and produce several short reports",
+            ],
+            "socratic_questions": [
+                "What do you want to know? Can you ask the question in one sentence?",
+                "Is this question the right size: not too big to answer, not too small to be interesting?",
+                "Where could you look to find the answer?",
+                "How will you remember what you find from each source?",
+                "Is this source one you trust? How can you tell?",
+            ],
+            "practice_activities": [
+                "Question-narrowing practice: take a big topic ('animals') and narrow to a good research question ('how do octopuses use their arms?')",
+                "Source-finding practice: given a question, find at least two sources (one book and one approved digital source)",
+                "Note-taking practice: read a paragraph; take three brief notes with the source noted",
+                "Organize-and-report practice: take the notes from one topic; group them; write a five-paragraph report (topic, three points, conclusion)",
+                "Source-evaluation introduction: present three sources on the same topic (an encyclopedia, a children's book, a random blog post); discuss which to trust and why",
+            ],
+            "real_world_connections": [
+                "Doing genuine research when the child wants to learn something (how does a guitar work, what is the moon made of, who lived in this town a hundred years ago)",
+                "Library use: librarians help research; the reference desk is a real resource",
+                "Recognizing research in adult life (figuring out which car to buy, where to take a vacation, how to fix something at home)",
+                "Beginning the habit of looking things up rather than guessing or believing the first answer found",
+                "Recognizing science, history, and journalism as research-based work",
+            ],
+            "common_misconceptions": [
+                "Believing research means typing a question into a search box and reading the first result. Real research uses multiple sources and evaluates them.",
+                "Believing every source online is trustworthy. Sources vary; evaluation is essential.",
+                "Believing notes should copy the source word for word. Notes should be in the child's own words; copying without quotation marks is plagiarism.",
+                "Believing a research question should be huge. Good research questions are narrow enough to actually answer.",
+                "Believing research is only for school. Research is a lifelong skill; the curious adult researches things all the time.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Generates a research question of right size",
+                "Finds at least two appropriate sources",
+                "Takes notes in own words with source attribution",
+                "Organizes notes into a short report with topic, three to five main points, and conclusion",
+                "Distinguishes more-trustworthy from less-trustworthy sources at an introductory level",
+            ],
+            "proficiency_indicators": [
+                "Completes most steps with prompting",
+                "Produces a report that includes notes but lacks organization",
+            ],
+            "developing_indicators": [
+                "Cannot narrow a question or find appropriate sources",
+                "Copies from a source without attribution or own-words paraphrase",
+            ],
+            "assessment_methods": [
+                "completed short report scored against a simple rubric",
+                "research-process observation: question, source, note, organize",
+                "source-evaluation discussion",
+                "note quality (paraphrased not copied; source attributed)",
+            ],
+            "sample_assessment_prompts": [
+                "Pick a topic you want to know about. Narrow it to a research question.",
+                "Find two sources on your question. Take notes from each. Write a short report with three main points.",
+                "Look at these three sources. Which would you trust most for a school report? Why?",
+                "Show me your notes. Why did you write the source on each note?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What is a good first step in any research project?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Type your topic into the first search box you find.",
+                    "Generate a clear research question that is narrow enough to actually answer.",
+                    "Start writing the report.",
+                    "Pick a font.",
+                ],
+                "correct_answer": "Generate a clear research question that is narrow enough to actually answer.",
+                "hints": [
+                    "Research begins with a question.",
+                ],
+                "explanation": (
+                    "Research begins with a good question. A question of right size (narrow enough to answer, "
+                    "interesting enough to want to know) shapes the whole rest of the project. Without a clear "
+                    "question, research becomes wandering."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "Which of these is a good research question?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Tell me about animals.",
+                    "How do octopuses use their arms to solve problems?",
+                    "Why is everything?",
+                    "Tell me everything about space.",
+                ],
+                "correct_answer": "How do octopuses use their arms to solve problems?",
+                "hints": [
+                    "Good questions are narrow enough to answer.",
+                ],
+                "explanation": (
+                    "'How do octopuses use their arms to solve problems?' is the right size: a clear focus, "
+                    "answerable in a short report, interesting. The others are too broad ('animals', 'space') or too "
+                    "vague ('why is everything?') to be researched. Narrowing a question is half the research."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "Why should you write down the source for each note you take?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Decoration; it doesn't matter.",
+                    "So you can return to the source if you need to check, and so you can give credit to the source in your report.",
+                    "So your notes look longer.",
+                    "Because it is required for style.",
+                ],
+                "correct_answer": "So you can return to the source if you need to check, and so you can give credit to the source in your report.",
+                "hints": [
+                    "Sources let you verify and give credit.",
+                ],
+                "explanation": (
+                    "Source attribution lets you return to a source if you need to verify a fact or read more, and it "
+                    "lets you give credit in your report. Real researchers always know where their information came "
+                    "from; this discipline begins now."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "You find three sources on a topic: a children's encyclopedia article, a book published by a "
+                    "university press, and a random blog post by someone you do not know. Which is most likely to be "
+                    "trustworthy?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "The blog post.",
+                    "The encyclopedia and the published book are both more reliable than the random blog; the blog may or may not be accurate.",
+                    "All three are equally trustworthy.",
+                    "Only the blog post, because it is on the internet.",
+                ],
+                "correct_answer": "The encyclopedia and the published book are both more reliable than the random blog; the blog may or may not be accurate.",
+                "hints": [
+                    "Published, edited sources are usually more reliable than unedited ones.",
+                ],
+                "explanation": (
+                    "Encyclopedias and university press books pass through editors and fact-checkers; their accuracy "
+                    "is much higher on average than a random blog post. Blogs by experts can be reliable, but you "
+                    "need more skill to evaluate them. At this band, prefer encyclopedias, vetted children's "
+                    "databases, and published books for research."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Pick something you genuinely want to know. Generate a research question. Name two sources you "
+                    "could use. Describe the first note you might take and how you would write the source on it."
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Walk through the four steps: question, source, note, source-attribution.",
+                ],
+                "explanation": (
+                    "A complete answer names the topic, the question, two real sources, a sample note, and the source "
+                    "shorthand for that note. With practice, this process becomes natural and the child does small "
+                    "research projects on their own curiosities."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Pick a topic you want to research. Generate a research question. Find two sources. Take notes from each, with source attribution. Write a short report with three to five main points.",
+                "type": "open_response",
+                "target_concept": "full_research_cycle",
+                "rubric": (
+                    "Mastery: question is narrow and clear; two appropriate sources; notes paraphrased and attributed; "
+                    "report has topic, main points, and conclusion. Proficient: cycle completed but one element weak. "
+                    "Developing: cycle incomplete."
+                ),
+            },
+            {
+                "prompt": "Look at these three sources on the same topic. Rank them by how trustworthy you would consider them for a school report. Explain your ranking.",
+                "type": "open_response",
+                "target_concept": "source_evaluation_introduction",
+                "rubric": (
+                    "Mastery: ranks appropriately with reasoning about authorship, publication, and editorial process. "
+                    "Proficient: ranks correctly with weak reasoning. Developing: cannot distinguish."
+                ),
+            },
+            {
+                "prompt": "Show me your research notes from a recent project. Explain how you took notes in your own words and why source attribution matters.",
+                "type": "open_response",
+                "target_concept": "note_taking_discipline",
+                "rubric": (
+                    "Mastery: notes are paraphrased in own words; each note has source; child can explain why both "
+                    "matter. Proficient: notes paraphrased but source attribution inconsistent. Developing: notes "
+                    "copied or sources missing."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "a children's encyclopedia (World Book, Britannica Kids, or similar) accessible in print or via library subscription",
+                "a children's nonfiction collection across multiple topics (provides source options for research questions)",
+                "a research notebook or note-cards for the child to use",
+            ],
+            "recommended": [
+                "library card and walking-distance library access (a librarian is a child's best research ally)",
+                "subscription access to a vetted children's database (PebbleGo, BrainPOP, World Book Kids)",
+                "a simple report template (title, introduction, three main-point paragraphs, conclusion) on a card",
+                "an atlas, almanac, and field guides as reference works",
+            ],
+        },
+        "time_estimates": {"first_exposure": 45, "practice_session": 30, "assessment": 60},
+        "accommodations": {
+            "dyslexia": "Use audiobook nonfiction sources where possible. Speech-to-text for note-taking. Verbal report rehearsal before writing. Sources can be read aloud; the research thinking is separate from the decoding load.",
+            "adhd": "Break the research cycle into separate sessions: question one day, sources another day, notes another day, organizing and writing another day. Short tasks with clear endings.",
+            "gifted": "Move to more sophisticated questions and longer reports. Introduce primary sources (a scientist's actual paper at child-accessible level; a historical document; a transcribed oral history). Begin to handle multiple competing sources.",
+            "visual_learner": "Use a research graphic organizer: question at the center, sources around it, notes branching from each source. The visual map keeps the project organized.",
+            "kinesthetic_learner": "Use index cards rather than notebook pages; sort and re-sort cards by sub-topic. Physical handling of notes supports organization.",
+            "auditory_learner": "Discuss the question and findings aloud throughout the process. Verbalize the planned report before writing.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we learn to do research: ask a question, find sources, take notes, organize findings, "
+                    "and write a short report. This is one of the most useful skills a reader and writer can have. "
+                    "We learn the cycle on a topic of genuine curiosity, then repeat it on more topics across the year."
+                ),
+                "gradual_release": {
+                    "i_do": "Parent demonstrates the full cycle on a topic of the child's choice: narrows the question; finds sources; takes notes with attribution; organizes; writes a sample report.",
+                    "we_do": "Together do a second research cycle, with the child taking more of the work.",
+                    "you_do": "Child does a research cycle independently and presents the report.",
+                },
+                "guided_practice": [
+                    "Weekly research session on a topic of the child's choice",
+                    "Short reports written and shared",
+                    "Source-evaluation discussion as part of each project",
+                ],
+                "independent_practice": [
+                    "Apply the research cycle to genuine questions across subjects",
+                    "Build a small portfolio of completed reports",
+                ],
+                "mastery_check": [
+                    "Completes the full research cycle independently",
+                    "Produces a short report on an assigned or self-chosen topic",
+                    "Recognizes more-trustworthy from less-trustworthy sources",
+                ],
+                "spiral_review": [
+                    "Return to earlier reports and notice how research skills have improved across the year",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "The classical disciplines of grammar, logic, and rhetoric have always rested on research: the "
+                    "patient gathering of evidence, the careful weighing of sources, the well-organized presentation. "
+                    "To research is to follow in the footsteps of every scholar from Aristotle forward. The skill is "
+                    "the foundation of all serious learning."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the four steps: question, source, note, organize",
+                        "Recite the discipline: every note carries its source",
+                    ],
+                    "recitations": [
+                        "Memorize the parts of a short report: topic introduction, main points (three to five), conclusion",
+                    ],
+                },
+                "copywork": [
+                    "Copy a model report (one to two paragraphs) into the copybook as a structural template",
+                ],
+                "recitation_routine": "When a research project is complete, the child gives an oral report from notes or memory before writing the report.",
+                "history_integration": "History is itself research: every history book is the product of research, and reading history teaches the form. Begin to use primary sources (letters, journals) alongside encyclopedia and book sources.",
+                "read_aloud_suggestions": [
+                    "Children's nonfiction series that show research practice (the DK Eyewitness titles list sources at the back; Russell Freedman's biographies show meticulous research)",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 30,
+                "living_book_suggestions": [
+                    "Living nonfiction across topics so the child has options when choosing a research question",
+                ],
+                "short_lesson_flow": "Research projects can stretch across a week or more; brief daily sessions of fifteen to twenty minutes work better than one long session. Each day: a small step of the cycle. By week's end the report is complete.",
+                "narration_prompt": "Tell me what you found today. Where did you find it? What was new to you?",
+                "real_world_objects": [
+                    "A research notebook with sections for question, sources, notes, organized findings, and final report",
+                    "A small set of reference works in the family library",
+                ],
+                "nature_connection": "Nature-study questions ('how do moths find their way at night?' 'why do leaves turn color in fall?') are wonderful starting topics for research; the child's own observations make the question alive.",
+                "habit_focus": "The habit of looking things up. The child who looks up what they want to know grows into the adult who does the same.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A research-cycle work card with the four steps clearly listed",
+                    "A children's encyclopedia or reference collection",
+                    "A set of question-narrowing example cards (big topic, narrower topic, good question)",
+                    "Note-cards or a research notebook",
+                    "A short-report template card",
+                ],
+                "presentation": {
+                    "three_period_lesson": "This is a research question; this is a source; this is a note; this is a report. Show me a research question. Is this a question or a topic? Is this a note or a copy?",
+                    "steps": [
+                        "The guide presents the four steps of the research cycle with a worked example on a topic of the child's interest",
+                        "The child does a research cycle with support: each step is checked before the next begins",
+                        "The child does subsequent research cycles independently",
+                        "The child reports back to the family or group, sharing what was learned",
+                        "Across the term the child develops fluency in the cycle",
+                    ],
+                },
+                "control_of_error": "The sources are the control: if the report says X, the source should support it. The child can return to the source to check.",
+                "abstraction_pathway": "From scaffolded one-source projects, to two-source projects with paraphrased notes, to multi-source projects with primary and secondary sources.",
+                "extensions": [
+                    "Primary source work: read original letters, diaries, or scientific papers (at child-accessible level)",
+                    "Multi-source comparison: when sources disagree, what does the researcher do?",
+                    "Begin to format reports with text features (headings, captions) using the rd-18 work",
+                ],
+                "observation_focus": "Watch for the child taking initiative in research: choosing a question, going to the bookshelf or library, taking notes without being told.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "When the child asks a question, say 'how could we find out?' rather than simply answering",
+                    "Keep a research-friendly environment: reference works, library card, vetted databases bookmarked",
+                    "Take research projects together: parent and child research the same question side by side",
+                ],
+                "real_world_contexts": [
+                    "Researching purchases (which bike, which board game)",
+                    "Researching trips (how does a passport work, what is in this national park)",
+                    "Researching answers to questions the child genuinely wants to know",
+                ],
+                "conversation_starters": [
+                    "What do you wonder about? Could we look it up together?",
+                    "Where might we find a good answer to that?",
+                    "Was the source you found helpful? Could we check another?",
+                ],
+                "resource_bank": [
+                    "Library card and library habit",
+                    "Vetted children's databases the child can use",
+                    "Family reference works on the home shelf",
+                ],
+                "parent_role": "Be a researcher yourself in front of the child. Look things up, name your sources, share what you learn. Welcome the child's questions and follow them into the library.",
+                "observation_documentation": "Note when the child looks things up on their own. Note when they begin to weigh sources. These are the markers of internalized research habit.",
+            },
+        },
+        "connections": {
+            "math": "Research questions in math ('how did the Mayans count?' 'who invented zero?') connect math to its history and to research practice",
+            "science": "Science learning at every level is itself research; this skill is the foundation of science learning for the rest of the child's life",
+            "history": "History and research are continuous; primary sources, secondary sources, and the writing of reports are the basic operations of historical learning",
+            "writing": "Research writing is one of the major modes of nonfiction writing; the short report at this band grows into longer reports, essays, and articles across years",
+        },
+    },
 }
