@@ -3392,4 +3392,366 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
             "standard_refs": [],
         },
     },
+    "elc-008": {
+        "node_type": "knowledge",
+        "trade": "electrical",
+        "competency_name": (
+            "Grounding and bonding theory for a residential electrical system "
+            "(concepts and AHJ-adopted NEC reference; NOT a license to perform "
+            "energized grounding work alone)"
+        ),
+        "progression_band": "helper",
+        "prerequisites": ["els-001", "elc-006"],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "Confusing GROUNDING with BONDING. The two are distinct: grounding "
+                    "connects the system to earth; bonding connects metal parts that "
+                    "could otherwise be at different potentials. Both are required; "
+                    "they serve different safety functions. Confusion between them is "
+                    "the most-documented residential electrical knowledge gap and the "
+                    "reason this competency exists at the helper band."
+                ),
+                (
+                    "Bonding neutral to ground at a subpanel (instead of at the main "
+                    "service equipment only). This creates parallel return paths via "
+                    "the equipment grounding conductor under normal operation, can "
+                    "energize metal equipment under fault, and can cause shock or "
+                    "fire. The AHJ-adopted NEC bonds at the main service equipment "
+                    "ONLY (Article 250 in current editions)."
+                ),
+                (
+                    "Treating the equipment grounding conductor as if it carries "
+                    "current under normal operation. The EGC is a SAFETY BOND that "
+                    "carries current ONLY during a fault (when insulation failure "
+                    "places a hot conductor in contact with metal that should be at "
+                    "ground potential). Designing or wiring as if the EGC normally "
+                    "carries current is wrong and dangerous."
+                ),
+                (
+                    "Believing that 'a ground rod is enough.' Ground rods alone "
+                    "typically have high resistance to earth (often hundreds of "
+                    "ohms); they cannot safely clear a fault by themselves. The "
+                    "fault-clearing safety function depends on the LOW-IMPEDANCE PATH "
+                    "back to the source (utility neutral) through the equipment "
+                    "grounding conductor and the main bonding jumper. The ground rod's "
+                    "role is to bond the system to earth potential, not to be a "
+                    "fault path. The AHJ-adopted NEC's separate fault-current path "
+                    "and grounding-electrode requirements both exist for distinct "
+                    "reasons."
+                ),
+                (
+                    "Performing energized grounding work without a licensed "
+                    "electrician present. Grounding theory at this band is "
+                    "CONCEPTUAL ONLY; the AHJ-adopted NEC's grounding-electrode "
+                    "system, main bonding jumper, equipment grounding conductor, and "
+                    "intersystem bonding work are all licensed-electrician work "
+                    "regulated by the AHJ. Knowledge of the theory does NOT "
+                    "authorize hands-on grounding work."
+                ),
+            ],
+            "ppe_required": [
+                "Trade PPE per els-001; no additional PPE for paper work",
+            ],
+            "supervision_required": False,
+            "supervision_basis": (
+                "Conceptual work with the AHJ-adopted NEC Article 250 in hand and "
+                "the AI tutor. No hands-on grounding work at this band. Knowledge "
+                "of grounding and bonding theory does NOT authorize hands-on "
+                "grounding work; that work is licensed-electrician work and is not "
+                "in scope at the foundation. The AI tutor names this rule "
+                "throughout the competency."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "The household's AHJ-adopted-edition NEC, Article 250",
+                "specification": (
+                    "The current NEC adopted by the local AHJ; Article 250 governs "
+                    "grounding and bonding. The article structure (general; system "
+                    "grounding; grounding electrode system; main bonding jumper; "
+                    "equipment grounding; equipment grounding conductors; bonding) "
+                    "is the reference for this competency. The node does NOT "
+                    "reproduce code text."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "A residential grounding-and-bonding diagram",
+                "specification": (
+                    "A diagram showing the grounding electrode system (ground "
+                    "rod(s), water-pipe bond if accessible, concrete-encased "
+                    "electrode if present, intersystem bonding termination), the "
+                    "grounding electrode conductor (GEC) from the panel to the "
+                    "electrodes, the main bonding jumper at the main service "
+                    "equipment bonding neutral to ground ONCE, the equipment "
+                    "grounding conductors running with every branch circuit, and "
+                    "the bonded metal water pipe and gas pipe (where required by "
+                    "the AHJ-adopted NEC). The AI tutor provides one."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Pencil, paper, and a notebook",
+                "specification": "Standard; the learner annotates the diagram and writes worked explanations",
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [],
+        "workspace_requirements": {
+            "surface": "Any flat surface (desk or table)",
+            "ventilation": "Indoor or outdoor; not relevant",
+            "lighting": "Adequate to read the code and the diagram",
+            "power": "None",
+            "containment": "None required",
+        },
+        "skill_description": (
+            "The learner builds a sound conceptual understanding of grounding and "
+            "bonding, the two distinct (and complementary) safety mechanisms in a "
+            "residential electrical system. GROUNDING refers to the connection of "
+            "the electrical system to earth: the GROUNDING ELECTRODE SYSTEM (one "
+            "or more ground rods, a water-pipe bond to the metallic water service "
+            "if present, a concrete-encased 'Ufer' electrode if part of the slab, "
+            "an intersystem bonding termination for telephone / cable / similar "
+            "systems) is connected to the panel's neutral / ground bus by the "
+            "GROUNDING ELECTRODE CONDUCTOR (GEC). The grounding electrode system "
+            "stabilizes the system voltage with respect to earth; it does NOT "
+            "primarily provide a fault-clearing path. BONDING refers to the "
+            "deliberate connection of metal parts so that they share the same "
+            "electrical potential and cannot energize relative to each other "
+            "under fault. The MAIN BONDING JUMPER bonds the neutral to ground "
+            "ONCE at the main service equipment (and only there, per the AHJ-"
+            "adopted NEC); the EQUIPMENT GROUNDING CONDUCTOR (EGC) bonds every "
+            "branch circuit's metal raceway and equipment back to the panel; "
+            "metal water and gas piping is bonded where the AHJ-adopted NEC "
+            "requires; intersystem bonding terminates the bonding of telephone, "
+            "cable, antenna, and similar systems at the service. The "
+            "FAULT-CLEARING PATH is the LOW-IMPEDANCE PATH a fault current "
+            "follows when a hot conductor contacts metal that should be at "
+            "ground potential: through the EGC back to the panel, through the "
+            "main bonding jumper to the neutral, and through the neutral back "
+            "to the utility transformer. The breaker operates only when the "
+            "fault current is high enough to trip it, which requires a "
+            "LOW-IMPEDANCE PATH. The ground rod is too high in resistance to "
+            "carry fault current safely; if the only path were ground rod to "
+            "earth, the breaker would NOT trip and metal equipment would stay "
+            "energized at lethal voltage. This is the most-misunderstood part "
+            "of residential electrical theory and the reason elc-008 exists at "
+            "the helper band. The learner annotates the diagram, names every "
+            "component, and writes one paragraph explaining the difference "
+            "between grounding and bonding, in plain language, with the "
+            "fault-clearing path as the centerpiece. Knowledge of this theory "
+            "does NOT authorize hands-on grounding work; the AHJ-adopted NEC's "
+            "grounding-and-bonding requirements are licensed-electrician work."
+        ),
+        "demonstration_criteria": [
+            (
+                "Names the distinction between GROUNDING (connection to earth) and "
+                "BONDING (connection between metal parts to keep them at the same "
+                "potential); explains in one paragraph why both are required and "
+                "how they serve different safety functions"
+            ),
+            (
+                "Names the components of the grounding electrode system likely in "
+                "the household: ground rod(s), water-pipe bond if the metallic "
+                "water service is present, concrete-encased electrode if present, "
+                "intersystem bonding termination"
+            ),
+            (
+                "Names the grounding electrode conductor (GEC) and its role: "
+                "connects the panel's neutral / ground bus to the grounding "
+                "electrode system"
+            ),
+            (
+                "Names the main bonding jumper and its role: bonds neutral to "
+                "ground ONCE at the main service equipment; this is the only "
+                "place in the system where neutral and ground are bonded together"
+            ),
+            (
+                "Names the equipment grounding conductor (EGC) and its role: the "
+                "low-impedance path from every metal raceway and metal equipment "
+                "back to the panel, used to clear a fault"
+            ),
+            (
+                "Names the fault-clearing path explicitly: hot contacts metal that "
+                "should be at ground potential -> fault current flows through the "
+                "EGC back to the panel -> through the main bonding jumper to the "
+                "neutral -> through the neutral back to the utility transformer "
+                "-> the resulting high fault current trips the breaker"
+            ),
+            (
+                "Names that the ground rod's role is to bond the system to earth "
+                "potential, NOT to be the fault-clearing path; the ground rod's "
+                "resistance to earth is typically too high to clear a fault by "
+                "itself"
+            ),
+            (
+                "Names the rule that bonding neutral to ground at a subpanel is a "
+                "code violation per the AHJ-adopted NEC, and names the failure "
+                "modes (parallel return paths on EGC, energized metal equipment "
+                "under fault)"
+            ),
+            (
+                "Names that hands-on grounding work is licensed-electrician work "
+                "and is not in scope at the foundation; this knowledge competency "
+                "does NOT authorize the learner to perform grounding work"
+            ),
+            (
+                "Annotates a residential grounding-and-bonding diagram with every "
+                "component named correctly; submits to the AI tutor for "
+                "confirmation"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Calling 'a ground rod' the safety mechanism that protects from shock",
+                "cause": "The learner did not internalize that the EGC and the bonding system, not the ground rod, are what clear faults",
+                "remedy": (
+                    "The ground rod stabilizes the system to earth potential. The "
+                    "EGC (and the main bonding jumper, and the neutral back to the "
+                    "transformer) are the low-impedance fault path that allows the "
+                    "breaker to trip. Without the EGC, the breaker would not trip "
+                    "on a fault even with a ground rod present. The AI tutor walks "
+                    "the fault-clearing path explicitly."
+                ),
+            },
+            {
+                "error": "Bonding neutral to ground at a subpanel",
+                "cause": "The learner did not internalize the once-only bonding rule",
+                "remedy": (
+                    "The neutral-to-ground bond exists at the main service "
+                    "equipment ONLY. At a subpanel, the neutral and ground are "
+                    "isolated: the neutral bus floats relative to the enclosure; "
+                    "the ground bus is bonded to the enclosure. Duplicating the "
+                    "bond at the subpanel creates parallel return paths through "
+                    "the EGC and can energize metal equipment under fault."
+                ),
+            },
+            {
+                "error": "Treating the EGC as if it carries current normally",
+                "cause": "The learner confused the EGC with the neutral",
+                "remedy": (
+                    "Under normal operation the EGC carries NO current; the "
+                    "neutral carries the return current. The EGC carries current "
+                    "ONLY during a fault. Designing or wiring as if the EGC "
+                    "normally carries current is wrong; if you see current on "
+                    "the EGC under normal operation, something is misconfigured."
+                ),
+            },
+            {
+                "error": "Bonding metal water piping but skipping intersystem bonding",
+                "cause": "The learner did not study the AHJ-adopted NEC's intersystem-bonding requirement",
+                "remedy": (
+                    "The AHJ-adopted NEC requires intersystem bonding termination "
+                    "at the service to bond telephone, cable, antenna, and "
+                    "similar systems to the grounding electrode system. The "
+                    "purpose is to keep all utility entrances at the same "
+                    "potential during a transient (lightning surge, line fault). "
+                    "Skipping it leaves potential-difference vulnerabilities."
+                ),
+            },
+            {
+                "error": "Thinking the EGC is optional on residential branches",
+                "cause": "The learner saw old two-wire installations and concluded the EGC was optional",
+                "remedy": (
+                    "Modern residential branch circuits per the AHJ-adopted NEC "
+                    "include an EGC (the bare or green conductor in NM-B cable; "
+                    "the equipment-grounding conductor in a separate raceway "
+                    "system). Old two-wire installations (no EGC) are legacy and "
+                    "are addressed by the AHJ-adopted NEC's specific exceptions "
+                    "(GFCI protection in some cases). New work follows the "
+                    "current code; legacy work is treated specifically per the "
+                    "AHJ."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "document",
+            "what_to_capture": (
+                "An annotated grounding-and-bonding diagram of a typical "
+                "residential service with the household's actual configuration "
+                "noted (which grounding electrodes are present: ground rod, "
+                "water-pipe bond, Ufer, intersystem bonding), with the GEC, "
+                "main bonding jumper, EGC, and bonded metal systems all labeled; "
+                "plus a one-paragraph written explanation of the difference "
+                "between grounding and bonding and the fault-clearing path. "
+                "Submitted to the AI tutor for confirmation."
+            ),
+            "what_the_evidence_shows": (
+                "That the learner has internalized the distinction between "
+                "grounding and bonding, can name every component of the system, "
+                "can trace the fault-clearing path, and can name the licensed-"
+                "electrician scope boundary on hands-on work"
+            ),
+        },
+        "mentor_signoff_required": False,
+        "pedagogy": {
+            "i_do": (
+                "The AI tutor walks the learner through a residential grounding-"
+                "and-bonding diagram, naming every component and tracing the "
+                "fault-clearing path explicitly. Names the once-only bonding "
+                "rule and the role of the ground rod (stabilize to earth; not a "
+                "fault path)."
+            ),
+            "we_do": (
+                "The AI tutor and the learner annotate a sample diagram "
+                "together. The learner names a component; the AI confirms or "
+                "corrects. The AI poses the question 'what happens during a "
+                "ground fault if the EGC is missing?' and walks the learner "
+                "through the answer."
+            ),
+            "you_do_supervised": (
+                "The learner annotates a diagram of the household's own "
+                "service grounding-and-bonding, names every component, and "
+                "writes the one-paragraph explanation. Submits to the AI tutor "
+                "for confirmation."
+            ),
+            "you_do_unsupervised": (
+                "Once the learner can produce a correct annotated diagram and "
+                "explanation across at least two sessions, they may continue to "
+                "the apprentice band's deeper Article-250 work (sizing the GEC, "
+                "sizing the EGC for different branch capacities, parallel "
+                "feeders, separately derived systems). Hands-on grounding work "
+                "remains licensed-electrician work and is not in scope at any "
+                "point in the foundation."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 5,
+        "session_length_minutes": 45,
+        "related_projects": [],
+        "certification_alignment": {
+            "ladder_rung": "helper",
+            "notes": (
+                "Knowledge competency. Grounding and bonding is the most "
+                "safety-critical conceptual area in residential electrical "
+                "theory and is heavily tested on every journeyman and master "
+                "exam."
+            ),
+            "certifications_supported": [
+                {
+                    "id": "elcert-nec",
+                    "domains": [
+                        "NEC Article 250 grounding and bonding (every part)",
+                        "fault-clearing path concept (NFPA 70E and NEC),",
+                        "intersystem bonding (NEC 250.94)",
+                    ],
+                    "notes": "Article 250 is one of the most-tested NEC chapters on every journeyman and master exam.",
+                },
+                {
+                    "id": "elcert-licensing",
+                    "domains": [
+                        "grounding and bonding at journeyman and master depth",
+                    ],
+                    "notes": "Universal foundational knowledge.",
+                },
+            ],
+        },
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
+    },
 }
