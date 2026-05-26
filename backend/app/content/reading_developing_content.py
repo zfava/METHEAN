@@ -8168,4 +8168,380 @@ READING_DEVELOPING_CONTENT = {
             "writing": "The reading log is one of the easiest doorways into the writing life; the child who logs their reading often begins to write more freely",
         },
     },
+    "rd-21": {
+        "enriched": True,
+        "learning_objectives": [
+            "Participate in a book discussion by asking real questions about a shared reading",
+            "Build on others' ideas instead of waiting only to share their own view: 'I agree with X because...' or 'I see it differently because...'",
+            "Support an opinion about a book with evidence from the text: 'I think Y because the book says Z'",
+            "Listen actively, name what others have said, and engage their reasoning rather than only their conclusions",
+            "Disagree well: respect the person while engaging the idea; the goal is shared understanding, not winning",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "rd-02 introduced chapter books; the child has been reading widely. Book discussion turns reading into "
+                "a shared practice. Three skills are central: ASKING (a real question about the book, not a quiz "
+                "question), BUILDING (responding to what others have said: agreeing with reasoning, disagreeing with "
+                "reasoning, asking a follow-up), and SUPPORTING (every opinion about a book backed with text evidence: "
+                "'I think the dragon was lonely because the book describes him sitting alone for chapters'). Honest "
+                "content note: book discussion goes wrong when it becomes either a quiz (parent asks, child answers, "
+                "no real exchange) or an opinion-fest (everyone shares their view with no engagement). The goal is "
+                "shared understanding, achieved by listening, building, and grounding opinions in the text."
+            ),
+            "scaffolding_sequence": [
+                "Read the same book together (parent and child, or a family read-aloud). Both come to the discussion having read it.",
+                "Begin with an open question: 'what stood out to you in this chapter?' or 'what surprised you?'",
+                "Demonstrate building: when the child shares, parent says 'I agree because X' or 'I noticed something different: Y'. The exchange is real.",
+                "Demonstrate text-evidence support: 'I think X because the book says Y'. Every opinion grounded in the text.",
+                "Demonstrate listening: parent re-states what the child said before responding: 'so you think the character was scared. I see that too because...'",
+                "Practice disagreement: parent disagrees with the child's reading respectfully and with text evidence; child practices doing the same",
+                "Expand to small group discussions: family book discussions, book clubs of two or three children, library reading groups",
+                "Build the habit: book discussion as a regular family practice rather than an occasional event",
+            ],
+            "socratic_questions": [
+                "What stood out to you in this chapter? Why?",
+                "What do you think about what X just said?",
+                "What in the book makes you think that?",
+                "Did anyone read this passage differently? Tell us how.",
+                "What questions are you left with at the end of the chapter?",
+            ],
+            "practice_activities": [
+                "Family book discussion at the end of each shared reading session: open question, building exchange, text-grounded opinion",
+                "Question-asking practice: child generates real questions about a chapter (not factual recall questions; open questions about meaning, character, theme)",
+                "Build-on-others practice: 'I agree with X because' or 'I see it differently because'; deliberate use of these moves",
+                "Text-evidence practice: every opinion supported with 'because the book says...' before being accepted",
+                "Disagreement practice: parent and child practice respectful disagreement; the goal is shared understanding, not winning",
+            ],
+            "real_world_connections": [
+                "Adult book clubs and reading groups, which depend on these same skills",
+                "Classroom and homeschool group discussions about books",
+                "Online book discussions, which require the same skills but offer special challenges",
+                "Discussing movies, shows, and shared experiences in the same way; the skill transfers",
+                "Civic discourse: discussing ideas with text and evidence rather than only opinions is the foundation of democratic conversation",
+            ],
+            "common_misconceptions": [
+                "Believing book discussion is about being right. The goal is shared understanding, not winning.",
+                "Believing opinions don't need support. An ungrounded opinion is hard to engage; a text-grounded opinion invites real exchange.",
+                "Believing the parent or teacher asks all the questions. Real discussion has many askers; the child asks too.",
+                "Believing disagreement is rude. Respectful disagreement with text evidence is the highest form of engagement; the goal is to engage the idea, not the person.",
+                "Believing discussion is for older children only. Young children can have rich discussions if the questions are open and the model is real.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Asks real questions about a shared reading",
+                "Builds on what others have said with explicit acknowledgment",
+                "Supports opinions with text evidence using the because-the-book-says frame",
+                "Listens actively, restating others' points before responding",
+                "Disagrees respectfully when their reading differs from others",
+            ],
+            "proficiency_indicators": [
+                "Shares opinions with text evidence with prompting",
+                "Listens but does not yet build on others",
+            ],
+            "developing_indicators": [
+                "Waits to share only own view without engaging others",
+                "Opinions are ungrounded; cannot cite text",
+            ],
+            "assessment_methods": [
+                "discussion participation observation across multiple book discussions",
+                "evidence-quality observation: does the child cite text when sharing opinion?",
+                "build-on-others observation: does the child reference and engage others' contributions?",
+                "post-discussion reflection: what did the child learn from someone else in the discussion?",
+            ],
+            "sample_assessment_prompts": [
+                "We just read this chapter together. What is one real question you have about it?",
+                "What do you think about what X said? Do you agree, disagree, or want to add?",
+                "You said you think Y. What in the book makes you think so?",
+                "What did you learn from someone else's reading of this chapter that you hadn't seen yourself?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What is the goal of a book discussion?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "To win the argument.",
+                    "To reach shared understanding through asking, building, and supporting with text evidence.",
+                    "To prove the parent right.",
+                    "To finish quickly.",
+                ],
+                "correct_answer": "To reach shared understanding through asking, building, and supporting with text evidence.",
+                "hints": [
+                    "Discussion is collaborative, not competitive.",
+                ],
+                "explanation": (
+                    "Book discussion aims at shared understanding. Asking real questions, building on others' ideas, "
+                    "and grounding opinions in text evidence are the three skills that make this possible. The point "
+                    "is not to win but to see the book together more clearly than any one reader could alone."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "Which of these is a real book-discussion question (not a quiz question)?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "How many children were in the family?",
+                    "Why do you think the author chose to end the chapter with that scene?",
+                    "What page is chapter three on?",
+                    "What is the author's last name?",
+                ],
+                "correct_answer": "Why do you think the author chose to end the chapter with that scene?",
+                "hints": [
+                    "Real questions invite thinking and multiple answers.",
+                ],
+                "explanation": (
+                    "A real discussion question has more than one good answer and invites thinking. 'Why do you think "
+                    "the author chose to end the chapter with that scene?' opens conversation. The others have single "
+                    "factual answers; they are quiz questions, not discussion questions."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "How do you support an opinion in a book discussion?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Speak loudly.",
+                    "Cite text evidence: 'I think X because the book says Y'.",
+                    "Repeat the opinion several times.",
+                    "Disagree with others.",
+                ],
+                "correct_answer": "Cite text evidence: 'I think X because the book says Y'.",
+                "hints": [
+                    "Real support comes from the text.",
+                ],
+                "explanation": (
+                    "The because-the-book-says frame turns an opinion into a discussable claim. With evidence, the "
+                    "opinion can be engaged: agreed with, extended, complicated, or respectfully challenged. Without "
+                    "evidence the opinion floats and discussion stalls."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Your sibling has just shared an opinion about a character. You see it differently. What is the "
+                    "best move?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Say they are wrong and laugh.",
+                    "Acknowledge what they said, share your different reading respectfully, and ground your reading in text evidence: 'I see why you think X because of that scene; I read it differently though, because the book also says Y'.",
+                    "Ignore them and share your view.",
+                    "Agree even though you disagree.",
+                ],
+                "correct_answer": "Acknowledge what they said, share your different reading respectfully, and ground your reading in text evidence: 'I see why you think X because of that scene; I read it differently though, because the book also says Y'.",
+                "hints": [
+                    "Respectful disagreement engages the person and the text.",
+                ],
+                "explanation": (
+                    "Respectful disagreement is the highest form of engagement. Acknowledging what was said shows "
+                    "you listened; sharing your different reading shows you have your own view; grounding it in text "
+                    "evidence makes it real. The goal is shared understanding, not winning."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Have a discussion about a chapter of your current shared reading with someone in your family. "
+                    "Write three things afterward: a real question you asked, an opinion you supported with text "
+                    "evidence, and something you learned from someone else's reading."
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Apply the three skills: ask, support, build.",
+                ],
+                "explanation": (
+                    "A complete answer names a real discussion question, a text-grounded opinion, and a takeaway from "
+                    "someone else. The third part is the most important: a discussion that taught you nothing was not "
+                    "a discussion; it was a presentation. Real discussion changes the participants."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Participate in a book discussion about an assigned shared reading. Afterward, name a real question you asked, an opinion you supported with text evidence, and something you learned from someone else.",
+                "type": "open_response",
+                "target_concept": "discussion_participation_three_skills",
+                "rubric": (
+                    "Mastery: all three skills demonstrated; real engagement with others' ideas evident. Proficient: "
+                    "two of three demonstrated. Developing: only own contributions, no engagement with others."
+                ),
+            },
+            {
+                "prompt": "Generate three discussion questions for a chapter of your current shared reading. The questions should be open-ended (more than one good answer).",
+                "type": "open_response",
+                "target_concept": "question_generation",
+                "rubric": (
+                    "Mastery: three open-ended discussion questions, each inviting thinking. Proficient: two open-ended "
+                    "questions; one is a quiz question. Developing: questions are all quiz-style."
+                ),
+            },
+            {
+                "prompt": "Practice a respectful disagreement: read a passage; have a discussion partner share an opinion about it; share your differing reading with acknowledgment and text evidence.",
+                "type": "open_response",
+                "target_concept": "respectful_disagreement_practice",
+                "rubric": (
+                    "Mastery: acknowledges partner's reading; shares own differently; cites text evidence; engages "
+                    "the idea respectfully. Proficient: disagrees but acknowledgment or evidence weak. Developing: "
+                    "cannot disagree respectfully."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "a shared reading book that both the child and a discussion partner are reading",
+                "a regular discussion time (after read-aloud, at tea, at meals)",
+                "willingness in the parent or partner to engage as a real reader, not as a quizzer",
+            ],
+            "recommended": [
+                "a wall card with the three discussion moves: ask, build, support",
+                "a sentence-frame card: 'I agree with X because...', 'I see it differently because...', 'I think Y because the book says Z'",
+                "a small homeschool book club with two or three other children for varied discussion practice",
+                "the family read-aloud as a regular site for shared reading and discussion",
+            ],
+        },
+        "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 30},
+        "accommodations": {
+            "dyslexia": "Discussion can happen entirely orally; reading load is on the shared reading, not on the discussion. Many strong discussers are weaker readers; discussion lets the thinking show without the writing barrier.",
+            "adhd": "Brief discussions are fine; one good exchange beats a half-hour of half-engaged talk. Have a clear opening question and a clear ending.",
+            "gifted": "Move to more sophisticated discussion: theme, structure, author's craft. Introduce literary terms (irony, foreshadowing) as they come up naturally. Take part in adult or older-children discussions where possible.",
+            "visual_learner": "Use a discussion-moves card visible during discussion. Some discussers benefit from drawing or doodling while they listen and speak.",
+            "kinesthetic_learner": "Discuss while doing something light with the hands (knitting, building with blocks, walking). Many discussers think better with hands occupied.",
+            "auditory_learner": "Most discussions are auditory by nature; this is the natural mode for many strong discussers.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we learn to discuss books. We learn to ask real questions, to build on what others say, "
+                    "and to support our opinions with evidence from the text. We learn that disagreement done well "
+                    "is the highest form of engagement, and that the goal is shared understanding."
+                ),
+                "gradual_release": {
+                    "i_do": "Parent demonstrates a real discussion turn: poses an open question, shares an opinion with text evidence, listens to a response, builds on it.",
+                    "we_do": "Together hold short discussions on shared readings; parent models all three skills explicitly; child practices each.",
+                    "you_do": "Child holds discussions with peers or family without parent scaffolding.",
+                },
+                "guided_practice": [
+                    "Daily brief discussion at end of shared reading",
+                    "Weekly more substantial discussion on a finished chapter or book",
+                    "Periodic small-group book club discussions",
+                ],
+                "independent_practice": [
+                    "Participate in family book discussions consistently",
+                    "Apply the three skills outside of book discussions (general conversation, classroom)",
+                ],
+                "mastery_check": [
+                    "Asks real questions of unfamiliar shared readings",
+                    "Supports opinions with text evidence",
+                    "Builds on others' ideas",
+                ],
+                "spiral_review": [
+                    "Periodic reflection on discussion practice: what makes a good discussion? what gets in the way?",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "Plato wrote his philosophical works as dialogues; Socrates taught by question and answer. The "
+                    "classical tradition treats discussion as the highest form of learning: minds meeting around a "
+                    "shared text, building understanding through exchange. To discuss is to enter a tradition older "
+                    "than literacy itself."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the three discussion skills: ask, build, support",
+                        "Recite the sentence frames: 'I agree because', 'I see it differently because', 'I think because the book says'",
+                    ],
+                    "recitations": [
+                        "Memorize a brief passage from a Socratic dialogue (Plato's Apology has accessible passages); see how Socrates and his partner build through question and answer",
+                    ],
+                },
+                "copywork": [
+                    "Copy a short exchange from a discussion-rich text (a Socratic dialogue passage, a Charlotte's Web conversation) into the copybook",
+                ],
+                "recitation_routine": "After each shared reading, the child gives an oral discussion turn with the three skills.",
+                "history_integration": "The Socratic method is the classical heritage of discussion; the medieval disputation, the early modern coffee house, the academic seminar all descend from it. Show the child this lineage.",
+                "read_aloud_suggestions": [
+                    "Books written as dialogues, like accessible Plato selections for older developing readers",
+                    "Books with strong discussion-worthy themes (E. B. White, C. S. Lewis, Madeleine L'Engle)",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "Living books that invite discussion: rich character, real moral substance, beauty in the language",
+                ],
+                "short_lesson_flow": "After reading, narration comes first; then a brief discussion. The discussion is genuine: parent and child as fellow readers. Across weeks the child becomes a real discussion partner.",
+                "narration_prompt": "Tell me about the chapter; then let us discuss what stood out to each of us.",
+                "real_world_objects": [
+                    "A tea-time setting or cozy place for regular family discussions",
+                    "A wall card with the three discussion moves",
+                ],
+                "nature_connection": "Discussion of nature observations parallels discussion of books: real questions, building on each other's noticings, grounding observation in actual evidence from the natural world.",
+                "habit_focus": "The habit of attention to the ideas of others alongside one's own. The habit of generous engagement.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A set of discussion question cards for the current shared reading",
+                    "Sentence-frame cards for ask, build, support",
+                    "A discussion log where the child records what they learned from each discussion",
+                    "A small circle of chairs or cushions for discussion that signals 'we are gathering here for talk'",
+                ],
+                "presentation": {
+                    "three_period_lesson": "This is asking; this is building; this is supporting. Show me an asking move. Was that a building move or a supporting move?",
+                    "steps": [
+                        "The guide presents the three discussion moves with worked examples",
+                        "The child practices each move in scaffolded discussion",
+                        "The child participates in small-group discussion with peers",
+                        "Across the term discussion fluency develops naturally",
+                    ],
+                },
+                "control_of_error": "The text and the other participants are the control: real exchange shows whether the moves work. Empty exchanges teach the child what to do differently next time.",
+                "abstraction_pathway": "From scaffolded discussion with sentence frames, to natural discussion using the frames internally, to leading discussion for others.",
+                "extensions": [
+                    "Lead a discussion for younger children",
+                    "Participate in inter-age book clubs with older and younger members",
+                    "Begin to take notes for a discussion to capture group insights",
+                ],
+                "observation_focus": "Watch for the child building on others' ideas without prompting. Watch for respectful disagreement with text evidence.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Talk about books in family conversation regularly; welcome the child's contributions",
+                    "Model real disagreement and building on each other's ideas in adult conversation that the child overhears",
+                    "Read shared books with the child specifically for the pleasure of discussing them together",
+                ],
+                "real_world_contexts": [
+                    "Family conversation about books, movies, shows, podcasts",
+                    "Conversations with grandparents and relatives about shared reading",
+                    "Book clubs with friends or other homeschool families",
+                ],
+                "conversation_starters": [
+                    "What was the most surprising part of your reading today?",
+                    "What do you think the writer was trying to say?",
+                    "I think X about the chapter; what do you think? Do you agree, disagree, or see something I missed?",
+                ],
+                "resource_bank": [
+                    "Family meals, tea times, walks, drives as natural sites for book conversation",
+                    "Shared family readings",
+                    "Community of friends and family who also read and talk about books",
+                ],
+                "parent_role": "Be a real discussant yourself. Share your own opinions about books with text evidence. Welcome the child's opinions and engage them with respect. Model disagreement done well.",
+                "observation_documentation": "Note when the child spontaneously initiates book talk. Note when they build on others' ideas in conversation. These signal a true discusser growing.",
+            },
+        },
+        "connections": {
+            "math": "Discussing how a math problem was solved (different methods, different reasoning paths) uses the same discussion skills; math conversation grows from this",
+            "science": "Scientific discussion (about an observation, an experiment, a finding) uses the same building and evidence-grounding moves",
+            "history": "History discussions (about a figure, an event, a period) require text evidence and respectful disagreement; book discussion is the training ground",
+            "writing": "Writing develops in dialogue; the child who discusses books well brings the same care and evidence-handling to their own writing",
+        },
+    },
 }
