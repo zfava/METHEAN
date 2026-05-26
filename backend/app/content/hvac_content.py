@@ -1430,4 +1430,527 @@ HVAC_CONTENT: dict[str, dict] = {
             "standard_refs": [],
         },
     },
+    "hc-021": {
+        "node_type": "technique",
+        "trade": "hvac",
+        "competency_name": (
+            "Use a digital multimeter with formal lockout-tagout to verify the absence of voltage "
+            "at a residential AC condenser disconnect before service (live-dead-live verification)"
+        ),
+        "progression_band": "apprentice",
+        "prerequisites": ["hs-001", "hc-001", "hc-002"],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "ELECTROCUTION RISK. Residential outdoor AC and heat pump units are typically "
+                    "supplied at 240V/60Hz/1-phase in the US. At residential available fault "
+                    "current, contact across the heart can stop it. The entire purpose of this "
+                    "competency is to verify, with a meter, that the conductors at the work "
+                    "point are dead before any further work. A learner who skips or mis-performs "
+                    "this competency and then contacts a live conductor in a downstream task can "
+                    "be killed."
+                ),
+                (
+                    "ARC FLASH. A short between conductors during energized work releases an arc "
+                    "that can cause severe burns and concussive injury. Arc-flash hazard on a "
+                    "residential 240V disconnect is smaller than commercial but real. NFPA 70E "
+                    "governs arc-flash boundaries and PPE selection; the default in this trade is "
+                    "to de-energize and verify dead before opening any enclosure, which removes "
+                    "the arc-flash hazard at the work point."
+                ),
+                (
+                    "WRONG-DISCONNECT FAILURE. A mis-identified or mis-operated disconnect leaves "
+                    "the wrong circuit dead and the intended one live. The unit cabinet may have "
+                    "TWO sources of power (line-voltage supply AND low-voltage control from the "
+                    "air handler); the line-voltage disconnect at the outdoor unit handles only "
+                    "the line side. The control side is verified dead separately, typically by "
+                    "switching the system off at the thermostat and verifying low voltage at the "
+                    "contactor."
+                ),
+                (
+                    "METER FAILURE. A digital multimeter with a depleted battery, a blown fuse, "
+                    "a broken probe lead, or a wrong category rating can read zero on a live "
+                    "conductor and mislead the user into thinking the circuit is dead. The "
+                    "live-dead-live (or test-dead-test) sequence per NFPA 70E exists precisely "
+                    "to catch this: verify the meter on a known live source FIRST, verify dead "
+                    "at the work point, then re-verify the meter on the known live source. All "
+                    "three readings must agree with the expected state. If the third reading "
+                    "fails, the second reading is invalid."
+                ),
+                (
+                    "STORED ENERGY IN CAPACITORS. The dual-run capacitor inside the outdoor unit "
+                    "stores a charge that persists after the disconnect is opened. This "
+                    "competency does NOT include opening the cabinet and contacting the "
+                    "capacitor; the live-dead-live verification is performed at the disconnect "
+                    "(line side), not at the capacitor (inside the cabinet). Capacitor discharge "
+                    "is its own competency, gated separately, not in this batch."
+                ),
+                (
+                    "BACKFEED FROM CONTROL CIRCUIT OR SHARED NEUTRAL. In some misinstalled or "
+                    "older systems, opening the line disconnect does not fully de-energize the "
+                    "cabinet because of a backfed control circuit, a shared neutral with another "
+                    "circuit, or a generator transfer arrangement. The verification at the work "
+                    "point is the safeguard; never assume the disconnect did its job."
+                ),
+                (
+                    "WET CONDITIONS. Performing this verification in rain, standing water, or on "
+                    "a wet outdoor pad significantly increases shock risk. The verification is "
+                    "deferred to dry conditions; if the situation is urgent (storm-related "
+                    "service), the qualified human present decides whether to proceed with "
+                    "additional PPE per NFPA 70E or to defer."
+                ),
+                (
+                    "SHARP SHEET-METAL EDGES on the disconnect cover and the unit cabinet if "
+                    "the cover is removed; cut-resistant gloves on for any handling of the "
+                    "cover."
+                ),
+            ],
+            "ppe_required": [
+                "Trade PPE per hs-001 (closed-toe shoes, the trade's general defaults)",
+                "Safety glasses (ANSI Z87.1) required throughout the procedure",
+                (
+                    "Insulating gloves rated for the voltage actually being verified (residential "
+                    "240V verification: class 00 or higher per NFPA 70E and the glove "
+                    "manufacturer); inspected per the manufacturer and OSHA before use. The "
+                    "qualified human present confirms the glove rating and the inspection."
+                ),
+                (
+                    "Long sleeves and clothing rated appropriately per NFPA 70E for the "
+                    "arc-flash incident energy at the disconnect (residential AC disconnect "
+                    "incident energy is typically low but the calculation is per the system; "
+                    "the qualified human present confirms PPE selection)"
+                ),
+                "No metal jewelry on hands, wrists, or neck during the procedure",
+                (
+                    "Multimeter (DMM) with CAT III at minimum rated for 600V or higher for the "
+                    "240V residential measurement, with intact test leads, current battery, and "
+                    "current calibration where the household or employer's program requires "
+                    "calibration tracking. CAT IV is acceptable. CAT II or unrated meters are "
+                    "NOT acceptable for this measurement per NFPA 70E."
+                ),
+                (
+                    "Lockout-tagout hardware appropriate to the disconnect type: a padlock that "
+                    "fits the disconnect's lockout provision, a danger tag legible per OSHA "
+                    "1910.145, and the key kept exclusively by the person performing the work "
+                    "for the duration of the lockout"
+                ),
+            ],
+            "supervision_required": True,
+            "supervision_basis": (
+                "ELECTRICAL HAZARD. A qualified human is PHYSICALLY PRESENT at the live-dead-"
+                "live verification, where qualified means a licensed HVAC technician OR a "
+                "licensed electrician with current experience in residential electrical work. "
+                "The qualified human watches the meter reading, watches the probe placement, "
+                "watches the lockout-tagout sequence, and is in position to intervene physically "
+                "if the learner makes a mistake. The AI tutor mentors the procedure walkthrough "
+                "on paper and reviews the artifact evidence (photos of the LOTO setup, written "
+                "procedure read-back) but does NOT stand in for the qualified human at the "
+                "live moment. A learner working alone with only AI mentoring at the live moment "
+                "is in mortal danger of electrocution if the procedure fails, the meter fails, "
+                "or the wrong disconnect is operated. This is the one hard line in the trade's "
+                "supervision policy. Households without a resident qualified person arrange a "
+                "paid professional supervision session, a vocational-school program day, an "
+                "apprentice arrangement with a working contractor, or defer the competency until "
+                "the qualified human is arranged. The AI tutor and the supervising adult on "
+                "premises do NOT substitute for the qualified electrical-scope human at the "
+                "live moment."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "Digital multimeter (DMM)",
+                "specification": (
+                    "CAT III rated for 600V or higher (CAT IV acceptable), with: a current "
+                    "battery; test leads in good condition (no cracked insulation, no broken "
+                    "shrouds, no exposed conductor); a current fuse on the current-measurement "
+                    "range; calibration current per the household's or employer's program if "
+                    "applicable. Fluke, Klein, Ideal, Amprobe, and other recognized industrial "
+                    "brands at the named CAT rating are acceptable. Inexpensive automotive or "
+                    "hobby meters typically lack the CAT rating and are NOT acceptable for this "
+                    "measurement per NFPA 70E."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "A known live voltage source for the live-dead-live verification",
+                "specification": (
+                    "A standard 120V wall receptacle near the work area, OR a manufactured "
+                    "proving unit (also called a voltage tester proving unit) that provides a "
+                    "verifiable voltage. The known live source is used to verify the meter is "
+                    "reading correctly BEFORE and AFTER the dead test at the work point. The "
+                    "qualified human present confirms the live source is actually live before "
+                    "the learner uses it."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Lockout hardware (padlock)",
+                "specification": (
+                    "A padlock that fits the disconnect's lockout provision (most outdoor AC "
+                    "disconnects have a hasp or provision for a padlock; pull-out disconnects "
+                    "are 'locked' by removing the pull-out and storing it with the worker, "
+                    "though a padlock through the body is still preferred where the disconnect "
+                    "supports it). Color: red is conventional for personnel locks. The key is "
+                    "kept exclusively by the person performing the work for the duration of the "
+                    "lockout; no shared keys, no master overrides."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Tagout tag",
+                "specification": (
+                    "A danger tag per OSHA 29 CFR 1910.145, signed and dated by the person "
+                    "performing the work, naming the reason for the lockout and the date. The "
+                    "tag is attached to the locked disconnect along with the lock; the tag is "
+                    "NOT a substitute for the lock."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "The unit's nameplate card from hc-001",
+                "specification": "Used to confirm the expected voltage (so the meter reads the expected value on the live test)",
+                "alternatives": [],
+            },
+            {
+                "name": "The unit's component-identification card from hc-002",
+                "specification": "Used to confirm which disconnect serves which unit and where the work point is",
+                "alternatives": [],
+            },
+            {
+                "name": "Insulating gloves rated for the voltage",
+                "specification": (
+                    "Class 00 or higher per NFPA 70E for residential 240V verification, inspected "
+                    "per the manufacturer and OSHA before use (visual inspection for cuts, "
+                    "punctures, ozone cracking; air-roll test per the manufacturer where "
+                    "applicable). The qualified human present confirms the glove rating and the "
+                    "inspection."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Safety glasses (ANSI Z87.1)",
+                "specification": "Worn throughout the procedure",
+                "alternatives": [],
+            },
+            {
+                "name": "Camera (cell phone is sufficient) for the LOTO and procedure photographs",
+                "specification": "Used to photograph the locked disconnect with the tag attached, for the artifact",
+                "alternatives": [],
+            },
+            {
+                "name": "The household's or employer's written lockout-tagout procedure",
+                "specification": (
+                    "OSHA 29 CFR 1910.147 requires a written, equipment-specific LOTO procedure "
+                    "for service work. The household's or employer's procedure for the specific "
+                    "equipment is read and followed; this node defers to that procedure for the "
+                    "specific steps and confirms the procedure exists per OSHA. If no written "
+                    "procedure exists for the equipment, the qualified human present produces "
+                    "one before the work begins."
+                ),
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [],
+        "workspace_requirements": {
+            "surface": "Dry outdoor pad or interior mechanical space at the disconnect's location",
+            "ventilation": "Adequate; weather conditions dry (no rain, no standing water)",
+            "lighting": "Adequate to clearly see the meter face, the test leads, the disconnect terminals, and the lockout hardware",
+            "power": (
+                "Power state is the work itself: the procedure begins with the system energized "
+                "(to verify the live state), proceeds through disconnect operation and lockout, "
+                "verifies dead at the work point, and re-verifies the meter on the known live "
+                "source after the dead test. The disconnect is restored only after the lockout "
+                "is released by the person who applied it and only after the work for which the "
+                "lockout was applied is complete."
+            ),
+            "containment": "Clear floor space around the disconnect; pets and small children excluded from the work area",
+        },
+        "skill_description": (
+            "The learner, with a qualified human (licensed electrician or licensed HVAC "
+            "technician with electrical scope) physically present, performs the live-dead-live "
+            "voltage verification at a residential outdoor AC condenser disconnect using a "
+            "CAT III or higher rated digital multimeter and the lockout-tagout procedure per "
+            "OSHA 29 CFR 1910.147 and NFPA 70E. The procedure: (1) review the nameplate from "
+            "hc-001 to confirm the expected voltage; (2) review the component identification "
+            "from hc-002 to confirm the correct disconnect for the unit; (3) put on insulating "
+            "gloves and safety glasses; (4) inspect the multimeter and its leads; (5) verify "
+            "the meter on a known live source (a nearby 120V receptacle or a proving unit), "
+            "reading the expected voltage; this is the FIRST live test; (6) operate the "
+            "disconnect to the open position (or remove the pull-out if it is a pull-out type); "
+            "(7) apply the padlock to the lockout provision and the signed and dated tag, "
+            "keeping the key exclusively with the person performing the work; (8) at the work "
+            "point (typically the load-side terminals of the disconnect, or the line-voltage "
+            "terminals inside the unit cabinet under the qualified human's supervision), verify "
+            "voltage is now zero by testing every pair of conductors that should be dead (L1 "
+            "to ground, L2 to ground, L1 to L2 for a 240V/1-phase circuit); this is the DEAD "
+            "test; (9) re-verify the meter on the known live source from step 5, reading the "
+            "expected voltage again; this is the SECOND live test, confirming the meter is "
+            "still functioning correctly and the dead reading from step 8 is valid; (10) "
+            "document the verification by photographing the locked disconnect with the tag in "
+            "place; (11) the unit is now safe to open for downstream service work, which is its "
+            "own competency. The learner narrates each step aloud as they perform it; the "
+            "qualified human watches the meter readings, the probe placements, and the lockout "
+            "sequence; the qualified human signs off on the verification before any downstream "
+            "work begins. At the end of the service work, the lockout is released by the same "
+            "person who applied it: tag removed, lock removed, disconnect operated to the "
+            "closed position, system restored to operating state. The AI tutor reviews the "
+            "written procedure, the LOTO photograph, and the learner's narrated walkthrough "
+            "after the session; the AI does NOT replace the qualified human at the live "
+            "moment."
+        ),
+        "demonstration_criteria": [
+            (
+                "Reviews the nameplate card from hc-001 BEFORE starting and names the expected "
+                "voltage; confirms the multimeter range will cover the expected voltage"
+            ),
+            (
+                "Reviews the component identification card from hc-002 BEFORE starting and "
+                "identifies the correct disconnect for the unit"
+            ),
+            (
+                "Inspects the multimeter and leads BEFORE the live test: battery indicator OK, "
+                "leads visually intact, fuse intact (the qualified human confirms by inspection)"
+            ),
+            (
+                "Performs the FIRST live test on the known live source (120V receptacle or "
+                "proving unit), reads the expected voltage, and announces the reading aloud; "
+                "the qualified human confirms the reading"
+            ),
+            (
+                "Operates the disconnect to the open position (or removes the pull-out) "
+                "correctly per the disconnect type"
+            ),
+            (
+                "Applies the padlock to the lockout provision and attaches the signed and "
+                "dated tag; keeps the key exclusively with the person performing the work; "
+                "the qualified human confirms the lock is properly engaged and the tag is "
+                "legible per OSHA 1910.145"
+            ),
+            (
+                "Performs the DEAD test at the work point, testing every pair of conductors "
+                "that should be dead (for residential 240V/1-phase: L1 to ground, L2 to ground, "
+                "L1 to L2), announces each reading aloud; the qualified human confirms each "
+                "probe placement and each reading"
+            ),
+            (
+                "Performs the SECOND live test on the same known live source from the first "
+                "live test, reads the expected voltage, and announces the reading aloud; the "
+                "qualified human confirms the reading and signs off that the dead test from "
+                "the previous step is valid"
+            ),
+            (
+                "Photographs the locked disconnect with the tag in place and submits the photo "
+                "to the AI tutor with a written narration of each step of the procedure as "
+                "performed"
+            ),
+            (
+                "Names the rule that the lockout is released ONLY by the person who applied it, "
+                "and ONLY after the work for which the lockout was applied is complete; "
+                "demonstrates the release sequence at the end of the practice session "
+                "(restoring the disconnect to operating state) under the qualified human's "
+                "supervision"
+            ),
+            (
+                "Names what would invalidate the dead reading and require restarting the "
+                "sequence: meter fails the second live test; tag or lock disturbed during the "
+                "work; the procedure deviates from OSHA 1910.147 in any material way; the "
+                "wrong disconnect is identified mid-procedure; a backfeed source is suspected"
+            ),
+            (
+                "Names that this competency covers ONLY the line-voltage verification at the "
+                "disconnect; the low-voltage control circuit is verified separately (off at the "
+                "thermostat, dead at the contactor; not in this competency); the capacitor is "
+                "discharged separately (a different competency); refrigerant work happens "
+                "separately under EPA Section 608 with a 608-certified person present (a "
+                "different competency); and gas-system work is separate (a different "
+                "competency)"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Skipping the first live test (testing the meter on the known live source before the dead test)",
+                "cause": "The learner felt the procedure was familiar and went straight to the disconnect",
+                "remedy": (
+                    "The live-dead-live sequence is non-negotiable. Without the first live test, "
+                    "a dead reading at the disconnect could mean (a) the disconnect is really "
+                    "open OR (b) the meter is broken. The first live test rules out (b). The "
+                    "qualified human present halts the procedure and requires the live test "
+                    "before the dead test. This is what NFPA 70E mandates."
+                ),
+            },
+            {
+                "error": "Skipping the second live test (re-verifying the meter on the known live source AFTER the dead test)",
+                "cause": "The learner read zero at the disconnect and assumed the meter was still good",
+                "remedy": (
+                    "The meter could have failed between the first live test and the dead test "
+                    "(a blown fuse during the dead test is a classic failure mode). The second "
+                    "live test confirms the meter is still functioning AND that the dead "
+                    "reading is valid. The qualified human present requires the second live "
+                    "test before the lockout is considered complete."
+                ),
+            },
+            {
+                "error": "Testing only L1 to L2 and skipping the conductor-to-ground readings",
+                "cause": "The learner read the line-to-line voltage and called the circuit dead",
+                "remedy": (
+                    "Both conductors can be live to ground while reading zero line-to-line "
+                    "(both at the same nonzero potential relative to ground, a real fault "
+                    "condition). Every pair that should be dead is tested: L1 to ground, L2 to "
+                    "ground, L1 to L2. All three must read zero."
+                ),
+            },
+            {
+                "error": "Using a CAT II or unrated meter for the 240V measurement",
+                "cause": "The learner used the meter that was in the toolbag without checking the CAT rating",
+                "remedy": (
+                    "The CAT rating addresses the transient voltage the meter is designed to "
+                    "survive. A CAT II meter on a CAT III circuit can explode in the user's "
+                    "hand during a fault. CAT III at 600V minimum is the rule per NFPA 70E for "
+                    "this measurement. The qualified human present confirms the CAT rating "
+                    "before the procedure begins."
+                ),
+            },
+            {
+                "error": "Trusting the disconnect position without verifying",
+                "cause": "The learner saw the disconnect in the open position and skipped the meter test",
+                "remedy": (
+                    "Position is not verification. The disconnect could be mechanically open "
+                    "but electrically passing voltage (broken switch, miswire, backfeed). The "
+                    "meter verification at the work point is the only safeguard. Every time."
+                ),
+            },
+            {
+                "error": "Leaving the key in the lock or giving it to someone else",
+                "cause": "The learner walked away to get a tool and handed the key to the supervising adult",
+                "remedy": (
+                    "The key is kept EXCLUSIVELY with the person performing the work for the "
+                    "duration of the lockout per OSHA 1910.147. No shared keys, no temporary "
+                    "handoffs. If the learner must leave, the lock comes off and the procedure "
+                    "is restarted on return."
+                ),
+            },
+            {
+                "error": "Performing the procedure in the rain or on a wet pad",
+                "cause": "The learner did not weigh the weather against the work",
+                "remedy": (
+                    "Wet conditions significantly increase shock risk. The procedure is deferred "
+                    "to dry conditions. If urgent, the qualified human present decides whether "
+                    "additional PPE per NFPA 70E justifies proceeding; the default is to defer."
+                ),
+            },
+            {
+                "error": "Reaching for the capacitor terminals after the disconnect is verified dead",
+                "cause": "The learner thought the cabinet was now fully safe",
+                "remedy": (
+                    "The capacitor stores a charge that persists after line voltage is removed. "
+                    "Discharging the capacitor is a DIFFERENT competency, not part of this one. "
+                    "After the line-voltage dead verification, the cabinet is safe to OPEN; "
+                    "contact with internal components requires its own qualifications and "
+                    "competencies."
+                ),
+            },
+            {
+                "error": "Operating the disconnect or removing the lock to test a downstream component before completing the work",
+                "cause": "The learner felt the procedure was 'paused' and could be resumed",
+                "remedy": (
+                    "The lockout is in place for the duration of the work. If a downstream test "
+                    "requires the system to be energized, the lock comes off in the OSHA-"
+                    "compliant sequence (tools cleared, personnel cleared, lock removed, "
+                    "disconnect restored), the test is performed energized, and a NEW LOTO "
+                    "sequence is performed before any further work inside the cabinet. The "
+                    "qualified human present manages this sequencing."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "photo",
+            "what_to_capture": (
+                "A photograph showing: (1) the locked disconnect with the padlock engaged and "
+                "the signed-and-dated tag attached; (2) the multimeter display reading the dead "
+                "voltage at the work point (the photo can be of the meter on the leads, with the "
+                "reading visible); (3) a separate photo of the meter reading the live voltage on "
+                "the known live source, taken AFTER the dead test (the second live test). "
+                "Submitted with a written narration of every step of the procedure as actually "
+                "performed, including the announced readings at each test point. The qualified "
+                "human present countersigns the narration."
+            ),
+            "what_the_evidence_shows": (
+                "That the live-dead-live sequence was performed correctly per NFPA 70E, that "
+                "the lockout was applied per OSHA 1910.147, that the dead test covered every "
+                "conductor pair, and that the qualified human present confirmed each step. The "
+                "AI tutor reviews the artifact for completeness against the demonstration "
+                "criteria; the AI tutor does NOT countersign the live verification (only the "
+                "qualified human can do that)."
+            ),
+        },
+        "mentor_signoff_required": True,
+        "pedagogy": {
+            "i_do": (
+                "The qualified human (licensed electrician or HVAC technician with electrical "
+                "scope) performs the full live-dead-live verification with formal LOTO on a "
+                "real residential AC disconnect, narrating each step aloud and explaining why "
+                "each step exists: the reason for the first live test (verify the meter), the "
+                "reason for the LOTO before the dead test (defense in depth), the reason for "
+                "every-pair-to-ground (catch both-live faults), the reason for the second live "
+                "test (verify the meter still works after the dead test). The learner watches "
+                "and the AI tutor (post-session, on the recorded narration) confirms the "
+                "procedure walkthrough matches NFPA 70E and OSHA 1910.147."
+            ),
+            "we_do": (
+                "The qualified human and the learner perform the procedure together on a second "
+                "real disconnect. The learner takes the meter and announces each step; the "
+                "qualified human watches every probe placement, confirms every reading, and "
+                "applies the lock (or watches the learner apply it). At each transition (live "
+                "test, disconnect open, LOTO applied, dead test, second live test, lockout "
+                "released), the qualified human pauses and the learner narrates aloud what "
+                "happens next and why."
+            ),
+            "you_do_supervised": (
+                "The learner performs the full procedure on a third real disconnect with the "
+                "qualified human physically present, watching the meter readings, the probe "
+                "placements, and the LOTO sequence. The qualified human intervenes only if the "
+                "learner is about to make a mistake that would invalidate the verification or "
+                "create a hazard. After the procedure, the learner submits the LOTO photograph, "
+                "the meter-reading photographs, and the written narration to the AI tutor; the "
+                "AI tutor confirms the artifact covers every demonstration criterion. The "
+                "qualified human countersigns the narration as having watched the live moment."
+            ),
+            "you_do_unsupervised": (
+                "There is NO unsupervised band for this competency. Every live-dead-live "
+                "verification on a real disconnect happens with a qualified human physically "
+                "present. This is the rule that holds across the trade: the verification of the "
+                "absence of voltage is a moment where a meter failure or a procedure failure "
+                "can kill, and the qualified human is the safeguard against meter failure and "
+                "procedure failure. The learner becomes journeyman in this competency by "
+                "having performed the verification correctly on at least ten disconnects "
+                "across at least five sessions, with at least two different qualified humans "
+                "countersigning, and is then themselves the qualified-human-present for "
+                "subsequent learners (which is itself a teaching-band competency, not in this "
+                "first batch). The AI tutor continues to mentor the procedure walkthrough and "
+                "review artifacts at every band."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 10,
+        "session_length_minutes": 45,
+        "signoff_validity_days": 365,
+        "related_projects": [],
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [
+                "OSHA 29 CFR 1910.147 (The Control of Hazardous Energy / Lockout-Tagout)",
+                "OSHA 29 CFR 1910.145 (Specifications for Accident Prevention Signs and Tags)",
+                "OSHA 29 CFR 1910.137 (Electrical Protective Equipment)",
+                "OSHA 29 CFR 1910.335 (Electrical Safety-Related Work Practices)",
+                "NFPA 70E (Standard for Electrical Safety in the Workplace; current edition)",
+                "NFPA 70 (NEC; current edition adopted by the local AHJ)",
+                "IEC 61010-1 / UL 61010-1 (test and measurement equipment Category Ratings: CAT II / III / IV)",
+                "The household's or employer's written equipment-specific lockout-tagout procedure per OSHA 1910.147",
+                "Manufacturer service literature for the specific multimeter, insulating gloves, lockout hardware, and HVAC equipment",
+                "The qualified human's professional license (licensed HVAC technician with electrical scope OR licensed electrician) per the local jurisdiction; the qualified human's continuing-education currency in NFPA 70E",
+            ],
+        },
+    },
 }
