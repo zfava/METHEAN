@@ -5146,4 +5146,382 @@ READING_DEVELOPING_CONTENT = {
             "writing": "A growing vocabulary supports the child's own writing; words met in reading appear in writing weeks or months later",
         },
     },
+    "rd-13": {
+        "enriched": True,
+        "learning_objectives": [
+            "Condense a multi-paragraph passage or short chapter into a brief summary that captures the main idea and the essential supporting details",
+            "Distinguish summarizing (compressing to essentials in your own words) from retelling or narrating (telling the events in order at length)",
+            "Identify and discard nonessential details when summarizing: lovely descriptions, minor side actions, parenthetical dialogue",
+            "Use the someone-wanted-but-so-then frame as a working tool for summarizing a narrative chapter",
+            "Use the topic-and-most-important-points frame as a working tool for summarizing a nonfiction passage",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "rd-06 built character analysis; the child is now equipped to read for what matters in a story. "
+                "Summarizing is the move from telling everything that happened (narration) to telling what mattered "
+                "(summary). The difference is essential. A narration of a chapter might run several minutes; a summary "
+                "of the same chapter runs two or three sentences. Summarizing is a higher-order skill than narration "
+                "because it asks the child to JUDGE which details are essential and which are not. Two frames carry "
+                "the child a long way at this band: SOMEONE-WANTED-BUT-SO-THEN for narrative (Who. What did they "
+                "want. What got in the way. So what did they do. Then what happened.) and TOPIC-AND-MOST-IMPORTANT-"
+                "POINTS for nonfiction (What is this about. What are the two or three most important things it "
+                "says.). Both frames are tools, not formulas: as the child grows, summaries become natural prose."
+            ),
+            "scaffolding_sequence": [
+                "Begin with a single short paragraph from a familiar story; parent and child together produce a one-sentence summary",
+                "Move to a chapter from a current chapter book; apply the someone-wanted-but-so-then frame and produce a two-to-three-sentence summary",
+                "Practice the test of essentiality: read the summary; does it tell the main idea? If not, what is missing? Does it carry side details? If so, what can be cut?",
+                "Distinguish summary from narration explicitly: narrate the chapter (take five minutes), then summarize the chapter (take thirty seconds). Compare.",
+                "Move to a nonfiction passage (a magazine article, an encyclopedia entry, a science text); apply the topic-and-most-important-points frame",
+                "Summarize across longer text: a whole story (not just a chapter), a whole article",
+                "Practice graduated tightness: summarize the same chapter in 5 sentences, then in 3, then in 1. Show the trade-offs.",
+                "Apply the skill in conversation: 'tell me what your book was about today' should now produce a real summary, not a chapter-by-chapter retelling",
+            ],
+            "socratic_questions": [
+                "What is this passage mostly about? In one sentence.",
+                "Who is the someone? What did they want? What got in the way? So what did they do? Then what happened?",
+                "What is essential to the story? What is interesting but not essential?",
+                "If you only had ten words to tell someone what this chapter is about, which ten words?",
+                "Is that a summary, or a retelling? How can you tell the difference?",
+            ],
+            "practice_activities": [
+                "Daily one-sentence summary of the current chapter the child is reading independently",
+                "Someone-wanted-but-so-then frame applied to chapters of a chapter book; written in the reading notebook",
+                "Topic-and-most-important-points frame applied to a short nonfiction passage each week",
+                "Summary-versus-narration practice: narrate a chapter, then summarize the same chapter, then compare them aloud",
+                "Graduated-tightness practice: summarize the same story in five sentences, then three, then one. Discuss what is lost and what survives.",
+            ],
+            "real_world_connections": [
+                "Telling a friend, parent, or sibling what a book is about without retelling the whole thing",
+                "Writing a book recommendation card for the library or for a friend",
+                "Telling someone what happened in a TV show or movie without giving every scene",
+                "Reading the back-cover blurb of a book; recognizing it as a summary written to invite a reader",
+                "Summarizing the news, a magazine article, a podcast episode",
+            ],
+            "common_misconceptions": [
+                "Believing summarizing is the same as retelling. They are different: retelling tells everything; summarizing tells what matters.",
+                "Believing a good summary is a long summary. A good summary is the SHORTEST version that still carries the main idea and essential details.",
+                "Believing every detail is essential. Most details are not. The judgment of essentiality is the heart of the skill.",
+                "Believing summarizing is the same for fiction and nonfiction. The frames differ: narrative leans on character and conflict; nonfiction leans on topic and main points.",
+                "Believing summarizing is something the child does once. Summarizing is a habit applied to every reading, every day.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Produces a brief, accurate summary of a narrative chapter using the someone-wanted-but-so-then frame",
+                "Produces a brief, accurate summary of a nonfiction passage using the topic-and-most-important-points frame",
+                "Distinguishes a summary from a retelling and can produce either when asked",
+                "Discards nonessential details deliberately, naming why each cut detail was not essential",
+                "Adapts summary length to context: one sentence when asked for the gist, three to five when asked for fuller summary",
+            ],
+            "proficiency_indicators": [
+                "Produces a summary that includes the main idea but carries extra detail",
+                "Distinguishes summary from retelling with prompting",
+            ],
+            "developing_indicators": [
+                "Retells in full instead of summarizing",
+                "Produces summaries that miss the main idea or include only side details",
+            ],
+            "assessment_methods": [
+                "scored summaries of chapters and passages against a rubric",
+                "summary-versus-narration discrimination tasks",
+                "graduated-tightness exercises",
+                "real-time observation during reading discussion: does the child summarize or retell?",
+            ],
+            "sample_assessment_prompts": [
+                "Read this chapter. In two or three sentences, tell me what the chapter is about.",
+                "Use the someone-wanted-but-so-then frame on this chapter.",
+                "Summarize this nonfiction article in one sentence. Then in three sentences. What did the longer version add?",
+                "Is this a summary or a retelling? How can you tell?",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What is the difference between a summary and a retelling?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "There is no difference; they are the same thing.",
+                    "A summary is short and tells what matters; a retelling tells everything in order.",
+                    "A summary is for fiction; a retelling is for nonfiction.",
+                    "A retelling is a kind of summary that uses fewer words.",
+                ],
+                "correct_answer": "A summary is short and tells what matters; a retelling tells everything in order.",
+                "hints": [
+                    "Think about the length and what is included in each.",
+                ],
+                "explanation": (
+                    "A retelling tells the events in order at full length. A summary compresses the passage to its main "
+                    "idea and essential details, in much fewer words. Summarizing asks the reader to judge which "
+                    "details matter."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "What does the someone-wanted-but-so-then frame help you do?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Memorize a chapter word for word.",
+                    "Summarize a narrative chapter by naming who, what they wanted, what got in the way, what they did, and what happened.",
+                    "List all the characters in a book.",
+                    "Find the rhyme scheme of a poem.",
+                ],
+                "correct_answer": "Summarize a narrative chapter by naming who, what they wanted, what got in the way, what they did, and what happened.",
+                "hints": [
+                    "It is a frame for narrative summary.",
+                ],
+                "explanation": (
+                    "The someone-wanted-but-so-then frame walks the reader through a narrative summary: Someone (who), "
+                    "wanted (their goal), but (the obstacle), so (what they did), then (the result). Five quick beats "
+                    "produce a real summary of a narrative chapter."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "What is the topic-and-most-important-points frame for?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Summarizing nonfiction by naming what it is about and the two or three most important things it says.",
+                    "Writing a poem.",
+                    "Memorizing a story.",
+                    "Reading a graphic novel.",
+                ],
+                "correct_answer": "Summarizing nonfiction by naming what it is about and the two or three most important things it says.",
+                "hints": [
+                    "It is the nonfiction parallel to the someone-wanted-but-so-then frame.",
+                ],
+                "explanation": (
+                    "Nonfiction is organized around topic and supporting points, not around a character's goal. The "
+                    "topic-and-most-important-points frame matches the structure: what is this about (the topic), and "
+                    "what are the two or three most important things it says (the points)."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "You have just finished a chapter of your book. Your friend asks 'what was that chapter about?' "
+                    "What should you do?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Retell every event in order from beginning to end.",
+                    "Summarize the chapter in two or three sentences using the someone-wanted-but-so-then frame.",
+                    "Say 'I don't know' and change the subject.",
+                    "Read the whole chapter aloud to them.",
+                ],
+                "correct_answer": "Summarize the chapter in two or three sentences using the someone-wanted-but-so-then frame.",
+                "hints": [
+                    "What does the friend want? A short, helpful answer.",
+                ],
+                "explanation": (
+                    "A friend asking 'what was it about' wants a summary, not a retelling. Two or three sentences "
+                    "delivered through the someone-wanted-but-so-then frame produce a real, useful summary. This is "
+                    "the everyday use of the skill."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Summarize a chapter of your current book first in five sentences, then in three sentences, then "
+                    "in one. What did each shorter version have to leave out?"
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Tighter summaries keep the essential and drop the nonessential.",
+                ],
+                "explanation": (
+                    "Graduated-tightness practice shows the child what is essential and what is not. The five-sentence "
+                    "version may carry secondary points; the three-sentence version keeps the main goal, obstacle, and "
+                    "outcome; the one-sentence version distills the gist. Each cut teaches judgment."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Read this assigned chapter. Summarize it in two or three sentences using the someone-wanted-but-so-then frame.",
+                "type": "open_response",
+                "target_concept": "narrative_summary_with_frame",
+                "rubric": (
+                    "Mastery: summary names the someone, the want, the obstacle, the action, the result; stays within "
+                    "two or three sentences; captures the main idea. Proficient: includes most beats; may include some "
+                    "nonessential detail. Developing: produces a retelling rather than a summary, or misses the main "
+                    "idea."
+                ),
+            },
+            {
+                "prompt": "Read this short nonfiction passage. Summarize it in two or three sentences using the topic-and-most-important-points frame.",
+                "type": "open_response",
+                "target_concept": "nonfiction_summary_with_frame",
+                "rubric": (
+                    "Mastery: names the topic and the two or three most important points; stays brief; captures what "
+                    "the passage is really about. Proficient: names topic but carries side details. Developing: cannot "
+                    "distinguish main points from supporting detail."
+                ),
+            },
+            {
+                "prompt": "Summarize this chapter in five sentences, then in three, then in one. What did each shorter version leave out, and why?",
+                "type": "open_response",
+                "target_concept": "graduated_tightness_judgment",
+                "rubric": (
+                    "Mastery: produces all three lengths; names what each cut left out and why each cut was acceptable. "
+                    "Proficient: produces all three lengths but cannot articulate why. Developing: cannot produce the "
+                    "tightest versions."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "a current chapter book the child is reading independently",
+                "a short nonfiction passage (one to three paragraphs) for summary practice",
+                "the child's reading notebook for written summaries",
+            ],
+            "recommended": [
+                "a wall card with the two summary frames (someone-wanted-but-so-then; topic-and-most-important-points)",
+                "back-cover blurbs from familiar books as examples of professional summaries",
+                "a magazine subscription with short articles at the child's reading level",
+            ],
+        },
+        "time_estimates": {"first_exposure": 25, "practice_session": 15, "assessment": 20},
+        "accommodations": {
+            "dyslexia": "Practice summary on read-aloud chapters first. The skill is about judgment of essentiality, not decoding; reduce the decoding load when teaching it.",
+            "adhd": "Keep summary work brief. One sentence on the day's reading is enough. The graduated-tightness exercise can be done across several days rather than in one sitting.",
+            "gifted": "Move to longer text (a whole short story; a whole article). Introduce thesis-and-support as a more abstract frame. Begin to summarize across multiple sources on a topic.",
+            "visual_learner": "Use a graphic organizer for the someone-wanted-but-so-then frame: five boxes in a row. Fill each box, then write the summary from the boxes.",
+            "kinesthetic_learner": "Act the someone-wanted-but-so-then frame with hand motions or stepping motions for the five beats. The body movement helps the structure settle.",
+            "auditory_learner": "Speak the summary aloud before writing. Many strong summaries are first spoken, then written down from the spoken version.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we learn to summarize. Summarizing is the skill of saying what a passage is about in much "
+                    "fewer words than the passage itself. We learn two frames: one for stories (someone-wanted-but-so-"
+                    "then) and one for nonfiction (topic-and-most-important-points). Summary is different from "
+                    "retelling, and it is one of the most useful skills a reader can have."
+                ),
+                "gradual_release": {
+                    "i_do": "Parent reads a chapter aloud and demonstrates summarizing with the someone-wanted-but-so-then frame, naming each beat as it goes.",
+                    "we_do": "Together with the child, summarize a second chapter using the frame. The child names the beats; parent helps with judgment of essentiality.",
+                    "you_do": "Child summarizes a chapter on their own and writes the summary in the reading notebook.",
+                },
+                "guided_practice": [
+                    "Daily one-sentence or two-sentence summary of the day's reading",
+                    "Weekly nonfiction summary on a short article using the topic-and-points frame",
+                    "Periodic graduated-tightness practice on a familiar story",
+                ],
+                "independent_practice": [
+                    "Maintain the daily summary habit in the reading notebook",
+                    "Use summary in conversation when asked about books",
+                ],
+                "mastery_check": [
+                    "Produces clean summaries with the frames",
+                    "Distinguishes summary from retelling",
+                    "Adapts length to context (gist versus fuller summary)",
+                ],
+                "spiral_review": [
+                    "Return to summaries from earlier in the term; check that they still feel accurate and tight",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "The educated reader knows the difference between everything a book says and what a book is about. "
+                    "Summary is the skill of saying what a book is about. Ancient writers prized the brief, dense "
+                    "saying: the epigram, the apothegm, the moral of the tale. To summarize is to honor a text by "
+                    "naming what is essential in it."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the narrative frame: someone, wanted, but, so, then",
+                        "Recite the nonfiction frame: topic, most important points",
+                    ],
+                    "recitations": [
+                        "Memorize a brief summary of a major work (a one-paragraph summary of The Odyssey or a chosen classic)",
+                    ],
+                },
+                "copywork": [
+                    "Copy a well-formed back-cover blurb from a familiar book as a model of professional summary",
+                ],
+                "recitation_routine": "At each reading session the child gives a brief spoken summary of the chapter just finished.",
+                "history_integration": "Summarizing the deeds of a historical figure or the events of a historical period uses the same frames. History at this level is largely a discipline of well-formed summary.",
+                "read_aloud_suggestions": [
+                    "Books with strong narrative arcs that summarize cleanly: The Wind in the Willows, Stuart Little, the Narnia chronicles, Anne of Green Gables",
+                    "Anthologies of short retellings (D'Aulaire, retold myths and legends) where each piece is already a kind of summary",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "Living books whose chapters carry a clear arc that the child can summarize",
+                ],
+                "short_lesson_flow": "After the reading, the child gives a brief spoken summary of what was read. Across weeks, written summary is introduced gradually alongside narration. Narration remains; summary is a related but distinct discipline.",
+                "narration_prompt": "Now give me a narration. Now give me a summary. How are they different?",
+                "real_world_objects": [
+                    "The reading notebook for written summaries",
+                    "A wall card with the two summary frames near the reading area",
+                ],
+                "nature_connection": "Nature observation also invites summary: at the end of a nature walk, what was the most important thing you saw today? In one sentence.",
+                "habit_focus": "The habit of saying clearly what a passage was about. Narration and summary together build a reader who knows what they have read.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A frame card with the five beats of someone-wanted-but-so-then in clear print",
+                    "A frame card with the topic-and-most-important-points beats",
+                    "A small set of short passages (one narrative, one nonfiction, one descriptive) for summary practice",
+                    "A graphic-organizer template for the narrative frame",
+                ],
+                "presentation": {
+                    "three_period_lesson": "This is a summary; this is a retelling; this is a graduated-tightness exercise. Show me a summary; show me a retelling. Is this a summary or a retelling?",
+                    "steps": [
+                        "The guide presents the someone-wanted-but-so-then frame with a worked example",
+                        "The child applies the frame to a short familiar passage",
+                        "The guide presents the topic-and-most-important-points frame with a nonfiction example",
+                        "The child applies that frame to a nonfiction passage",
+                        "Across the term the child develops the habit of summarizing daily",
+                    ],
+                },
+                "control_of_error": "The control is the chapter itself: a summary is accurate if a reader who has not read the chapter can grasp what it was about from the summary alone.",
+                "abstraction_pathway": "From filling in the frame's beats one by one, to writing summaries as flowing prose, to choosing summary length to suit the audience.",
+                "extensions": [
+                    "Summary of multiple chapters as a single piece",
+                    "Summary of an entire short book",
+                    "Comparison of two summaries of the same chapter; what each emphasizes",
+                ],
+                "observation_focus": "Watch for the child summarizing rather than retelling without prompting. Watch for confident judgment about which details are essential.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Ask the child what their current book is about; receive a real summary as the answer over time",
+                    "Read back-cover blurbs together; talk about how the writer chose what to include",
+                    "Recommend books to each other in summary form",
+                ],
+                "real_world_contexts": [
+                    "Telling a friend or sibling what a book or show was about",
+                    "Writing brief recommendations on a family book wall or shared reading log",
+                    "Summarizing podcast episodes, news stories, or a documentary watched together",
+                ],
+                "conversation_starters": [
+                    "What was your book about today?",
+                    "If you only had ten words to tell me what that chapter was about, what would you say?",
+                    "Was that a summary or a retelling? Which did I ask for?",
+                ],
+                "resource_bank": [
+                    "A home library with strong storytelling and accessible nonfiction",
+                    "Magazines and articles at the child's level for short-form summary practice",
+                    "Back-cover blurbs as professional summary models",
+                ],
+                "parent_role": "Model summary in your own conversation. Tell the child what your book or article was about in summary form. Welcome the child's summaries and ask follow-up questions about what was left out.",
+                "observation_documentation": "Note when the child shifts from retelling to summarizing in everyday conversation. The shift signals internalization.",
+            },
+        },
+        "connections": {
+            "math": "Word problems often require summarizing what is being asked; the same judgment of essentials transfers directly",
+            "science": "Summarizing a science article or experiment writeup uses the topic-and-points frame; science learning depends heavily on summary",
+            "history": "Telling what happened in a historical period or what a figure did uses summary; this is the central skill of reading history at any level",
+            "writing": "Writing a summary is itself a writing exercise; the discipline of compression strengthens the child's own writing across genres",
+        },
+    },
 }
