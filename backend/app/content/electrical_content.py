@@ -2188,4 +2188,278 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
             "standard_refs": [],
         },
     },
+    "elc-004": {
+        "node_type": "knowledge",
+        "trade": "electrical",
+        "competency_name": (
+            "Series and parallel circuits and basic residential load calculation"
+        ),
+        "progression_band": "helper",
+        "prerequisites": ["els-001", "elc-003"],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "Misapplying series rules to a parallel circuit (or vice versa) and "
+                    "concluding the wrong current draw. Not a direct hazard at this band "
+                    "(paper work), but a real downstream error if the wrong calculation "
+                    "propagates into elc-007 ampacity or any later install."
+                ),
+                (
+                    "Underestimating the load on a circuit by computing only the "
+                    "nameplate-rated draw at unity power factor and missing inrush, "
+                    "starting current, or non-unity power factor. Branch-circuit "
+                    "breakers must hold the continuous load below the AHJ-adopted NEC's "
+                    "80% continuous-load rule for non-100%-rated breakers. The "
+                    "AHJ-adopted NEC's load-calculation rules (Article 220) govern."
+                ),
+                (
+                    "Confusing voltage drop on a long branch with the supply voltage. A "
+                    "long branch carrying significant current can drop several volts "
+                    "from the panel to the load; the load sees less than nameplate "
+                    "voltage and may overheat or run poorly. Voltage drop is treated "
+                    "at this band as a concept; the AHJ-adopted NEC's voltage-drop "
+                    "guidance applies in any install."
+                ),
+            ],
+            "ppe_required": [
+                "Trade PPE per els-001; no additional PPE required for paper work",
+            ],
+            "supervision_required": False,
+            "supervision_basis": (
+                "Pure conceptual work with paper, calculator, and the AI tutor's "
+                "interactive problem set. No real equipment, no live circuits. AI "
+                "tutor mentors end-to-end."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "Pencil, paper, and a calculator",
+                "specification": "A real calculator capable of basic arithmetic and reciprocal operations",
+                "alternatives": [],
+            },
+            {
+                "name": "A reference card for the series and parallel circuit rules",
+                "specification": (
+                    "A card or printout showing the series rules (I same, V adds, R "
+                    "adds), the parallel rules (V same, I adds, 1/R_total = sum of "
+                    "1/R_i), and the 80% continuous-load rule for branch-circuit "
+                    "breakers. The AI tutor provides one."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Sample residential branch-circuit load lists",
+                "specification": (
+                    "Worked sample lists showing the kinds of loads typically on a "
+                    "kitchen small-appliance branch, a bathroom branch, a general-"
+                    "purpose room branch, a 240V dedicated branch (range, dryer, "
+                    "electric water heater, etc.), provided by the AI tutor"
+                ),
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [],
+        "workspace_requirements": {
+            "surface": "Any flat surface (desk or table)",
+            "ventilation": "Indoor or outdoor; not relevant",
+            "lighting": "Adequate to read calculator and paper",
+            "power": "None",
+            "containment": "None required",
+        },
+        "skill_description": (
+            "The learner extends Ohm's law and the power equation from a single "
+            "resistor to networks of two or more loads. In a series circuit (loads "
+            "wired end-to-end), the same current flows through every load; the "
+            "voltage divides across the loads in proportion to their resistance; the "
+            "total resistance is the sum of the individual resistances; if one load "
+            "opens (e.g. a bulb burns out), the whole string goes dark. In a "
+            "parallel circuit (loads wired across the same voltage), every load sees "
+            "the full supply voltage; the total current is the sum of the individual "
+            "currents; the total (equivalent) resistance is found by 1/R_total = "
+            "1/R_1 + 1/R_2 + ... and is always less than the smallest individual "
+            "resistance; if one load opens, the others continue. Residential branch "
+            "circuits wire loads in PARALLEL (every receptacle on a branch sees 120V "
+            "regardless of what else is plugged in); series wiring of household loads "
+            "is uncommon and is mostly seen historically in old Christmas-light "
+            "strings. The learner solves problems of both kinds. The learner then "
+            "applies the series and parallel rules to a basic residential load "
+            "calculation: list the loads on a branch (each in watts at the rated "
+            "voltage), convert each to amperes at the branch voltage, sum the amps "
+            "(since the loads are in parallel), and compare to the branch breaker's "
+            "amp rating. The AHJ-adopted NEC governs the formal load-calculation "
+            "rules (Article 220 in current editions); this band introduces the "
+            "concept and the rules of thumb (the 80% continuous-load rule, the "
+            "diversity / demand factors named at the introductory level), with "
+            "deeper treatment reserved for the apprentice band."
+        ),
+        "demonstration_criteria": [
+            (
+                "Given a series circuit of two or three resistors and a supply "
+                "voltage, computes total resistance, current, and voltage across "
+                "each resistor correctly across at least three problems"
+            ),
+            (
+                "Given a parallel circuit of two or three resistors and a supply "
+                "voltage, computes total (equivalent) resistance, total current, and "
+                "current through each branch correctly across at least three problems"
+            ),
+            (
+                "Names that residential branch circuits wire receptacles, switches, "
+                "and fixtures in PARALLEL (every device sees full supply voltage), "
+                "and explains in one sentence why series wiring is uncommon (one "
+                "open and everything stops)"
+            ),
+            (
+                "Given a list of loads on a residential branch (e.g. a kitchen small-"
+                "appliance branch: a 1500W toaster, a 1000W microwave, a 500W "
+                "coffee maker), computes the total current draw at 120V and "
+                "compares to a 20A breaker (the kitchen small-appliance standard per "
+                "the AHJ-adopted NEC in many editions); names whether the load fits "
+                "under the 80% continuous-load rule for a non-100%-rated breaker"
+            ),
+            (
+                "Names voltage drop as a concept: a long branch carrying significant "
+                "current drops voltage from the panel to the load; the load sees less "
+                "than nameplate voltage. Names that the AHJ-adopted NEC publishes "
+                "voltage-drop guidance for branch circuits and feeders, and that the "
+                "actual voltage-drop calculation is part of the apprentice band's "
+                "install work."
+            ),
+            (
+                "Catches at least one unreasonable answer per problem set by sanity-"
+                "check against expected residential values (a 120V branch with five "
+                "1500W loads totals 7500W = 62A, which a 20A breaker cannot hold; the "
+                "answer requires either fewer loads or a 240V dedicated circuit)"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Adding parallel resistances directly (R_total = R_1 + R_2) instead of using the reciprocal formula",
+                "cause": "The learner confused the series rule with the parallel rule",
+                "remedy": (
+                    "For parallel: 1/R_total = 1/R_1 + 1/R_2 + ... and then take the "
+                    "reciprocal. For two equal resistors in parallel, R_total is half "
+                    "of one (a useful sanity check). The AI tutor walks through the "
+                    "reciprocal step explicitly."
+                ),
+            },
+            {
+                "error": "Computing total power as I_total x V (correct) but using R_total wrong in a derived form",
+                "cause": "The learner used the parallel R_total in V^2 / R correctly but then added series resistances on a parallel problem",
+                "remedy": (
+                    "Solve for the equivalent resistance first, name which rule "
+                    "applies (series adds, parallel reciprocal), then apply Ohm's "
+                    "law. The AI tutor walks through both methods (sum the branch "
+                    "currents vs use V^2 / R_total) and confirms they agree."
+                ),
+            },
+            {
+                "error": "Treating every receptacle on a branch as if it has its own breaker",
+                "cause": "The learner did not internalize the parallel wiring of residential branches",
+                "remedy": (
+                    "One branch breaker protects every receptacle, switch, and "
+                    "fixture wired in parallel on that branch. The breaker's amp "
+                    "rating is the total current the branch can carry; the loads on "
+                    "the branch share that ampacity. The AHJ-adopted NEC governs the "
+                    "rules for what loads can share a branch."
+                ),
+            },
+            {
+                "error": "Forgetting the 80% continuous-load rule",
+                "cause": "The learner sized the load at 100% of the breaker rating",
+                "remedy": (
+                    "For a non-100%-rated breaker (the residential default), a "
+                    "continuous load (3 hours or more) is sized at 80% of the "
+                    "breaker rating. A 20A breaker carries a continuous load of 16A "
+                    "maximum. The AHJ-adopted NEC defines continuous load and the "
+                    "specific exceptions; the rule of thumb is the standard starting "
+                    "point at this band."
+                ),
+            },
+            {
+                "error": "Confusing volts and volt-amperes on a load list",
+                "cause": "The learner treated VA as if it were V",
+                "remedy": (
+                    "Volts (V) is the voltage; volt-amperes (VA) is the apparent "
+                    "power. They are unrelated units. The learner converts loads to "
+                    "amps by dividing the load's wattage (or VA for inductive loads "
+                    "with a published VA rating) by the branch voltage. The AI tutor "
+                    "names this on every load-list problem."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "document",
+            "what_to_capture": (
+                "A worked problem set: three series problems, three parallel problems, "
+                "and two basic residential load-calculation problems (one kitchen "
+                "small-appliance branch, one 240V dedicated branch), each with "
+                "answers in correct units and the 80%-rule check"
+            ),
+            "what_the_evidence_shows": (
+                "That the learner can apply series and parallel rules correctly and "
+                "can size a basic residential load against a branch breaker at the "
+                "introductory level, with the 80% continuous-load rule applied where "
+                "applicable"
+            ),
+        },
+        "mentor_signoff_required": False,
+        "pedagogy": {
+            "i_do": (
+                "The AI tutor walks the learner through a series example, then a "
+                "parallel example, then a load-list example. Names the rules, the "
+                "units, and the parallel-wiring fact for residential branches. "
+                "Introduces the 80% continuous-load rule with a worked example."
+            ),
+            "we_do": (
+                "The AI tutor and the learner alternate problems across the three "
+                "kinds. The AI poses; the learner solves; the AI confirms or names "
+                "the misconception."
+            ),
+            "you_do_supervised": (
+                "The learner solves a complete problem set independently and submits "
+                "to the AI tutor. The AI tutor confirms each answer; on any miss, "
+                "the AI re-quizzes a similar problem."
+            ),
+            "you_do_unsupervised": (
+                "Once the learner can produce a complete and correct problem set "
+                "across at least two sessions, they may continue unsupervised. The "
+                "AI tutor remains available for the apprentice-band deeper treatment "
+                "of NEC Article 220 load-calculation methods and voltage-drop "
+                "calculation."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 4,
+        "session_length_minutes": 30,
+        "related_projects": [],
+        "certification_alignment": {
+            "ladder_rung": "helper",
+            "notes": "Knowledge competency. Foundational for NEC load-calculation work.",
+            "certifications_supported": [
+                {
+                    "id": "elcert-nec",
+                    "domains": [
+                        "NEC Article 220 (load calculations) rests on series/parallel "
+                        "rules and the 80% continuous-load rule",
+                        "branch-circuit sizing per the AHJ-adopted NEC",
+                    ],
+                    "notes": "Heavily tested on the journeyman exam.",
+                },
+                {
+                    "id": "elcert-licensing",
+                    "domains": [
+                        "circuit theory at journeyman depth; load-calculation methods",
+                    ],
+                    "notes": "Universal across every state licensing exam.",
+                },
+            ],
+        },
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
+    },
 }
