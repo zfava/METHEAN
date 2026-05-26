@@ -1917,6 +1917,48 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/attempts/{attempt_id}/progress:
+    post:
+      tags:
+      - state
+      summary: Save Attempt Progress Endpoint
+      description: Save partial work on an attempt without submitting it.
+      operationId: save_attempt_progress_endpoint_api_v1_attempts__attempt_id__progress_post
+      parameters:
+      - name: attempt_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Attempt Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttemptProgressRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttemptResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/attempts/{attempt_id}:
     get:
       tags:
@@ -9593,6 +9635,95 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/transcribe:
+    post:
+      tags:
+      - voice
+      summary: Transcribe
+      operationId: transcribe_api_v1_children__child_id__transcribe_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Body_transcribe_api_v1_children__child_id__transcribe_post'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranscribeResponse'
+        '403':
+          description: voice_input_disabled
+        '413':
+          description: audio_too_large
+        '415':
+          description: audio_unsupported_mime
+        '422':
+          description: audio_invalid | audio_too_long | audio_too_short
+        '429':
+          description: voice_cap_reached
+        '503':
+          description: provider_unavailable
+  /api/v1/children/{child_id}/tts/stream:
+    post:
+      tags:
+      - voice
+      summary: Tts Stream
+      operationId: tts_stream_api_v1_children__child_id__tts_stream_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TTSRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '403':
+          description: voice_output_disabled
+        '422':
+          description: unknown_persona | text_invalid
+        '429':
+          description: voice_output_cap_reached
+        '503':
+          description: provider_unavailable
   /health:
     get:
       summary: Health
@@ -10001,6 +10132,16 @@ components:
       - portfolio_review
       - clinical_evaluation
       title: AssessmentType
+    AttemptProgressRequest:
+      properties:
+        notes:
+          type: string
+          title: Notes
+          description: Draft notes for partial, unsubmitted work
+      type: object
+      required:
+      - notes
+      title: AttemptProgressRequest
     AttemptResponse:
       properties:
         id:
@@ -10347,6 +10488,16 @@ components:
       - content
       - general
       title: BetaFeedbackType
+    Body_transcribe_api_v1_children__child_id__transcribe_post:
+      properties:
+        audio:
+          type: string
+          format: binary
+          title: Audio
+      type: object
+      required:
+      - audio
+      title: Body_transcribe_api_v1_children__child_id__transcribe_post
     Body_upload_artifact_endpoint_api_v1_children__child_id__artifacts_post:
       properties:
         file:
@@ -10613,6 +10764,13 @@ components:
         onboarded:
           type: boolean
           title: Onboarded
+        voice_mode_style:
+          type: string
+          enum:
+          - tap_toggle
+          - press_hold
+          title: Voice Mode Style
+          default: tap_toggle
       type: object
       required:
       - child_id
@@ -10672,6 +10830,14 @@ components:
           - type: boolean
           - type: 'null'
           title: Onboarded
+        voice_mode_style:
+          anyOf:
+          - type: string
+            enum:
+            - tap_toggle
+            - press_hold
+          - type: 'null'
+          title: Voice Mode Style
       type: object
       title: ChildPersonalizationUpdate
     ChildPreferencesUpdate:
@@ -10764,6 +10930,16 @@ components:
           - type: string
           - type: 'null'
           title: Grade Level
+        curriculum_philosophy:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Curriculum Philosophy
+        subject_philosophies:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Subject Philosophies
       type: object
       title: ChildUpdate
     ConfigUpdate:
@@ -12282,6 +12458,36 @@ components:
         max_interest_tags_per_child:
           type: integer
           title: Max Interest Tags Per Child
+        voice_input_enabled:
+          type: boolean
+          title: Voice Input Enabled
+          default: true
+        voice_minutes_daily_cap:
+          type: integer
+          title: Voice Minutes Daily Cap
+          default: 60
+        whisper_provider:
+          type: string
+          enum:
+          - openai
+          - local
+          title: Whisper Provider
+          default: openai
+        voice_output_enabled:
+          type: boolean
+          title: Voice Output Enabled
+          default: true
+        voice_output_minutes_daily_cap:
+          type: integer
+          title: Voice Output Minutes Daily Cap
+          default: 120
+        tts_provider:
+          type: string
+          enum:
+          - openai
+          - elevenlabs
+          title: Tts Provider
+          default: openai
       type: object
       required:
       - allowed_vibes
@@ -12349,6 +12555,46 @@ components:
             minimum: 1.0
           - type: 'null'
           title: Max Interest Tags Per Child
+        voice_input_enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Voice Input Enabled
+        voice_minutes_daily_cap:
+          anyOf:
+          - type: integer
+            maximum: 480.0
+            minimum: 0.0
+          - type: 'null'
+          title: Voice Minutes Daily Cap
+        whisper_provider:
+          anyOf:
+          - type: string
+            enum:
+            - openai
+            - local
+          - type: 'null'
+          title: Whisper Provider
+        voice_output_enabled:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Voice Output Enabled
+        voice_output_minutes_daily_cap:
+          anyOf:
+          - type: integer
+            maximum: 600.0
+            minimum: 0.0
+          - type: 'null'
+          title: Voice Output Minutes Daily Cap
+        tts_provider:
+          anyOf:
+          - type: string
+            enum:
+            - openai
+            - elevenlabs
+          - type: 'null'
+          title: Tts Provider
       type: object
       title: PersonalizationPolicyUpdate
       description: 'Partial-update payload.
@@ -13107,6 +13353,40 @@ components:
       required:
       - events
       title: SyncRequest
+    TTSRequest:
+      properties:
+        text:
+          type: string
+          maxLength: 4000
+          minLength: 1
+          title: Text
+        persona_id:
+          type: string
+          maxLength: 60
+          minLength: 1
+          title: Persona Id
+        voice_mode:
+          type: boolean
+          title: Voice Mode
+          default: false
+        message_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message Id
+      type: object
+      required:
+      - text
+      - persona_id
+      title: TTSRequest
+      description: 'Body of a POST to ``/children/{id}/tts/stream``.
+
+
+        ``message_id`` is the kid-side identifier the consumer correlates
+
+        with the streamed audio (TutorChat sets it to the bubble''s
+
+        server-side message id).'
     TemplateCopyResponse:
       properties:
         learning_map_id:
@@ -13201,6 +13481,56 @@ components:
       - access_token
       - expires_in
       title: TokenResponse
+    TranscribeResponse:
+      properties:
+        text:
+          type: string
+          title: Text
+        duration_seconds:
+          type: number
+          title: Duration Seconds
+        remaining_minutes:
+          type: integer
+          title: Remaining Minutes
+        is_silent:
+          type: boolean
+          title: Is Silent
+          default: false
+        safety_intervention:
+          type: boolean
+          title: Safety Intervention
+          default: false
+        intervention_kind:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Intervention Kind
+        suggested_response:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Suggested Response
+        provider:
+          type: string
+          enum:
+          - openai
+          - local
+          title: Provider
+      type: object
+      required:
+      - text
+      - duration_seconds
+      - remaining_minutes
+      - provider
+      title: TranscribeResponse
+      description: 'Successful transcription envelope.
+
+
+        ``text`` is empty when the response is a safety intervention; the
+
+        caller surfaces a wellbeing UI instead of writing the transcript
+
+        into the kid''s textarea.'
     TutorMessageRequest:
       properties:
         child_id:
@@ -13221,6 +13551,10 @@ components:
             type: array
           - type: 'null'
           title: Conversation History
+        voice_mode:
+          type: boolean
+          title: Voice Mode
+          default: false
       type: object
       required:
       - message
