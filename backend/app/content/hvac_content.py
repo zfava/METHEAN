@@ -1097,4 +1097,337 @@ HVAC_CONTENT: dict[str, dict] = {
             "standard_refs": [],
         },
     },
+    "hc-002": {
+        "node_type": "technique",
+        "trade": "hvac",
+        "competency_name": (
+            "Identify the major components of a residential split-system air conditioner or "
+            "heat pump by sight, without opening any enclosure"
+        ),
+        "progression_band": "helper",
+        "prerequisites": ["hs-001"],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "Reaching toward a spinning condenser fan or blower in operation; the rule "
+                    "is no body part enters the airflow path of a running fan; for visual ID the "
+                    "learner stays clear of any operating equipment and works on de-energized "
+                    "equipment when up close"
+                ),
+                (
+                    "Touching a hot suction or liquid line during operation; the liquid line on "
+                    "a running AC is typically warm to hot to the touch (over 100 F is common), "
+                    "and the suction line can be cold enough to cause frostbite if a refrigerant "
+                    "leak is escaping; the rule is no touching of line set during operation, only "
+                    "visual identification at this band"
+                ),
+                (
+                    "Touching the compressor or other hot components during or shortly after "
+                    "operation; the compressor and head can run hot enough to burn skin"
+                ),
+                (
+                    "Opening the electrical disconnect or any enclosure to find a component; the "
+                    "rule is the cover stays on at this band; visual ID is performed with the "
+                    "cover closed for energized equipment and with the cover closed (or open "
+                    "under a qualified human's supervision per hc-021) for de-energized "
+                    "equipment"
+                ),
+                (
+                    "Sharp sheet-metal edges on the outdoor unit cabinet; cut-resistant gloves "
+                    "on if any handling of the cabinet (touching, leaning against) is anticipated"
+                ),
+                (
+                    "Slip hazard from condensate or seasonal water around the outdoor unit; the "
+                    "learner observes the standing water and condensate path as part of the ID, "
+                    "not as a hazard to step into"
+                ),
+            ],
+            "ppe_required": [
+                "Trade PPE per hs-001 (closed-toe shoes, the trade's general defaults)",
+                "Safety glasses for any work close to the outdoor unit (insects, debris, weather)",
+                (
+                    "Cut-resistant gloves if any handling of the cabinet panels is anticipated; "
+                    "bare hands acceptable for pure visual ID at arm's length"
+                ),
+            ],
+            "supervision_required": False,
+            "supervision_basis": (
+                "Visual identification with the cover closed and no enclosure opening involves no "
+                "tool use, no live circuit contact, no refrigerant contact, no opened combustion "
+                "system, and no rotating equipment contact. The AI tutor mentors this competency "
+                "end-to-end: the learner photographs each component (with the unit cover closed "
+                "for any energized equipment; the cover is opened only under hc-021 with a "
+                "qualified human present, which is a different competency), and the AI confirms "
+                "each identification. Trade-level supervision from hvac-root still applies in "
+                "the sense that no enclosure is opened and no energized work is performed; the "
+                "identification itself is low-hazard and AI-mentorable."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "A residential split-system air conditioner or heat pump",
+                "specification": (
+                    "The household's actual equipment, OR clear photographs of an outdoor "
+                    "condenser unit and indoor air handler from manufacturer's service "
+                    "literature. Visual ID is performed with the cover closed on energized "
+                    "equipment; any cover-removed views are from manufacturer's documentation "
+                    "or from a session with a qualified human present per hc-021. Mini-split "
+                    "and packaged-unit photographs are acceptable substitutes if the household "
+                    "does not have a split system."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Camera (cell phone is sufficient)",
+                "specification": (
+                    "A camera that produces images clear enough to identify components in the "
+                    "AI tutor's review. The learner photographs the unit and each external "
+                    "component from a few angles."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Component identification card or notebook",
+                "specification": (
+                    "A sheet or notebook page listing each named component with its function in "
+                    "one sentence as the learner identifies it. The card travels with the "
+                    "learner across later sessions on that equipment."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Flashlight or headlamp",
+                "specification": (
+                    "Mechanical-space lighting is commonly poor; a flashlight is on the person "
+                    "for the visit"
+                ),
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [],
+        "workspace_requirements": {
+            "surface": "Wherever the equipment is installed (outdoor pad, basement, attic, utility closet, garage)",
+            "ventilation": "Per hs-001 for the space",
+            "lighting": "Daylight, room lighting, or flashlight as needed",
+            "power": (
+                "Energy state immaterial for cover-closed visual ID; for any cover-removed view, "
+                "the disconnect is verified open under hc-021 by a qualified human (which is a "
+                "different competency, not in scope for this node's unsupervised practice)"
+            ),
+            "containment": "None required",
+        },
+        "skill_description": (
+            "The learner visits the household's outdoor condenser unit and indoor air handler "
+            "(or furnace with cooling coil) and identifies each major component by sight with "
+            "the unit covers closed. The learner photographs each component or component area "
+            "and submits to the AI tutor with the component's name and function written on a "
+            "card. The components, in order from outside in: outdoor condenser unit cabinet "
+            "(the metal box on the pad); the condenser coil (the metal fins wrapped around the "
+            "outside of the cabinet, visible through the cabinet grille); the condenser fan "
+            "(the fan visible at the top or side of the cabinet, exhausting heated air); the "
+            "line set entering the cabinet (two copper lines, the larger insulated suction line "
+            "and the smaller bare liquid line; on a heat pump in heating mode the temperatures "
+            "swap, but the size and insulation tell which line is which); the service ports "
+            "(two small valves on the line set near the cabinet, with caps in place when not in "
+            "use; refrigerant work happens here under EPA 608, not in this batch); the outdoor "
+            "disconnect (a small electrical box mounted on the wall near the outdoor unit, "
+            "between the building's electrical panel and the outdoor unit, containing the "
+            "service-disconnect switch and overcurrent protection); the electrical whip (the "
+            "flexible conduit from the disconnect to the cabinet, carrying the supply wiring); "
+            "the cabinet access panels (the side or top panel the technician removes to access "
+            "the contactor, capacitor, control board, and compressor, which are inside and not "
+            "visible at this band). Indoor side: the air handler or furnace cabinet (the indoor "
+            "metal box that contains the blower and the evaporator coil or burner); the supply "
+            "and return duct connections (the rectangular sheet-metal openings on the cabinet); "
+            "the evaporator coil access (a panel on the cabinet, behind which the coil sits; "
+            "not opened at this band); the blower compartment (a panel on the cabinet, behind "
+            "which the blower sits; not opened at this band); the condensate drain pan and "
+            "primary condensate line (visible at the bottom of the cabinet or as a PVC pipe "
+            "exiting the cabinet, usually with a P-trap and a termination at a floor drain or "
+            "outside); the secondary or emergency drain pan and the float switch (on systems "
+            "installed above living space; required by IMC in most jurisdictions); the indoor "
+            "filter slot (often at the return-air side of the cabinet or in a separate filter "
+            "grille in the return duct); the thermostat (on the wall in the living space, "
+            "connected by low-voltage wiring back to the air handler or furnace control); the "
+            "control board (inside the cabinet, not visible at this band). Each component is "
+            "named with its function in one sentence on the card."
+        ),
+        "demonstration_criteria": [
+            (
+                "Names every visible component of the outdoor unit from outside the cabinet: "
+                "cabinet, condenser coil (visible through the grille), condenser fan (visible at "
+                "top or side), line set (insulated suction line and bare liquid line), service "
+                "ports with caps in place, outdoor disconnect, electrical whip, access panels "
+                "(named but not opened)"
+            ),
+            (
+                "Names every visible component of the indoor unit from outside the cabinet: "
+                "cabinet, supply and return duct connections, access panels for evaporator coil "
+                "and blower (named but not opened), condensate drain pan and primary line, "
+                "secondary or emergency drain pan and float switch (if present per the "
+                "installation), filter slot or return-air filter grille, thermostat on the wall"
+            ),
+            (
+                "Names the function of each component in one sentence: the condenser fan "
+                "exhausts heated refrigerant gas to the outdoor air; the evaporator coil absorbs "
+                "heat from the indoor air; the compressor (inside the outdoor unit, not visible "
+                "at this band) pumps the refrigerant around the loop; etc."
+            ),
+            (
+                "Distinguishes the suction line from the liquid line by inspection (the suction "
+                "line is the larger of the two and is insulated; the liquid line is smaller and "
+                "bare copper)"
+            ),
+            (
+                "Locates the outdoor disconnect and names that it is the device used in hc-021 "
+                "to de-energize the outdoor unit before any service; demonstrates pointing to "
+                "the disconnect without operating it (operating the disconnect is part of "
+                "hc-021, not this competency)"
+            ),
+            (
+                "Names that the access panels (cabinet covers, blower compartment, evaporator "
+                "coil access) are NOT opened at this band; opening them is part of a different "
+                "competency that requires lockout-tagout per hc-021 and a qualified human "
+                "present per the trade root's supervision policy"
+            ),
+            (
+                "Names that the service ports on the line set are NOT touched at this band; "
+                "any work at the service ports is EPA Section 608 refrigerant work and requires "
+                "a 608-certified person physically present"
+            ),
+            (
+                "Photographs each component or component area and submits to the AI tutor with "
+                "the component name and function written on the card; the AI tutor confirms "
+                "each identification or names a discrepancy; the learner reconciles"
+            ),
+            (
+                "Names the difference between a split-system AC and a split-system heat pump in "
+                "one sentence (a heat pump can run the refrigerant cycle in both directions, "
+                "providing heating in winter and cooling in summer; an AC runs only in cooling "
+                "mode)"
+            ),
+            (
+                "Names what is and is not in this band: visible-from-outside identification is "
+                "in band; opened-enclosure inspection, refrigerant work, electrical service work, "
+                "and combustion-system work are each gated separately"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Confusing the suction line and the liquid line",
+                "cause": "The learner did not notice the insulation difference or the diameter difference",
+                "remedy": (
+                    "Suction line: larger diameter, insulated. Liquid line: smaller diameter, "
+                    "bare copper. On a heat pump in heating mode the temperatures swap (the "
+                    "suction line is now hot, the liquid line cool), but the size and insulation "
+                    "of the lines themselves do not change. The AI tutor confirms in the photo."
+                ),
+            },
+            {
+                "error": "Trying to identify the compressor or contactor from the outside",
+                "cause": "The learner expected the components named in the description to be visible",
+                "remedy": (
+                    "The compressor, contactor, capacitor, and control board sit inside the "
+                    "outdoor cabinet, behind the access panels. They are not visible at this "
+                    "band. The cover stays on; the AI tutor confirms which components are "
+                    "external and which are internal."
+                ),
+            },
+            {
+                "error": "Opening the disconnect to look at the internals",
+                "cause": "The learner reached to flip the disconnect or pull the pull-out",
+                "remedy": (
+                    "The disconnect is identified and pointed to, NOT operated. Operating the "
+                    "disconnect (opening it, verifying the absence of voltage) is hc-021, which "
+                    "requires a qualified human present at the live-dead-live verification. The "
+                    "disconnect stays as found at this band."
+                ),
+            },
+            {
+                "error": "Touching a service port cap to see how it unscrews",
+                "cause": "The learner was curious about the refrigerant service port",
+                "remedy": (
+                    "Service ports are NOT touched at this band. Removing a cap can release "
+                    "refrigerant; opening the port is EPA Section 608 work and requires a 608-"
+                    "certified person physically present. The cap stays on as found; the cap is "
+                    "pointed to and named."
+                ),
+            },
+            {
+                "error": "Missing the secondary drain pan or float switch on an above-living-space air handler",
+                "cause": "The pan and switch are visible but often not obvious if not looking for them",
+                "remedy": (
+                    "On any installation above living space (attic air handler, second-floor "
+                    "closet), the IMC and most local codes require a secondary drain pan and a "
+                    "float switch that interrupts the system on condensate overflow. The AI "
+                    "tutor confirms in the photo and explains the function of the float switch."
+                ),
+            },
+            {
+                "error": "Reaching toward a running condenser fan",
+                "cause": "The learner wanted to feel the airflow or see the fan blades better",
+                "remedy": (
+                    "No body part enters the airflow path of a running fan. The fan is observed "
+                    "from outside the airflow; if a closer look is needed, the unit is "
+                    "de-energized under hc-021 first by a qualified human."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "photo",
+            "what_to_capture": (
+                "A series of photographs of the household's outdoor unit and indoor air handler "
+                "(or furnace), with each named component visible and labeled in an accompanying "
+                "card (handwritten or typed) that names the component and its function in one "
+                "sentence. The cards and photographs are submitted to the AI tutor for "
+                "field-by-field confirmation."
+            ),
+            "what_the_evidence_shows": (
+                "That the learner identified each visible component correctly, distinguished "
+                "the suction and liquid lines, located the disconnect without operating it, "
+                "located the service ports without touching them, and named which components "
+                "and operations are in band and which are gated for later"
+            ),
+        },
+        "mentor_signoff_required": False,
+        "pedagogy": {
+            "i_do": (
+                "The AI tutor walks the learner through a sample split-system photograph (the "
+                "AI provides the image), naming each visible component aloud (in chat or in "
+                "voice), pointing out the distinguishing features (insulated suction line, "
+                "bare liquid line, capped service ports, etc.), and naming which components are "
+                "internal and not visible at this band."
+            ),
+            "we_do": (
+                "The AI tutor and the learner work through a second sample photograph together. "
+                "The learner names a component; the AI confirms or corrects; the next component "
+                "is the AI's, then back to the learner. At the end the learner reads the whole "
+                "ID card back."
+            ),
+            "you_do_supervised": (
+                "The learner visits the household's actual equipment, photographs each "
+                "component, and writes the name and function of each on the card. The cards and "
+                "photographs are submitted to the AI tutor for confirmation. The supervising "
+                "adult is on premises only for the visit itself (because the learner is in the "
+                "mechanical space or yard); the AI mentors the actual identification."
+            ),
+            "you_do_unsupervised": (
+                "Once the learner can produce accurate ID cards for the outdoor unit and the "
+                "indoor unit (or furnace with cooling) across at least two sessions, they may "
+                "identify components on new equipment unsupervised. The AI tutor remains "
+                "available for component confirmation; this is not a supervision rule, it is a "
+                "double-check rule that stays in place across bands."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 3,
+        "session_length_minutes": 30,
+        "related_projects": [],
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
+    },
 }
