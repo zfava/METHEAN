@@ -492,4 +492,455 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Reading with attention to punctuation and phrasing trains the writing hand to use those same marks deliberately",
         },
     },
+    "rd-02": {
+        "enriched": True,
+        "learning_objectives": [
+            "Choose and complete an early chapter book at the child's instructional level across multiple days",
+            "Hold the thread of a narrative across chapter boundaries: return to the book the next day knowing where the story is",
+            "Recognize the structure of a chapter book: short chapters, sustained characters, a beginning / middle / end at the book scale",
+            "Build reading stamina from 15 minutes toward 30 minutes of continuous independent silent reading",
+            "Articulate a book preference: name what kind of chapter book the child likes and ask for more like it",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "Foundational reading lived inside the picture book and the short decodable text: one sitting, one story, "
+                "begin and finish on the same day. Chapter books are different in kind. The story is too long for one "
+                "sitting; the child carries the narrative in mind across hours and days; the chapter break is the first "
+                "place reading stops without the story ending. The skill is not reading harder words (the words on early "
+                "chapter pages are often easier than the picture-book vocabulary) but holding more story longer. The "
+                "right first chapter books are short-chapter, character-driven, illustrated where it helps: Frog and Toad, "
+                "Mercy Watson, Magic Tree House, Henry and Mudge, Junie B. Jones, then The Boxcar Children, Charlotte's "
+                "Web, Mr. Popper's Penguins, then up the ladder."
+            ),
+            "scaffolding_sequence": [
+                "Tour the chapter book together: the cover, the title page, the table of contents, the first chapter heading; explain that the book has parts called chapters",
+                "Read the first chapter aloud to the child while the child follows along in the book; talk about who the characters are and where the story starts",
+                "Child reads the second chapter independently (or with parent on alternating pages); at the end, retell what happened in this chapter",
+                "Stop at the end of a chapter even if the child wants to keep reading; mark the place with a bookmark and put the book in a known spot",
+                "Next day, before reading the next chapter, ask the child to tell what happened so far; then continue",
+                "Build the daily reading habit: a chosen reading time, a chosen reading place, a chosen book; the child reads the next chapter or 15 to 20 minutes, whichever is longer",
+                "Across one book, log which chapter was the child's favorite and why; this builds the habit of having preferences",
+                "When the book is finished, celebrate it: the child names what they liked, asks for another book like it, and starts the next",
+            ],
+            "socratic_questions": [
+                "We're about to read chapter three. Before we start, can you tell me what happened in chapters one and two?",
+                "This chapter ended on something exciting. Why do you think the author made it stop right there?",
+                "You liked Frog and Toad. What was it about that book that you liked? What kind of book should we look for next?",
+                "The book is long enough that we won't finish today. How does it feel to leave a story in the middle and come back tomorrow?",
+                "If you imagine the story so far in your head, what do you see?",
+            ],
+            "practice_activities": [
+                "Pick a first chapter book together at the library or bookstore; the child chooses among three the parent has pre-selected at the instructional level",
+                "Daily chapter-or-twenty-minutes reading habit, same time and place each day, with a bookmark left at the stopping place",
+                "Keep a 'books I have read' list on the wall or in a notebook; add each finished book to the list with the date",
+                "After finishing a book, the child tells a parent or sibling what the book was about in three or four sentences (a real audience, real telling)",
+                "Read aloud the first chapter or two of a book the child will then read independently; sometimes the parent's voice gets the child into a book they would otherwise put down",
+            ],
+            "real_world_connections": [
+                "Going to the library on a regular schedule and choosing the next chapter book together",
+                "Having a chosen reading time before bed when chapter books fit naturally into the day",
+                "Trading books with a sibling, cousin, or friend who is reading at the same level",
+                "Talking with a grandparent or older relative about a chapter book the relative also read as a child",
+                "Watching a beloved chapter book read aloud as an audiobook on a long car ride, then picking up the physical book to reread",
+            ],
+            "common_misconceptions": [
+                "Thinking the child must finish a chapter book in one sitting. Chapter books are multi-day reading by design; the chapter break is the natural stopping point.",
+                "Pushing the child to longer books before stamina is built. Frog and Toad at full attention is better than Harry Potter at half attention.",
+                "Treating the chapter book as a vocabulary test. The point at this band is sustained narrative comprehension, not unfamiliar-word counts.",
+                "Insisting the child finish every book they start. The child who finishes 8 of 10 chosen books has built more than the child who slogs through 10 of 10. Permission to abandon is part of becoming a real reader.",
+                "Choosing books for the child by parent literary taste alone. The child's preferences are the engine of reading volume; honor what the child wants to read.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Completes an early chapter book across one to two weeks at 15 to 30 minutes per day",
+                "Can recall and retell the gist of yesterday's reading before continuing today",
+                "Names the chapter structure: short chapters, sustained characters, a beginning and end at book scale",
+                "Sustains 20+ minutes of continuous independent silent reading",
+                "Articulates a preference: 'I like books about ___; the part I liked best was ___'",
+            ],
+            "proficiency_indicators": [
+                "Completes a chapter book across two to three weeks with support",
+                "Recalls main events of prior chapters with prompting",
+                "Sustains 10 to 15 minutes of continuous reading",
+            ],
+            "developing_indicators": [
+                "Loses the thread between chapters; needs a full reread to continue",
+                "Sustains under 10 minutes of continuous reading",
+                "Cannot name a book preference yet",
+            ],
+            "assessment_methods": [
+                "completed-book log across a month",
+                "before-reading retelling check (what happened so far?)",
+                "after-book retelling (what was the book about, in your own words?)",
+                "independent reading stamina log",
+            ],
+            "sample_assessment_prompts": [
+                "Tell me what happened in the chapters you have read so far.",
+                "After you finish this book, tell me what the book was about. What was your favorite part?",
+                "How long did you read today without stopping?",
+                "What kind of book do you want next? Tell me what you liked about this one so I know what to look for.",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "What does a 'chapter' mean in a chapter book?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "A different book by the same author",
+                    "A section of one book, with the rest of the book continuing the same story",
+                    "A picture in the book",
+                    "A word that's hard to read",
+                ],
+                "correct_answer": "A section of one book, with the rest of the book continuing the same story",
+                "hints": [
+                    "Look at the table of contents at the start of the book. Each line is one chapter.",
+                ],
+                "explanation": (
+                    "A chapter is one section of a book. A chapter book has several chapters that together tell one story. "
+                    "When one chapter ends, the next chapter continues the same story."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": (
+                    "You read three chapters of a chapter book yesterday. Today, before you start chapter four, what is "
+                    "the best thing to do?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Skip chapter four and read chapter five instead.",
+                    "Start over from chapter one.",
+                    "Take a moment to remember what happened in chapters one to three, then read chapter four.",
+                    "Read chapter four very fast.",
+                ],
+                "correct_answer": "Take a moment to remember what happened in chapters one to three, then read chapter four.",
+                "hints": [
+                    "The story keeps going from where you left off. You need the story so far in your head.",
+                ],
+                "explanation": (
+                    "Chapter books are written so each chapter continues the story. Spending a moment to remember the "
+                    "story so far lets you read the new chapter with the right context."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "You picked a chapter book but after two chapters you don't really like it. What should you do?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Force yourself to finish even though you don't like it.",
+                    "Tell someone in your family why you don't like it and pick a different book.",
+                    "Throw the book away.",
+                    "Pretend to read it but actually do something else.",
+                ],
+                "correct_answer": "Tell someone in your family why you don't like it and pick a different book.",
+                "hints": [
+                    "Real readers abandon books they don't connect with. Naming why helps you find the next book.",
+                ],
+                "explanation": (
+                    "Permission to abandon a book is part of being a real reader. Telling someone why you didn't like it "
+                    "helps everyone find the next book that you will love. Forcing a bad fit damages the habit of reading."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "How long should you try to read your chapter book each day at this stage?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "5 minutes.",
+                    "About 15 to 20 minutes, or one chapter, whichever is longer.",
+                    "Two hours.",
+                    "Until you finish the whole book in one sitting.",
+                ],
+                "correct_answer": "About 15 to 20 minutes, or one chapter, whichever is longer.",
+                "hints": [
+                    "Daily reading builds stamina. Long forced sessions burn the habit out.",
+                ],
+                "explanation": (
+                    "Daily 15 to 20 minutes (or one chapter) is the target stamina-building habit. As stamina grows the "
+                    "child will naturally want longer sessions; let the want lead."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "You finished your chapter book. The next thing to do is to tell someone what it was about. Practice now: "
+                    "in three or four sentences, what would you say about the last chapter book you finished?"
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Name the main character and the situation, then say one or two main things that happened, then say what you liked.",
+                ],
+                "explanation": (
+                    "A good book retelling at this band has: the main character or characters, the situation or problem, "
+                    "one or two main things that happened, and the child's own response. It's a short telling, not a "
+                    "summary of every event."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": (
+                    "Tell me what happened so far in the chapter book you are reading. (Asked before continuing into the "
+                    "next chapter.)"
+                ),
+                "type": "open_response",
+                "target_concept": "cross_chapter_retention",
+                "rubric": (
+                    "Mastery: names the main characters, the situation, and the main events of the chapters read so far in "
+                    "coherent order. Proficient: names main characters and gist with some prompting. Developing: cannot "
+                    "recall yesterday's reading without a reread."
+                ),
+            },
+            {
+                "prompt": "Tell me about the last chapter book you finished. What was it about, and what was your favorite part?",
+                "type": "open_response",
+                "target_concept": "book_level_retelling_and_preference",
+                "rubric": (
+                    "Mastery: 3 to 5 sentence retelling that captures the book's situation and main events, plus a "
+                    "specific named favorite part. Proficient: shorter retelling, generic favorite. Developing: cannot "
+                    "retell or articulate preference."
+                ),
+            },
+            {
+                "prompt": "How long can you read your current chapter book without stopping? Show me by reading until you naturally want a break.",
+                "type": "open_response",
+                "target_concept": "independent_reading_stamina",
+                "rubric": (
+                    "Mastery: sustains 20+ minutes. Proficient: 10 to 15 minutes. Developing: under 10 minutes."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "early chapter books at the child's instructional level (Frog and Toad, Mercy Watson, Magic Tree House, Henry and Mudge, Junie B. Jones, then The Boxcar Children, Charlotte's Web, Mr. Popper's Penguins)",
+                "a chosen reading place at home (a corner, a chair, a bedside spot)",
+                "a bookmark and a known place for the current book between sittings",
+            ],
+            "recommended": [
+                "a weekly library trip to keep books flowing in",
+                "a 'books I have read' list (wall poster, notebook, or app) the child keeps themselves",
+                "audiobooks of beloved chapter books for car trips and bedtime listening",
+            ],
+        },
+        "time_estimates": {"first_exposure": 25, "practice_session": 20, "assessment": 15},
+        "accommodations": {
+            "dyslexia": (
+                "Pair audiobooks with the printed book so the child hears the fluent voice while their eyes follow the "
+                "text; many dyslexic readers love long books they would not yet read alone. Use the easiest chapter books "
+                "(Frog and Toad, Mercy Watson) at this band, where the story interest is high and the text load is light. "
+                "Read alternating pages aloud with the child."
+            ),
+            "adhd": (
+                "Short-chapter books (Magic Tree House, Mercy Watson) are easier than long-chapter books at this band. "
+                "Allow standing or fidgeting while reading. A clear 15-minute timer with a known stop is easier than open-"
+                "ended stamina building. Reading on the move (bedtime, car, after lunch) works for many ADHD readers."
+            ),
+            "gifted": (
+                "Move sooner to longer chapter books with more sustained narratives (Roald Dahl, E. B. White, Beverly Cleary, "
+                "Kate DiCamillo, Lemony Snicket as the upper edge of the band). Introduce the idea of a series so the "
+                "child reads several books with the same characters in a row. Honor wide reading volume as the goal."
+            ),
+            "visual_learner": "Books with illustrations across the band help (Frog and Toad, Henry and Mudge, Magic Tree House). Good light on the reading place.",
+            "kinesthetic_learner": (
+                "Read aloud at bedtime so the child can fidget and listen at once. Track with a finger or bookmark for the "
+                "harder pages. Standing or walking while listening to an audiobook builds the same skill."
+            ),
+            "auditory_learner": "Audiobook-and-print pairing is especially effective. Read aloud first chapters to get the child into the book's voice.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Chapter books mark the move from reading one story in one sitting to holding one story across days. "
+                    "Today and across this week we will choose, begin, and finish an early chapter book together, building "
+                    "the habit of daily reading and the ability to remember the story across chapters."
+                ),
+                "gradual_release": {
+                    "i_do": (
+                        "Show the cover and title page; read the table of contents aloud; read the first chapter aloud while "
+                        "the child follows. Name the chapter break and the bookmark, and show how the book waits in its "
+                        "spot for tomorrow."
+                    ),
+                    "we_do": (
+                        "Read the second chapter together, taking alternating pages or paragraphs. At the chapter break, "
+                        "stop and have the child tell what has happened so far in the story."
+                    ),
+                    "you_do": (
+                        "Child reads the next chapter independently for the daily 15 to 20 minutes (or one chapter). At "
+                        "the end of the book, the child tells a parent or sibling what the book was about."
+                    ),
+                },
+                "guided_practice": [
+                    "Daily chapter-or-15-minutes habit at a chosen time and place",
+                    "Before-reading retelling: tell the story so far, then continue",
+                    "After-book retelling: 3 to 5 sentences about the book to a real audience",
+                ],
+                "independent_practice": [
+                    "Choose the next book from three pre-selected options at instructional level",
+                    "Keep the 'books I have read' list across the term",
+                ],
+                "mastery_check": [
+                    "Completes an early chapter book across 1 to 2 weeks",
+                    "Can recall yesterday's reading before continuing today",
+                    "Sustains 20+ minutes of independent reading",
+                ],
+                "spiral_review": [
+                    "Return to a favorite finished book occasionally for an easy fluent reread",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "The chapter book is the first long-form text the reader carries in mind. To read it well is an act of "
+                    "memory and attention sustained across days, the grammar-stage habit that makes all later reading "
+                    "possible. We choose worthy books and we read them daily, attentively, with the story held entire in "
+                    "mind."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the chapter book habit: a chapter or fifteen minutes, every day, the same time and place",
+                        "Recite the daily prompt: before today's chapter, tell what has happened so far",
+                    ],
+                    "recitations": [
+                        "Memorize and recite one short passage of beautiful language from the chapter book in progress each week",
+                    ],
+                },
+                "copywork": [
+                    "Copy one sentence of fine language from the chapter book in progress each week, into the copybook, attending to its punctuation and rhythm",
+                ],
+                "recitation_routine": (
+                    "Each lesson begins with the child telling what has happened so far in the chapter book, then reads the "
+                    "next chapter; the narrative is recited cumulatively across the days of the book."
+                ),
+                "history_integration": (
+                    "Choose chapter books that sit along the chronological spine (historical fiction at the right age: "
+                    "Little House series, Mr. Popper's Penguins, The Courage of Sarah Noble) so the reading practice runs "
+                    "with the history sequence."
+                ),
+                "read_aloud_suggestions": [
+                    "Read aloud a slightly more advanced chapter book each evening alongside the child's own independent chapter book; the parent voice carries the harder language while the child reads their own at independent level",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 20,
+                "living_book_suggestions": [
+                    "Living chapter books with truly beautiful language and real story interest: Charlotte's Web, The Little House series, Mr. Popper's Penguins, Mrs. Frisby and the Rats of NIMH (upper edge), Frog and Toad, Mercy Watson at the entry",
+                    "Avoid twaddle: thin series-pulp written down to the child rarely earns the reader; choose the books worth the time even at the easy end",
+                ],
+                "short_lesson_flow": (
+                    "Sit together, the child with the book in hand. The child reads a chapter (or a portion that fits the "
+                    "20-minute lesson) attentively, once and well. At the end, the child narrates the chapter to the parent "
+                    "in their own words. Stop while the reading is still a pleasure; the next day continues the same book."
+                ),
+                "narration_prompt": (
+                    "Tell me the chapter you just read in your own words. What did you most enjoy in it?"
+                ),
+                "real_world_objects": [
+                    "The chapter book itself, kept where the child can return to it daily",
+                    "A small reading nook with good light and quiet",
+                    "A simple reading journal where the child copies a favorite sentence and notes the book and chapter",
+                ],
+                "nature_connection": (
+                    "Some chapter books at this band are themselves nature-attentive (Charlotte's Web, The Little House "
+                    "books, the early Magic Tree House books); the chapter book practice supports the nature notebook by "
+                    "modeling careful observation of small things."
+                ),
+                "habit_focus": (
+                    "The habit of attention sustained across many days. The chapter book is the first place the child "
+                    "experiences a story too long for one sitting; the daily habit makes this kind of reading the child's "
+                    "own."
+                ),
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A reading corner stocked with chapter books at and just above the child's independent level, the child choosing freely",
+                    "A 'books I have read' list the child keeps themselves, with the date each book was finished",
+                    "A bookmark and a known place for the current book between sittings",
+                    "A small notebook for copying one favorite sentence per book, when the child wants to",
+                ],
+                "presentation": {
+                    "three_period_lesson": (
+                        "This is a chapter. Show me where this chapter ends. Where does the next chapter begin? Where does "
+                        "the book wait until tomorrow? The chapter, the bookmark, the spot are introduced calmly, then "
+                        "handed to the child as the child's own."
+                    ),
+                    "steps": [
+                        "The guide shows the chapter book, the table of contents, the chapter break, and the bookmark spot",
+                        "The child chooses among offered chapter books at their independent level",
+                        "The child reads a chapter (or 15 to 20 minutes) in the reading corner each day",
+                        "At the end of each book, the child adds it to their own 'books I have read' list with the date",
+                    ],
+                },
+                "control_of_error": (
+                    "The story itself is the control: a child who has lost the thread will say so when asked to retell, and "
+                    "will return to the bookmark on their own to reread. The guide does not correct; the guide notices and "
+                    "the child mends."
+                ),
+                "abstraction_pathway": (
+                    "From listening to a chapter book read aloud, to reading chapters together, toward reading whole chapter "
+                    "books independently and choosing the next book from the shelf with confidence."
+                ),
+                "extensions": [
+                    "When a book in a series is loved, the child reads the next book in the series",
+                    "When the child has finished several books by one author, name the author and look for more",
+                    "Begin a small reading journal with one copied sentence per book",
+                ],
+                "observation_focus": (
+                    "Watch for the child returning to the reading corner freely, sustaining longer reading sessions across "
+                    "the term, naming book preferences in their own words, and beginning to choose the next book without "
+                    "the guide picking it."
+                ),
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a generous, well-curated shelf of early chapter books at the child's reading level within reach",
+                    "Make weekly library trips a family habit, with the child choosing books for themselves",
+                    "Leave audiobooks of beloved chapter books alongside the print versions for car trips and bedtime",
+                    "Make a cozy reading nook with good light and quiet where long uninterrupted reading is easy",
+                ],
+                "real_world_contexts": [
+                    "Bedtime reading time set aside as the child's own",
+                    "Long car trips with audiobooks the whole family listens to together",
+                    "Sharing favorite chapter books with siblings, cousins, friends at the same reading level",
+                    "Talking with grandparents about chapter books they read as children",
+                ],
+                "conversation_starters": [
+                    "What part of the book are you in? Tell me what's happening.",
+                    "Did you like that book? What kind of book do you want next?",
+                    "Want to listen to the audiobook of your next book on our car trip?",
+                    "Should we try a book by that author you liked? They wrote a lot more.",
+                ],
+                "resource_bank": [
+                    "Many inviting chapter books at and around the child's reading level",
+                    "Audiobooks paired with the print, especially for long car trips",
+                    "Series the child can fall into and read several of in a row",
+                    "A library card the child uses freely",
+                ],
+                "parent_role": (
+                    "Talk about books in the family conversation the way other families talk about TV or sports. Honor the "
+                    "child's preferences. Welcome the abandoned books as readily as the finished ones. Never time the "
+                    "reading; trust that volume builds the habit and the habit builds the reader."
+                ),
+                "observation_documentation": (
+                    "Across a term, note the books finished, the books abandoned, the kinds of books the child returns to, "
+                    "and the growing length of their daily reading. This noticing replaces any test or stamina log."
+                ),
+            },
+        },
+        "connections": {
+            "math": "Sustained attention to a chapter book builds the same stamina muscle as sustained attention to a multi-step math problem",
+            "science": "A child who can hold a chapter-book story in mind can begin to hold a science narrative (the life cycle, the experiment, the explanation) in mind too",
+            "history": "Historical fiction chapter books (Little House, Mr. Popper) are an early door into the history sequence",
+            "writing": "Reading whole chapter books is the precondition for writing one's own short stories with chapters",
+        },
+    },
 }
