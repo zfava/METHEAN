@@ -3990,4 +3990,388 @@ READING_DEVELOPING_CONTENT = {
             "writing": "Writing a compare-and-contrast essay is the writing-strand application of this reading skill",
         },
     },
+    "rd-10": {
+        "enriched": True,
+        "learning_objectives": [
+            "Read and enjoy a variety of poetry forms: lyric, narrative, humorous, nature, free verse",
+            "Identify rhyme scheme using letter notation (AABB, ABAB, ABCB, etc.)",
+            "Identify rhythm and meter at the introductory level: where the beat lands, where the line speeds up or slows down",
+            "Identify stanza structure: a stanza is to a poem what a paragraph is to prose; count the stanzas, notice the pattern",
+            "Notice imagery and sound: what does the poem ask you to see, hear, smell, taste, touch? What sounds repeat?",
+            "Memorize and recite a chosen poem with expression: poetry is meant to be heard, not just read on the page",
+        ],
+        "teaching_guidance": {
+            "introduction": (
+                "Foundational reading included poetry recitation (rf-17) and nursery rhymes (rf-18); poems were enjoyed "
+                "as music. Developing poetry appreciation lifts the level of attention. The child still enjoys the music "
+                "but also notices the structure: rhyme scheme, rhythm, stanza, imagery. They meet a wider variety of "
+                "poetry forms (lyric, narrative, humorous, nature, free verse) and learn the vocabulary that names what "
+                "they hear and see. The central practice remains MEMORIZATION AND RECITATION; poetry is heard, not just "
+                "read. A child who has memorized two dozen poems by the end of the developing level has the music of "
+                "the language in the ear."
+            ),
+            "scaffolding_sequence": [
+                "Begin with poems the child already loves: nursery rhymes, A. A. Milne, Shel Silverstein, Jack Prelutsky, the rhyming picture books the child knows",
+                "Introduce rhyme scheme as a notation: mark each rhyme with a letter ('cat' = A; 'hat' = A; 'tree' = B; 'me' = B → AABB). Practice on a known poem first.",
+                "Move to other patterns: ABAB (alternating rhyme), ABCB (rhyming only lines 2 and 4), free verse (no rhyme), couplets (AABB...)",
+                "Introduce rhythm by clapping the beat. Some lines are dum-da-dum-da (iambic); some are dum-da-da-dum-da-da (rolling); some have no fixed meter (free verse)",
+                "Introduce stanza as the paragraph of poetry: count the stanzas, notice if they are equal or different in length",
+                "Introduce imagery: 'what does this line ask you to see / hear / smell / taste / feel?' Mark the sense each line invokes",
+                "Introduce sound devices lightly: alliteration (Peter Piper picked a peck of pickled peppers), onomatopoeia (buzz, crash, hiss)",
+                "Tour the forms: read a lyric poem (a personal feeling poem), a narrative poem (a poem that tells a story), a humorous poem (Shel Silverstein, Ogden Nash), a nature poem (Frost, Mary Oliver at age), a free-verse poem (Carl Sandburg, Langston Hughes)",
+                "Memorize one short poem and recite it with expression at the end of each week",
+            ],
+            "socratic_questions": [
+                "How does the poem sound? Where does the beat land?",
+                "What is the rhyme scheme? Mark it with letters.",
+                "How many stanzas does the poem have? Are they the same length?",
+                "What does the poem ask you to see or hear?",
+                "What is the poem really about? (For a poem with figurative content, the topic and the subject may differ.)",
+                "Why did the poet choose those specific words? What other words could have gone there?",
+                "Recite the poem you memorized this week with expression. Where did your voice rise? Where did it pause?",
+            ],
+            "practice_activities": [
+                "Rhyme-scheme marking: mark the rhyme scheme of a familiar poem in letters",
+                "Stanza count: count the stanzas of a poem and notice the pattern",
+                "Imagery walk: read a poem and circle every sensory image",
+                "Memorize and recite: pick a short poem each week, memorize across the week, recite Friday with expression for the family",
+                "Form tour: across a term, read at least one poem of each form (lyric, narrative, humorous, nature, free verse)",
+                "Poem-of-the-day: a poem read aloud at breakfast or bedtime, with one quick noticing each day",
+            ],
+            "real_world_connections": [
+                "Reciting memorized poems at family gatherings",
+                "Recognizing song lyrics as poetry (every song lyric has rhyme scheme, rhythm, stanza)",
+                "Writing greeting cards and birthday wishes in verse",
+                "Listening to spoken-word poetry (age-appropriate) and audiobooks of poetry collections",
+                "Noticing rhyme and rhythm in nursery rhymes recited to younger siblings",
+            ],
+            "common_misconceptions": [
+                "Believing poetry must rhyme to be poetry. Free verse has no rhyme but is still poetry. Walt Whitman, Carl Sandburg, much of contemporary poetry is free verse.",
+                "Treating rhythm and meter as a math problem. Rhythm is felt first in the ear; the letter notation is a tool for naming what is already heard.",
+                "Reading a poem only once. Poems repay rereading; the second and third readings hear things the first reading missed.",
+                "Reading a poem silently when the poem asks to be heard. Read aloud, even alone; the music is the point.",
+                "Believing the poem is about its surface topic. A poem about a road might be about choice (Frost); a poem about a stopped horse might be about death (Frost); the subject can be one thing, the topic another. At this band the child notices the possibility without forcing every poem to have hidden depths.",
+            ],
+        },
+        "assessment_criteria": {
+            "mastery_indicators": [
+                "Identifies rhyme scheme of an unfamiliar poem using letter notation",
+                "Distinguishes stanzas and notices stanza pattern",
+                "Identifies imagery in a poem and names the sense each invokes",
+                "Recognizes major poetry forms (lyric, narrative, humorous, nature, free verse) and names which form a chosen poem belongs to",
+                "Memorizes and recites at least one short poem each week with expression",
+            ],
+            "proficiency_indicators": [
+                "Marks rhyme scheme on a familiar poem reliably",
+                "Counts stanzas and recognizes imagery with prompting",
+                "Memorizes a short poem with some support",
+            ],
+            "developing_indicators": [
+                "Reads poems as if they were prose, with no attention to sound or structure",
+                "Cannot distinguish a poem from prose at a glance",
+            ],
+            "assessment_methods": [
+                "rhyme-scheme marking on an unfamiliar poem",
+                "imagery walk on a chosen poem",
+                "weekly memorized poem recitation with expression",
+                "form identification: name the form of a chosen poem",
+            ],
+            "sample_assessment_prompts": [
+                "Read this poem aloud. What is the rhyme scheme? Mark it with letters.",
+                "How many stanzas does this poem have? Are they the same length?",
+                "Circle every image in this poem. What sense does each invoke?",
+                "What form is this poem (lyric, narrative, humorous, nature, free verse)?",
+                "Recite the poem you memorized this week. Read it with expression.",
+            ],
+        },
+        "practice_items": [
+            {
+                "type": "problem",
+                "difficulty": 1,
+                "prompt": "Mark the rhyme scheme of this poem with letters: 'Roses are red, / Violets are blue, / Sugar is sweet, / And so are you.'",
+                "expected_type": "text",
+                "hints": [
+                    "The end-words are red, blue, sweet, you. Which rhyme?",
+                ],
+                "explanation": (
+                    "Red and sweet do not rhyme, so they are different letters. Blue and you rhyme. The rhyme scheme is "
+                    "ABCB (line 1 = A, line 2 = B, line 3 = C, line 4 = B again because it rhymes with line 2)."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": "What is a 'stanza'?",
+                "expected_type": "multiple_choice",
+                "options": [
+                    "A single line of a poem.",
+                    "A group of lines in a poem, like a paragraph in prose; usually separated from other stanzas by a blank line.",
+                    "The first word of every line.",
+                    "The rhyme at the end of a poem.",
+                ],
+                "correct_answer": "A group of lines in a poem, like a paragraph in prose; usually separated from other stanzas by a blank line.",
+                "hints": [
+                    "Think paragraph, but for poems.",
+                ],
+                "explanation": (
+                    "A stanza is a group of lines in a poem, like a paragraph in prose. Stanzas are usually separated by "
+                    "blank lines. Some poems have many short stanzas; others have a few long stanzas; some have only "
+                    "one stanza."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 2,
+                "prompt": (
+                    "Does poetry have to rhyme?"
+                ),
+                "expected_type": "multiple_choice",
+                "options": [
+                    "Yes, all poetry must rhyme.",
+                    "No; free verse is poetry without rhyme. Many poets (Walt Whitman, Carl Sandburg, much contemporary poetry) write free verse.",
+                    "Only nursery rhymes are real poetry.",
+                    "Yes, if it doesn't rhyme it is prose.",
+                ],
+                "correct_answer": "No; free verse is poetry without rhyme. Many poets (Walt Whitman, Carl Sandburg, much contemporary poetry) write free verse.",
+                "hints": [
+                    "Free verse is poetry without fixed rhyme or meter.",
+                ],
+                "explanation": (
+                    "Free verse is poetry without fixed rhyme or meter. It still has poetic qualities: imagery, sound, "
+                    "rhythm shaped by line breaks rather than meter, attention to specific words. Whitman, Sandburg, "
+                    "Langston Hughes, much of contemporary poetry is free verse."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Read this Robert Frost line: 'Whose woods these are I think I know.' What images does it ask you "
+                    "to see? What does the line sound like (rhythm)?"
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Images: think about what you can picture from these words.",
+                    "Rhythm: clap the line. Where does the beat land?",
+                ],
+                "explanation": (
+                    "The line asks you to picture woods (a forest, snowy in the full poem) and a speaker who might or "
+                    "might not be trespassing. The rhythm is iambic tetrameter: da-DUM da-DUM da-DUM da-DUM (whose-WOODS "
+                    "these-ARE I-THINK I-KNOW). The steady beat is part of the poem's contemplative feel."
+                ),
+            },
+            {
+                "type": "problem",
+                "difficulty": 3,
+                "prompt": (
+                    "Pick a short poem you love (under 16 lines) and tell me: the rhyme scheme, the number of stanzas, "
+                    "one image you remember, and what form the poem is (lyric, narrative, humorous, nature, free verse)."
+                ),
+                "expected_type": "text",
+                "hints": [
+                    "Apply each vocabulary item to a real poem.",
+                ],
+                "explanation": (
+                    "Applying the vocabulary to a poem the child loves is the real practice. A complete answer names "
+                    "the rhyme scheme (or notes the poem is free verse), counts the stanzas, identifies a specific "
+                    "image, and names the form. This is what poetry appreciation at the developing band looks like."
+                ),
+            },
+        ],
+        "assessment_items": [
+            {
+                "prompt": "Read this unfamiliar poem aloud. Mark the rhyme scheme with letters.",
+                "type": "open_response",
+                "target_concept": "rhyme_scheme_identification",
+                "rubric": (
+                    "Mastery: correct letter notation for any common pattern (AABB, ABAB, ABCB, free verse). Proficient: "
+                    "correct for simple patterns. Developing: cannot mark rhyme scheme."
+                ),
+            },
+            {
+                "prompt": "How many stanzas does this poem have? Are they the same length? What pattern do you notice?",
+                "type": "open_response",
+                "target_concept": "stanza_structure",
+                "rubric": (
+                    "Mastery: counts correctly, names pattern. Proficient: counts correctly. Developing: cannot identify "
+                    "stanzas."
+                ),
+            },
+            {
+                "prompt": "Circle every image in this poem and tell me what sense each invokes.",
+                "type": "open_response",
+                "target_concept": "imagery_identification",
+                "rubric": (
+                    "Mastery: identifies most images and names sense for each. Proficient: identifies some images. "
+                    "Developing: cannot identify images."
+                ),
+            },
+            {
+                "prompt": "Recite your memorized poem for me. Read it with expression and pause where the poem asks you to.",
+                "type": "open_response",
+                "target_concept": "memorized_recitation",
+                "rubric": (
+                    "Mastery: full poem from memory, confident expression, appropriate pauses. Proficient: full poem "
+                    "with some prompting, basic expression. Developing: partial memorization or flat delivery."
+                ),
+            },
+        ],
+        "resource_guidance": {
+            "required": [
+                "a poetry collection or anthology at the child's level (A Child's Garden of Verses, When We Were Very Young, Where the Sidewalk Ends, A Light in the Attic, Oxford Book of Children's Verse)",
+                "a recitation notebook where the child copies memorized poems",
+                "a quiet recital space (a chair, a poetry corner, the family table at the right moment)",
+            ],
+            "recommended": [
+                "audiobooks of poetry collections for modeling fluent expressive recitation",
+                "an anthology that covers multiple forms (lyric, narrative, humorous, nature, free verse) for the form tour",
+                "Robert Frost, Christina Rossetti, A. A. Milne, Robert Louis Stevenson, Shel Silverstein, Jack Prelutsky, Langston Hughes, Naomi Shihab Nye for variety",
+            ],
+        },
+        "time_estimates": {"first_exposure": 20, "practice_session": 15, "assessment": 15},
+        "accommodations": {
+            "dyslexia": "Poetry is especially valuable for dyslexic readers because the short lines, repeated patterns, and oral tradition reward listening as much as reading. Memorize by hearing; recite by heart; the written form is the trace, not the source.",
+            "adhd": "Short poems with clear rhythm hold attention better than long ones. Memorize in 2-line chunks across several days. Recite to a real audience as the motivation.",
+            "gifted": "Move to more complex forms (sonnet, villanelle, sestina at the upper edge of the band). Introduce specific poets with depth (Frost in winter, Dickinson, Hughes, Oliver). Begin to discuss what poems are 'about' beyond their surface topic.",
+            "visual_learner": "Mark rhyme scheme and stanza breaks visually on a printed copy. Color-code images by sense.",
+            "kinesthetic_learner": "Clap the rhythm of a line. Walk a poem (a step per beat). Recite while walking or moving.",
+            "auditory_learner": "Listen to poems read aloud (podcasts, audiobooks, recordings of poets reading their own work). Memorize by ear before reading on paper.",
+        },
+        "philosophy_specific": {
+            "traditional": {
+                "introduction": (
+                    "Today we move from enjoying poems as music to noticing how poems are made. We learn the vocabulary: "
+                    "rhyme scheme, rhythm, stanza, imagery, form. We meet five forms (lyric, narrative, humorous, nature, "
+                    "free verse). And we keep the central practice: memorize one short poem each week and recite it with "
+                    "expression."
+                ),
+                "gradual_release": {
+                    "i_do": "Parent reads a poem aloud, then explains the rhyme scheme, stanzas, imagery, and form.",
+                    "we_do": "Together with the child, work through a second poem: mark rhyme scheme, count stanzas, find images.",
+                    "you_do": "Child applies the vocabulary to a third poem independently and recites their memorized poem of the week.",
+                },
+                "guided_practice": [
+                    "Rhyme-scheme marking on a poem each week",
+                    "Imagery walk on a poem each week",
+                    "Memorize-and-recite weekly",
+                ],
+                "independent_practice": [
+                    "Read poetry daily for ten minutes",
+                    "Across the term, read at least one poem of each major form",
+                ],
+                "mastery_check": [
+                    "Marks rhyme scheme of unfamiliar poems",
+                    "Identifies form of unfamiliar poems",
+                    "Memorizes and recites a short poem each week",
+                ],
+                "spiral_review": [
+                    "Re-recite earlier memorized poems each Friday cumulatively",
+                ],
+            },
+            "classical": {
+                "narrative_introduction": (
+                    "Poetry is older than prose. The earliest stories were poems. The Iliad, the Odyssey, the Beowulf, "
+                    "the Psalms: all poems, all memorized and recited for centuries before they were written down. To "
+                    "learn poetry is to take up an ancient art that lives in the ear before it lives on the page."
+                ),
+                "memory_work": {
+                    "chants": [
+                        "Recite the elements of poetry: rhyme, rhythm, stanza, imagery, form",
+                        "Recite the five forms: lyric (a feeling), narrative (a story), humorous (a laugh), nature (the natural world), free verse (no fixed meter or rhyme)",
+                    ],
+                    "recitations": [
+                        "Memorize and recite a short poem each week, building a cumulative repertoire across the term",
+                        "Build a recitation book the child reads from at family gatherings",
+                    ],
+                },
+                "copywork": [
+                    "Copy each memorized poem into the recitation notebook neatly, attending to its line breaks and punctuation",
+                ],
+                "recitation_routine": "Begin each lesson with the recitation of a poem from earlier weeks; add the new poem; the repertoire grows cumulatively.",
+                "history_integration": "Poetry across the chronological spine: nursery rhymes (folk), Robert Louis Stevenson (Victorian), Frost (twentieth century), Hughes (Harlem Renaissance), contemporary poets at the upper edge.",
+                "read_aloud_suggestions": [
+                    "A daily poem at breakfast or bedtime, drawn from a real anthology",
+                    "Classical and traditional poetry: Christina Rossetti, Robert Louis Stevenson, A. A. Milne, Robert Frost; modern poets at age",
+                ],
+            },
+            "charlotte_mason": {
+                "lesson_length_minutes": 15,
+                "living_book_suggestions": [
+                    "A Child's Garden of Verses (Stevenson), When We Were Very Young (Milne), Now We Are Six (Milne), A Light in the Attic (Silverstein), Where the Sidewalk Ends (Silverstein), the Oxford Book of Children's Verse",
+                ],
+                "short_lesson_flow": (
+                    "Read a poem aloud, slowly, twice. Talk about it briefly. The child memorizes one poem per week and "
+                    "recites it Friday. The poem is enjoyed first; the analysis is light and serves the enjoyment, not "
+                    "the other way around."
+                ),
+                "narration_prompt": "Tell me about the poem we just read. What did you see, hear, feel?",
+                "real_world_objects": [
+                    "A poetry anthology kept in the reading nook",
+                    "A recitation notebook with the child's memorized poems copied in",
+                    "A quiet recital chair or corner",
+                ],
+                "nature_connection": "Read nature poems outdoors during walks. Copy a favorite line into the nature notebook with a small drawing.",
+                "habit_focus": "The habit of attention to language. Poetry rewards close attention; the child who attends to one poem well has practiced the habit that will serve all later literary reading.",
+            },
+            "montessori": {
+                "prepared_materials": [
+                    "A poetry shelf in the reading area with anthologies the child chooses freely",
+                    "A recitation notebook the child manages as their own",
+                    "Rhyme-scheme marking sheets and stanza-counting templates",
+                    "A 'poems I have memorized' list the child keeps with the date each was learned",
+                ],
+                "presentation": {
+                    "three_period_lesson": "This is a rhyme scheme; this is a stanza; this is an image. Show me a rhyme; show me a stanza; show me an image. Mark the rhyme scheme of this poem.",
+                    "steps": [
+                        "The guide reads aloud a poem and points out the rhyme scheme, stanzas, and imagery",
+                        "The child works through poems freely with the marking sheets",
+                        "The child chooses a poem to memorize each week and adds it to their recitation notebook",
+                        "Across the term the child's memorized repertoire grows",
+                    ],
+                },
+                "control_of_error": "The poem itself is the control: a rhyme scheme is either correct or not; the child reads the line again and adjusts.",
+                "abstraction_pathway": "From enjoying poems as music, to noticing their structure with vocabulary, toward reading any new poem with full attention to form and content at the first reading.",
+                "extensions": [
+                    "Memorize a longer poem (a Frost or a Shakespeare passage at the upper edge of the band)",
+                    "Build a personal anthology of favorite poems",
+                    "Recite for a real audience: family gathering, video to a grandparent, school presentation",
+                ],
+                "observation_focus": "Watch for the child returning to the poetry shelf freely, for the memorized repertoire growing, and for the child reaching for poetry vocabulary in their own talk.",
+            },
+            "unschooling": {
+                "invitations": [
+                    "Keep a generous poetry shelf with a wide variety of forms and poets",
+                    "Read a poem aloud at breakfast or bedtime as a family habit",
+                    "Welcome the child's memorization without making it assigned work",
+                    "Listen to spoken-word poetry, audiobooks of poetry, recordings of poets reading their own work",
+                ],
+                "real_world_contexts": [
+                    "Reciting memorized poems at family gatherings",
+                    "Reading song lyrics as poetry",
+                    "Writing greeting cards in verse for birthdays and holidays",
+                    "Listening to poems on long car trips",
+                ],
+                "conversation_starters": [
+                    "What's a poem you've been thinking about?",
+                    "Want to memorize a poem this week? Pick one you love.",
+                    "Read me that poem aloud. I want to hear it.",
+                    "Did you notice how the poem sounds different from a story?",
+                ],
+                "resource_bank": [
+                    "A wide variety of poetry anthologies kept available",
+                    "Audiobooks and spoken-word recordings of poetry",
+                    "Song lyrics treated as poetry where the child notices them",
+                    "A discussion partner who loves poetry alongside the child",
+                ],
+                "parent_role": "Love poetry yourself, visibly. Read aloud often. Welcome the child's memorizations and recitations. Welcome the child's strong opinions about poems.",
+                "observation_documentation": "Across a term, note the poems the child has chosen to memorize, the poets they return to, and the way they talk about poems. This noticing replaces any test.",
+            },
+        },
+        "connections": {
+            "math": "Rhyme scheme and meter are patterns: identifying patterns is the same math-and-music skill",
+            "science": "Many great nature poems (Frost, Mary Oliver, Wordsworth) are nature observation in compressed form; the poem teaches close attention to the natural world",
+            "history": "Memorizing poems is one of the oldest educational practices; the child enters a tradition that runs back to before writing",
+            "writing": "Reading poetry trains the child to write with attention to sound, rhythm, and specific words; this feeds all later writing",
+        },
+    },
 }
