@@ -2746,4 +2746,338 @@ ELECTRICAL_CONTENT: dict[str, dict] = {
             "standard_refs": [],
         },
     },
+    "elc-006": {
+        "node_type": "knowledge",
+        "trade": "electrical",
+        "competency_name": (
+            "Anatomy of a residential electrical service: service entrance, meter, "
+            "main disconnect, panel, branch circuits, overcurrent protection, and "
+            "the foundation's scope boundary"
+        ),
+        "progression_band": "helper",
+        "prerequisites": ["els-001", "elc-002"],
+        "safety_basis": {
+            "hazards": [
+                (
+                    "Misidentifying the line side vs the load side of the main "
+                    "disconnect. The line side (the conductors from the meter to the "
+                    "main breaker, the meter itself, and the supply from the utility) "
+                    "is energized even when the main disconnect is open. Service-"
+                    "entrance work is regulated more strictly than branch-circuit "
+                    "work and is NOT in scope at the foundation. This is the most "
+                    "important boundary in this competency."
+                ),
+                (
+                    "Confusing the role of the main disconnect with the role of a "
+                    "branch breaker. The main disconnect de-energizes everything "
+                    "downstream (every branch); a branch breaker de-energizes only "
+                    "its branch. Both are protective devices but at different "
+                    "scopes."
+                ),
+                (
+                    "Trusting a panel label that says BREAKER N controls a specific "
+                    "circuit. Panel labels in older or remodeled homes are commonly "
+                    "wrong; the verification at the work point under elc-021 is the "
+                    "safeguard."
+                ),
+                (
+                    "Treating a subpanel as if its neutral is bonded to ground at the "
+                    "subpanel. The AHJ-adopted NEC bonds neutral to ground at the "
+                    "main service equipment only; subpanels must have neutral "
+                    "isolated from ground. Misunderstanding this is a real downstream "
+                    "wiring error."
+                ),
+            ],
+            "ppe_required": [
+                "Trade PPE per els-001 if the learner visits the actual service; no additional PPE required for diagram-and-photo work",
+            ],
+            "supervision_required": False,
+            "supervision_basis": (
+                "Conceptual work with the AI tutor, on diagrams, photographs (taken "
+                "with covers closed), and the household's actual service viewed from "
+                "outside the enclosures. No enclosure opening at this band; no live "
+                "work."
+            ),
+            "fresh_safety_signoff_within_days": 365,
+        },
+        "tools_required": [
+            {
+                "name": "A diagram of a residential electrical service from the utility through the main panel",
+                "specification": (
+                    "A one-line diagram showing utility supply (overhead service drop "
+                    "or underground service lateral), the service-entrance conductors, "
+                    "the meter base, the main disconnect (a separate switch in some "
+                    "installations or a main breaker in combination panels), the "
+                    "main panel with branch breakers and neutral / ground busbars, "
+                    "any subpanels with their feeders, the grounding electrode system "
+                    "(ground rod, water-pipe bond, intersystem bonding termination), "
+                    "and the typical branch circuits exiting the panel. The AI tutor "
+                    "provides one."
+                ),
+                "alternatives": [
+                    "Clear photographs of the household's actual service taken with "
+                    "covers closed (the utility drop, the meter base, the main panel "
+                    "exterior, any subpanel exterior)",
+                ],
+            },
+            {
+                "name": "The household's actual residential service viewed from outside enclosures",
+                "specification": (
+                    "The actual installation, walked through with the supervising "
+                    "adult on premises (per els-001); the learner identifies each "
+                    "component on the diagram against the real installation. No "
+                    "enclosure opened."
+                ),
+                "alternatives": [],
+            },
+            {
+                "name": "Notebook for annotated diagrams and the household's service inventory",
+                "specification": "Pencil, paper, and a way to file the work",
+                "alternatives": [],
+            },
+        ],
+        "materials_required": [],
+        "workspace_requirements": {
+            "surface": "Any flat surface for diagram work; the household's actual service for the walk-through",
+            "ventilation": "Per els-001 for the walk-through",
+            "lighting": "Per els-001",
+            "power": "None for the diagram work; energy state immaterial for cover-closed walk-through",
+            "containment": "None required",
+        },
+        "skill_description": (
+            "The learner builds a complete mental map of the residential electrical "
+            "service from the utility supply through every branch circuit. The "
+            "service begins at the utility's connection: an OVERHEAD SERVICE DROP "
+            "(the conductors from the utility pole to the weatherhead at the house) "
+            "or an UNDERGROUND SERVICE LATERAL (the conductors from a utility "
+            "padmount transformer or pad to the meter base). The conductors enter "
+            "the METER BASE (the utility's metering enclosure; this is the utility's "
+            "property up to the load-side terminals). From the meter the conductors "
+            "go to the MAIN DISCONNECT, which in many residential installations is "
+            "the MAIN BREAKER inside the MAIN PANEL (a 'combination service "
+            "equipment'); in some installations it is a separate main disconnect "
+            "ahead of the panel. The main disconnect de-energizes everything "
+            "downstream when opened; the LINE SIDE of the main disconnect remains "
+            "energized from the utility (this is the SCOPE BOUNDARY of the "
+            "foundation; service-entrance work is not in scope). From the main, "
+            "TWO HOT BUSBARS (in residential single-phase 120/240V service, two "
+            "120V legs of opposite phases) supply the branch BREAKERS that protect "
+            "each branch circuit. A NEUTRAL BUSBAR (bonded to the panel enclosure "
+            "and to ground at the main service equipment ONLY per the AHJ-adopted "
+            "NEC) carries the return current. The GROUNDING ELECTRODE CONDUCTOR "
+            "(GEC) connects the panel's neutral / ground busbar to the GROUNDING "
+            "ELECTRODE SYSTEM (typically one or two ground rods, a water-pipe bond "
+            "to the metallic water supply if present, possibly a concrete-encased "
+            "electrode 'Ufer' if part of the slab, and an intersystem bonding "
+            "termination for telephone, cable, and similar systems per the AHJ-"
+            "adopted NEC). SUBPANELS, where present, are fed from the main by a "
+            "four-wire FEEDER (two hots, a neutral, and an equipment grounding "
+            "conductor); the subpanel has its OWN ground bus bonded to its "
+            "enclosure but its neutral bus ISOLATED from the enclosure (the AHJ-"
+            "adopted NEC governs). Each BRANCH CIRCUIT leaves the panel through a "
+            "BRANCH BREAKER (the overcurrent protective device), runs in a CABLE "
+            "(NM-B nonmetallic-sheathed cable for residential, MC armored where "
+            "permitted, conduit-and-wire in some installations), and serves the "
+            "RECEPTACLES, SWITCHES, and FIXTURES on the circuit. The OVERCURRENT "
+            "PROTECTION at each branch is sized per the AHJ-adopted NEC's Article "
+            "240 to protect the conductors against thermal damage from overload "
+            "and short circuit; specific sizing follows the conductor's AMPACITY "
+            "per Article 310 (the next competency, elc-007). The learner walks "
+            "their household's actual service (covers closed) and identifies each "
+            "of these components on the diagram and on the real installation."
+        ),
+        "demonstration_criteria": [
+            (
+                "Names every major component of a residential electrical service "
+                "from the utility supply through a branch circuit, in order, with "
+                "the function of each in one sentence"
+            ),
+            (
+                "Identifies in the household's actual installation: the utility "
+                "drop or lateral entry; the meter base; the main disconnect "
+                "location; the main panel; any subpanels; the visible grounding "
+                "electrode (ground rod, water-pipe bond if accessible)"
+            ),
+            (
+                "Names the LINE / LOAD distinction at the main disconnect and "
+                "names that the line side is the foundation's SCOPE BOUNDARY: "
+                "service-entrance work is NOT in scope at the foundation"
+            ),
+            (
+                "Names the neutral-to-ground bond rule: bonded at the main "
+                "service equipment ONLY per the AHJ-adopted NEC; subpanels have "
+                "neutral isolated from ground"
+            ),
+            (
+                "Names the grounding electrode system components likely in the "
+                "household: ground rod(s), water-pipe bond, concrete-encased "
+                "electrode if present, intersystem bonding termination if present"
+            ),
+            (
+                "Names that each branch circuit is protected by an overcurrent "
+                "device (breaker or fuse) sized per the AHJ-adopted NEC to protect "
+                "the conductors and the equipment; names that AHJ-adopted Article "
+                "240 governs overcurrent protection and Article 310 governs "
+                "conductor ampacity"
+            ),
+            (
+                "Names that residential single-phase service is typically 120/240V "
+                "split-phase: two 120V hot legs of opposite phases sharing a "
+                "neutral; either hot to neutral gives 120V (general branches), "
+                "hot-to-hot gives 240V (range, dryer, electric water heater, "
+                "central AC dedicated branches)"
+            ),
+            (
+                "Annotates a one-line diagram of a representative residential "
+                "service, labeling every component named above"
+            ),
+        ],
+        "common_errors": [
+            {
+                "error": "Treating the meter as 'where the power starts inside the house'",
+                "cause": "The learner did not internalize that the meter is the utility's metering enclosure, and that the conductors from the meter to the main disconnect are still service-entrance conductors",
+                "remedy": (
+                    "The service-entrance conductors and the meter itself are part "
+                    "of the SERVICE (the line side of the main disconnect); the "
+                    "premises wiring begins at the load side of the main "
+                    "disconnect. The AHJ-adopted NEC Article 100 names the "
+                    "definitions. The line side is OUT OF SCOPE at the "
+                    "foundation."
+                ),
+            },
+            {
+                "error": "Wiring a subpanel's neutral bonded to its enclosure",
+                "cause": "The learner read the bond rule for the main and applied it everywhere",
+                "remedy": (
+                    "The neutral-to-ground bond exists at the main service "
+                    "equipment ONLY. At a subpanel, the neutral bus is ISOLATED "
+                    "from the enclosure; the ground bus is bonded to the "
+                    "enclosure. Duplicate bonds at subpanels create parallel "
+                    "return paths via the equipment grounding conductors, can "
+                    "cause neutral current on the equipment grounding system, "
+                    "and can energize metal equipment under fault. The AHJ-"
+                    "adopted NEC governs."
+                ),
+            },
+            {
+                "error": "Confusing 120V general branches with 240V dedicated branches",
+                "cause": "The learner did not internalize that residential is 120/240V split-phase",
+                "remedy": (
+                    "Either 120V hot leg to neutral is a 120V general branch "
+                    "(receptacles, lights, small appliances). Both hot legs "
+                    "together (hot-to-hot) is 240V for dedicated branches "
+                    "(electric range, dryer, water heater, central AC). The "
+                    "panel uses two-pole breakers (one in each phase position) "
+                    "for 240V branches and single-pole breakers for 120V "
+                    "branches."
+                ),
+            },
+            {
+                "error": "Treating overcurrent protection as if it protected the load",
+                "cause": "The learner thought the breaker's amp rating was 'for the load'",
+                "remedy": (
+                    "Overcurrent protection per the AHJ-adopted NEC Article 240 "
+                    "protects the CONDUCTORS (and the equipment) against thermal "
+                    "damage from overload and short circuit. The load may be "
+                    "sized smaller than the breaker; what cannot happen is the "
+                    "conductor sized smaller than the breaker. Conductor sizing "
+                    "(elc-007) is what the breaker is protecting."
+                ),
+            },
+            {
+                "error": "Trusting a panel label as authoritative",
+                "cause": "The learner did not internalize the rule that labels are commonly wrong in older or remodeled homes",
+                "remedy": (
+                    "Labels are a starting point, not a final answer. Every "
+                    "elc-021 act verifies dead at the work point regardless of "
+                    "label. Labels are corrected during a verified-dead session "
+                    "by the licensed electrician."
+                ),
+            },
+        ],
+        "artifact_expected": {
+            "type": "document",
+            "what_to_capture": (
+                "An annotated one-line diagram of the household's actual "
+                "residential service, with every major component named and "
+                "labeled (utility supply, meter, main disconnect, main panel, "
+                "subpanels if any, neutral / ground busbars, grounding electrode "
+                "system, representative branches at 120V and 240V), accompanied "
+                "by cover-closed photographs of each component on the diagram"
+            ),
+            "what_the_evidence_shows": (
+                "That the learner has a complete mental and visual map of the "
+                "household's actual residential service, can name the scope "
+                "boundary at the main disconnect, can name the neutral-to-"
+                "ground bond rule, and can name the role of the grounding "
+                "electrode system and the overcurrent protection"
+            ),
+        },
+        "mentor_signoff_required": False,
+        "pedagogy": {
+            "i_do": (
+                "The AI tutor walks the learner through a representative "
+                "residential service one-line diagram, naming every component "
+                "in order from utility supply inward, and explains the LINE / "
+                "LOAD scope boundary, the neutral-to-ground bond rule, and the "
+                "120/240V split-phase convention."
+            ),
+            "we_do": (
+                "The AI tutor and the learner walk through a second sample "
+                "service together. The learner names a component; the AI "
+                "confirms or corrects. Then the learner walks the household's "
+                "actual service with the supervising adult on premises, "
+                "identifying each component on the real installation against "
+                "the diagram."
+            ),
+            "you_do_supervised": (
+                "The learner annotates a one-line diagram of the household's "
+                "actual service, naming every component, and submits to the "
+                "AI tutor. The AI tutor confirms each annotation and the "
+                "scope-boundary call. The supervising adult is on premises for "
+                "the walk-through; the AI mentors the diagram work."
+            ),
+            "you_do_unsupervised": (
+                "Once the learner can annotate the household's service "
+                "correctly and walk through it identifying every component, "
+                "they may study additional residential service configurations "
+                "(generator transfer arrangements, solar interconnections, "
+                "200A vs 100A vs 400A services, subpanel arrangements) at the "
+                "apprentice band."
+            ),
+        },
+        "estimated_practice_sessions_to_signoff": 4,
+        "session_length_minutes": 45,
+        "related_projects": [],
+        "certification_alignment": {
+            "ladder_rung": "helper",
+            "notes": "Knowledge competency. Service-anatomy fluency underpins every later install and service competency.",
+            "certifications_supported": [
+                {
+                    "id": "elcert-nec",
+                    "domains": [
+                        "NEC Article 100 definitions (service, service-entrance, "
+                        "service equipment, branch circuit, feeder, etc.)",
+                        "NEC Article 230 services and service-entrance "
+                        "requirements",
+                        "NEC Article 250 grounding and bonding",
+                        "NEC Article 240 overcurrent protection",
+                        "NEC Article 408 panelboards and switchboards",
+                    ],
+                    "notes": "These chapters are foundational on every journeyman and master exam.",
+                },
+                {
+                    "id": "elcert-licensing",
+                    "domains": ["service anatomy across the state licensing exam scope"],
+                    "notes": "Universal foundational knowledge.",
+                },
+            ],
+        },
+        "safety_review": {
+            "reviewed": False,
+            "reviewer": None,
+            "reviewed_on": None,
+            "standard_refs": [],
+        },
+    },
 }
