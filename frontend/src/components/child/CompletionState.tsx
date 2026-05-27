@@ -136,7 +136,7 @@ export default function CompletionState({
             weight
             entrance
             delay={0.6}
-            className="text-[28px] font-semibold tracking-tight text-(--color-text) mb-3"
+            className="type-heading-lg text-(--color-text) mb-3"
           >
             Great work today{childName ? `, ${childName}` : ""}.
           </MotionText>
@@ -163,7 +163,7 @@ export default function CompletionState({
               transition={{ duration: dur, ease: MOTION_EASINGS.confident, delay: 1.4 }}
               className="bg-(--color-surface) border border-(--color-border) rounded-[14px] px-4 py-3 mb-8 text-left shadow-[var(--shadow-card)]"
             >
-              <div className="text-xs uppercase tracking-wide text-(--color-text-tertiary) mb-2">
+              <div className="type-eyebrow-md text-(--color-text-tertiary) mb-2">
                 Mastery moved up
               </div>
               <Stagger gap="generous" as="ul" className="space-y-1.5">
@@ -232,7 +232,7 @@ export default function CompletionState({
                   <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h2 className="text-[22px] font-semibold tracking-tight text-(--color-text) mb-1">
+              <h2 className="type-heading-md text-(--color-text) mb-1">
                 {MASTERY_HEADINGS[masteryLevel || ""] || "Nice work"}
               </h2>
 
@@ -295,7 +295,7 @@ export default function CompletionState({
         ) : (
           <MotionCard breathing={false} hoverLift={false} depth={0} className="bg-transparent">
             <GlowHalo size={72} color="var(--color-success)" />
-            <h2 className="text-[22px] font-semibold tracking-tight text-(--color-text) mb-2">
+            <h2 className="type-heading-md text-(--color-text) mb-2">
               Activity complete
             </h2>
             <p className="text-sm text-(--color-text-secondary) mb-1">{activityTitle}</p>

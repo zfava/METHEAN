@@ -44,12 +44,20 @@ export function PassageReader({ passage }: { passage: PassageData }) {
 
   return (
     <section className="my-4 rounded-2xl border border-(--color-border) bg-(--color-surface) p-6 shadow-[var(--shadow-card)]">
-      {passage.title && (
-        <h3 className="mb-3 text-lg font-semibold text-(--color-text)">{passage.title}</h3>
+      {/* Optional level eyebrow (e.g., "Decodable · Short A") sets the
+          context above the title without competing with it. */}
+      {passage.level && (
+        <p className="type-eyebrow-sm text-(--color-text-tertiary) mb-2">{passage.level}</p>
       )}
+      {passage.title && (
+        <h3 className="mb-4 type-heading-lg text-(--color-text)">{passage.title}</h3>
+      )}
+      {/* Editorial body. Fraunces at opsz=36 + SOFT=75, ~19px, max
+          ~640px measure. This is the highest-fidelity text surface
+          in the product. */}
       <p
-        className="text-(--color-text) whitespace-pre-line"
-        style={{ fontSize: "19px", lineHeight: 1.8, maxWidth: "34rem" }}
+        className="type-editorial-lg text-(--color-text) whitespace-pre-line"
+        style={{ maxWidth: "40rem" }}
       >
         {passage.text}
       </p>

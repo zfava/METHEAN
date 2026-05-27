@@ -102,7 +102,7 @@ export default function MobileNavSheet({ open, onClose }: { open: boolean; onClo
                 enough that hiding groups behind a tap was friction
                 without payoff. */}
             <div className="px-1 pb-2">
-              <span className="text-[11px] font-semibold tracking-wider uppercase text-(--color-text-tertiary)">
+              <span className="type-eyebrow-sm text-(--color-text-tertiary)">
                 {section.label}
               </span>
             </div>

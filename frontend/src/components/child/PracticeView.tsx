@@ -96,7 +96,7 @@ export default function PracticeView({ context, childId, onComplete }: PracticeV
   if (totalItems === 0) {
     return (
       <div className="max-w-2xl mx-auto py-6">
-        <h1 className="text-2xl font-semibold text-(--color-text) mb-4">{context.activity.title}</h1>
+        <h1 className="type-heading-md text-(--color-text) mb-4">{context.activity.title}</h1>
         <div className="bg-(--color-surface) border border-(--color-border) rounded-xl p-6 text-center">
           <p className="text-(--color-text-secondary) mb-4">No practice items available for this activity yet.</p>
           <p className="text-sm text-(--color-text-tertiary)">Content is being generated. Try again in a few minutes.</p>
@@ -110,7 +110,7 @@ export default function PracticeView({ context, childId, onComplete }: PracticeV
     const openCount = results.filter((r) => r.correct === null).length;
     return (
       <div className="max-w-2xl mx-auto py-6">
-        <h1 className="text-2xl font-medium text-(--color-text) mb-2">Practice Complete</h1>
+        <h1 className="type-heading-md text-(--color-text) mb-2">Practice Complete</h1>
         {/* Encouragement based on performance */}
         <p className="text-base text-(--color-text-secondary) mb-4 italic">
           {correctCount === totalItems ? "Perfect score. You clearly know this material."
@@ -155,7 +155,7 @@ export default function PracticeView({ context, childId, onComplete }: PracticeV
   return (
     <div className="max-w-2xl mx-auto py-6">
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-xl font-semibold text-(--color-text)">{context.activity.title}</h1>
+        <h1 className="type-heading-sm text-(--color-text)">{context.activity.title}</h1>
         <span className="text-sm text-(--color-text-tertiary)">{currentIdx + 1} of {totalItems}</span>
       </div>
 

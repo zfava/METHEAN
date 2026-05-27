@@ -17,7 +17,7 @@ export function StepReady({ companionName, companionVoice, onLaunch }: StepReady
       </div>
 
       <header>
-        <h1 className="text-2xl font-semibold text-(--color-text) tracking-tight">{name} is ready.</h1>
+        <h1 className="type-heading-md text-(--color-text)">{name} is ready.</h1>
         <p className="text-sm text-(--color-text-secondary) mt-2">
           Let&apos;s go do today&apos;s learning.
         </p>

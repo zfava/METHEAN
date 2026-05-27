@@ -14,7 +14,7 @@ export function StepIconography({ packs, selectedId, onSelect, onContinue }: Ste
   return (
     <div className="space-y-6">
       <header className="text-center">
-        <h1 className="text-2xl font-semibold text-(--color-text) tracking-tight">Pick your icon style.</h1>
+        <h1 className="type-heading-md text-(--color-text)">Pick your icon style.</h1>
         <p className="text-sm text-(--color-text-secondary) mt-2">
           The little symbols on each activity.
         </p>

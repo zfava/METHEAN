@@ -44,7 +44,7 @@ export default function ProjectView({ context, childId, onComplete, onSaveProgre
             as="h1"
             weight
             entrance
-            className="text-3xl font-semibold text-(--color-text) mb-2"
+            className="type-heading-lg text-(--color-text) mb-2"
           >
             {context.activity.title}
           </MotionText>
@@ -67,7 +67,7 @@ export default function ProjectView({ context, childId, onComplete, onSaveProgre
 
           {steps.length > 0 && (
             <div className="mb-6">
-              <h3 className="text-sm font-semibold text-(--color-text-secondary) uppercase tracking-wider mb-3">Instructions</h3>
+              <h3 className="type-eyebrow-md text-(--color-text-secondary) mb-3">Instructions</h3>
               <ol className="space-y-2">
                 {steps.map((step, i) => (
                   <li key={i} className="flex gap-3 text-base text-(--color-text)">
@@ -80,7 +80,7 @@ export default function ProjectView({ context, childId, onComplete, onSaveProgre
           )}
 
           <div className="mb-6">
-            <h3 className="text-sm font-semibold text-(--color-text-secondary) uppercase tracking-wider mb-2">Your work</h3>
+            <h3 className="type-eyebrow-md text-(--color-text-secondary) mb-2">Your work</h3>
             <textarea
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
@@ -116,7 +116,7 @@ export default function ProjectView({ context, childId, onComplete, onSaveProgre
 
       {phase === "reflect" && (
         <>
-          <h2 className="text-2xl font-semibold text-(--color-text) mb-6">How did the project go?</h2>
+          <h2 className="type-heading-md text-(--color-text) mb-6">How did the project go?</h2>
           <div className="space-y-3 mb-8">
             {[
               { label: "I'm really proud of this", value: 0.9 },

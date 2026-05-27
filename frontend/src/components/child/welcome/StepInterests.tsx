@@ -18,7 +18,7 @@ export function StepInterests({ tags, maxCount, initialSelected, onContinue }: S
   return (
     <div className="space-y-6">
       <header className="text-center">
-        <h1 className="text-2xl font-semibold text-(--color-text) tracking-tight">What are you into?</h1>
+        <h1 className="type-heading-md text-(--color-text)">What are you into?</h1>
         <p className="text-sm text-(--color-text-secondary) mt-2">
           Pick up to {maxCount}. We&apos;ll use these to make learning more your style.
         </p>

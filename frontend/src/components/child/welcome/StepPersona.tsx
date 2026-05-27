@@ -14,7 +14,7 @@ export function StepPersona({ personas, selectedId, onSelect, onContinue }: Step
   return (
     <div className="space-y-6">
       <header className="text-center">
-        <h1 className="text-2xl font-semibold text-(--color-text) tracking-tight">Pick your study buddy.</h1>
+        <h1 className="type-heading-md text-(--color-text)">Pick your study buddy.</h1>
         <p className="text-sm text-(--color-text-secondary) mt-2">
           They&apos;ll help you when you get stuck.
         </p>
