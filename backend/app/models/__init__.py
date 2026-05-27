@@ -2,6 +2,7 @@
 
 from app.models.achievements import Achievement, Streak
 from app.models.annual_curriculum import AnnualCurriculum
+from app.models.assessment import Assessment, PortfolioEntry
 from app.models.calibration import CalibrationProfile, CalibrationSnapshot, EvaluatorPrediction
 from app.models.curriculum import (
     ChildMapEnrollment,
@@ -11,6 +12,7 @@ from app.models.curriculum import (
     LearningNode,
     Subject,
 )
+from app.models.education_plan import EducationPlan
 from app.models.evidence import (
     ActivityFeedback,
     AdvisorReport,
@@ -56,6 +58,7 @@ __all__ = [
     "Alert",
     "AnnualCurriculum",
     "Artifact",
+    "Assessment",
     "Attempt",
     "AuditLog",
     "BetaFeedback",
@@ -66,6 +69,7 @@ __all__ = [
     "ChildNodeState",
     "ChildPreferences",
     "DeviceToken",
+    "EducationPlan",
     "EvaluatorPrediction",
     "FSRSCard",
     "FamilyInsight",
@@ -86,6 +90,7 @@ __all__ = [
     "NotificationLog",
     "Plan",
     "PlanWeek",
+    "PortfolioEntry",
     "ReadingLogEntry",
     "RefreshToken",
     "ReviewLog",
