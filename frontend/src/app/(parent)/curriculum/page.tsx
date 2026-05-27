@@ -41,8 +41,11 @@ export default function CurriculumPage() {
 
   // Philosophy builder state
   const [philosophyLabel, setPhilosophyLabel] = useState("Eclectic");
-  const [subjects, setSubjects] = useState<{ s: string; d: string }[]>([]);
-  const [selectedSubject, setSelectedSubject] = useState<{ s: string; d: string } | null>(null);
+  // Each subject carries its catalog id alongside the display name so
+  // we can recover the content tier from subjectLevels when the parent
+  // confirms one to generate (the tier picker is keyed by id).
+  const [subjects, setSubjects] = useState<{ id: string; s: string; d: string }[]>([]);
+  const [selectedSubject, setSelectedSubject] = useState<{ id: string; s: string; d: string } | null>(null);
   const [scopeNotes, setScopeNotes] = useState("");
   const [approved, setApproved] = useState(false);
 
@@ -58,11 +61,16 @@ export default function CurriculumPage() {
         })
         .catch(() => {});
 
-      // Set subjects based on grade
-      // Default subjects (user can change via SubjectLevelPicker)
+      // Default subjects shown before the parent has touched the
+      // picker. Each entry carries the catalog id used as the picker
+      // key. The parent can change, add, or remove these via the
+      // SubjectLevelPicker, at which point the list is rebuilt from
+      // subjectLevels (see onChange below).
       setSubjects([
-        { s: "Phonics & Reading", d: "" }, { s: "Mathematics", d: "" },
-        { s: "Science", d: "" }, { s: "History", d: "" },
+        { id: "phonics_reading", s: "Phonics & Reading", d: "" },
+        { id: "mathematics", s: "Mathematics", d: "" },
+        { id: "science", s: "Science", d: "" },
+        { id: "history", s: "History", d: "" },
       ]);
     }
   }, [buildPath, selectedChild]);
@@ -101,12 +109,17 @@ export default function CurriculumPage() {
     setGenerating(true);
     try {
       const year = new Date().getFullYear();
+      // Wire the picker's chosen tier to the backend so the generator
+      // actually uses it (without this, the tier picker is a no-op and
+      // generation falls back to ChildPreferences.subject_levels).
+      const content_tier = subjectLevels[selectedSubject.id];
       const result = await annualCurriculum.generate(selectedChild.id, {
         subject_name: selectedSubject.s,
         academic_year: `${year}-${year + 1}`,
         hours_per_week: 4,
         total_weeks: 36,
         scope_notes: scopeNotes || undefined,
+        ...(content_tier ? { content_tier } : {}),
       });
       setProposal(result);
       toast("Curriculum generated", "success");
@@ -272,9 +285,15 @@ export default function CurriculumPage() {
             selected={subjectLevels}
             onChange={(levels) => {
               setSubjectLevels(levels);
-              setSubjects(Object.keys(levels).map(id => ({
-                s: id.replace(/_/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase()), d: "",
-              })));
+              setSubjects(
+                Object.keys(levels).map((id) => ({
+                  id,
+                  s: id
+                    .replace(/_/g, " ")
+                    .replace(/\b\w/g, (c: string) => c.toUpperCase()),
+                  d: "",
+                })),
+              );
             }}
             showCustom={true}
           />

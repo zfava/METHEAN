@@ -509,6 +509,15 @@ export const household = {
   update: (data: object) => request<any>("/household/settings", { method: "PUT", body: JSON.stringify(data) }),
   getPhilosophy: () => request<any>("/household/philosophy"),
   updatePhilosophy: (data: object) => request<any>("/household/philosophy", { method: "PUT", body: JSON.stringify(data) }),
+  // Client-only scratch JSONB for UI state (dismissed explainers, etc.).
+  // PATCH is shallow-merge: send only the keys you want to change;
+  // pass null to remove a key. See backend/app/api/spec_coverage.py.
+  getUIPreferences: () => request<Record<string, unknown>>("/household/ui-preferences"),
+  updateUIPreferences: (patch: Record<string, unknown>) =>
+    request<Record<string, unknown>>("/household/ui-preferences", {
+      method: "PATCH",
+      body: JSON.stringify(patch),
+    }),
 };
 
 // AI
