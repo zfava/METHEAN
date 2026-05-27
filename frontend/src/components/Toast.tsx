@@ -2,6 +2,8 @@
 
 import { createContext, useCallback, useContext, useRef, useState } from "react";
 import { useMobile } from "@/lib/useMobile";
+import { CheckCircle2, Info, X, XCircle } from "@/lib/icons";
+import { Icon } from "@/components/ui/Icon";
 
 interface ToastItem {
   id: number;
@@ -24,28 +26,15 @@ export function useToast() {
 
 let nextId = 0;
 
+// Toast container already paints a tinted background per
+// typeStyles, so the icon's own soft-disc background from the
+// prior hand-drawn version is dropped here. Color flows from the
+// surrounding text color, so the Icon picks up the danger/success/
+// accent token automatically via parent.
 const TOAST_ICONS = {
-  error: (
-    <svg className="w-4 h-4 shrink-0" viewBox="0 0 16 16" fill="none">
-      <circle cx="8" cy="8" r="7" fill="var(--color-danger)" opacity="0.15" />
-      <circle cx="8" cy="8" r="7" stroke="var(--color-danger)" strokeWidth="1" fill="none" />
-      <path d="M5.5 5.5l5 5M10.5 5.5l-5 5" stroke="var(--color-danger)" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  ),
-  success: (
-    <svg className="w-4 h-4 shrink-0" viewBox="0 0 16 16" fill="none">
-      <circle cx="8" cy="8" r="7" fill="var(--color-success)" opacity="0.15" />
-      <circle cx="8" cy="8" r="7" stroke="var(--color-success)" strokeWidth="1" fill="none" />
-      <path d="M5 8l2 2 4-4" stroke="var(--color-success)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  ),
-  info: (
-    <svg className="w-4 h-4 shrink-0" viewBox="0 0 16 16" fill="none">
-      <circle cx="8" cy="8" r="7" fill="var(--color-accent)" opacity="0.15" />
-      <circle cx="8" cy="8" r="7" stroke="var(--color-accent)" strokeWidth="1" fill="none" />
-      <path d="M8 7v4M8 5.5v.01" stroke="var(--color-accent)" strokeWidth="1.5" strokeLinecap="round" />
-    </svg>
-  ),
+  error: <Icon icon={XCircle} size={16} className="shrink-0" />,
+  success: <Icon icon={CheckCircle2} size={16} className="shrink-0" />,
+  info: <Icon icon={Info} size={16} className="shrink-0" />,
 };
 
 const typeStyles = {
@@ -114,9 +103,7 @@ function SwipeableToast({
           className="shrink-0 opacity-40 hover:opacity-80 transition-opacity"
           aria-label="Dismiss"
         >
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+          <Icon icon={X} size={14} strokeWidth={2.5} />
         </button>
       </div>
     </div>

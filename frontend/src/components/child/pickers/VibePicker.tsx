@@ -2,6 +2,8 @@
 
 import { useToast } from "@/components/Toast";
 import type { Vibe } from "@/lib/personalization-types";
+import { Lock } from "@/lib/icons";
+import { Icon } from "@/components/ui/Icon";
 
 interface VibePickerProps {
   vibes: Vibe[];
@@ -62,10 +64,7 @@ export function VibePicker({ vibes, selectedId, onSelect }: VibePickerProps) {
               </div>
               {isLocked && (
                 <span aria-hidden="true" className="absolute top-2 right-2 text-(--color-text-tertiary)">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <rect x="5" y="11" width="14" height="9" rx="2" />
-                    <path d="M8 11V8a4 4 0 0 1 8 0v3" />
-                  </svg>
+                  <Icon icon={Lock} size={14} />
                 </span>
               )}
             </div>

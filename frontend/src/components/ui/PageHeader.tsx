@@ -1,6 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/cn";
+import { ChevronLeft } from "@/lib/icons";
+import { Icon } from "@/components/ui/Icon";
 
 export default function PageHeader({
   title,
@@ -19,8 +21,8 @@ export default function PageHeader({
     <div className={cn("flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between mb-6", className)}>
       <div className="flex items-center gap-3">
         {backHref && (
-          <a href={backHref} className="text-(--color-text-tertiary) hover:text-(--color-text-secondary) transition-colors duration-150">
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M10 13l-5-5 5-5" stroke="currentColor" strokeWidth="1.5" fill="none"/></svg>
+          <a href={backHref} className="text-(--color-text-tertiary) hover:text-(--color-text-secondary) transition-colors duration-150" aria-label="Back">
+            <Icon icon={ChevronLeft} size={16} />
           </a>
         )}
         <div>

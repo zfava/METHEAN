@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 
+import { Clock } from "@/lib/icons";
+import { Icon } from "@/components/ui/Icon";
+
 interface Props {
   remainingInputMinutes: number | null;
   remainingOutputMinutes: number | null;
@@ -29,10 +32,7 @@ export function VoiceModeMinutesIndicator({
         aria-expanded={open}
         aria-label={`Voice time left: ${compact}`}
       >
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-          <circle cx="12" cy="12" r="10" />
-          <polyline points="12 6 12 12 16 14" />
-        </svg>
+        <Icon icon={Clock} size={12} strokeWidth={2} />
         {compact}
       </button>
       {open && (

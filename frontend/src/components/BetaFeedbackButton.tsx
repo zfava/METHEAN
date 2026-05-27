@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { betaFeedback, type BetaFeedbackItem } from "@/lib/api";
+import { MessageCircle } from "@/lib/icons";
+import { Icon } from "@/components/ui/Icon";
 import { useMobile } from "@/lib/useMobile";
 import { useToast } from "@/components/Toast";
 import Button from "@/components/ui/Button";
@@ -164,15 +166,7 @@ export default function BetaFeedbackButton() {
           height: 52,
         }}
       >
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path
-            d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
+        <Icon icon={MessageCircle} size={22} strokeWidth={1.75} />
       </button>
 
       {isMobile ? (

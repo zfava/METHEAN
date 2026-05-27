@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useState } from "react";
 import { billing } from "@/lib/api";
+import { ArrowRight } from "@/lib/icons";
+import { Icon } from "@/components/ui/Icon";
 import "@/components/landing/landing.css";
 
 /**
@@ -52,18 +54,7 @@ const ShieldMark = ({ size = 48 }: { size?: number }) => (
   </svg>
 );
 
-const ArrowIcon = () => (
-  <svg
-    width="16"
-    height="16"
-    viewBox="0 0 16 16"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path d="M3 8h10M9 4l4 4-4 4" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
+const ArrowIcon = () => <Icon icon={ArrowRight} size={16} strokeWidth={2} />;
 
 export default function SubscriptionRequired({ status }: SubscriptionRequiredProps) {
   const [submitting, setSubmitting] = useState(false);
