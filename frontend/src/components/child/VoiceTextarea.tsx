@@ -5,6 +5,7 @@ import { useCallback } from "react";
 import { CapReachedNotice } from "@/components/child/voice/CapReachedNotice";
 import { PermissionDeniedNotice } from "@/components/child/voice/PermissionDeniedNotice";
 import { MicButton } from "@/components/child/MicButton";
+import { TactileInput } from "@/components/child/motion";
 import { usePersonalization } from "@/lib/PersonalizationProvider";
 import { useVoiceInput } from "@/lib/useVoiceInput";
 
@@ -68,37 +69,54 @@ export function VoiceTextarea({
   const showPermNotice = state.status === "permission_denied";
   const showMic = policyEnabled && !showCapNotice && !showPermNotice;
 
+  const isVoiceActive =
+    state.status === "recording" || state.status === "transcribing";
+
   return (
-    <div
-      className={["relative w-full", className ?? ""].join(" ").trim()}
-      style={style}
-    >
-      <textarea
-        {...rest}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className={[
-          "block w-full px-4 py-3 pr-14 text-base leading-relaxed",
-          "border border-(--color-border) rounded-2xl bg-(--color-surface) text-(--color-text)",
-          "focus:outline-none focus:ring-2 focus:ring-(--color-accent)/30",
-          "min-h-[80px]",
-          "text-[16px]",  // iOS zoom-on-focus guard
-        ].join(" ")}
-      />
-      <div className="absolute right-2 bottom-2 flex items-center gap-2">
-        {showCapNotice && <CapReachedNotice />}
-        {showPermNotice && <PermissionDeniedNotice />}
-        {showMic && (
-          <MicButton
-            status={state.status}
-            recordingDurationMs={state.recordingDurationMs}
-            onStart={controls.start}
-            onStop={controls.stop}
-            onCancel={controls.cancel}
+    <TactileInput className={["w-full", className ?? ""].join(" ").trim()}>
+      <div className="relative w-full" style={style}>
+        <textarea
+          {...rest}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className={[
+            "block w-full px-4 py-3 pr-14 text-base leading-relaxed",
+            "border border-(--color-border) rounded-2xl bg-(--color-surface) text-(--color-text)",
+            "focus:outline-none focus:ring-2 focus:ring-(--color-accent)/30",
+            "min-h-[80px]",
+            "text-[16px]",  // iOS zoom-on-focus guard
+          ].join(" ")}
+        />
+        {/* Soft gold underline while the voice channel is hot. The
+            shimmer reuses the existing global keyframe but scoped to
+            a 2px-tall sliver under the textarea so it never competes
+            with the textarea text. */}
+        {isVoiceActive && (
+          <span
+            aria-hidden="true"
+            className="animate-shimmer absolute left-3 right-3 bottom-1 h-[2px] rounded-full opacity-70"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent 0%, var(--color-brand-gold) 50%, transparent 100%)",
+              backgroundSize: "200% 100%",
+            }}
           />
         )}
+        <div className="absolute right-2 bottom-2 flex items-center gap-2">
+          {showCapNotice && <CapReachedNotice />}
+          {showPermNotice && <PermissionDeniedNotice />}
+          {showMic && (
+            <MicButton
+              status={state.status}
+              recordingDurationMs={state.recordingDurationMs}
+              onStart={controls.start}
+              onStop={controls.stop}
+              onCancel={controls.cancel}
+            />
+          )}
+        </div>
       </div>
-    </div>
+    </TactileInput>
   );
 }
 

@@ -4,6 +4,8 @@ import { useEffect, type ReactNode } from "react";
 
 import { PersonalizationProvider } from "@/lib/PersonalizationProvider";
 import { VibeProvider } from "@/lib/VibeProvider";
+import { ChildProvider } from "@/lib/ChildContext";
+import { MotionProvider } from "@/lib/motion/MotionContext";
 import { useSelectedChild } from "@/lib/useSelectedChild";
 
 // The /child surface is auth-gated and depends on per-household
@@ -42,9 +44,18 @@ export default function ChildLayout({ children }: { children: ReactNode }) {
   // `usePersonalization()`. The VibeProvider falls back to the calm
   // token bag when the library hasn't loaded, so the wrapper paints
   // with the design-system defaults during prerender.
+  // ChildProvider is mounted here (rather than at root) because the
+  // /child surface is the only place the MotionProvider needs to read
+  // the active child's grade_level to derive the age-band default
+  // motion intensity. PersonalizationProvider stays nested under it
+  // unchanged.
   return (
-    <PersonalizationProvider childId={selectedId}>
-      <VibeProvider>{children}</VibeProvider>
-    </PersonalizationProvider>
+    <ChildProvider>
+      <PersonalizationProvider childId={selectedId}>
+        <VibeProvider>
+          <MotionProvider>{children}</MotionProvider>
+        </VibeProvider>
+      </PersonalizationProvider>
+    </ChildProvider>
   );
 }

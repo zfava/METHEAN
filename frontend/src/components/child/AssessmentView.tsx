@@ -1,10 +1,14 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import type { LearningContext } from "@/lib/api";
 import { useSoundCue } from "@/lib/useSoundCue";
 import { usePersonalization } from "@/lib/PersonalizationProvider";
 import VoiceTextarea from "@/components/child/VoiceTextarea";
+import { MotionText } from "@/components/child/motion";
+import { useMotion } from "@/lib/motion/MotionContext";
+import { MOTION_DURATIONS_SEC, MOTION_EASINGS } from "@/lib/motion/tokens";
 
 interface AssessmentItem {
   prompt: string;
@@ -94,9 +98,12 @@ export default function AssessmentView({ context, onComplete }: AssessmentViewPr
         <span className="text-xs text-(--color-text-tertiary)">{currentIdx + 1} of {totalItems}</span>
       </div>
 
-      {/* One question at a time */}
-      <div className="bg-(--color-surface) border border-(--color-border) rounded-2xl p-6 mb-6">
-        <p className="text-lg text-(--color-text) leading-relaxed mb-4">{item.prompt}</p>
+      {/* One question at a time. Cinematic decelerate on the prompt
+          card to convey the gravity of an assessment without
+          bouncing. The prompt text itself shifts weight from regular
+          to medium via MotionText so the question lands. */}
+      <AssessmentQuestionCard prompt={item.prompt}>
+
 
         {item.type === "number" && (
           <input type="number" value={responses[currentIdx] || ""}
@@ -135,7 +142,7 @@ export default function AssessmentView({ context, onComplete }: AssessmentViewPr
             placeholder="Write your answer..." rows={4}
             className="w-full px-4 py-3 rounded-xl border border-(--color-border) bg-(--color-page) text-base text-(--color-text) focus:outline-none focus:border-(--color-accent) resize-none" />
         )}
-      </div>
+      </AssessmentQuestionCard>
 
       {/* Navigation */}
       <div className="flex items-center justify-between">
@@ -168,5 +175,48 @@ export default function AssessmentView({ context, onComplete }: AssessmentViewPr
         </span>
       </div>
     </div>
+  );
+}
+
+/**
+ * Wraps each assessment question in a card that enters with the
+ * cinematic curve. Re-mounts on the prompt changing so the gravity
+ * resets between questions. Skips animation under reduceMotion.
+ */
+function AssessmentQuestionCard({
+  prompt,
+  children,
+}: {
+  prompt: string;
+  children: React.ReactNode;
+}) {
+  const { reduceMotion, speed } = useMotion();
+  const dur = MOTION_DURATIONS_SEC.slow / speed;
+  if (reduceMotion) {
+    return (
+      <div className="bg-(--color-surface) border border-(--color-border) rounded-2xl p-6 mb-6">
+        <p className="text-lg text-(--color-text) leading-relaxed mb-4">{prompt}</p>
+        {children}
+      </div>
+    );
+  }
+  return (
+    <motion.div
+      key={prompt}
+      initial={{ opacity: 0, y: 14 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: dur, ease: MOTION_EASINGS.cinematic }}
+      className="bg-(--color-surface) border border-(--color-border) rounded-2xl p-6 mb-6"
+    >
+      <MotionText
+        as="p"
+        weight
+        entrance
+        className="text-lg text-(--color-text) leading-relaxed mb-4"
+      >
+        {prompt}
+      </MotionText>
+      {children}
+    </motion.div>
   );
 }

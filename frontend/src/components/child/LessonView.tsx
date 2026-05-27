@@ -9,6 +9,7 @@ import PassageReader from "@/components/child/PassageReader";
 import WidgetHost from "@/components/child/widgets/WidgetHost";
 import TutorChat from "./TutorChat";
 import { cn } from "@/lib/cn";
+import { MotionText, MotionButton, Stagger } from "@/components/child/motion";
 
 interface LessonViewProps {
   context: LearningContext;
@@ -60,7 +61,14 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
       {/* Phase: Setup */}
       {phase === "setup" && (
         <div className="text-center py-8">
-          <h1 className="text-3xl font-semibold text-(--color-text) mb-3">{activity.title}</h1>
+          <MotionText
+            as="h1"
+            weight
+            entrance
+            className="text-3xl font-semibold text-(--color-text) mb-3"
+          >
+            {activity.title}
+          </MotionText>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-(--color-accent-light) text-(--color-accent) text-sm mb-6">
             Lesson · {activity.estimated_minutes} minutes
           </div>
@@ -68,13 +76,13 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
           {lesson.objectives?.length > 0 && (
             <div className="text-left bg-(--color-surface) rounded-2xl p-6 mb-6">
               <h3 className="text-sm font-semibold text-(--color-text-secondary) uppercase tracking-wider mb-2">What you&apos;ll learn today</h3>
-              <ul className="space-y-1.5">
+              <Stagger gap="tight" as="ul" className="space-y-1.5">
                 {lesson.objectives.map((obj, i) => (
                   <li key={i} className="text-base text-(--color-text) flex items-start gap-2">
                     <span className="text-(--color-accent) mt-1">•</span> {obj}
                   </li>
                 ))}
-              </ul>
+              </Stagger>
             </div>
           )}
 
@@ -93,10 +101,14 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
             </div>
           )}
 
-          <button onClick={() => setPhase("intro")}
-            className="w-full max-w-xs py-4 text-lg font-semibold text-white bg-(--color-accent) rounded-2xl hover:opacity-90 transition-opacity">
+          <MotionButton
+            variant="primary"
+            size="lg"
+            onPress={() => setPhase("intro")}
+            className="w-full max-w-xs"
+          >
             Begin
-          </button>
+          </MotionButton>
         </div>
       )}
 

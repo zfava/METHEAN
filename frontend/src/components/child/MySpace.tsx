@@ -1,11 +1,14 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useEffect, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 
 import BottomSheet from "@/components/BottomSheet";
 import { CompanionAvatar } from "@/components/CompanionAvatar";
 import { useToast } from "@/components/Toast";
+import { useMotion } from "@/lib/motion/MotionContext";
+import { MOTION_EASINGS } from "@/lib/motion/tokens";
 import { IconographyPicker } from "@/components/child/pickers/IconographyPicker";
 import { InterestChips } from "@/components/child/pickers/InterestChips";
 import { PersonaPicker } from "@/components/child/pickers/PersonaPicker";
@@ -105,9 +108,14 @@ export function MySpace({ open, onClose }: MySpaceProps) {
 
       {mode === "main" && (
         <>
-          {/* Companion identity */}
+          {/* Companion identity. The avatar breathes gently (1.0 ->
+              1.015 -> 1.0 over 4s) under ambient motion so the kid
+              sees their companion as quietly alive on the picker
+              surface. */}
           <section className="flex flex-col items-center gap-3 text-(--color-accent)">
-            <CompanionAvatar personaId={profile.companion_voice || "default_warm"} size={96} />
+            <BreathingAvatar>
+              <CompanionAvatar personaId={profile.companion_voice || "default_warm"} size={96} />
+            </BreathingAvatar>
             <div className="text-center">
               <div className="text-lg font-semibold text-(--color-text)">
                 {profile.companion_name || "Your companion"}
@@ -204,6 +212,40 @@ export function MySpace({ open, onClose }: MySpaceProps) {
                   >
                     <div className="text-sm font-medium text-(--color-text)">{opt.label}</div>
                     <div className="text-[11px] text-(--color-text-tertiary)">{opt.subline}</div>
+                  </button>
+                );
+              })}
+            </div>
+          </Section>
+
+          <Section title="Motion">
+            <p className="text-xs text-(--color-text-secondary) leading-relaxed mb-3">
+              How much motion feels right? You can always change this.
+            </p>
+            <div className="grid grid-cols-3 gap-2">
+              {([
+                { id: "calm", label: "Calm", subline: "Still and quiet" },
+                { id: "standard", label: "Standard", subline: "Just right" },
+                { id: "lively", label: "Lively", subline: "Alive and warm" },
+              ] as const).map((opt) => {
+                const current =
+                  (profile as { motion_preference?: string }).motion_preference ?? "standard";
+                const selected = current === opt.id;
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => void patch({ motion_preference: opt.id })}
+                    className={[
+                      "rounded-2xl border p-3 text-left min-h-[44px] transition-colors",
+                      selected
+                        ? "border-(--color-brand-gold) bg-(--color-brand-gold)/10"
+                        : "border-(--color-border) bg-(--color-surface) hover:bg-(--color-page)",
+                    ].join(" ")}
+                    aria-pressed={selected}
+                  >
+                    <div className="text-sm font-medium text-(--color-text)">{opt.label}</div>
+                    <div className="text-xs text-(--color-text-secondary) mt-1">{opt.subline}</div>
                   </button>
                 );
               })}
@@ -489,5 +531,30 @@ function ConfirmReset({
         </button>
       </div>
     </section>
+  );
+}
+
+/**
+ * Gentle 4-second breathing scale on the companion avatar. Only
+ * active when useMotion().ambient is true; otherwise renders the
+ * child untouched.
+ */
+function BreathingAvatar({ children }: { children: ReactNode }) {
+  const { ambient, reduceMotion } = useMotion();
+  if (reduceMotion || !ambient) {
+    return <div>{children}</div>;
+  }
+  return (
+    <motion.div
+      animate={{ scale: [1, 1.015, 1] }}
+      transition={{
+        duration: 4,
+        ease: MOTION_EASINGS.composed,
+        repeat: Infinity,
+        repeatType: "mirror",
+      }}
+    >
+      {children}
+    </motion.div>
   );
 }

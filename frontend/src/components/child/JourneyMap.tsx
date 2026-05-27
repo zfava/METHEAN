@@ -1,6 +1,10 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useMemo, useState, useRef, useEffect } from "react";
+
+import { useMotion } from "@/lib/motion/MotionContext";
+import { MOTION_DURATIONS_SEC, MOTION_EASINGS, MOTION_STAGGER_SEC } from "@/lib/motion/tokens";
 
 export interface JourneyNode {
   id: string;
@@ -118,17 +122,18 @@ function SubjectMap({ nodes, subjectColor }: { nodes: JourneyNode[]; subjectColo
   const completedPts = positions.slice(0, completedEnd);
   const allPts = positions;
 
-  // Reduced motion check
-  const [reducedMotion, setReducedMotion] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReducedMotion(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
+  // Motion intent comes from the shared provider so age band /
+  // motion_preference / OS reduce-motion all feed one source. The
+  // local matchMedia listener is gone.
+  const motionState = useMotion();
+  const reducedMotion = motionState.reduceMotion;
+  const motionSpeed = motionState.speed;
 
   if (orderedNodes.length === 0) return null;
+
+  const completedPathD = completedPts.length > 1 ? bezierPath(completedPts) : "";
+  const drawDuration = MOTION_DURATIONS_SEC.cinematic / motionSpeed;
+  const staggerStep = MOTION_STAGGER_SEC.generous / motionSpeed;
 
   return (
     <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full" role="img"
@@ -156,11 +161,25 @@ function SubjectMap({ nodes, subjectColor }: { nodes: JourneyNode[]; subjectColo
           strokeDasharray="6 4" strokeLinecap="round" />
       )}
 
-      {/* Completed path (solid, subject color) */}
-      {completedPts.length > 1 && (
-        <path d={bezierPath(completedPts)} fill="none" stroke={subjectColor} strokeWidth="3"
-          strokeLinecap="round" />
-      )}
+      {/* Completed path (solid, subject color) — draws in
+          left-to-right via pathLength on mount. The static fallback
+          (reduced motion) just renders the line. */}
+      {completedPts.length > 1 &&
+        (reducedMotion ? (
+          <path d={completedPathD} fill="none" stroke={subjectColor} strokeWidth="3"
+            strokeLinecap="round" />
+        ) : (
+          <motion.path
+            d={completedPathD}
+            fill="none"
+            stroke={subjectColor}
+            strokeWidth="3"
+            strokeLinecap="round"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ duration: drawDuration, ease: MOTION_EASINGS.cinematic }}
+          />
+        ))}
 
       {/* Nodes */}
       {orderedNodes.map((node, i) => {
@@ -177,10 +196,34 @@ function SubjectMap({ nodes, subjectColor }: { nodes: JourneyNode[]; subjectColo
         const labelX = labelSide === "left" ? pos.x - r - 8 : pos.x + r + 8;
         const labelAnchor = labelSide === "left" ? "end" : "start";
 
+        // Stagger each node in with a confident curve. Under
+        // reducedMotion we render the group untouched so screen
+        // readers don't see a flicker and so initial paint is final.
+        const groupProps = {
+          onClick: () => setTooltip(tooltip?.node.id === node.id ? null : { node, x: pos.x, y: pos.y }),
+          className: "cursor-pointer",
+          role: "button",
+          tabIndex: 0,
+          "aria-label": `${node.title}: ${node.mastery}`,
+          onKeyDown: (e: React.KeyboardEvent<SVGGElement>) => {
+            if (e.key === "Enter")
+              setTooltip(tooltip?.node.id === node.id ? null : { node, x: pos.x, y: pos.y });
+          },
+        };
+        const Group: typeof motion.g = motion.g;
+        const groupEntrance = reducedMotion
+          ? undefined
+          : {
+              initial: { opacity: 0, y: 8, scale: 0.96 },
+              animate: { opacity: 1, y: 0, scale: 1 },
+              transition: {
+                duration: MOTION_DURATIONS_SEC.base / motionSpeed,
+                ease: MOTION_EASINGS.confident,
+                delay: i * staggerStep,
+              },
+            };
         return (
-          <g key={node.id} onClick={() => setTooltip(tooltip?.node.id === node.id ? null : { node, x: pos.x, y: pos.y })}
-            className="cursor-pointer" role="button" tabIndex={0} aria-label={`${node.title}: ${node.mastery}`}
-            onKeyDown={e => { if (e.key === "Enter") setTooltip(tooltip?.node.id === node.id ? null : { node, x: pos.x, y: pos.y }); }}>
+          <Group key={node.id} {...groupProps} {...(groupEntrance ?? {})}>
 
             {/* Current node pulse — uses the design-system
                 .animate-pulse-soft class wrapped on a <g> so the
@@ -259,7 +302,7 @@ function SubjectMap({ nodes, subjectColor }: { nodes: JourneyNode[]; subjectColo
                 {node.mastery.replace(/_/g, " ")}
               </text>
             )}
-          </g>
+          </Group>
         );
       })}
 

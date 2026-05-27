@@ -1,9 +1,12 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import type { LearningContext } from "@/lib/api";
 import { useSoundCue } from "@/lib/useSoundCue";
 import TutorChat from "./TutorChat";
+import { useMotion } from "@/lib/motion/MotionContext";
+import { MOTION_DURATIONS_SEC, MOTION_EASINGS } from "@/lib/motion/tokens";
 
 interface ReviewViewProps {
   context: LearningContext;
@@ -76,16 +79,16 @@ export default function ReviewView({ context, childId, onComplete }: ReviewViewP
             </div>
           )}
 
-          {/* One prompt at a time */}
-          <div className="bg-(--color-surface) rounded-2xl p-6 border border-(--color-border) mb-6">
-            <p className="text-lg text-(--color-text) leading-relaxed mb-4">{prompts[currentPrompt]}</p>
-            <textarea
-              value={responses[currentPrompt] || ""}
-              onChange={(e) => setResponses({ ...responses, [currentPrompt]: e.target.value })}
-              placeholder="What do you remember?"
-              className="w-full h-24 px-4 py-3 text-base border border-(--color-border) rounded-2xl resize-none bg-(--color-page) text-(--color-text) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20"
-            />
-          </div>
+          {/* Card-stack physics. The active card sits on top; the
+              next card peeks behind with offset+scale+opacity. On
+              advance, the top card exits stage-right and the next
+              promotes into place. */}
+          <ReviewCardStack
+            currentPrompt={currentPrompt}
+            prompts={prompts}
+            response={responses[currentPrompt] || ""}
+            onResponseChange={(text) => setResponses({ ...responses, [currentPrompt]: text })}
+          />
 
           <div className="flex items-center justify-between">
             <div className="flex gap-2">
@@ -141,6 +144,80 @@ export default function ReviewView({ context, childId, onComplete }: ReviewViewP
       )}
 
       {showTutor && <TutorChat activityId={context.activity.id} childId={childId} onClose={() => setShowTutor(false)} />}
+    </div>
+  );
+}
+
+/**
+ * Card-stack physics for the review prompts. The active card is
+ * always the top of the stack; behind it sits a quiet peek of the
+ * next prompt at translateY +8px, scale 0.97, opacity 0.45. Exits
+ * stage-right with the confident curve and the next promotes into
+ * place.
+ */
+function ReviewCardStack({
+  currentPrompt,
+  prompts,
+  response,
+  onResponseChange,
+}: {
+  currentPrompt: number;
+  prompts: string[];
+  response: string;
+  onResponseChange: (text: string) => void;
+}) {
+  const { reduceMotion, speed } = useMotion();
+  const dur = MOTION_DURATIONS_SEC.base / speed;
+  const hasNext = currentPrompt + 1 < prompts.length;
+
+  if (reduceMotion) {
+    return (
+      <div className="bg-(--color-surface) rounded-2xl p-6 border border-(--color-border) mb-6">
+        <p className="text-lg text-(--color-text) leading-relaxed mb-4">{prompts[currentPrompt]}</p>
+        <textarea
+          value={response}
+          onChange={(e) => onResponseChange(e.target.value)}
+          placeholder="What do you remember?"
+          className="w-full h-24 px-4 py-3 text-base border border-(--color-border) rounded-2xl resize-none bg-(--color-page) text-(--color-text) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative mb-6" style={{ minHeight: 200 }}>
+      {/* Peek card behind the active one (next prompt, dimmed). */}
+      {hasNext && (
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 bg-(--color-surface) rounded-2xl p-6 border border-(--color-border) pointer-events-none"
+          style={{ transform: "translateY(8px) scale(0.97)", opacity: 0.45 }}
+        >
+          <p className="text-lg text-(--color-text) leading-relaxed truncate">
+            {prompts[currentPrompt + 1]}
+          </p>
+        </div>
+      )}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentPrompt}
+          initial={{ opacity: 0, x: 40, scale: 0.98 }}
+          animate={{ opacity: 1, x: 0, scale: 1 }}
+          exit={{ opacity: 0, x: -60, scale: 0.97 }}
+          transition={{ duration: dur, ease: MOTION_EASINGS.confident }}
+          className="relative bg-(--color-surface) rounded-2xl p-6 border border-(--color-border) shadow-[var(--shadow-card)]"
+        >
+          <p className="text-lg text-(--color-text) leading-relaxed mb-4">
+            {prompts[currentPrompt]}
+          </p>
+          <textarea
+            value={response}
+            onChange={(e) => onResponseChange(e.target.value)}
+            placeholder="What do you remember?"
+            className="w-full h-24 px-4 py-3 text-base border border-(--color-border) rounded-2xl resize-none bg-(--color-page) text-(--color-text) focus:outline-none focus:ring-2 focus:ring-(--color-accent)/20"
+          />
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
