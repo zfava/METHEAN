@@ -46,6 +46,73 @@ class TestHouseholdSettings:
         assert resp.status_code == 200
         assert resp.json()["name"] == "New Family Name"
 
+
+class TestHouseholdUIPreferences:
+    """Per-household scratch JSONB. Shallow-merge PATCH semantics: the
+    body's top-level keys overwrite existing keys, explicit ``null``
+    removes a key, nested objects are replaced wholesale rather than
+    deep-merged. Lives next to household settings so dismissed UI hints
+    and similar client-only state survive across sessions and devices.
+    """
+
+    @pytest.mark.asyncio
+    async def test_get_returns_empty_object_initially(self, auth_client, household):
+        resp = await auth_client.get("/api/v1/household/ui-preferences")
+        assert resp.status_code == 200
+        assert resp.json() == {}
+
+    @pytest.mark.asyncio
+    async def test_patch_creates_keys_and_persists(self, auth_client, household):
+        resp = await auth_client.patch(
+            "/api/v1/household/ui-preferences",
+            json={"dismissed_tier_explainer": True, "last_curriculum_tab": "build"},
+        )
+        assert resp.status_code == 200
+        assert resp.json() == {
+            "dismissed_tier_explainer": True,
+            "last_curriculum_tab": "build",
+        }
+
+        # A subsequent GET should return the same merged state.
+        again = await auth_client.get("/api/v1/household/ui-preferences")
+        assert again.json() == {
+            "dismissed_tier_explainer": True,
+            "last_curriculum_tab": "build",
+        }
+
+    @pytest.mark.asyncio
+    async def test_patch_is_shallow_merge_not_replace(self, auth_client, household):
+        await auth_client.patch(
+            "/api/v1/household/ui-preferences",
+            json={"first_key": "first_value", "second_key": "second_value"},
+        )
+        resp = await auth_client.patch(
+            "/api/v1/household/ui-preferences",
+            json={"second_key": "updated"},
+        )
+        # first_key must survive the second PATCH.
+        assert resp.json() == {"first_key": "first_value", "second_key": "updated"}
+
+    @pytest.mark.asyncio
+    async def test_patch_null_deletes_key(self, auth_client, household):
+        await auth_client.patch(
+            "/api/v1/household/ui-preferences",
+            json={"ephemeral": "x", "kept": "y"},
+        )
+        resp = await auth_client.patch(
+            "/api/v1/household/ui-preferences",
+            json={"ephemeral": None},
+        )
+        assert resp.json() == {"kept": "y"}
+
+    @pytest.mark.asyncio
+    async def test_patch_rejects_non_object_body(self, auth_client, household):
+        resp = await auth_client.patch(
+            "/api/v1/household/ui-preferences",
+            json=["not", "an", "object"],
+        )
+        assert resp.status_code == 422
+
     @pytest.mark.asyncio
     async def test_update_timezone(self, auth_client, db_session, household):
         resp = await auth_client.put(

@@ -21,6 +21,12 @@ class Household(Base):
     home_state: Mapped[str | None] = mapped_column(String(2), nullable=True)
     settings: Mapped[dict | None] = mapped_column(JSONB, default=dict)
     philosophical_profile: Mapped[dict | None] = mapped_column(JSONB, default=dict)
+    # Client-only UI state that should persist across sessions and devices
+    # (e.g., which contextual explainer cards the user has dismissed).
+    # Distinct from `settings`, which carries server-side config.
+    ui_preferences: Mapped[dict] = mapped_column(
+        JSONB, nullable=False, server_default=text("'{}'::jsonb"), default=dict
+    )
     # Billing
     stripe_customer_id: Mapped[str | None] = mapped_column(Text, nullable=True)
     stripe_subscription_id: Mapped[str | None] = mapped_column(Text, nullable=True)

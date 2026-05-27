@@ -391,6 +391,56 @@ async def get_philosophy(
     return household.philosophical_profile or {}
 
 
+# ── UI preferences ────────────────────────────────
+#
+# Per-household scratch JSONB for client-only UI state (dismissed
+# explainers, last-used panels, etc.). PATCH semantics: shallow merge,
+# with explicit null on a top-level key removing it. Any authenticated
+# household member may read and write; this is not governance data.
+
+
+@router.get("/household/ui-preferences")
+async def get_ui_preferences(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    result = await db.execute(select(Household).where(Household.id == user.household_id))
+    household = result.scalar_one()
+    return household.ui_preferences or {}
+
+
+@router.patch("/household/ui-preferences")
+async def patch_ui_preferences(
+    body: dict,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Shallow-merge ``body`` into ``households.ui_preferences``.
+
+    Keys present in the body overwrite existing top-level keys; passing
+    ``null`` for a key removes it. Nested objects are replaced wholesale
+    rather than deep-merged, which keeps the merge predictable for
+    callers and avoids JSON-pointer surprises.
+    """
+    if not isinstance(body, dict):
+        raise HTTPException(status_code=422, detail="body must be a JSON object")
+
+    result = await db.execute(select(Household).where(Household.id == user.household_id))
+    household = result.scalar_one()
+    current = dict(household.ui_preferences or {})
+    for k, v in body.items():
+        if v is None:
+            current.pop(k, None)
+        else:
+            current[k] = v
+    household.ui_preferences = current
+    from sqlalchemy.orm.attributes import flag_modified
+
+    flag_modified(household, "ui_preferences")
+    await db.flush()
+    return current
+
+
 @router.get("/children")
 async def list_children(
     db: AsyncSession = Depends(get_db),
