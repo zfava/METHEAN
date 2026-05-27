@@ -2,6 +2,7 @@
 
 import uuid
 from datetime import date
+from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
@@ -20,6 +21,11 @@ from app.services.annual_curriculum import (
     record_week_completion,
 )
 
+# The five curriculum content tiers (scope/sequence axis). Distinct from
+# per-node mastery state. Mirrors LEARNING_LEVELS keys in
+# app.core.learning_levels and SCOPE_SEQUENCES[subject] keys.
+ContentTier = Literal["foundational", "developing", "intermediate", "advanced", "mastery"]
+
 router = APIRouter(tags=["annual-curriculum"], dependencies=[Depends(require_active_subscription)])
 
 
@@ -34,6 +40,12 @@ class GenerateRequest(BaseModel):
     total_weeks: int = 36
     start_date: date | None = None
     scope_notes: str | None = None
+    # Curriculum content tier (foundational..mastery). When supplied,
+    # overrides the per-child default from ChildPreferences.subject_levels
+    # so a parent can generate at a tier other than the saved level
+    # without first persisting the change. The picker UI always sends
+    # this field; older clients omit it and fall back to the saved level.
+    content_tier: ContentTier | None = None
 
 
 class WeekNotesRequest(BaseModel):
@@ -120,6 +132,7 @@ async def generate_curriculum(
         total_weeks=body.total_weeks,
         start_date=body.start_date,
         scope_notes=body.scope_notes,
+        content_tier=body.content_tier,
     )
     await db.commit()
     return {"id": str(curriculum.id), "status": curriculum.status, "subject": curriculum.subject_name}

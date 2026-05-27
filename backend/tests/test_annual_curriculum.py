@@ -428,6 +428,101 @@ class TestHistory:
         assert len(by_year["2026-2027"]) == 2
 
 
+class TestContentTierOverride:
+    """The picker rebuild relies on GenerateRequest.content_tier flowing
+    all the way into the AI prompt so the parent's tier choice actually
+    drives generation. Prior to this wiring, the picker selection was
+    silently dropped and generation always used the child's saved level
+    (or ``developing`` if none was saved).
+    """
+
+    @pytest.mark.asyncio
+    async def test_content_tier_overrides_saved_subject_level(self, db_session, household, child, user, monkeypatch):
+        from app.models.identity import ChildPreferences
+        from app.services import annual_curriculum as svc
+
+        prefs = ChildPreferences(
+            child_id=child.id,
+            household_id=household.id,
+            subject_levels={"mathematics": "foundational"},
+        )
+        db_session.add(prefs)
+        await db_session.flush()
+
+        captured: dict = {}
+
+        async def _capture(*_args, **kwargs):
+            captured["user_prompt"] = kwargs.get("user_prompt", "")
+            return {
+                "output": _make_scope_sequence(2),
+                "ai_run_id": None,
+            }
+
+        monkeypatch.setattr(svc, "call_ai", _capture)
+
+        # Without override: should pick up the saved "foundational" level.
+        await svc.generate_annual_curriculum(
+            db_session,
+            household.id,
+            child.id,
+            user.id,
+            subject_name="Mathematics",
+            academic_year="2026-2027",
+            total_weeks=2,
+        )
+        assert "Foundational" in captured["user_prompt"]
+
+        # With override: should use "advanced" instead of the saved value.
+        await svc.generate_annual_curriculum(
+            db_session,
+            household.id,
+            child.id,
+            user.id,
+            subject_name="Mathematics",
+            academic_year="2026-2027",
+            total_weeks=2,
+            content_tier="advanced",
+        )
+        assert "Advanced" in captured["user_prompt"]
+
+    @pytest.mark.asyncio
+    async def test_unknown_content_tier_falls_back_to_saved_level(
+        self, db_session, household, child, user, monkeypatch
+    ):
+        from app.models.identity import ChildPreferences
+        from app.services import annual_curriculum as svc
+
+        prefs = ChildPreferences(
+            child_id=child.id,
+            household_id=household.id,
+            subject_levels={"science": "intermediate"},
+        )
+        db_session.add(prefs)
+        await db_session.flush()
+
+        captured: dict = {}
+
+        async def _capture(*_args, **kwargs):
+            captured["user_prompt"] = kwargs.get("user_prompt", "")
+            return {"output": _make_scope_sequence(2), "ai_run_id": None}
+
+        monkeypatch.setattr(svc, "call_ai", _capture)
+
+        await svc.generate_annual_curriculum(
+            db_session,
+            household.id,
+            child.id,
+            user.id,
+            subject_name="Science",
+            academic_year="2026-2027",
+            total_weeks=2,
+            content_tier="nonexistent_tier",
+        )
+        # Unknown value silently falls back rather than raising, so the
+        # saved Intermediate level should still be used.
+        assert "Intermediate" in captured["user_prompt"]
+
+
 class TestApproachingWeeksEval:
     @pytest.mark.asyncio
     async def test_evaluate_approaching_weeks(self, db_session, household, child, user):

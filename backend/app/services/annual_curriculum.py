@@ -79,6 +79,7 @@ async def generate_annual_curriculum(
     total_weeks: int = 36,
     start_date: date | None = None,
     scope_notes: str | None = None,
+    content_tier: str | None = None,
 ) -> AnnualCurriculum:
     """Generate a complete year-long curriculum for one subject."""
 
@@ -116,10 +117,17 @@ async def generate_annual_curriculum(
 
     child_age = (date.today() - child.date_of_birth).days / 365.25 if child.date_of_birth else 6
 
-    # Learning level for AI prompt
-    from app.core.learning_levels import LEARNING_LEVELS, get_level_for_subject
+    # Learning level for AI prompt. If the caller explicitly chose a
+    # content tier in the picker, honor it; otherwise fall back to the
+    # child's saved per-subject level. Unknown values are coerced to the
+    # safe "developing" default rather than raising, so a stale client
+    # sending a value we no longer recognize still generates something.
+    from app.core.learning_levels import LEARNING_LEVELS, VALID_LEVELS, get_level_for_subject
 
-    level = get_level_for_subject(prefs, subject_name)
+    if content_tier and content_tier in VALID_LEVELS:
+        level = content_tier
+    else:
+        level = get_level_for_subject(prefs, subject_name)
     level_info = LEARNING_LEVELS.get(level, LEARNING_LEVELS["developing"])
 
     # Fetch learning map nodes in topological order if provided
