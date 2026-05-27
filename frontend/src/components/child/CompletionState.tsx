@@ -9,6 +9,7 @@ import { useMotion } from "@/lib/motion/MotionContext";
 import { MOTION_DURATIONS_SEC, MOTION_EASINGS } from "@/lib/motion/tokens";
 import { Check, TrendingUp } from "@/lib/icons";
 import { Icon } from "@/components/ui/Icon";
+import { formatMasteryState } from "@/lib/mastery";
 import {
   AmbientField,
   MilestoneMoment,
@@ -38,11 +39,15 @@ interface CompletionStateProps {
   };
 }
 
+// Headline shown after an attempt that moves the kid up a rung.
+// Stays tonal/celebratory rather than echoing the raw state name, which
+// is rendered separately in the from -> to chip below the headline.
 const MASTERY_HEADINGS: Record<string, string> = {
   mastered: "Mastered",
-  proficient: "Great progress",
-  developing: "Building understanding",
-  emerging: "Getting started",
+  proficient: "Confident now",
+  developing: "Sticking",
+  emerging: "Catching on",
+  not_started: "First step",
 };
 
 /**
@@ -174,10 +179,10 @@ export default function CompletionState({
                     <Icon icon={TrendingUp} size={14} className="text-(--color-success)" />
                     <span className="text-(--color-text)">{g.subject}</span>
                     <span className="text-(--color-text-tertiary) text-xs ml-auto">
-                      <span className="capitalize">{g.from.replace(/_/g, " ")}</span>
+                      <span>{formatMasteryState(g.from)}</span>
                       {" → "}
-                      <span className="text-(--color-success) capitalize font-medium">
-                        {g.to.replace(/_/g, " ")}
+                      <span className="text-(--color-success) font-medium">
+                        {formatMasteryState(g.to)}
                       </span>
                     </span>
                   </li>
@@ -242,7 +247,6 @@ export default function CompletionState({
                   }}
                 >
                   <motion.span
-                    className="capitalize"
                     initial={{ opacity: 1 }}
                     animate={{ opacity: [1, 0, 1] }}
                     transition={{
@@ -252,7 +256,7 @@ export default function CompletionState({
                       times: [0, 0.5, 1],
                     }}
                   >
-                    {previousMastery?.replace(/_/g, " ")}
+                    {formatMasteryState(previousMastery)}
                   </motion.span>
                   <motion.span aria-hidden="true"
                     initial={{ x: 0 }}
@@ -265,16 +269,16 @@ export default function CompletionState({
                   >
                     →
                   </motion.span>
-                  <span className="capitalize font-semibold">
-                    {masteryLevel?.replace(/_/g, " ")}
+                  <span className="font-semibold">
+                    {formatMasteryState(masteryLevel)}
                   </span>
                 </motion.div>
               ) : (
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-(--color-accent-light) text-(--color-accent) text-xs font-medium mb-3">
-                  <span className="capitalize">{previousMastery?.replace(/_/g, " ")}</span>
+                  <span>{formatMasteryState(previousMastery)}</span>
                   <span aria-hidden="true">→</span>
-                  <span className="capitalize font-semibold">
-                    {masteryLevel?.replace(/_/g, " ")}
+                  <span className="font-semibold">
+                    {formatMasteryState(masteryLevel)}
                   </span>
                 </div>
               )}

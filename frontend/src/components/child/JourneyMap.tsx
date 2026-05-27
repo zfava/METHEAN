@@ -5,6 +5,7 @@ import { useMemo, useState, useRef, useEffect } from "react";
 
 import { useMotion } from "@/lib/motion/MotionContext";
 import { MOTION_DURATIONS_SEC, MOTION_EASINGS, MOTION_STAGGER_SEC } from "@/lib/motion/tokens";
+import { formatMasteryState } from "@/lib/mastery";
 
 export interface JourneyNode {
   id: string;
@@ -61,13 +62,13 @@ function NodeTooltip({ node, x, y, onClose }: {
           <div className="text-[9px] text-(--color-text-tertiary)">Mastered {new Date(node.mastered_at).toLocaleDateString()}</div>
         )}
         {isCurrent && (
-          <div className="text-[9px] text-(--color-accent) capitalize">{node.mastery.replace(/_/g, " ")}</div>
+          <div className="text-[9px] text-(--color-accent)">{formatMasteryState(node.mastery)}</div>
         )}
         {isLocked && node.prerequisites && node.prerequisites.length > 0 && (
           <div className="text-[9px] text-(--color-text-tertiary)">Complete prerequisites first</div>
         )}
         {!isLocked && !isMastered && !isCurrent && (
-          <div className="text-[9px] text-(--color-text-tertiary) capitalize">{node.mastery.replace(/_/g, " ")}</div>
+          <div className="text-[9px] text-(--color-text-tertiary)">{formatMasteryState(node.mastery)}</div>
         )}
       </div>
     </foreignObject>
@@ -298,8 +299,8 @@ function SubjectMap({ nodes, subjectColor }: { nodes: JourneyNode[]; subjectColo
             {/* Current mastery label */}
             {isCurrent && (
               <text x={labelX} y={pos.y + 14} textAnchor={labelAnchor} fontSize="9"
-                fill={subjectColor} className="capitalize">
-                {node.mastery.replace(/_/g, " ")}
+                fill={subjectColor}>
+                {formatMasteryState(node.mastery)}
               </text>
             )}
           </Group>

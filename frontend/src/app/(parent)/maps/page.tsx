@@ -11,6 +11,7 @@ import Button from "@/components/ui/Button";
 import EmptyState from "@/components/ui/EmptyState";
 import { cn } from "@/lib/cn";
 import DagGraph from "@/components/DagGraph";
+import { formatMasteryState } from "@/lib/mastery";
 
 // ── Node card styling by mastery + status ──
 function nodeStyle(node: MapNodeState): { bg: string; border: string; text: string } {
@@ -154,10 +155,10 @@ export default function MapsPage() {
         <>
           {/* ── Legend ── */}
           <div className="flex items-center gap-4 mb-4 text-xs text-(--color-text-secondary)">
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-(--color-success-light) border border-(--color-success)" /> Mastered</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-(--color-accent-light) border border-(--color-accent)" /> Proficient</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-(--color-warning-light) border border-(--color-warning)" /> Developing</span>
-            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-(--color-danger-light) border border-(--color-danger)" /> Emerging</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-(--color-success-light) border border-(--color-success)" /> {formatMasteryState("mastered")}</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-(--color-accent-light) border border-(--color-accent)" /> {formatMasteryState("proficient")}</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-(--color-warning-light) border border-(--color-warning)" /> {formatMasteryState("developing")}</span>
+            <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-(--color-danger-light) border border-(--color-danger)" /> {formatMasteryState("emerging")}</span>
             <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-(--color-surface) border border-dashed border-(--color-success)/50" /> Available</span>
             <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-(--color-page) border border-(--color-border-strong)" /> Blocked</span>
           </div>

@@ -15,6 +15,7 @@ import { cn } from "@/lib/cn";
 import SubjectLevelPicker from "@/components/SubjectLevelPicker";
 import CurriculumPhilosophySelector from "@/components/CurriculumPhilosophySelector";
 import { type CurriculumPhilosophy } from "@/lib/curriculum-philosophy";
+import { formatContentTier } from "@/lib/mastery";
 
 
 interface TodayActivity {
@@ -312,7 +313,7 @@ export default function FamilyPage() {
                         {(child as any).preferences?.subject_levels && Object.keys((child as any).preferences.subject_levels).length > 0
                           ? Object.entries((child as any).preferences.subject_levels).map(([s, l]: [string, any]) => (
                               <span key={s} className="text-[10px] px-1.5 py-0.5 bg-(--color-page) rounded-[var(--radius-badge)] text-(--color-text-secondary)">
-                                {s.replace(/_/g, " ")}: {l}
+                                {s.replace(/_/g, " ")}: {formatContentTier(l)}
                               </span>
                             ))
                           : <span className="text-[10px] text-(--color-text-tertiary)">

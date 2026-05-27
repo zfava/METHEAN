@@ -15,11 +15,14 @@ import { ShieldIcon } from "@/components/ConstitutionalCeremony";
 import { cn } from "@/lib/cn";
 
 const TYPES = ["parent_observation", "oral_narration", "written_work", "demonstration", "project", "discussion", "quiz"];
+// Labels mirror the per-node mastery taxonomy in lib/mastery.ts.
+// "needs_review" is not a mastery state, just a triage flag, so it
+// keeps its own copy.
 const JUDGMENTS: { id: string; label: string; description: string }[] = [
   { id: "mastered", label: "Mastered", description: "Has it down. Demonstrates consistent skill." },
-  { id: "proficient", label: "Proficient", description: "Confident and capable. Working independently." },
-  { id: "developing", label: "Developing", description: "Coming along. Needs occasional support." },
-  { id: "emerging", label: "Emerging", description: "Just starting. Heavy support still needed." },
+  { id: "proficient", label: "Confident", description: "Confident and capable. Working independently." },
+  { id: "developing", label: "Practiced", description: "Coming along. Needs occasional support." },
+  { id: "emerging", label: "Learning", description: "Just starting. Heavy support still needed." },
   { id: "needs_review", label: "Needs Review", description: "Concerned. Revisit before moving on." },
 ];
 const PORTFOLIO_TYPES = ["work_sample", "narrative", "photo", "certificate", "reading_log", "field_trip"];

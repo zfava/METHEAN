@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/cn";
+import { formatMasteryState, isMasteryState } from "@/lib/mastery";
 
 const styles: Record<string, string> = {
   mastered: "bg-(--color-success-light) text-(--color-success)",
@@ -37,11 +38,17 @@ const styles: Record<string, string> = {
 
 export default function StatusBadge({ status, className = "" }: { status: string; className?: string }) {
   const style = styles[status] || "bg-(--color-page) text-(--color-text-secondary)";
-  const label = status.replace(/_/g, " ");
+  // Mastery states get their canonical display name (Just started /
+  // Learning / Practiced / Confident / Mastered). Other statuses
+  // (curriculum draft, activity scheduled, governance approve, etc.)
+  // keep the humanized wire format, which `capitalize` then renders.
+  const isMastery = isMasteryState(status);
+  const label = isMastery ? formatMasteryState(status) : status.replace(/_/g, " ");
   return (
     <span
       className={cn(
-        "inline-block px-2 py-0.5 rounded-[4px] text-[11px] font-medium capitalize",
+        "inline-block px-2 py-0.5 rounded-[4px] text-[11px] font-medium",
+        isMastery ? "" : "capitalize",
         style,
         className,
       )}
