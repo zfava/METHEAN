@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useRef } from "react";
 
 import { haptic } from "@/lib/haptics";
+import { Mic } from "@/lib/icons";
+import { Icon } from "@/components/ui/Icon";
 import type { VoiceConversationStatus } from "@/lib/useVoiceConversation";
 
 export type InteractionStyle = "press_hold" | "tap_toggle";
@@ -172,22 +174,7 @@ export function TalkButton({
           aria-hidden="true"
         />
       ) : (
-        <svg
-          width="36"
-          height="36"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
-          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-          <path d="M19 10a7 7 0 0 1-14 0" />
-          <line x1="12" y1="19" x2="12" y2="23" />
-          <line x1="8" y1="23" x2="16" y2="23" />
-        </svg>
+        <Icon icon={Mic} size={36} strokeWidth={2} />
       )}
     </button>
   );

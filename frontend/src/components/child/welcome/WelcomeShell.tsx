@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useRef, type ReactNode } from "react";
 
 import type { Vibe } from "@/lib/personalization-types";
+import { ChevronLeft } from "@/lib/icons";
+import { Icon } from "@/components/ui/Icon";
 
 export interface WelcomeStepDef {
   id: string;
@@ -80,9 +82,7 @@ export function WelcomeShell({
             currentIndex === 0 ? "opacity-0 pointer-events-none" : "hover:bg-(--color-surface)",
           ].join(" ")}
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M15 18L9 12l6-6" />
-          </svg>
+          <Icon icon={ChevronLeft} size={20} strokeWidth={2} />
         </button>
 
         <div className="flex items-center gap-1.5" role="presentation" aria-hidden="true">

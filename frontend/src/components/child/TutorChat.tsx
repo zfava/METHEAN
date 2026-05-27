@@ -10,6 +10,8 @@ import { useTutorVoice } from "@/lib/useTutorVoice";
 import { useVoiceConversation } from "@/lib/useVoiceConversation";
 import { useMotion } from "@/lib/motion/MotionContext";
 import { MOTION_DURATIONS_SEC, MOTION_EASINGS } from "@/lib/motion/tokens";
+import { Mic, Send, Volume2, VolumeX, X } from "@/lib/icons";
+import { Icon } from "@/components/ui/Icon";
 
 interface TutorChatProps {
   activityId: string;
@@ -339,18 +341,7 @@ export default function TutorChat({
             aria-label={voiceControls.sessionMuted ? "Turn voice on" : "Turn voice off"}
             className="w-10 h-10 mr-1 rounded-full flex items-center justify-center text-(--color-text-tertiary) hover:bg-(--color-page) min-h-[44px] min-w-[44px]"
           >
-            {voiceControls.sessionMuted ? (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-                <line x1="22" y1="9" x2="16" y2="15" />
-                <line x1="16" y1="9" x2="22" y2="15" />
-              </svg>
-            ) : (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
-              </svg>
-            )}
+            <Icon icon={voiceControls.sessionMuted ? VolumeX : Volume2} size={18} strokeWidth={2} />
           </button>
           {/* Voice-mode toggle. Hidden when either cap is fully
               exhausted; the conversation-state mirror would 403 the
@@ -362,19 +353,12 @@ export default function TutorChat({
             aria-label={voiceMode ? "Exit voice mode" : "Enter voice mode"}
             className="w-10 h-10 mr-1 rounded-full flex items-center justify-center text-(--color-text-tertiary) hover:bg-(--color-page) min-h-[44px] min-w-[44px]"
           >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
-              <path d="M19 10a7 7 0 0 1-14 0" />
-              <line x1="12" y1="19" x2="12" y2="23" />
-              <line x1="8" y1="23" x2="16" y2="23" />
-            </svg>
+            <Icon icon={Mic} size={18} strokeWidth={2} />
           </button>
           <button onClick={handleClose}
             className="w-10 h-10 rounded-full flex items-center justify-center text-(--color-text-tertiary) hover:bg-(--color-page) min-h-[44px] min-w-[44px]"
             aria-label="Close tutor">
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <Icon icon={X} size={20} strokeWidth={2} />
           </button>
         </div>
 
@@ -499,9 +483,7 @@ export default function TutorChat({
               className="w-11 h-11 rounded-full flex items-center justify-center shrink-0 text-white disabled:opacity-30"
               style={{ background: accent }}
               aria-label="Send message">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-              </svg>
+              <Icon icon={Send} size={20} strokeWidth={2} />
             </button>
           </div>
         </div>

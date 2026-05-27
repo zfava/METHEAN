@@ -7,6 +7,8 @@ import { auth, governance, notifications as notificationsApi, type User } from "
 import { useChild } from "@/lib/ChildContext";
 import { cn } from "@/lib/cn";
 import { MetheanLogo } from "@/components/Brand";
+import { Bell, ChevronRight, X } from "@/lib/icons";
+import { Icon } from "@/components/ui/Icon";
 
 // ── Nav group definitions ──
 const NAV_GROUPS = [
@@ -200,18 +202,14 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
         </Link>
         <div className="flex items-center gap-2">
           <button onClick={() => setShowNotifs(!showNotifs)} className="relative p-1.5 text-white/40 hover:text-white/70 transition-colors">
-            <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-            </svg>
+            <Icon icon={Bell} size={18} strokeWidth={1.75} />
             {unreadNotifs > 0 && (
               <span className={cn("absolute -top-0.5 -right-0.5 w-3.5 h-3.5 bg-(--color-brand-gold) text-white text-[8px] font-bold rounded-full flex items-center justify-center", bellPulse && "notif-new")}>{unreadNotifs}</span>
             )}
           </button>
           {mobile && (
             <button onClick={onClose} className="p-1.5 text-white/40 hover:text-white/70 transition-colors">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <Icon icon={X} size={20} strokeWidth={2} />
             </button>
           )}
         </div>
@@ -275,15 +273,15 @@ export default function Sidebar({ mobile = false, onClose }: { mobile?: boolean;
                     {showBadge && (
                       <span className="bg-(--color-brand-gold) text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">{pendingCount}</span>
                     )}
-                    <svg
+                    <Icon
+                      icon={ChevronRight}
+                      size={12}
+                      strokeWidth={2.5}
                       className={cn(
-                        "w-3 h-3 text-white/20 transition-transform duration-150",
-                        isExpanded ? "rotate-90" : "rotate-0"
+                        "text-white/20 transition-transform duration-150",
+                        isExpanded ? "rotate-90" : "rotate-0",
                       )}
-                      fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                    </svg>
+                    />
                   </div>
                 </button>
               ) : (

@@ -8,6 +8,8 @@ import { governance, notifications as notificationsApi } from "@/lib/api";
 import { MetheanWordmark } from "@/components/Brand";
 import BottomSheet from "@/components/BottomSheet";
 import { haptic } from "@/lib/native";
+import { Bell, Check, ChevronDown } from "@/lib/icons";
+import { Icon } from "@/components/ui/Icon";
 
 export default function MobileHeader() {
   const { children, selectedChild, setSelectedChild, loading } = useChild();
@@ -67,16 +69,7 @@ export default function MobileHeader() {
                   <span className="text-sm font-medium text-(--color-text) truncate max-w-[110px]">
                     {selectedChild.first_name}
                   </span>
-                  <svg
-                    className="w-3.5 h-3.5 text-(--color-text-tertiary) shrink-0"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2.5}
-                    aria-hidden="true"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                  </svg>
+                  <Icon icon={ChevronDown} size={14} strokeWidth={2.5} className="text-(--color-text-tertiary) shrink-0" />
                 </button>
               ) : (
                 <span className="text-sm font-medium text-(--color-text) truncate max-w-[140px]">
@@ -106,16 +99,7 @@ export default function MobileHeader() {
                   : "Notifications"
               }
             >
-              <svg
-                className="w-5 h-5 text-(--color-text-secondary)"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={1.8}
-                aria-hidden="true"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-              </svg>
+              <Icon icon={Bell} size={20} strokeWidth={1.75} className="text-(--color-text-secondary)" />
               {showGovBadge && (
                 <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 rounded-full bg-(--color-danger) ring-2 ring-(--color-surface)" />
               )}
@@ -151,9 +135,7 @@ export default function MobileHeader() {
                     <div className="text-xs text-(--color-text-secondary)">{child.grade_level || "No grade set"}</div>
                   </div>
                   {isSelected && (
-                    <svg className="w-5 h-5 text-(--color-brand-gold) shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
+                    <Icon icon={Check} size={20} strokeWidth={2.5} className="text-(--color-brand-gold) shrink-0" />
                   )}
                 </button>
               );

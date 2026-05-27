@@ -7,6 +7,8 @@ import { MetheanMark } from "@/components/Brand";
 import { useSoundCue } from "@/lib/useSoundCue";
 import { useMotion } from "@/lib/motion/MotionContext";
 import { MOTION_DURATIONS_SEC, MOTION_EASINGS } from "@/lib/motion/tokens";
+import { Check, TrendingUp } from "@/lib/icons";
+import { Icon } from "@/components/ui/Icon";
 import {
   AmbientField,
   MilestoneMoment,
@@ -169,7 +171,7 @@ export default function CompletionState({
               <Stagger gap="generous" as="ul" className="space-y-1.5">
                 {gains.map((g, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm">
-                    <span className="text-(--color-success)" aria-hidden="true">↗</span>
+                    <Icon icon={TrendingUp} size={14} className="text-(--color-success)" />
                     <span className="text-(--color-text)">{g.subject}</span>
                     <span className="text-(--color-text-tertiary) text-xs ml-auto">
                       <span className="capitalize">{g.from.replace(/_/g, " ")}</span>
@@ -221,16 +223,7 @@ export default function CompletionState({
               className="bg-transparent"
             >
               <div className="w-16 h-16 mx-auto mb-5 rounded-full bg-(--color-success-light) flex items-center justify-center">
-                <svg
-                  className="w-9 h-9 text-(--color-success)"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2.5}
-                  aria-hidden="true"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
+                <Icon icon={Check} size={36} strokeWidth={2.5} className="text-(--color-success)" />
               </div>
               <h2 className="type-heading-md text-(--color-text) mb-1">
                 {MASTERY_HEADINGS[masteryLevel || ""] || "Nice work"}

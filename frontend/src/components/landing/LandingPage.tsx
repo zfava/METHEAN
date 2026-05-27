@@ -2,6 +2,20 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import {
+  ArrowRight,
+  CalendarDays,
+  Check,
+  FileCheck2,
+  Layers3,
+  Lightbulb,
+  Shield,
+  ShieldPlus,
+  TrendingUp,
+  Users,
+  Wrench,
+} from "@/lib/icons";
+import { Icon } from "@/components/ui/Icon";
 import "./landing.css";
 
 // Faithful port of frontend/design-reference/METHEAN_Demo_1.html (routes['/']).
@@ -37,24 +51,10 @@ const ShieldLogo = ({ height = 32 }: { height?: number }) => (
 );
 
 const ArrowIcon = ({ className }: { className?: string }) => (
-  <svg
-    className={className}
-    width="16"
-    height="16"
-    viewBox="0 0 16 16"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <path d="M3 8h10M9 4l4 4-4 4" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
+  <Icon icon={ArrowRight} size={16} strokeWidth={2} className={className} />
 );
 
-const CheckIcon = () => (
-  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
-    <path d="M3 6l2 2 4-4" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
+const CheckIcon = () => <Icon icon={Check} size={12} strokeWidth={2} />;
 
 const FAQ_ITEMS: ReadonlyArray<{ q: string; a: string }> = [
   {
@@ -491,19 +491,7 @@ export default function LandingPage() {
                   ].map((r) => (
                     <div className="rule-card" key={r.name}>
                       <div className="rule-icon">
-                        <svg
-                          width="14"
-                          height="14"
-                          viewBox="0 0 16 16"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                        >
-                          <path
-                            d="M8 1L13 3.5v4C13 11 10.5 13.5 8 14.5C5.5 13.5 3 11 3 7.5v-4z"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
+                        <Icon icon={Shield} size={14} />
                       </div>
                       <div className="rule-content">
                         <div className="rule-name">{r.name}</div>
@@ -1013,19 +1001,7 @@ export default function LandingPage() {
           <div className="feat-grid reveal-stagger">
             <div className="feat-cell large">
               <div className="feat-icon">
-                <svg
-                  width="32"
-                  height="32"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M12 2L4 6v6c0 5 3.5 9.5 8 11 4.5-1.5 8-6 8-11V6z" />
-                  <path d="M12 8v8M8 12h8" strokeWidth="1.2" />
-                </svg>
+                <Icon icon={ShieldPlus} size={32} />
               </div>
               <h3>Parent Sovereignty</h3>
               <p>
@@ -1038,19 +1014,7 @@ export default function LandingPage() {
             </div>
             <div className="feat-cell">
               <div className="feat-icon">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M3 7l9-4 9 4-9 4-9-4z" />
-                  <path d="M3 12l9 4 9-4M3 17l9 4 9-4" />
-                </svg>
+                <Icon icon={Layers3} size={24} />
               </div>
               <h3>Your Philosophy</h3>
               <p>
@@ -1060,22 +1024,7 @@ export default function LandingPage() {
             </div>
             <div className="feat-cell">
               <div className="feat-icon">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect x="3" y="4" width="18" height="17" rx="2" />
-                  <path d="M3 9h18M8 4v17M16 4v17" />
-                  <circle cx="6" cy="13" r="0.8" fill="currentColor" />
-                  <circle cx="12" cy="13" r="0.8" fill="currentColor" />
-                  <circle cx="6" cy="17" r="0.8" fill="currentColor" />
-                </svg>
+                <Icon icon={CalendarDays} size={24} />
               </div>
               <h3>The Curriculum Builder</h3>
               <p>
@@ -1086,19 +1035,7 @@ export default function LandingPage() {
             </div>
             <div className="feat-cell">
               <div className="feat-icon">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <path d="M14 2v6h6M9 14l2 2 4-4" />
-                </svg>
+                <Icon icon={FileCheck2} size={24} />
               </div>
               <h3>All 51 Jurisdictions</h3>
               <p>
@@ -1107,39 +1044,14 @@ export default function LandingPage() {
             </div>
             <div className="feat-cell">
               <div className="feat-icon">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="9" cy="9" r="3" />
-                  <circle cx="16" cy="9" r="3" />
-                  <path d="M4 20c0-3 2-5 5-5M20 20c0-3-2-5-5-5" />
-                </svg>
+                <Icon icon={Users} size={24} />
               </div>
               <h3>Multi-Child Family</h3>
               <p>Unlimited children. Each tracked separately, all visible on one screen.</p>
             </div>
             <div className="feat-cell">
               <div className="feat-icon">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <polyline points="3 17 9 11 13 15 21 7" />
-                  <polyline points="14 7 21 7 21 14" />
-                </svg>
+                <Icon icon={TrendingUp} size={24} />
               </div>
               <h3>Mastery Over Memory</h3>
               <p>
@@ -1149,18 +1061,7 @@ export default function LandingPage() {
             </div>
             <div className="feat-cell">
               <div className="feat-icon">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.7 2.7-2.6-.4-.4-2.6z" />
-                </svg>
+                <Icon icon={Wrench} size={24} />
               </div>
               <h3>Trades &amp; Apprenticeships</h3>
               <p>
@@ -1169,19 +1070,7 @@ export default function LandingPage() {
             </div>
             <div className="feat-cell">
               <div className="feat-icon">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M12 2a7 7 0 0 1 4 12.7c-.7.5-1 1.3-1 2.1V18H9v-1.2c0-.8-.3-1.6-1-2.1A7 7 0 0 1 12 2z" />
-                  <path d="M9 18h6M10 22h4" />
-                </svg>
+                <Icon icon={Lightbulb} size={24} />
               </div>
               <h3>Optional Child Tutor</h3>
               <p>
