@@ -22,6 +22,7 @@ import AssessmentView from "@/components/child/AssessmentView";
 import ProjectView from "@/components/child/ProjectView";
 import FieldTripView from "@/components/child/FieldTripView";
 import CompletionState from "@/components/child/CompletionState";
+import { AmbientField, PageTransition, Stagger } from "@/components/child/motion";
 
 // ── Types ──
 
@@ -372,8 +373,9 @@ export default function ChildPage() {
   if (activeActivity && completed) {
     const isReview = activeActivity.is_review;
     return (
-      <div className={`min-h-screen`} style={pageBg}>
-        <div className="max-w-xl mx-auto px-8 py-16">
+      <div className="min-h-screen relative isolate" style={pageBg}>
+        <PageTransition viewKey={`completion-${activeActivity.id}`} mode="page">
+        <div className="max-w-xl mx-auto px-8 py-16 relative">
           <CompletionState
             activityTitle={activeActivity.title}
             masteryLevel={completionData.mastery}
@@ -395,6 +397,7 @@ export default function ChildPage() {
             {remaining.length > 1 ? `${remaining.length - 1} activit${remaining.length - 1 === 1 ? "y" : "ies"} remaining today.` : ""}
           </p>
         </div>
+        </PageTransition>
       </div>
     );
   }
@@ -417,6 +420,7 @@ export default function ChildPage() {
 
         {/* Activity content */}
         <div className="flex-1 overflow-y-auto">
+          <PageTransition viewKey={`activity-${activeActivity.id}-${t}`} mode="page">
           <div className="max-w-2xl mx-auto px-4 md:px-8 py-6">
             {t === "lesson" && <LessonView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
             {t === "practice" && <PracticeView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
@@ -437,6 +441,7 @@ export default function ChildPage() {
             )}
             {t === "field_trip" && <FieldTripView context={learningContext} onComplete={handleComplete} />}
           </div>
+          </PageTransition>
         </div>
       </div>
     );
@@ -458,9 +463,15 @@ export default function ChildPage() {
 
   // ═══ PHASE 1: MORNING VIEW / PHASE 4: ALL DONE ═══
   return (
-    <div className={`min-h-screen`} style={pageBg}>
+    <div className="min-h-screen relative isolate" style={pageBg}>
+      {/* Ambient background drift behind dashboard content. Pure
+          visual; pointer-events none; honors useMotion().ambient. */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <AmbientField mode="warm" intensity={0.55} />
+      </div>
+      <PageTransition viewKey="child-dashboard" mode="fade">
       {/* Header */}
-      <header className="bg-(--color-surface) border-b border-(--color-border) px-8 py-5">
+      <header className="bg-(--color-surface)/90 backdrop-blur-sm border-b border-(--color-border) px-8 py-5 relative">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             {/* Persona-driven companion avatar. */}
@@ -558,18 +569,17 @@ export default function ChildPage() {
             <p className="text-sm text-(--color-text-secondary)">Enjoy your free time, {dash.child.first_name}.</p>
           </div>
         ) : (
-          <div className="max-w-[640px] mx-auto flex flex-col gap-3 mb-10">
+          <Stagger gap="base" className="max-w-[640px] mx-auto flex flex-col gap-3 mb-10">
             {/* Uncompleted activities */}
-            {activities.filter(a => a.status !== "completed").map((act, idx) => {
+            {activities.filter(a => a.status !== "completed").map((act) => {
               const tl = typeLabels[act.type] || { label: act.type, icon: "\uD83D\uDCC4" };
               const isInProgress = act.status === "in_progress";
               const topColor = typeTopBorder[act.type] || "var(--color-accent)";
               const ctaLabel = isInProgress ? "Continue" : act.type === "review" ? "Review" : "Start";
-              const staggerClass = `stagger-${Math.min(8, idx + 1)}`;
               return (
                 <div
                   key={act.id}
-                  className={`animate-fade-up ${staggerClass} bg-(--color-surface) rounded-[14px] border border-(--color-border) shadow-[var(--shadow-card)] overflow-hidden`}
+                  className="bg-(--color-surface) rounded-[14px] border border-(--color-border) shadow-[var(--shadow-card)] overflow-hidden"
                 >
                   <div className="h-[3px] w-full" style={{ background: topColor }} aria-hidden="true" />
                   <div className="p-4 sm:p-5 flex items-center gap-4">
@@ -606,14 +616,13 @@ export default function ChildPage() {
             })}
 
             {/* Completed activities */}
-            {activities.filter(a => a.status === "completed").map((act, idx) => {
+            {activities.filter(a => a.status === "completed").map((act) => {
               const tl = typeLabels[act.type] || { label: act.type, icon: "\uD83D\uDCC4" };
               const topColor = typeTopBorder[act.type] || "var(--color-accent)";
-              const staggerClass = `stagger-${Math.min(8, idx + 1)}`;
               return (
                 <div
                   key={act.id}
-                  className={`animate-fade-up ${staggerClass} bg-(--color-surface) rounded-[14px] border border-(--color-border) overflow-hidden opacity-60`}
+                  className="bg-(--color-surface) rounded-[14px] border border-(--color-border) overflow-hidden opacity-60"
                 >
                   <div className="h-[3px] w-full" style={{ background: topColor }} aria-hidden="true" />
                   <div className="p-4 sm:p-5 flex items-center gap-4">
@@ -634,7 +643,7 @@ export default function ChildPage() {
                 </div>
               );
             })}
-          </div>
+          </Stagger>
         )}
 
         {/* Subject Progress */}
@@ -716,6 +725,7 @@ export default function ChildPage() {
           100% { transform: scale(1); opacity: 1; }
         }
       `}</style>
+      </PageTransition>
     </div>
   );
 }

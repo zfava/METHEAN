@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { streamTutorMessage } from "@/lib/api";
 import { CompanionAvatar } from "@/components/CompanionAvatar";
@@ -7,6 +8,8 @@ import { VoiceModeUI } from "@/components/child/voice/VoiceModeUI";
 import { usePersonalization } from "@/lib/PersonalizationProvider";
 import { useTutorVoice } from "@/lib/useTutorVoice";
 import { useVoiceConversation } from "@/lib/useVoiceConversation";
+import { useMotion } from "@/lib/motion/MotionContext";
+import { MOTION_DURATIONS_SEC, MOTION_EASINGS } from "@/lib/motion/tokens";
 
 interface TutorChatProps {
   activityId: string;
@@ -383,7 +386,7 @@ export default function TutorChat({
             const timeGap = showTime(i);
 
             return (
-              <div key={i}>
+              <MessageRow key={i} index={i}>
                 {/* Timestamp gap */}
                 {timeGap && (
                   <div className="text-center text-[9px] text-(--color-text-tertiary) py-2">
@@ -435,7 +438,7 @@ export default function TutorChat({
                     </div>
                   </div>
                 )}
-              </div>
+              </MessageRow>
             );
           })}
 
@@ -521,5 +524,40 @@ export default function TutorChat({
         `}</style>
       </div>
     </>
+  );
+}
+
+/**
+ * Single chat row with motion entrance. Tight stagger feel is
+ * achieved by giving each successive index a small extra delay
+ * derived from its position; under reduceMotion the row renders
+ * statically. The streaming token-by-token reveal in the active
+ * tutor bubble lives upstream in the message text itself (the
+ * existing isStreaming logic + cursor span); this primitive only
+ * owns the bubble's *arrival*, not its body composition.
+ */
+function MessageRow({
+  index,
+  children,
+}: {
+  index: number;
+  children: React.ReactNode;
+}) {
+  const { reduceMotion, speed } = useMotion();
+  if (reduceMotion) return <div>{children}</div>;
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: MOTION_DURATIONS_SEC.base / speed,
+        ease: MOTION_EASINGS.confident,
+        // Tight stagger: 40ms per row, capped so the 30th message
+        // doesn't sit 1.2s behind everything.
+        delay: Math.min(index * 0.04, 0.4),
+      }}
+    >
+      {children}
+    </motion.div>
   );
 }

@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 
 import { haptic } from "@/lib/haptics";
 import type { VoiceInputStatus } from "@/lib/useVoiceInput";
+import { Pulse } from "@/components/child/motion";
 
 interface MicButtonProps {
   status: VoiceInputStatus;
@@ -77,9 +78,11 @@ export function MicButton({
           ? "Microphone blocked"
           : "Start voice input";
 
-  return (
-    <>
-      <span ref={liveRef} aria-live="polite" className="sr-only" />
+  // While recording, wrap the button in <Pulse> so the listening
+  // affordance reads as alive. Pulse honors reduceMotion internally
+  // and falls back to the static border + danger background. The
+  // wrapper does not affect the button's hit target.
+  const buttonNode = (
       <button
         type="button"
         onClick={onClick}
@@ -92,7 +95,7 @@ export function MicButton({
           "min-h-[44px] min-w-[44px] w-11 h-11 sm:w-9 sm:h-9 sm:min-h-0 sm:min-w-0",
           "transition-colors disabled:opacity-50",
           isRecording
-            ? "bg-(--color-danger) text-white animate-pulse"
+            ? "bg-(--color-danger) text-white"
             : "bg-(--color-accent) text-white hover:opacity-90",
         ].join(" ")}
       >
@@ -124,6 +127,12 @@ export function MicButton({
           </svg>
         )}
       </button>
+  );
+
+  return (
+    <>
+      <span ref={liveRef} aria-live="polite" className="sr-only" />
+      {isRecording ? <Pulse color="var(--color-danger)">{buttonNode}</Pulse> : buttonNode}
     </>
   );
 }

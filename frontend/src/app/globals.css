@@ -91,6 +91,20 @@
   --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
   --transition-fast: 0.15s var(--ease);
   --transition-base: 0.2s var(--ease);
+
+  /* ── Motion vocabulary (mirrors lib/motion/tokens.ts) ──
+     Use these in CSS keyframes and transition declarations so the
+     surface stays coherent with the framer-motion primitives. */
+  --motion-confident: cubic-bezier(0.32, 0.72, 0, 1);
+  --motion-composed: cubic-bezier(0.65, 0, 0.35, 1);
+  --motion-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-micro: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-micro: 120ms;
+  --duration-fast: 200ms;
+  --duration-base: 320ms;
+  --duration-slow: 520ms;
+  --duration-cinematic: 900ms;
+  --duration-epic: 1400ms;
 }
 
 /* ── Safe area insets (notch / home indicator) ── */
@@ -459,4 +473,28 @@ input:-webkit-autofill:focus {
       animation-range: entry 0% entry 25%;
     }
   }
+}
+
+/* ══════════════════════════════════════════════════
+   Child-surface motion helpers
+   Companion CSS to the framer-motion primitives. Used by JourneyMap
+   (gold rim pulse), MicButton fallbacks, etc. All authored to fold
+   to no-op under prefers-reduced-motion.
+   ══════════════════════════════════════════════════ */
+@keyframes gold-rim-pulse {
+  0%, 100% { box-shadow: inset 0 0 0 1px rgba(198, 162, 78, 0); }
+  50% { box-shadow: inset 0 0 0 1px rgba(198, 162, 78, 0.4); }
+}
+.animate-gold-rim-pulse { animation: gold-rim-pulse 2.4s var(--motion-composed) infinite; }
+
+@keyframes particle-rise {
+  0% { opacity: 0; transform: translateY(0) scale(0.6); }
+  40% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(-40px) scale(1); }
+}
+.animate-particle-rise { animation: particle-rise var(--duration-epic) var(--motion-cinematic) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-gold-rim-pulse,
+  .animate-particle-rise { animation: none !important; }
 }

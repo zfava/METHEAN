@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { LearningContext } from "@/lib/api";
 import { useSoundCue } from "@/lib/useSoundCue";
 import TutorChat from "./TutorChat";
+import { MotionButton, MotionText } from "@/components/child/motion";
 
 interface ProjectViewProps {
   context: LearningContext;
@@ -39,7 +40,14 @@ export default function ProjectView({ context, childId, onComplete, onSaveProgre
     <div className="max-w-2xl mx-auto py-6">
       {phase === "work" && (
         <>
-          <h1 className="text-3xl font-semibold text-(--color-text) mb-2">{context.activity.title}</h1>
+          <MotionText
+            as="h1"
+            weight
+            entrance
+            className="text-3xl font-semibold text-(--color-text) mb-2"
+          >
+            {context.activity.title}
+          </MotionText>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-(--color-danger-light) text-(--color-danger) text-sm mb-6">
             Project · {context.activity.estimated_minutes} minutes
           </div>
@@ -88,10 +96,14 @@ export default function ProjectView({ context, childId, onComplete, onSaveProgre
                 Save Progress
               </button>
             )}
-            <button onClick={() => setPhase("reflect")}
-              className="flex-1 py-3.5 text-base font-semibold text-white bg-(--color-success) rounded-2xl hover:opacity-90 transition-opacity">
+            <MotionButton
+              variant="success"
+              size="lg"
+              onPress={() => setPhase("reflect")}
+              className="flex-1"
+            >
               Submit Completed Project
-            </button>
+            </MotionButton>
           </div>
 
           {context.tutor_available && (

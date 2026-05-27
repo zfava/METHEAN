@@ -70,6 +70,12 @@ export interface ChildPersonalization {
    *  the voice-mode TalkButton. Lives in the personalization JSONB
    *  so changing it does not require a migration. */
   voice_mode_style?: "tap_toggle" | "press_hold";
+  /** Parent governance: motion intensity for the child surface.
+   *  calm     -> reserved + ambient off,
+   *  standard -> age-band defaults pass through,
+   *  lively   -> ambient on, intensity ambient.
+   *  Stored on the personalization JSONB; no backend migration. */
+  motion_preference?: "calm" | "standard" | "lively";
 }
 
 export interface PersonalizationPolicy {

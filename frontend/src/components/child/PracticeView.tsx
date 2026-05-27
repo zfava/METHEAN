@@ -1,10 +1,14 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import type { LearningContext } from "@/lib/api";
 import { useSoundCue } from "@/lib/useSoundCue";
 import VoiceTextarea from "@/components/child/VoiceTextarea";
 import TutorChat from "./TutorChat";
+import { MotionButton, Stagger, TactileInput } from "@/components/child/motion";
+import { useMotion } from "@/lib/motion/MotionContext";
+import { MOTION_DURATIONS_SEC, MOTION_EASINGS } from "@/lib/motion/tokens";
 
 interface PracticeItem {
   type: string;
@@ -37,6 +41,7 @@ export default function PracticeView({ context, childId, onComplete }: PracticeV
 
   const item = items[currentIdx];
   const totalItems = items.length;
+  const { reduceMotion, speed } = useMotion();
 
   // Activity-start cue. The hook gracefully no-ops when the kid's
   // pack is off, before any user gesture, or under
@@ -168,28 +173,65 @@ export default function PracticeView({ context, childId, onComplete }: PracticeV
         </div>
       )}
 
-      {/* Question */}
-      <div className="bg-(--color-surface) border border-(--color-border) rounded-xl p-5 mb-4">
+      {/* Question card. On a correct answer it blooms green-soft for
+          600ms and pulses 1.0->1.02->1.0; on an incorrect answer it
+          shakes gently (existing animate-shake but timed slower via
+          inline animation override below). */}
+      <motion.div
+        className="bg-(--color-surface) border border-(--color-border) rounded-xl p-5 mb-4"
+        animate={
+          reduceMotion || !checked
+            ? undefined
+            : correct
+              ? {
+                  boxShadow: [
+                    "0 0 0 0 rgba(45,106,79,0)",
+                    "0 0 0 8px rgba(45,106,79,0.18)",
+                    "0 0 0 0 rgba(45,106,79,0)",
+                  ],
+                  scale: [1, 1.02, 1],
+                }
+              : {
+                  x: [0, -6, 5, -4, 3, 0],
+                }
+        }
+        transition={
+          reduceMotion || !checked
+            ? undefined
+            : correct
+              ? {
+                  duration: 0.6 / speed,
+                  ease: MOTION_EASINGS.composed,
+                  times: [0, 0.5, 1],
+                }
+              : {
+                  duration: 0.45 / speed,
+                  ease: MOTION_EASINGS.composed,
+                }
+        }
+      >
         <p className="text-(--color-text) text-lg leading-relaxed">{item.prompt}</p>
-      </div>
+      </motion.div>
 
       {/* Input area */}
       {!checked && (
         <div className="mb-4">
           {item.expected_type === "number" && (
-            <input type="number" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Type your answer..." className="w-full px-4 py-3 rounded-xl border border-(--color-border) bg-(--color-surface) text-(--color-text) text-lg focus:outline-none focus:border-(--color-accent)" onKeyDown={(e) => e.key === "Enter" && answer && checkAnswer()} autoFocus />
+            <TactileInput>
+              <input type="number" value={answer} onChange={(e) => setAnswer(e.target.value)} placeholder="Type your answer..." className="w-full px-4 py-3 rounded-xl border border-(--color-border) bg-(--color-surface) text-(--color-text) text-lg focus:outline-none focus:border-(--color-accent)" onKeyDown={(e) => e.key === "Enter" && answer && checkAnswer()} autoFocus />
+            </TactileInput>
           )}
           {item.expected_type === "text" && (
             <VoiceTextarea value={answer} onChange={setAnswer} childId={childId} placeholder="Write your answer..." rows={4} className="w-full px-4 py-3 rounded-xl border border-(--color-border) bg-(--color-surface) text-(--color-text) focus:outline-none focus:border-(--color-accent) resize-none" autoFocus />
           )}
           {item.expected_type === "multiple_choice" && item.options && (
-            <div className="space-y-2">
+            <Stagger gap="tight" className="space-y-2">
               {item.options.map((opt, i) => (
                 <button key={i} onClick={() => setAnswer(opt)} className={`w-full text-left px-4 py-3 rounded-xl border transition-colors ${answer === opt ? "border-(--color-accent) bg-(--color-accent-light) text-(--color-text)" : "border-(--color-border) bg-(--color-surface) text-(--color-text-secondary) hover:border-(--color-text-tertiary)"}`}>
                   {String.fromCharCode(65 + i)}. {opt}
                 </button>
               ))}
-            </div>
+            </Stagger>
           )}
           {item.expected_type === "true_false" && (
             <div className="flex gap-3">
