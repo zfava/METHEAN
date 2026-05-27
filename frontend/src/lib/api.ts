@@ -18,6 +18,44 @@ export class ApiError extends Error {
   }
 }
 
+/**
+ * Thrown when the backend gates a route with require_active_subscription
+ * and returns 402. Carries the household's current subscription status
+ * (canceled, past_due, paused, incomplete, unpaid, unknown, etc.) so the
+ * paywall screen can branch lapsed-vs-never-subscribed copy, plus the
+ * hint path the backend returned. The real Stripe URL is fetched via
+ * billing.subscribe() at click time, not stored here.
+ */
+export class PaymentRequiredError extends ApiError {
+  subscriptionStatus: string;
+  checkoutHint: string;
+
+  constructor(subscriptionStatus: string, checkoutHint: string) {
+    super(402, "subscription_required");
+    this.name = "PaymentRequiredError";
+    this.subscriptionStatus = subscriptionStatus;
+    this.checkoutHint = checkoutHint;
+  }
+}
+
+/**
+ * Event name fired on `window` whenever a 402 is observed. The parent
+ * app layout listens for this and renders the SubscriptionRequired
+ * screen, so every gated page handles the paywall the same way without
+ * each page needing its own catch.
+ */
+export const PAYWALL_EVENT = "methean:paywall";
+
+export interface PaywallEventDetail {
+  status: string;
+  checkoutHint: string;
+}
+
+function dispatchPaywall(detail: PaywallEventDetail) {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent<PaywallEventDetail>(PAYWALL_EVENT, { detail }));
+}
+
 function getCookie(name: string): string | undefined {
   if (typeof document === "undefined") return undefined;
   const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
@@ -77,7 +115,20 @@ async function request<T>(
       // Don't retry client errors (4xx) — they are not transient
       if (!RETRYABLE_STATUSES.has(res.status) || !shouldRetry || attempt === attempts - 1) {
         const body = await res.json().catch(() => ({ detail: res.statusText }));
-        throw new ApiError(res.status, body.detail || res.statusText);
+        // 402 carries a structured paywall payload: throw a typed error
+        // and fire a global event so the layout-level gate can swap to
+        // the branded SubscriptionRequired screen regardless of which
+        // page initiated the call.
+        if (res.status === 402) {
+          const payload =
+            body && typeof body.detail === "object" && body.detail !== null ? body.detail : body;
+          const subscriptionStatus = String(payload?.status ?? "unknown");
+          const checkoutHint = String(payload?.checkout_url ?? "/billing/checkout");
+          dispatchPaywall({ status: subscriptionStatus, checkoutHint });
+          throw new PaymentRequiredError(subscriptionStatus, checkoutHint);
+        }
+        const detailValue = body && typeof body.detail === "string" ? body.detail : res.statusText;
+        throw new ApiError(res.status, detailValue);
       }
 
       lastError = new ApiError(res.status, res.statusText);

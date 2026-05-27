@@ -11,6 +11,7 @@ import MobileHeader from "@/components/MobileHeader";
 import BottomTabBar from "@/components/BottomTabBar";
 import MobileNavSheet from "@/components/MobileNavSheet";
 import BetaFeedbackButton from "@/components/BetaFeedbackButton";
+import SubscriptionGate from "@/components/billing/SubscriptionGate";
 
 function ParentLayoutInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -73,7 +74,9 @@ function ParentLayoutInner({ children }: { children: React.ReactNode }) {
           paddingRight: 32,
         }}
       >
-        <PageTransition>{children}</PageTransition>
+        <PageTransition>
+          <SubscriptionGate>{children}</SubscriptionGate>
+        </PageTransition>
       </main>
 
       <BetaFeedbackButton />
