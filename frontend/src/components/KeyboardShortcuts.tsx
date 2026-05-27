@@ -56,7 +56,7 @@ export default function KeyboardShortcuts() {
   return (
     <div className="fixed bottom-6 right-6 z-50 animate-fade-up">
       <div className="bg-(--color-surface) rounded-[14px] border border-(--color-border) shadow-[var(--shadow-lg)] px-4 py-3 min-w-[200px]">
-        <div className="text-[10px] font-medium text-(--color-text-tertiary) uppercase tracking-wider mb-2">Keyboard Shortcuts</div>
+        <div className="type-eyebrow-sm text-(--color-text-tertiary) mb-2">Keyboard Shortcuts</div>
         <div className="space-y-1.5">
           {SHORTCUTS.map((s) => (
             <div key={s.keys} className="flex items-center justify-between gap-4">

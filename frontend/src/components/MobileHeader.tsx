@@ -130,7 +130,7 @@ export default function MobileHeader() {
       {/* Child selector sheet */}
       <BottomSheet open={childSheetOpen} onClose={() => setChildSheetOpen(false)} label="Select child">
         <div className="px-4 pt-2 pb-4">
-          <h3 className="text-base font-semibold text-(--color-text) mb-3">Switch Child</h3>
+          <h3 className="type-heading-sm text-(--color-text) mb-3">Switch Child</h3>
           <div className="flex flex-col gap-2">
             {children.map((child) => {
               const isSelected = child.id === selectedChild?.id;

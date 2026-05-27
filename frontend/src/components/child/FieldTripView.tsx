@@ -43,7 +43,7 @@ export default function FieldTripView({ context, onComplete }: FieldTripViewProp
             as="h1"
             weight
             entrance
-            className="text-3xl font-semibold text-(--color-text) mb-2"
+            className="type-heading-lg text-(--color-text) mb-2"
           >
             {context.activity.title}
           </MotionText>
@@ -53,7 +53,7 @@ export default function FieldTripView({ context, onComplete }: FieldTripViewProp
 
           {context.activity.description && (
             <div className="bg-(--color-surface) rounded-2xl p-6 border border-(--color-border) mb-6">
-              <h3 className="text-sm font-semibold text-(--color-text-secondary) uppercase tracking-wider mb-2">Preparation</h3>
+              <h3 className="type-eyebrow-md text-(--color-text-secondary) mb-2">Preparation</h3>
               <p className="text-base text-(--color-text) leading-relaxed whitespace-pre-line">{context.activity.description}</p>
             </div>
           )}
@@ -87,7 +87,7 @@ export default function FieldTripView({ context, onComplete }: FieldTripViewProp
 
       {phase === "reflect" && (
         <>
-          <h2 className="text-2xl font-semibold text-(--color-text) mb-6">How was the field trip?</h2>
+          <h2 className="type-heading-md text-(--color-text) mb-6">How was the field trip?</h2>
 
           <div className="space-y-4 mb-6">
             {reflectionPrompts.map((prompt) => (

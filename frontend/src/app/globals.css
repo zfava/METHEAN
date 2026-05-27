@@ -66,12 +66,32 @@
   --radius-badge: 6px;
   --radius-input: 10px;
 
-  /* ── Type ── */
-  --font-sans: var(--font-dm-sans), "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* ── Type ──
+     The product runs on three families: Fraunces (serif/display),
+     Inter (sans/UI), JetBrains Mono (data, code, timestamps).
+     --font-display is a distinct alias so consumers can mark a
+     declaration as display-only without colliding with body-serif
+     editorial use. */
+  --font-sans: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, "SF Mono", monospace;
-  --font-serif: var(--font-cormorant), "Iowan Old Style", "Palatino", Georgia, serif;
+  --font-serif: var(--font-fraunces), "Fraunces", "Iowan Old Style", "Palatino", Georgia, serif;
+  --font-display: var(--font-fraunces), "Fraunces", Georgia, serif;
   --tracking-tight: -0.025em;
   --tracking-tighter: -0.035em;
+
+  /* ── Typography vocabulary ──
+     Named values used by .type-* classes below and by ad-hoc
+     declarations elsewhere. Keep these in sync with anything that
+     hand-writes a tracking or leading value. */
+  --leading-tight: 1.05;
+  --leading-snug: 1.2;
+  --leading-base: 1.5;
+  --leading-relaxed: 1.65;
+  --tracking-display: -0.04em;   /* display headlines, Fraunces */
+  --tracking-heading: -0.025em;  /* section headers */
+  --tracking-body: -0.005em;     /* default body */
+  --tracking-ui: 0em;             /* Inter UI labels */
+  --tracking-eyebrow: 0.12em;    /* uppercase eyebrows */
 
   /* ── Editorial palette (cinematic landing) ── */
   --gold-deep: #A6843A;
@@ -127,7 +147,7 @@ html {
 body {
   font-family: var(--font-sans);
   font-size: 15px;
-  line-height: 1.6;
+  line-height: var(--leading-base);
   color: var(--color-text);
   background: var(--color-page);
   min-height: 100dvh;
@@ -498,3 +518,181 @@ input:-webkit-autofill:focus {
   .animate-gold-rim-pulse,
   .animate-particle-rise { animation: none !important; }
 }
+
+/* ══════════════════════════════════════════════════
+   Typography
+   ══════════════════════════════════════════════════
+   Two families do all the work:
+     - Fraunces (var(--font-display) / var(--font-serif)) drives every
+       editorial moment via opsz + SOFT variation axes. The named
+       helpers below preset both axes to the value Fraunces was drawn
+       for at each visible size — display at opsz=144 (most refined,
+       low contrast), heading at opsz=72, editorial at opsz=36, body
+       at opsz=14 (sturdier, higher x-height). SOFT scales inversely:
+       small text gets SOFT=100 (softer, more readable), display
+       gets SOFT=25 (crisper, more carved).
+     - Inter (var(--font-sans)) handles all UI labels and body. Per-
+       size tracking is set explicitly because Inter benefits from
+       slightly negative tracking at display sizes and slightly
+       positive at small label/eyebrow sizes.
+
+   Use the .type-* classes below for new code. The font-fraunces-*
+   and font-inter-* helpers are the lower-level building blocks they
+   compose. */
+
+.font-fraunces-display {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 144, "SOFT" 25;
+  letter-spacing: var(--tracking-display);
+  line-height: var(--leading-tight);
+}
+.font-fraunces-heading {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 72, "SOFT" 50;
+  letter-spacing: var(--tracking-heading);
+  line-height: var(--leading-snug);
+}
+.font-fraunces-editorial {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 36, "SOFT" 75;
+  letter-spacing: var(--tracking-body);
+  line-height: var(--leading-relaxed);
+}
+.font-fraunces-body {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 14, "SOFT" 100;
+  letter-spacing: 0;
+  line-height: var(--leading-relaxed);
+}
+
+.font-inter-display { font-family: var(--font-sans); letter-spacing: -0.025em; }
+.font-inter-heading { font-family: var(--font-sans); letter-spacing: -0.015em; }
+.font-inter-body    { font-family: var(--font-sans); letter-spacing: 0; }
+.font-inter-label   { font-family: var(--font-sans); letter-spacing: 0.01em; font-weight: 500; }
+.font-inter-eyebrow {
+  font-family: var(--font-sans);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+/* Canonical type scale.
+   Inline the rules (rather than @apply) because @apply on
+   non-utility custom classes is unreliable in Tailwind v4. The
+   inlined declarations duplicate a few lines from the helpers above
+   but make the cascade explicit and the class self-contained. */
+
+/* Display: Fraunces, large editorial moments only (hero, milestone,
+   founder-letter heading). */
+.type-display-xl {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 144, "SOFT" 25;
+  font-size: 72px;
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-display);
+}
+.type-display-lg {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 144, "SOFT" 25;
+  font-size: 56px;
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-display);
+}
+.type-display-md {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 144, "SOFT" 25;
+  font-size: 44px;
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-display);
+}
+
+/* Heading: Fraunces, section-level. opsz 72 reads as proportional
+   at 18-36px while keeping enough crispness in the strokes. */
+.type-heading-xl {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 72, "SOFT" 50;
+  font-size: 36px;
+  font-weight: 500;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-heading);
+}
+.type-heading-lg {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 72, "SOFT" 50;
+  font-size: 28px;
+  font-weight: 500;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-heading);
+}
+.type-heading-md {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 72, "SOFT" 50;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-heading);
+}
+.type-heading-sm {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 72, "SOFT" 50;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-heading);
+}
+
+/* Editorial: Fraunces sized for long-form body (passage reader,
+   quote blocks, founder letter body). opsz=36 + SOFT=75 give
+   readable curves at running-text size. */
+.type-editorial-lg {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 36, "SOFT" 75;
+  font-size: 19px;
+  font-weight: 400;
+  line-height: var(--leading-relaxed);
+  letter-spacing: var(--tracking-body);
+}
+.type-editorial-md {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 36, "SOFT" 75;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: var(--leading-relaxed);
+  letter-spacing: var(--tracking-body);
+}
+
+/* UI body: Inter, the default for every screen's body copy. */
+.type-body-lg { font-family: var(--font-sans); font-size: 17px; font-weight: 400; line-height: 1.5; letter-spacing: 0; }
+.type-body-md { font-family: var(--font-sans); font-size: 15px; font-weight: 400; line-height: 1.5; letter-spacing: 0; }
+.type-body-sm { font-family: var(--font-sans); font-size: 13px; font-weight: 400; line-height: 1.45; letter-spacing: 0; }
+.type-body-xs { font-family: var(--font-sans); font-size: 12px; font-weight: 400; line-height: 1.4; letter-spacing: 0; }
+
+/* UI labels: Inter at 500, slightly positive tracking so labels
+   read as deliberate. */
+.type-label-md { font-family: var(--font-sans); font-size: 14px; font-weight: 500; letter-spacing: 0.01em; }
+.type-label-sm { font-family: var(--font-sans); font-size: 12px; font-weight: 500; letter-spacing: 0.01em; }
+
+/* Eyebrow: Inter, uppercase, tracked. The single visual signal
+   for a small-caps section eyebrow across the product. */
+.type-eyebrow-md {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+}
+.type-eyebrow-sm {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+}
+
+/* Mono: JetBrains Mono for tabular data, code, timestamps, IDs. */
+.type-mono-md { font-family: var(--font-mono); font-size: 13px; line-height: 1.5; letter-spacing: 0; }
+.type-mono-sm { font-family: var(--font-mono); font-size: 11px; line-height: 1.45; letter-spacing: 0; }

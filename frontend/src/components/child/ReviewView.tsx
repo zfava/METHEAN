@@ -60,7 +60,7 @@ export default function ReviewView({ context, childId, onComplete }: ReviewViewP
         <>
           {/* Header with context */}
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-medium text-(--color-text) mb-2">Memory Check</h1>
+            <h1 className="type-heading-md text-(--color-text) mb-2">Memory Check</h1>
             <p className="text-base text-(--color-text-secondary) leading-relaxed">
               {daysSince && daysSince > 0
                 ? `You learned ${context.activity.title} ${daysSince === 1 ? "yesterday" : `${daysSince} days ago`}. Let's see what stuck.`
@@ -118,7 +118,7 @@ export default function ReviewView({ context, childId, onComplete }: ReviewViewP
 
       {phase === "reflect" && (
         <div className="text-center">
-          <h2 className="text-2xl font-medium text-(--color-text) mb-2">How well do you remember this?</h2>
+          <h2 className="type-heading-md text-(--color-text) mb-2">How well do you remember this?</h2>
           <p className="text-sm text-(--color-text-secondary) mb-8">Be honest — it helps us plan your next review.</p>
 
           <div className="flex justify-center gap-4 mb-10">

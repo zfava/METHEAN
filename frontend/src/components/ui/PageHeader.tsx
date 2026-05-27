@@ -24,8 +24,8 @@ export default function PageHeader({
           </a>
         )}
         <div>
-          <h1 className="text-[22px] sm:text-[28px] font-semibold tracking-[-0.025em] text-(--color-text)">{title}</h1>
-          {subtitle && <p className="text-[15px] text-(--color-text-secondary) mt-1">{subtitle}</p>}
+          <h1 className="type-heading-lg text-(--color-text)">{title}</h1>
+          {subtitle && <p className="type-body-md text-(--color-text-secondary) mt-1">{subtitle}</p>}
         </div>
       </div>
       {actions && <div className="flex items-center gap-2">{actions}</div>}

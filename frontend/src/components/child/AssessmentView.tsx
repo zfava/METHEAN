@@ -64,7 +64,7 @@ export default function AssessmentView({ context, onComplete }: AssessmentViewPr
     return (
       <div className="max-w-2xl mx-auto py-12 text-center">
         <div className="text-4xl mb-4">{"\uD83C\uDF1F"}</div>
-        <h1 className="text-2xl font-medium text-(--color-text) mb-2">All done!</h1>
+        <h1 className="type-heading-md text-(--color-text) mb-2">All done!</h1>
         <p className="text-base text-(--color-text-secondary) leading-relaxed">
           Your parent will review your work. You did great showing what you know.
         </p>
@@ -86,7 +86,7 @@ export default function AssessmentView({ context, onComplete }: AssessmentViewPr
     <div className="max-w-2xl mx-auto py-8">
       {/* Header — "Show what you know", not "Test" */}
       <div className="mb-6">
-        <h1 className="text-xl font-medium text-(--color-text)">Show What You Know</h1>
+        <h1 className="type-heading-sm text-(--color-text)">Show What You Know</h1>
         <p className="text-sm text-(--color-text-tertiary)">{context.activity.title}</p>
       </div>
 

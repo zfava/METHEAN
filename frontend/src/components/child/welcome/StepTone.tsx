@@ -14,7 +14,7 @@ export function StepTone({ tones, selectedId, onSelect, onContinue }: StepTonePr
   return (
     <div className="space-y-6">
       <header className="text-center">
-        <h1 className="text-2xl font-semibold text-(--color-text) tracking-tight">
+        <h1 className="type-heading-md text-(--color-text)">
           How should your buddy talk to you?
         </h1>
         <p className="text-sm text-(--color-text-secondary) mt-2">

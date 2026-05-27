@@ -27,9 +27,12 @@
   --muted: #5C5C5C;
   --muted-light: rgba(245, 241, 232, 0.6);
   --muted-faint: rgba(245, 241, 232, 0.4);
-  --serif: var(--font-fraunces), "Fraunces", "Cormorant Garamond", Georgia, serif;
-  --sans: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
-  --mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, monospace;
+  /* Inherit the app-wide font tokens from globals.css. Aliasing so
+     the existing .cinematic-landing selectors that reference --serif,
+     --sans, --mono keep compiling unchanged. */
+  --serif: var(--font-serif);
+  --sans: var(--font-sans);
+  --mono: var(--font-mono);
   --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);

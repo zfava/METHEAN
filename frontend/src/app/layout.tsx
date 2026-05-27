@@ -1,38 +1,32 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, DM_Sans, Fraunces, Inter, JetBrains_Mono } from "next/font/google";
+import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import ClientProviders from "@/components/ClientProviders";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import OfflineBanner from "@/components/OfflineBanner";
 import AppLifecycle from "@/components/AppLifecycle";
 
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-  variable: "--font-cormorant",
-  display: "swap",
-});
-
+// Fraunces is loaded as a variable font with the optical-size
+// (opsz) and softness (SOFT) axes exposed. The .type-* helpers in
+// globals.css set those axes per visible size so the same family
+// reads as crisp display copy at 72px and as soft editorial copy at
+// 19px. Omitting `weight` is required to keep the variable font;
+// next/font otherwise selects static cuts and drops the axes.
 const fraunces = Fraunces({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  axes: ["opsz", "SOFT"],
   style: ["normal", "italic"],
   variable: "--font-fraunces",
   display: "swap",
 });
 
+// Inter is the app-wide sans. All UI labels and body copy. The
+// per-size tracking lives in the .font-inter-* helpers; Inter
+// itself doesn't expose an optical-size axis.
 const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
-  display: "swap",
-});
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-dm-sans",
   display: "swap",
 });
 
@@ -76,7 +70,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${cormorant.variable} ${fraunces.variable} ${inter.variable} ${dmSans.variable} ${jetbrains.variable}`}
+      className={`${fraunces.variable} ${inter.variable} ${jetbrains.variable}`}
     >
       <head>
         <meta name="theme-color" content="#0F1B2D" />

@@ -103,7 +103,7 @@ export function MySpace({ open, onClose }: MySpaceProps) {
     <div className="px-5 pb-8 space-y-8">
       {/* Header */}
       <header className="pt-2">
-        <h2 className="text-base font-semibold text-(--color-text)">My Space</h2>
+        <h2 className="type-heading-sm text-(--color-text)">My Space</h2>
       </header>
 
       {mode === "main" && (
@@ -332,7 +332,7 @@ export function MySpace({ open, onClose }: MySpaceProps) {
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section>
-      <h3 className="text-[11px] font-semibold uppercase tracking-[0.08em] text-(--color-text-secondary) mb-3">
+      <h3 className="type-eyebrow-sm text-(--color-text-secondary) mb-3">
         {title}
       </h3>
       {children}

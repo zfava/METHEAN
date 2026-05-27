@@ -65,7 +65,7 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
             as="h1"
             weight
             entrance
-            className="text-3xl font-semibold text-(--color-text) mb-3"
+            className="type-heading-lg text-(--color-text) mb-3"
           >
             {activity.title}
           </MotionText>
@@ -75,7 +75,7 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
 
           {lesson.objectives?.length > 0 && (
             <div className="text-left bg-(--color-surface) rounded-2xl p-6 mb-6">
-              <h3 className="text-sm font-semibold text-(--color-text-secondary) uppercase tracking-wider mb-2">What you&apos;ll learn today</h3>
+              <h3 className="type-eyebrow-md text-(--color-text-secondary) mb-2">What you&apos;ll learn today</h3>
               <Stagger gap="tight" as="ul" className="space-y-1.5">
                 {lesson.objectives.map((obj, i) => (
                   <li key={i} className="text-base text-(--color-text) flex items-start gap-2">
@@ -115,7 +115,7 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
       {/* Phase: Introduction */}
       {phase === "intro" && (
         <div className="py-6">
-          <h2 className="text-2xl font-semibold text-(--color-text) mb-4">Let&apos;s get started</h2>
+          <h2 className="type-heading-md text-(--color-text) mb-4">Let&apos;s get started</h2>
           {lesson.introduction && (
             <div className="text-base leading-relaxed text-(--color-text) mb-6 whitespace-pre-line">
               {lesson.introduction}
@@ -129,7 +129,7 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
           )}
           {passages.length > 0 && (
             <div className="mb-6">
-              <h3 className="text-sm font-semibold text-(--color-text-secondary) uppercase tracking-wider mb-2">
+              <h3 className="type-eyebrow-md text-(--color-text-secondary) mb-2">
                 Reading
               </h3>
               {passages.map((passage) => (
@@ -237,7 +237,7 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
       {/* Phase: Practice */}
       {phase === "practice" && (
         <div className="py-6">
-          <h2 className="text-2xl font-semibold text-(--color-text) mb-2">Practice</h2>
+          <h2 className="type-heading-md text-(--color-text) mb-2">Practice</h2>
           <p className="text-sm text-(--color-text-secondary) mb-6">
             {prompts.length > 0 ? "Work through these to build your skills." : "Write about what you learned, or describe your work in your own words."}
           </p>
@@ -273,7 +273,7 @@ export default function LessonView({ context, childId, onComplete }: LessonViewP
       {/* Phase: Reflection & Submit */}
       {phase === "reflect" && (
         <div className="py-6">
-          <h2 className="text-2xl font-semibold text-(--color-text) mb-6">How did it go?</h2>
+          <h2 className="type-heading-md text-(--color-text) mb-6">How did it go?</h2>
 
           <div className="space-y-3 mb-8">
             {[
