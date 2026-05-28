@@ -10,6 +10,12 @@ class Settings(BaseSettings):
     # Application
     APP_ENV: str = "development"
     APP_DEBUG: bool = False
+    # Local-dev only: skip the subscription gate so premium endpoints
+    # (curriculum, plans, insights, wellbeing, etc.) work without a
+    # real Stripe subscription. Wired through docker-compose.override.yml
+    # for dev. The field_validator below refuses to boot if this is
+    # true in staging or production, mirroring the AI_MOCK_ENABLED guard.
+    DEV_BYPASS_SUBSCRIPTION: bool = False
     LOG_LEVEL: str = "INFO"
     CORS_ORIGINS: list[str] = ["http://localhost:3000"]
 
@@ -110,6 +116,18 @@ class Settings(BaseSettings):
         if env == "production" and v and not allow:
             raise ValueError(
                 "AI_MOCK_ENABLED=True in production requires ALLOW_AI_MOCK_IN_PRODUCTION=true. Refusing to boot."
+            )
+        return v
+
+    @field_validator("DEV_BYPASS_SUBSCRIPTION")
+    @classmethod
+    def bypass_must_be_off_outside_dev(cls, v: bool, info) -> bool:
+        env = info.data.get("APP_ENV", "development")
+        if v and env in ("production", "staging"):
+            raise ValueError(
+                "DEV_BYPASS_SUBSCRIPTION=true in production or staging is unsafe. "
+                "It is intended only for local development via docker-compose.override.yml. "
+                "Refusing to boot."
             )
         return v
 

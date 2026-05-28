@@ -23,6 +23,18 @@
 # image's node_modules. Pure source edits do not require a rebuild.
 
 services:
+  backend:
+    # Local-dev: skip the Stripe subscription gate so every premium
+    # endpoint (curriculum, plans, family insights, wellbeing, map
+    # state, etc.) works without a real subscription. The bypass is
+    # gated by the DEV_BYPASS_SUBSCRIPTION setting in
+    # backend/app/core/config.py, which a field_validator refuses to
+    # accept as true in staging or production. This file is auto-loaded
+    # only by `docker compose up` without explicit `-f` flags, so
+    # production and staging deploys never see this var.
+    environment:
+      DEV_BYPASS_SUBSCRIPTION: "true"
+
   frontend:
     build:
       context: ./frontend

@@ -75,6 +75,41 @@ does not need to be excluded from the deploy image (it is not copied
 into the frontend image at all because it lives at the repo root, not
 under `frontend/`).
 
+## Subscription bypass in development
+
+By default, local development bypasses the Stripe subscription gate so
+you can use premium features (curriculum generation, family insights,
+wellbeing analysis, map state, plans) without a real subscription. This
+is controlled by the `DEV_BYPASS_SUBSCRIPTION=true` env var, set
+automatically in `docker-compose.override.yml` on the `backend` service.
+
+The first time the bypass activates after the backend starts, you'll
+see a `WARNING` line in the backend logs:
+
+    WARNING DEV_BYPASS_SUBSCRIPTION is active. All households treated as having an active premium subscription...
+
+This is intentional. It's a visible reminder that you're not exercising
+the real paywall path. The warning fires once per worker process, not
+once per request.
+
+**Production and staging deployments do NOT load
+`docker-compose.override.yml`** and the bypass is inert. The override
+file is only loaded by the default `docker compose up` command;
+production uses explicit `-f docker-compose.yml -f
+docker-compose.prod.yml` flags. As a belt-and-suspenders guard, the
+config layer in `backend/app/core/config.py` refuses to boot the
+backend if `DEV_BYPASS_SUBSCRIPTION=true` and `APP_ENV` is `production`
+or `staging`, so the bypass cannot be flipped on accidentally in those
+environments even if the env var leaks in.
+
+To test the real paywall flow locally (for example, before a demo),
+run:
+
+    docker compose -f docker-compose.yml up
+
+This omits the override file. Premium endpoints will return 402,
+exactly as a real unsubscribed user would experience.
+
 ## The bug this layout fixes
 
 Before this change, `docker-compose.yml` bind-mounted

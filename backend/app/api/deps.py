@@ -1,5 +1,6 @@
 """Shared FastAPI dependencies."""
 
+import logging
 import uuid
 from typing import Literal
 
@@ -7,12 +8,21 @@ from fastapi import Cookie, Depends, HTTPException, Path, Query, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import settings
 from app.core.database import get_session, set_tenant
 from app.core.security import decode_token
 from app.models.enums import UserRole
 from app.models.identity import Child, User
 
+logger = logging.getLogger(__name__)
+
 AccessMode = Literal["read", "write"]
+
+# Module-level flag so the dev-bypass warning fires at most once per
+# worker process. The Settings load already gates ``DEV_BYPASS_SUBSCRIPTION``
+# against production via the config validator, so the only thing left to
+# do at request time is log a visible reminder and short-circuit the gate.
+_bypass_warning_logged: bool = False
 
 
 class PaginationParams:
@@ -186,7 +196,25 @@ async def require_active_subscription(
     ``paused``, ``incomplete``, ``incomplete_expired``, ``unpaid``, or
     anything unrecognised — is rejected with a structured 402 the
     frontend can branch on to render the upgrade banner.
+
+    Local-dev escape hatch: when ``settings.DEV_BYPASS_SUBSCRIPTION`` is
+    true (set in docker-compose.override.yml, never in prod/staging),
+    every household is treated as having an active subscription so
+    developers can exercise premium features without a real Stripe
+    subscription. The config layer refuses to boot if this flag is true
+    in production or staging, so the check here is safe at request time.
     """
+    global _bypass_warning_logged
+    if settings.DEV_BYPASS_SUBSCRIPTION:
+        if not _bypass_warning_logged:
+            logger.warning(
+                "DEV_BYPASS_SUBSCRIPTION is active. All households treated as having "
+                "an active premium subscription. This MUST NOT be set in staging or "
+                "production. Configured via docker-compose.override.yml."
+            )
+            _bypass_warning_logged = True
+        return user
+
     from datetime import UTC, datetime
 
     from app.models.identity import Household
