@@ -1,0 +1,60 @@
+# Local-dev overlay for `docker compose`.
+#
+# `docker compose` automatically loads docker-compose.override.yml on
+# top of docker-compose.yml when no `-f` flags are passed. Production
+# and staging deploys use explicit `-f docker-compose.yml -f
+# docker-compose.prod.yml` (or staging) and therefore IGNORE this file.
+#
+# What this override does:
+#   - Switches the frontend container from the production standalone
+#     server to `npm run dev`, so the Next.js dev server is what the
+#     browser hits at localhost:3000.
+#   - Bind-mounts the entire frontend tree at /app so edits to any
+#     source file are picked up instantly. /app/.next and
+#     /app/node_modules use named volumes so the dev server's compile
+#     cache survives container restarts AND so the bind mount does not
+#     paint host node_modules over the in-image install (which would be
+#     wrong on a different architecture, e.g. M-series Macs).
+#   - Skips the production build entrypoint; we just need node + the
+#     installed modules.
+#
+# If a contributor edits `frontend/Dockerfile` or `frontend/package.json`,
+# they still need `docker compose build frontend` once to refresh the
+# image's node_modules. Pure source edits do not require a rebuild.
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      # The runner stage strips dev deps and source, so `npm run dev`
+      # cannot start from it. Stop at the `deps` stage, which has
+      # `node_modules` installed but skips the production build. The
+      # bind mount below paints the host source tree on top, so dev
+      # gets host code + image-arch node_modules.
+      target: deps
+    command: npm run dev
+    environment:
+      NODE_ENV: development
+      NEXT_TELEMETRY_DISABLED: "1"
+      # Polling is required because inotify does not propagate across
+      # the bind mount on some hosts (Linux with overlayfs on macOS via
+      # Docker Desktop, WSL2). Without these flags the dev server does
+      # not see edits.
+      WATCHPACK_POLLING: "true"
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      # Bind the whole frontend tree so any source edit is visible to
+      # the dev server inside the container.
+      - ./frontend:/app
+      # Named volumes shadow the bind mount at /app/node_modules and
+      # /app/.next so we keep the image's pre-installed modules (which
+      # match the container's arch) and persist the dev compile cache
+      # across `docker compose up` cycles. Docker auto-populates these
+      # from the image content on first mount.
+      - frontend_node_modules:/app/node_modules
+      - frontend_next_cache:/app/.next
+
+volumes:
+  frontend_node_modules:
+  frontend_next_cache:

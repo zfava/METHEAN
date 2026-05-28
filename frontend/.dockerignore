@@ -1,0 +1,59 @@
+# Build-context hygiene for the frontend image.
+#
+# Without this file, `COPY . .` in the builder stage pulled in the
+# host's `.next/` (10MB+ of cached compile artifacts) and
+# `node_modules/` (hundreds of MB). `node_modules` was harmless because
+# `COPY --from=deps` immediately replaced it, but `.next/` carried
+# forward into the builder layer and made every build slower than it
+# needed to be, leaked host state into the image, and made layer
+# caching nondeterministic across machines. Excluding it here keeps the
+# build hermetic.
+#
+# Anything listed here is excluded from the build context that Docker
+# sends to the daemon. It does not affect host files.
+
+# Generated artifacts
+.next
+out
+build
+dist
+.turbo
+
+# Dependencies (installed inside the builder by Stage 1)
+node_modules
+
+# Source control + IDE
+.git
+.gitignore
+.vscode
+.idea
+
+# Native build outputs (these come from Capacitor, not the web image)
+android
+ios
+android-config
+ios-config
+
+# Test + lint artifacts
+coverage
+playwright-report
+test-results
+.eslintcache
+.lighthouserc.json
+
+# Editor and OS scratch
+*.log
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Environment files belong outside the image; values come in via
+# docker-compose env_file or build ARGs at runtime.
+.env
+.env.*
+!.env.example
+
+# Local dev compose override (we add docker-compose.override.yml at
+# repo root, not inside frontend/, but list it defensively).
+docker-compose.override.yml

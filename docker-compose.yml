@@ -103,8 +103,12 @@ services:
       - .env
     depends_on:
       - backend
-    volumes:
-      - ./frontend/src:/app/src
+    # No bind mount here: the runner image runs the Next.js standalone
+    # bundle (.next/standalone/server.js), so mounting host source at
+    # /app/src would have no effect on what the browser sees. For local
+    # iteration use docker-compose.override.yml, which is auto-loaded
+    # by `docker compose` and switches this service to `npm run dev`
+    # with hot reload.
 
 volumes:
   pgdata:
