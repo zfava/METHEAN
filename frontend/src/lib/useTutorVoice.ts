@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { createStreamingPlayer, type StreamingAudioPlayer } from "@/lib/audio/player";
+import { audioConductor } from "@/lib/audio/AudioConductor";
 import { usePersonalization } from "@/lib/PersonalizationProvider";
 
 export interface TutorVoiceState {
@@ -113,6 +114,15 @@ export function useTutorVoice(): [TutorVoiceState, TutorVoiceControls] {
       playerRef.current?.stop();
     };
   }, []);
+
+  // Duck the procedural ambient bed while tutor voice is speaking, and
+  // restore when it stops. Refcounted in the conductor so multiple
+  // useTutorVoice consumers (TutorChat + PassageReader) are safe.
+  useEffect(() => {
+    if (!isPlaying) return;
+    audioConductor.duckAmbient();
+    return () => audioConductor.restoreAmbient();
+  }, [isPlaying]);
 
   return [
     { isPlaying, currentMessageId, error },

@@ -3,6 +3,7 @@
 import { useCallback } from "react";
 
 import { useToast } from "@/components/Toast";
+import { audioConductor, type PackTier } from "@/lib/audio/AudioConductor";
 import type { SoundPack } from "@/lib/personalization-types";
 
 interface SoundPickerProps {
@@ -13,28 +14,18 @@ interface SoundPickerProps {
 
 /**
  * Three cards (Off, Soft, Full). Non-off cards expose a "Hear
- * sample" button that plays the `correct` cue from that pack. The
- * sample uses a fresh Audio instance per tap so it sidesteps the
- * useSoundCue gating; the tap itself counts as the user gesture
- * the browser requires for autoplay.
+ * sample" button that auditions the procedural `correct` cue at that
+ * pack's tier via the AudioConductor. The tap unlocks the audio
+ * context (it is the required user gesture) and the preview routes
+ * around the saved-pack master gain so it plays even when the current
+ * pack is "off".
  */
 export function SoundPicker({ packs, selectedId, onSelect }: SoundPickerProps) {
   const { toast } = useToast();
 
   const playSample = useCallback((packId: string) => {
-    if (packId === "off") return;
-    try {
-      const audio = new Audio(`/sounds/${packId}/correct.mp3`);
-      audio.volume = 0.6;
-      void audio.play().catch(() => {
-        // Browser rejected the play (autoplay or device error).
-        // The kid hasn't lost anything; just surface a hint.
-        toast("Tap again to hear it", "info");
-      });
-    } catch {
-      // Unsupported environment. No-op.
-    }
-  }, [toast]);
+    void audioConductor.previewCue("correct", packId as PackTier);
+  }, []);
 
   return (
     <div className="space-y-2" role="radiogroup" aria-label="Choose sound level">

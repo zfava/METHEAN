@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { ActivityIcon, type ActivityType } from "@/components/ActivityIcon";
+import { audioConductor, type PackTier } from "@/lib/audio/AudioConductor";
 import { CompanionAvatar } from "@/components/CompanionAvatar";
 import { AffectedChildrenPanel } from "@/components/governance/AffectedChildrenPanel";
 import { PolicyChecklist } from "@/components/governance/PolicyChecklist";
@@ -625,13 +626,7 @@ function SoundSampleButton({ packId }: { packId: string }) {
         e.preventDefault();
         e.stopPropagation();
         if (isOff) return;
-        try {
-          const audio = new Audio(`/sounds/${packId}/correct.mp3`);
-          audio.volume = 0.6;
-          void audio.play().catch(() => {});
-        } catch {
-          // Ignore; sample is advisory.
-        }
+        void audioConductor.previewCue("correct", packId as PackTier);
       }}
       className="text-xs font-medium text-(--color-accent) hover:underline min-h-[36px] px-2 disabled:opacity-40 disabled:hover:no-underline"
     >
