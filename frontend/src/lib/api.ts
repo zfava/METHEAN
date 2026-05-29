@@ -201,6 +201,16 @@ export const children = {
   today: (childId: string) => request<any[]>(`/children/${childId}/today`),
   dashboard: (childId: string) => request<ChildDashboardResponse>(`/children/${childId}/dashboard`),
   alerts: (childId: string, limit = 5) => request<any>(`/children/${childId}/alerts?limit=${limit}`),
+  preferences: (childId: string) =>
+    request<{
+      child_id: string;
+      daily_duration_minutes: number | null;
+      learning_style: Record<string, unknown>;
+      interests: unknown[];
+      preferred_schedule: Record<string, unknown>;
+      subject_levels: Record<string, string>;
+      parent_notes: string | null;
+    }>(`/children/${childId}/preferences`),
   updatePreferences: (childId: string, data: object) =>
     request<any>(`/children/${childId}/preferences`, { method: "PUT", body: JSON.stringify(data) }),
 };

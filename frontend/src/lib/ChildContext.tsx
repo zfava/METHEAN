@@ -12,8 +12,8 @@ interface ChildInfo {
   subject_philosophies?: Record<string, string>;
   preferences?: {
     subject_levels?: Record<string, string>;
-    daily_duration_minutes?: number;
-    parent_notes?: string;
+    daily_duration_minutes?: number | null;
+    parent_notes?: string | null;
   } | null;
 }
 
@@ -22,6 +22,9 @@ interface ChildContextValue {
   selectedChild: ChildInfo | null;
   setSelectedChild: (child: ChildInfo) => void;
   loading: boolean;
+  /** Re-fetch /children. Use after any mutation whose result should
+   *  appear in the cached child list (e.g., Learning Profile save). */
+  refresh: () => Promise<void>;
 }
 
 const ChildContext = createContext<ChildContextValue>({
@@ -29,6 +32,7 @@ const ChildContext = createContext<ChildContextValue>({
   selectedChild: null,
   setSelectedChild: () => {},
   loading: true,
+  refresh: async () => {},
 });
 
 export function useChild() {
@@ -42,18 +46,38 @@ export function ChildProvider({ children: reactChildren }: { children: React.Rea
   const [selected, setSelected] = useState<ChildInfo | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchChildren = useCallback(async (): Promise<ChildInfo[]> => {
+    try {
+      const r = await fetch(`${API_BASE}/children`, { credentials: "include" });
+      if (!r.ok) return [];
+      return (await r.json()) as ChildInfo[];
+    } catch {
+      return [];
+    }
+  }, []);
+
   useEffect(() => {
-    fetch(`${API_BASE}/children`, { credentials: "include" })
-      .then((r) => (r.ok ? r.json() : []))
-      .then((data: ChildInfo[]) => {
+    fetchChildren()
+      .then((data) => {
         setChildList(data);
         if (data.length > 0 && !selected) {
           setSelected(data[0]);
         }
       })
-      .catch(() => {})
       .finally(() => setLoading(false));
-  }, []);
+  }, [fetchChildren]);
+
+  const refresh = useCallback(async () => {
+    const data = await fetchChildren();
+    setChildList(data);
+    // Keep the current selection if it still exists; otherwise pick
+    // the first child. Re-pinning by id preserves any updated fields
+    // (e.g., preferences) that came back in the new payload.
+    setSelected((prev) => {
+      if (!prev) return data[0] ?? null;
+      return data.find((c) => c.id === prev.id) ?? data[0] ?? null;
+    });
+  }, [fetchChildren]);
 
   const selectChild = useCallback((child: ChildInfo) => {
     setSelected(child);
@@ -66,6 +90,7 @@ export function ChildProvider({ children: reactChildren }: { children: React.Rea
         selectedChild: selected,
         setSelectedChild: selectChild,
         loading,
+        refresh,
       }}
     >
       {reactChildren}

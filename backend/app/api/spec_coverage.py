@@ -181,6 +181,7 @@ class ChildPreferencesUpdate(BaseModel):
     interests: list | None = None
     preferred_schedule: dict | None = None
     subject_levels: dict | None = None
+    parent_notes: str | None = None
 
 
 class SyncEvent(BaseModel):
@@ -472,6 +473,17 @@ async def list_children(
         )
         enrollment_count = enroll_result.scalar() or 0
 
+        # Inline the Learning Profile so the Family Overview can render
+        # each child card from one fetch. Missing row -> empty values so
+        # the frontend's emptiness check works without a null branch.
+        prefs_result = await db.execute(select(ChildPreferences).where(ChildPreferences.child_id == c.id))
+        prefs = prefs_result.scalar_one_or_none()
+        preferences = {
+            "subject_levels": (prefs.subject_levels if prefs else None) or {},
+            "daily_duration_minutes": prefs.daily_duration_minutes if prefs else None,
+            "parent_notes": prefs.parent_notes if prefs else None,
+        }
+
         items.append(
             {
                 "id": str(c.id),
@@ -482,6 +494,7 @@ async def list_children(
                 "enrollment_count": enrollment_count,
                 "curriculum_philosophy": c.curriculum_philosophy,
                 "subject_philosophies": c.subject_philosophies or {},
+                "preferences": preferences,
             }
         )
     return items
@@ -579,8 +592,56 @@ async def update_child_preferences(
                 detail=(f"Invalid level(s): {invalid}. Must be one of {sorted(VALID_LEVELS)}"),
             )
         prefs.subject_levels = body.subject_levels
+    if body.parent_notes is not None:
+        prefs.parent_notes = body.parent_notes
     await db.flush()
-    return {"child_id": str(child_id), "daily_duration_minutes": prefs.daily_duration_minutes}
+    return _preferences_response(prefs, child_id)
+
+
+def _preferences_response(prefs: ChildPreferences, child_id: uuid.UUID) -> dict:
+    """Serialize a ChildPreferences row to the wire shape used by
+    the PUT response and the GET endpoint. Mirrors the fields the form
+    can write, so a client can round-trip its own payload from either
+    endpoint."""
+    return {
+        "child_id": str(child_id),
+        "daily_duration_minutes": prefs.daily_duration_minutes,
+        "learning_style": prefs.learning_style or {},
+        "interests": prefs.interests or [],
+        "preferred_schedule": prefs.preferred_schedule or {},
+        "subject_levels": prefs.subject_levels or {},
+        "parent_notes": prefs.parent_notes,
+    }
+
+
+@router.get("/children/{child_id}/preferences")
+async def get_child_preferences(
+    child_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
+) -> dict:
+    """Read back the persisted Learning Profile for a child.
+
+    Returns the same wire shape as the PUT response so the frontend can
+    refresh after save without reading from the children-list cache. An
+    unset profile returns the model's empty defaults rather than 404 so
+    the form can pre-fill consistently for both first-edit and re-edit.
+    """
+    await _get_child_or_404(db, child_id, user.household_id)
+    result = await db.execute(select(ChildPreferences).where(ChildPreferences.child_id == child_id))
+    prefs = result.scalar_one_or_none()
+    if not prefs:
+        return {
+            "child_id": str(child_id),
+            "daily_duration_minutes": None,
+            "learning_style": {},
+            "interests": [],
+            "preferred_schedule": {},
+            "subject_levels": {},
+            "parent_notes": None,
+        }
+    return _preferences_response(prefs, child_id)
 
 
 # ══════════════════════════════════════════════════

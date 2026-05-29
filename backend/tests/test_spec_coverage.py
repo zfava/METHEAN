@@ -152,6 +152,82 @@ class TestChildUpdate:
         assert resp.json()["daily_duration_minutes"] == 120
 
     @pytest.mark.asyncio
+    async def test_update_preferences_round_trips_all_form_fields(self, auth_client, db_session, household, child):
+        """Family Overview form sends daily_duration_minutes, parent_notes,
+        and subject_levels in one PUT. All three must persist and read back
+        identically, both on the PUT response and on a follow-up GET. This
+        is the regression test for the bug where parent_notes was dropped
+        by the Pydantic schema and the response only echoed daily_duration."""
+        payload = {
+            "daily_duration_minutes": 90,
+            "parent_notes": "Loves hands-on math, struggles with timed drills.",
+            "subject_levels": {
+                "mathematics": "intermediate",
+                "phonics_reading": "developing",
+            },
+        }
+        put_resp = await auth_client.put(
+            f"/api/v1/children/{child.id}/preferences",
+            json=payload,
+        )
+        assert put_resp.status_code == 200
+        put_body = put_resp.json()
+        assert put_body["daily_duration_minutes"] == 90
+        assert put_body["parent_notes"] == payload["parent_notes"]
+        assert put_body["subject_levels"] == payload["subject_levels"]
+
+        get_resp = await auth_client.get(f"/api/v1/children/{child.id}/preferences")
+        assert get_resp.status_code == 200
+        get_body = get_resp.json()
+        assert get_body["daily_duration_minutes"] == 90
+        assert get_body["parent_notes"] == payload["parent_notes"]
+        assert get_body["subject_levels"] == payload["subject_levels"]
+
+    @pytest.mark.asyncio
+    async def test_get_preferences_returns_empty_defaults_when_unset(self, auth_client, db_session, household, child):
+        """First-edit case: a child with no ChildPreferences row should
+        return empty defaults rather than 404 so the form can pre-fill
+        from the same shape on first and subsequent edits."""
+        resp = await auth_client.get(f"/api/v1/children/{child.id}/preferences")
+        assert resp.status_code == 200
+        body = resp.json()
+        assert body["child_id"] == str(child.id)
+        assert body["daily_duration_minutes"] is None
+        assert body["parent_notes"] is None
+        assert body["subject_levels"] == {}
+
+    @pytest.mark.asyncio
+    async def test_list_children_includes_preferences(self, auth_client, db_session, household, child):
+        """GET /children must inline each child's Learning Profile so the
+        Family Overview can render every card from one fetch without
+        triggering N+1 calls. Missing row -> empty defaults."""
+        # Before any PUT: preferences sub-object exists with empty values.
+        before = await auth_client.get("/api/v1/children")
+        assert before.status_code == 200
+        items = before.json()
+        assert len(items) == 1
+        assert "preferences" in items[0]
+        assert items[0]["preferences"]["subject_levels"] == {}
+        assert items[0]["preferences"]["daily_duration_minutes"] is None
+        assert items[0]["preferences"]["parent_notes"] is None
+
+        # After a PUT: the same list endpoint reflects the saved values.
+        await auth_client.put(
+            f"/api/v1/children/{child.id}/preferences",
+            json={
+                "daily_duration_minutes": 75,
+                "parent_notes": "Visual learner.",
+                "subject_levels": {"mathematics": "advanced"},
+            },
+        )
+        after = await auth_client.get("/api/v1/children")
+        assert after.status_code == 200
+        prefs = after.json()[0]["preferences"]
+        assert prefs["daily_duration_minutes"] == 75
+        assert prefs["parent_notes"] == "Visual learner."
+        assert prefs["subject_levels"] == {"mathematics": "advanced"}
+
+    @pytest.mark.asyncio
     async def test_patch_child_accepts_curriculum_philosophy(self, auth_client, db_session, household, child):
         """The child-update endpoint accepts a valid curriculum philosophy."""
         resp = await auth_client.patch(

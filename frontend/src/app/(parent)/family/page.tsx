@@ -46,7 +46,7 @@ export default function FamilyPage() {
   useEffect(() => { document.title = "Family | METHEAN"; }, []);
   const { toast } = useToast();
 
-  const { children, loading: childrenLoading } = useChild();
+  const { children, loading: childrenLoading, refresh: refreshChildren } = useChild();
   const [childData, setChildData] = useState<Record<string, ChildDayData>>({});
   const isMobile = useMobile();
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -308,21 +308,46 @@ export default function FamilyPage() {
                       </button>
                     </div>
 
-                    {editingProfile !== child.id && (
-                      <div className="flex flex-wrap gap-1">
-                        {(child as any).preferences?.subject_levels && Object.keys((child as any).preferences.subject_levels).length > 0
-                          ? Object.entries((child as any).preferences.subject_levels).map(([s, l]: [string, any]) => (
-                              <span key={s} className="text-[10px] px-1.5 py-0.5 bg-(--color-page) rounded-[var(--radius-badge)] text-(--color-text-secondary)">
-                                {s.replace(/_/g, " ")}: {formatContentTier(l)}
-                              </span>
-                            ))
-                          : <span className="text-[10px] text-(--color-text-tertiary)">
+                    {editingProfile !== child.id && (() => {
+                      const prefs = (child as any).preferences;
+                      const levels = prefs?.subject_levels ?? {};
+                      const levelKeys = Object.keys(levels);
+                      const hasLevels = levelKeys.length > 0;
+                      const hasMinutes = prefs?.daily_duration_minutes != null;
+                      const hasNotes = typeof prefs?.parent_notes === "string" && prefs.parent_notes.trim().length > 0;
+                      const hasAnyProfile = hasLevels || hasMinutes || hasNotes;
+                      return (
+                        <div className="flex flex-wrap gap-1">
+                          {hasAnyProfile ? (
+                            <>
+                              {levelKeys.map((s) => (
+                                <span key={s} className="text-[10px] px-1.5 py-0.5 bg-(--color-page) rounded-[var(--radius-badge)] text-(--color-text-secondary)">
+                                  {s.replace(/_/g, " ")}: {formatContentTier(levels[s])}
+                                </span>
+                              ))}
+                              {hasMinutes && (
+                                <span className="text-[10px] px-1.5 py-0.5 bg-(--color-page) rounded-[var(--radius-badge)] text-(--color-text-secondary)">
+                                  {prefs.daily_duration_minutes} min/day
+                                </span>
+                              )}
+                              {hasNotes && (
+                                <span
+                                  className="text-[10px] px-1.5 py-0.5 bg-(--color-page) rounded-[var(--radius-badge)] text-(--color-text-secondary) max-w-[240px] truncate"
+                                  title={prefs.parent_notes}
+                                >
+                                  notes
+                                </span>
+                              )}
+                            </>
+                          ) : (
+                            <span className="text-[10px] text-(--color-text-tertiary)">
                               No profile set.{" "}
                               <button onClick={(e) => { e.stopPropagation(); setEditingProfile(child.id); }} className="text-(--color-accent)">Set up</button>
                             </span>
-                        }
-                      </div>
-                    )}
+                          )}
+                        </div>
+                      );
+                    })()}
 
                     {editingProfile === child.id && (
                       <div className="mt-2" onClick={(e) => e.stopPropagation()}>
@@ -394,6 +419,10 @@ export default function FamilyPage() {
                               });
                               toast("Profile saved", "success");
                               setEditingProfile(null);
+                              // Refresh ChildContext so child.preferences
+                              // reflects the new values immediately; the
+                              // local activities/alerts also re-fetch.
+                              await refreshChildren();
                               loadAllChildren();
                             } catch { toast("Couldn't save profile", "error"); }
                           }}
