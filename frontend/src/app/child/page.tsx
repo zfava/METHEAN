@@ -10,7 +10,7 @@ import { useToast } from "@/components/Toast";
 import { useMobile } from "@/lib/useMobile";
 import { haptic } from "@/lib/haptics";
 import { usePersonalization } from "@/lib/PersonalizationProvider";
-import { useSoundCue } from "@/lib/useSoundCue";
+import { useCelebration } from "@/lib/celebration/CelebrationDirector";
 import { ActivityIcon, type ActivityType } from "@/components/ActivityIcon";
 import { CompanionAvatar } from "@/components/CompanionAvatar";
 import { MySpace } from "@/components/child/MySpace";
@@ -25,7 +25,6 @@ import CompletionState from "@/components/child/CompletionState";
 import { AmbientField, PageTransition } from "@/components/child/motion";
 import {
   Fade,
-  Scale,
   Stagger,
   Press,
   Hover,
@@ -34,7 +33,6 @@ import {
   SharedLayout,
   SharedItem,
   RouteTransition,
-  SPRING_BOUNCY,
   useMotion,
 } from "@/lib/motion";
 import { motion } from "framer-motion";
@@ -185,20 +183,24 @@ export default function ChildPage() {
   const [showSettings, setShowSettings] = useState(false);
   const [showJourney, setShowJourney] = useState(false);
   const isMobile = useMobile();
-  const [showCelebration, setShowCelebration] = useState(false);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Sound cues. The hook short-circuits when the kid's pack is
-  // "off" or before the first user gesture, so wiring it here is
-  // always safe.
-  const playCue = useSoundCue();
+  // Celebration orchestration (particles + sound + microcopy +
+  // companion signal). The director owns all celebration sound.
+  const celebration = useCelebration();
 
   // Tracks the previous mastery_transitions_up count so a refresh
-  // that brings the number up plays the mastery_up cue exactly
+  // that brings the number up fires the mastery_up celebration exactly
   // once per transition. Null on first load (don't fire for the
   // initial value, only for deltas).
   const prevMasteryUpRef = useRef<number | null>(null);
+
+  // Streak milestone bookkeeping. Seeded on first dashboard load with
+  // the thresholds already earned so a refresh does not replay them.
+  // A threshold only fires once per session even if the streak drops
+  // and re-climbs past it later.
+  const celebratedStreaksRef = useRef<Set<number> | null>(null);
 
   // ── Init ──
 
@@ -215,18 +217,45 @@ export default function ChildPage() {
     if (dash) document.title = `${dash.child.first_name}'s Learning | METHEAN`;
   }, [dash]);
 
-  // Fire the mastery_up cue exactly once per upward transition.
-  // First-load value is recorded without firing so refreshing the
-  // page doesn't replay yesterday's celebration.
+  // Fire the mastery_up celebration exactly once per upward
+  // transition. First-load value is recorded without firing so
+  // refreshing the page doesn't replay yesterday's celebration.
   useEffect(() => {
     if (!dash) return;
     const next = dash.progress.this_week.mastery_transitions_up;
     const prev = prevMasteryUpRef.current;
     if (prev !== null && next > prev) {
-      playCue("mastery_up", { volume: 0.6 });
+      celebration.trigger({ tier: "mastery_up", microcopy: "Mastered!" });
     }
     prevMasteryUpRef.current = next;
-  }, [dash, playCue]);
+  }, [dash, celebration]);
+
+  // Fire a streak-milestone celebration when the current streak first
+  // crosses 7, 30, or 100 this session. Seeded on first load with the
+  // already-earned thresholds; a threshold fires at most once per
+  // session, so a reset-then-reclimb does not replay it.
+  useEffect(() => {
+    if (!dash) return;
+    const current = dash.child.streak.current;
+    const milestones: Array<[number, "streak_7" | "streak_30" | "streak_100"]> = [
+      [7, "streak_7"],
+      [30, "streak_30"],
+      [100, "streak_100"],
+    ];
+    if (celebratedStreaksRef.current === null) {
+      celebratedStreaksRef.current = new Set(
+        milestones.filter(([m]) => current >= m).map(([m]) => m),
+      );
+      return;
+    }
+    const seen = celebratedStreaksRef.current;
+    for (const [threshold, tier] of milestones) {
+      if (current >= threshold && !seen.has(threshold)) {
+        seen.add(threshold);
+        celebration.trigger({ tier });
+      }
+    }
+  }, [dash, celebration]);
 
   async function init() {
     setLoading(true);
@@ -331,8 +360,11 @@ export default function ChildPage() {
         durationMinutes: dur,
       });
       haptic("success");
-      setShowCelebration(true);
-      setTimeout(() => { setShowCelebration(false); setCompleted(true); }, 1500);
+      // Non-blocking celebration: particles burst over the completion
+      // view, which is revealed immediately rather than after a forced
+      // pause. The director also fires the activity_complete cue.
+      celebration.trigger({ tier: "activity_complete" });
+      setCompleted(true);
     } catch {
       toast("Couldn't save your work. Try again.", "error");
     }
@@ -736,27 +768,6 @@ export default function ChildPage() {
       </div>
 
       {overlay}
-
-      {/* Celebration animation */}
-      {showCelebration && (
-        <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center"
-          style={{ background: "rgba(250,250,248,0.95)" }}
-          onClick={() => { setShowCelebration(false); setCompleted(true); }}>
-          <Scale transition={SPRING_BOUNCY}>
-            <div className="w-24 h-24 rounded-full flex items-center justify-center mb-4"
-              style={{ background: "rgba(45,106,79,0.1)" }}>
-              <svg className="w-14 h-14 text-(--color-success)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-          </Scale>
-          <Fade direction="up" delay={0.2}>
-            <p className="text-xl font-bold text-(--color-text)">
-              Great work!
-            </p>
-          </Fade>
-        </div>
-      )}
       </RouteTransition>
     </div>
   );

@@ -29,6 +29,9 @@ interface MilestoneMomentProps {
   trigger: string;
   /** Cue to fire on mount. Default "day_complete". */
   soundCue?: CueEvent;
+  /** Suppress the mount cue when sound is owned elsewhere (e.g. the
+   *  CelebrationDirector owns day_complete). Defaults to false. */
+  muteCue?: boolean;
   children: ReactNode;
 }
 
@@ -37,13 +40,14 @@ const PARTICLE_COUNT = 14;
 export function MilestoneMoment({
   trigger,
   soundCue = "day_complete",
+  muteCue = false,
   children,
 }: MilestoneMomentProps) {
   const { reduceMotion, milestones, speed } = useMotion();
   const playCue = useSoundCue();
 
   useEffect(() => {
-    playCue(soundCue, { volume: 0.6 });
+    if (!muteCue) playCue(soundCue, { volume: 0.6 });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [trigger]);
 

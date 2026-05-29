@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 
 import { MetheanMark } from "@/components/Brand";
-import { useSoundCue } from "@/lib/useSoundCue";
+import { useCelebration } from "@/lib/celebration/CelebrationDirector";
 import { useMotion } from "@/lib/motion/MotionContext";
 import { MOTION_DURATIONS_SEC, MOTION_EASINGS } from "@/lib/motion/tokens";
 import { Check, TrendingUp } from "@/lib/icons";
@@ -110,19 +110,23 @@ export default function CompletionState({
   daySummary,
 }: CompletionStateProps) {
   const masteryChanged = masteryLevel && previousMastery && masteryLevel !== previousMastery;
-  const playCue = useSoundCue();
   const { speed, reduceMotion } = useMotion();
+  const celebration = useCelebration();
 
-  // Activity-complete cue is fired by the parent screens via
-  // playCue("activity_complete"); MilestoneMoment owns the day_complete
-  // cue. For the masteryChanged branch we also fire the mastery cue
-  // here so the cinematic-tier transitions get their dedicated sound.
+  // The CelebrationDirector is the single owner of celebration sound.
+  // The day-complete moment (particles + day_complete cue + microcopy)
+  // is dispatched here when the day's last activity finishes. The
+  // mastery_up cue is owned by the dashboard-level trigger in
+  // child/page.tsx, so this component no longer fires cues directly.
   useEffect(() => {
-    if (!allDone && masteryChanged) {
-      playCue("mastery_up", { volume: 0.55 });
+    if (allDone) {
+      celebration.trigger({
+        tier: "day_complete",
+        microcopy: childName ? `Great work today, ${childName}` : "Great work today",
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allDone, masteryChanged]);
+  }, [allDone]);
 
   // ── End-of-day milestone ──────────────────────────────────────────
   if (allDone) {
@@ -131,7 +135,7 @@ export default function CompletionState({
     const gains = daySummary?.masteryGains ?? [];
     const dur = MOTION_DURATIONS_SEC.slow / speed;
     return (
-      <MilestoneMoment trigger="end-of-day" soundCue="day_complete">
+      <MilestoneMoment trigger="end-of-day" muteCue>
         <div className="text-center py-12 px-6 max-w-md mx-auto relative">
           {/* Soft brand ambient behind shield */}
           <div className="relative mx-auto mb-8" style={{ width: 96, height: 110 }}>
