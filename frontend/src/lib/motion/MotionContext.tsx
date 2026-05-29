@@ -8,9 +8,16 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import type { Transition } from "framer-motion";
 
 import { useChild } from "@/lib/ChildContext";
 import { usePersonalization } from "@/lib/PersonalizationProvider";
+import {
+  INSTANT_TRANSITION,
+  SPRING_BY_VIBE,
+  vibeMotionIdFromVibe,
+  type VibeMotionId,
+} from "@/lib/motion/springs";
 
 /**
  * The motion contract for the child surface.
@@ -20,6 +27,11 @@ import { usePersonalization } from "@/lib/PersonalizationProvider";
  *   2. Child age band (derived from grade_level) -> default intensity.
  *   3. Vibe.tokens motion_intensity / motion_speed -> if present.
  *   4. Parent governance motion_preference (calm/standard/lively).
+ *
+ * The active vibe ID is also mapped onto a physics personality
+ * (SPRING_BY_VIBE) and exposed as `spring`, so every framer-motion
+ * primitive picks up the right feel automatically. Under reduceMotion
+ * `spring` collapses to an instant transition.
  *
  * Consumers call useMotion() inside every primitive. Primitives must
  * also branch on reduceMotion to render the final state instantly.
@@ -31,7 +43,8 @@ export type AgeBand = "early" | "middle" | "older" | "adolescent";
 
 export type MotionPreference = "calm" | "standard" | "lively";
 
-export interface MotionState {
+/** The age-band / governance derived fields, vibe-spring excluded. */
+export interface MotionStateBase {
   intensity: MotionIntensity;
   /** Multiplier on base durations (0.7..1.3). */
   speed: number;
@@ -47,6 +60,17 @@ export interface MotionState {
   ageBand: AgeBand;
 }
 
+export interface MotionState extends MotionStateBase {
+  /**
+   * Physics personality for the active vibe. Spring-based primitives
+   * use this as their default transition. Collapses to an instant
+   * transition under reduceMotion.
+   */
+  spring: Transition;
+  /** The resolved vibe motion personality ID. */
+  vibeMotionId: VibeMotionId;
+}
+
 const DEFAULT_STATE: MotionState = {
   intensity: "standard",
   speed: 1.0,
@@ -55,6 +79,8 @@ const DEFAULT_STATE: MotionState = {
   milestones: true,
   reduceMotion: false,
   ageBand: "middle",
+  spring: SPRING_BY_VIBE.calm,
+  vibeMotionId: "calm",
 };
 
 const MotionStateContext = createContext<MotionState>(DEFAULT_STATE);
@@ -80,7 +106,7 @@ export function ageBandFromGrade(grade: string | null | undefined): AgeBand {
   return "adolescent";
 }
 
-function ageBandDefaults(band: AgeBand): MotionState {
+function ageBandDefaults(band: AgeBand): MotionStateBase {
   switch (band) {
     case "early":
       return {
@@ -126,9 +152,9 @@ function ageBandDefaults(band: AgeBand): MotionState {
 }
 
 function applyVibeTokens(
-  state: MotionState,
+  state: MotionStateBase,
   tokens: Record<string, string> | undefined,
-): MotionState {
+): MotionStateBase {
   if (!tokens) return state;
   const next = { ...state };
   const tokenIntensity = tokens["motion_intensity"];
@@ -152,9 +178,9 @@ function applyVibeTokens(
 }
 
 function applyMotionPreference(
-  state: MotionState,
+  state: MotionStateBase,
   preference: MotionPreference | undefined,
-): MotionState {
+): MotionStateBase {
   if (!preference) return state;
   if (preference === "calm") {
     // calm: tighter, lower-amplitude, ambient off, milestones still
@@ -181,16 +207,14 @@ function usePrefersReducedMotion(): boolean {
   return reduced;
 }
 
-interface MotionPreferenceShape {
-  motion_preference?: MotionPreference;
-}
-
 export function MotionProvider({ children }: { children: ReactNode }) {
   const reduceMotion = usePrefersReducedMotion();
   const { selectedChild } = useChild();
   const { profile, library } = usePersonalization();
 
   const state = useMemo<MotionState>(() => {
+    const vibeMotionId = vibeMotionIdFromVibe(profile.vibe);
+
     if (reduceMotion) {
       return {
         intensity: "reserved",
@@ -200,10 +224,14 @@ export function MotionProvider({ children }: { children: ReactNode }) {
         milestones: false,
         reduceMotion: true,
         ageBand: ageBandFromGrade(selectedChild?.grade_level),
+        // Spring still carries the personality so consumers reading it
+        // directly stay coherent, but it resolves in a single frame.
+        spring: INSTANT_TRANSITION,
+        vibeMotionId,
       };
     }
     const band = ageBandFromGrade(selectedChild?.grade_level);
-    let next = ageBandDefaults(band);
+    let next: MotionStateBase = ageBandDefaults(band);
 
     // Vibe.tokens may carry optional motion hints. Applied after
     // age-band so a vibe explicitly designed for a calm intensity can
@@ -215,7 +243,11 @@ export function MotionProvider({ children }: { children: ReactNode }) {
     // motion_preference now lives on ChildPersonalization directly.
     next = applyMotionPreference(next, profile.motion_preference);
 
-    return next;
+    return {
+      ...next,
+      spring: SPRING_BY_VIBE[vibeMotionId],
+      vibeMotionId,
+    };
   }, [reduceMotion, selectedChild?.grade_level, profile, library]);
 
   return <MotionStateContext.Provider value={state}>{children}</MotionStateContext.Provider>;

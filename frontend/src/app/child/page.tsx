@@ -22,7 +22,22 @@ import AssessmentView from "@/components/child/AssessmentView";
 import ProjectView from "@/components/child/ProjectView";
 import FieldTripView from "@/components/child/FieldTripView";
 import CompletionState from "@/components/child/CompletionState";
-import { AmbientField, PageTransition, Stagger } from "@/components/child/motion";
+import { AmbientField, PageTransition } from "@/components/child/motion";
+import {
+  Fade,
+  Scale,
+  Stagger,
+  Press,
+  Hover,
+  AmbientFloat,
+  ParallaxOnScroll,
+  SharedLayout,
+  SharedItem,
+  RouteTransition,
+  SPRING_BOUNCY,
+  useMotion,
+} from "@/lib/motion";
+import { motion } from "framer-motion";
 
 // ── Types ──
 
@@ -77,17 +92,22 @@ function ProgressRing({ completed, total, minutesRemaining, large }: {
   const offset = circ * (1 - pct);
   const allDone = completed >= total && total > 0;
   const sizeClass = large ? "w-[120px] h-[120px] md:w-[140px] md:h-[140px]" : "w-24 h-24";
+  const { spring } = useMotion();
 
   return (
     <div className={`relative ${sizeClass} shrink-0`} role="img" aria-label={`${completed} of ${total} activities completed`}>
       <svg viewBox="0 0 80 80" className="w-full h-full">
         <circle cx="40" cy="40" r={r} fill="none" stroke="var(--color-border)" strokeWidth="4" />
-        <circle cx="40" cy="40" r={r} fill="none"
+        {/* The fill level animates on prop change with the active vibe
+            spring (instant under reduced-motion via useMotion). */}
+        <motion.circle cx="40" cy="40" r={r} fill="none"
           stroke={allDone ? "var(--color-success)" : "var(--color-accent)"}
           strokeWidth="4" strokeLinecap="round"
-          strokeDasharray={circ} strokeDashoffset={offset}
+          strokeDasharray={circ}
           transform="rotate(-90 40 40)"
-          className="transition-all duration-700" />
+          initial={false}
+          animate={{ strokeDashoffset: offset }}
+          transition={spring} />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         {allDone ? (
@@ -406,7 +426,14 @@ export default function ChildPage() {
   if (activeActivity && learningContext) {
     const t = activeActivity.type;
     return (
-      <div className={`fixed inset-0 z-50 flex flex-col`} style={{ ...pageBg, paddingTop: "var(--safe-top)" }}>
+      <SharedLayout id="child-activity-morph">
+      {/* The tapped card morphs into this full-screen container via the
+          shared layoutId (no cross-fade). */}
+      <SharedItem
+        layoutId={`card-${activeActivity.id}`}
+        className="fixed inset-0 z-50 flex flex-col"
+        style={{ ...pageBg, paddingTop: "var(--safe-top)" }}
+      >
         {/* Top bar */}
         <div className="flex items-center h-12 px-4 shrink-0 bg-(--color-surface)/80 backdrop-blur border-b border-(--color-border)/50">
           <button onClick={goNext} className="w-11 h-11 flex items-center justify-center press-scale" aria-label="Back">
@@ -443,7 +470,8 @@ export default function ChildPage() {
           </div>
           </PageTransition>
         </div>
-      </div>
+      </SharedItem>
+      </SharedLayout>
     );
   }
 
@@ -465,11 +493,12 @@ export default function ChildPage() {
   return (
     <div className="min-h-screen relative isolate" style={pageBg}>
       {/* Ambient background drift behind dashboard content. Pure
-          visual; pointer-events none; honors useMotion().ambient. */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
+          visual; pointer-events none; honors useMotion().ambient.
+          ParallaxOnScroll gives it depth as the page scrolls. */}
+      <ParallaxOnScroll depth={0.6} className="pointer-events-none absolute inset-0 -z-10">
         <AmbientField mode="warm" intensity={0.55} />
-      </div>
-      <PageTransition viewKey="child-dashboard" mode="fade">
+      </ParallaxOnScroll>
+      <RouteTransition routeKey="child-dashboard">
       {/* Header */}
       <header className="bg-(--color-surface)/90 backdrop-blur-sm border-b border-(--color-border) px-8 py-5 relative">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
@@ -563,13 +592,16 @@ export default function ChildPage() {
         {activities.length === 0 ? (
           <div className="text-center py-20">
             <div className="flex justify-center mb-4">
-              <CompanionAvatar personaId={profile.companion_voice || "default_warm"} size={48} />
+              <AmbientFloat>
+                <CompanionAvatar personaId={profile.companion_voice || "default_warm"} size={48} />
+              </AmbientFloat>
             </div>
             <h2 className="text-lg font-medium text-(--color-text) mb-2">No learning scheduled today</h2>
             <p className="text-sm text-(--color-text-secondary)">Enjoy your free time, {dash.child.first_name}.</p>
           </div>
         ) : (
-          <Stagger gap="base" className="max-w-[640px] mx-auto flex flex-col gap-3 mb-10">
+          <SharedLayout id="child-activity-morph">
+          <Stagger className="max-w-[640px] mx-auto flex flex-col gap-3 mb-10">
             {/* Uncompleted activities */}
             {activities.filter(a => a.status !== "completed").map((act) => {
               const tl = typeLabels[act.type] || { label: act.type, icon: "\uD83D\uDCC4" };
@@ -577,8 +609,9 @@ export default function ChildPage() {
               const topColor = typeTopBorder[act.type] || "var(--color-accent)";
               const ctaLabel = isInProgress ? "Continue" : act.type === "review" ? "Review" : "Start";
               return (
-                <div
-                  key={act.id}
+                <Fade direction="up" key={act.id}>
+                <SharedItem
+                  layoutId={`card-${act.id}`}
                   className="bg-(--color-surface) rounded-[14px] border border-(--color-border) shadow-[var(--shadow-card)] overflow-hidden"
                 >
                   <div className="h-[3px] w-full" style={{ background: topColor }} aria-hidden="true" />
@@ -601,17 +634,20 @@ export default function ChildPage() {
                         )}
                       </div>
                     </div>
-                    <button
-                      onClick={() => startActivity(act)}
-                      className="shrink-0 inline-flex items-center justify-center gap-1.5 rounded-[10px] font-medium px-4 py-2 text-[13px] bg-(--color-accent) text-white hover:bg-(--color-accent-hover) press-scale focus-visible:ring-2 focus-visible:ring-(--color-accent)/30 focus-visible:ring-offset-2 min-h-[44px]"
-                      aria-label={`${ctaLabel} ${act.title}`}>
-                      {ctaLabel}
-                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                      </svg>
-                    </button>
+                    <Press className="shrink-0">
+                      <button
+                        onClick={() => startActivity(act)}
+                        className="shrink-0 inline-flex items-center justify-center gap-1.5 rounded-[10px] font-medium px-4 py-2 text-[13px] bg-(--color-accent) text-white hover:bg-(--color-accent-hover) focus-visible:ring-2 focus-visible:ring-(--color-accent)/30 focus-visible:ring-offset-2 min-h-[44px]"
+                        aria-label={`${ctaLabel} ${act.title}`}>
+                        {ctaLabel}
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5} aria-hidden="true">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    </Press>
                   </div>
-                </div>
+                </SharedItem>
+                </Fade>
               );
             })}
 
@@ -620,8 +656,8 @@ export default function ChildPage() {
               const tl = typeLabels[act.type] || { label: act.type, icon: "\uD83D\uDCC4" };
               const topColor = typeTopBorder[act.type] || "var(--color-accent)";
               return (
-                <div
-                  key={act.id}
+                <Fade direction="up" key={act.id}>
+                <Hover
                   className="bg-(--color-surface) rounded-[14px] border border-(--color-border) overflow-hidden opacity-60"
                 >
                   <div className="h-[3px] w-full" style={{ background: topColor }} aria-hidden="true" />
@@ -640,10 +676,12 @@ export default function ChildPage() {
                       </svg>
                     </span>
                   </div>
-                </div>
+                </Hover>
+                </Fade>
               );
             })}
           </Stagger>
+          </SharedLayout>
         )}
 
         {/* Subject Progress */}
@@ -704,28 +742,22 @@ export default function ChildPage() {
         <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center"
           style={{ background: "rgba(250,250,248,0.95)" }}
           onClick={() => { setShowCelebration(false); setCompleted(true); }}>
-          <div style={{ animation: "celebration-pop 0.4s cubic-bezier(0.32, 0.72, 0, 1) both" }}>
+          <Scale transition={SPRING_BOUNCY}>
             <div className="w-24 h-24 rounded-full flex items-center justify-center mb-4"
               style={{ background: "rgba(45,106,79,0.1)" }}>
               <svg className="w-14 h-14 text-(--color-success)" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
             </div>
-          </div>
-          <p className="text-xl font-bold text-(--color-text) animate-fade-up" style={{ animationDelay: "200ms" }}>
-            Great work!
-          </p>
+          </Scale>
+          <Fade direction="up" delay={0.2}>
+            <p className="text-xl font-bold text-(--color-text)">
+              Great work!
+            </p>
+          </Fade>
         </div>
       )}
-
-      <style>{`
-        @keyframes celebration-pop {
-          0% { transform: scale(0); opacity: 0; }
-          60% { transform: scale(1.1); opacity: 1; }
-          100% { transform: scale(1); opacity: 1; }
-        }
-      `}</style>
-      </PageTransition>
+      </RouteTransition>
     </div>
   );
 }

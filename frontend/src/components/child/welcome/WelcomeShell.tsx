@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useRef, type ReactNode } from "react";
+import { AnimatePresence } from "framer-motion";
 
 import type { Vibe } from "@/lib/personalization-types";
 import { ChevronLeft } from "@/lib/icons";
 import { Icon } from "@/components/ui/Icon";
+import { Slide } from "@/lib/motion";
+import { useMobile } from "@/lib/useMobile";
 
 export interface WelcomeStepDef {
   id: string;
@@ -48,6 +51,16 @@ export function WelcomeShell({
   const total = steps.length;
   const step = steps[currentIndex];
   const announceRef = useRef<HTMLDivElement>(null);
+  const isMobile = useMobile();
+
+  // Direction for the step transition: +1 advancing, -1 going back.
+  // Computed against the previous index (still the old value during
+  // the render that the index changes on), then committed in an effect.
+  const prevIndexRef = useRef(currentIndex);
+  const dir: 1 | -1 = currentIndex >= prevIndexRef.current ? 1 : -1;
+  useEffect(() => {
+    prevIndexRef.current = currentIndex;
+  }, [currentIndex]);
 
   // a11y: announce step changes for screen readers without
   // re-announcing on rerenders that don't change the index.
@@ -106,9 +119,17 @@ export function WelcomeShell({
         </button>
       </header>
 
-      {/* Body: the step content owns its own scroll */}
+      {/* Body: the step content owns its own scroll. Steps slide in
+          from the leading edge (down on mobile, right on desktop) and
+          out to the opposite edge; direction inverts on back. */}
       <main className="flex-1 overflow-y-auto px-5 pb-10">
-        <div className="max-w-md mx-auto py-4">{children}</div>
+        <div className="max-w-md mx-auto py-4">
+          <AnimatePresence mode="wait" custom={dir} initial={false}>
+            <Slide key={currentIndex} dir={dir} axis={isMobile ? "y" : "x"}>
+              {children}
+            </Slide>
+          </AnimatePresence>
+        </div>
       </main>
 
       {/* Footer: skip current step. Hidden on the final ready
