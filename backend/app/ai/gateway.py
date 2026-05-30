@@ -206,6 +206,7 @@ class AIProvider(str, Enum):
     # member name so callers don't churn.
     claude = "anthropic"
     openai = "openai"
+    native = "native"
     mock = "mock"
 
 
@@ -352,6 +353,20 @@ async def call_ai(
                 input_tokens = result.get("input_tokens", 0)
                 output_tokens = result.get("output_tokens", 0)
                 provider_used = AIProvider.openai
+                break
+
+            elif provider == AIProvider.native:
+                # Deterministic native generator. Handles the prompts/roles it
+                # recognizes (currently the annual curriculum) and returns None
+                # for everything else so the loop falls through to mock.
+                from app.services.native_curriculum_generator import build_native_response
+
+                native_output = await build_native_response(db, household_id, role, user_prompt, philosophical_profile)
+                if native_output is None:
+                    continue
+                output = json.dumps(native_output)
+                model_used = "native"
+                provider_used = AIProvider.native
                 break
 
             elif provider == AIProvider.mock and settings.AI_MOCK_ENABLED:
@@ -554,6 +569,10 @@ def _get_provider_chain() -> list[AIProvider]:
         chain.append(AIProvider.claude)
     if settings.AI_FALLBACK_API_KEY:
         chain.append(AIProvider.openai)
+    # Deterministic native generator: always available, sits ahead of mock so
+    # that when the real providers are absent or fail it produces real content
+    # (currently the annual curriculum) rather than falling through to mock.
+    chain.append(AIProvider.native)
     if settings.AI_MOCK_ENABLED:
         chain.append(AIProvider.mock)
     return chain
