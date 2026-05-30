@@ -12,6 +12,7 @@
 
 import { Component, useCallback, useEffect, useState, type ReactNode } from "react";
 import { useSoundCue } from "@/lib/useSoundCue";
+import { useCompanionState } from "@/components/companion/state";
 import { getWidget } from "./registry";
 import type { WidgetSpec } from "./types";
 
@@ -33,6 +34,7 @@ class WidgetErrorBoundary extends Component<{ children: ReactNode }, { hasError:
 
 export function WidgetHost({ spec }: { spec: WidgetSpec }) {
   const playCue = useSoundCue();
+  const { trackEvent: trackCompanion } = useCompanionState();
   const [reducedMotion, setReducedMotion] = useState(false);
 
   useEffect(() => {
@@ -45,7 +47,8 @@ export function WidgetHost({ spec }: { spec: WidgetSpec }) {
 
   const handleComplete = useCallback(() => {
     playCue("correct");
-  }, [playCue]);
+    trackCompanion("correct");
+  }, [playCue, trackCompanion]);
 
   const Widget = getWidget(spec.widget);
   // Forward-compatible: a node may declare a type this build lacks.

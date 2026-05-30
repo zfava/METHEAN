@@ -1,23 +1,21 @@
 "use client";
 
+import { useReducedMotion } from "framer-motion";
+
+import { personaFromId } from "@/components/companion/personas";
+
 /**
- * Renders the kid's chosen companion persona as a small avatar.
+ * Static, stateless rendering of a companion persona by id.
  *
- * The SVGs live under /public/companions/<persona_id>.svg and use
- * currentColor + the brand-gold variable so they inherit the
- * surrounding text color. Unknown persona IDs fall back to
- * default_warm so the tutor chat never paints an empty slot.
+ * This is the thin wrapper form: it renders the procedural persona SVG
+ * (the same components CompanionStage uses) in a resting "idle" state
+ * with no gaze tracking and no state machine. It is used by surfaces
+ * that show a persona by explicit id and may live outside the /child
+ * provider tree (onboarding, parent governance, pickers, tutor chat).
+ *
+ * For the live, stateful companion (gaze, celebrate, sleep, etc.) use
+ * CompanionStage instead.
  */
-
-const KNOWN_PERSONAS = new Set<string>([
-  "default_warm",
-  "default_bright",
-  "default_steady",
-  "default_playful",
-  "default_gentle",
-]);
-
-const FALLBACK_PERSONA = "default_warm";
 
 const PERSONA_LABEL: Record<string, string> = {
   default_warm: "Warm companion",
@@ -39,19 +37,19 @@ export function CompanionAvatar({
   /** Override the auto-derived persona label. */
   alt?: string;
 }) {
-  const safeId = KNOWN_PERSONAS.has(personaId) ? personaId : FALLBACK_PERSONA;
-  const label = alt ?? PERSONA_LABEL[safeId] ?? "Companion";
+  const reduceMotion = useReducedMotion() ?? false;
+  const Persona = personaFromId(personaId);
+  const label = alt ?? PERSONA_LABEL[personaId] ?? "Companion";
+
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={`/companions/${safeId}.svg`}
-      alt={label}
+    <span
       role="img"
-      width={size}
-      height={size}
+      aria-label={label}
       className={className}
-      style={{ width: size, height: size, display: "block" }}
-    />
+      style={{ display: "inline-block", lineHeight: 0, width: size, height: size }}
+    >
+      <Persona state="idle" size={size} reduceMotion={reduceMotion} />
+    </span>
   );
 }
 

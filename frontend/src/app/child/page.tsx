@@ -13,6 +13,8 @@ import { usePersonalization } from "@/lib/PersonalizationProvider";
 import { useCelebration } from "@/lib/celebration/CelebrationDirector";
 import { ActivityIcon, type ActivityType } from "@/components/ActivityIcon";
 import { CompanionAvatar } from "@/components/CompanionAvatar";
+import { CompanionStage } from "@/components/companion/CompanionStage";
+import { useCompanionState } from "@/components/companion/state";
 import { MySpace } from "@/components/child/MySpace";
 import JourneyMap, { JourneyCarousel } from "@/components/child/JourneyMap";
 import LessonView from "@/components/child/LessonView";
@@ -189,6 +191,7 @@ export default function ChildPage() {
   // Celebration orchestration (particles + sound + microcopy +
   // companion signal). The director owns all celebration sound.
   const celebration = useCelebration();
+  const { trackEvent: trackCompanion } = useCompanionState();
 
   // Tracks the previous mastery_transitions_up count so a refresh
   // that brings the number up fires the mastery_up celebration exactly
@@ -290,11 +293,17 @@ export default function ChildPage() {
     if (activeActivity) {
       setElapsedSeconds(0);
       timerRef.current = setInterval(() => setElapsedSeconds((s) => s + 1), 1000);
-    } else {
-      if (timerRef.current) clearInterval(timerRef.current);
+      // After the initial focus beat, the companion settles into a
+      // contemplative "thinking" pose while the child works.
+      const thinkTimer = setTimeout(() => trackCompanion("thinking_start"), 1500);
+      return () => {
+        if (timerRef.current) clearInterval(timerRef.current);
+        clearTimeout(thinkTimer);
+      };
     }
+    if (timerRef.current) clearInterval(timerRef.current);
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [activeActivity?.id]);
+  }, [activeActivity?.id, trackCompanion]);
 
   const formatTimer = (s: number) => `${Math.floor(s / 60)}:${(s % 60).toString().padStart(2, "0")}`;
 
@@ -311,6 +320,7 @@ export default function ChildPage() {
       const ctx = await learn.context(act.id, selectedId);
       setLearningContext(ctx);
       setActiveActivity(act);
+      trackCompanion("activity_start");
       setCompleted(false);
       setCompletionData({});
       setTransVisible(false);
@@ -364,6 +374,8 @@ export default function ChildPage() {
       // view, which is revealed immediately rather than after a forced
       // pause. The director also fires the activity_complete cue.
       celebration.trigger({ tier: "activity_complete" });
+      trackCompanion("thinking_end");
+      trackCompanion("activity_complete");
       setCompleted(true);
     } catch {
       toast("Couldn't save your work. Try again.", "error");
@@ -372,6 +384,7 @@ export default function ChildPage() {
 
   function goNext() {
     setActiveActivity(null);
+    trackCompanion("activity_end");
     setAttemptId("");
     setLearningContext(null);
     setCompleted(false);
@@ -535,8 +548,9 @@ export default function ChildPage() {
       <header className="bg-(--color-surface)/90 backdrop-blur-sm border-b border-(--color-border) px-8 py-5 relative">
         <div className="max-w-2xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
-            {/* Persona-driven companion avatar. */}
-            <CompanionAvatar personaId={profile.companion_voice || "default_warm"} size={36} />
+            {/* Live, stateful companion (breathes, blinks, tracks the
+                cursor, celebrates, sleeps). */}
+            <CompanionStage size={48} />
             <span className="text-sm font-medium text-(--color-text)">{dash.child.first_name}</span>
             {dash.child.streak.current > 0 && (
               <span className="text-xs text-(--color-warning) font-medium flex items-center gap-1" aria-label={`${dash.child.streak.current} day streak`}>

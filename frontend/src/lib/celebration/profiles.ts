@@ -382,3 +382,38 @@ export function buildStreak100Fireflies(ctx: ProfileContext): Particle[] {
   }
   return out;
 }
+
+// Small confetti burst for a companion tap (Nova). Short-lived, no sound.
+// Lives at a screen point (x, y) in canvas/CSS pixels. Respects
+// reduced-motion by emitting fewer, faster-fading particles.
+export function buildTapBurst(
+  x: number,
+  y: number,
+  rng: () => number,
+  reducedMotion: boolean,
+): Particle[] {
+  const mod = reducedMotion
+    ? { count: 0.4, velocity: 0.6, lifeDecay: 1.4 }
+    : { count: 1, velocity: 1, lifeDecay: 1 };
+  const n = Math.max(4, Math.round(range(rng, 8, 12) * mod.count));
+  const out: Particle[] = [];
+  for (let i = 0; i < n; i++) {
+    const angle = rng() * Math.PI * 2;
+    const speed = range(rng, 90, 200);
+    out.push(
+      makeParticle(rng, mod, {
+        x,
+        y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 40, // slight upward pop
+        shape: rng() < 0.5 ? "star" : "sparkle",
+        baseColor: rng() < 0.5 ? ORANGE_RED : GOLD,
+        endColor: WHITE,
+        size: range(rng, 3, 6),
+        lifetimeSec: 0.8,
+        gravity: 220,
+      }),
+    );
+  }
+  return out;
+}

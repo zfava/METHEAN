@@ -7,6 +7,7 @@ import { VibeProvider } from "@/lib/VibeProvider";
 import { ChildProvider } from "@/lib/ChildContext";
 import { MotionProvider } from "@/lib/motion/MotionContext";
 import { CelebrationProvider } from "@/lib/celebration/CelebrationDirector";
+import { CompanionProvider } from "@/components/companion/state";
 import { useSelectedChild } from "@/lib/useSelectedChild";
 
 // The /child surface is auth-gated and depends on per-household
@@ -55,7 +56,9 @@ export default function ChildLayout({ children }: { children: ReactNode }) {
       <PersonalizationProvider childId={selectedId}>
         <VibeProvider>
           <MotionProvider>
-            <CelebrationProvider>{children}</CelebrationProvider>
+            <CelebrationProvider>
+              <CompanionProvider>{children}</CompanionProvider>
+            </CelebrationProvider>
           </MotionProvider>
         </VibeProvider>
       </PersonalizationProvider>

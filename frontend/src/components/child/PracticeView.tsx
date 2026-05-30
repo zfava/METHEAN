@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
 import type { LearningContext } from "@/lib/api";
 import { useSoundCue } from "@/lib/useSoundCue";
+import { useCompanionState } from "@/components/companion/state";
 import VoiceTextarea from "@/components/child/VoiceTextarea";
 import TutorChat from "./TutorChat";
 import { MotionButton, Stagger, TactileInput } from "@/components/child/motion";
@@ -38,6 +39,7 @@ export default function PracticeView({ context, childId, onComplete }: PracticeV
   const [results, setResults] = useState<Array<{ prompt: string; response: string; correct: boolean | null }>>([]);
   const [phase, setPhase] = useState<"work" | "summary">("work");
   const playCue = useSoundCue();
+  const { trackEvent: trackCompanion } = useCompanionState();
 
   const item = items[currentIdx];
   const totalItems = items.length;
@@ -63,7 +65,13 @@ export default function PracticeView({ context, childId, onComplete }: PracticeV
     setCorrect(isCorrect);
     setResults((prev) => [...prev, { prompt: item.prompt, response: answer, correct: isAutoCheck ? isCorrect : null }]);
     if (isCorrect) playCue("correct");
-  }, [item, answer, playCue]);
+    // Drive the companion: celebrate on a correct auto-checked answer,
+    // commiserate on a wrong one. Non-auto-checked items have no known
+    // correctness, so they emit no companion event.
+    if (isAutoCheck && item.correct_answer) {
+      trackCompanion(isCorrect ? "correct" : "incorrect");
+    }
+  }, [item, answer, playCue, trackCompanion]);
 
   const nextItem = useCallback(() => {
     if (currentIdx + 1 >= totalItems) {

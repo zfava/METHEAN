@@ -16,9 +16,9 @@ import {
   MotionButton,
   MotionCard,
   MotionText,
-  ShieldDraw,
   Stagger,
 } from "@/components/child/motion";
+import { CompanionStage } from "@/components/companion/CompanionStage";
 
 interface CompletionStateProps {
   activityTitle: string;
@@ -137,9 +137,11 @@ export default function CompletionState({
     return (
       <MilestoneMoment trigger="end-of-day" muteCue>
         <div className="text-center py-12 px-6 max-w-md mx-auto relative">
-          {/* Soft brand ambient behind shield */}
-          <div className="relative mx-auto mb-8" style={{ width: 96, height: 110 }}>
-            <ShieldDraw size={96} color="var(--color-brand-gold)" />
+          {/* The live companion is the centerpiece of the day-complete
+              scene. The day_complete celebration trigger above puts it in
+              its celebrate state as the scene mounts. */}
+          <div className="relative mx-auto mb-8 flex items-center justify-center" style={{ width: 96, height: 110 }}>
+            <CompanionStage size={96} />
           </div>
 
           <MotionText

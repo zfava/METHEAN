@@ -21,6 +21,7 @@ import {
   buildStreak100Explosion,
   buildStreak100Fireflies,
   buildStreak100Rocket,
+  buildTapBurst,
   type CelebrationTier,
   type ProfileContext,
   type VibeId,
@@ -36,10 +37,14 @@ export interface CelebrationRequest {
 
 interface CelebrationContextValue {
   trigger: (req: CelebrationRequest) => void;
+  /** Small confetti burst at a screen point (no sound). Used by Nova's
+   *  tap handler; routes through the same single canvas. */
+  tapBurst: (x: number, y: number) => void;
 }
 
 const CelebrationContext = createContext<CelebrationContextValue>({
   trigger: () => {},
+  tapBurst: () => {},
 });
 
 const VIBE_IDS: ReadonlySet<string> = new Set<VibeId>([
@@ -209,8 +214,15 @@ export function CelebrationProvider({ children }: { children: ReactNode }) {
     [profileCtx, schedule],
   );
 
+  const tapBurst = useCallback((x: number, y: number) => {
+    const engine = engineRef.current;
+    if (!engine) return;
+    const seed = (Date.now() ^ (seedRef.current++ << 16)) >>> 0;
+    engine.emit(buildTapBurst(x, y, mulberry32(seed), reducedRef.current));
+  }, []);
+
   return (
-    <CelebrationContext.Provider value={{ trigger }}>
+    <CelebrationContext.Provider value={{ trigger, tapBurst }}>
       {children}
       <canvas
         ref={canvasRef}

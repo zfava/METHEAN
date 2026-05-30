@@ -5,10 +5,9 @@ import { useEffect, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
 
 import BottomSheet from "@/components/BottomSheet";
-import { CompanionAvatar } from "@/components/CompanionAvatar";
+import { CompanionStage } from "@/components/companion/CompanionStage";
 import { useToast } from "@/components/Toast";
 import { useMotion } from "@/lib/motion/MotionContext";
-import { MOTION_EASINGS } from "@/lib/motion/tokens";
 import { IconographyPicker } from "@/components/child/pickers/IconographyPicker";
 import { InterestChips } from "@/components/child/pickers/InterestChips";
 import { PersonaPicker } from "@/components/child/pickers/PersonaPicker";
@@ -108,14 +107,11 @@ export function MySpace({ open, onClose }: MySpaceProps) {
 
       {mode === "main" && (
         <>
-          {/* Companion identity. The avatar breathes gently (1.0 ->
-              1.015 -> 1.0 over 4s) under ambient motion so the kid
-              sees their companion as quietly alive on the picker
-              surface. */}
+          {/* Companion identity. The live companion breathes, blinks,
+              and tracks the cursor so the kid sees it as alive on the
+              picker surface. */}
           <section className="flex flex-col items-center gap-3 text-(--color-accent)">
-            <BreathingAvatar>
-              <CompanionAvatar personaId={profile.companion_voice || "default_warm"} size={96} />
-            </BreathingAvatar>
+            <CompanionStage size={80} />
             <div className="text-center">
               <div className="text-lg font-semibold text-(--color-text)">
                 {profile.companion_name || "Your companion"}
@@ -539,22 +535,3 @@ function ConfirmReset({
  * active when useMotion().ambient is true; otherwise renders the
  * child untouched.
  */
-function BreathingAvatar({ children }: { children: ReactNode }) {
-  const { ambient, reduceMotion } = useMotion();
-  if (reduceMotion || !ambient) {
-    return <div>{children}</div>;
-  }
-  return (
-    <motion.div
-      animate={{ scale: [1, 1.015, 1] }}
-      transition={{
-        duration: 4,
-        ease: MOTION_EASINGS.composed,
-        repeat: Infinity,
-        repeatType: "mirror",
-      }}
-    >
-      {children}
-    </motion.div>
-  );
-}
