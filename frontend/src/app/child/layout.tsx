@@ -54,13 +54,13 @@ export default function ChildLayout({ children }: { children: ReactNode }) {
   return (
     <ChildProvider>
       <PersonalizationProvider childId={selectedId}>
-        <VibeProvider>
-          <MotionProvider>
+        <MotionProvider>
+          <VibeProvider>
             <CelebrationProvider>
               <CompanionProvider>{children}</CompanionProvider>
             </CelebrationProvider>
-          </MotionProvider>
-        </VibeProvider>
+          </VibeProvider>
+        </MotionProvider>
       </PersonalizationProvider>
     </ChildProvider>
   );

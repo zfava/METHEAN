@@ -589,25 +589,25 @@ input:-webkit-autofill:focus {
   font-family: var(--font-display);
   font-variation-settings: "opsz" 144, "SOFT" 25;
   font-size: 72px;
-  font-weight: 400;
+  font-weight: var(--font-weight-display, 400);
   line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-display);
+  letter-spacing: var(--font-tracking-display, var(--tracking-display));
 }
 .type-display-lg {
   font-family: var(--font-display);
   font-variation-settings: "opsz" 144, "SOFT" 25;
   font-size: 56px;
-  font-weight: 400;
+  font-weight: var(--font-weight-display, 400);
   line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-display);
+  letter-spacing: var(--font-tracking-display, var(--tracking-display));
 }
 .type-display-md {
   font-family: var(--font-display);
   font-variation-settings: "opsz" 144, "SOFT" 25;
   font-size: 44px;
-  font-weight: 400;
+  font-weight: var(--font-weight-display, 400);
   line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-display);
+  letter-spacing: var(--font-tracking-display, var(--tracking-display));
 }
 
 /* Heading: Fraunces, section-level. opsz 72 reads as proportional
@@ -616,7 +616,7 @@ input:-webkit-autofill:focus {
   font-family: var(--font-display);
   font-variation-settings: "opsz" 72, "SOFT" 50;
   font-size: 36px;
-  font-weight: 500;
+  font-weight: var(--font-weight-heading, 500);
   line-height: var(--leading-snug);
   letter-spacing: var(--tracking-heading);
 }
@@ -624,7 +624,7 @@ input:-webkit-autofill:focus {
   font-family: var(--font-display);
   font-variation-settings: "opsz" 72, "SOFT" 50;
   font-size: 28px;
-  font-weight: 500;
+  font-weight: var(--font-weight-heading, 500);
   line-height: var(--leading-snug);
   letter-spacing: var(--tracking-heading);
 }
@@ -632,7 +632,7 @@ input:-webkit-autofill:focus {
   font-family: var(--font-display);
   font-variation-settings: "opsz" 72, "SOFT" 50;
   font-size: 22px;
-  font-weight: 500;
+  font-weight: var(--font-weight-heading, 500);
   line-height: var(--leading-snug);
   letter-spacing: var(--tracking-heading);
 }
@@ -640,9 +640,47 @@ input:-webkit-autofill:focus {
   font-family: var(--font-display);
   font-variation-settings: "opsz" 72, "SOFT" 50;
   font-size: 18px;
-  font-weight: 600;
+  font-weight: var(--font-weight-heading, 600);
   line-height: var(--leading-snug);
   letter-spacing: var(--tracking-heading);
+}
+
+/* Per-vibe typography modifiers. Each vibe nudges display/heading weight
+   and display tracking so the type voice matches the world: calm reads
+   lighter and breathier, bold heavier and tighter, studio expressive.
+   These are authoritative because VibeProvider drops --font-weight-heading
+   from its inline token bag. Non-vibe (parent) surfaces have no data-vibe
+   attribute and fall back to the defaults baked into the type classes. */
+[data-vibe="calm"] {
+  --font-weight-display: 300;
+  --font-weight-heading: 400;
+  --font-tracking-display: 0.02em;
+  --letter-spacing-tighter: -0.005em;
+}
+[data-vibe="field"] {
+  --font-weight-display: 400;
+  --font-weight-heading: 500;
+  --font-tracking-display: 0.01em;
+}
+[data-vibe="orbit"] {
+  --font-weight-display: 400;
+  --font-weight-heading: 500;
+  --font-tracking-display: 0.015em;
+}
+[data-vibe="workshop"] {
+  --font-weight-display: 500;
+  --font-weight-heading: 600;
+  --font-tracking-display: 0;
+}
+[data-vibe="studio"] {
+  --font-weight-display: 500;
+  --font-weight-heading: 600;
+  --font-tracking-display: -0.01em;
+}
+[data-vibe="bold"] {
+  --font-weight-display: 700;
+  --font-weight-heading: 800;
+  --font-tracking-display: -0.02em;
 }
 
 /* Editorial: Fraunces sized for long-form body (passage reader,
