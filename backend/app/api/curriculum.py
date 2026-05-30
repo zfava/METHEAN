@@ -59,6 +59,7 @@ from app.services.dag_engine import (
     rebuild_closure_for_map,
     would_create_cycle,
 )
+from app.services.template_persistence import apply_template
 from app.services.templates import TEMPLATES
 
 router = APIRouter(tags=["curriculum"], dependencies=[Depends(require_active_subscription)])
@@ -196,117 +197,24 @@ async def copy_template(
     if not template:
         raise HTTPException(status_code=404, detail="Template not found")
 
-    # Create subject
-    subject = Subject(
-        household_id=user.household_id,
-        name=template.subject_name,
-        color=template.subject_color,
-        description=template.description,
-    )
-    db.add(subject)
-    await db.flush()
-
-    # Create learning map
-    lmap = LearningMap(
-        household_id=user.household_id,
-        subject_id=subject.id,
-        name=template.name,
-        description=template.description,
-    )
-    db.add(lmap)
-    await db.flush()
-
-    # Create nodes with new UUIDs, maintain ref -> uuid mapping
-    ref_to_uuid: dict[str, uuid.UUID] = {}
-    for tnode in template.nodes:
-        node = LearningNode(
-            learning_map_id=lmap.id,
-            household_id=user.household_id,
-            node_type=tnode.node_type,
-            title=tnode.title,
-            description=tnode.description,
-            estimated_minutes=tnode.estimated_minutes,
-            sort_order=tnode.sort_order,
-        )
-        db.add(node)
-        await db.flush()
-        ref_to_uuid[tnode.ref] = node.id
-
-        # Inline content on the template node takes precedence.
-        if tnode.content is not None:
-            node.content = tnode.content
-
-        # Inject pre-enriched content if available
-        try:
-            from app.content.math_foundational_content import MATH_FOUNDATIONAL_CONTENT
-
-            if template.template_id == "math-foundational" and tnode.ref in MATH_FOUNDATIONAL_CONTENT:
-                node.content = MATH_FOUNDATIONAL_CONTENT[tnode.ref]
-        except ImportError:
-            pass
-        try:
-            from app.content.reading_foundational_content import READING_FOUNDATIONAL_CONTENT
-
-            if template.template_id == "reading-foundational" and tnode.ref in READING_FOUNDATIONAL_CONTENT:
-                node.content = READING_FOUNDATIONAL_CONTENT[tnode.ref]
-        except ImportError:
-            pass
-        try:
-            from app.content.history_foundational_content import HISTORY_FOUNDATIONAL_CONTENT
-
-            if template.template_id == "history-foundational" and tnode.ref in HISTORY_FOUNDATIONAL_CONTENT:
-                node.content = HISTORY_FOUNDATIONAL_CONTENT[tnode.ref]
-        except ImportError:
-            pass
-        try:
-            from app.content.writing_foundational_content import WRITING_FOUNDATIONAL_CONTENT
-
-            if template.template_id == "writing-foundational" and tnode.ref in WRITING_FOUNDATIONAL_CONTENT:
-                node.content = WRITING_FOUNDATIONAL_CONTENT[tnode.ref]
-        except ImportError:
-            pass
-        try:
-            from app.content.science_foundational_content import SCIENCE_FOUNDATIONAL_CONTENT
-
-            if template.template_id == "science-foundational" and tnode.ref in SCIENCE_FOUNDATIONAL_CONTENT:
-                node.content = SCIENCE_FOUNDATIONAL_CONTENT[tnode.ref]
-        except ImportError:
-            pass
-
-    # Create edges
-    edge_count = 0
-    for tedge in template.edges:
-        from_id = ref_to_uuid[tedge.from_ref]
-        to_id = ref_to_uuid[tedge.to_ref]
-        edge = LearningEdge(
-            learning_map_id=lmap.id,
-            household_id=user.household_id,
-            from_node_id=from_id,
-            to_node_id=to_id,
-            relation=tedge.relation,
-        )
-        db.add(edge)
-        edge_count += 1
-
-    await db.flush()
-
-    # Build transitive closure for the new map
-    await rebuild_closure_for_map(db, lmap.id)
+    # Deep-copy the template through the single shared persistence path so
+    # the HTTP route and the namespace resolver create nodes identically.
+    application = await apply_template(db, template, user.household_id)
 
     # Queue background enrichment
     try:
         from app.tasks.worker import enrich_map_task
 
-        enrich_map_task.delay(str(lmap.id), str(user.household_id))
+        enrich_map_task.delay(str(application.learning_map_id), str(user.household_id))
     except Exception:
         pass  # Enrichment failure should not block template application
 
     return TemplateCopyResponse(
-        learning_map_id=lmap.id,
-        subject_id=subject.id,
+        learning_map_id=application.learning_map_id,
+        subject_id=application.subject_id,
         name=template.name,
-        node_count=len(template.nodes),
-        edge_count=edge_count,
+        node_count=application.node_count,
+        edge_count=application.edge_count,
     )
 
 

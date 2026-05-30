@@ -86,6 +86,11 @@ class LearningNode(Base):
     estimated_minutes: Mapped[int | None] = mapped_column(Integer)
     sort_order: Mapped[int] = mapped_column(Integer, default=0)
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
+    # Records the template/content-module ref this node was materialized from
+    # (e.g. "mf-01"). Lets the namespace resolver find an already-persisted
+    # node by its content id, making content persistence idempotent. NULL for
+    # nodes created outside the from-template path (e.g. hand-built maps).
+    source_ref: Mapped[str | None] = mapped_column(String(64), index=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
