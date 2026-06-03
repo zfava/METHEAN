@@ -1,11 +1,11 @@
-"""Gold-standard gate for the math foundational batch mf-31..mf-45.
+"""Gold-standard gate for the math foundational batch mf-46..mf-60.
 
 Asserts the 15 new nodes pass the REAL validator (node_content.py), carry the
 exact NATIVE_KEYS from test_node_content.py, never hard-fail the unschooling
 rule, satisfy the three-file rule (content + scope + template), have mutually
 consistent prerequisites referencing only earlier real nodes, resolve to UUIDs
-through node_resolver, and meet the depth floor. No reimplementation of the
-validator: the real functions are imported and called.
+through node_resolver, and meet the depth floor. The real validator functions
+are imported and called, not reimplemented.
 """
 
 from datetime import date
@@ -19,30 +19,30 @@ from app.services.node_content import validate_content, validate_philosophy
 from app.services.node_resolver import resolve_ref_to_uuid
 from app.services.templates import MATH_FOUNDATIONAL
 
-# The canonical requirement sets, imported (not copied) from the schema test.
+# Canonical requirement sets, imported (not copied) from the schema test.
 from tests.test_node_content import NATIVE_KEYS, PHILOSOPHIES, UNSCHOOLING_FORBIDDEN
 
-NEW_NUMS = list(range(31, 46))
+NEW_NUMS = list(range(46, 61))
 NEW_IDS = [f"mf-{n}" for n in NEW_NUMS]
 NEW_REFS = [f"math_f_{n}" for n in NEW_NUMS]
 
-# The authoritative prerequisite map (docs/math_foundational_gap.md, mf-31..mf-45).
+# Authoritative prerequisite map (docs/math_foundational_gap.md, mf-46..mf-60).
 EXPECTED_PREREQS: dict[str, list[str]] = {
-    "mf-31": [],
-    "mf-32": ["mf-31"],
-    "mf-33": ["mf-31"],
-    "mf-34": ["mf-32", "mf-33"],
-    "mf-35": ["mf-03"],
-    "mf-36": ["mf-32"],
-    "mf-37": ["mf-01", "mf-36"],
-    "mf-38": ["mf-01"],
-    "mf-39": ["mf-32"],
-    "mf-40": ["mf-01", "mf-39"],
-    "mf-41": ["mf-04"],
-    "mf-42": ["mf-04"],
-    "mf-43": ["mf-02", "mf-40"],
-    "mf-44": ["mf-04"],
-    "mf-45": ["mf-35"],
+    "mf-46": ["mf-11"],
+    "mf-47": ["mf-11"],
+    "mf-48": ["mf-11"],
+    "mf-49": ["mf-42", "mf-11"],
+    "mf-50": ["mf-18"],
+    "mf-51": ["mf-10"],
+    "mf-52": ["mf-34", "mf-09"],
+    "mf-53": ["mf-09"],
+    "mf-54": ["mf-09"],
+    "mf-55": ["mf-54"],
+    "mf-56": ["mf-55"],
+    "mf-57": ["mf-56"],
+    "mf-58": ["mf-56", "mf-46"],
+    "mf-59": ["mf-19"],
+    "mf-60": ["mf-34", "mf-35"],
 }
 
 ACCOMMODATION_KEYS = {"dyslexia", "adhd", "gifted", "visual_learner", "kinesthetic_learner", "auditory_learner"}
@@ -56,7 +56,7 @@ def _template_nodes() -> dict[str, object]:
     return {tn.ref: tn for tn in MATH_FOUNDATIONAL.nodes}
 
 
-# ── Validator gate (the real validator) ──────────────────────────────────
+# ── Validator gate (real validator) ──────────────────────────────────────
 
 
 @pytest.mark.parametrize("node_id", NEW_IDS)
@@ -101,12 +101,9 @@ def test_depth_floor(node_id):
     assert len(c["assessment_items"]) >= 5, f"{node_id} has < 5 assessment_items"
     assert set(c["accommodations"].keys()) == ACCOMMODATION_KEYS
     assert set(c["philosophy_specific"].keys()) >= set(PHILOSOPHIES)
-    # difficulty ramps 1 -> 3 across the practice set
     diffs = [pi["difficulty"] for pi in c["practice_items"]]
     assert min(diffs) == 1 and max(diffs) == 3
-    # at least one free-response item (no correct_answer) per Foundational pattern
     assert any("correct_answer" not in pi for pi in c["practice_items"])
-    # assessment items mix answer-keyed and rubric-scored, each with a target_concept
     assert any("correct_answer" in ai for ai in c["assessment_items"])
     assert any("rubric" in ai for ai in c["assessment_items"])
     assert all(ai.get("target_concept") for ai in c["assessment_items"])
@@ -114,7 +111,6 @@ def test_depth_floor(node_id):
 
 @pytest.mark.parametrize("node_id", NEW_IDS)
 def test_traditional_spiral_references_a_prior_node(node_id):
-    """The traditional spiral_review must name at least one prior mf node id."""
     spiral = MATH_FOUNDATIONAL_CONTENT[node_id]["philosophy_specific"]["traditional"]["spiral_review"]
     text = " ".join(spiral)
     num = int(node_id.split("-")[1])
@@ -134,15 +130,13 @@ def test_all_three_files_have_every_new_node():
         assert f"mf-{n}" in tnodes, f"mf-{n} missing from MATH_FOUNDATIONAL template"
 
 
-def test_counts_grew_by_fifteen():
-    # This batch brought the library to at least 45; later batches add more,
-    # so assert >= 45 (forward-compatible) rather than an exact snapshot.
-    assert len(MATH_FOUNDATIONAL_CONTENT) >= 45
-    assert len(get_scope_sequence("mathematics", "foundational")) >= 45
-    assert len(MATH_FOUNDATIONAL.nodes) >= 45
+def test_counts_now_sixty():
+    assert len(MATH_FOUNDATIONAL_CONTENT) == 60
+    assert len(get_scope_sequence("mathematics", "foundational")) == 60
+    assert len(MATH_FOUNDATIONAL.nodes) == 60
 
 
-# ── Prerequisite integrity (three files agree, earlier nodes only) ───────
+# ── Prerequisite integrity (three files agree, earlier-only) ─────────────
 
 
 def test_scope_prereqs_match_expected_and_are_earlier():
@@ -159,7 +153,6 @@ def test_scope_prereqs_match_expected_and_are_earlier():
 
 
 def test_template_edges_match_scope_prereqs():
-    """Every scope prerequisite has a matching prerequisite edge into the node."""
     incoming: dict[str, set[str]] = {}
     for e in MATH_FOUNDATIONAL.edges:
         incoming.setdefault(e.to_ref, set()).add(e.from_ref)
@@ -168,7 +161,7 @@ def test_template_edges_match_scope_prereqs():
         assert edges_in == set(prereqs), f"{node_id} template edges {edges_in} != prereqs {set(prereqs)}"
 
 
-# ── Resolver + generator gates (need the DB) ─────────────────────────────
+# ── Resolver + generator gates (DB) ──────────────────────────────────────
 
 
 @pytest.mark.parametrize("ref", NEW_REFS)
@@ -178,25 +171,20 @@ async def test_resolver_resolves_each_new_ref(db_session, household, ref):
     assert res.unresolved is None
 
 
-async def test_generator_plan_has_no_needs_content_after_batch(db_session, household):
-    """A foundational plan over the full 45-topic scope now resolves every
-    topic: zero needs_content weeks (the 15 new nodes are no longer
-    placeholders). Pre-batch only 30 of 45 scope refs were resolvable; this
-    batch makes the remaining 15 resolve, dropping needs_content to zero."""
+async def test_generator_plan_all_sixty_resolve_zero_needs_content(db_session, household):
+    """A foundational plan over the full 60-topic scope resolves every topic:
+    zero needs_content weeks (60 of 60 resolved, the 15 new nodes no longer
+    placeholders), with 60 distinct focus-node UUIDs."""
     out = await generate_for_subject(
         db_session,
         household.id,
         "mathematics",
         "foundational",
         hours_per_week=4.0,
-        total_weeks=45,
+        total_weeks=60,
         start_date=date(2026, 9, 1),
     )
     needs = [w for w in out["weeks"] if w.get("needs_content")]
     assert needs == [], f"unexpected needs_content weeks: {[w['week_number'] for w in needs]}"
-
-    # All foundational topics resolved (this batch's 15 plus any later ones).
     resolved_ids = {fid for w in out["weeks"] for fid in w["focus_nodes"]}
-    # At least the 45 topics this batch completed all resolve; later batches
-    # add more topics over the same weeks, so assert >= 45 (forward-compatible).
-    assert len(resolved_ids) >= 45
+    assert len(resolved_ids) == 60
