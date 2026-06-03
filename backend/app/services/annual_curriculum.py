@@ -6,6 +6,7 @@ maintains the historical record of planned vs actual.
 """
 
 import json
+import logging
 import uuid
 from datetime import UTC, date, datetime, timedelta
 
@@ -24,6 +25,43 @@ from app.models.enums import (
 )
 from app.models.governance import Activity, Attempt, GovernanceEvent, Plan, PlanWeek
 from app.models.identity import Child, ChildPreferences, Household
+
+logger = logging.getLogger("methean.annual_curriculum")
+
+
+class MaterializationError(Exception):
+    """A curriculum approved for materialization produced zero output from a
+    populated request.
+
+    Raised instead of silently creating an empty Plan. This means the stored
+    ``scope_sequence`` is the wrong shape (e.g. the multi-year ``year_plans``
+    mock shape was saved instead of the annual ``weeks[]`` contract), not that
+    the plan was intentionally empty. The message names the subject/tier and
+    the likely cause so the bad provider output is diagnosable.
+    """
+
+
+def _subject_is_authored(subject_name: str) -> bool:
+    """True if scope_sequences defines any topics for this subject (any level).
+
+    Used by the materialization guard to tell a broken shape (an authored
+    subject that should have produced weeks) apart from a genuinely empty
+    shell for a subject with no authored scope yet.
+    """
+    try:
+        from app.content.scope_sequences import SCOPE_SEQUENCES
+        from app.core.learning_levels import SUBJECT_CATALOG
+    except Exception:
+        return False
+
+    subj_id = subject_name.lower().replace(" ", "_").replace("&", "and")
+    for cat in SUBJECT_CATALOG.values():
+        for s in cat:
+            if s["name"].lower() == subject_name.lower() or s["id"] == subj_id:
+                subj_id = s["id"]
+                break
+    return bool(SCOPE_SEQUENCES.get(subj_id))
+
 
 ANNUAL_CURRICULUM_SYSTEM = """You are METHEAN's Annual Curriculum Architect.
 
@@ -336,9 +374,68 @@ async def materialize_full_year(
 ) -> dict:
     """Create Plan/PlanWeek/Activity records for ALL weeks."""
 
-    weeks_data = curriculum.scope_sequence.get("weeks", [])
+    scope = curriculum.scope_sequence or {}
+    weeks_data = scope.get("weeks", [])
+
     if not weeks_data:
+        # Zero weeks from an approved curriculum. Distinguish a broken shape
+        # (raise) from a genuinely-unauthored empty shell (warn). The
+        # silent-zero return this replaces hid the year_plans-vs-weeks shape
+        # mismatch (see curriculum_pipeline_audit.md, cross-cutting issue 2).
+        top_keys = sorted(scope.keys())
+        has_year_plans = "year_plans" in scope
+        authored = _subject_is_authored(curriculum.subject_name)
+        if scope or has_year_plans or authored:
+            detail = (
+                "Detected 'year_plans' — the multi-year education-plan / mock shape "
+                "was stored instead of the annual weeks[] contract. "
+                if has_year_plans
+                else ""
+            )
+            raise MaterializationError(
+                f"Annual curriculum '{curriculum.subject_name}' "
+                f"(grade={curriculum.grade_level}, {curriculum.academic_year}) materialized "
+                f"0 weeks: scope_sequence has no usable 'weeks' list "
+                f"(top-level keys present: {top_keys}). {detail}"
+                f"Expected scope_sequence['weeks'] = [{{week_number, suggested_activities, "
+                f"focus_nodes, assessment_focus}}, ...]. Likely cause: the AI provider "
+                f"returned the wrong shape (ai_run_id={curriculum.ai_run_id})."
+            )
+        # Empty scope_sequence ({}) for a subject with no authored scope: nothing
+        # to materialize yet. Warn loudly, do not raise.
+        logger.warning(
+            "annual_curriculum.materialize.empty_unauthored",
+            extra={"curriculum_id": str(curriculum.id), "subject": curriculum.subject_name},
+        )
         return {"weeks_created": 0, "activities_created": 0}
+
+    # Partial-library signal: weeks authored but some have no resolved content
+    # node yet. This is acceptable (the activities still materialize); warn so
+    # the gap is visible, do not raise.
+    needs_content_weeks = sum(1 for w in weeks_data if w.get("needs_content"))
+    if needs_content_weeks:
+        logger.warning(
+            "annual_curriculum.materialize.needs_content",
+            extra={
+                "curriculum_id": str(curriculum.id),
+                "subject": curriculum.subject_name,
+                "needs_content_weeks": needs_content_weeks,
+                "total_weeks": len(weeks_data),
+            },
+        )
+
+    # Zero-activities guard, checked before any rows are written so a broken
+    # shape never leaves a half-built empty Plan behind. needs_content weeks
+    # still carry (consolidation) activities, so this does not fire for them.
+    planned_activities = sum(len(w.get("suggested_activities", [])) for w in weeks_data)
+    if planned_activities == 0:
+        raise MaterializationError(
+            f"Annual curriculum '{curriculum.subject_name}' ({curriculum.academic_year}) has "
+            f"{len(weeks_data)} weeks but 0 activities: every week's 'suggested_activities' was "
+            f"empty or missing — a broken scope_sequence shape. Expected each week to carry "
+            f"suggested_activities=[{{day, type, title, description, minutes}}, ...] "
+            f"(ai_run_id={curriculum.ai_run_id})."
+        )
 
     # Determine which weeks are "near" (auto-approve governance)
     today = date.today()
