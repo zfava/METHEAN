@@ -131,9 +131,11 @@ def test_all_three_files_have_every_new_node():
 
 
 def test_counts_now_ninety():
-    assert len(MATH_FOUNDATIONAL_CONTENT) == 90
-    assert len(get_scope_sequence("mathematics", "foundational")) == 90
-    assert len(MATH_FOUNDATIONAL.nodes) == 90
+    # This batch brought the library to at least 90; later batches add more,
+    # so assert >= 90 (forward-compatible) rather than an exact snapshot.
+    assert len(MATH_FOUNDATIONAL_CONTENT) >= 90
+    assert len(get_scope_sequence("mathematics", "foundational")) >= 90
+    assert len(MATH_FOUNDATIONAL.nodes) >= 90
 
 
 # ── Prerequisite integrity (three files agree, earlier-only) ─────────────
@@ -172,9 +174,10 @@ async def test_resolver_resolves_each_new_ref(db_session, household, ref):
 
 
 async def test_generator_plan_all_ninety_resolve_zero_needs_content(db_session, household):
-    """A foundational plan over the full 90-topic scope resolves every topic:
-    zero needs_content weeks (90 of 90 resolved, the 15 new nodes no longer
-    placeholders), with 90 distinct focus-node UUIDs."""
+    """A foundational plan over the 90-week scope resolves every topic with zero
+    needs_content weeks (the 15 nodes this batch added are no longer
+    placeholders). Later batches add more topics over the same weeks, so assert
+    >= 90 distinct focus-node UUIDs (forward-compatible) rather than exactly 90."""
     out = await generate_for_subject(
         db_session,
         household.id,
@@ -187,4 +190,4 @@ async def test_generator_plan_all_ninety_resolve_zero_needs_content(db_session, 
     needs = [w for w in out["weeks"] if w.get("needs_content")]
     assert needs == [], f"unexpected needs_content weeks: {[w['week_number'] for w in needs]}"
     resolved_ids = {fid for w in out["weeks"] for fid in w["focus_nodes"]}
-    assert len(resolved_ids) == 90
+    assert len(resolved_ids) >= 90
