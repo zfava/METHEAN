@@ -1,5 +1,5 @@
-"""Gold-standard gate for the math foundational batch mf-106..mf-120, plus the
-whole-library graph-integrity gate that scans every mf node (mf-01..mf-120).
+"""Gold-standard gate for the math foundational batch mf-121..mf-135, plus the
+whole-library graph-integrity gate that scans every mf node (mf-01..mf-135).
 
 The per-batch gates assert the 15 new nodes pass the REAL validator
 (node_content.py), carry the exact NATIVE_KEYS from test_node_content.py, never
@@ -27,27 +27,27 @@ from app.services.templates import MATH_FOUNDATIONAL
 # Canonical requirement sets, imported (not copied) from the schema test.
 from tests.test_node_content import NATIVE_KEYS, PHILOSOPHIES, UNSCHOOLING_FORBIDDEN
 
-NEW_NUMS = list(range(106, 121))
+NEW_NUMS = list(range(121, 136))
 NEW_IDS = [f"mf-{n}" for n in NEW_NUMS]
 NEW_REFS = [f"math_f_{n}" for n in NEW_NUMS]
 
-# Authoritative prerequisite map (docs/math_foundational_gap.md, mf-106..mf-120).
+# Authoritative prerequisite map (docs/math_foundational_gap.md, mf-121..mf-135).
 EXPECTED_PREREQS: dict[str, list[str]] = {
-    "mf-106": ["mf-103", "mf-104", "mf-105"],
-    "mf-107": ["mf-103"],
-    "mf-108": ["mf-98"],
-    "mf-109": ["mf-45"],
-    "mf-110": ["mf-13"],
-    "mf-111": ["mf-110"],
-    "mf-112": ["mf-111", "mf-97"],
-    "mf-113": ["mf-45"],
-    "mf-114": ["mf-14"],
-    "mf-115": ["mf-42"],
-    "mf-116": ["mf-111", "mf-90"],
-    "mf-117": ["mf-17"],
-    "mf-118": ["mf-17"],
-    "mf-119": ["mf-118", "mf-117"],
-    "mf-120": ["mf-117"],
+    "mf-121": ["mf-119"],
+    "mf-122": ["mf-117"],
+    "mf-123": ["mf-117"],
+    "mf-124": ["mf-17"],
+    "mf-125": ["mf-122"],
+    "mf-126": ["mf-21", "mf-125"],
+    "mf-127": ["mf-126", "mf-108"],
+    "mf-128": ["mf-126"],
+    "mf-129": ["mf-12"],
+    "mf-130": ["mf-129"],
+    "mf-131": ["mf-15"],
+    "mf-132": ["mf-131", "mf-51"],
+    "mf-133": ["mf-132"],
+    "mf-134": ["mf-16"],
+    "mf-135": ["mf-134", "mf-51"],
 }
 
 ACCOMMODATION_KEYS = {"dyslexia", "adhd", "gifted", "visual_learner", "kinesthetic_learner", "auditory_learner"}
@@ -140,12 +140,10 @@ def test_all_three_files_have_every_new_node():
         assert f"mf-{n}" in tnodes, f"mf-{n} missing from MATH_FOUNDATIONAL template"
 
 
-def test_counts_now_one_hundred_twenty():
-    # This batch brought the library to at least 120; later batches add more,
-    # so assert >= 120 (forward-compatible) rather than an exact snapshot.
-    assert len(MATH_FOUNDATIONAL_CONTENT) >= 120
-    assert len(get_scope_sequence("mathematics", "foundational")) >= 120
-    assert len(MATH_FOUNDATIONAL.nodes) >= 120
+def test_counts_now_one_hundred_thirty_five():
+    assert len(MATH_FOUNDATIONAL_CONTENT) == 135
+    assert len(get_scope_sequence("mathematics", "foundational")) == 135
+    assert len(MATH_FOUNDATIONAL.nodes) == 135
 
 
 # ── Prerequisite integrity (three files agree, earlier-only) ─────────────
@@ -173,12 +171,7 @@ def test_template_edges_match_scope_prereqs():
         assert edges_in == set(prereqs), f"{node_id} template edges {edges_in} != prereqs {set(prereqs)}"
 
 
-# ── WHOLE-LIBRARY GRAPH-INTEGRITY GATE (scans mf-01..mf-120) ──────────────
-#
-# These assertions scan the entire authored library, not just the 15 new nodes,
-# so they keep holding (and catch regressions) as later batches land. The
-# prerequisite graph is read from scope_sequences and cross-checked against the
-# template edges.
+# ── WHOLE-LIBRARY GRAPH-INTEGRITY GATE (scans mf-01..mf-135) ──────────────
 
 
 def test_library_ids_are_contiguous_no_gaps_no_duplicates():
@@ -209,7 +202,6 @@ def test_every_prerequisite_references_a_real_node():
     dangling: list[str] = []
     for ref, entry in scope.items():
         for p in entry.get("prerequisites", []):
-            # Content ids zero-pad to at least two digits (mf-01, mf-10, mf-100).
             content_id = f"mf-{_num(p):02d}"
             if content_id not in MATH_FOUNDATIONAL_CONTENT or p not in scope:
                 dangling.append(f"{ref} -> {p}")
@@ -280,7 +272,7 @@ def test_spiral_review_references_resolve_to_real_prior_nodes():
         num = _num(node_id)
         spiral = MATH_FOUNDATIONAL_CONTENT[node_id]["philosophy_specific"]["traditional"]["spiral_review"]
         text = " ".join(spiral)
-        referenced = [f"mf-{m:02d}" for m in range(1, 121) if f"mf-{m:02d}" in text]
+        referenced = [f"mf-{m:02d}" for m in range(1, 136) if f"mf-{m:02d}" in text]
         assert referenced, f"{node_id} spiral_review references no mf node"
         for r in referenced:
             if r not in MATH_FOUNDATIONAL_CONTENT:
@@ -301,20 +293,19 @@ async def test_resolver_resolves_each_new_ref(db_session, household, ref):
 
 
 async def test_generator_plan_all_resolve_zero_needs_content(db_session, household):
-    """A foundational plan over the 120-week scope resolves every topic with zero
-    needs_content weeks (the 15 nodes this batch added are no longer
-    placeholders). Later batches add more topics over the same weeks, so assert
-    >= 120 distinct focus-node UUIDs (forward-compatible) rather than exactly 120."""
+    """A foundational plan over the full 135-topic scope resolves every topic:
+    zero needs_content weeks (the 15 new nodes are no longer placeholders), with
+    135 distinct focus-node UUIDs."""
     out = await generate_for_subject(
         db_session,
         household.id,
         "mathematics",
         "foundational",
         hours_per_week=4.0,
-        total_weeks=120,
+        total_weeks=135,
         start_date=date(2026, 9, 1),
     )
     needs = [w for w in out["weeks"] if w.get("needs_content")]
     assert needs == [], f"unexpected needs_content weeks: {[w['week_number'] for w in needs]}"
     resolved_ids = {fid for w in out["weeks"] for fid in w["focus_nodes"]}
-    assert len(resolved_ids) >= 120
+    assert len(resolved_ids) == 135
