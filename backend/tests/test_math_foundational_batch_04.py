@@ -1,4 +1,4 @@
-"""Gold-standard gate for the math foundational batch mf-61..mf-75.
+"""Gold-standard gate for the math foundational batch mf-76..mf-90.
 
 Asserts the 15 new nodes pass the REAL validator (node_content.py), carry the
 exact NATIVE_KEYS from test_node_content.py, never hard-fail the unschooling
@@ -22,27 +22,27 @@ from app.services.templates import MATH_FOUNDATIONAL
 # Canonical requirement sets, imported (not copied) from the schema test.
 from tests.test_node_content import NATIVE_KEYS, PHILOSOPHIES, UNSCHOOLING_FORBIDDEN
 
-NEW_NUMS = list(range(61, 76))
+NEW_NUMS = list(range(76, 91))
 NEW_IDS = [f"mf-{n}" for n in NEW_NUMS]
 NEW_REFS = [f"math_f_{n}" for n in NEW_NUMS]
 
-# Authoritative prerequisite map (docs/math_foundational_gap.md, mf-61..mf-75).
+# Authoritative prerequisite map (docs/math_foundational_gap.md, mf-76..mf-90).
 EXPECTED_PREREQS: dict[str, list[str]] = {
-    "mf-61": ["mf-60"],
-    "mf-62": ["mf-61"],
-    "mf-63": ["mf-05", "mf-62"],
-    "mf-64": ["mf-05"],
-    "mf-65": ["mf-05"],
-    "mf-66": ["mf-65"],
-    "mf-67": ["mf-66"],
-    "mf-68": ["mf-64"],
-    "mf-69": ["mf-68"],
-    "mf-70": ["mf-05"],
-    "mf-71": ["mf-61"],
-    "mf-72": ["mf-38", "mf-61"],
-    "mf-73": ["mf-07", "mf-63", "mf-69"],
-    "mf-74": ["mf-25", "mf-69"],
-    "mf-75": ["mf-60"],
+    "mf-76": ["mf-75"],
+    "mf-77": ["mf-76"],
+    "mf-78": ["mf-06", "mf-77"],
+    "mf-79": ["mf-06", "mf-64"],
+    "mf-80": ["mf-79"],
+    "mf-81": ["mf-36", "mf-76"],
+    "mf-82": ["mf-08", "mf-78"],
+    "mf-83": ["mf-73", "mf-82"],
+    "mf-84": ["mf-80"],
+    "mf-85": ["mf-61", "mf-76"],
+    "mf-86": ["mf-54", "mf-73"],
+    "mf-87": ["mf-49", "mf-54"],
+    "mf-88": ["mf-86", "mf-87"],
+    "mf-89": ["mf-49", "mf-54"],
+    "mf-90": ["mf-82", "mf-89"],
 }
 
 ACCOMMODATION_KEYS = {"dyslexia", "adhd", "gifted", "visual_learner", "kinesthetic_learner", "auditory_learner"}
@@ -130,12 +130,10 @@ def test_all_three_files_have_every_new_node():
         assert f"mf-{n}" in tnodes, f"mf-{n} missing from MATH_FOUNDATIONAL template"
 
 
-def test_counts_now_seventy_five():
-    # This batch brought the library to at least 75; later batches add more,
-    # so assert >= 75 (forward-compatible) rather than an exact snapshot.
-    assert len(MATH_FOUNDATIONAL_CONTENT) >= 75
-    assert len(get_scope_sequence("mathematics", "foundational")) >= 75
-    assert len(MATH_FOUNDATIONAL.nodes) >= 75
+def test_counts_now_ninety():
+    assert len(MATH_FOUNDATIONAL_CONTENT) == 90
+    assert len(get_scope_sequence("mathematics", "foundational")) == 90
+    assert len(MATH_FOUNDATIONAL.nodes) == 90
 
 
 # ── Prerequisite integrity (three files agree, earlier-only) ─────────────
@@ -173,21 +171,20 @@ async def test_resolver_resolves_each_new_ref(db_session, household, ref):
     assert res.unresolved is None
 
 
-async def test_generator_plan_all_seventy_five_resolve_zero_needs_content(db_session, household):
-    """A foundational plan over the 75-week scope resolves every topic with zero
-    needs_content weeks (the 15 nodes this batch added are no longer
-    placeholders). Later batches add more topics over the same weeks, so assert
-    >= 75 distinct focus-node UUIDs (forward-compatible) rather than exactly 75."""
+async def test_generator_plan_all_ninety_resolve_zero_needs_content(db_session, household):
+    """A foundational plan over the full 90-topic scope resolves every topic:
+    zero needs_content weeks (90 of 90 resolved, the 15 new nodes no longer
+    placeholders), with 90 distinct focus-node UUIDs."""
     out = await generate_for_subject(
         db_session,
         household.id,
         "mathematics",
         "foundational",
         hours_per_week=4.0,
-        total_weeks=75,
+        total_weeks=90,
         start_date=date(2026, 9, 1),
     )
     needs = [w for w in out["weeks"] if w.get("needs_content")]
     assert needs == [], f"unexpected needs_content weeks: {[w['week_number'] for w in needs]}"
     resolved_ids = {fid for w in out["weeks"] for fid in w["focus_nodes"]}
-    assert len(resolved_ids) >= 75
+    assert len(resolved_ids) == 90
