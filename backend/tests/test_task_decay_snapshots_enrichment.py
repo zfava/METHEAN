@@ -333,6 +333,7 @@ async def test_snapshot_handles_no_activity(db_session, hh, kid):
 async def test_enrichment_enriches_unenriched_nodes(db_session, hh, subj, lmap):
     """Enrichment processes nodes without content."""
     from app.tasks.enrichment import _enrich_map
+    from tests.conftest import test_session_factory
 
     # Create 3 nodes with no content
     for i, title in enumerate(["Counting to 20", "Addition Facts", "Subtraction"]):
@@ -346,7 +347,7 @@ async def test_enrichment_enriches_unenriched_nodes(db_session, hh, subj, lmap):
         db_session.add(n)
     await db_session.commit()
 
-    result = await _enrich_map(lmap.id, hh.id)
+    result = await _enrich_map(lmap.id, hh.id, session_factory=test_session_factory)
 
     assert result["total"] == 3
     assert result["enriched"] + result["skipped"] + result["failed"] == result["total"]
@@ -358,6 +359,7 @@ async def test_enrichment_enriches_unenriched_nodes(db_session, hh, subj, lmap):
 async def test_enrichment_skips_already_enriched(db_session, hh, subj, lmap):
     """Nodes with existing enriched content are not re-enriched."""
     from app.tasks.enrichment import _enrich_map
+    from tests.conftest import test_session_factory
 
     n = LearningNode(
         learning_map_id=lmap.id,
@@ -369,7 +371,7 @@ async def test_enrichment_skips_already_enriched(db_session, hh, subj, lmap):
     db_session.add(n)
     await db_session.commit()
 
-    result = await _enrich_map(lmap.id, hh.id)
+    result = await _enrich_map(lmap.id, hh.id, session_factory=test_session_factory)
 
     assert result["total"] == 1
     assert result["skipped"] == 1
@@ -382,11 +384,12 @@ async def test_enrichment_handles_missing_map(db_session, hh):
     import uuid
 
     from app.tasks.enrichment import _enrich_map
+    from tests.conftest import test_session_factory
 
     await db_session.commit()
 
     fake_map_id = uuid.uuid4()
-    result = await _enrich_map(fake_map_id, hh.id)
+    result = await _enrich_map(fake_map_id, hh.id, session_factory=test_session_factory)
 
     assert result["enriched"] == 0
     assert result["failed"] == 0
@@ -397,6 +400,7 @@ async def test_enrichment_handles_missing_map(db_session, hh):
 async def test_enrichment_seed_content_applied(db_session, hh, subj, lmap):
     """Seed content is applied when node title matches."""
     from app.tasks.enrichment import _enrich_map
+    from tests.conftest import test_session_factory
 
     # "Letter Recognition" matches seed content in seed_content.py
     n = LearningNode(
@@ -408,7 +412,7 @@ async def test_enrichment_seed_content_applied(db_session, hh, subj, lmap):
     db_session.add(n)
     await db_session.commit()
 
-    result = await _enrich_map(lmap.id, hh.id)
+    result = await _enrich_map(lmap.id, hh.id, session_factory=test_session_factory)
 
     assert result["enriched"] == 1
 
