@@ -1,16 +1,16 @@
-"""Gold-standard gate for the math foundational batch mf-91..mf-105, plus a
-whole-library graph-integrity gate that scans every mf node (mf-01..mf-105).
+"""Gold-standard gate for the math foundational batch mf-106..mf-120, plus the
+whole-library graph-integrity gate that scans every mf node (mf-01..mf-120).
 
 The per-batch gates assert the 15 new nodes pass the REAL validator
 (node_content.py), carry the exact NATIVE_KEYS from test_node_content.py, never
-hard-fail the unschooling rule, satisfy the three-file rule, have consistent
-backward-only prerequisites, resolve to UUIDs, and meet the depth floor.
+hard-fail the unschooling rule, satisfy the three-file rule, have backward-only
+prerequisites, resolve to UUIDs, and meet the depth floor.
 
 The graph-integrity gate scans the entire authored library: contiguous ids with
 no gaps or duplicates, cross-file count parity, an acyclic prerequisite DAG with
-no dangling references, backward-only (topologically sound) prerequisites, and
-reachable spiral-review references. These assertions keep holding as later
-batches land.
+no dangling references, backward-only (topologically sound) prerequisites (save
+the one documented legacy exception), and reachable spiral-review references.
+These assertions keep holding as later batches land.
 """
 
 from datetime import date
@@ -27,27 +27,27 @@ from app.services.templates import MATH_FOUNDATIONAL
 # Canonical requirement sets, imported (not copied) from the schema test.
 from tests.test_node_content import NATIVE_KEYS, PHILOSOPHIES, UNSCHOOLING_FORBIDDEN
 
-NEW_NUMS = list(range(91, 106))
+NEW_NUMS = list(range(106, 121))
 NEW_IDS = [f"mf-{n}" for n in NEW_NUMS]
 NEW_REFS = [f"math_f_{n}" for n in NEW_NUMS]
 
-# Authoritative prerequisite map (docs/math_foundational_gap.md, mf-91..mf-105).
+# Authoritative prerequisite map (docs/math_foundational_gap.md, mf-106..mf-120).
 EXPECTED_PREREQS: dict[str, list[str]] = {
-    "mf-91": ["mf-88", "mf-68"],
-    "mf-92": ["mf-90", "mf-79"],
-    "mf-93": ["mf-56", "mf-88"],
-    "mf-94": ["mf-93", "mf-91"],
-    "mf-95": ["mf-56", "mf-90"],
-    "mf-96": ["mf-95", "mf-92"],
-    "mf-97": ["mf-27", "mf-49"],
-    "mf-98": ["mf-51"],
-    "mf-99": ["mf-98", "mf-73"],
-    "mf-100": ["mf-99"],
-    "mf-101": ["mf-51", "mf-98"],
-    "mf-102": ["mf-99", "mf-100"],
-    "mf-103": ["mf-102", "mf-66"],
-    "mf-104": ["mf-102", "mf-101"],
-    "mf-105": ["mf-102", "mf-101"],
+    "mf-106": ["mf-103", "mf-104", "mf-105"],
+    "mf-107": ["mf-103"],
+    "mf-108": ["mf-98"],
+    "mf-109": ["mf-45"],
+    "mf-110": ["mf-13"],
+    "mf-111": ["mf-110"],
+    "mf-112": ["mf-111", "mf-97"],
+    "mf-113": ["mf-45"],
+    "mf-114": ["mf-14"],
+    "mf-115": ["mf-42"],
+    "mf-116": ["mf-111", "mf-90"],
+    "mf-117": ["mf-17"],
+    "mf-118": ["mf-17"],
+    "mf-119": ["mf-118", "mf-117"],
+    "mf-120": ["mf-117"],
 }
 
 ACCOMMODATION_KEYS = {"dyslexia", "adhd", "gifted", "visual_learner", "kinesthetic_learner", "auditory_learner"}
@@ -140,12 +140,10 @@ def test_all_three_files_have_every_new_node():
         assert f"mf-{n}" in tnodes, f"mf-{n} missing from MATH_FOUNDATIONAL template"
 
 
-def test_counts_now_one_hundred_five():
-    # This batch brought the library to at least 105; later batches add more,
-    # so assert >= 105 (forward-compatible) rather than an exact snapshot.
-    assert len(MATH_FOUNDATIONAL_CONTENT) >= 105
-    assert len(get_scope_sequence("mathematics", "foundational")) >= 105
-    assert len(MATH_FOUNDATIONAL.nodes) >= 105
+def test_counts_now_one_hundred_twenty():
+    assert len(MATH_FOUNDATIONAL_CONTENT) == 120
+    assert len(get_scope_sequence("mathematics", "foundational")) == 120
+    assert len(MATH_FOUNDATIONAL.nodes) == 120
 
 
 # ── Prerequisite integrity (three files agree, earlier-only) ─────────────
@@ -173,22 +171,17 @@ def test_template_edges_match_scope_prereqs():
         assert edges_in == set(prereqs), f"{node_id} template edges {edges_in} != prereqs {set(prereqs)}"
 
 
-# ── WHOLE-LIBRARY GRAPH-INTEGRITY GATE (scans mf-01..mf-105) ──────────────
+# ── WHOLE-LIBRARY GRAPH-INTEGRITY GATE (scans mf-01..mf-120) ──────────────
 #
-# These assertions deliberately scan the entire authored library, not just the
-# 15 new nodes, so they keep holding (and catch regressions) as later batches
-# land. The prerequisite graph is read from scope_sequences (the authoritative
-# prerequisites list) and cross-checked against the template edges.
-
-
-def _all_content_nums() -> set[int]:
-    return {_num(k) for k in MATH_FOUNDATIONAL_CONTENT}
+# These assertions scan the entire authored library, not just the 15 new nodes,
+# so they keep holding (and catch regressions) as later batches land. The
+# prerequisite graph is read from scope_sequences and cross-checked against the
+# template edges.
 
 
 def test_library_ids_are_contiguous_no_gaps_no_duplicates():
     keys = list(MATH_FOUNDATIONAL_CONTENT.keys())
     nums = [_num(k) for k in keys]
-    # No duplicates.
     duplicates = sorted({n for n in nums if nums.count(n) > 1})
     assert not duplicates, f"duplicate mf ids: {[f'mf-{n:02d}' for n in duplicates]}"
     top = max(nums)
@@ -221,15 +214,15 @@ def test_every_prerequisite_references_a_real_node():
     assert not dangling, f"dangling prerequisite references: {dangling}"
 
 
-# Two pre-existing forward-references live in the ORIGINAL mf-01..mf-30 spine,
-# which this contract is forbidden to edit: mf-07 (Addition Facts to 20) and
-# mf-08 (Subtraction Facts to 20) both list mf-09 (Place Value Tens and Ones)
-# as a prerequisite. The dependency is conceptually correct (adding and
+# One pre-existing forward-reference pair lives in the ORIGINAL mf-01..mf-30
+# spine, which this contract is forbidden to edit: mf-07 (Addition Facts to 20)
+# and mf-08 (Subtraction Facts to 20) both list mf-09 (Place Value Tens and
+# Ones) as a prerequisite. The dependency is conceptually correct (adding and
 # subtracting to twenty rests on tens-and-ones place value); only the original
-# id NUMBERING is out of prerequisite order. The graph stays acyclic. Every
-# node the authorship contract governs (mf-31 onward, authored in strict
-# prerequisite order) is backward-only, and this gate fails loudly on any NEW
-# forward-reference beyond these two documented legacy artifacts.
+# id NUMBERING is out of prerequisite order. The graph stays acyclic. Every node
+# the authorship contract governs (mf-31 onward, authored in strict prerequisite
+# order) is backward-only, and this gate fails loudly on any NEW forward-
+# reference beyond these two documented legacy artifacts.
 KNOWN_LEGACY_FORWARD_REFS: set[tuple[str, str]] = {
     ("math_f_07", "math_f_09"),
     ("math_f_08", "math_f_09"),
@@ -246,7 +239,6 @@ def test_prerequisites_are_backward_only_topologically_sound():
                 forward.add((ref, p))
     new_forward = forward - KNOWN_LEGACY_FORWARD_REFS
     assert not new_forward, f"new forward references (prerequisite id not strictly earlier): {sorted(new_forward)}"
-    # The only tolerated forward-references are the documented legacy pair.
     assert forward <= KNOWN_LEGACY_FORWARD_REFS, f"unexpected forward-reference set: {sorted(forward)}"
 
 
@@ -263,7 +255,6 @@ def test_prerequisite_graph_is_acyclic():
         stack.append(node)
         for nxt in graph.get(node, []):
             if nxt not in color:
-                # dangling reference is covered by another test; skip here
                 continue
             if color[nxt] == GREY:
                 cycle_path.extend(stack[stack.index(nxt) :] + [nxt])
@@ -287,7 +278,7 @@ def test_spiral_review_references_resolve_to_real_prior_nodes():
         num = _num(node_id)
         spiral = MATH_FOUNDATIONAL_CONTENT[node_id]["philosophy_specific"]["traditional"]["spiral_review"]
         text = " ".join(spiral)
-        referenced = [f"mf-{m:02d}" for m in range(1, 106) if f"mf-{m:02d}" in text]
+        referenced = [f"mf-{m:02d}" for m in range(1, 121) if f"mf-{m:02d}" in text]
         assert referenced, f"{node_id} spiral_review references no mf node"
         for r in referenced:
             if r not in MATH_FOUNDATIONAL_CONTENT:
@@ -308,20 +299,19 @@ async def test_resolver_resolves_each_new_ref(db_session, household, ref):
 
 
 async def test_generator_plan_all_resolve_zero_needs_content(db_session, household):
-    """A foundational plan over the 105-week scope resolves every topic with zero
-    needs_content weeks (the 15 nodes this batch added are no longer
-    placeholders). Later batches add more topics over the same weeks, so assert
-    >= 105 distinct focus-node UUIDs (forward-compatible) rather than exactly 105."""
+    """A foundational plan over the full 120-topic scope resolves every topic:
+    zero needs_content weeks (the 15 new nodes are no longer placeholders), with
+    120 distinct focus-node UUIDs."""
     out = await generate_for_subject(
         db_session,
         household.id,
         "mathematics",
         "foundational",
         hours_per_week=4.0,
-        total_weeks=105,
+        total_weeks=120,
         start_date=date(2026, 9, 1),
     )
     needs = [w for w in out["weeks"] if w.get("needs_content")]
     assert needs == [], f"unexpected needs_content weeks: {[w['week_number'] for w in needs]}"
     resolved_ids = {fid for w in out["weeks"] for fid in w["focus_nodes"]}
-    assert len(resolved_ids) >= 105
+    assert len(resolved_ids) == 120
