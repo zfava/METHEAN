@@ -6490,6 +6490,116 @@
         }
       }
     },
+    "/api/v1/household/ui-preferences": {
+      "get": {
+        "tags": [
+          "spec-coverage"
+        ],
+        "summary": "Get Ui Preferences",
+        "operationId": "get_ui_preferences_api_v1_household_ui_preferences_get",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get Ui Preferences Api V1 Household Ui Preferences Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "spec-coverage"
+        ],
+        "summary": "Patch Ui Preferences",
+        "description": "Shallow-merge ``body`` into ``households.ui_preferences``.\n\nKeys present in the body overwrite existing top-level keys; passing\n``null`` for a key removes it. Nested objects are replaced wholesale\nrather than deep-merged, which keeps the merge predictable for\ncallers and avoids JSON-pointer surprises.",
+        "operationId": "patch_ui_preferences_api_v1_household_ui_preferences_patch",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "title": "Body"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Patch Ui Preferences Api V1 Household Ui Preferences Patch"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/children": {
       "get": {
         "tags": [
@@ -6725,6 +6835,65 @@
                 "schema": {
                   "type": "object",
                   "title": "Response Update Child Preferences Api V1 Children  Child Id  Preferences Put"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "spec-coverage"
+        ],
+        "summary": "Get Child Preferences",
+        "description": "Read back the persisted Learning Profile for a child.\n\nReturns the same wire shape as the PUT response so the frontend can\nrefresh after save without reading from the children-list cache. An\nunset profile returns the model's empty defaults rather than 404 so\nthe form can pre-fill consistently for both first-edit and re-edit.",
+        "operationId": "get_child_preferences_api_v1_children__child_id__preferences_get",
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get Child Preferences Api V1 Children  Child Id  Preferences Get"
                 }
               }
             }
@@ -17611,6 +17780,17 @@
               }
             ],
             "title": "Subject Levels"
+          },
+          "parent_notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Notes"
           }
         },
         "type": "object",
@@ -18406,6 +18586,24 @@
               }
             ],
             "title": "Scope Notes"
+          },
+          "content_tier": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "foundational",
+                  "developing",
+                  "intermediate",
+                  "advanced",
+                  "mastery"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Content Tier"
           }
         },
         "type": "object",
