@@ -1,4 +1,4 @@
-"""Gold-standard gate for the math foundational batch mf-46..mf-60.
+"""Gold-standard gate for the math foundational batch mf-61..mf-75.
 
 Asserts the 15 new nodes pass the REAL validator (node_content.py), carry the
 exact NATIVE_KEYS from test_node_content.py, never hard-fail the unschooling
@@ -22,27 +22,27 @@ from app.services.templates import MATH_FOUNDATIONAL
 # Canonical requirement sets, imported (not copied) from the schema test.
 from tests.test_node_content import NATIVE_KEYS, PHILOSOPHIES, UNSCHOOLING_FORBIDDEN
 
-NEW_NUMS = list(range(46, 61))
+NEW_NUMS = list(range(61, 76))
 NEW_IDS = [f"mf-{n}" for n in NEW_NUMS]
 NEW_REFS = [f"math_f_{n}" for n in NEW_NUMS]
 
-# Authoritative prerequisite map (docs/math_foundational_gap.md, mf-46..mf-60).
+# Authoritative prerequisite map (docs/math_foundational_gap.md, mf-61..mf-75).
 EXPECTED_PREREQS: dict[str, list[str]] = {
-    "mf-46": ["mf-11"],
-    "mf-47": ["mf-11"],
-    "mf-48": ["mf-11"],
-    "mf-49": ["mf-42", "mf-11"],
-    "mf-50": ["mf-18"],
-    "mf-51": ["mf-10"],
-    "mf-52": ["mf-34", "mf-09"],
-    "mf-53": ["mf-09"],
-    "mf-54": ["mf-09"],
-    "mf-55": ["mf-54"],
-    "mf-56": ["mf-55"],
-    "mf-57": ["mf-56"],
-    "mf-58": ["mf-56", "mf-46"],
-    "mf-59": ["mf-19"],
-    "mf-60": ["mf-34", "mf-35"],
+    "mf-61": ["mf-60"],
+    "mf-62": ["mf-61"],
+    "mf-63": ["mf-05", "mf-62"],
+    "mf-64": ["mf-05"],
+    "mf-65": ["mf-05"],
+    "mf-66": ["mf-65"],
+    "mf-67": ["mf-66"],
+    "mf-68": ["mf-64"],
+    "mf-69": ["mf-68"],
+    "mf-70": ["mf-05"],
+    "mf-71": ["mf-61"],
+    "mf-72": ["mf-38", "mf-61"],
+    "mf-73": ["mf-07", "mf-63", "mf-69"],
+    "mf-74": ["mf-25", "mf-69"],
+    "mf-75": ["mf-60"],
 }
 
 ACCOMMODATION_KEYS = {"dyslexia", "adhd", "gifted", "visual_learner", "kinesthetic_learner", "auditory_learner"}
@@ -130,12 +130,10 @@ def test_all_three_files_have_every_new_node():
         assert f"mf-{n}" in tnodes, f"mf-{n} missing from MATH_FOUNDATIONAL template"
 
 
-def test_counts_now_sixty():
-    # This batch brought the library to at least 60; later batches add more,
-    # so assert >= 60 (forward-compatible) rather than an exact snapshot.
-    assert len(MATH_FOUNDATIONAL_CONTENT) >= 60
-    assert len(get_scope_sequence("mathematics", "foundational")) >= 60
-    assert len(MATH_FOUNDATIONAL.nodes) >= 60
+def test_counts_now_seventy_five():
+    assert len(MATH_FOUNDATIONAL_CONTENT) == 75
+    assert len(get_scope_sequence("mathematics", "foundational")) == 75
+    assert len(MATH_FOUNDATIONAL.nodes) == 75
 
 
 # ── Prerequisite integrity (three files agree, earlier-only) ─────────────
@@ -173,21 +171,20 @@ async def test_resolver_resolves_each_new_ref(db_session, household, ref):
     assert res.unresolved is None
 
 
-async def test_generator_plan_all_sixty_resolve_zero_needs_content(db_session, household):
-    """A foundational plan over the 60-week scope resolves every topic with zero
-    needs_content weeks (the 15 nodes this batch added are no longer
-    placeholders). Later batches add more topics over the same weeks, so assert
-    >= 60 distinct focus-node UUIDs (forward-compatible) rather than exactly 60."""
+async def test_generator_plan_all_seventy_five_resolve_zero_needs_content(db_session, household):
+    """A foundational plan over the full 75-topic scope resolves every topic:
+    zero needs_content weeks (75 of 75 resolved, the 15 new nodes no longer
+    placeholders), with 75 distinct focus-node UUIDs."""
     out = await generate_for_subject(
         db_session,
         household.id,
         "mathematics",
         "foundational",
         hours_per_week=4.0,
-        total_weeks=60,
+        total_weeks=75,
         start_date=date(2026, 9, 1),
     )
     needs = [w for w in out["weeks"] if w.get("needs_content")]
     assert needs == [], f"unexpected needs_content weeks: {[w['week_number'] for w in needs]}"
     resolved_ids = {fid for w in out["weeks"] for fid in w["focus_nodes"]}
-    assert len(resolved_ids) >= 60
+    assert len(resolved_ids) == 75
