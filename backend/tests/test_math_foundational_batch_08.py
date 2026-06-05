@@ -1,16 +1,22 @@
-"""Gold-standard gate for the math foundational batch mf-121..mf-135, plus the
-whole-library graph-integrity gate that scans every mf node (mf-01..mf-135).
+"""Gold-standard gate for the math foundational batch mf-136..mf-150, plus the
+whole-library graph-integrity gate that scans every mf node (mf-01..mf-150) and a
+cross-band check for the spiral-review (section 15) and cumulative-assessment
+(section 16) nodes.
 
 The per-batch gates assert the 15 new nodes pass the REAL validator
 (node_content.py), carry the exact NATIVE_KEYS from test_node_content.py, never
 hard-fail the unschooling rule, satisfy the three-file rule, have backward-only
 prerequisites, resolve to UUIDs, and meet the depth floor.
 
-The graph-integrity gate scans the entire authored library: contiguous ids with
-no gaps or duplicates, cross-file count parity, an acyclic prerequisite DAG with
-no dangling references, backward-only (topologically sound) prerequisites (save
-the one documented legacy exception), and reachable spiral-review references.
-These assertions keep holding as later batches land.
+The graph-integrity gate scans the entire authored library: contiguous ids,
+cross-file count parity, an acyclic prerequisite DAG with no dangling references,
+backward-only prerequisites (save the one documented legacy exception), and
+reachable spiral-review references.
+
+The cross-band check enforces the design intent of the section 15 spiral-review
+and section 16 cumulative-assessment nodes: their prerequisites must span at
+least two DISTINCT prior concept bands, so they genuinely interleave earlier
+work rather than drilling one concept.
 """
 
 from datetime import date
@@ -27,28 +33,34 @@ from app.services.templates import MATH_FOUNDATIONAL
 # Canonical requirement sets, imported (not copied) from the schema test.
 from tests.test_node_content import NATIVE_KEYS, PHILOSOPHIES, UNSCHOOLING_FORBIDDEN
 
-NEW_NUMS = list(range(121, 136))
+NEW_NUMS = list(range(136, 151))
 NEW_IDS = [f"mf-{n}" for n in NEW_NUMS]
 NEW_REFS = [f"math_f_{n}" for n in NEW_NUMS]
 
-# Authoritative prerequisite map (docs/math_foundational_gap.md, mf-121..mf-135).
+# Authoritative prerequisite map (docs/math_foundational_gap.md, mf-136..mf-150).
 EXPECTED_PREREQS: dict[str, list[str]] = {
-    "mf-121": ["mf-119"],
-    "mf-122": ["mf-117"],
-    "mf-123": ["mf-117"],
-    "mf-124": ["mf-17"],
-    "mf-125": ["mf-122"],
-    "mf-126": ["mf-21", "mf-125"],
-    "mf-127": ["mf-126", "mf-108"],
-    "mf-128": ["mf-126"],
-    "mf-129": ["mf-12"],
-    "mf-130": ["mf-129"],
-    "mf-131": ["mf-15"],
-    "mf-132": ["mf-131", "mf-51"],
-    "mf-133": ["mf-132"],
-    "mf-134": ["mf-16"],
-    "mf-135": ["mf-134", "mf-51"],
+    "mf-136": ["mf-135"],
+    "mf-137": ["mf-134"],
+    "mf-138": ["mf-136", "mf-82"],
+    "mf-139": ["mf-138"],
+    "mf-140": ["mf-29"],
+    "mf-141": ["mf-22"],
+    "mf-142": ["mf-141"],
+    "mf-143": ["mf-142", "mf-90"],
+    "mf-144": ["mf-23", "mf-24"],
+    "mf-145": ["mf-144"],
+    "mf-146": ["mf-144", "mf-84"],
+    "mf-147": ["mf-145", "mf-91", "mf-92"],
+    "mf-148": ["mf-147"],
+    "mf-149": ["mf-102", "mf-144"],
+    "mf-150": ["mf-130", "mf-18"],
 }
+
+# Section 15 (spiral-review structure) and section 16 (cumulative assessment)
+# nodes present in this batch. Only mf-150 (the daily Meeting routine) falls in
+# section 15 here; the section 16 cumulative assessments are mf-155..mf-157,
+# authored in a later batch.
+SPIRAL_AND_CUMULATIVE_NODES = ["mf-150"]
 
 ACCOMMODATION_KEYS = {"dyslexia", "adhd", "gifted", "visual_learner", "kinesthetic_learner", "auditory_learner"}
 
@@ -56,6 +68,70 @@ ACCOMMODATION_KEYS = {"dyslexia", "adhd", "gifted", "visual_learner", "kinesthet
 def _num(node_id: str) -> int:
     """Numeric part of an mf-NN or math_f_NN id."""
     return int(node_id.split("_")[-1] if node_id.startswith("math_f_") else node_id.split("-")[1])
+
+
+# Concept band for each authored node, following the gap doc's section grouping.
+# Covered nodes mf-01..mf-30 are scattered across sections, so they are mapped
+# explicitly; the gap nodes mf-31..mf-157 follow their section's id-range.
+_COVERED_BANDS: dict[int, str] = {
+    1: "counting",
+    2: "counting",
+    3: "counting",
+    4: "counting",
+    5: "addition",
+    6: "subtraction",
+    7: "addition",
+    8: "subtraction",
+    9: "place_value",
+    10: "patterns",
+    11: "patterns",
+    12: "patterns",
+    13: "measurement",
+    14: "measurement",
+    15: "time",
+    16: "money",
+    17: "geometry",
+    18: "patterns",
+    19: "place_value",
+    20: "patterns",
+    21: "fractions",
+    22: "data",
+    23: "word_problems",
+    24: "word_problems",
+    25: "addition",
+    26: "subtraction",
+    27: "multidigit",
+    28: "addition",
+    29: "geometry",
+    30: "cumulative",
+}
+_GAP_BAND_RANGES: list[tuple[int, int, str]] = [
+    (31, 44, "counting"),
+    (45, 51, "patterns"),
+    (52, 59, "place_value"),
+    (60, 74, "addition"),
+    (75, 85, "subtraction"),
+    (86, 97, "multidigit"),
+    (98, 108, "multiplication"),
+    (109, 116, "measurement"),
+    (117, 124, "geometry"),
+    (125, 128, "fractions"),
+    (129, 133, "time"),
+    (134, 139, "money"),
+    (140, 143, "data"),
+    (144, 149, "word_problems"),
+    (150, 154, "spiral"),
+    (155, 157, "cumulative"),
+]
+
+
+def _band_of(num: int) -> str:
+    if num in _COVERED_BANDS:
+        return _COVERED_BANDS[num]
+    for lo, hi, band in _GAP_BAND_RANGES:
+        if lo <= num <= hi:
+            return band
+    return "unknown"
 
 
 def _scope_by_ref() -> dict[str, dict]:
@@ -140,12 +216,10 @@ def test_all_three_files_have_every_new_node():
         assert f"mf-{n}" in tnodes, f"mf-{n} missing from MATH_FOUNDATIONAL template"
 
 
-def test_counts_now_one_hundred_thirty_five():
-    # This batch brought the library to at least 135; later batches add more,
-    # so assert >= 135 (forward-compatible) rather than an exact snapshot.
-    assert len(MATH_FOUNDATIONAL_CONTENT) >= 135
-    assert len(get_scope_sequence("mathematics", "foundational")) >= 135
-    assert len(MATH_FOUNDATIONAL.nodes) >= 135
+def test_counts_now_one_hundred_fifty():
+    assert len(MATH_FOUNDATIONAL_CONTENT) == 150
+    assert len(get_scope_sequence("mathematics", "foundational")) == 150
+    assert len(MATH_FOUNDATIONAL.nodes) == 150
 
 
 # ── Prerequisite integrity (three files agree, earlier-only) ─────────────
@@ -173,7 +247,21 @@ def test_template_edges_match_scope_prereqs():
         assert edges_in == set(prereqs), f"{node_id} template edges {edges_in} != prereqs {set(prereqs)}"
 
 
-# ── WHOLE-LIBRARY GRAPH-INTEGRITY GATE (scans mf-01..mf-135) ──────────────
+# ── Section 15 / 16 cross-band check ─────────────────────────────────────
+
+
+def test_spiral_and_cumulative_nodes_span_multiple_bands():
+    """Each spiral-review (section 15) and cumulative-assessment (section 16)
+    node must list prerequisites that span at least two DISTINCT prior concept
+    bands, so the node genuinely interleaves earlier work."""
+    for node_id in SPIRAL_AND_CUMULATIVE_NODES:
+        prereqs = EXPECTED_PREREQS[node_id]
+        bands = {_band_of(_num(p)) for p in prereqs}
+        assert "unknown" not in bands, f"{node_id} has a prereq with an unknown band: {prereqs}"
+        assert len(bands) >= 2, f"{node_id} prerequisites span only one band {bands}; must span >= 2"
+
+
+# ── WHOLE-LIBRARY GRAPH-INTEGRITY GATE (scans mf-01..mf-150) ──────────────
 
 
 def test_library_ids_are_contiguous_no_gaps_no_duplicates():
@@ -213,12 +301,10 @@ def test_every_prerequisite_references_a_real_node():
 # One pre-existing forward-reference pair lives in the ORIGINAL mf-01..mf-30
 # spine, which this contract is forbidden to edit: mf-07 (Addition Facts to 20)
 # and mf-08 (Subtraction Facts to 20) both list mf-09 (Place Value Tens and
-# Ones) as a prerequisite. The dependency is conceptually correct (adding and
-# subtracting to twenty rests on tens-and-ones place value); only the original
-# id NUMBERING is out of prerequisite order. The graph stays acyclic. Every node
-# the authorship contract governs (mf-31 onward, authored in strict prerequisite
-# order) is backward-only, and this gate fails loudly on any NEW forward-
-# reference beyond these two documented legacy artifacts.
+# Ones) as a prerequisite. The dependency is conceptually correct; only the
+# original id NUMBERING is out of prerequisite order. The graph stays acyclic.
+# Every node the authorship contract governs (mf-31 onward) is backward-only,
+# and this gate fails loudly on any NEW forward-reference beyond these two.
 KNOWN_LEGACY_FORWARD_REFS: set[tuple[str, str]] = {
     ("math_f_07", "math_f_09"),
     ("math_f_08", "math_f_09"),
@@ -274,7 +360,7 @@ def test_spiral_review_references_resolve_to_real_prior_nodes():
         num = _num(node_id)
         spiral = MATH_FOUNDATIONAL_CONTENT[node_id]["philosophy_specific"]["traditional"]["spiral_review"]
         text = " ".join(spiral)
-        referenced = [f"mf-{m:02d}" for m in range(1, 136) if f"mf-{m:02d}" in text]
+        referenced = [f"mf-{m:02d}" for m in range(1, 151) if f"mf-{m:02d}" in text]
         assert referenced, f"{node_id} spiral_review references no mf node"
         for r in referenced:
             if r not in MATH_FOUNDATIONAL_CONTENT:
@@ -295,20 +381,19 @@ async def test_resolver_resolves_each_new_ref(db_session, household, ref):
 
 
 async def test_generator_plan_all_resolve_zero_needs_content(db_session, household):
-    """A foundational plan over the 135-week scope resolves every topic with zero
-    needs_content weeks (the 15 nodes this batch added are no longer
-    placeholders). Later batches add more topics over the same weeks, so assert
-    >= 135 distinct focus-node UUIDs (forward-compatible) rather than exactly 135."""
+    """A foundational plan over the full 150-topic scope resolves every topic:
+    zero needs_content weeks (the 15 new nodes are no longer placeholders), with
+    150 distinct focus-node UUIDs."""
     out = await generate_for_subject(
         db_session,
         household.id,
         "mathematics",
         "foundational",
         hours_per_week=4.0,
-        total_weeks=135,
+        total_weeks=150,
         start_date=date(2026, 9, 1),
     )
     needs = [w for w in out["weeks"] if w.get("needs_content")]
     assert needs == [], f"unexpected needs_content weeks: {[w['week_number'] for w in needs]}"
     resolved_ids = {fid for w in out["weeks"] for fid in w["focus_nodes"]}
-    assert len(resolved_ids) >= 135
+    assert len(resolved_ids) == 150
