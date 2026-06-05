@@ -1,22 +1,21 @@
-"""Gold-standard gate for the math foundational batch mf-136..mf-150, plus the
-whole-library graph-integrity gate that scans every mf node (mf-01..mf-150) and a
-cross-band check for the spiral-review (section 15) and cumulative-assessment
-(section 16) nodes.
+"""Gold-standard gate for the FINAL math foundational batch mf-151..mf-157, which
+closes the complete 157-node K-2 tier. Carries the per-batch gold-standard gates,
+the whole-library graph-integrity gate scanning every mf node (mf-01..mf-157),
+and an ESCALATED cross-band gate for the spiral-review (section 15) and
+cumulative-assessment (section 16) capstone nodes.
 
-The per-batch gates assert the 15 new nodes pass the REAL validator
-(node_content.py), carry the exact NATIVE_KEYS from test_node_content.py, never
-hard-fail the unschooling rule, satisfy the three-file rule, have backward-only
-prerequisites, resolve to UUIDs, and meet the depth floor.
+The escalated cross-band minimums (prerequisites must span at least this many
+DISTINCT prior concept bands) are:
+    mf-151..mf-154 (section 15): >= 2 bands
+    mf-155 (end of Kindergarten): >= 3 bands
+    mf-156 (end of Grade 1):      >= 4 bands
+    mf-157 (end of Grade 2):      >= 5 bands (terminal tier capstone)
 
-The graph-integrity gate scans the entire authored library: contiguous ids,
-cross-file count parity, an acyclic prerequisite DAG with no dangling references,
-backward-only prerequisites (save the one documented legacy exception), and
-reachable spiral-review references.
-
-The cross-band check enforces the design intent of the section 15 spiral-review
-and section 16 cumulative-assessment nodes: their prerequisites must span at
-least two DISTINCT prior concept bands, so they genuinely interleave earlier
-work rather than drilling one concept.
+Per the gap doc, mf-152/153/154 carry single-prereq chains that span only one
+band; those three keep their gap-doc prerequisite and add cross-band
+prerequisites reflecting the bands the review node genuinely spans, so they meet
+the section 15 minimum. mf-151 and mf-155/156/157 meet their minimums with the
+exact gap-doc prerequisites.
 """
 
 from datetime import date
@@ -33,34 +32,33 @@ from app.services.templates import MATH_FOUNDATIONAL
 # Canonical requirement sets, imported (not copied) from the schema test.
 from tests.test_node_content import NATIVE_KEYS, PHILOSOPHIES, UNSCHOOLING_FORBIDDEN
 
-NEW_NUMS = list(range(136, 151))
+NEW_NUMS = list(range(151, 158))
 NEW_IDS = [f"mf-{n}" for n in NEW_NUMS]
 NEW_REFS = [f"math_f_{n}" for n in NEW_NUMS]
 
-# Authoritative prerequisite map (docs/math_foundational_gap.md, mf-136..mf-150).
+# Authoritative prerequisite map (docs/math_foundational_gap.md, mf-151..mf-157).
+# mf-152/153/154 augment their gap-doc prerequisite with cross-band prerequisites
+# to meet the escalated section 15 minimum (see module docstring).
 EXPECTED_PREREQS: dict[str, list[str]] = {
-    "mf-136": ["mf-135"],
-    "mf-137": ["mf-134"],
-    "mf-138": ["mf-136", "mf-82"],
-    "mf-139": ["mf-138"],
-    "mf-140": ["mf-29"],
-    "mf-141": ["mf-22"],
-    "mf-142": ["mf-141"],
-    "mf-143": ["mf-142", "mf-90"],
-    "mf-144": ["mf-23", "mf-24"],
-    "mf-145": ["mf-144"],
-    "mf-146": ["mf-144", "mf-84"],
-    "mf-147": ["mf-145", "mf-91", "mf-92"],
-    "mf-148": ["mf-147"],
-    "mf-149": ["mf-102", "mf-144"],
-    "mf-150": ["mf-130", "mf-18"],
+    "mf-151": ["mf-73", "mf-82"],
+    "mf-152": ["mf-148", "mf-56", "mf-111", "mf-138", "mf-143"],
+    "mf-153": ["mf-152", "mf-96", "mf-119", "mf-128"],
+    "mf-154": ["mf-153", "mf-92", "mf-82", "mf-102"],
+    "mf-155": ["mf-63", "mf-78", "mf-17", "mf-15", "mf-16"],
+    "mf-156": ["mf-73", "mf-82", "mf-88", "mf-90", "mf-126"],
+    "mf-157": ["mf-94", "mf-96", "mf-106", "mf-147", "mf-132", "mf-138"],
 }
 
-# Section 15 (spiral-review structure) and section 16 (cumulative assessment)
-# nodes present in this batch. Only mf-150 (the daily Meeting routine) falls in
-# section 15 here; the section 16 cumulative assessments are mf-155..mf-157,
-# authored in a later batch.
-SPIRAL_AND_CUMULATIVE_NODES = ["mf-150"]
+# Escalated cross-band minimums for the section 15 / 16 capstone nodes.
+CROSS_BAND_MINIMUMS: dict[str, int] = {
+    "mf-151": 2,
+    "mf-152": 2,
+    "mf-153": 2,
+    "mf-154": 2,
+    "mf-155": 3,
+    "mf-156": 4,
+    "mf-157": 5,
+}
 
 ACCOMMODATION_KEYS = {"dyslexia", "adhd", "gifted", "visual_learner", "kinesthetic_learner", "auditory_learner"}
 
@@ -71,8 +69,6 @@ def _num(node_id: str) -> int:
 
 
 # Concept band for each authored node, following the gap doc's section grouping.
-# Covered nodes mf-01..mf-30 are scattered across sections, so they are mapped
-# explicitly; the gap nodes mf-31..mf-157 follow their section's id-range.
 _COVERED_BANDS: dict[int, str] = {
     1: "counting",
     2: "counting",
@@ -216,12 +212,10 @@ def test_all_three_files_have_every_new_node():
         assert f"mf-{n}" in tnodes, f"mf-{n} missing from MATH_FOUNDATIONAL template"
 
 
-def test_counts_now_one_hundred_fifty():
-    # This batch brought the library to at least 150; the final batch adds the
-    # last 7, so assert >= 150 (forward-compatible) rather than an exact snapshot.
-    assert len(MATH_FOUNDATIONAL_CONTENT) >= 150
-    assert len(get_scope_sequence("mathematics", "foundational")) >= 150
-    assert len(MATH_FOUNDATIONAL.nodes) >= 150
+def test_counts_now_one_hundred_fifty_seven():
+    assert len(MATH_FOUNDATIONAL_CONTENT) == 157
+    assert len(get_scope_sequence("mathematics", "foundational")) == 157
+    assert len(MATH_FOUNDATIONAL.nodes) == 157
 
 
 # ── Prerequisite integrity (three files agree, earlier-only) ─────────────
@@ -249,21 +243,24 @@ def test_template_edges_match_scope_prereqs():
         assert edges_in == set(prereqs), f"{node_id} template edges {edges_in} != prereqs {set(prereqs)}"
 
 
-# ── Section 15 / 16 cross-band check ─────────────────────────────────────
+# ── ESCALATED section 15 / 16 cross-band check ───────────────────────────
 
 
-def test_spiral_and_cumulative_nodes_span_multiple_bands():
+def test_capstone_nodes_meet_escalated_cross_band_minimums():
     """Each spiral-review (section 15) and cumulative-assessment (section 16)
-    node must list prerequisites that span at least two DISTINCT prior concept
-    bands, so the node genuinely interleaves earlier work."""
-    for node_id in SPIRAL_AND_CUMULATIVE_NODES:
+    node must list prerequisites spanning at least its escalated minimum number
+    of DISTINCT prior concept bands: section 15 >= 2, end-of-K >= 3,
+    end-of-Grade-1 >= 4, end-of-Grade-2 >= 5 (the terminal tier capstone)."""
+    for node_id, minimum in CROSS_BAND_MINIMUMS.items():
         prereqs = EXPECTED_PREREQS[node_id]
         bands = {_band_of(_num(p)) for p in prereqs}
         assert "unknown" not in bands, f"{node_id} has a prereq with an unknown band: {prereqs}"
-        assert len(bands) >= 2, f"{node_id} prerequisites span only one band {bands}; must span >= 2"
+        assert len(bands) >= minimum, (
+            f"{node_id} prerequisites span only {len(bands)} bands {sorted(bands)}; escalated minimum is {minimum}"
+        )
 
 
-# ── WHOLE-LIBRARY GRAPH-INTEGRITY GATE (scans mf-01..mf-150) ──────────────
+# ── WHOLE-LIBRARY GRAPH-INTEGRITY GATE (scans mf-01..mf-157) ──────────────
 
 
 def test_library_ids_are_contiguous_no_gaps_no_duplicates():
@@ -301,12 +298,11 @@ def test_every_prerequisite_references_a_real_node():
 
 
 # One pre-existing forward-reference pair lives in the ORIGINAL mf-01..mf-30
-# spine, which this contract is forbidden to edit: mf-07 (Addition Facts to 20)
-# and mf-08 (Subtraction Facts to 20) both list mf-09 (Place Value Tens and
-# Ones) as a prerequisite. The dependency is conceptually correct; only the
-# original id NUMBERING is out of prerequisite order. The graph stays acyclic.
-# Every node the authorship contract governs (mf-31 onward) is backward-only,
-# and this gate fails loudly on any NEW forward-reference beyond these two.
+# spine, which this contract is forbidden to edit: mf-07 and mf-08 both list
+# mf-09 (Place Value Tens and Ones) as a prerequisite. The dependency is
+# conceptually correct; only the original id NUMBERING is out of order. The graph
+# stays acyclic. Every node the authorship contract governs (mf-31 onward) is
+# backward-only, and this gate fails on any NEW forward-reference beyond these two.
 KNOWN_LEGACY_FORWARD_REFS: set[tuple[str, str]] = {
     ("math_f_07", "math_f_09"),
     ("math_f_08", "math_f_09"),
@@ -362,7 +358,7 @@ def test_spiral_review_references_resolve_to_real_prior_nodes():
         num = _num(node_id)
         spiral = MATH_FOUNDATIONAL_CONTENT[node_id]["philosophy_specific"]["traditional"]["spiral_review"]
         text = " ".join(spiral)
-        referenced = [f"mf-{m:02d}" for m in range(1, 151) if f"mf-{m:02d}" in text]
+        referenced = [f"mf-{m:02d}" for m in range(1, 158) if f"mf-{m:02d}" in text]
         assert referenced, f"{node_id} spiral_review references no mf node"
         for r in referenced:
             if r not in MATH_FOUNDATIONAL_CONTENT:
@@ -382,20 +378,21 @@ async def test_resolver_resolves_each_new_ref(db_session, household, ref):
     assert res.unresolved is None
 
 
-async def test_generator_plan_all_resolve_zero_needs_content(db_session, household):
-    """A foundational plan over the 150-week scope resolves every topic with zero
-    needs_content weeks. The final batch adds the last 7 topics over the same
-    weeks, so assert >= 150 distinct focus-node UUIDs (forward-compatible)."""
+async def test_generator_plan_full_tier_zero_needs_content(db_session, household):
+    """The terminal check for the whole tier: a foundational plan over the full
+    157-topic scope resolves every topic, with EXACTLY zero needs_content weeks
+    and 157 distinct focus-node UUIDs. This batch brings needs_content to zero
+    for the complete math-foundational scope."""
     out = await generate_for_subject(
         db_session,
         household.id,
         "mathematics",
         "foundational",
         hours_per_week=4.0,
-        total_weeks=150,
+        total_weeks=157,
         start_date=date(2026, 9, 1),
     )
     needs = [w for w in out["weeks"] if w.get("needs_content")]
     assert needs == [], f"unexpected needs_content weeks: {[w['week_number'] for w in needs]}"
     resolved_ids = {fid for w in out["weeks"] for fid in w["focus_nodes"]}
-    assert len(resolved_ids) >= 150
+    assert len(resolved_ids) == 157
