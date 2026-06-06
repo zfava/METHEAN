@@ -25,6 +25,8 @@ from app.content.woodworking_content import WOODWORKING_CONTENT
 from app.content.writing_foundational_content import WRITING_FOUNDATIONAL_CONTENT
 from app.services.node_content import (
     NODE_CONTENT_SCHEMA,
+    choice_space_is_valid,
+    validate_choice_space,
     validate_content,
     validate_media,
     validate_philosophy,
@@ -318,6 +320,105 @@ class TestValidatePhilosophy:
             }
         )
         assert not any(i.startswith("error:") for i in issues)
+
+
+def _well_formed_choice_space() -> dict:
+    """A well-formed, all-acceptable choice_space (no consequential decisions)."""
+    return {
+        "choice_space": {
+            "proposable": [
+                {"class": "order", "option": "addition_first", "label": "Do addition before subtraction"},
+                {"class": "order", "option": "subtraction_first", "label": "Do subtraction before addition"},
+                {"class": "practice_variant", "option": "objects", "label": "Practice with countable objects"},
+                {"class": "practice_variant", "option": "number_line", "label": "Practice on a number line"},
+            ],
+            "excluded_note": (
+                "Consequential decisions (prerequisite-skip, mastery-declaration, subject-exit) "
+                "are not in scope and are never child-proposable."
+            ),
+            "author_default_latitude": "auto",
+        }
+    }
+
+
+class TestValidateChoiceSpace:
+    def test_schema_documents_choice_space(self):
+        assert "choice_space" in NODE_CONTENT_SCHEMA
+        cs = NODE_CONTENT_SCHEMA["choice_space"]
+        assert "proposable" in cs
+        assert "excluded_note" in cs
+        assert "author_default_latitude" in cs
+
+    def test_absent_choice_space_is_valid(self):
+        """Absent choice_space means fully parent-directed: no issues, valid."""
+        assert validate_choice_space({}) == []
+        assert validate_choice_space({"learning_objectives": ["x"]}) == []
+        assert choice_space_is_valid({}) is True
+
+    def test_existing_nodes_have_no_choice_space_and_stay_valid(self):
+        """The 182 foundational nodes carry no choice_space, so they stay valid."""
+        for node_key in ("mf-01", "mf-30", "mf-99", "rf-01", "rf-25"):
+            content = _node_content(node_key)
+            assert "choice_space" not in content
+            assert validate_choice_space(content) == []
+            assert choice_space_is_valid(content) is True
+
+    def test_well_formed_choice_space_validates(self):
+        content = _well_formed_choice_space()
+        issues = validate_choice_space(content)
+        assert not [i for i in issues if i.startswith("error:")], issues
+        assert choice_space_is_valid(content) is True
+
+    def test_consequential_decision_by_class_is_rejected(self):
+        content = {
+            "choice_space": {
+                "proposable": [
+                    {"class": "prerequisite_skip", "option": "skip_mf_03"},
+                ],
+                "excluded_note": "consequential decisions excluded",
+            }
+        }
+        issues = validate_choice_space(content)
+        assert any(i.startswith("error:") and "consequential decision" in i for i in issues), issues
+        assert choice_space_is_valid(content) is False
+
+    def test_consequential_decision_by_option_is_rejected(self):
+        for bad_option in ("declare_mastery", "leave_subject", "skip prerequisite"):
+            content = {
+                "choice_space": {
+                    "proposable": [
+                        {"class": "order", "option": bad_option},
+                    ],
+                    "excluded_note": "consequential decisions excluded",
+                }
+            }
+            issues = validate_choice_space(content)
+            assert any(i.startswith("error:") for i in issues), (bad_option, issues)
+            assert choice_space_is_valid(content) is False
+
+    def test_missing_excluded_note_is_rejected(self):
+        content = {
+            "choice_space": {
+                "proposable": [{"class": "order", "option": "a"}],
+            }
+        }
+        issues = validate_choice_space(content)
+        assert any(i.startswith("error:") and "excluded_note" in i for i in issues), issues
+
+    def test_non_dict_choice_space_is_rejected(self):
+        assert any(i.startswith("error:") for i in validate_choice_space({"choice_space": ["nope"]}))
+
+    def test_unknown_class_is_warning_not_error(self):
+        content = {
+            "choice_space": {
+                "proposable": [{"class": "made_up_class", "option": "a"}],
+                "excluded_note": "consequential decisions excluded",
+            }
+        }
+        issues = validate_choice_space(content)
+        assert any(i.startswith("warning:") and "unknown class" in i for i in issues)
+        assert not [i for i in issues if i.startswith("error:")]
+        assert choice_space_is_valid(content) is True
 
 
 class TestAuthoredPhilosophyContent:

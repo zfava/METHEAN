@@ -155,6 +155,43 @@ NODE_CONTENT_SCHEMA = {
         "review_session": 10,
         "estimated_sessions_to_mastery": 5,
     },
+    # choice_space is OPTIONAL. It is the schema hook for PARENT-FINAL,
+    # CURRICULUM-AUTHORED, READINESS-INFORMED child choice (governed
+    # agency). When ABSENT, the node is fully parent-directed: the child
+    # proposes nothing, and the node behaves exactly as it always has.
+    # This is why the 182 existing nodes (157 mf + 25 rf) stay valid:
+    # they carry no choice_space, and validate_choice_space returns []
+    # for any content without one.
+    #
+    # When PRESENT, choice_space bounds what a child may PROPOSE. The
+    # child never gets an open field: every option in proposable[] is one
+    # the curriculum authority asserts is acceptable regardless of which
+    # the child picks. Consequential decisions (skipping a prerequisite,
+    # declaring mastery, leaving a subject) are NEVER child-proposable
+    # and the validator REJECTS any choice_space that tries to include
+    # one. The parent remains the final authority: proposals route
+    # through the existing governance queue, and a per-child parent
+    # latitude setting (mirroring the AI input/oversight dial) can widen,
+    # tighten, or disable each choice class.
+    "choice_space": {
+        "proposable": [
+            {
+                "class": "order | practice_path | practice_variant | pacing_within_bounds",
+                "option": "stable id/label of this proposable, all-acceptable option",
+                "label": "optional human-readable description of the option",
+            }
+        ],
+        "excluded_note": (
+            "required: explicit statement that consequential decisions (prerequisite-skip, "
+            "mastery-declaration, subject-exit) are NOT in scope and are never child-proposable"
+        ),
+        "author_default_latitude": (
+            "the curriculum authority's recommended default latitude for this node's choices: "
+            "'auto' (low-stakes, apply on proposal) or 'review' (higher-stakes, queue for parent). "
+            "May be a single string applying to every class, or a dict mapping class to latitude. "
+            "The parent can override this per class; when the parent has set nothing this is the default."
+        ),
+    },
     # Literary mastery strand: two node shapes live alongside the
     # foundational shape above. lit-craft-NNN nodes follow
     # literary_craft_node; lit-work-NNN and lit-work-inh-NNN nodes
@@ -519,6 +556,183 @@ def validate_philosophy(content: dict) -> list[str]:
                 )
 
     return issues
+
+
+# ---- Governed-agency choice_space validation --------------------------
+#
+# choice_space is the schema hook for PARENT-FINAL, CURRICULUM-AUTHORED,
+# READINESS-INFORMED child choice. The validator here is the safety gate:
+# it never raises (mirrors validate_media / validate_philosophy), returns
+# "error:"-prefixed entries for hard violations the authoring pipeline
+# must not ship, and "warning:"-prefixed entries for advisories. A node
+# with NO choice_space yields [] (absent means fully parent-directed),
+# which is what keeps every existing node valid.
+
+# The bounded set of choice classes a child may PROPOSE within. Each is a
+# choice among all-acceptable outcomes, never a consequential decision.
+PROPOSABLE_CHOICE_CLASSES: frozenset[str] = frozenset(
+    {
+        "order",  # the order in which equally-ready items are met
+        "practice_path",  # which of several acceptable practice paths to take
+        "practice_variant",  # which variant of an activity to do
+        "pacing_within_bounds",  # pacing choices that stay inside authored bounds
+    }
+)
+
+# The latitude values a choice class can carry. "auto" applies a proposal
+# immediately; "review" queues it for the parent; "disabled" removes child
+# proposability for that class entirely. Author defaults use auto/review;
+# a parent may additionally set "disabled".
+CHOICE_LATITUDES: frozenset[str] = frozenset({"auto", "review", "disabled"})
+AUTHOR_DEFAULT_LATITUDES: frozenset[str] = frozenset({"auto", "review"})
+
+# The consequential decisions that are NEVER child-proposable. A
+# choice_space whose proposable[] names any of these (by class or by
+# option token) is REJECTED. These are the decisions that must stay with
+# the parent / governance layer: skipping a prerequisite, declaring
+# mastery, and leaving a subject.
+CONSEQUENTIAL_DECISION_TOKENS: frozenset[str] = frozenset(
+    {
+        "prerequisite_skip",
+        "prerequisite-skip",
+        "skip_prerequisite",
+        "skip-prerequisite",
+        "mastery_declaration",
+        "mastery-declaration",
+        "declare_mastery",
+        "declare-mastery",
+        "subject_exit",
+        "subject-exit",
+        "exit_subject",
+        "exit-subject",
+        "leave_subject",
+        "leave-subject",
+    }
+)
+
+
+def _names_consequential_decision(value: object) -> bool:
+    """Return True if a class/option string names a consequential decision.
+
+    Matches the canonical consequential-decision tokens as substrings of a
+    normalized (lowercased, whitespace-to-underscore) string, so that
+    "skip prerequisite", "skip_prerequisite", and "prerequisite-skip" are
+    all caught.
+    """
+    if not isinstance(value, str):
+        return False
+    normalized = "_".join(value.lower().split())
+    return any(token in normalized for token in CONSEQUENTIAL_DECISION_TOKENS)
+
+
+def validate_choice_space(content: dict) -> list[str]:
+    """Validate the optional choice_space block of a node.
+
+    Returns a list of strings, possibly empty, and NEVER raises. Entries
+    prefixed "error:" are hard failures the authoring pipeline must not
+    ship; entries prefixed "warning:" are advisory.
+
+    The guarantees that keep every existing node valid:
+
+    - content with NO choice_space returns [] (absent means the node is
+      fully parent-directed; this is the safe default).
+    - a choice_space that is not a dict is a single hard error.
+
+    The safety invariants enforced as hard errors:
+
+    - every proposable[] entry must be a dict carrying a class and an
+      option;
+    - NO proposable entry may name a consequential decision
+      (prerequisite-skip, mastery-declaration, subject-exit) by class or
+      by option: such a choice_space is REJECTED;
+    - excluded_note must be present and non-empty (the explicit statement
+      that consequential decisions are out of scope).
+
+    Advisory warnings:
+
+    - an unknown choice class (not one of PROPOSABLE_CHOICE_CLASSES);
+    - an author_default_latitude outside {auto, review} (single value or
+      per-class dict value);
+    - an empty proposable list.
+    """
+    issues: list[str] = []
+
+    choice_space = content.get("choice_space")
+    if choice_space is None:
+        # Absent means fully parent-directed. This is the safe default and
+        # the reason existing nodes stay valid.
+        return issues
+    if not isinstance(choice_space, dict):
+        return ["error: choice_space must be a dict when present"]
+
+    proposable = choice_space.get("proposable")
+    if proposable is None or not isinstance(proposable, list):
+        issues.append("error: choice_space.proposable must be a list")
+        proposable = []
+    elif not proposable:
+        issues.append("warning: choice_space.proposable is empty (no child-proposable options)")
+
+    for i, entry in enumerate(proposable):
+        if not isinstance(entry, dict):
+            issues.append(f"error: choice_space.proposable[{i}] must be a dict")
+            continue
+        choice_class = entry.get("class")
+        option = entry.get("option")
+        if not choice_class:
+            issues.append(f"error: choice_space.proposable[{i}] missing class")
+        if not option:
+            issues.append(f"error: choice_space.proposable[{i}] missing option")
+        # The core safety gate: reject any consequential decision, whether
+        # it is smuggled in via the class or via the option.
+        if _names_consequential_decision(choice_class) or _names_consequential_decision(option):
+            issues.append(
+                f"error: choice_space.proposable[{i}] names a consequential decision "
+                "(prerequisite-skip, mastery-declaration, or subject-exit); these are never "
+                "child-proposable and must be excluded from any choice_space"
+            )
+        elif isinstance(choice_class, str) and choice_class not in PROPOSABLE_CHOICE_CLASSES:
+            issues.append(
+                f"warning: choice_space.proposable[{i}] has unknown class {choice_class!r}; "
+                f"expected one of {sorted(PROPOSABLE_CHOICE_CLASSES)}"
+            )
+
+    excluded_note = choice_space.get("excluded_note")
+    if not isinstance(excluded_note, str) or not excluded_note.strip():
+        issues.append(
+            "error: choice_space.excluded_note is required and must explicitly state that "
+            "consequential decisions (prerequisite-skip, mastery-declaration, subject-exit) "
+            "are not in scope and never child-proposable"
+        )
+
+    default_latitude = choice_space.get("author_default_latitude")
+    if default_latitude is not None:
+        if isinstance(default_latitude, str):
+            if default_latitude not in AUTHOR_DEFAULT_LATITUDES:
+                issues.append(
+                    f"warning: choice_space.author_default_latitude {default_latitude!r} is not one of "
+                    f"{sorted(AUTHOR_DEFAULT_LATITUDES)}"
+                )
+        elif isinstance(default_latitude, dict):
+            for cls, lat in default_latitude.items():
+                if lat not in AUTHOR_DEFAULT_LATITUDES:
+                    issues.append(
+                        f"warning: choice_space.author_default_latitude[{cls!r}] = {lat!r} is not one of "
+                        f"{sorted(AUTHOR_DEFAULT_LATITUDES)}"
+                    )
+        else:
+            issues.append("warning: choice_space.author_default_latitude must be a string or a dict")
+
+    return issues
+
+
+def choice_space_is_valid(content: dict) -> bool:
+    """Return True iff the node's choice_space has no hard (error:) failures.
+
+    A node with no choice_space is valid (fully parent-directed). This is
+    the boolean the governance/runtime path consults before honoring any
+    child proposal against the node.
+    """
+    return not any(issue.startswith("error:") for issue in validate_choice_space(content))
 
 
 # ---- Literary mastery validation --------------------------------------
