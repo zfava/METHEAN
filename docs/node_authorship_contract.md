@@ -349,6 +349,101 @@ embody **explicit, direct instruction**, not discovery:
 
 ---
 
+## 8. OPTIONAL `choice_space` — governed agency (PARENT-FINAL child choice)
+
+`choice_space` is an **optional** node block that bounds what a child may
+**propose**. It is the schema half of "governed agency": child choice
+mirrors the existing parent-adjustable AI input/oversight dial, the same
+governance primitive with a different actor. Three roles:
+
+- **CHILD PROPOSES** within a bounded set of all-acceptable options
+  (`proposable[]`), never an open field.
+- **SYSTEM INFORMS**: each proposal and its resolution is captured as an
+  immutable governance event (event type `child_choice_proposal`) carrying
+  child / node / option / outcome / timestamp. A future readiness service
+  will derive a per-child, per-class signal from that history. The
+  inference is a later phase; only the event hooks are laid now.
+- **PARENT APPROVES**: final authority always, via the existing governance
+  queue. The parent can grant standing approval for a choice class (`auto`)
+  or require per-instance review (`review`), and can `disable` a class
+  entirely.
+
+### The absent-means-parent-directed default (why existing nodes stay valid)
+
+When `choice_space` is **absent**, the node is **fully parent-directed**: the
+child proposes nothing and the node behaves exactly as before. This is the
+safe default. `validate_choice_space(content)` returns `[]` for any content
+without a `choice_space`, so all 182 existing foundational nodes (157 `mf` +
+25 `rf`) stay valid unchanged. `validate_content` and `validate_philosophy`
+are not touched by this feature.
+
+### Shape (when present)
+
+```python
+"choice_space": {
+    "proposable": [                       # the bounded, all-acceptable options
+        {
+            "class": "order",             # one of: order | practice_path |
+                                          #   practice_variant | pacing_within_bounds
+            "option": "addition_first",   # stable id/label of this option
+            "label": "Do addition before subtraction",  # optional, human-readable
+        },
+        # ... every option here must be acceptable REGARDLESS of which the child picks
+    ],
+    "excluded_note": (                    # REQUIRED explicit statement
+        "Consequential decisions (prerequisite-skip, mastery-declaration, "
+        "subject-exit) are not in scope and never child-proposable."
+    ),
+    "author_default_latitude": "auto",    # 'auto' (low-stakes) or 'review' (higher-stakes);
+                                          # may be a per-class dict; the parent can override per class
+}
+```
+
+### The two hard rules the validator enforces (`validate_choice_space`)
+
+1. **Every option in `proposable[]` must be an acceptable outcome.** The
+   author asserts that whichever the child picks is fine. Bounded set, never
+   an open field.
+2. **No consequential decision is ever proposable.** Skipping a
+   prerequisite, declaring mastery, and leaving a subject are NEVER in a
+   `choice_space`. The validator **rejects** (an `error:` line) any
+   `proposable` entry that names one of these by class or by option, and
+   `excluded_note` must be present to state the exclusion explicitly.
+
+Like the other validators, `validate_choice_space` never raises: `error:`
+lines are hard failures the pipeline must not ship; `warning:` lines (an
+unknown class, an out-of-range `author_default_latitude`, an empty
+`proposable`) are advisory. `choice_space_is_valid(content)` is the boolean
+the runtime path consults before honoring a proposal.
+
+### Parent latitude (mirrors the AI oversight dial) and routing
+
+The parent tunes child-choice latitude **per child** via a JSONB key,
+`ChildPreferences.personalization['child_choice_latitude']`, a dict mapping
+choice class to `auto` | `review` | `disabled`. This reuses the same
+mechanism as the AI dial (which lives in
+`Household.philosophical_profile['ai_autonomy_level']`); no parallel
+mechanism is introduced. Resolution (`app/services/child_choice.py`):
+
+- parent value for the class WINS (WIDEN -> `auto`, TIGHTEN -> `review`,
+  DISABLE -> `disabled`);
+- unset -> the node's `author_default_latitude`;
+- otherwise -> the safe default `review`.
+
+A child proposal routes through `propose_child_choice`, which writes one
+immutable `child_choice_proposal` governance event:
+
+- `auto` -> applied immediately (action `approve`);
+- `review` -> queued for the parent (action `defer`); the child sees
+  "waiting for approval" and **no learning state changes** until approved;
+- `disabled` -> rejected (action `reject`); proposability removed for that
+  class regardless of the author default.
+
+The parent's decision on a queued proposal is recorded by
+`resolve_pending_choice` as a second immutable event (`approve` / `reject`),
+linked to the proposal. The governance core and its existing event types are
+unchanged; this is additive (a new `target_type` string only).
+
 ## Authoring checklist
 
 - [ ] `*_content.py` node dict added, keyed `mf-NN`, at `mf-01` depth (§1, §6).
@@ -361,3 +456,4 @@ embody **explicit, direct instruction**, not discovery:
 - [ ] `scope_sequences.py` `math_f_NN` entry added with accurate `prerequisites` (§3).
 - [ ] `templates.py` `TemplateNode` + `TemplateEdge`s added, edges agreeing with scope prerequisites (§4).
 - [ ] Traditional variant is direct-instruction, states a mastery threshold, and spirals to prior work (§7).
+- [ ] (Optional) If the node offers child choice, `choice_space` lists only all-acceptable options, names no consequential decision, and carries `excluded_note` (§8). Absent is fine: the node is then fully parent-directed.
