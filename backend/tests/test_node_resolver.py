@@ -143,9 +143,10 @@ async def test_persist_reuses_from_template_mechanism(db_session, household):
 
 async def test_unresolved_no_template_returns_record_not_exception(db_session, household):
     """Content authored but with no owning template -> None + unresolved
-    record, no crash. (reading-foundational content exists but has no
-    template, so it cannot be persisted yet.)"""
-    res = await resolve_content_id_to_uuid(db_session, "rf-01", household.id)
+    record, no crash. (reading-developing content exists but has no
+    template yet, so it cannot be persisted; reading-foundational rf-01..rf-40
+    is now templated and resolves.)"""
+    res = await resolve_content_id_to_uuid(db_session, "rd-01", household.id)
     assert res.node_uuid is None
     assert res.unresolved is not None
     assert res.unresolved.reason == "no_template"

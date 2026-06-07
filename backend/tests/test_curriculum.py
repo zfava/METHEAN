@@ -846,9 +846,10 @@ class TestTemplates:
         resp = await auth_client.get("/api/v1/learning-maps/templates")
         assert resp.status_code == 200
         templates = resp.json()
-        assert len(templates) == 17
+        assert len(templates) == 18
         ids = {t["template_id"] for t in templates}
         assert "math-foundational" in ids
+        assert "reading-foundational" in ids
         assert "elementary-core" in ids
         assert "classical-logic" in ids
         assert "physical_fitness_foundations" in ids
