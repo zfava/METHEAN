@@ -1,28 +1,31 @@
-"""Gold-standard gate for the SECOND reading-foundational batch rf-41..rf-55.
+"""Gold-standard gate for the THIRD reading-foundational batch rf-56..rf-70,
+the LETTER-SOUND strand where both rails join (the real PA-to-phonics handoff).
 
-This batch crosses the PA-to-phonics handoff per docs/reading_foundational_gap.md:
-it COMPLETES the phonemic-awareness spine (rf-41..rf-49: medial-phoneme
-isolation, categorization, full phoneme blend/segment, four-phoneme clusters,
-deletion/substitution/addition, PA fluency) and lays the LETTER-knowledge rail
-(rf-50..rf-55: name uppercase, name lowercase, match case, form uppercase, form
-lowercase, letter-naming automaticity).
+Phase 0 reconciliation (reported in the deliverable): the existing rf-03
+(Consonant Sounds), rf-04 (Short Vowels), and rf-05 (CVC Words) are GENERAL,
+introductory nodes. The gap doc's rf-56..rf-70 are finer-grained, systematic,
+mf-01-depth nodes that BUILD ON them. Classification: EXTEND. There is no
+duplication: rf-56 lists rf-03 as a prerequisite, rf-61 lists rf-04, and rf-66
+lists rf-05; each deepens rather than repeats the general node.
 
-Scope note (reported in the deliverable): per the gap doc, the FIRST letter-SOUND
-correspondence node is rf-56 (plus the existing rf-03/04/05); there is no
-letter-sound node in rf-41..rf-55. So this batch does not contain the literal
-letter-sound handoff edge. Instead it lays BOTH rails the letter-sound strand
-needs: the terminal auditory phoneme skills (blend/segment, rf-43..rf-45) and
-letter naming (rf-50..rf-52). The HANDOFF gate below asserts those rails are in
-place; the letter-sound node that consumes them lands next batch at rf-56
-(building on the existing rf-03).
+Strand boundaries: S5 letter-sound is rf-56..rf-64 (consonant sets rf-56..rf-59,
+review rf-60, short vowels rf-61..rf-63, letter-sound automaticity rf-64); S6
+CVC is rf-65 (blend VC/CVC), rf-66..rf-68 (decode by vowel family), rf-69
+(encode), rf-70 (word families). This batch authors rf-56..rf-70 (15); rf-71
+(CVC automaticity capstone) and S7 (digraphs/blends, rf-72+) are the next batch.
 
-Carries forward the batch-01 gates: validator, NATIVE_KEYS, depth floor,
-parent-directed (no choice_space), three-file integrity, the PA-AUDITORY gate
-(phonemic-awareness nodes stay oral, never depend on the letter/phonics strand),
-and the WHOLE-LIBRARY graph-integrity gate scanning rf-01..rf-55, INCLUDING the
-documented legacy carve-out read_f_15 -> read_f_21/22 (the reading analogue of
-math's mf-07/08 -> mf-09). Everything this batch authors (rf-41+) is strictly
-backward-only.
+DUAL-RAIL handoff: the first letter-sound node rf-56 connects BOTH rails. It
+lists as prerequisites the auditory rail (rf-43, phoneme blending) AND the
+letter rail (rf-51, lowercase naming), plus the EXTEND parent rf-03. The dual
+dependency IS the bridge: the child brings the heard sound and the known letter
+to sound-to-letter mapping. (rf-65 and rf-69 likewise pair a phonics node with
+an auditory PA node, rf-43 and rf-44.)
+
+Carries forward the prior gates: validator, NATIVE_KEYS, depth floor,
+parent-directed (no choice_space), three-file integrity, and the WHOLE-LIBRARY
+graph-integrity gate scanning rf-01..rf-70, INCLUDING the documented legacy
+carve-out read_f_15 -> read_f_21/22. Everything this batch authors (rf-56+) is
+strictly backward-only.
 """
 
 from datetime import date
@@ -39,72 +42,43 @@ from app.services.templates import READING_FOUNDATIONAL
 # Canonical requirement sets, imported (not copied) from the schema test.
 from tests.test_node_content import NATIVE_KEYS, PHILOSOPHIES, UNSCHOOLING_FORBIDDEN
 
-NEW_NUMS = list(range(41, 56))
+NEW_NUMS = list(range(56, 71))
 NEW_IDS = [f"rf-{n:02d}" for n in NEW_NUMS]
 NEW_REFS = [f"read_f_{n:02d}" for n in NEW_NUMS]
 
-# Authoritative prerequisite map (docs/reading_foundational_gap.md, rf-41..rf-55),
-# in content-id form. Every prereq is a real, strictly-earlier reading node.
+# Authoritative prerequisite map (docs/reading_foundational_gap.md, rf-56..rf-70),
+# in content-id form. rf-56 is augmented with the dual-rail prerequisites
+# (rf-51 letter rail, rf-43 auditory rail) on top of its EXTEND parent rf-03.
 EXPECTED_PREREQS: dict[str, list[str]] = {
-    "rf-41": ["rf-40"],
-    "rf-42": ["rf-40"],
-    "rf-43": ["rf-39"],
-    "rf-44": ["rf-43"],
-    "rf-45": ["rf-44"],
-    "rf-46": ["rf-44"],
-    "rf-47": ["rf-46"],
-    "rf-48": ["rf-47"],
-    "rf-49": ["rf-47"],
-    "rf-50": ["rf-01"],
-    "rf-51": ["rf-50"],
-    "rf-52": ["rf-51"],
-    "rf-53": ["rf-50"],
-    "rf-54": ["rf-51"],
-    "rf-55": ["rf-52"],
+    "rf-56": ["rf-03", "rf-51", "rf-43"],
+    "rf-57": ["rf-56"],
+    "rf-58": ["rf-57"],
+    "rf-59": ["rf-58"],
+    "rf-60": ["rf-59"],
+    "rf-61": ["rf-04"],
+    "rf-62": ["rf-61"],
+    "rf-63": ["rf-62"],
+    "rf-64": ["rf-60", "rf-63"],
+    "rf-65": ["rf-64", "rf-43"],
+    "rf-66": ["rf-05"],
+    "rf-67": ["rf-66"],
+    "rf-68": ["rf-67"],
+    "rf-69": ["rf-68", "rf-44"],
+    "rf-70": ["rf-66"],
 }
 
-# Phonemic-awareness (oral, "the ear") nodes authored in THIS batch.
-PA_NODES_BATCH = ["rf-41", "rf-42", "rf-43", "rf-44", "rf-45", "rf-46", "rf-47", "rf-48", "rf-49"]
-# Letter naming / formation (involve LETTERS, not sound mapping) nodes this batch.
-LETTER_NODES_BATCH = ["rf-50", "rf-51", "rf-52", "rf-53", "rf-54", "rf-55"]
+# EXTEND links: each new node that deepens a general existing node lists it.
+EXTEND_LINKS = {"rf-56": "rf-03", "rf-61": "rf-04", "rf-66": "rf-05"}
 
-# The full phonemic-awareness strand across both reading batches (rf-31..rf-49).
-ALL_PA_NODES = {f"rf-{n}" for n in range(31, 50)}
-
-# The letter-naming / letter-sound / decoding / formation strand a PA node must
-# NEVER depend on. Keeping PA distinct from and before letters is the gap doc's
-# load-bearing ordering decision.
-LETTER_PHONICS_NODES = {
-    "rf-01",
-    "rf-03",
-    "rf-04",
-    "rf-05",
-    "rf-06",
-    "rf-07",
-    "rf-08",
-    "rf-09",
-    "rf-10",
-    "rf-50",
-    "rf-51",
-    "rf-52",
-    "rf-53",
-    "rf-54",
-    "rf-55",
-}
-
-# The only prior nodes a PA node may depend on: the oral PA root (rf-02),
-# listening comprehension (rf-21), and any PA node (rf-31..rf-49).
-PA_ALLOWED_PREREQS = {"rf-02", "rf-21", *ALL_PA_NODES}
-
-# The letter-knowledge chain a letter-naming node may depend on (rf-01 plus the
-# uppercase/lowercase naming nodes). Letter naming does NOT depend on PA.
-LETTER_NAMING_ALLOWED = {"rf-01", "rf-50", "rf-51"}
+# DUAL-RAIL: the first letter-sound node and the rails it must reach.
+FIRST_LETTER_SOUND_NODE = "rf-56"
+AUDITORY_RAIL = {"rf-43", "rf-44", "rf-45", "rf-03", "rf-04", "rf-05"}
+LETTER_RAIL = {"rf-50", "rf-51", "rf-52"}
 
 ACCOMMODATION_KEYS = {"dyslexia", "adhd", "gifted", "visual_learner", "kinesthetic_learner", "auditory_learner"}
 
 # The single legacy forward-reference pair in the un-editable original spine
-# (rf-15 Oral Narration -> rf-21, rf-22). Conceptually correct, id-order only;
-# the graph stays acyclic. No NEW forward reference is permitted beyond these.
+# (rf-15 Oral Narration -> rf-21, rf-22). Conceptually correct, id-order only.
 KNOWN_LEGACY_FORWARD_REFS: set[tuple[str, str]] = {
     ("read_f_15", "read_f_21"),
     ("read_f_15", "read_f_22"),
@@ -112,7 +86,6 @@ KNOWN_LEGACY_FORWARD_REFS: set[tuple[str, str]] = {
 
 
 def _num(node_id: str) -> int:
-    """Numeric part of an rf-NN or read_f_NN id."""
     return int(node_id.split("_")[-1] if node_id.startswith("read_f_") else node_id.split("-")[1])
 
 
@@ -191,8 +164,6 @@ def test_no_choice_space_parent_directed(node_id):
 
 @pytest.mark.parametrize("node_id", NEW_IDS)
 def test_traditional_spiral_references_a_prior_node(node_id):
-    """Every new node (all have prerequisites) carries a spiral_review naming a
-    real, strictly-earlier rf node."""
     spiral = READING_FOUNDATIONAL_CONTENT[node_id]["philosophy_specific"]["traditional"]["spiral_review"]
     text = " ".join(spiral)
     num = _num(node_id)
@@ -212,12 +183,10 @@ def test_all_three_files_have_every_new_node():
         assert f"rf-{n:02d}" in tnodes, f"rf-{n:02d} missing from READING_FOUNDATIONAL template"
 
 
-def test_counts_now_fifty_five():
-    # Lower bound (matches the math tier convention, test_counts_now_one_hundred_fifty
-    # uses >= 150) so later reading batches that grow the tier do not break this gate.
-    assert len(READING_FOUNDATIONAL_CONTENT) >= 55
-    assert len([t for t in get_scope_sequence("phonics_reading", "foundational")]) >= 55
-    assert len(READING_FOUNDATIONAL.nodes) >= 55
+def test_counts_now_seventy():
+    assert len(READING_FOUNDATIONAL_CONTENT) == 70
+    assert len([t for t in get_scope_sequence("phonics_reading", "foundational")]) == 70
+    assert len(READING_FOUNDATIONAL.nodes) == 70
 
 
 # ── Prerequisite integrity (three files agree, earlier-only) ─────────────
@@ -245,71 +214,39 @@ def test_template_edges_match_scope_prereqs_for_new_nodes():
         assert edges_in == set(prereqs), f"{node_id} template edges {edges_in} != prereqs {set(prereqs)}"
 
 
-# ── PA-AUDITORY gate ─────────────────────────────────────────────────────
+# ── NO-DUPLICATION (EXTEND): new nodes build on the general rf-03/04/05 ───
 
 
-def test_pa_nodes_do_not_depend_on_letter_or_phonics_strand():
-    """The phonemic-awareness nodes (rf-41..rf-49) must stay distinct from and
-    before letters: none may depend on a letter-naming/letter-sound/formation
-    node, and each may depend only on the oral PA root (rf-02), listening
-    comprehension (rf-21), or another PA node."""
-    for node_id in PA_NODES_BATCH:
-        prereqs = set(EXPECTED_PREREQS[node_id])
-        letter_dep = prereqs & LETTER_PHONICS_NODES
-        assert not letter_dep, f"{node_id} (PA) depends on letter/phonics node(s): {sorted(letter_dep)}"
-        stray = prereqs - PA_ALLOWED_PREREQS
-        assert not stray, f"{node_id} (PA) depends on non-auditory prereq(s): {sorted(stray)}"
+def test_extend_links_present_no_duplication():
+    """The reconciliation classified the batch EXTEND: rf-56 deepens rf-03,
+    rf-61 deepens rf-04, and rf-66 deepens rf-05, listing each general node as a
+    prerequisite rather than duplicating it. The existing nodes are referenced,
+    never modified (they are out of scope)."""
+    for new_node, general in EXTEND_LINKS.items():
+        assert general in EXPECTED_PREREQS[new_node], f"{new_node} must list {general} as a prerequisite (EXTEND)"
+        assert general in READING_FOUNDATIONAL_CONTENT, f"general node {general} must still exist"
+        # The general node is the introductory spine node; the new node is the deeper one.
+        assert _num(general) < _num(new_node)
 
 
-def test_pa_nodes_have_no_forward_dependency():
-    for node_id in PA_NODES_BATCH:
-        num = _num(node_id)
-        for p in EXPECTED_PREREQS[node_id]:
-            assert _num(p) < num, f"{node_id} (PA) has a forward dependency on {p}"
+# ── DUAL-RAIL HANDOFF: the first letter-sound node joins both rails ───────
 
 
-# ── HANDOFF gate (the PA-to-phonics bridge this batch lays) ──────────────
+def test_first_letter_sound_node_bridges_both_rails():
+    """rf-56, the first letter-sound node, lists prerequisites reaching BOTH the
+    auditory rail (a terminal phoneme blend/segment PA node, or the existing
+    letter-sound nodes) AND the letter rail (a letter-naming node). A node on
+    only one rail would have cut the handoff."""
+    prereqs = set(EXPECTED_PREREQS[FIRST_LETTER_SOUND_NODE])
+    auditory = prereqs & AUDITORY_RAIL
+    letter = prereqs & LETTER_RAIL
+    assert auditory, f"{FIRST_LETTER_SOUND_NODE} reaches no auditory-rail prerequisite: {sorted(prereqs)}"
+    assert letter, f"{FIRST_LETTER_SOUND_NODE} reaches no letter-rail prerequisite: {sorted(prereqs)}"
+    # Specifically, rf-56 bridges rf-43 (auditory) and rf-51 (letter), extending rf-03.
+    assert "rf-43" in prereqs and "rf-51" in prereqs and "rf-03" in prereqs
 
 
-def test_handoff_rails_are_laid():
-    """This batch lays the TWO rails the letter-sound strand (rf-56 next, and the
-    existing rf-03) will join: (1) the terminal auditory phoneme skills, blending
-    and segmenting (rf-43, rf-44, rf-45), which stay purely oral and PA-dependent;
-    and (2) letter NAMING (rf-50, rf-51, rf-52), which builds on letter
-    recognition (rf-01), not on PA. The literal letter-sound handoff edge lands
-    next batch at rf-56; there is no letter-sound node in rf-41..rf-55 per the
-    gap doc."""
-    # Auditory rail: terminal phoneme blend/segment nodes, oral and PA-dependent.
-    for nid in ["rf-43", "rf-44", "rf-45"]:
-        assert nid in PA_NODES_BATCH
-        prereqs = set(EXPECTED_PREREQS[nid])
-        assert prereqs <= PA_ALLOWED_PREREQS, f"{nid} auditory rail depends outside PA: {sorted(prereqs)}"
-        assert not (prereqs & LETTER_PHONICS_NODES), f"{nid} auditory rail must not touch letters"
-    # Letter rail: letter-naming nodes build on letter recognition, not on PA.
-    for nid in ["rf-50", "rf-51", "rf-52"]:
-        assert nid in LETTER_NODES_BATCH
-        prereqs = set(EXPECTED_PREREQS[nid])
-        assert prereqs, f"{nid} letter rail should build on prior letter knowledge"
-        assert prereqs <= LETTER_NAMING_ALLOWED, (
-            f"{nid} letter rail depends outside letter-knowledge: {sorted(prereqs)}"
-        )
-        assert not (prereqs & ALL_PA_NODES), f"{nid} letter naming must not depend on a PA node"
-    # The letter-knowledge rail traces back to rf-01 (Letter Recognition).
-    assert EXPECTED_PREREQS["rf-50"] == ["rf-01"]
-
-
-def test_letter_nodes_build_on_letter_recognition_not_pa():
-    """Every letter naming/formation node (rf-50..rf-55) depends only on letter
-    knowledge (rf-01 and earlier letter nodes), never on a phonemic-awareness
-    node."""
-    letter_chain = {"rf-01", *LETTER_NODES_BATCH}
-    for node_id in LETTER_NODES_BATCH:
-        prereqs = set(EXPECTED_PREREQS[node_id])
-        assert prereqs <= letter_chain, f"{node_id} depends outside the letter chain: {sorted(prereqs)}"
-        assert not (prereqs & ALL_PA_NODES), f"{node_id} (letter) must not depend on a PA node"
-
-
-# ── WHOLE-LIBRARY GRAPH-INTEGRITY GATE (scans rf-01..rf-55) ──────────────
+# ── WHOLE-LIBRARY GRAPH-INTEGRITY GATE (scans rf-01..rf-70) ──────────────
 
 
 def test_library_ids_are_contiguous_no_gaps_no_duplicates():
@@ -347,8 +284,6 @@ def test_every_prerequisite_references_a_real_node():
 
 
 def test_prerequisites_are_backward_only_except_known_legacy():
-    """ZERO new forward references. Only the documented legacy pair
-    (rf-15 -> rf-21/22) is permitted. Everything rf-41..rf-55 is backward-only."""
     scope = _scope_by_ref()
     forward: set[tuple[str, str]] = set()
     for ref, entry in scope.items():
@@ -398,7 +333,7 @@ def test_spiral_review_references_resolve_to_real_prior_nodes():
         num = _num(node_id)
         spiral = READING_FOUNDATIONAL_CONTENT[node_id]["philosophy_specific"]["traditional"]["spiral_review"]
         text = " ".join(spiral)
-        referenced = [f"rf-{m:02d}" for m in range(1, 56) if f"rf-{m:02d}" in text]
+        referenced = [f"rf-{m:02d}" for m in range(1, 71) if f"rf-{m:02d}" in text]
         assert referenced, f"{node_id} spiral_review references no rf node"
         for r in referenced:
             if r not in READING_FOUNDATIONAL_CONTENT:
@@ -419,9 +354,9 @@ async def test_resolver_resolves_each_new_ref(db_session, household, ref):
 
 
 async def test_generator_plan_reading_tier_zero_needs_content(db_session, household):
-    """needs_content drops by exactly 15: before this batch, 40 of the 55 reading
-    refs resolved (rf-01..rf-40) and 15 were needs_content (rf-41..rf-55); now all
-    55 resolve, so the full 55-topic plan has zero needs_content weeks and 55
+    """needs_content drops by exactly 15: before this batch, 55 of the 70 reading
+    refs resolved (rf-01..rf-55) and 15 were needs_content (rf-56..rf-70); now all
+    70 resolve, so the full 70-topic plan has zero needs_content weeks and 70
     distinct focus-node UUIDs."""
     scope = get_scope_sequence("phonics_reading", "foundational")
     out = await generate_for_subject(
@@ -436,10 +371,8 @@ async def test_generator_plan_reading_tier_zero_needs_content(db_session, househ
     needs = [w for w in out["weeks"] if w.get("needs_content")]
     assert needs == [], f"unexpected needs_content weeks: {[w['week_number'] for w in needs]}"
     resolved_ids = {fid for w in out["weeks"] for fid in w["focus_nodes"]}
-    # Lower bound so later reading batches that extend the tier do not break this gate.
-    assert len(resolved_ids) >= 55
+    assert len(resolved_ids) == 70
 
-    # The batch's exact contribution: each of the 15 new refs resolves.
     newly = 0
     for ref in NEW_REFS:
         res = await resolve_ref_to_uuid(db_session, ref, household.id)
