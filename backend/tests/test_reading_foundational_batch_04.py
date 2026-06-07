@@ -252,9 +252,10 @@ def test_all_three_files_have_every_new_node():
 
 
 def test_counts_now_eighty_five():
-    assert len(READING_FOUNDATIONAL_CONTENT) == 85
-    assert len([t for t in get_scope_sequence("phonics_reading", "foundational")]) == 85
-    assert len(READING_FOUNDATIONAL.nodes) == 85
+    # Lower bound: rf-85 landed in this batch; later batches (rf-86+) raise these.
+    assert len(READING_FOUNDATIONAL_CONTENT) >= 85
+    assert len([t for t in get_scope_sequence("phonics_reading", "foundational")]) >= 85
+    assert len(READING_FOUNDATIONAL.nodes) >= 85
 
 
 # ── Prerequisite integrity (three files agree, earlier-only) ─────────────
@@ -409,7 +410,8 @@ async def test_generator_plan_reading_tier_zero_needs_content(db_session, househ
     needs = [w for w in out["weeks"] if w.get("needs_content")]
     assert needs == [], f"unexpected needs_content weeks: {[w['week_number'] for w in needs]}"
     resolved_ids = {fid for w in out["weeks"] for fid in w["focus_nodes"]}
-    assert len(resolved_ids) == 85
+    # Lower bound: rf-01..rf-85 all resolve; later batches add more resolvable refs.
+    assert len(resolved_ids) >= 85
 
     newly = 0
     for ref in NEW_REFS:
