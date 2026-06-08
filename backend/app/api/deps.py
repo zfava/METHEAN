@@ -237,3 +237,37 @@ async def require_active_subscription(
             "checkout_url": "/billing/checkout",
         },
     )
+
+
+async def require_native_curriculum_access(
+    user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+) -> User:
+    """Gate: the user's household must hold the native-curriculum entitlement.
+
+    Gates the native-library curriculum generation/materialization path (the
+    "Approve and Create" / generate-year-plan endpoints that fire the NATIVE
+    provider when API keys are blank). The entitlement
+    (``Household.native_curriculum_access``) defaults OFF, so the feature is
+    dark for every household until it is flipped to true for a specific
+    household — a data write, no code change or deploy.
+
+    This is the security boundary: the check is enforced here, in a request
+    dependency that resolves BEFORE the route handler body, so an unentitled
+    request does nothing (no generation, no DB write). It holds against a
+    crafted direct API call, not just the UI. Unentitled households get a
+    structured 403 the frontend can branch on.
+    """
+    from app.models.identity import Household
+
+    result = await db.execute(select(Household).where(Household.id == user.household_id))
+    hh = result.scalar_one_or_none()
+    if hh is None or not hh.native_curriculum_access:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail={
+                "error": "native_curriculum_access_required",
+                "message": ("Native curriculum generation is not enabled for this household."),
+            },
+        )
+    return user

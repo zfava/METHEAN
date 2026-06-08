@@ -41,6 +41,16 @@ class Household(Base):
     learner_age_range: Mapped[str] = mapped_column(String(20), nullable=False, server_default="k12")
     credit_system: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
 
+    # Per-household entitlement gating native-library curriculum
+    # generation/materialization. Default OFF: the feature is dark for every
+    # household until this boolean is flipped to TRUE for a specific household
+    # (a data write, no code change or deploy). A first-class column, scoped
+    # per-household like subscription_status/governance_mode, because it is a
+    # server-enforced access gate, not client UI state.
+    native_curriculum_access: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default="false", default=False
+    )
+
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()

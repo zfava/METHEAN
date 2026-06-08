@@ -9,7 +9,14 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import get_current_user, get_db, require_active_subscription, require_child_access, require_permission
+from app.api.deps import (
+    get_current_user,
+    get_db,
+    require_active_subscription,
+    require_child_access,
+    require_native_curriculum_access,
+    require_permission,
+)
 from app.models.annual_curriculum import AnnualCurriculum
 from app.models.enums import ActivityStatus, ActivityType
 from app.models.governance import Activity, Plan, PlanWeek
@@ -117,8 +124,15 @@ async def generate_curriculum(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("plans.generate")),
     _child: Child = Depends(require_child_access("write")),
+    _entitlement: User = Depends(require_native_curriculum_access),
 ):
-    """Generate a new annual curriculum draft."""
+    """Generate a new annual curriculum draft.
+
+    Gated behind the per-household native-curriculum entitlement
+    (``require_native_curriculum_access``). The dependency resolves before
+    this body runs, so an unentitled household gets a 403 and no draft is
+    generated or written.
+    """
     await _get_child(db, child_id, user.household_id)
     curriculum = await generate_annual_curriculum(
         db,
@@ -211,8 +225,15 @@ async def approve_curriculum(
     curriculum_id: uuid.UUID,
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_permission("approve.activities")),
+    _entitlement: User = Depends(require_native_curriculum_access),
 ):
-    """Approve curriculum and materialize ALL weeks."""
+    """Approve curriculum and materialize ALL weeks.
+
+    Gated behind the per-household native-curriculum entitlement
+    (``require_native_curriculum_access``). The dependency resolves before
+    this body runs, so an unentitled household gets a 403 and NO
+    materialization side-effects occur.
+    """
     curriculum = await approve_annual_curriculum(db, curriculum_id, user.id, user.household_id)
     await db.commit()
     return {"status": curriculum.status, "approved_at": str(curriculum.approved_at)}

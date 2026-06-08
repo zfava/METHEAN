@@ -228,6 +228,11 @@ def _household_settings_dict(household: Household) -> dict:
         "timezone": household.timezone,
         "home_state": household.home_state,
         "ai_tier": hh_settings.get("ai_tier", "opus"),
+        # Per-household entitlement for native-library curriculum generation.
+        # The frontend reads this capability on load and hides the
+        # native-generation surface when false. Cosmetic only: the real gate
+        # is server-side (require_native_curriculum_access).
+        "native_curriculum_access": household.native_curriculum_access,
         "settings": hh_settings,
     }
 
