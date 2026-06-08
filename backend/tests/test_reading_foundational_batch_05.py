@@ -266,9 +266,10 @@ def test_all_three_files_have_every_new_node():
 
 
 def test_counts_now_one_hundred():
-    assert len(READING_FOUNDATIONAL_CONTENT) == 100
-    assert len([t for t in get_scope_sequence("phonics_reading", "foundational")]) == 100
-    assert len(READING_FOUNDATIONAL.nodes) == 100
+    # Lower bound: rf-100 landed in this batch; later batches (rf-101+) raise these.
+    assert len(READING_FOUNDATIONAL_CONTENT) >= 100
+    assert len([t for t in get_scope_sequence("phonics_reading", "foundational")]) >= 100
+    assert len(READING_FOUNDATIONAL.nodes) >= 100
 
 
 # ── Prerequisite integrity (three files agree, earlier-only) ─────────────
@@ -308,7 +309,7 @@ def test_library_ids_are_contiguous_no_gaps_no_duplicates():
     expected = set(range(1, top + 1))
     missing = sorted(expected - set(nums))
     assert not missing, f"missing rf ids (gaps): {[f'rf-{n:02d}' for n in missing]}"
-    assert top == 100, f"library top should be rf-100, got rf-{top:02d}"
+    assert top >= 100, f"library top should be at least rf-100, got rf-{top:02d}"
     assert set(nums) == expected, f"id set is not exactly rf-01..rf-{top:02d}"
 
 
@@ -318,7 +319,7 @@ def test_cross_file_count_parity():
         [t for t in get_scope_sequence("phonics_reading", "foundational") if str(t["ref"]).startswith("read_f_")]
     )
     template_count = len({tn.ref for tn in READING_FOUNDATIONAL.nodes if str(tn.ref).startswith("rf-")})
-    assert content_count == scope_count == template_count == 100, (
+    assert content_count == scope_count == template_count >= 100, (
         f"count mismatch: content={content_count}, scope={scope_count}, template={template_count}"
     )
 
@@ -422,7 +423,8 @@ async def test_generator_plan_reading_tier_zero_needs_content(db_session, househ
     needs = [w for w in out["weeks"] if w.get("needs_content")]
     assert needs == [], f"unexpected needs_content weeks: {[w['week_number'] for w in needs]}"
     resolved_ids = {fid for w in out["weeks"] for fid in w["focus_nodes"]}
-    assert len(resolved_ids) == 100
+    # Lower bound: rf-01..rf-100 all resolve; later batches add more resolvable refs.
+    assert len(resolved_ids) >= 100
 
     newly = 0
     for ref in NEW_REFS:
