@@ -18,6 +18,16 @@ export default function CurriculumPage() {
   useEffect(() => { document.title = "Curriculum | METHEAN"; }, []);
   const { toast } = useToast();
 
+  // Per-household entitlement for native-library curriculum generation. The
+  // "Build from Philosophy" surface is hidden when this is false. Cosmetic
+  // only: the server enforces the gate (403) regardless of the UI.
+  const [nativeAccess, setNativeAccess] = useState(false);
+  useEffect(() => {
+    household.get()
+      .then((h: { native_curriculum_access?: boolean }) => setNativeAccess(Boolean(h?.native_curriculum_access)))
+      .catch(() => setNativeAccess(false));
+  }, []);
+
   const { selectedChild } = useChild();
   const [tab, setTab] = useState<"my" | "build">("my");
   const [maps, setMaps] = useState<MapState[]>([]);
@@ -258,10 +268,15 @@ export default function CurriculumPage() {
       {/* ── BUILD: PATH SELECTOR ── */}
       {tab === "build" && !buildPath && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Card onClick={() => setBuildPath("philosophy")} padding="p-5" className="text-left hover:border-(--color-accent) transition-colors">
-            <div className="text-sm font-semibold text-(--color-text) mb-1">Build from Philosophy</div>
-            <p className="text-xs text-(--color-text-secondary)">AI generates curriculum based on your educational profile</p>
-          </Card>
+          {/* Native-library generation surface, gated by the per-household
+              entitlement. Hidden when not entitled; the server enforces the
+              gate regardless. */}
+          {nativeAccess && (
+            <Card onClick={() => setBuildPath("philosophy")} padding="p-5" className="text-left hover:border-(--color-accent) transition-colors">
+              <div className="text-sm font-semibold text-(--color-text) mb-1">Build from Philosophy</div>
+              <p className="text-xs text-(--color-text-secondary)">AI generates curriculum based on your educational profile</p>
+            </Card>
+          )}
           <Card onClick={() => setBuildPath("existing")} padding="p-5" className="text-left hover:border-(--color-accent) transition-colors">
             <div className="text-sm font-semibold text-(--color-text) mb-1">Map Existing Materials</div>
             <p className="text-xs text-(--color-text-secondary)">Import Saxon Math, Story of the World, etc.</p>
