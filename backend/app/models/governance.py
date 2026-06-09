@@ -74,6 +74,12 @@ class GovernanceEvent(Base):
     reason: Mapped[str | None] = mapped_column(Text)
     metadata_: Mapped[dict | None] = mapped_column("metadata", JSONB, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    # SHA-256 hash chain (migration 052): event_hash covers this row's
+    # canonical payload plus prev_event_hash, linking each event to the
+    # previous one in its household. Nullable so pre-052 rows and
+    # non-Postgres environments degrade to unhashed (verify fails closed).
+    event_hash: Mapped[str | None] = mapped_column(String(64))
+    prev_event_hash: Mapped[str | None] = mapped_column(String(64))
 
 
 class Plan(Base):

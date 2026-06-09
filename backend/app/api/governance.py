@@ -11,6 +11,7 @@ import json
 import uuid
 from datetime import UTC, date, datetime, timedelta
 
+import structlog
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 from sqlalchemy import func, select
@@ -66,12 +67,15 @@ from app.schemas.governance import (
     TutorMessageResponse,
 )
 from app.services.governance import (
+    build_governance_hash_payload,
     create_default_rules,
     log_governance_event,
+    verify_chain,
 )
 from app.services.planner import generate_plan
 
 router = APIRouter(tags=["governance"])
+logger = structlog.get_logger()
 
 
 # ── Helpers ──
@@ -1681,6 +1685,72 @@ async def list_governance_events(
         "total": total,
         "skip": pagination.skip,
         "limit": pagination.limit,
+    }
+
+
+# ══════════════════════════════════════════════════
+# Audit Chain Integrity
+# ══════════════════════════════════════════════════
+
+
+@router.get("/chain/verify")
+async def verify_governance_chain(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "co_parent")),
+) -> dict:
+    """Verify the household's governance hash chain end to end.
+
+    Loads every governance event for the caller's household in chain
+    order, recomputes each hash, and reports the first break if any.
+    RLS scopes the query to the tenant; the explicit household filter
+    is defense in depth, matching the other governance endpoints.
+    """
+    result = await db.execute(
+        select(GovernanceEvent)
+        .where(GovernanceEvent.household_id == user.household_id)
+        .order_by(GovernanceEvent.created_at.asc(), GovernanceEvent.id.asc())
+    )
+    events = result.scalars().all()
+
+    event_dicts = [
+        {
+            **build_governance_hash_payload(
+                household_id=e.household_id,
+                user_id=e.user_id,
+                action=e.action,
+                target_type=e.target_type,
+                target_id=e.target_id,
+                reason=e.reason,
+                metadata=e.metadata_,
+                created_at=e.created_at,
+            ),
+            "event_hash": e.event_hash,
+            "prev_event_hash": e.prev_event_hash,
+        }
+        for e in events
+    ]
+    report = verify_chain(event_dicts)
+    head_hash = events[-1].event_hash if events else None
+
+    if report["valid"]:
+        logger.info(
+            "governance_chain_verified",
+            household_id=str(user.household_id),
+            checked=report["checked"],
+        )
+    else:
+        logger.warning(
+            "governance_chain_broken",
+            household_id=str(user.household_id),
+            checked=report["checked"],
+            first_break_index=report["first_break_index"],
+        )
+
+    return {
+        "valid": report["valid"],
+        "checked": report["checked"],
+        "head_hash": head_hash,
+        "first_break_index": report["first_break_index"],
     }
 
 
