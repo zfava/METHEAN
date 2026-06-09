@@ -198,6 +198,22 @@ export const children = {
     request<RetentionSummary>(`/children/${childId}/retention-summary`),
   nodeHistory: (childId: string, nodeId: string) =>
     request<StateEvent[]>(`/children/${childId}/nodes/${nodeId}/history`),
+  demotions: (childId: string, limit = 50) =>
+    request<{ items: DemotionFeedItem[]; total: number; skip: number; limit: number }>(
+      `/children/${childId}/demotions?limit=${limit}`,
+    ),
+  masteryOverride: (childId: string, nodeId: string, body: { target_level: string; reason: string }) =>
+    request<{
+      governance_event_id: string;
+      state_event_id: string;
+      child_id: string;
+      node_id: string;
+      new_mastery_level: string;
+      message: string;
+    }>(`/children/${childId}/nodes/${nodeId}/mastery-override`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    }),
   today: (childId: string) => request<any[]>(`/children/${childId}/today`),
   dashboard: (childId: string) => request<ChildDashboardResponse>(`/children/${childId}/dashboard`),
   alerts: (childId: string, limit = 5) => request<any>(`/children/${childId}/alerts?limit=${limit}`),
@@ -1360,6 +1376,31 @@ export interface StateEvent {
   to_state: string | null;
   trigger: string | null;
   created_at: string;
+}
+
+// Parent-legible explanation envelope attached to an automated demotion.
+// Written by the backend (Phase 1) and surfaced to the parent verbatim.
+export interface DemotionExplanation {
+  from_level: string;
+  to_level: string;
+  cause: string;
+  confidence: number | null;
+  retrievability: number | null;
+  fsrs_stability: number | null;
+  threshold_crossed: number | null;
+  human_summary: string;
+}
+
+export interface DemotionFeedItem {
+  id: string;
+  node_id: string;
+  event_type: string;
+  from_state: string | null;
+  to_state: string | null;
+  trigger: string | null;
+  created_at: string;
+  explanation: DemotionExplanation;
+  node_title?: string;
 }
 
 export interface DecisionTrace {
