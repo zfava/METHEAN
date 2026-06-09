@@ -21,9 +21,10 @@ from app.models.curriculum import (
 )
 from app.models.enums import (
     EdgeRelation,
+    GovernanceAction,
     MasteryLevel,
 )
-from app.models.governance import Attempt
+from app.models.governance import Attempt, GovernanceEvent
 from app.models.identity import Child, User
 from app.models.state import ChildNodeState, FSRSCard, StateEvent
 from app.schemas.state import (
@@ -34,13 +35,15 @@ from app.schemas.state import (
     AttemptSubmitResponse,
     ChildStateResponse,
     DemotionFeedItem,
+    MasteryOverrideRequest,
+    MasteryOverrideResponse,
     NodeStateResponse,
     RetentionSummaryResponse,
     StateEventResponse,
 )
 from app.services.attempt_workflow import save_attempt_progress, start_attempt, submit_attempt
 from app.services.learning_context import get_activity_learning_context
-from app.services.state_engine import compute_retrievability
+from app.services.state_engine import apply_mastery_override, compute_retrievability
 
 router = APIRouter(tags=["state"])
 
@@ -274,6 +277,81 @@ async def get_demotions(
         "skip": pagination.skip,
         "limit": pagination.limit,
     }
+
+
+@router.post(
+    "/children/{child_id}/nodes/{node_id}/mastery-override",
+    response_model=MasteryOverrideResponse,
+)
+async def override_mastery_demotion(
+    child_id: uuid.UUID,
+    node_id: uuid.UUID,
+    body: MasteryOverrideRequest,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("write")),
+) -> MasteryOverrideResponse:
+    """Parent override of an automated mastery demotion.
+
+    Restores the node to the chosen level with a recorded reason, dual-logged to
+    an immutable GovernanceEvent (the audit decision) and a StateEvent (the
+    append-only state history), mirroring the blocked-node unlock override. A
+    no-op (target equal to the current level) is recorded as a reaffirmation,
+    not rejected.
+    """
+    await _get_child_or_404(db, child_id, user.household_id)
+
+    # Validate the node exists and belongs to the household (mirror the
+    # blocked-node override's LearningNode lookup).
+    node_result = await db.execute(
+        select(LearningNode).where(
+            LearningNode.id == node_id,
+            LearningNode.household_id == user.household_id,
+            LearningNode.is_active == True,  # noqa: E712
+        )
+    )
+    node = node_result.scalar_one_or_none()
+    if not node:
+        raise HTTPException(status_code=404, detail="Node not found")
+
+    # Log the parent decision as an immutable GovernanceEvent (audit), in the
+    # same place the blocked-node override writes it.
+    gov_event = GovernanceEvent(
+        household_id=user.household_id,
+        user_id=user.id,
+        action=GovernanceAction.modify,
+        target_type="child_node_state",
+        target_id=node_id,
+        reason=body.reason,
+        metadata_={
+            "child_id": str(child_id),
+            "override_type": "mastery_demotion_reversal",
+            "target_level": body.target_level.value,
+        },
+    )
+    db.add(gov_event)
+
+    # Apply the ChildNodeState change + append the override StateEvent.
+    override = await apply_mastery_override(
+        db,
+        child_id,
+        user.household_id,
+        node_id,
+        body.target_level,
+        body.reason,
+        user.id,
+    )
+
+    await db.commit()
+
+    return MasteryOverrideResponse(
+        governance_event_id=gov_event.id,
+        state_event_id=override["state_event_id"],
+        child_id=child_id,
+        node_id=node_id,
+        new_mastery_level=override["new_level"],
+        message=f"Node '{node.title}' mastery set to {override['new_level'].value} via parent override",
+    )
 
 
 @router.get(

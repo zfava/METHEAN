@@ -193,6 +193,50 @@ async def emit_state_event(
     return event
 
 
+async def apply_mastery_override(
+    db: AsyncSession,
+    child_id: uuid.UUID,
+    household_id: uuid.UUID,
+    node_id: uuid.UUID,
+    target_level: MasteryLevel,
+    reason: str,
+    user_id: uuid.UUID,
+) -> dict:
+    """Apply a parent override of a node's mastery level.
+
+    Updates the derived ChildNodeState projection in place and appends an
+    immutable override StateEvent recording who changed it and why. A no-op
+    (target equal to the current level) is still recorded as a parent
+    reaffirmation. Returns previous level, new level, and the state-event id.
+    """
+    node_state = await get_or_create_node_state(db, child_id, household_id, node_id)
+    previous_level = node_state.mastery_level
+    node_state.mastery_level = target_level
+
+    state_event = await emit_state_event(
+        db,
+        child_id,
+        household_id,
+        node_id,
+        event_type=StateEventType.override,
+        from_state=previous_level.value if hasattr(previous_level, "value") else str(previous_level),
+        to_state=target_level.value if hasattr(target_level, "value") else str(target_level),
+        trigger="parent_override",
+        metadata={
+            "reason": reason,
+            "overridden_by": str(user_id),
+            "override_kind": "mastery_demotion_reversal",
+        },
+        created_by=user_id,
+    )
+
+    return {
+        "previous_level": previous_level,
+        "new_level": target_level,
+        "state_event_id": state_event.id,
+    }
+
+
 async def get_or_create_fsrs_card(
     db: AsyncSession,
     child_id: uuid.UUID,

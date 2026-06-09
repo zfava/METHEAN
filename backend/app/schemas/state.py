@@ -71,6 +71,27 @@ class DemotionFeedItem(BaseModel):
     explanation: dict
 
 
+class MasteryOverrideRequest(BaseModel):
+    """Parent override of an automated mastery demotion.
+
+    ``target_level`` is the level to restore the node to (its prior level, or
+    any level the parent chooses). ``reason`` is recorded on both the
+    GovernanceEvent and the StateEvent for the audit trail.
+    """
+
+    target_level: MasteryLevel
+    reason: str = Field(min_length=1, max_length=1000)
+
+
+class MasteryOverrideResponse(BaseModel):
+    governance_event_id: uuid.UUID
+    state_event_id: uuid.UUID
+    child_id: uuid.UUID
+    node_id: uuid.UUID
+    new_mastery_level: MasteryLevel
+    message: str
+
+
 class RetentionSummaryResponse(BaseModel):
     child_id: uuid.UUID
     total_nodes: int
