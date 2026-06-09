@@ -23,6 +23,71 @@ from app.models.enums import (
 from app.models.identity import Child
 from app.models.state import ChildNodeState, FSRSCard, ReviewLog, StateEvent
 
+# Mastery levels in ascending order. A demotion is any transition whose
+# destination sits at a lower index than its origin. Keep this the single
+# source of truth for ordering so no inline ordinals creep in.
+_MASTERY_ORDER: tuple[MasteryLevel, ...] = (
+    MasteryLevel.not_started,
+    MasteryLevel.emerging,
+    MasteryLevel.developing,
+    MasteryLevel.proficient,
+    MasteryLevel.mastered,
+)
+
+
+def _mastery_index(level: MasteryLevel) -> int:
+    """Ordinal position of a mastery level within _MASTERY_ORDER."""
+    return _MASTERY_ORDER.index(level)
+
+
+def is_demotion(from_level: MasteryLevel, to_level: MasteryLevel) -> bool:
+    """True when the transition lowers mastery (to ordinal < from ordinal)."""
+    return _mastery_index(to_level) < _mastery_index(from_level)
+
+
+def build_demotion_explanation(
+    from_level: MasteryLevel,
+    to_level: MasteryLevel,
+    cause: str,
+    *,
+    confidence: float | None = None,
+    retrievability: float | None = None,
+    fsrs_stability: float | None = None,
+    threshold_crossed: float,
+) -> dict:
+    """Build the parent-legible envelope explaining a mastery demotion.
+
+    The returned dict is stored inside an immutable StateEvent's metadata so a
+    parent UI can render why a skill came back for review. ``human_summary`` is
+    a single calm, jargon-free, parent-facing sentence composed from the actual
+    level names and the cause.
+    """
+    from_name = from_level.value if hasattr(from_level, "value") else str(from_level)
+    to_name = to_level.value if hasattr(to_level, "value") else str(to_level)
+
+    if cause == "retention_decay":
+        human_summary = (
+            "It has been long enough since this skill was practiced that the "
+            "system flagged it for review to keep it fresh."
+        )
+    else:
+        human_summary = (
+            f"This skill moved from {from_name} back to {to_name} after the last "
+            "attempt scored below the mastery line, so it comes back for another "
+            "practice round."
+        )
+
+    return {
+        "from_level": from_name,
+        "to_level": to_name,
+        "cause": cause,
+        "confidence": confidence,
+        "retrievability": retrievability,
+        "fsrs_stability": fsrs_stability,
+        "threshold_crossed": threshold_crossed,
+        "human_summary": human_summary,
+    }
+
 
 def _get_scheduler(weights: list[float] | None = None) -> Scheduler:
     """Get FSRS Scheduler instance, optionally with personalized weights.
@@ -247,6 +312,24 @@ async def process_review(
     if new_mastery != previous_mastery:
         event_type = StateEventType.mastery_change
 
+    event_metadata: dict = {
+        "confidence": confidence,
+        "rating": rating.value,
+        "fsrs_stability": updated_card.stability,
+        "fsrs_due": updated_card.due.isoformat() if updated_card.due else None,
+    }
+    # A demotion (the attempt scored below the prior level) carries a
+    # parent-legible explanation; promotions and holds do not.
+    if is_demotion(previous_mastery, new_mastery):
+        event_metadata["demotion_explanation"] = build_demotion_explanation(
+            previous_mastery,
+            new_mastery,
+            cause="low_confidence_attempt",
+            confidence=confidence,
+            fsrs_stability=updated_card.stability,
+            threshold_crossed=settings.MASTERY_THRESHOLD,
+        )
+
     state_event = await emit_state_event(
         db,
         child_id,
@@ -256,12 +339,7 @@ async def process_review(
         from_state=previous_mastery.value if hasattr(previous_mastery, "value") else str(previous_mastery),
         to_state=new_mastery.value if hasattr(new_mastery, "value") else str(new_mastery),
         trigger="attempt",
-        metadata={
-            "confidence": confidence,
-            "rating": rating.value,
-            "fsrs_stability": updated_card.stability,
-            "fsrs_due": updated_card.due.isoformat() if updated_card.due else None,
-        },
+        metadata=event_metadata,
         created_by=created_by,
     )
 

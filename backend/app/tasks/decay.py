@@ -20,7 +20,7 @@ from app.core.config import settings
 from app.core.database import set_tenant
 from app.models.enums import MasteryLevel, StateEventType
 from app.models.state import ChildNodeState, FSRSCard, StateEvent
-from app.services.state_engine import compute_retrievability, emit_state_event
+from app.services.state_engine import build_demotion_explanation, compute_retrievability, emit_state_event
 
 
 async def run_decay_batch(
@@ -121,6 +121,18 @@ async def run_decay_batch(
                             "threshold": settings.DECAY_RETRIEVABILITY_THRESHOLD,
                             "fsrs_stability": card.stability,
                             "days_overdue": (now - card.due).total_seconds() / 86400 if card.due else 0,
+                            # Parent-legible explanation for the demotion. Only
+                            # the metadata grows; event_type, trigger, and the
+                            # from/to states (and the idempotency query that
+                            # matches them) are unchanged.
+                            "demotion_explanation": build_demotion_explanation(
+                                MasteryLevel.mastered,
+                                MasteryLevel.proficient,
+                                cause="retention_decay",
+                                retrievability=round(retrievability, 4),
+                                fsrs_stability=card.stability,
+                                threshold_crossed=settings.DECAY_RETRIEVABILITY_THRESHOLD,
+                            ),
                         },
                     )
                     cards_decayed += 1
