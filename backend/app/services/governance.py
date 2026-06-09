@@ -5,11 +5,14 @@ Enforces: approval_required, pace_limit, content_filter,
 schedule_constraint, and ai_boundary rules.
 """
 
+import hashlib
+import json
 import uuid
 from dataclasses import dataclass, field
 from datetime import UTC, date, datetime, timedelta
 
-from sqlalchemy import func, select
+import structlog
+from sqlalchemy import func, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.enums import GovernanceAction, RuleScope, RuleTier, RuleType
@@ -515,6 +518,91 @@ async def create_default_rules(
     return defaults
 
 
+# ══════════════════════════════════════════════════
+# Hash chain (append-only audit, migration 052)
+# ══════════════════════════════════════════════════
+
+logger = structlog.get_logger()
+
+GENESIS_SENTINEL = "GENESIS"
+
+# The exact GovernanceEvent columns covered by the hash, in canonical
+# payload form. The surrogate id is excluded: it is generated at flush
+# time and carries no audit meaning; everything a parent audits is here.
+GOVERNANCE_HASH_FIELDS = (
+    "household_id",
+    "user_id",
+    "action",
+    "target_type",
+    "target_id",
+    "reason",
+    "metadata",
+    "created_at",
+)
+
+
+def build_governance_hash_payload(
+    *,
+    household_id: uuid.UUID | str,
+    user_id: uuid.UUID | str | None,
+    action: GovernanceAction | str,
+    target_type: str,
+    target_id: uuid.UUID | str,
+    reason: str | None,
+    metadata: dict | None,
+    created_at: datetime | str,
+) -> dict:
+    """Build the canonical dict hashed for a GovernanceEvent.
+
+    Every value is normalized to a JSON-stable form (str for UUIDs,
+    enum value for the action, isoformat for the timestamp) so the
+    same row always serializes to the same bytes, whether the inputs
+    come from the ORM, from raw migration rows, or from API output.
+    """
+    return {
+        "household_id": str(household_id),
+        "user_id": str(user_id) if user_id is not None else None,
+        "action": action.value if isinstance(action, GovernanceAction) else str(action),
+        "target_type": target_type,
+        "target_id": str(target_id),
+        "reason": reason,
+        "metadata": metadata or {},
+        "created_at": created_at.isoformat() if isinstance(created_at, datetime) else str(created_at),
+    }
+
+
+def compute_event_hash(payload: dict, prev_hash: str | None) -> str:
+    """Compute the SHA-256 chain hash for one event.
+
+    Serialization is canonical: sorted keys, no whitespace, default=str
+    for any stray non-JSON values. The previous event's hash (or the
+    GENESIS sentinel for the first event in a household) is prepended
+    so each hash commits to the entire history before it.
+    """
+    serialized = json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str)
+    return hashlib.sha256(((prev_hash or GENESIS_SENTINEL) + serialized).encode("utf-8")).hexdigest()
+
+
+def verify_chain(events: list[dict]) -> dict:
+    """Verify a household's hash chain. Pure function, no I/O.
+
+    Each dict must carry the canonical payload fields plus the stored
+    event_hash and prev_event_hash, already ordered by (created_at, id).
+    Fails closed: a missing or null stored hash is a break, not a skip.
+    Returns {"valid": bool, "checked": int, "first_break_index": int | None}.
+    """
+    prev_hash: str | None = None
+    for index, event in enumerate(events):
+        if event.get("prev_event_hash") != prev_hash:
+            return {"valid": False, "checked": index + 1, "first_break_index": index}
+        payload = {f: event.get(f) for f in GOVERNANCE_HASH_FIELDS}
+        expected = compute_event_hash(payload, prev_hash)
+        if event.get("event_hash") != expected:
+            return {"valid": False, "checked": index + 1, "first_break_index": index}
+        prev_hash = expected
+    return {"valid": True, "checked": len(events), "first_break_index": None}
+
+
 async def log_governance_event(
     db: AsyncSession,
     household_id: uuid.UUID,
@@ -525,7 +613,42 @@ async def log_governance_event(
     reason: str | None = None,
     metadata: dict | None = None,
 ) -> GovernanceEvent:
-    """Log an immutable governance event."""
+    """Log an immutable governance event, chained to the household's last event."""
+    # Serialize concurrent appends per household so two transactions can
+    # never both read the same head and fork the chain. The advisory
+    # lock is transaction-scoped and released automatically on
+    # commit/rollback. This is the only raw SQL outside migrations.
+    if db.bind is not None and db.bind.dialect.name == "postgresql":
+        await db.execute(
+            text("SELECT pg_advisory_xact_lock(hashtext(:hid))"),
+            {"hid": str(household_id)},
+        )
+
+    head_result = await db.execute(
+        select(GovernanceEvent.event_hash)
+        .where(GovernanceEvent.household_id == household_id)
+        .order_by(GovernanceEvent.created_at.desc(), GovernanceEvent.id.desc())
+        .limit(1)
+    )
+    prev_hash = head_result.scalar_one_or_none()
+
+    # created_at is set client-side (not left to the server default)
+    # because the hash must commit to it before the row is inserted:
+    # the append-only triggers forbid writing the hash in a second pass.
+    created_at = datetime.now(UTC)
+    event_metadata = metadata or {}
+    payload = build_governance_hash_payload(
+        household_id=household_id,
+        user_id=user_id,
+        action=action,
+        target_type=target_type,
+        target_id=target_id,
+        reason=reason,
+        metadata=event_metadata,
+        created_at=created_at,
+    )
+    event_hash = compute_event_hash(payload, prev_hash)
+
     event = GovernanceEvent(
         household_id=household_id,
         user_id=user_id,
@@ -533,10 +656,20 @@ async def log_governance_event(
         target_type=target_type,
         target_id=target_id,
         reason=reason,
-        metadata_=metadata or {},
+        metadata_=event_metadata,
+        created_at=created_at,
+        event_hash=event_hash,
+        prev_event_hash=prev_hash,
     )
     db.add(event)
     await db.flush()
+    logger.debug(
+        "governance_event_chained",
+        household_id=str(household_id),
+        event_id=str(event.id),
+        event_hash=event_hash,
+        prev_event_hash=prev_hash,
+    )
 
     # Record governance pattern for intelligence layer
     try:
