@@ -33,6 +33,7 @@ from app.schemas.state import (
     AttemptSubmitRequest,
     AttemptSubmitResponse,
     ChildStateResponse,
+    DemotionFeedItem,
     NodeStateResponse,
     RetentionSummaryResponse,
     StateEventResponse,
@@ -220,6 +221,55 @@ async def get_node_history(
     )
     return {
         "items": [StateEventResponse.model_validate(e) for e in result.scalars().all()],
+        "total": total,
+        "skip": pagination.skip,
+        "limit": pagination.limit,
+    }
+
+
+@router.get(
+    "/children/{child_id}/demotions",
+)
+async def get_demotions(
+    child_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+    pagination: PaginationParams = Depends(),
+    _child: Child = Depends(require_child_access("read")),
+) -> dict:
+    """Recent automated mastery demotions for a child, newest first.
+
+    A demotion is any StateEvent carrying a ``demotion_explanation`` envelope in
+    its metadata (written in Phase 1). That single predicate captures both the
+    attempt path and the decay path regardless of event_type. Read-only.
+    """
+    await _get_child_or_404(db, child_id, user.household_id)
+
+    base = select(StateEvent).where(
+        StateEvent.child_id == child_id,
+        StateEvent.household_id == user.household_id,
+        StateEvent.metadata_.has_key("demotion_explanation"),
+    )
+    total_result = await db.execute(select(func.count()).select_from(base.subquery()))
+    total = total_result.scalar() or 0
+    result = await db.execute(
+        base.order_by(StateEvent.created_at.desc()).offset(pagination.skip).limit(pagination.limit)
+    )
+    items = [
+        DemotionFeedItem(
+            id=e.id,
+            node_id=e.node_id,
+            event_type=e.event_type,
+            from_state=e.from_state,
+            to_state=e.to_state,
+            trigger=e.trigger,
+            created_at=e.created_at,
+            explanation=(e.metadata_ or {}).get("demotion_explanation") or {},
+        )
+        for e in result.scalars().all()
+    ]
+    return {
+        "items": items,
         "total": total,
         "skip": pagination.skip,
         "limit": pagination.limit,

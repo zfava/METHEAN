@@ -52,6 +52,25 @@ class StateEventResponse(BaseModel):
     created_at: datetime
 
 
+class DemotionFeedItem(BaseModel):
+    """One automated mastery demotion, for the child-wide demotion feed.
+
+    Carries the parent-legible ``explanation`` envelope (the
+    ``demotion_explanation`` from the event's metadata, written in Phase 1).
+    Node titles are intentionally not joined here; the frontend resolves them
+    separately, keeping this read-only query a single StateEvent filter.
+    """
+
+    id: uuid.UUID
+    node_id: uuid.UUID
+    event_type: StateEventType
+    from_state: str | None
+    to_state: str | None
+    trigger: str | None
+    created_at: datetime
+    explanation: dict
+
+
 class RetentionSummaryResponse(BaseModel):
     child_id: uuid.UUID
     total_nodes: int
