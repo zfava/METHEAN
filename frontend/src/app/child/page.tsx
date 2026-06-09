@@ -3,10 +3,12 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
-  auth, attempts, learn, children as childrenApi,
+  auth, attempts, learn, children as childrenApi, childSession,
   type LearningContext, type ChildDashboardResponse,
 } from "@/lib/api";
+import { readKidModeCookie } from "@/lib/ChildContext";
 import { useToast } from "@/components/Toast";
+import ExitGate from "@/components/child/ExitGate";
 import { useMobile } from "@/lib/useMobile";
 import { haptic } from "@/lib/haptics";
 import { usePersonalization } from "@/lib/PersonalizationProvider";
@@ -184,6 +186,9 @@ export default function ChildPage() {
 
   const [showSettings, setShowSettings] = useState(false);
   const [showJourney, setShowJourney] = useState(false);
+  const [showExitGate, setShowExitGate] = useState(false);
+  const [kidMode, setKidMode] = useState(false);
+  const [hasPin, setHasPin] = useState(true);
   const isMobile = useMobile();
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -213,7 +218,7 @@ export default function ChildPage() {
       setSessionCompleted(0);
       setSessionSubjects([]);
       setDayMasteryGains([]);
-      loadDashboard();
+      enterKidModeAndLoad();
     }
   }, [selectedId]);
   useEffect(() => {
@@ -262,8 +267,10 @@ export default function ChildPage() {
 
   async function init() {
     setLoading(true);
+    setKidMode(readKidModeCookie());
     try {
-      await auth.me();
+      const me = await auth.me();
+      setHasPin(Boolean(me.has_parent_pin));
       const data: ChildInfo[] = await childrenApi.list() as any;
       setChildrenList(Array.isArray(data) ? data : []);
       if (data.length > 0) setSelectedId(data[0].id);
@@ -273,6 +280,23 @@ export default function ChildPage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  // Swap the parent session for a child-scoped token before any
+  // dashboard data loads. Skipped when the kid_mode cookie is already
+  // set (a child token cannot re-enter). On failure, bounce back to
+  // the parent dashboard rather than running /child on a parent token.
+  async function enterKidModeAndLoad() {
+    if (!readKidModeCookie()) {
+      try {
+        await childSession.enter(selectedId);
+      } catch {
+        window.location.href = "/dashboard";
+        return;
+      }
+    }
+    setKidMode(true);
+    loadDashboard();
   }
 
   async function loadDashboard() {
@@ -560,12 +584,18 @@ export default function ChildPage() {
             )}
           </div>
           <div className="flex items-center gap-2">
-            {childrenList.length > 1 && (
+            {childrenList.length > 1 && !kidMode && (
               <select value={selectedId} onChange={e => setSelectedId(e.target.value)}
                 className="text-sm border border-(--color-border) rounded-xl px-3 py-1.5 min-h-[44px]" aria-label="Switch child">
                 {childrenList.map(c => <option key={c.id} value={c.id}>{c.first_name}</option>)}
               </select>
             )}
+            <button onClick={() => setShowExitGate(true)}
+              className="p-2 text-(--color-text-tertiary) hover:text-(--color-text) min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Exit kid mode">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+              </svg>
+            </button>
             <button onClick={() => setShowSettings(!showSettings)}
               className="p-2 text-(--color-text-tertiary) hover:text-(--color-text) min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Settings">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -578,6 +608,7 @@ export default function ChildPage() {
       </header>
 
       <MySpace open={showSettings} onClose={() => setShowSettings(false)} />
+      <ExitGate open={showExitGate} onClose={() => setShowExitGate(false)} hasPin={hasPin} />
 
       <div className="max-w-2xl mx-auto px-8 py-10">
         {/* Hero: Greeting + Progress Ring */}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { auth, account, academicCalendar, household, familyInvites, dataExport, compliance, betaFeedback, type BetaFeedbackItem, type User } from "@/lib/api";
+import { auth, account, academicCalendar, household, familyInvites, dataExport, compliance, betaFeedback, childSession, type BetaFeedbackItem, type User } from "@/lib/api";
 import { useMobile } from "@/lib/useMobile";
 import { useToast } from "@/components/Toast";
 import PageHeader from "@/components/ui/PageHeader";
@@ -55,6 +55,12 @@ export default function SettingsPage() {
   const [confirmPw, setConfirmPw] = useState("");
   const [pwError, setPwError] = useState("");
   const [pwSuccess, setPwSuccess] = useState(false);
+
+  // Kid Mode PIN
+  const [pinPassword, setPinPassword] = useState("");
+  const [newPin, setNewPin] = useState("");
+  const [pinError, setPinError] = useState("");
+  const [pinSaved, setPinSaved] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -118,6 +124,21 @@ export default function SettingsPage() {
     } catch (err: any) {
       toast(err?.detail || err?.message || "Couldn't change password", "error");
       setPwError(err?.detail || err?.message || "Couldn't change password.");
+    }
+  }
+
+  async function savePin() {
+    setPinError(""); setPinSaved(false);
+    if (!/^\d{4,8}$/.test(newPin)) { setPinError("PIN must be 4 to 8 digits."); return; }
+    try {
+      await childSession.setPin(pinPassword, newPin);
+      setPinSaved(true);
+      setUser((u) => (u ? { ...u, has_parent_pin: true } : u));
+      toast("Kid Mode PIN saved", "success");
+      setPinPassword(""); setNewPin("");
+    } catch (err: any) {
+      toast(err?.detail || "Couldn't save PIN", "error");
+      setPinError(err?.detail || "Couldn't save PIN.");
     }
   }
 
@@ -251,6 +272,28 @@ export default function SettingsPage() {
           {pwSuccess && <p className="text-xs text-(--color-success)">Password changed successfully.</p>}
           <Button variant="primary" size="sm" onClick={changePassword} disabled={!currentPw || !newPw || !confirmPw}>
             Change Password
+          </Button>
+        </div>
+      </Card>
+
+      {/* Kid Mode PIN */}
+      <Card className="mb-6">
+        <SectionHeader title="Kid Mode PIN" />
+        <p className="text-xs text-(--color-text-secondary) mt-1 mb-3">
+          {user?.has_parent_pin
+            ? "A PIN is set. Kids need it (or your password) to leave kid mode. Enter your password to change it."
+            : "Set a short PIN to leave kid mode without typing your full password."}
+        </p>
+        <div className="mt-3 space-y-3">
+          <input type="password" value={pinPassword} onChange={(e) => setPinPassword(e.target.value)} placeholder="Current password"
+            className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
+          <input type="password" inputMode="numeric" value={newPin} onChange={(e) => setNewPin(e.target.value.replace(/\D/g, "").slice(0, 8))}
+            placeholder="New PIN (4 to 8 digits)"
+            className="w-full px-3 py-2 text-sm border border-(--color-border) rounded-[10px] bg-(--color-surface)" />
+          {pinError && <p className="text-xs text-(--color-danger)">{pinError}</p>}
+          {pinSaved && <p className="text-xs text-(--color-success)">PIN saved.</p>}
+          <Button variant="primary" size="sm" onClick={savePin} disabled={!pinPassword || !newPin}>
+            {user?.has_parent_pin ? "Change PIN" : "Set PIN"}
           </Button>
         </div>
       </Card>
