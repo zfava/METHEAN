@@ -36,6 +36,7 @@ from app.models.enums import (
     AlertStatus,
     AttemptStatus,
     EdgeRelation,
+    FSRSRating,
     GovernanceAction,
     MasteryLevel,
     PlanStatus,
@@ -217,11 +218,15 @@ def _make_card(
 
 
 def _make_review(card_id, child_id, household_id, rating, days_ago):
+    # The migrated ``fsrsrating`` enum stores each rating's integer VALUE as the
+    # label ("1".."4"), whereas the ORM column serializes a member by NAME. Pass
+    # the value as a string so the bound literal matches the DB enum label.
+    # Accepts an FSRSRating member (preferred) or a bare int.
     return ReviewLog(
         card_id=card_id,
         child_id=child_id,
         household_id=household_id,
-        rating=rating,
+        rating=str(int(rating)),
         scheduled_days=3,
         elapsed_days=2,
         reviewed_at=NOW - timedelta(days=days_ago),
@@ -247,7 +252,18 @@ async def seed():
         # ═══════════════════════════════════════════
         # Household + Parent
         # ═══════════════════════════════════════════
-        household = Household(name="The Builder Family", timezone="America/Denver")
+        # Seed the demo household in its honest trial state (not a faked paid
+        # subscription) so the family can immediately generate a year plan: the
+        # generate route admits "trialing" or a future trial_ends_at. Also grant
+        # the native-curriculum entitlement so seed -> working environment is one
+        # step (no separate grant_native_curriculum_access run needed for demos).
+        household = Household(
+            name="The Builder Family",
+            timezone="America/Denver",
+            subscription_status="trialing",
+            trial_ends_at=NOW + timedelta(days=30),
+            native_curriculum_access=True,
+        )
         db.add(household)
         await db.flush()
         hid = household.id
@@ -292,6 +308,8 @@ async def seed():
             password_hash=hash_password(DEMO_PASSWORD),
             display_name="Zack",
             role="owner",
+            is_active=True,
+            email_verified=True,
         )
         db.add(parent)
         await db.flush()
@@ -428,7 +446,7 @@ async def seed():
             await db.flush()
             # 8-10 reviews per card
             for i in range(10 if title in ("Multiplication", "Division") else 8):
-                rating = 3 if i < 5 else 4  # Good then Easy
+                rating = FSRSRating.good if i < 5 else FSRSRating.easy  # Good then Easy
                 db.add(_make_review(card.id, liam.id, hid, rating, days_ago=60 - i * 5))
                 review_count += 1
         for title in ["Fractions", "Essay Structure", "Grammar & Mechanics", "Scientific Method"]:
@@ -438,7 +456,7 @@ async def seed():
             db.add(card)
             await db.flush()
             for i in range(4):
-                db.add(_make_review(card.id, liam.id, hid, 3, days_ago=20 - i * 4))
+                db.add(_make_review(card.id, liam.id, hid, FSRSRating.good, days_ago=20 - i * 4))
                 review_count += 1
         await db.flush()
 
@@ -516,7 +534,6 @@ async def seed():
         # ═══════════════════════════════════════════
         # Plans (one per child)
         # ═══════════════════════════════════════════
-        plans_created = 0
         for child, nodes, child_label in [
             (emma, k2, "Emma"),
             (liam, elem, "Liam"),
@@ -626,7 +643,6 @@ async def seed():
                         )
                     )
 
-            plans_created += 1
         await db.flush()
 
         # ═══════════════════════════════════════════
