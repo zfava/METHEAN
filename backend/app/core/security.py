@@ -25,16 +25,31 @@ def create_access_token(
     user_id: uuid.UUID,
     household_id: uuid.UUID,
     role: str,
+    scope: str = "parent",
+    child_id: uuid.UUID | None = None,
+    expires_minutes: int | None = None,
 ) -> str:
+    """Mint an access token.
+
+    scope is "parent" for normal sessions and "child" for kid-mode
+    sessions. Child tokens keep the parent's user id as sub (so the
+    session can be restored on exit) and carry the bound child in the
+    child_id claim. Tokens minted before the scope claim existed decode
+    as parent scope: consumers must default a missing scope to "parent".
+    """
     now = datetime.now(UTC)
+    minutes = expires_minutes if expires_minutes is not None else settings.ACCESS_TOKEN_EXPIRE_MINUTES
     payload = {
         "sub": str(user_id),
         "hid": str(household_id),
         "role": role,
         "type": "access",
+        "scope": scope,
         "iat": now,
-        "exp": now + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
+        "exp": now + timedelta(minutes=minutes),
     }
+    if child_id is not None:
+        payload["child_id"] = str(child_id)
     return jwt.encode(payload, settings.JWT_SECRET, algorithm=settings.JWT_ALGORITHM)
 
 

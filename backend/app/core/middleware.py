@@ -1,5 +1,7 @@
-"""Error handling middleware, rate limiting, and CSRF protection (Section 11)."""
+"""Error handling middleware, rate limiting, CSRF protection (Section 11),
+and child-session scope enforcement."""
 
+import re
 import secrets
 import time
 import uuid
@@ -189,6 +191,131 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
                 },
                 headers={"Retry-After": str(retry_after)},
             )
+
+        return await call_next(request)
+
+
+# ── Child-session scope enforcement ─────────────────────────────────
+#
+# Every path a child-scoped token may touch, enumerated from the actual
+# /child frontend surface. Fail-closed: anything not matched here is
+# denied for child tokens, so endpoints added in the future are
+# parent-only until deliberately allowlisted. Each entry names the
+# frontend caller that needs it.
+CHILD_SCOPE_ALLOWLIST: tuple[re.Pattern[str], ...] = tuple(
+    re.compile(pattern)
+    for pattern in (
+        # ExitGate (frontend/src/components/child/ExitGate.tsx): leave kid mode.
+        r"^/api/v1/auth/child-session/exit$",
+        # useSelectedChild (frontend/src/lib/useSelectedChild.ts) and
+        # child/page.tsx call auth.me to resolve the session.
+        r"^/api/v1/auth/me$",
+        # ChildProvider (frontend/src/lib/ChildContext.tsx) and
+        # children.list via useSelectedChild fetch GET /children for the
+        # child switcher header.
+        r"^/api/v1/children$",
+        # children.dashboard (frontend/src/app/child/page.tsx): the kid
+        # dashboard payload.
+        r"^/api/v1/children/[^/]+/dashboard",
+        # PersonalizationProvider getForChild/updateForChild
+        # (frontend/src/lib/PersonalizationProvider.tsx), driven by the
+        # /child/welcome flow and MySpace.tsx.
+        r"^/api/v1/children/[^/]+/personalization",
+        # transcribe.submit via useVoiceInput (frontend/src/lib/useVoiceInput.ts),
+        # used by TalkButton.tsx, VoiceTextarea.tsx, MicButton.tsx. The
+        # voice safety intervention verdict rides back in this response.
+        r"^/api/v1/children/[^/]+/transcribe$",
+        # useTutorVoice (frontend/src/lib/useTutorVoice.ts): companion
+        # voice playback in TutorChat.tsx / VoiceModeUI.tsx.
+        r"^/api/v1/children/[^/]+/tts/stream$",
+        # PersonalizationProvider (frontend/src/lib/PersonalizationProvider.tsx):
+        # session-stable persona/vibe library.
+        r"^/api/v1/personalization/library$",
+        # learn.context (frontend/src/app/child/page.tsx): lesson,
+        # practice, review, assessment views.
+        r"^/api/v1/activities/[^/]+/learn",
+        # attempts.start (frontend/src/app/child/page.tsx).
+        r"^/api/v1/activities/[^/]+/attempts$",
+        # attempts.submit / attempts.saveProgress / attempts.get
+        # (frontend/src/app/child/page.tsx and views).
+        r"^/api/v1/attempts/[^/]+",
+        # streamTutorMessage (frontend/src/components/child/TutorChat.tsx).
+        r"^/api/v1/tutor/[^/]+/stream$",
+    )
+)
+
+# Hard denials regardless of allowlist (defense in depth). Checked
+# before the allowlist so a future allowlist mistake cannot expose
+# these surfaces to a child token.
+CHILD_SCOPE_HARD_DENY_SUBSTRINGS: tuple[str, ...] = (
+    "/governance",
+    "/billing",
+    "/compliance",
+    "/auth/pin",
+    "/household",
+)
+
+# Captures the child id segment of any /children/{id}/... path so a
+# child token bound to one child can be rejected on a sibling's paths
+# even before route-level checks run.
+_CHILD_PATH_ID_RE = re.compile(r"^/api/v1/children/([^/]+)(?:/|$)")
+
+
+class ChildScopeMiddleware(BaseHTTPMiddleware):
+    """Fail-closed path allowlist for child-scoped (kid mode) tokens.
+
+    Decodes the scope claim from the access_token cookie. Parent tokens
+    (including legacy tokens with no scope claim) pass through
+    untouched. Child tokens are denied on any path that is not
+    explicitly allowlisted, on the hard-deny surfaces, and on any
+    /children/{id} path whose id is not the token's bound child. On any
+    decode failure the request passes through so normal auth returns
+    its usual 401.
+
+    This is the first of two layers: app.api.deps re-enforces scope at
+    the dependency level (require_role, require_child_access), so a
+    route mistakenly added to the allowlist still cannot perform
+    parent-only actions.
+    """
+
+    async def dispatch(self, request: Request, call_next) -> Response:
+        token = request.cookies.get("access_token")
+        if not token:
+            return await call_next(request)
+
+        from app.core.security import decode_token
+
+        try:
+            payload = decode_token(token)
+        except Exception:
+            # Invalid or expired token: let normal auth produce its 401.
+            return await call_next(request)
+
+        if payload.get("scope", "parent") != "child":
+            return await call_next(request)
+
+        path = request.url.path
+
+        def deny(reason: str) -> JSONResponse:
+            logger.warning(
+                "child_session_forbidden",
+                path=path,
+                method=request.method,
+                reason=reason,
+                child_id=str(payload.get("child_id", "")),
+                household_id=str(payload.get("hid", "")),
+            )
+            return JSONResponse(status_code=403, content={"detail": "child_session_forbidden"})
+
+        if any(substring in path for substring in CHILD_SCOPE_HARD_DENY_SUBSTRINGS):
+            return deny("hard_deny")
+
+        child_path = _CHILD_PATH_ID_RE.match(path)
+        if child_path and child_path.group(1) != str(payload.get("child_id", "")):
+            return deny("child_mismatch")
+
+        if not any(pattern.match(path) for pattern in CHILD_SCOPE_ALLOWLIST):
+            return deny("not_allowlisted")
 
         return await call_next(request)
 

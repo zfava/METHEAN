@@ -70,6 +70,11 @@ async def get_current_user(
             )
         user_id = uuid.UUID(payload["sub"])
         household_id = uuid.UUID(payload["hid"])
+        # Tokens minted before the scope claim existed default to
+        # parent scope so existing sessions keep working.
+        token_scope = payload.get("scope", "parent")
+        raw_child_id = payload.get("child_id")
+        token_child_id = uuid.UUID(raw_child_id) if raw_child_id else None
     except HTTPException:
         raise
     except Exception:
@@ -91,11 +96,25 @@ async def get_current_user(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="User not found or inactive",
         )
+    # Transient (non-mapped) attributes so downstream dependencies can
+    # enforce kid-mode scope without re-decoding the token. sub stays
+    # the parent user id even under child scope; the scope and bound
+    # child are what change. setattr keeps them out of the mapped
+    # column namespace.
+    setattr(user, "token_scope", token_scope)  # noqa: B010
+    setattr(user, "token_child_id", token_child_id)  # noqa: B010
     return user
 
 
 def require_role(*roles: str):
     async def check_role(user: User = Depends(get_current_user)) -> User:
+        # A child-scoped token can never satisfy a parent/admin role
+        # check, regardless of the role baked into the token.
+        if getattr(user, "token_scope", "parent") == "child":
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="child_session_forbidden",
+            )
         role_val = user.role.value if hasattr(user.role, "value") else user.role
         if role_val not in roles:
             raise HTTPException(
@@ -147,8 +166,12 @@ def require_child_access(mode: AccessMode = "read"):
 
     1. Tenant isolation. A child outside the user's household is a
        404 — never leak existence.
-    2. Observer write block. ``UserRole.observer`` is read-only.
-    3. Linked-learner constraint. A user with ``linked_child_id`` set
+    2. Kid-mode binding. A child-scoped token is bound to exactly one
+       child_id; any other child is a 403. Write mode for the bound
+       child stays permitted (attempt/learning endpoints), consistent
+       with the existing AccessMode semantics below.
+    3. Observer write block. ``UserRole.observer`` is read-only.
+    4. Linked-learner constraint. A user with ``linked_child_id`` set
        can only touch that child; any other id is a 403.
     """
 
@@ -166,6 +189,12 @@ def require_child_access(mode: AccessMode = "read"):
         child = result.scalar_one_or_none()
         if not child:
             raise HTTPException(status_code=404, detail="Child not found")
+
+        if getattr(user, "token_scope", "parent") == "child" and child_id != getattr(user, "token_child_id", None):
+            raise HTTPException(
+                status_code=403,
+                detail="child_session_forbidden",
+            )
 
         if mode == "write" and user.role == UserRole.observer:
             raise HTTPException(
