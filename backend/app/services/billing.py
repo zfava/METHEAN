@@ -99,8 +99,14 @@ async def create_portal_session(
     return session.url
 
 
-async def cancel_subscription(db: AsyncSession, household_id: uuid.UUID) -> bool:
-    """Cancel subscription at period end."""
+async def cancel_subscription(db: AsyncSession, household_id: uuid.UUID, at_period_end: bool = True) -> bool:
+    """Cancel subscription.
+
+    Default cancels at period end (the normal billing flow). Household
+    deletion passes at_period_end=False to cancel immediately: a family
+    leaving with their data erased should not stay on an active plan.
+    Tolerates missing config: no Stripe key or no customer means False.
+    """
     _init_stripe()
     if not settings.STRIPE_SECRET_KEY:
         return False
@@ -112,7 +118,10 @@ async def cancel_subscription(db: AsyncSession, household_id: uuid.UUID) -> bool
 
     subscriptions = stripe.Subscription.list(customer=hh.stripe_customer_id, limit=1)
     if subscriptions.data:
-        stripe.Subscription.modify(subscriptions.data[0].id, cancel_at_period_end=True)
+        if at_period_end:
+            stripe.Subscription.modify(subscriptions.data[0].id, cancel_at_period_end=True)
+        else:
+            stripe.Subscription.cancel(subscriptions.data[0].id)
         return True
     return False
 

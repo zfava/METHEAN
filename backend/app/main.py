@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 
 import redis.asyncio as aioredis
 import structlog
-from fastapi import FastAPI, Request
+from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, Response
 
@@ -13,6 +13,7 @@ from app.ai.gateway import AIProviderUnavailableError
 from app.api.academic_calendar import router as academic_calendar_router
 from app.api.annual_curriculum import router as annual_curriculum_router
 from app.api.assessment import router as assessment_router
+from app.api.auth import household_router
 from app.api.auth import router as auth_router
 from app.api.billing import router as billing_router
 from app.api.calibration import router as calibration_router
@@ -114,22 +115,33 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Routers
+# Routers.
+# Surfaces that create or read child data carry the router-level
+# verified-email gate (COPPA posture: no child records until the
+# parent proves control of the contact address). Auth, billing,
+# usage, feedback, operations (data export must stay reachable), and
+# the verification flow itself stay ungated so an unverified user can
+# verify, pay, export, or leave.
+from app.api.deps import require_verified_email
+
+_verified = [Depends(require_verified_email)]
+
 app.include_router(auth_router, prefix="/api/v1")
+app.include_router(household_router, prefix="/api/v1")
 app.include_router(academic_calendar_router, prefix="/api/v1")
-app.include_router(curriculum_router, prefix="/api/v1")
-app.include_router(state_router, prefix="/api/v1")
-app.include_router(governance_router, prefix="/api/v1")
+app.include_router(curriculum_router, prefix="/api/v1", dependencies=_verified)
+app.include_router(state_router, prefix="/api/v1", dependencies=_verified)
+app.include_router(governance_router, prefix="/api/v1", dependencies=_verified)
 app.include_router(operations_router, prefix="/api/v1")
-app.include_router(spec_router, prefix="/api/v1")
+app.include_router(spec_router, prefix="/api/v1", dependencies=_verified)
 app.include_router(education_plan_router, prefix="/api/v1")
 app.include_router(assessment_router, prefix="/api/v1")
-app.include_router(compliance_router, prefix="/api/v1")
-app.include_router(annual_curriculum_router, prefix="/api/v1")
+app.include_router(compliance_router, prefix="/api/v1", dependencies=_verified)
+app.include_router(annual_curriculum_router, prefix="/api/v1", dependencies=_verified)
 app.include_router(feedback_router, prefix="/api/v1")
 app.include_router(feedback_beta_router, prefix="/api/v1")
 app.include_router(notifications_router, prefix="/api/v1")
-app.include_router(documents_router, prefix="/api/v1")
+app.include_router(documents_router, prefix="/api/v1", dependencies=_verified)
 app.include_router(resources_router, prefix="/api/v1")
 app.include_router(intelligence_router, prefix="/api/v1")
 app.include_router(billing_router, prefix="/api/v1")
@@ -138,7 +150,7 @@ app.include_router(calibration_router, prefix="/api/v1")
 app.include_router(style_vector_router, prefix="/api/v1")
 app.include_router(family_intelligence_router, prefix="/api/v1")
 app.include_router(wellbeing_router, prefix="/api/v1")  # PARENT-ONLY
-app.include_router(child_dashboard_router, prefix="/api/v1")
+app.include_router(child_dashboard_router, prefix="/api/v1", dependencies=_verified)
 app.include_router(fitness_router, prefix="/api/v1")
 app.include_router(personalization_router, prefix="/api/v1")
 app.include_router(transcribe_router, prefix="/api/v1")

@@ -132,6 +132,7 @@ async def other_household_user(db_session: AsyncSession, client: AsyncClient) ->
         password_hash=hash_password("xxxxxxxx"),
         display_name="Other Owner",
         role="owner",
+        email_verified=True,
     )
     db_session.add(other_user)
     await db_session.flush()

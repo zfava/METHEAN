@@ -56,6 +56,18 @@ function dispatchPaywall(detail: PaywallEventDetail) {
   window.dispatchEvent(new CustomEvent<PaywallEventDetail>(PAYWALL_EVENT, { detail }));
 }
 
+/**
+ * Fired on `window` whenever the backend rejects a request with the
+ * verified-email gate (403 email_not_verified). The parent layout
+ * listens and shows the verification banner with a resend button.
+ */
+export const EMAIL_NOT_VERIFIED_EVENT = "methean:email-not-verified";
+
+function dispatchEmailNotVerified() {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent(EMAIL_NOT_VERIFIED_EVENT));
+}
+
 function getCookie(name: string): string | undefined {
   if (typeof document === "undefined") return undefined;
   const match = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
@@ -128,6 +140,12 @@ async function request<T>(
           throw new PaymentRequiredError(subscriptionStatus, checkoutHint);
         }
         const detailValue = body && typeof body.detail === "string" ? body.detail : res.statusText;
+        // Server-side verification gate: surface one banner app-wide
+        // (mirrors the PAYWALL_EVENT pattern) instead of a per-page
+        // error so the user is pointed at the existing verify flow.
+        if (res.status === 403 && detailValue === "email_not_verified") {
+          dispatchEmailNotVerified();
+        }
         throw new ApiError(res.status, detailValue);
       }
 
@@ -164,6 +182,23 @@ export const auth = {
     }),
   me: () => request<User>("/auth/me"),
   logout: () => request("/auth/logout", { method: "POST" }),
+};
+
+// Household deletion lifecycle (COPPA/GDPR erasure). Both destructive
+// calls carry the password for server-side re-authentication.
+export const householdDeletion = {
+  request: (password: string) =>
+    request<{ pending: boolean; purge_after: string }>("/household", {
+      method: "DELETE",
+      body: JSON.stringify({ password }),
+    }),
+  restore: (password: string) =>
+    request<{ pending: boolean; purge_after: null }>("/household/restore", {
+      method: "POST",
+      body: JSON.stringify({ password }),
+    }),
+  status: () =>
+    request<{ pending: boolean; purge_after: string | null }>("/household/deletion-status"),
 };
 
 // Kid-mode (child-scoped) sessions. enter swaps the HttpOnly access
@@ -678,6 +713,8 @@ export const account = {
     request<{ success: boolean }>("/auth/reset-password", { method: "POST", body: JSON.stringify({ token, new_password: newPassword }) }),
   resendVerification: () =>
     request<{ sent: boolean }>("/auth/resend-verification", { method: "POST" }),
+  verifyEmail: (token: string) =>
+    request<{ verified: boolean }>("/auth/verify-email", { method: "POST", body: JSON.stringify({ token }) }),
 };
 
 export const billing = {

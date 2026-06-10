@@ -12,6 +12,106 @@ import BottomTabBar from "@/components/BottomTabBar";
 import MobileNavSheet from "@/components/MobileNavSheet";
 import BetaFeedbackButton from "@/components/BetaFeedbackButton";
 import SubscriptionGate from "@/components/billing/SubscriptionGate";
+import { account, householdDeletion, EMAIL_NOT_VERIFIED_EVENT } from "@/lib/api";
+
+/**
+ * Banner shown while a household deletion is pending: states the purge
+ * date and offers restore (password re-prompt, server re-authenticates).
+ */
+function DeletionPendingBanner() {
+  const [purgeAfter, setPurgeAfter] = useState<string | null>(null);
+  const [password, setPassword] = useState("");
+  const [restoring, setRestoring] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    householdDeletion
+      .status()
+      .then((s) => setPurgeAfter(s.pending ? s.purge_after : null))
+      .catch(() => {});
+  }, []);
+
+  if (!purgeAfter) return null;
+  const dateStr = new Date(purgeAfter).toLocaleDateString(undefined, {
+    year: "numeric", month: "long", day: "numeric",
+  });
+
+  return (
+    <div className="bg-(--color-danger) text-white px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+      <p className="text-sm flex-1">
+        This household is scheduled for permanent deletion on <strong>{dateStr}</strong>.
+        Everything will be erased: learning records, documents, and your subscription.
+      </p>
+      <div className="flex items-center gap-2">
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password to restore"
+          className="px-2 py-1.5 text-sm rounded-[8px] text-(--color-text) bg-white/95 border-0"
+        />
+        <button
+          disabled={!password || restoring}
+          onClick={async () => {
+            setRestoring(true);
+            setError("");
+            try {
+              await householdDeletion.restore(password);
+              setPurgeAfter(null);
+            } catch {
+              setError("That password didn't work.");
+            } finally {
+              setRestoring(false);
+            }
+          }}
+          className="px-3 py-1.5 text-sm font-semibold rounded-[8px] bg-white text-(--color-danger) disabled:opacity-50"
+        >
+          Restore
+        </button>
+      </div>
+      {error && <p className="text-xs text-white/90">{error}</p>}
+    </div>
+  );
+}
+
+/**
+ * Banner shown after any API call is rejected with email_not_verified.
+ * Points at the existing verification flow (resend + emailed link).
+ */
+function VerifyEmailBanner() {
+  const [visible, setVisible] = useState(false);
+  const [sent, setSent] = useState(false);
+
+  useEffect(() => {
+    const show = () => setVisible(true);
+    window.addEventListener(EMAIL_NOT_VERIFIED_EVENT, show);
+    return () => window.removeEventListener(EMAIL_NOT_VERIFIED_EVENT, show);
+  }, []);
+
+  if (!visible) return null;
+  return (
+    <div className="bg-(--color-warning) text-(--color-text) px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+      <p className="text-sm flex-1">
+        Verify your email to unlock your family's learning records. Check your inbox for the
+        verification link.
+      </p>
+      <button
+        disabled={sent}
+        onClick={async () => {
+          try {
+            await account.resendVerification();
+            setSent(true);
+          } catch {
+            setSent(true);
+          }
+        }}
+        className="px-3 py-1.5 text-sm font-semibold rounded-[8px] bg-white text-(--color-text) disabled:opacity-60"
+      >
+        {sent ? "Sent. Check your inbox." : "Resend verification email"}
+      </button>
+    </div>
+  );
+}
 
 function ParentLayoutInner({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -86,6 +186,8 @@ function ParentLayoutInner({ children }: { children: React.ReactNode }) {
           paddingRight: 32,
         }}
       >
+        <DeletionPendingBanner />
+        <VerifyEmailBanner />
         <PageTransition>
           <SubscriptionGate>{children}</SubscriptionGate>
         </PageTransition>

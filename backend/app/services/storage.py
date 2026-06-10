@@ -64,6 +64,33 @@ def upload_artifact(
     return key
 
 
+def list_artifact_keys(prefix: str) -> list[str]:
+    """List every object key under a prefix.
+
+    Object keys are namespaced {household_id}/..., so passing the
+    household id as the prefix enumerates everything the household
+    owns regardless of which table tracked the upload.
+    """
+    client = _get_s3_client()
+    keys: list[str] = []
+    paginator = client.get_paginator("list_objects_v2")
+    try:
+        for page in paginator.paginate(Bucket=settings.S3_BUCKET_NAME, Prefix=prefix):
+            keys.extend(obj["Key"] for obj in page.get("Contents", []))
+    except ClientError:
+        # Bucket missing means nothing was ever uploaded.
+        return []
+    return keys
+
+
+def delete_artifact(s3_key: str) -> None:
+    """Delete a single object. Raises on transport errors so callers
+    can decide whether partial erasure is acceptable (the purge task
+    treats any failure as a reason to retry the whole household)."""
+    client = _get_s3_client()
+    client.delete_object(Bucket=settings.S3_BUCKET_NAME, Key=s3_key)
+
+
 def get_presigned_url(s3_key: str, expires_in: int = 3600) -> str:
     """Generate a presigned download URL for an S3 object."""
     client = _get_s3_client()

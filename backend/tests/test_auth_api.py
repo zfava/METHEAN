@@ -577,16 +577,30 @@ async def test_invite_accept_rejects_corrupted_legacy_role_in_db(client, db_sess
 
 async def _register_for_verify(client: AsyncClient, email: str = "verify@example.com") -> str:
     """Register a user and return the email used. Verification tokens
-    are issued on register; tests pull them back out of the DB."""
-    resp = await client.post(
-        "/api/v1/auth/register",
-        json={
-            "email": email,
-            "password": "verifypass123",
-            "display_name": "Verify User",
-            "household_name": "Verify Family",
-        },
-    )
+    are issued on register; tests pull them back out of the DB.
+
+    Registers with an email provider configured (and the sender
+    mocked) so the account stays unverified: without a provider the
+    register endpoint auto-verifies outside production and these
+    verification-flow tests would have nothing to test."""
+    from unittest.mock import AsyncMock as _AsyncMock
+    from unittest.mock import patch as _patch
+
+    from app.core.config import settings as _settings
+
+    with (
+        _patch.object(_settings, "RESEND_API_KEY", "re_test_key"),
+        _patch("app.services.email.send_email", new_callable=_AsyncMock, return_value=True),
+    ):
+        resp = await client.post(
+            "/api/v1/auth/register",
+            json={
+                "email": email,
+                "password": "verifypass123",
+                "display_name": "Verify User",
+                "household_name": "Verify Family",
+            },
+        )
     assert resp.status_code == 201, resp.text
     return email
 
@@ -1847,7 +1861,13 @@ async def test_resend_verification_creates_new_token(client: AsyncClient, db_ses
 
     from app.models.identity import EmailVerificationToken
 
-    await _register_and_capture(client, "resend-new@test.com")
+    from app.core.config import settings as app_settings
+
+    with (
+        patch.object(app_settings, "RESEND_API_KEY", "re_test_key"),
+        patch("app.services.email.send_email", new_callable=AsyncMock, return_value=True),
+    ):
+        await _register_and_capture(client, "resend-new@test.com")
     user = (await db_session.execute(select(User).where(User.email == "resend-new@test.com"))).scalar_one()
 
     count_before = (await db_session.execute(select(func.count(EmailVerificationToken.id)))).scalar_one()
@@ -1902,7 +1922,13 @@ async def test_resend_verification_sends_email(client: AsyncClient):
     and a tokenised URL in the body."""
     from unittest.mock import AsyncMock, patch
 
-    await _register_and_capture(client, "resend-send@test.com")
+    from app.core.config import settings as app_settings
+
+    with (
+        patch.object(app_settings, "RESEND_API_KEY", "re_test_key"),
+        patch("app.services.email.send_email", new_callable=AsyncMock, return_value=True),
+    ):
+        await _register_and_capture(client, "resend-send@test.com")
 
     with patch("app.services.email.send_email", new_callable=AsyncMock, return_value=True) as mock:
         resp = await client.post("/api/v1/auth/resend-verification")
@@ -2707,7 +2733,13 @@ async def test_resend_verification_returns_sent_true(client: AsyncClient):
     after the email is dispatched."""
     from unittest.mock import AsyncMock, patch
 
-    await _register_and_capture(client, "resend-tail@test.com")
+    from app.core.config import settings as app_settings
+
+    with (
+        patch.object(app_settings, "RESEND_API_KEY", "re_test_key"),
+        patch("app.services.email.send_email", new_callable=AsyncMock, return_value=True),
+    ):
+        await _register_and_capture(client, "resend-tail@test.com")
 
     with patch("app.services.email.send_email", new_callable=AsyncMock, return_value=True):
         resp = await client.post("/api/v1/auth/resend-verification")

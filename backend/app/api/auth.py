@@ -4,6 +4,7 @@
 
 import hashlib
 import re
+import secrets
 import uuid
 from datetime import UTC, datetime, timedelta
 
@@ -44,6 +45,11 @@ from app.schemas.auth import (
 # bare name "InviteRequest" — aliasing the institutional one keeps
 # the local family schema as the canonical InviteRequest.
 from app.schemas.auth import InviteRequest as InstitutionalInviteRequest
+
+# Canonical deletion window lives next to the purge task so the
+# endpoint and the eraser can never disagree about when data becomes
+# unrecoverable.
+from app.tasks.purge import DELETION_WINDOW_DAYS
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 logger = structlog.get_logger()
@@ -100,6 +106,14 @@ async def register(
     )
     db.add(user)
     await db.flush()
+
+    # With no email provider configured, the verification email can
+    # never be delivered and the verified-email gate would lock every
+    # new account out of child data forever. Outside production (the
+    # config validator requires RESEND_API_KEY in production) treat
+    # such accounts as verified so local dev and CI keep working.
+    if not settings.RESEND_API_KEY and not settings.is_production:
+        user.email_verified = True
 
     # Auto-grant owner permissions
     from app.core.permissions import grant_role_permissions
@@ -226,6 +240,10 @@ async def register_institution(
     db.add(user)
     await db.flush()
 
+    # Same no-email-provider escape as /auth/register above.
+    if not settings.RESEND_API_KEY and not settings.is_production:
+        user.email_verified = True
+
     from app.core.permissions import grant_role_permissions
 
     await grant_role_permissions(db, user.id, household.id, "owner", user.id)
@@ -313,9 +331,11 @@ async def invite_user(
 
     household_role = _INSTITUTIONAL_ROLE_TO_HOUSEHOLD_ROLE[body.institutional_role]
 
-    # Invited users get a placeholder password hash; the production
-    # flow would email a set-password link. Tests set passwords directly.
-    placeholder_password = hash_password(f"invite-{body.email}")
+    # Invited users get an unguessable random sentinel hash: nobody can
+    # authenticate against it, including the inviter. The invitee gains
+    # access only by completing the password-reset (set password) flow.
+    # Never derive this from the email or any other guessable input.
+    placeholder_password = hash_password(secrets.token_urlsafe(32))
 
     new_user = User(
         household_id=current_user.household_id,
@@ -1202,3 +1222,188 @@ async def accept_invite(
     await db.commit()
 
     return {"user_id": str(new_user.id), "household_id": str(invite.household_id)}
+
+
+# ══════════════════════════════════════════════════
+# Household deletion (COPPA/GDPR erasure rights)
+# ══════════════════════════════════════════════════
+
+# Deletion endpoints live at /household (not /auth/household) to sit
+# beside the existing /household/export, so they get their own
+# prefix-less router, wired in main.py. Ungated by email verification:
+# the right to leave must never be blocked.
+household_router = APIRouter(tags=["auth"])
+
+
+class HouseholdDeletionRequest(BaseModel):
+    password: str
+
+
+def _require_owner(user: User) -> None:
+    role = user.role.value if hasattr(user.role, "value") else str(user.role)
+    if role != "owner":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only the household owner can manage deletion",
+        )
+
+
+def _purge_after(requested_at: datetime) -> datetime:
+    return requested_at + timedelta(days=DELETION_WINDOW_DAYS)
+
+
+@household_router.delete("/household")
+async def request_household_deletion(
+    body: HouseholdDeletionRequest,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Schedule the household for permanent deletion after a 7-day window.
+
+    Owner role, parent token scope, and password re-authentication
+    required: a session cookie alone must never be enough to destroy a
+    family's records. The subscription is canceled immediately; data
+    stays intact (and exportable) until the purge task fires.
+    """
+    from app.models.enums import GovernanceAction
+    from app.services.billing import cancel_subscription
+    from app.services.governance import log_governance_event
+
+    _require_parent_scope(user)
+    _require_owner(user)
+    if not verify_password(body.password, user.password_hash):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Password is incorrect")
+
+    result = await db.execute(select(Household).where(Household.id == user.household_id))
+    household = result.scalar_one()
+    if household.deletion_requested_at is not None:
+        raise HTTPException(status_code=409, detail="deletion_already_pending")
+
+    now = datetime.now(UTC)
+    household.deletion_requested_at = now
+    household.deletion_requested_by = user.id
+    purge_after = _purge_after(now)
+
+    try:
+        canceled = await cancel_subscription(db, household.id, at_period_end=False)
+    except Exception as exc:
+        # A Stripe outage must not block the legal right to leave; the
+        # purge task retries cancellation before erasing.
+        canceled = False
+        logger.warning(
+            "household_deletion_stripe_cancel_failed",
+            household_id=str(household.id),
+            error=str(exc),
+        )
+
+    try:
+        from app.services.email import send_email
+        from app.services.email_templates import deletion_scheduled_email
+
+        await send_email(
+            user.email,
+            "Your METHEAN household is scheduled for deletion",
+            deletion_scheduled_email(
+                user.display_name,
+                purge_after.strftime("%B %d, %Y"),
+                f"{settings.APP_URL}/settings",
+                f"{settings.APP_URL}/settings",
+            ),
+        )
+    except Exception as exc:
+        logger.warning(
+            "household_deletion_email_failed",
+            household_id=str(household.id),
+            error=str(exc),
+        )
+
+    await log_governance_event(
+        db,
+        household.id,
+        user.id,
+        GovernanceAction.modify,
+        "household_deletion_requested",
+        household.id,
+        reason="Household deletion requested by owner",
+        metadata={"purge_after": purge_after.isoformat(), "subscription_canceled": canceled},
+    )
+    logger.info(
+        "household_deletion_requested",
+        household_id=str(household.id),
+        user_id=str(user.id),
+        purge_after=purge_after.isoformat(),
+        subscription_canceled=canceled,
+    )
+    return {"pending": True, "purge_after": purge_after.isoformat()}
+
+
+@household_router.post("/household/restore")
+async def restore_household(
+    body: HouseholdDeletionRequest,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Cancel a pending household deletion within the 7-day window."""
+    from app.models.enums import GovernanceAction
+    from app.services.governance import log_governance_event
+
+    _require_parent_scope(user)
+    _require_owner(user)
+    if not verify_password(body.password, user.password_hash):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Password is incorrect")
+
+    result = await db.execute(select(Household).where(Household.id == user.household_id))
+    household = result.scalar_one()
+    if household.deletion_requested_at is None:
+        raise HTTPException(status_code=409, detail="no_deletion_pending")
+
+    household.deletion_requested_at = None
+    household.deletion_requested_by = None
+
+    try:
+        from app.services.email import send_email
+        from app.services.email_templates import deletion_canceled_email
+
+        await send_email(
+            user.email,
+            "Your METHEAN deletion was canceled",
+            deletion_canceled_email(user.display_name),
+        )
+    except Exception as exc:
+        logger.warning(
+            "household_restore_email_failed",
+            household_id=str(household.id),
+            error=str(exc),
+        )
+
+    await log_governance_event(
+        db,
+        household.id,
+        user.id,
+        GovernanceAction.modify,
+        "household_deletion_restored",
+        household.id,
+        reason="Household deletion canceled by owner",
+    )
+    logger.info(
+        "household_deletion_restored",
+        household_id=str(household.id),
+        user_id=str(user.id),
+    )
+    return {"pending": False, "purge_after": None}
+
+
+@household_router.get("/household/deletion-status")
+async def household_deletion_status(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Whether a deletion is pending and when the purge will run."""
+    result = await db.execute(select(Household).where(Household.id == user.household_id))
+    household = result.scalar_one()
+    if household.deletion_requested_at is None:
+        return {"pending": False, "purge_after": None}
+    return {
+        "pending": True,
+        "purge_after": _purge_after(household.deletion_requested_at).isoformat(),
+    }

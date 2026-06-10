@@ -1,6 +1,5 @@
 """Shared test fixtures."""
 
-import asyncio
 from collections.abc import AsyncGenerator
 
 import pytest
@@ -243,6 +242,7 @@ async def user(db_session: AsyncSession, household: Household) -> User:
         password_hash=hash_password("testpass123"),
         display_name="Test Parent",
         role="owner",
+        email_verified=True,
     )
     db_session.add(u)
     await db_session.flush()
@@ -312,6 +312,7 @@ async def co_parent_user(db_session: AsyncSession, household: Household) -> User
         password_hash=hash_password("xxxxxxxx"),
         display_name="Co Parent",
         role=UserRole.co_parent,
+        email_verified=True,
     )
     db_session.add(u)
     await db_session.flush()
@@ -328,6 +329,7 @@ async def observer_user(db_session: AsyncSession, household: Household) -> User:
         password_hash=hash_password("xxxxxxxx"),
         display_name="Observer",
         role=UserRole.observer,
+        email_verified=True,
     )
     db_session.add(u)
     await db_session.flush()
@@ -359,6 +361,7 @@ async def self_learner_user(db_session: AsyncSession, household: Household, chil
         password_hash=hash_password("xxxxxxxx"),
         display_name="Self Learner",
         role=UserRole.co_parent,
+        email_verified=True,
         is_self_learner=True,
         linked_child_id=child.id,
     )

@@ -213,6 +213,39 @@ def require_child_access(mode: AccessMode = "read"):
     return checker
 
 
+async def require_verified_email(
+    access_token: str | None = Cookie(default=None),
+    db: AsyncSession = Depends(get_db),
+) -> None:
+    """Router-level gate: an authenticated account must be verified.
+
+    Applied in main.py to every surface that creates or reads child
+    data, per the COPPA/GDPR posture: no child records until the
+    parent has proven control of the contact address. Auth, billing,
+    usage, feedback, and the verification flow itself stay ungated so
+    an unverified user can verify, pay, export, or leave.
+
+    Requests without a (valid) token pass through untouched: each
+    route's own auth dependency still returns its usual 401, and the
+    few deliberately public routes under gated routers (e.g. the
+    compliance states reference list) stay public. Nothing is loosened
+    for child data because every child-data route requires auth, and
+    any authenticated-but-unverified caller is rejected here with a
+    stable token the frontend maps to the verification banner.
+    """
+    if not access_token:
+        return
+    try:
+        user = await get_current_user(access_token=access_token, db=db)
+    except HTTPException:
+        return
+    if not user.email_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="email_not_verified",
+        )
+
+
 async def require_active_subscription(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),

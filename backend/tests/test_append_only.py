@@ -342,6 +342,7 @@ async def test_chain_verify_endpoint_household_isolation(client: AsyncClient, db
         password_hash=hash_password("testpass123"),
         display_name="Parent B",
         role="owner",
+        email_verified=True,
     )
     db_session.add(user_b)
     await db_session.flush()
