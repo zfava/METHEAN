@@ -41,7 +41,13 @@ from app.api.wellbeing import router as wellbeing_router
 from app.core.config import settings
 from app.core.database import engine
 from app.core.logging import setup_logging
-from app.core.middleware import CSRFMiddleware, ErrorHandlerMiddleware, RateLimitMiddleware, SecurityHeadersMiddleware
+from app.core.middleware import (
+    ChildScopeMiddleware,
+    CSRFMiddleware,
+    ErrorHandlerMiddleware,
+    RateLimitMiddleware,
+    SecurityHeadersMiddleware,
+)
 
 logger = structlog.get_logger()
 
@@ -98,6 +104,7 @@ Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 app.add_middleware(ErrorHandlerMiddleware)
 app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(CSRFMiddleware)
+app.add_middleware(ChildScopeMiddleware)
 app.add_middleware(RateLimitMiddleware, requests_per_minute=120)
 app.add_middleware(
     CORSMiddleware,

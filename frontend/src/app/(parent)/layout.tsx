@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 import PageTransition from "@/components/PageTransition";
 import KeyboardShortcuts from "@/components/KeyboardShortcuts";
-import { ChildProvider } from "@/lib/ChildContext";
+import { ChildProvider, readKidModeCookie } from "@/lib/ChildContext";
 import { useMobile } from "@/lib/useMobile";
 import MobileHeader from "@/components/MobileHeader";
 import BottomTabBar from "@/components/BottomTabBar";
@@ -19,6 +19,18 @@ function ParentLayoutInner({ children }: { children: React.ReactNode }) {
   const [navSheetOpen, setNavSheetOpen] = useState(false);
   const mainRef = useRef<HTMLElement>(null);
   const scrollPositions = useRef<Record<string, number>>({});
+
+  // Kid mode lockout: while the session is child-scoped the parent
+  // surface must not render. The server already rejects every parent
+  // API call with 403 (the cookie carries a child-scoped token), so
+  // this mirrors the unauthenticated redirect in /child/layout.tsx
+  // and routes back to the kid surface. Exit goes through the PIN
+  // gate on /child, never through navigation.
+  useEffect(() => {
+    if (typeof window !== "undefined" && readKidModeCookie()) {
+      window.location.replace("/child");
+    }
+  }, [pathname]);
 
   // Close nav sheet on route change
   useEffect(() => { setNavSheetOpen(false); }, [pathname]);

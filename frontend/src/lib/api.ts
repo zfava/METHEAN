@@ -166,6 +166,28 @@ export const auth = {
   logout: () => request("/auth/logout", { method: "POST" }),
 };
 
+// Kid-mode (child-scoped) sessions. enter swaps the HttpOnly access
+// token for a child-scoped one bound to a single child; exit restores
+// the parent session after PIN (or password) verification. Both go
+// through the shared request helper so the CSRF header is attached.
+export const childSession = {
+  enter: (childId: string) =>
+    request<{ access_token: string; expires_in: number; scope: string; child_id: string }>(
+      "/auth/child-session/enter",
+      { method: "POST", body: JSON.stringify({ child_id: childId }) },
+    ),
+  exit: (secret: { pin?: string; password?: string }) =>
+    request<{ access_token: string; expires_in: number; scope: string }>(
+      "/auth/child-session/exit",
+      { method: "POST", body: JSON.stringify(secret) },
+    ),
+  setPin: (currentPassword: string, newPin: string) =>
+    request<{ success: boolean }>("/auth/pin", {
+      method: "POST",
+      body: JSON.stringify({ current_password: currentPassword, new_pin: newPin }),
+    }),
+};
+
 // Children
 export const children = {
   list: () => request<ChildListItem[]>("/children"),
@@ -1117,6 +1139,8 @@ export interface User {
   role: string;
   is_active: boolean;
   created_at: string;
+  /** True when a kid-mode exit PIN is set for this parent. */
+  has_parent_pin?: boolean;
 }
 
 export interface ChildState {

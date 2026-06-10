@@ -96,6 +96,11 @@ class User(Base):
     )
     institutional_role: Mapped[str | None] = mapped_column(String(50), nullable=True)
 
+    # Kid-mode exit PIN, hashed with the same bcrypt utility as
+    # passwords (migration 053). Nullable: households without a PIN
+    # exit kid mode with the parent password instead.
+    parent_pin_hash: Mapped[str | None] = mapped_column(String(255), nullable=True)
+
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
@@ -103,6 +108,12 @@ class User(Base):
 
     # Relationships
     household: Mapped["Household"] = relationship(back_populates="users")
+
+    @property
+    def has_parent_pin(self) -> bool:
+        """True when a kid-mode exit PIN is set. Safe to expose: the
+        hash itself never leaves the model."""
+        return self.parent_pin_hash is not None
 
 
 class EmailVerificationToken(Base):

@@ -3,9 +3,10 @@
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import {
-  auth, attempts, learn, children as childrenApi,
+  auth, attempts, learn, children as childrenApi, childSession,
   type LearningContext, type ChildDashboardResponse,
 } from "@/lib/api";
+import { readKidModeCookie } from "@/lib/ChildContext";
 import { useToast } from "@/components/Toast";
 import { useMobile } from "@/lib/useMobile";
 import { haptic } from "@/lib/haptics";
@@ -184,6 +185,7 @@ export default function ChildPage() {
 
   const [showSettings, setShowSettings] = useState(false);
   const [showJourney, setShowJourney] = useState(false);
+  const [kidMode, setKidMode] = useState(false);
   const isMobile = useMobile();
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -213,7 +215,7 @@ export default function ChildPage() {
       setSessionCompleted(0);
       setSessionSubjects([]);
       setDayMasteryGains([]);
-      loadDashboard();
+      enterKidModeAndLoad();
     }
   }, [selectedId]);
   useEffect(() => {
@@ -262,6 +264,7 @@ export default function ChildPage() {
 
   async function init() {
     setLoading(true);
+    setKidMode(readKidModeCookie());
     try {
       await auth.me();
       const data: ChildInfo[] = await childrenApi.list() as any;
@@ -273,6 +276,23 @@ export default function ChildPage() {
     } finally {
       setLoading(false);
     }
+  }
+
+  // Swap the parent session for a child-scoped token before any
+  // dashboard data loads. Skipped when the kid_mode cookie is already
+  // set (a child token cannot re-enter). On failure, bounce back to
+  // the parent dashboard rather than running /child on a parent token.
+  async function enterKidModeAndLoad() {
+    if (!readKidModeCookie()) {
+      try {
+        await childSession.enter(selectedId);
+      } catch {
+        window.location.href = "/dashboard";
+        return;
+      }
+    }
+    setKidMode(true);
+    loadDashboard();
   }
 
   async function loadDashboard() {
@@ -560,7 +580,7 @@ export default function ChildPage() {
             )}
           </div>
           <div className="flex items-center gap-2">
-            {childrenList.length > 1 && (
+            {childrenList.length > 1 && !kidMode && (
               <select value={selectedId} onChange={e => setSelectedId(e.target.value)}
                 className="text-sm border border-(--color-border) rounded-xl px-3 py-1.5 min-h-[44px]" aria-label="Switch child">
                 {childrenList.map(c => <option key={c.id} value={c.id}>{c.first_name}</option>)}

@@ -1,11 +1,13 @@
 # subscription_exempt: login/registration/refresh must work without an active subscription
 # See fix/methean6-08-subscription-gating for classification rationale.
-"""Auth API endpoints: register, login, logout, refresh."""
+"""Auth API endpoints: register, login, logout, refresh, kid-mode sessions."""
 
 import hashlib
+import re
 import uuid
 from datetime import UTC, datetime, timedelta
 
+import structlog
 from fastapi import APIRouter, Cookie, Depends, HTTPException, Request, Response, status
 from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import select, update
@@ -44,6 +46,7 @@ from app.schemas.auth import (
 from app.schemas.auth import InviteRequest as InstitutionalInviteRequest
 
 router = APIRouter(prefix="/auth", tags=["auth"])
+logger = structlog.get_logger()
 
 
 def _set_cookie(response: Response, name: str, value: str, max_age: int) -> None:
@@ -596,6 +599,270 @@ async def change_password(
     user.password_hash = hash_password(body.new_password)
     await db.commit()
     return {"success": True}
+
+
+# ══════════════════════════════════════════════════
+# Kid-mode (child-scoped) sessions
+# ══════════════════════════════════════════════════
+
+# A child session can never outlive 12 hours, even if the configured
+# access expiry is longer.
+CHILD_SESSION_MAX_MINUTES = 12 * 60
+
+# After this many consecutive failed exit attempts within the window,
+# the PIN path is rejected (even with the correct PIN) and exit
+# requires the full parent password.
+PIN_ATTEMPT_LIMIT = 5
+PIN_ATTEMPT_WINDOW_SECONDS = 15 * 60
+
+_PIN_FORMAT = re.compile(r"^\d{4,8}$")
+
+
+def _require_parent_scope(user: User) -> None:
+    if getattr(user, "token_scope", "parent") != "parent":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="child_session_forbidden",
+        )
+
+
+def _exit_attempts_key(household_id: uuid.UUID) -> str:
+    return f"kid_exit_attempts:{household_id}"
+
+
+def _role_value(user: User) -> str:
+    return user.role.value if hasattr(user.role, "value") else str(user.role)
+
+
+class SetPinRequest(BaseModel):
+    current_password: str
+    new_pin: str
+
+
+class ChildSessionEnterRequest(BaseModel):
+    child_id: uuid.UUID
+
+
+class ChildSessionExitRequest(BaseModel):
+    pin: str | None = None
+    password: str | None = None
+
+
+@router.post("/pin")
+async def set_parent_pin(
+    body: SetPinRequest,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Set or change the kid-mode exit PIN.
+
+    Parent scope required; requires the current password; the PIN is 4
+    to 8 digits and is hashed with the same utility as passwords. The
+    PIN value itself is never logged anywhere.
+    """
+    from app.models.enums import GovernanceAction
+    from app.services.governance import log_governance_event
+
+    _require_parent_scope(user)
+    if not verify_password(body.current_password, user.password_hash):
+        raise HTTPException(status_code=400, detail="Current password is incorrect")
+    if not _PIN_FORMAT.fullmatch(body.new_pin):
+        raise HTTPException(status_code=422, detail="PIN must be 4 to 8 digits")
+
+    had_pin = user.parent_pin_hash is not None
+    user.parent_pin_hash = hash_password(body.new_pin)
+    await log_governance_event(
+        db,
+        user.household_id,
+        user.id,
+        GovernanceAction.modify,
+        "parent_pin_changed",
+        user.id,
+        reason="Kid-mode exit PIN changed" if had_pin else "Kid-mode exit PIN set",
+        metadata={"had_pin": had_pin},
+    )
+    logger.info(
+        "parent_pin_changed",
+        user_id=str(user.id),
+        household_id=str(user.household_id),
+        had_pin=had_pin,
+    )
+    await db.commit()
+    return {"success": True}
+
+
+@router.post("/child-session/enter")
+async def enter_child_session(
+    body: ChildSessionEnterRequest,
+    response: Response,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Swap the parent session for a child-scoped one (kid mode).
+
+    Parent scope required: a child token cannot nest another child
+    session. The child must belong to the caller's household,
+    mirroring require_child_access semantics. The minted token keeps
+    the parent user id as sub so exit can restore the session; only
+    scope and child_id change.
+    """
+    from app.models.enums import GovernanceAction
+    from app.models.identity import Child
+    from app.services.governance import log_governance_event
+
+    _require_parent_scope(user)
+
+    result = await db.execute(
+        select(Child).where(
+            Child.id == body.child_id,
+            Child.household_id == user.household_id,
+        )
+    )
+    child = result.scalar_one_or_none()
+    if not child:
+        raise HTTPException(status_code=404, detail="Child not found")
+    if user.linked_child_id is not None and body.child_id != user.linked_child_id:
+        raise HTTPException(status_code=403, detail="Not authorized for this learner")
+
+    expires_minutes = min(settings.ACCESS_TOKEN_EXPIRE_MINUTES, CHILD_SESSION_MAX_MINUTES)
+    access_token = create_access_token(
+        user.id,
+        user.household_id,
+        _role_value(user),
+        scope="child",
+        child_id=child.id,
+        expires_minutes=expires_minutes,
+    )
+    _set_cookie(response, "access_token", access_token, expires_minutes * 60)
+    # Non-HttpOnly marker so the frontend can render kid mode without
+    # an API call. Carries no authority: the HttpOnly token's scope
+    # claim is what the server enforces.
+    response.set_cookie(
+        key="kid_mode",
+        value="1",
+        httponly=False,
+        secure=settings.is_production,
+        samesite="lax",
+        max_age=expires_minutes * 60,
+        path="/",
+    )
+
+    await log_governance_event(
+        db,
+        user.household_id,
+        user.id,
+        GovernanceAction.modify,
+        "child_session_entered",
+        child.id,
+        reason="Kid mode entered",
+        metadata={"child_id": str(child.id), "expires_minutes": expires_minutes},
+    )
+    logger.info(
+        "child_session_entered",
+        user_id=str(user.id),
+        household_id=str(user.household_id),
+        child_id=str(child.id),
+        expires_minutes=expires_minutes,
+    )
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "expires_in": expires_minutes * 60,
+        "scope": "child",
+        "child_id": str(child.id),
+    }
+
+
+@router.post("/child-session/exit")
+async def exit_child_session(
+    body: ChildSessionExitRequest,
+    response: Response,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+) -> dict:
+    """Exit kid mode and restore the parent-scoped session.
+
+    Validates the parent PIN (preferred when one is set) or the parent
+    password (always accepted, and required once the PIN path is
+    locked by too many consecutive failures). The child token kept the
+    parent user id as sub, so the restored session is the original
+    parent's.
+    """
+    from app.core.cache import cache_delete, cache_get, cache_set
+    from app.models.enums import GovernanceAction
+    from app.services.governance import log_governance_event
+
+    attempts_key = _exit_attempts_key(user.household_id)
+    attempts = int(await cache_get(attempts_key) or 0)
+    pin_locked = attempts >= PIN_ATTEMPT_LIMIT
+
+    async def record_failure(reason: str) -> None:
+        await cache_set(attempts_key, attempts + 1, ttl_seconds=PIN_ATTEMPT_WINDOW_SECONDS)
+        logger.warning(
+            "child_session_exit_failed",
+            user_id=str(user.id),
+            household_id=str(user.household_id),
+            reason=reason,
+            consecutive_failures=attempts + 1,
+        )
+
+    verified_with: str | None = None
+    if body.password is not None and (pin_locked or not user.parent_pin_hash or body.pin is None):
+        # Password path: always available, and the only path while the
+        # PIN is locked or no PIN is set.
+        if verify_password(body.password, user.password_hash):
+            verified_with = "password"
+        else:
+            await record_failure("password_mismatch")
+            raise HTTPException(status_code=401, detail="Invalid PIN or password")
+    elif body.pin is not None and user.parent_pin_hash:
+        if pin_locked:
+            raise HTTPException(status_code=403, detail="pin_locked_use_password")
+        if verify_password(body.pin, user.parent_pin_hash):
+            verified_with = "pin"
+        else:
+            await record_failure("pin_mismatch")
+            raise HTTPException(status_code=401, detail="Invalid PIN or password")
+    elif body.pin is not None:
+        raise HTTPException(status_code=400, detail="pin_not_set")
+    else:
+        raise HTTPException(status_code=400, detail="pin_or_password_required")
+
+    await cache_delete(attempts_key)
+
+    exited_child_id = getattr(user, "token_child_id", None)
+    access_token = create_access_token(user.id, user.household_id, _role_value(user))
+    _set_cookie(response, "access_token", access_token, settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60)
+    response.delete_cookie("kid_mode", path="/")
+
+    await log_governance_event(
+        db,
+        user.household_id,
+        user.id,
+        GovernanceAction.modify,
+        "child_session_exited",
+        exited_child_id or user.id,
+        reason="Kid mode exited",
+        metadata={
+            "child_id": str(exited_child_id) if exited_child_id else None,
+            "verified_with": verified_with,
+        },
+    )
+    logger.info(
+        "child_session_exited",
+        user_id=str(user.id),
+        household_id=str(user.household_id),
+        child_id=str(exited_child_id) if exited_child_id else None,
+        verified_with=verified_with,
+    )
+
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "expires_in": settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+        "scope": "parent",
+    }
 
 
 @router.get("/me/notification-preferences")

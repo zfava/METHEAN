@@ -36,6 +36,9 @@ class UserResponse(BaseModel):
     role: str
     is_active: bool
     created_at: datetime
+    # True when a kid-mode exit PIN is set; the hash never leaves the
+    # model. Lets the ExitGate choose PIN pad vs password upfront.
+    has_parent_pin: bool = False
 
 
 class RegisterResponse(BaseModel):

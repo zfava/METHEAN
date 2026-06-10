@@ -415,6 +415,189 @@
         }
       }
     },
+    "/api/v1/auth/pin": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Set Parent Pin",
+        "description": "Set or change the kid-mode exit PIN.\n\nParent scope required; requires the current password; the PIN is 4\nto 8 digits and is hashed with the same utility as passwords. The\nPIN value itself is never logged anywhere.",
+        "operationId": "set_parent_pin_api_v1_auth_pin_post",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetPinRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Set Parent Pin Api V1 Auth Pin Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/child-session/enter": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Enter Child Session",
+        "description": "Swap the parent session for a child-scoped one (kid mode).\n\nParent scope required: a child token cannot nest another child\nsession. The child must belong to the caller's household,\nmirroring require_child_access semantics. The minted token keeps\nthe parent user id as sub so exit can restore the session; only\nscope and child_id change.",
+        "operationId": "enter_child_session_api_v1_auth_child_session_enter_post",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChildSessionEnterRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Enter Child Session Api V1 Auth Child Session Enter Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/child-session/exit": {
+      "post": {
+        "tags": [
+          "auth"
+        ],
+        "summary": "Exit Child Session",
+        "description": "Exit kid mode and restore the parent-scoped session.\n\nValidates the parent PIN (preferred when one is set) or the parent\npassword (always accepted, and required once the PIN path is\nlocked by too many consecutive failures). The child token kept the\nparent user id as sub, so the restored session is the original\nparent's.",
+        "operationId": "exit_child_session_api_v1_auth_child_session_exit_post",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChildSessionExitRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Exit Child Session Api V1 Auth Child Session Exit Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/auth/me/notification-preferences": {
       "get": {
         "tags": [
@@ -18015,6 +18198,48 @@
         "type": "object",
         "title": "ChildPreferencesUpdate"
       },
+      "ChildSessionEnterRequest": {
+        "properties": {
+          "child_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Child Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "child_id"
+        ],
+        "title": "ChildSessionEnterRequest"
+      },
+      "ChildSessionExitRequest": {
+        "properties": {
+          "pin": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pin"
+          },
+          "password": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Password"
+          }
+        },
+        "type": "object",
+        "title": "ChildSessionExitRequest"
+      },
       "ChildStateResponse": {
         "properties": {
           "child_id": {
@@ -21811,6 +22036,24 @@
         ],
         "title": "RuleType"
       },
+      "SetPinRequest": {
+        "properties": {
+          "current_password": {
+            "type": "string",
+            "title": "Current Password"
+          },
+          "new_pin": {
+            "type": "string",
+            "title": "New Pin"
+          }
+        },
+        "type": "object",
+        "required": [
+          "current_password",
+          "new_pin"
+        ],
+        "title": "SetPinRequest"
+      },
       "SoundPackEntry": {
         "properties": {
           "id": {
@@ -22539,6 +22782,11 @@
             "type": "string",
             "format": "date-time",
             "title": "Created At"
+          },
+          "has_parent_pin": {
+            "type": "boolean",
+            "title": "Has Parent Pin",
+            "default": false
           }
         },
         "type": "object",

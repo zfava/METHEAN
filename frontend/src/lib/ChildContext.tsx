@@ -25,6 +25,20 @@ interface ChildContextValue {
   /** Re-fetch /children. Use after any mutation whose result should
    *  appear in the cached child list (e.g., Learning Profile save). */
   refresh: () => Promise<void>;
+  /** True while the session is child-scoped (kid mode). Derived from
+   *  the non-HttpOnly kid_mode cookie the server sets on enter; the
+   *  HttpOnly token's scope claim is what the server actually
+   *  enforces, so this is render state, never authority. */
+  kidMode: boolean;
+  /** Re-read the kid_mode cookie after an enter/exit call. */
+  refreshKidMode: () => void;
+}
+
+/** Read the kid_mode marker cookie. Exported for layouts that need a
+ *  cookie check without mounting the provider. */
+export function readKidModeCookie(): boolean {
+  if (typeof document === "undefined") return false;
+  return /(?:^|; )kid_mode=1(?:;|$)/.test(document.cookie);
 }
 
 const ChildContext = createContext<ChildContextValue>({
@@ -33,6 +47,8 @@ const ChildContext = createContext<ChildContextValue>({
   setSelectedChild: () => {},
   loading: true,
   refresh: async () => {},
+  kidMode: false,
+  refreshKidMode: () => {},
 });
 
 export function useChild() {
@@ -45,6 +61,7 @@ export function ChildProvider({ children: reactChildren }: { children: React.Rea
   const [childList, setChildList] = useState<ChildInfo[]>([]);
   const [selected, setSelected] = useState<ChildInfo | null>(null);
   const [loading, setLoading] = useState(true);
+  const [kidMode, setKidMode] = useState(false);
 
   const fetchChildren = useCallback(async (): Promise<ChildInfo[]> => {
     try {
@@ -56,7 +73,12 @@ export function ChildProvider({ children: reactChildren }: { children: React.Rea
     }
   }, []);
 
+  const refreshKidMode = useCallback(() => {
+    setKidMode(readKidModeCookie());
+  }, []);
+
   useEffect(() => {
+    refreshKidMode();
     fetchChildren()
       .then((data) => {
         setChildList(data);
@@ -65,7 +87,7 @@ export function ChildProvider({ children: reactChildren }: { children: React.Rea
         }
       })
       .finally(() => setLoading(false));
-  }, [fetchChildren]);
+  }, [fetchChildren, refreshKidMode]);
 
   const refresh = useCallback(async () => {
     const data = await fetchChildren();
@@ -91,6 +113,8 @@ export function ChildProvider({ children: reactChildren }: { children: React.Rea
         setSelectedChild: selectChild,
         loading,
         refresh,
+        kidMode,
+        refreshKidMode,
       }}
     >
       {reactChildren}
