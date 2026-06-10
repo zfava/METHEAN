@@ -9,7 +9,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.assessment import Assessment, PortfolioEntry
 from app.models.curriculum import LearningNode, Subject
 from app.models.enums import GovernanceAction, MasteryLevel, StateEventType
-from app.models.governance import GovernanceEvent
 from app.models.state import ChildNodeState
 from app.services.state_engine import get_or_create_node_state, process_review
 
@@ -89,17 +88,19 @@ async def record_assessment(
                 created_by=user_id,
             )
 
-            # Log governance event for mastery override
-            db.add(
-                GovernanceEvent(
-                    household_id=household_id,
-                    user_id=user_id,
-                    action=GovernanceAction.modify,
-                    target_type="mastery_override",
-                    target_id=node_id,
-                    reason=f"Parent assessment: {prev.value if hasattr(prev, 'value') else prev} -> {target_mastery.value}",
-                    metadata_={"assessment_id": str(assessment.id)},
-                )
+            # Log governance event for mastery override through the
+            # hashed chain logger
+            from app.services.governance import log_governance_event
+
+            await log_governance_event(
+                db,
+                household_id,
+                user_id,
+                GovernanceAction.modify,
+                "mastery_override",
+                node_id,
+                reason=f"Parent assessment: {prev.value if hasattr(prev, 'value') else prev} -> {target_mastery.value}",
+                metadata={"assessment_id": str(assessment.id)},
             )
 
     # If confidence_override is provided, run through FSRS

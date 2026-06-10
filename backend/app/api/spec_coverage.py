@@ -343,7 +343,6 @@ async def update_philosophy(
 ) -> dict:
     """Set the household's philosophical profile. Governs all AI behavior."""
     from app.models.enums import GovernanceAction
-    from app.models.governance import GovernanceEvent
 
     profile = body.model_dump(exclude_none=True)
 
@@ -371,18 +370,18 @@ async def update_philosophy(
     household.philosophical_profile = profile
     await db.flush()
 
-    # Log governance event
-    db.add(
-        GovernanceEvent(
-            household_id=user.household_id,
-            user_id=user.id,
-            action=GovernanceAction.modify,
-            target_type="philosophical_profile",
-            target_id=user.household_id,
-            reason="Philosophical profile updated",
-        )
+    # Log governance event through the hashed chain logger
+    from app.services.governance import log_governance_event
+
+    await log_governance_event(
+        db,
+        user.household_id,
+        user.id,
+        GovernanceAction.modify,
+        "philosophical_profile",
+        user.household_id,
+        reason="Philosophical profile updated",
     )
-    await db.flush()
 
     return profile
 

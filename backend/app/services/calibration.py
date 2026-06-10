@@ -379,20 +379,17 @@ async def recompute_profile(
         )
     )
 
-    from app.models.governance import GovernanceEvent
+    from app.services.governance import log_governance_event
 
-    db.add(
-        GovernanceEvent(
-            household_id=household_id,
-            user_id=None,
-            action=GovernanceAction.modify,
-            target_type="calibration_profile",
-            target_id=profile.id,
-            reason=f"Calibration profile recomputed: mean_drift={profile.mean_drift:.3f}, bias={profile.directional_bias:.3f}, offset={profile.recalibration_offset:.3f}",
-        )
+    await log_governance_event(
+        db,
+        household_id,
+        None,
+        GovernanceAction.modify,
+        "calibration_profile",
+        profile.id,
+        reason=f"Calibration profile recomputed: mean_drift={profile.mean_drift:.3f}, bias={profile.directional_bias:.3f}, offset={profile.recalibration_offset:.3f}",
     )
-
-    await db.flush()
     return profile
 
 

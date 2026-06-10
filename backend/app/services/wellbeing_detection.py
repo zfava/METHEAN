@@ -700,22 +700,21 @@ async def record_dismissal(
     # Governance event
     try:
         from app.models.enums import GovernanceAction
-        from app.models.governance import GovernanceEvent
+        from app.services.governance import log_governance_event
 
-        db.add(
-            GovernanceEvent(
-                household_id=household_id,
-                user_id=None,
-                action=GovernanceAction.modify,
-                target_type="wellbeing_anomaly",
-                target_id=anomaly.id,
-                reason=f"wellbeing_anomaly_dismissed: {atype}",
-                metadata_={
-                    "anomaly_type": atype,
-                    "new_threshold_adjustment": adjustments[atype],
-                    "total_false_positives": config.total_false_positives,
-                },
-            )
+        await log_governance_event(
+            db,
+            household_id,
+            None,
+            GovernanceAction.modify,
+            "wellbeing_anomaly",
+            anomaly.id,
+            reason=f"wellbeing_anomaly_dismissed: {atype}",
+            metadata={
+                "anomaly_type": atype,
+                "new_threshold_adjustment": adjustments[atype],
+                "total_false_positives": config.total_false_positives,
+            },
         )
     except Exception:
         pass

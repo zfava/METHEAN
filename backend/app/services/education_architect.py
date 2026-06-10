@@ -16,7 +16,6 @@ from app.ai.gateway import AIRole, call_ai
 from app.ai.prompts import EDUCATION_ARCHITECT_SYSTEM
 from app.models.education_plan import EducationPlan
 from app.models.enums import GovernanceAction
-from app.models.governance import GovernanceEvent
 from app.models.identity import Child, ChildPreferences, Household
 
 
@@ -121,18 +120,18 @@ Limit to the next {min(years_remaining, 5)} years for now (the plan can be exten
     db.add(plan)
     await db.flush()
 
-    # Log governance event
-    db.add(
-        GovernanceEvent(
-            household_id=household_id,
-            user_id=user_id,
-            action=GovernanceAction.modify,
-            target_type="education_plan",
-            target_id=plan.id,
-            reason=f"Education plan generated for {child.first_name}",
-        )
+    # Log governance event through the hashed chain logger
+    from app.services.governance import log_governance_event
+
+    await log_governance_event(
+        db,
+        household_id,
+        user_id,
+        GovernanceAction.modify,
+        "education_plan",
+        plan.id,
+        reason=f"Education plan generated for {child.first_name}",
     )
-    await db.flush()
 
     return plan
 
@@ -158,17 +157,17 @@ async def approve_education_plan(
     plan.approved_at = datetime.now(UTC)
     plan.approved_by = user_id
 
-    db.add(
-        GovernanceEvent(
-            household_id=household_id,
-            user_id=user_id,
-            action=GovernanceAction.approve,
-            target_type="education_plan",
-            target_id=plan.id,
-            reason="Education plan approved by parent",
-        )
+    from app.services.governance import log_governance_event
+
+    await log_governance_event(
+        db,
+        household_id,
+        user_id,
+        GovernanceAction.approve,
+        "education_plan",
+        plan.id,
+        reason="Education plan approved by parent",
     )
-    await db.flush()
     return plan
 
 
