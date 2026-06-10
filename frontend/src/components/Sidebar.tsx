@@ -83,6 +83,7 @@ const NAV_GROUPS = [
       // policy and the page hides itself for them, so the nav link
       // is gated here too to avoid a 403-shaped dead end.
       { href: "/governance/personalization", label: "Personalization", guardianOnly: true },
+      { href: "/governance/ai", label: "AI Autonomy" },
     ],
   },
 ];

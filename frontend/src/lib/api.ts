@@ -339,6 +339,48 @@ export const transcribe = {
   },
 };
 
+// AI governance panel: per-role autonomy policy, provider chain
+// status, and spend. The policy is a parent POLICY, not a switch.
+export interface AIRoleSetting {
+  role: string;
+  autonomy: "off" | "standard" | "autonomous";
+  allowed: string[];
+  description: string;
+  updated_at: string | null;
+  updated_by: string | null;
+}
+
+export interface AIStatusData {
+  chain_order: string[];
+  providers: Record<string, { configured: boolean; always_available?: boolean }>;
+  today: {
+    spend_cents: number;
+    tokens: number;
+    calls: number;
+    daily_token_limit: number;
+    pct_tokens: number;
+    pct_cost: number;
+  };
+  last_30_days: {
+    role: string;
+    calls: number;
+    input_tokens: number;
+    output_tokens: number;
+    estimated_cost_cents: number;
+  }[];
+}
+
+export const aiGovernance = {
+  settings: () =>
+    request<{ roles: AIRoleSetting[]; autonomy_levels: Record<string, string> }>("/governance/ai-settings"),
+  update: (role: string, autonomy: string) =>
+    request<{ role: string; autonomy: string; old_autonomy: string }>("/governance/ai-settings", {
+      method: "PUT",
+      body: JSON.stringify({ role, autonomy }),
+    }),
+  status: () => request<AIStatusData>("/governance/ai-status"),
+};
+
 // Family Record: the cumulative, evidence-backed educational record
 // (2.1 backend). Read-only over learner state; export seals a bundle.
 export interface RecordEvidenceAttempt {
