@@ -130,6 +130,7 @@ RLS_TABLES = [
     "fsrs_cards",
     "governance_events",
     "governance_rules",
+    "household_ai_role_settings",
     "learner_intelligence",
     "learner_style_vectors",
     "learning_edges",

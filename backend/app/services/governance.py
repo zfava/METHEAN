@@ -687,3 +687,235 @@ async def log_governance_event(
         pass  # Intelligence recording is non-blocking
 
     return event
+
+
+# ══════════════════════════════════════════════════
+# AI role autonomy policy (migration 056)
+# ══════════════════════════════════════════════════
+
+AI_AUTONOMY_OFF = "off"
+AI_AUTONOMY_STANDARD = "standard"
+AI_AUTONOMY_AUTONOMOUS = "autonomous"
+
+# Which autonomy values each role may take. Widening a role's allowed
+# set is a deliberate product decision with legal and parental weight,
+# not a config change: it means defining the role's named write
+# actions, their governance events, and their revocation story first.
+# Only the tutor is autonomy-capable today (the tutor profile system
+# consumes the grant).
+ALLOWED_AUTONOMY: dict[str, tuple[str, ...]] = {
+    "planner": (AI_AUTONOMY_OFF, AI_AUTONOMY_STANDARD),
+    "tutor": (AI_AUTONOMY_OFF, AI_AUTONOMY_STANDARD, AI_AUTONOMY_AUTONOMOUS),
+    "evaluator": (AI_AUTONOMY_OFF, AI_AUTONOMY_STANDARD),
+    "advisor": (AI_AUTONOMY_OFF, AI_AUTONOMY_STANDARD),
+    "cartographer": (AI_AUTONOMY_OFF, AI_AUTONOMY_STANDARD),
+    "education_architect": (AI_AUTONOMY_OFF, AI_AUTONOMY_STANDARD),
+    "content_architect": (AI_AUTONOMY_OFF, AI_AUTONOMY_STANDARD),
+    "curriculum_mapper": (AI_AUTONOMY_OFF, AI_AUTONOMY_STANDARD),
+}
+
+# One line per role, written for a skeptical parent.
+AI_ROLE_DESCRIPTIONS: dict[str, str] = {
+    "planner": "Drafts weekly activity plans for your approval. It proposes; you approve every plan before your child sees it.",
+    "tutor": "Talks your child through their work with guiding questions. It coaches; it never just hands over answers.",
+    "evaluator": "Reads completed work and suggests a mastery judgment. Your approval settings decide what actually counts.",
+    "advisor": "Writes you periodic progress summaries and suggestions. It reports to you, never to your child.",
+    "cartographer": "Suggests how skills connect and what could come next on the learning map. Nothing moves without your approval.",
+    "education_architect": "Drafts long-range education plans and annual curricula for your review. Your curriculum itself runs natively, with or without AI.",
+    "content_architect": "Drafts lesson content and practice material inside the curriculum you already approved.",
+    "curriculum_mapper": "Reads curriculum materials you provide and maps them into METHEAN for your review.",
+}
+
+# One line per autonomy level, same audience.
+AI_AUTONOMY_DESCRIPTIONS: dict[str, str] = {
+    AI_AUTONOMY_OFF: "This role makes no AI calls at all. The features it powers show a friendly unavailable state instead.",
+    AI_AUTONOMY_STANDARD: "The AI advises. Anything it wants to change about your child's record waits for your approval. This is the default.",
+    AI_AUTONOMY_AUTONOMOUS: "A standing grant: this role may apply its specific, named actions without per-item approval. Every action is recorded against this grant in the sealed family record, and one tap revokes it.",
+}
+
+# Plain-language scope text recorded inside every grant event. The
+# grant event's hash is the standing reference that future autonomous
+# writes cite.
+AI_AUTONOMY_GRANT_SCOPE: dict[str, str] = {
+    "tutor": (
+        "Allows the AI tutor to apply its specific, named tutor adjustments "
+        "for your child without per-item approval. Every action under this "
+        "grant is recorded in the sealed family record, cites this grant, "
+        "and the grant is revocable in one tap."
+    ),
+}
+
+_AI_POLICY_CACHE_TTL_SECONDS = 30
+
+
+def _ai_policy_cache_key(household_id: uuid.UUID, role: str) -> str:
+    return f"ai_policy:{household_id}:{role}"
+
+
+async def get_ai_role_policy(db: AsyncSession, household_id: uuid.UUID, role: str) -> str:
+    """Effective autonomy for one role. Absent row means standard.
+
+    Cached briefly (mirroring the governance queue cache pattern) so
+    the gateway does not add a query to every AI call; writes
+    invalidate the key.
+    """
+    from app.core.cache import cache_get, cache_set
+
+    key = _ai_policy_cache_key(household_id, role)
+    cached = await cache_get(key)
+    if cached in (AI_AUTONOMY_OFF, AI_AUTONOMY_STANDARD, AI_AUTONOMY_AUTONOMOUS):
+        return cached
+
+    from app.models.governance import HouseholdAIRoleSetting
+
+    result = await db.execute(
+        select(HouseholdAIRoleSetting.autonomy).where(
+            HouseholdAIRoleSetting.household_id == household_id,
+            HouseholdAIRoleSetting.role == role,
+        )
+    )
+    autonomy = result.scalar_one_or_none() or AI_AUTONOMY_STANDARD
+    await cache_set(key, autonomy, ttl_seconds=_AI_POLICY_CACHE_TTL_SECONDS)
+    return autonomy
+
+
+async def get_all_ai_role_settings(db: AsyncSession, household_id: uuid.UUID) -> list[dict]:
+    """All eight roles with effective autonomy and change metadata."""
+    from app.models.governance import HouseholdAIRoleSetting
+
+    result = await db.execute(select(HouseholdAIRoleSetting).where(HouseholdAIRoleSetting.household_id == household_id))
+    rows = {row.role: row for row in result.scalars().all()}
+
+    settings_list = []
+    for role, allowed in ALLOWED_AUTONOMY.items():
+        row = rows.get(role)
+        settings_list.append(
+            {
+                "role": role,
+                "autonomy": row.autonomy if row else AI_AUTONOMY_STANDARD,
+                "allowed": list(allowed),
+                "description": AI_ROLE_DESCRIPTIONS[role],
+                "updated_at": row.updated_at.isoformat() if row and row.updated_at else None,
+                "updated_by": str(row.updated_by) if row and row.updated_by else None,
+            }
+        )
+    return settings_list
+
+
+async def set_ai_role_policy(
+    db: AsyncSession,
+    household_id: uuid.UUID,
+    user_id: uuid.UUID,
+    role: str,
+    autonomy: str,
+) -> dict:
+    """Upsert one role's autonomy policy and log the governance events.
+
+    Raises ValueError for unknown roles or disallowed autonomy values
+    (the endpoint surfaces these as 422). Every change logs
+    ai_role_policy_changed; transitions into and out of autonomous
+    additionally log ai_autonomy_granted / ai_autonomy_revoked because
+    a standing grant carries legal and parental weight beyond a normal
+    setting change.
+    """
+    allowed = ALLOWED_AUTONOMY.get(role)
+    if allowed is None:
+        raise ValueError(f"Unknown AI role '{role}'")
+    if autonomy not in allowed:
+        raise ValueError(f"Autonomy '{autonomy}' is not available for the {role} role. Allowed: {', '.join(allowed)}")
+
+    from app.core.cache import cache_delete
+    from app.models.governance import HouseholdAIRoleSetting
+
+    result = await db.execute(
+        select(HouseholdAIRoleSetting).where(
+            HouseholdAIRoleSetting.household_id == household_id,
+            HouseholdAIRoleSetting.role == role,
+        )
+    )
+    row = result.scalar_one_or_none()
+    old_autonomy = row.autonomy if row else AI_AUTONOMY_STANDARD
+
+    if row is None:
+        row = HouseholdAIRoleSetting(
+            household_id=household_id,
+            role=role,
+            autonomy=autonomy,
+            updated_by=user_id,
+        )
+        db.add(row)
+    else:
+        row.autonomy = autonomy
+        row.updated_by = user_id
+    await db.flush()
+    await cache_delete(_ai_policy_cache_key(household_id, role))
+
+    if autonomy != old_autonomy:
+        await log_governance_event(
+            db,
+            household_id,
+            user_id,
+            GovernanceAction.modify,
+            "ai_role_policy_changed",
+            row.id,
+            reason=f"AI policy for {role}: {old_autonomy} to {autonomy}",
+            metadata={"role": role, "old": old_autonomy, "new": autonomy},
+        )
+        if autonomy == AI_AUTONOMY_AUTONOMOUS:
+            await log_governance_event(
+                db,
+                household_id,
+                user_id,
+                GovernanceAction.approve,
+                "ai_autonomy_granted",
+                row.id,
+                reason=AI_AUTONOMY_GRANT_SCOPE.get(role, f"Standing autonomy grant for the {role} role"),
+                metadata={"role": role, "granted_by": str(user_id), "scope": AI_AUTONOMY_GRANT_SCOPE.get(role)},
+            )
+        elif old_autonomy == AI_AUTONOMY_AUTONOMOUS:
+            await log_governance_event(
+                db,
+                household_id,
+                user_id,
+                GovernanceAction.modify,
+                "ai_autonomy_revoked",
+                row.id,
+                reason=f"Standing autonomy grant for the {role} role revoked",
+                metadata={"role": role, "revoked_by": str(user_id)},
+            )
+        logger.info(
+            "ai_role_policy_changed",
+            household_id=str(household_id),
+            role=role,
+            old=old_autonomy,
+            new=autonomy,
+            user_id=str(user_id),
+        )
+
+    return {
+        "role": role,
+        "autonomy": autonomy,
+        "old_autonomy": old_autonomy,
+    }
+
+
+async def get_active_autonomy_grant(db: AsyncSession, household_id: uuid.UUID, role: str) -> str | None:
+    """The hash of the standing grant event currently in force, or None.
+
+    Future autonomous writes cite this hash so every action under a
+    grant is traceable to the parent decision that authorized it.
+    """
+    result = await db.execute(
+        select(GovernanceEvent)
+        .where(
+            GovernanceEvent.household_id == household_id,
+            GovernanceEvent.target_type.in_(["ai_autonomy_granted", "ai_autonomy_revoked"]),
+            GovernanceEvent.metadata_["role"].astext == role,
+        )
+        .order_by(GovernanceEvent.created_at.desc(), GovernanceEvent.id.desc())
+        .limit(1)
+    )
+    latest = result.scalar_one_or_none()
+    if latest is None or latest.target_type != "ai_autonomy_granted":
+        return None
+    return latest.event_hash
