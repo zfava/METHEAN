@@ -59,6 +59,7 @@ const NAV_SECTIONS: { label: string; items: NavItem[] }[] = [
     label: "Settings",
     items: [
       { href: "/family", label: "Family" },
+      { href: "/record", label: "Family Record" },
       { href: "/compliance", label: "Compliance" },
       { href: "/billing", label: "Billing" },
       { href: "/settings", label: "Settings" },

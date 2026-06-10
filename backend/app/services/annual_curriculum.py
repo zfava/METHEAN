@@ -23,7 +23,7 @@ from app.models.enums import (
     GovernanceAction,
     PlanStatus,
 )
-from app.models.governance import Activity, Attempt, GovernanceEvent, Plan, PlanWeek
+from app.models.governance import Activity, Attempt, Plan, PlanWeek
 from app.models.identity import Child, ChildPreferences, Household
 
 logger = logging.getLogger("methean.annual_curriculum")
@@ -303,17 +303,17 @@ Generate the complete {total_weeks}-week scope and sequence."""
     db.add(curriculum)
     await db.flush()
 
-    db.add(
-        GovernanceEvent(
-            household_id=household_id,
-            user_id=user_id,
-            action=GovernanceAction.modify,
-            target_type="annual_curriculum",
-            target_id=curriculum.id,
-            reason=f"Annual curriculum generated: {subject_name} {academic_year}",
-        )
+    from app.services.governance import log_governance_event
+
+    await log_governance_event(
+        db,
+        household_id,
+        user_id,
+        GovernanceAction.modify,
+        "annual_curriculum",
+        curriculum.id,
+        reason=f"Annual curriculum generated: {subject_name} {academic_year}",
     )
-    await db.flush()
 
     return curriculum
 
@@ -341,17 +341,17 @@ async def approve_annual_curriculum(
     curriculum.approved_at = datetime.now(UTC)
     curriculum.approved_by = user_id
 
-    db.add(
-        GovernanceEvent(
-            household_id=household_id,
-            user_id=user_id,
-            action=GovernanceAction.approve,
-            target_type="annual_curriculum",
-            target_id=curriculum.id,
-            reason=f"Annual curriculum approved: {curriculum.subject_name} {curriculum.academic_year}",
-        )
+    from app.services.governance import log_governance_event
+
+    await log_governance_event(
+        db,
+        household_id,
+        user_id,
+        GovernanceAction.approve,
+        "annual_curriculum",
+        curriculum.id,
+        reason=f"Annual curriculum approved: {curriculum.subject_name} {curriculum.academic_year}",
     )
-    await db.flush()
 
     # Materialize full year
     await materialize_full_year(db, curriculum)

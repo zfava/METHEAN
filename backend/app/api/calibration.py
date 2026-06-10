@@ -11,7 +11,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.api.deps import get_current_user, get_db, require_active_subscription, require_child_access
 from app.models.calibration import CalibrationProfile, EvaluatorPrediction
 from app.models.enums import GovernanceAction
-from app.models.governance import GovernanceEvent
 from app.models.identity import Child, User
 
 router = APIRouter(tags=["calibration"], dependencies=[Depends(require_active_subscription)])
@@ -188,16 +187,17 @@ async def update_calibration_offset(
         profile.parent_override_offset = None
         changes["parent_override_offset"] = None
 
-    # Emit governance event
-    db.add(
-        GovernanceEvent(
-            household_id=user.household_id,
-            user_id=user.id,
-            action=GovernanceAction.modify,
-            target_type="calibration_profile",
-            target_id=profile.id,
-            reason=f"Calibration offset updated: {changes}",
-        )
+    # Emit governance event through the hashed chain logger
+    from app.services.governance import log_governance_event
+
+    await log_governance_event(
+        db,
+        user.household_id,
+        user.id,
+        GovernanceAction.modify,
+        "calibration_profile",
+        profile.id,
+        reason=f"Calibration offset updated: {changes}",
     )
 
     await db.flush()

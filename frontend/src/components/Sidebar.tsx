@@ -19,6 +19,7 @@ const NAV_GROUPS = [
     items: [
       { href: "/dashboard", label: "Dashboard", exact: true },
       { href: "/family", label: "Family" },
+      { href: "/record", label: "Family Record" },
       { href: "/compliance", label: "Compliance" },
     ],
   },

@@ -28,7 +28,6 @@ from app.models.curriculum import (
     Subject,
 )
 from app.models.enums import EdgeRelation, GovernanceAction, MasteryLevel, StateEventType
-from app.models.governance import GovernanceEvent
 from app.models.identity import Child, User
 from app.models.state import ChildNodeState, StateEvent
 from app.schemas.curriculum import (
@@ -1112,17 +1111,20 @@ async def override_blocked_node(
         )
         db.add(state)
 
-    # Log as GovernanceEvent (immutable audit)
-    gov_event = GovernanceEvent(
-        household_id=user.household_id,
-        user_id=user.id,
-        action=GovernanceAction.approve,
-        target_type="child_node_state",
-        target_id=node_id,
+    # Log as GovernanceEvent (immutable audit) through the hashed
+    # chain logger
+    from app.services.governance import log_governance_event
+
+    gov_event = await log_governance_event(
+        db,
+        user.household_id,
+        user.id,
+        GovernanceAction.approve,
+        "child_node_state",
+        node_id,
         reason=body.reason,
-        metadata_={"child_id": str(child_id), "override_type": "unlock_blocked_node"},
+        metadata={"child_id": str(child_id), "override_type": "unlock_blocked_node"},
     )
-    db.add(gov_event)
 
     # Also log as StateEvent (append-only state history)
     state_event = StateEvent(

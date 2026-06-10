@@ -21,7 +21,7 @@ from app.core.config import settings
 from app.core.database import set_tenant
 from app.models.curriculum import LearningNode
 from app.models.enums import GovernanceAction, MasteryLevel
-from app.models.governance import GovernanceEvent, GovernanceRule
+from app.models.governance import GovernanceRule
 from app.models.identity import Child
 from app.models.state import ChildNodeState
 
@@ -127,21 +127,22 @@ async def evaluate_temporal_triggers(
                 rule.trigger_conditions = tc
                 flag_modified(rule, "trigger_conditions")
 
-                # Log governance event
-                db.add(
-                    GovernanceEvent(
-                        household_id=rule.household_id,
-                        user_id=rule.created_by,
-                        action=GovernanceAction.modify,
-                        target_type="temporal_trigger",
-                        target_id=rule.id,
-                        reason=f"Temporal trigger fired: {fire_reason}. Rule '{rule.name}' {action}d.",
-                        metadata_={
-                            "trigger_type": trigger_type,
-                            "action": action,
-                            "reason": fire_reason,
-                        },
-                    )
+                # Log governance event through the hashed chain logger
+                from app.services.governance import log_governance_event
+
+                await log_governance_event(
+                    db,
+                    rule.household_id,
+                    rule.created_by,
+                    GovernanceAction.modify,
+                    "temporal_trigger",
+                    rule.id,
+                    reason=f"Temporal trigger fired: {fire_reason}. Rule '{rule.name}' {action}d.",
+                    metadata={
+                        "trigger_type": trigger_type,
+                        "action": action,
+                        "reason": fire_reason,
+                    },
                 )
 
                 triggers_fired += 1

@@ -10,7 +10,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user, get_db, require_active_subscription, require_child_access
 from app.models.enums import AuditAction, GovernanceAction
-from app.models.governance import GovernanceEvent
 from app.models.identity import Child, User
 from app.models.intelligence import LearnerIntelligence
 from app.models.operational import AuditLog
@@ -169,22 +168,23 @@ async def set_style_override(
 
     vector.parent_overrides = overrides
 
-    db.add(
-        GovernanceEvent(
-            household_id=user.household_id,
-            user_id=user.id,
-            action=GovernanceAction.modify,
-            target_type="learner_style_vector",
-            target_id=vector.id,
-            reason=f"{action}: {body.dimension}",
-            metadata_={
-                "action": action,
-                "dimension": body.dimension,
-                "old_value": old_value,
-                "new_value": overrides.get(body.dimension),
-                "child_id": str(child_id),
-            },
-        )
+    from app.services.governance import log_governance_event
+
+    await log_governance_event(
+        db,
+        user.household_id,
+        user.id,
+        GovernanceAction.modify,
+        "learner_style_vector",
+        vector.id,
+        reason=f"{action}: {body.dimension}",
+        metadata={
+            "action": action,
+            "dimension": body.dimension,
+            "old_value": old_value,
+            "new_value": overrides.get(body.dimension),
+            "child_id": str(child_id),
+        },
     )
 
     db.add(
@@ -266,22 +266,23 @@ async def set_style_bounds(
 
     vector.parent_bounds = bounds
 
-    db.add(
-        GovernanceEvent(
-            household_id=user.household_id,
-            user_id=user.id,
-            action=GovernanceAction.modify,
-            target_type="learner_style_vector",
-            target_id=vector.id,
-            reason=f"{action}: {body.dimension}",
-            metadata_={
-                "action": action,
-                "dimension": body.dimension,
-                "old_bounds": old_bounds,
-                "new_bounds": bounds.get(body.dimension),
-                "child_id": str(child_id),
-            },
-        )
+    from app.services.governance import log_governance_event
+
+    await log_governance_event(
+        db,
+        user.household_id,
+        user.id,
+        GovernanceAction.modify,
+        "learner_style_vector",
+        vector.id,
+        reason=f"{action}: {body.dimension}",
+        metadata={
+            "action": action,
+            "dimension": body.dimension,
+            "old_bounds": old_bounds,
+            "new_bounds": bounds.get(body.dimension),
+            "child_id": str(child_id),
+        },
     )
 
     db.add(

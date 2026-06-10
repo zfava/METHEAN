@@ -21,7 +21,6 @@ from app.models.curriculum import (
     Subject,
 )
 from app.models.enums import EdgeRelation, GovernanceAction, MasteryLevel
-from app.models.governance import GovernanceEvent
 from app.models.identity import Child, Household
 from app.models.state import ChildNodeState, FSRSCard
 
@@ -207,18 +206,18 @@ async def apply_curriculum_mapping(
             )
         )
 
-    # Log governance event
-    db.add(
-        GovernanceEvent(
-            household_id=household_id,
-            user_id=user_id,
-            action=GovernanceAction.approve,
-            target_type="curriculum_mapping",
-            target_id=lmap.id,
-            reason=f"Mapped '{proposal.get('material_name', '')}' into METHEAN",
-        )
+    # Log governance event through the hashed chain logger
+    from app.services.governance import log_governance_event
+
+    await log_governance_event(
+        db,
+        household_id,
+        user_id,
+        GovernanceAction.approve,
+        "curriculum_mapping",
+        lmap.id,
+        reason=f"Mapped '{proposal.get('material_name', '')}' into METHEAN",
     )
-    await db.flush()
 
     # Queue background enrichment
     try:

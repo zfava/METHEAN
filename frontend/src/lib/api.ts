@@ -339,6 +339,109 @@ export const transcribe = {
   },
 };
 
+// Family Record: the cumulative, evidence-backed educational record
+// (2.1 backend). Read-only over learner state; export seals a bundle.
+export interface RecordEvidenceAttempt {
+  id: string;
+  activity_id: string;
+  activity_title: string | null;
+  status: string;
+  score: number | null;
+  started_at: string | null;
+  completed_at: string | null;
+  duration_minutes: number | null;
+}
+
+export interface RecordEvidenceAssessment {
+  id: string;
+  assessment_type: string;
+  title: string;
+  mastery_judgment: string | null;
+  assessed_at: string | null;
+}
+
+export interface RecordGovernanceEvent {
+  id: string;
+  action: string;
+  target_type: string;
+  target_id: string;
+  reason: string | null;
+  created_at: string;
+  event_hash: string | null;
+  prev_event_hash: string | null;
+}
+
+export interface RecordMasteryEvidence {
+  node_id: string;
+  node_title: string;
+  node_type: string;
+  subject: string | null;
+  mastery_level: string;
+  achieved_at: string | null;
+  fsrs_stability: number | null;
+  attempts: RecordEvidenceAttempt[];
+  assessments: RecordEvidenceAssessment[];
+  governance_events: RecordGovernanceEvent[];
+}
+
+export interface FamilyRecordData {
+  format: string;
+  identity: {
+    child_first_name: string;
+    child_last_name: string | null;
+    birth_year: number | null;
+    grade_level: string | null;
+    household_state: string | null;
+    record_generated_at: string;
+    methean_version: string;
+  };
+  transcript: {
+    grading_scale: string;
+    courses: {
+      academic_year: string;
+      subject_name: string;
+      grade_level: string | null;
+      status: string;
+      weeks_completed: number;
+      total_weeks: number | null;
+      hours_per_week: number | null;
+      overall_mastery: string | null;
+      translated_grade: string | null;
+    }[];
+    cumulative_hours: { total_hours: number; by_subject: Record<string, number> };
+  };
+  mastery_evidence: RecordMasteryEvidence[];
+  attendance: { total_hours: number; by_subject: Record<string, number> };
+  reading_log: { title: string; author: string | null; status: string | null }[];
+  integrity: { head_hash: string | null; chain_verified: boolean; event_count: number };
+}
+
+export interface RecordExportResult {
+  bundle_hash: string;
+  content_hash: string;
+  download_url: string | null;
+  expires_in: number;
+  artifact_id: string;
+  skipped_documents: { name: string; reason: string }[];
+}
+
+export interface RecordExportListItem {
+  artifact_id: string;
+  child_id: string;
+  title: string;
+  bundle_hash: string | null;
+  content_hash: string | null;
+  created_at: string | null;
+  file_size_bytes: number | null;
+}
+
+export const familyRecord = {
+  get: (childId: string) => request<FamilyRecordData>(`/children/${childId}/family-record`),
+  exportBundle: (childId: string) =>
+    request<RecordExportResult>(`/children/${childId}/family-record/export`, { method: "POST" }),
+  listExports: () => request<RecordExportListItem[]>(`/family-record/exports`),
+};
+
 // Snapshots
 export interface SnapshotItem {
   id: string; week_start: string; week_end: string;

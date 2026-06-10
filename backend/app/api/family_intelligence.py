@@ -16,7 +16,6 @@ from app.models.enums import (
     InsightStatus,
 )
 from app.models.family_insight import FamilyInsight, FamilyInsightConfig
-from app.models.governance import GovernanceEvent
 from app.models.identity import Child, User
 from app.models.operational import AuditLog
 
@@ -202,25 +201,26 @@ async def update_insight_status(
         "dismissed": "family_insight_dismissed",
     }
 
-    db.add(
-        GovernanceEvent(
-            household_id=user.household_id,
-            user_id=user.id,
-            action=GovernanceAction.modify,
-            target_type="family_insight",
-            target_id=insight.id,
-            reason=f"{action_map[body.status]}: {insight.pattern_type.value if hasattr(insight.pattern_type, 'value') else insight.pattern_type}",
-            metadata_={
-                "action": action_map[body.status],
-                "insight_id": str(insight.id),
-                "pattern_type": insight.pattern_type.value
-                if hasattr(insight.pattern_type, "value")
-                else str(insight.pattern_type),
-                "previous_status": previous_status,
-                "new_status": body.status,
-                "parent_response": body.parent_response,
-            },
-        )
+    from app.services.governance import log_governance_event
+
+    await log_governance_event(
+        db,
+        user.household_id,
+        user.id,
+        GovernanceAction.modify,
+        "family_insight",
+        insight.id,
+        reason=f"{action_map[body.status]}: {insight.pattern_type.value if hasattr(insight.pattern_type, 'value') else insight.pattern_type}",
+        metadata={
+            "action": action_map[body.status],
+            "insight_id": str(insight.id),
+            "pattern_type": insight.pattern_type.value
+            if hasattr(insight.pattern_type, "value")
+            else str(insight.pattern_type),
+            "previous_status": previous_status,
+            "new_status": body.status,
+            "parent_response": body.parent_response,
+        },
     )
 
     db.add(
@@ -318,16 +318,17 @@ async def update_insight_config(
         config.pattern_settings = current
         changes["pattern_settings"] = body.pattern_settings
 
-    db.add(
-        GovernanceEvent(
-            household_id=user.household_id,
-            user_id=user.id,
-            action=GovernanceAction.modify,
-            target_type="family_insight_config",
-            target_id=config.id,
-            reason=f"Family insight config updated: {list(changes.keys())}",
-            metadata_={"changes": changes},
-        )
+    from app.services.governance import log_governance_event
+
+    await log_governance_event(
+        db,
+        user.household_id,
+        user.id,
+        GovernanceAction.modify,
+        "family_insight_config",
+        config.id,
+        reason=f"Family insight config updated: {list(changes.keys())}",
+        metadata={"changes": changes},
     )
 
     db.add(

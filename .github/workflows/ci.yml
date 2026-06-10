@@ -309,6 +309,12 @@ jobs:
       AI_MOCK_ENABLED: "true"
       NEXT_PUBLIC_API_URL: http://localhost:8000/api/v1
       PYTHONPATH: ${{ github.workspace }}/backend
+      # Family Record exports upload sealed bundles to S3; the moto
+      # stub below stands in for it. Subscription bypass lets freshly
+      # registered e2e households exercise paid surfaces (the config
+      # layer refuses this flag outside dev/test).
+      S3_ENDPOINT_URL: http://localhost:9001
+      DEV_BYPASS_SUBSCRIPTION: "true"
 
     steps:
       - uses: actions/checkout@v4
@@ -327,6 +333,13 @@ jobs:
       - name: Run migrations
         working-directory: backend
         run: alembic upgrade head
+
+      - name: Start S3 stub (moto)
+        run: |
+          pip install "moto[server]"
+          python -m moto.server -p 9001 &
+          sleep 2
+          curl -f http://localhost:9001 || exit 1
 
       - name: Start backend
         working-directory: backend

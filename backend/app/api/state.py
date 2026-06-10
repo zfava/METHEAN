@@ -24,7 +24,7 @@ from app.models.enums import (
     GovernanceAction,
     MasteryLevel,
 )
-from app.models.governance import Attempt, GovernanceEvent
+from app.models.governance import Attempt
 from app.models.identity import Child, User
 from app.models.state import ChildNodeState, FSRSCard, StateEvent
 from app.schemas.state import (
@@ -314,22 +314,24 @@ async def override_mastery_demotion(
     if not node:
         raise HTTPException(status_code=404, detail="Node not found")
 
-    # Log the parent decision as an immutable GovernanceEvent (audit), in the
-    # same place the blocked-node override writes it.
-    gov_event = GovernanceEvent(
-        household_id=user.household_id,
-        user_id=user.id,
-        action=GovernanceAction.modify,
-        target_type="child_node_state",
-        target_id=node_id,
+    # Log the parent decision as an immutable GovernanceEvent (audit),
+    # through the hashed chain logger.
+    from app.services.governance import log_governance_event
+
+    gov_event = await log_governance_event(
+        db,
+        user.household_id,
+        user.id,
+        GovernanceAction.modify,
+        "child_node_state",
+        node_id,
         reason=body.reason,
-        metadata_={
+        metadata={
             "child_id": str(child_id),
             "override_type": "mastery_demotion_reversal",
             "target_level": body.target_level.value,
         },
     )
-    db.add(gov_event)
 
     # Apply the ChildNodeState change + append the override StateEvent.
     override = await apply_mastery_override(

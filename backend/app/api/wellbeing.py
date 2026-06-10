@@ -16,7 +16,6 @@ from app.models.enums import (
     AuditAction,
     GovernanceAction,
 )
-from app.models.governance import GovernanceEvent
 from app.models.identity import Child, User
 from app.models.operational import AuditLog
 from app.models.wellbeing import WellbeingAnomaly, WellbeingConfig
@@ -157,22 +156,23 @@ async def update_anomaly_status(
         "resolved": "wellbeing_anomaly_resolved",
     }
 
-    db.add(
-        GovernanceEvent(
-            household_id=user.household_id,
-            user_id=user.id,
-            action=GovernanceAction.modify,
-            target_type="wellbeing_anomaly",
-            target_id=anomaly.id,
-            reason=f"{action_map[body.status]}: {atype}",
-            metadata_={
-                "action": action_map[body.status],
-                "anomaly_type": atype,
-                "previous_status": prev_status,
-                "new_status": body.status,
-                "child_id": str(child_id),
-            },
-        )
+    from app.services.governance import log_governance_event
+
+    await log_governance_event(
+        db,
+        user.household_id,
+        user.id,
+        GovernanceAction.modify,
+        "wellbeing_anomaly",
+        anomaly.id,
+        reason=f"{action_map[body.status]}: {atype}",
+        metadata={
+            "action": action_map[body.status],
+            "anomaly_type": atype,
+            "previous_status": prev_status,
+            "new_status": body.status,
+            "child_id": str(child_id),
+        },
     )
 
     db.add(
@@ -291,16 +291,17 @@ async def update_config(
         config.custom_thresholds = current
         changes["custom_thresholds"] = body.custom_thresholds
 
-    db.add(
-        GovernanceEvent(
-            household_id=user.household_id,
-            user_id=user.id,
-            action=GovernanceAction.modify,
-            target_type="wellbeing_config",
-            target_id=config.id,
-            reason=f"wellbeing_config_updated: {list(changes.keys())}",
-            metadata_={"changes": changes, "child_id": str(child_id)},
-        )
+    from app.services.governance import log_governance_event
+
+    await log_governance_event(
+        db,
+        user.household_id,
+        user.id,
+        GovernanceAction.modify,
+        "wellbeing_config",
+        config.id,
+        reason=f"wellbeing_config_updated: {list(changes.keys())}",
+        metadata={"changes": changes, "child_id": str(child_id)},
     )
 
     db.add(

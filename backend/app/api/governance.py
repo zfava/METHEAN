@@ -417,21 +417,20 @@ async def attest_report(
     Creates an immutable governance event as attestation. This is the
     authoritative document — not any AI summary.
     """
-    event = GovernanceEvent(
-        household_id=user.household_id,
-        user_id=user.id,
-        action=GovernanceAction.approve,
-        target_type="governance_report_attestation",
-        target_id=user.household_id,
+    event = await log_governance_event(
+        db,
+        user.household_id,
+        user.id,
+        GovernanceAction.approve,
+        "governance_report_attestation",
+        user.household_id,
         reason=body.attestation_text,
-        metadata_={
+        metadata={
             "report_id": body.report_id,
             "attested_by": user.display_name,
             "attested_at": datetime.now(UTC).isoformat(),
         },
     )
-    db.add(event)
-    await db.flush()
 
     return {
         "attestation_id": str(event.id),
