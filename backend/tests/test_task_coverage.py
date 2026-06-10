@@ -575,8 +575,8 @@ class TestWorkerConfig:
 
         assert celery_app.conf.task_acks_late is True
 
-    def test_twelve_beat_entries(self):
-        """Beat schedule has exactly 12 scheduled tasks."""
+    def test_thirteen_beat_entries(self):
+        """Beat schedule has exactly 13 scheduled tasks."""
         from app.tasks.worker import celery_app
 
-        assert len(celery_app.conf.beat_schedule) == 12
+        assert len(celery_app.conf.beat_schedule) == 13
