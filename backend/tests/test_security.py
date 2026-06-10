@@ -172,6 +172,7 @@ RLS_COVERED_TABLES = [
     "fsrs_cards",
     "review_logs",
     "governance_rules",
+    "household_ai_role_settings",
     "governance_events",
     "plans",
     "plan_weeks",
@@ -395,4 +396,5 @@ class TestRLSCoverageMatrix:
         # fitness_logs + fitness_benchmarks added in migration 037
         # personalization_policy added in migration 043
         # voice_usage_daily added in migration 044
-        assert len(RLS_COVERED_TABLES) == 54
+        # household_ai_role_settings added in migration 056
+        assert len(RLS_COVERED_TABLES) == 55
