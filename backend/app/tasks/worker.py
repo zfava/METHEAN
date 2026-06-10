@@ -74,6 +74,10 @@ celery_app.conf.beat_schedule = {
         "task": "app.tasks.worker.wellbeing_detection_task",
         "schedule": crontab(hour=5, minute=0),
     },
+    "daily-household-purge": {
+        "task": "app.tasks.worker.purge_deleted_households",
+        "schedule": crontab(hour=1, minute=30),
+    },
 }
 
 
@@ -216,6 +220,17 @@ def wellbeing_detection_task(self) -> dict:
         from app.tasks.wellbeing_batch import run_wellbeing_sync
 
         return run_wellbeing_sync()
+    except Exception as exc:
+        self.retry(exc=exc, countdown=30 * (2**self.request.retries))
+
+
+@celery_app.task(name="app.tasks.worker.purge_deleted_households", bind=True, max_retries=3)
+def purge_deleted_households(self) -> dict:
+    """Daily: permanently erase households past the 7-day deletion window."""
+    try:
+        from app.tasks.purge import run_purge_sync
+
+        return run_purge_sync()
     except Exception as exc:
         self.retry(exc=exc, countdown=30 * (2**self.request.retries))
 

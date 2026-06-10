@@ -41,6 +41,12 @@ class Household(Base):
     learner_age_range: Mapped[str] = mapped_column(String(20), nullable=False, server_default="k12")
     credit_system: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
 
+    # Deletion lifecycle (migration 054). A non-null
+    # deletion_requested_at marks the household for purge once the
+    # 7-day window elapses; restore clears both fields.
+    deletion_requested_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    deletion_requested_by: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
+
     # Per-household entitlement gating native-library curriculum
     # generation/materialization. Default OFF: the feature is dark for every
     # household until this boolean is flipped to TRUE for a specific household

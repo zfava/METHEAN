@@ -213,6 +213,25 @@ def require_child_access(mode: AccessMode = "read"):
     return checker
 
 
+async def require_verified_email(user: User = Depends(get_current_user)) -> User:
+    """Gate: the account email must be verified.
+
+    Applied at the router level (see main.py) to every surface that
+    creates or reads child data, per the COPPA/GDPR posture: no child
+    records until the parent has proven control of the contact
+    address. Auth, billing, usage, feedback, and the verification flow
+    itself stay ungated so an unverified user can verify, pay, export,
+    or leave. The 403 detail is a stable token the frontend maps to
+    the verification banner.
+    """
+    if not user.email_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="email_not_verified",
+        )
+    return user
+
+
 async def require_active_subscription(
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),

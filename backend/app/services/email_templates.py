@@ -236,3 +236,54 @@ def email_verification_email(verify_url: str) -> str:
         If you didn't create a METHEAN account, you can safely ignore this email.
     </p>"""
     return _base("Verify your METHEAN email", body)
+
+
+def deletion_scheduled_email(parent_name: str, purge_date_str: str, settings_url: str, export_url: str) -> str:
+    """Household deletion confirmation: states the 7-day window, how to
+    restore, and where to export data first. Sent the moment a parent
+    requests deletion."""
+    body = f"""
+    <h2 style="font-size:20px;color:#0F1B2D;margin:0 0 8px;">Your household is scheduled for deletion</h2>
+    <p style="font-size:14px;color:#6B6B6B;line-height:1.6;margin:0 0 16px;">
+        {parent_name}, we received your request to delete your METHEAN household.
+        Everything will be permanently erased on <strong>{purge_date_str}</strong>:
+        every learning record, every document, and your subscription. This cannot
+        be undone after that date.
+    </p>
+    <div style="background:rgba(184,134,11,0.08);border-left:3px solid #B8860B;border-radius:0 8px 8px 0;padding:12px 16px;margin:0 0 16px;">
+        <strong style="color:#B8860B;font-size:13px;">Changed your mind?</strong>
+        <p style="font-size:12px;color:#6B6B6B;margin:4px 0 0;line-height:1.5;">
+            Sign in any time before {purge_date_str} and choose Restore in
+            Settings. Your family's data stays untouched until then.
+        </p>
+    </div>
+    <p style="font-size:14px;color:#6B6B6B;line-height:1.6;margin:0 0 20px;">
+        Your data belongs to you. Export a complete copy before it is erased:
+    </p>
+    <div style="text-align:center;margin:0 0 20px;">
+        <a href="{export_url}" style="display:inline-block;background:#4A6FA5;color:white;padding:14px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">Export My Data</a>
+    </div>
+    <p style="font-size:12px;color:#9A9A9A;margin:0;">
+        If you didn't request this, restore your household from
+        <a href="{settings_url}" style="color:#4A6FA5;text-decoration:none;">Settings</a>
+        and change your password immediately.
+    </p>"""
+    return _base("Your METHEAN household is scheduled for deletion", body)
+
+
+def deletion_canceled_email(parent_name: str) -> str:
+    """Confirmation that a pending household deletion was restored."""
+    body = f"""
+    <h2 style="font-size:20px;color:#0F1B2D;margin:0 0 8px;">Deletion canceled</h2>
+    <p style="font-size:14px;color:#6B6B6B;line-height:1.6;margin:0 0 20px;">
+        {parent_name}, your household's scheduled deletion has been canceled.
+        Nothing was removed and your family's records are exactly as you left
+        them. Welcome back.
+    </p>
+    <div style="text-align:center;margin:0 0 20px;">
+        <a href="https://methean.app/dashboard" style="display:inline-block;background:#4A6FA5;color:white;padding:14px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">Open Dashboard</a>
+    </div>
+    <p style="font-size:12px;color:#9A9A9A;margin:0;">
+        If you didn't cancel this deletion, change your password immediately.
+    </p>"""
+    return _base("Your METHEAN deletion was canceled", body)
