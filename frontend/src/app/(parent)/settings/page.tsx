@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { auth, account, academicCalendar, household, familyInvites, dataExport, compliance, betaFeedback, childSession, type BetaFeedbackItem, type User } from "@/lib/api";
+import { auth, account, academicCalendar, household, householdDeletion, familyInvites, dataExport, compliance, betaFeedback, childSession, type BetaFeedbackItem, type User } from "@/lib/api";
 import { useMobile } from "@/lib/useMobile";
 import { useToast } from "@/components/Toast";
 import PageHeader from "@/components/ui/PageHeader";
@@ -49,6 +49,13 @@ export default function SettingsPage() {
   // Beta feedback submissions
   const [myFeedback, setMyFeedback] = useState<BetaFeedbackItem[]>([]);
 
+  // Danger Zone (household deletion)
+  const [purgeAfter, setPurgeAfter] = useState<string | null>(null);
+  const [dzName, setDzName] = useState("");
+  const [dzPassword, setDzPassword] = useState("");
+  const [dzError, setDzError] = useState("");
+  const [dzBusy, setDzBusy] = useState(false);
+
   // Password
   const [currentPw, setCurrentPw] = useState("");
   const [newPw, setNewPw] = useState("");
@@ -79,6 +86,7 @@ export default function SettingsPage() {
       account.getNotificationPreferences().then(setNotifPrefs).catch(() => {}),
       familyInvites.list().then(setInvites).catch(() => {}),
       betaFeedback.list().then(setMyFeedback).catch(() => {}),
+      householdDeletion.status().then((d) => setPurgeAfter(d.pending ? d.purge_after : null)).catch(() => {}),
     ]).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
@@ -351,6 +359,65 @@ export default function SettingsPage() {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+      </Card>
+
+
+      {/* Danger Zone */}
+      <Card className="mb-6" borderLeft="border-l-(--color-danger)">
+        <SectionHeader title="Danger Zone" />
+        {purgeAfter ? (
+          <div className="mt-3 space-y-3">
+            <p className="text-sm text-(--color-danger)">
+              This household is scheduled for permanent deletion on{" "}
+              <strong>{new Date(purgeAfter).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" })}</strong>.
+              Until then nothing is removed and you can restore everything.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <input type="password" value={dzPassword} onChange={(e) => setDzPassword(e.target.value)} placeholder="Password to restore"
+                className="flex-1 px-3 py-2 text-sm border border-(--color-border-strong) rounded-[10px] bg-(--color-surface)" />
+              <Button variant="primary" size="sm" disabled={!dzPassword || dzBusy} onClick={async () => {
+                setDzBusy(true); setDzError("");
+                try {
+                  await householdDeletion.restore(dzPassword);
+                  setPurgeAfter(null); setDzPassword("");
+                  toast("Deletion canceled. Welcome back.", "success");
+                } catch (err: any) {
+                  setDzError(err?.detail === "Password is incorrect" ? "That password didn't work." : err?.detail || "Couldn't restore.");
+                } finally { setDzBusy(false); }
+              }}>Restore Household</Button>
+            </div>
+            {dzError && <p className="text-xs text-(--color-danger)">{dzError}</p>}
+          </div>
+        ) : (
+          <div className="mt-3 space-y-3">
+            <p className="text-xs text-(--color-text-secondary)">
+              Permanently delete this household: every learning record, document, and your
+              subscription. You get a 7 day window to change your mind, and you can export
+              your data first. After the window, everything is gone forever.
+            </p>
+            <div>
+              <label className="block text-xs text-(--color-text-secondary) mb-1">Type your household name to confirm</label>
+              <input value={dzName} onChange={(e) => setDzName(e.target.value)} placeholder={hhName}
+                className="w-full px-3 py-2 text-sm border border-(--color-border-strong) rounded-[10px] bg-(--color-surface)" />
+            </div>
+            <div>
+              <label className="block text-xs text-(--color-text-secondary) mb-1">Your password</label>
+              <input type="password" value={dzPassword} onChange={(e) => setDzPassword(e.target.value)} placeholder="Password"
+                className="w-full px-3 py-2 text-sm border border-(--color-border-strong) rounded-[10px] bg-(--color-surface)" />
+            </div>
+            {dzError && <p className="text-xs text-(--color-danger)">{dzError}</p>}
+            <Button variant="danger" size="sm" disabled={dzBusy || !dzPassword || dzName.trim() !== hhName.trim()} onClick={async () => {
+              setDzBusy(true); setDzError("");
+              try {
+                const result = await householdDeletion.request(dzPassword);
+                setPurgeAfter(result.purge_after); setDzPassword(""); setDzName("");
+                toast("Deletion scheduled. You have 7 days to restore.", "info");
+              } catch (err: any) {
+                setDzError(err?.detail === "Password is incorrect" ? "That password didn't work." : err?.detail || "Couldn't schedule deletion.");
+              } finally { setDzBusy(false); }
+            }}>Delete Household Permanently</Button>
           </div>
         )}
       </Card>

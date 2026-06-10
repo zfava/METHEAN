@@ -711,6 +711,118 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/household:
+    delete:
+      tags:
+      - auth
+      summary: Request Household Deletion
+      description: 'Schedule the household for permanent deletion after a 7-day window.
+
+
+        Owner role, parent token scope, and password re-authentication
+
+        required: a session cookie alone must never be enough to destroy a
+
+        family''s records. The subscription is canceled immediately; data
+
+        stays intact (and exportable) until the purge task fires.'
+      operationId: request_household_deletion_api_v1_household_delete
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HouseholdDeletionRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Request Household Deletion Api V1 Household Delete
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/household/restore:
+    post:
+      tags:
+      - auth
+      summary: Restore Household
+      description: Cancel a pending household deletion within the 7-day window.
+      operationId: restore_household_api_v1_household_restore_post
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HouseholdDeletionRequest'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Restore Household Api V1 Household Restore Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/household/deletion-status:
+    get:
+      tags:
+      - auth
+      summary: Household Deletion Status
+      description: Whether a deletion is pending and when the purge will run.
+      operationId: household_deletion_status_api_v1_household_deletion_status_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                title: Response Household Deletion Status Api V1 Household Deletion
+                  Status Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/household/academic-calendar:
     get:
       tags:
@@ -5307,6 +5419,15 @@ paths:
       summary: Prometheus Metrics
       description: Prometheus-format metrics endpoint.
       operationId: prometheus_metrics_api_v1_metrics_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
       responses:
         '200':
           description: Successful Response
@@ -5315,6 +5436,12 @@ paths:
               schema:
                 type: string
                 title: Response Prometheus Metrics Api V1 Metrics Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/children/{child_id}/certifications:
     get:
       tags:
@@ -6131,16 +6258,31 @@ paths:
       description: List all supported states with summary. Public endpoint — no auth
         required.
       operationId: list_states_api_v1_compliance_states_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
       responses:
         '200':
           description: Successful Response
           content:
             application/json:
               schema:
+                type: array
                 items:
                   type: object
-                type: array
                 title: Response List States Api V1 Compliance States Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/compliance/states/{code}:
     get:
       tags:
@@ -6316,17 +6458,32 @@ paths:
       summary: List Compliance Domains
       description: List every configured compliance domain.
       operationId: list_compliance_domains_api_v1_compliance_domains_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
       responses:
         '200':
           description: Successful Response
           content:
             application/json:
               schema:
+                type: array
                 items:
                   type: object
-                type: array
                 title: Response List Compliance Domains Api V1 Compliance Domains
                   Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/compliance/domain/{domain}/check/{child_id}:
     get:
       tags:
@@ -12038,6 +12195,15 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    HouseholdDeletionRequest:
+      properties:
+        password:
+          type: string
+          title: Password
+      type: object
+      required:
+      - password
+      title: HouseholdDeletionRequest
     HouseholdSettingsUpdate:
       properties:
         name:
