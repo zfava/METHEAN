@@ -7888,6 +7888,118 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/family-record:
+    get:
+      tags:
+      - family-record
+      summary: Get Family Record
+      description: 'The cumulative Family Record as JSON: transcript, mastery
+
+        evidence chains, attendance, reading log, and chain integrity.'
+      operationId: get_family_record_api_v1_children__child_id__family_record_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FamilyRecord'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/family-record/export:
+    post:
+      tags:
+      - family-record
+      summary: Export Family Record Endpoint
+      description: 'Build and store a sealed export bundle.
+
+
+        The export itself is logged to the governance chain, so every
+
+        issued bundle leaves a permanent, tamper-evident receipt.'
+      operationId: export_family_record_endpoint_api_v1_children__child_id__family_record_export_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExportResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/family-record/exports:
+    get:
+      tags:
+      - family-record
+      summary: List Family Record Exports
+      description: Prior sealed exports for this household, with hashes and dates.
+      operationId: list_family_record_exports_api_v1_family_record_exports_get
+      parameters:
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExportListItem'
+                title: Response List Family Record Exports Api V1 Family Record Exports
+                  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/resources:
     post:
       tags:
@@ -10886,6 +10998,21 @@ components:
       - state_event_id
       - nodes_unblocked
       title: AttemptSubmitResponse
+    AttendanceSection:
+      properties:
+        total_hours:
+          type: number
+          title: Total Hours
+        by_subject:
+          additionalProperties:
+            type: number
+          type: object
+          title: By Subject
+      type: object
+      required:
+      - total_hours
+      - by_subject
+      title: AttendanceSection
     AttestRequest:
       properties:
         report_id:
@@ -11653,6 +11780,21 @@ components:
       required:
       - name
       title: CreateResourceRequest
+    CumulativeHours:
+      properties:
+        total_hours:
+          type: number
+          title: Total Hours
+        by_subject:
+          additionalProperties:
+            type: number
+          type: object
+          title: By Subject
+      type: object
+      required:
+      - total_hours
+      - by_subject
+      title: CumulativeHours
     CustomSubjectCreate:
       properties:
         name:
@@ -11839,6 +11981,245 @@ components:
       - is_active
       - progress_pct
       title: EnrollmentResponse
+    EvidenceAssessment:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        assessment_type:
+          type: string
+          title: Assessment Type
+        title:
+          type: string
+          title: Title
+        mastery_judgment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Mastery Judgment
+        assessed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Assessed At
+      type: object
+      required:
+      - id
+      - assessment_type
+      - title
+      - mastery_judgment
+      - assessed_at
+      title: EvidenceAssessment
+    EvidenceAttempt:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        activity_id:
+          type: string
+          format: uuid
+          title: Activity Id
+        activity_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Activity Title
+        status:
+          type: string
+          title: Status
+        score:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Score
+        started_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Started At
+        completed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Completed At
+        duration_minutes:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Duration Minutes
+      type: object
+      required:
+      - id
+      - activity_id
+      - activity_title
+      - status
+      - score
+      - started_at
+      - completed_at
+      - duration_minutes
+      title: EvidenceAttempt
+    EvidenceGovernanceEvent:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        action:
+          type: string
+          title: Action
+        target_type:
+          type: string
+          title: Target Type
+        target_id:
+          type: string
+          format: uuid
+          title: Target Id
+        reason:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reason
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        event_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Event Hash
+        prev_event_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prev Event Hash
+      type: object
+      required:
+      - id
+      - action
+      - target_type
+      - target_id
+      - reason
+      - created_at
+      - event_hash
+      - prev_event_hash
+      title: EvidenceGovernanceEvent
+    ExportListItem:
+      properties:
+        artifact_id:
+          type: string
+          format: uuid
+          title: Artifact Id
+        child_id:
+          type: string
+          format: uuid
+          title: Child Id
+        title:
+          type: string
+          title: Title
+        bundle_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Bundle Hash
+        content_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content Hash
+        created_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Created At
+        file_size_bytes:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: File Size Bytes
+      type: object
+      required:
+      - artifact_id
+      - child_id
+      - title
+      - bundle_hash
+      - content_hash
+      - created_at
+      - file_size_bytes
+      title: ExportListItem
+    ExportResponse:
+      properties:
+        bundle_hash:
+          type: string
+          title: Bundle Hash
+        content_hash:
+          type: string
+          title: Content Hash
+        download_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Download Url
+        expires_in:
+          type: integer
+          title: Expires In
+        artifact_id:
+          type: string
+          format: uuid
+          title: Artifact Id
+        skipped_documents:
+          items:
+            type: object
+          type: array
+          title: Skipped Documents
+      type: object
+      required:
+      - bundle_hash
+      - content_hash
+      - download_url
+      - expires_in
+      - artifact_id
+      - skipped_documents
+      title: ExportResponse
+    FamilyRecord:
+      properties:
+        format:
+          type: string
+          title: Format
+          default: methean-family-record/1
+        identity:
+          $ref: '#/components/schemas/IdentitySection'
+        transcript:
+          $ref: '#/components/schemas/TranscriptSection'
+        mastery_evidence:
+          items:
+            $ref: '#/components/schemas/MasteryEvidence'
+          type: array
+          title: Mastery Evidence
+        attendance:
+          $ref: '#/components/schemas/AttendanceSection'
+        reading_log:
+          items:
+            $ref: '#/components/schemas/ReadingLogItem'
+          type: array
+          title: Reading Log
+        integrity:
+          $ref: '#/components/schemas/IntegritySection'
+      type: object
+      required:
+      - identity
+      - transcript
+      - mastery_evidence
+      - attendance
+      - reading_log
+      - integrity
+      title: FamilyRecord
     FeedbackCreate:
       properties:
         message:
@@ -12263,6 +12644,48 @@ components:
       - icons
       - available
       title: IconographyPackEntry
+    IdentitySection:
+      properties:
+        child_first_name:
+          type: string
+          title: Child First Name
+        child_last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Child Last Name
+        birth_year:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Birth Year
+        grade_level:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Grade Level
+        household_state:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Household State
+        record_generated_at:
+          type: string
+          format: date-time
+          title: Record Generated At
+        methean_version:
+          type: string
+          title: Methean Version
+      type: object
+      required:
+      - child_first_name
+      - child_last_name
+      - birth_year
+      - grade_level
+      - household_state
+      - record_generated_at
+      - methean_version
+      title: IdentitySection
     InstitutionalRegisterRequest:
       properties:
         organization_name:
@@ -12295,6 +12718,25 @@ components:
       - admin_password
       - admin_display_name
       title: InstitutionalRegisterRequest
+    IntegritySection:
+      properties:
+        head_hash:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Head Hash
+        chain_verified:
+          type: boolean
+          title: Chain Verified
+        event_count:
+          type: integer
+          title: Event Count
+      type: object
+      required:
+      - head_hash
+      - chain_verified
+      - event_count
+      title: IntegritySection
     InterestTagEntry:
       properties:
         id:
@@ -12609,6 +13051,65 @@ components:
       - table_of_contents
       - subject_area
       title: MapExistingRequest
+    MasteryEvidence:
+      properties:
+        node_id:
+          type: string
+          format: uuid
+          title: Node Id
+        node_title:
+          type: string
+          title: Node Title
+        node_type:
+          type: string
+          title: Node Type
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject
+        mastery_level:
+          type: string
+          title: Mastery Level
+        achieved_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Achieved At
+        fsrs_stability:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Fsrs Stability
+        attempts:
+          items:
+            $ref: '#/components/schemas/EvidenceAttempt'
+          type: array
+          title: Attempts
+        assessments:
+          items:
+            $ref: '#/components/schemas/EvidenceAssessment'
+          type: array
+          title: Assessments
+        governance_events:
+          items:
+            $ref: '#/components/schemas/EvidenceGovernanceEvent'
+          type: array
+          title: Governance Events
+      type: object
+      required:
+      - node_id
+      - node_title
+      - node_type
+      - subject
+      - mastery_level
+      - achieved_at
+      - fsrs_stability
+      - attempts
+      - assessments
+      - governance_events
+      title: MasteryEvidence
     MasteryLevel:
       type: string
       enum:
@@ -13654,6 +14155,51 @@ components:
       required:
       - book_title
       title: ReadingLogCreate
+    ReadingLogItem:
+      properties:
+        title:
+          type: string
+          title: Title
+        author:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Author
+        genre:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Genre
+        status:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Status
+        pages_read:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Pages Read
+        pages_total:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Pages Total
+        child_rating:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Child Rating
+      type: object
+      required:
+      - title
+      - author
+      - genre
+      - status
+      - pages_read
+      - pages_total
+      - child_rating
+      title: ReadingLogItem
     ReadingLogUpdate:
       properties:
         book_title:
@@ -14250,6 +14796,74 @@ components:
         caller surfaces a wellbeing UI instead of writing the transcript
 
         into the kid''s textarea.'
+    TranscriptCourse:
+      properties:
+        academic_year:
+          type: string
+          title: Academic Year
+        subject_name:
+          type: string
+          title: Subject Name
+        grade_level:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Grade Level
+        status:
+          type: string
+          title: Status
+        weeks_completed:
+          type: integer
+          title: Weeks Completed
+        total_weeks:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Total Weeks
+        hours_per_week:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Hours Per Week
+        overall_mastery:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Overall Mastery
+        translated_grade:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Translated Grade
+      type: object
+      required:
+      - academic_year
+      - subject_name
+      - grade_level
+      - status
+      - weeks_completed
+      - total_weeks
+      - hours_per_week
+      - overall_mastery
+      title: TranscriptCourse
+    TranscriptSection:
+      properties:
+        grading_scale:
+          type: string
+          title: Grading Scale
+        courses:
+          items:
+            $ref: '#/components/schemas/TranscriptCourse'
+          type: array
+          title: Courses
+        cumulative_hours:
+          $ref: '#/components/schemas/CumulativeHours'
+      type: object
+      required:
+      - grading_scale
+      - courses
+      - cumulative_hours
+      title: TranscriptSection
     TutorMessageRequest:
       properties:
         child_id:

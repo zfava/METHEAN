@@ -243,9 +243,11 @@ async def generate_attendance_record(
         ),
     ]
 
-    monthly = record.get("monthly_summary", {})
+    # get_attendance_record returns monthly_summary as a list of
+    # {month, school_days, total_hours, avg_hours_per_day} dicts.
+    monthly = record.get("monthly_summary", [])
     if monthly:
-        lines = [f"  {month}: {data.get('school_days', 0)} days" for month, data in monthly.items()]
+        lines = [f"  {m.get('month')}: {m.get('school_days', 0)} days" for m in monthly]
         sections.append(("Monthly Breakdown", "\n".join(lines)))
 
     return _make_pdf(
@@ -254,6 +256,71 @@ async def generate_attendance_record(
         child_name,
         hh.name or "Household",
     )
+
+
+async def assemble_transcript_data(
+    db: AsyncSession,
+    household_id: uuid.UUID,
+    child_id: uuid.UUID,
+    grading_scale: str = "mastery",
+) -> dict:
+    """Assemble the cumulative transcript data.
+
+    Single source of truth for transcript content: both the PDF
+    transcript (generate_transcript) and the Family Record JSON
+    (services/family_record.py) consume this dict, so the two surfaces
+    can never drift apart.
+    """
+    child, hh = await _get_child_and_household(db, child_id, household_id)
+    child_name = f"{child.first_name} {child.last_name or ''}"
+
+    curr_r = await db.execute(
+        select(AnnualCurriculum)
+        .where(
+            AnnualCurriculum.child_id == child_id,
+            AnnualCurriculum.household_id == household_id,
+        )
+        .order_by(AnnualCurriculum.academic_year)
+    )
+    curricula = curr_r.scalars().all()
+
+    if grading_scale != "mastery":
+        from app.services.grading import get_grade
+    else:
+        get_grade = None  # type: ignore[assignment]
+
+    courses = []
+    for c in curricula:
+        actual = c.actual_record or {}
+        overall_mastery = actual.get("overall_mastery")
+        translated_grade = None
+        if grading_scale != "mastery" and overall_mastery and get_grade is not None:
+            translated_grade = get_grade(overall_mastery, grading_scale)
+        courses.append(
+            {
+                "academic_year": c.academic_year,
+                "subject_name": c.subject_name,
+                "grade_level": c.grade_level,
+                "status": c.status,
+                "weeks_completed": len(actual.get("weeks", {})),
+                "total_weeks": c.total_weeks,
+                "hours_per_week": c.hours_per_week,
+                "overall_mastery": overall_mastery,
+                "translated_grade": translated_grade,
+            }
+        )
+
+    hours = await get_hours_breakdown(db, household_id, child_id)
+
+    return {
+        "child_name": child_name,
+        "grade_level": child.grade_level,
+        "date_of_birth": child.date_of_birth,
+        "household_name": hh.name or "Household",
+        "grading_scale": grading_scale,
+        "courses": courses,
+        "hours": hours,
+    }
 
 
 async def generate_transcript(
@@ -271,53 +338,34 @@ async def generate_transcript(
     overall mastery (sourced from actual_record.overall_mastery) is
     translated through it.
     """
-    child, hh = await _get_child_and_household(db, child_id, household_id)
-    child_name = f"{child.first_name} {child.last_name or ''}"
-
-    curr_r = await db.execute(
-        select(AnnualCurriculum)
-        .where(
-            AnnualCurriculum.child_id == child_id,
-            AnnualCurriculum.household_id == household_id,
-        )
-        .order_by(AnnualCurriculum.academic_year)
-    )
-    curricula = curr_r.scalars().all()
+    data = await assemble_transcript_data(db, household_id, child_id, grading_scale)
+    child_name = data["child_name"]
 
     student_info = (
-        f"Name: {child_name}\nGrade: {child.grade_level or 'N/A'}\nDate of Birth: {child.date_of_birth or 'N/A'}"
+        f"Name: {child_name}\nGrade: {data['grade_level'] or 'N/A'}\nDate of Birth: {data['date_of_birth'] or 'N/A'}"
     )
     if grading_scale != "mastery":
         student_info += f"\nGrading Scale: {grading_scale}"
 
     sections = [("Student Information", student_info)]
 
-    if grading_scale != "mastery":
-        from app.services.grading import get_grade
-    else:
-        get_grade = None  # type: ignore[assignment]
-
-    for c in curricula:
-        actual = c.actual_record or {}
-        completed_weeks = len(actual.get("weeks", {}))
+    for course in data["courses"]:
         body = (
-            f"Grade Level: {c.grade_level or 'N/A'}\n"
-            f"Status: {c.status}\n"
-            f"Weeks completed: {completed_weeks}/{c.total_weeks}\n"
-            f"Hours/week: {c.hours_per_week or 'N/A'}"
+            f"Grade Level: {course['grade_level'] or 'N/A'}\n"
+            f"Status: {course['status']}\n"
+            f"Weeks completed: {course['weeks_completed']}/{course['total_weeks']}\n"
+            f"Hours/week: {course['hours_per_week'] or 'N/A'}"
         )
-        overall_mastery = actual.get("overall_mastery")
-        if grading_scale != "mastery" and overall_mastery and get_grade is not None:
-            translated = get_grade(overall_mastery, grading_scale)
-            body += f"\nGrade: {translated}"
+        if course["translated_grade"]:
+            body += f"\nGrade: {course['translated_grade']}"
         sections.append(
             (
-                f"{c.academic_year}, {c.subject_name}",
+                f"{course['academic_year']}, {course['subject_name']}",
                 body,
             )
         )
 
-    hours = await get_hours_breakdown(db, household_id, child_id)
+    hours = data["hours"]
     sections.append(
         (
             "Cumulative Hours",
@@ -326,4 +374,4 @@ async def generate_transcript(
         )
     )
 
-    return _make_pdf("Academic Transcript", sections, child_name, hh.name or "Household")
+    return _make_pdf("Academic Transcript", sections, child_name, data["household_name"])
