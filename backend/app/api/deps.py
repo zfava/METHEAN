@@ -1,10 +1,11 @@
 """Shared FastAPI dependencies."""
 
 import logging
+import re
 import uuid
 from typing import Literal
 
-from fastapi import Cookie, Depends, HTTPException, Path, Query, status
+from fastapi import Cookie, Depends, HTTPException, Path, Query, Request, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -246,7 +247,31 @@ async def require_verified_email(
         )
 
 
+# Paths a family in restricted/canceled dunning keeps, because losing
+# payment must never mean losing reach to their own data. The list is
+# the data-stewardship surface and nothing else, following the
+# subscription-exempt classification convention (see the header of
+# api/spec_coverage.py): household deletion and its status live in
+# auth.py, which is subscription-exempt in full, so they need no entry
+# here. Matched against the request path so the family-record router's
+# own require_active_subscription dependency opens for exactly these
+# routes without loosening any other gated router.
+_DUNNING_DATA_ACCESS_PATTERNS = (
+    # Family Record read: the cumulative evidence-backed record.
+    re.compile(r"/children/[0-9a-fA-F-]+/family-record$"),
+    # Sealed data export: build and download a complete bundle.
+    re.compile(r"/children/[0-9a-fA-F-]+/family-record/export$"),
+    # Prior exports list: re-reach bundles already issued.
+    re.compile(r"/family-record/exports$"),
+)
+
+
+def _is_dunning_data_access_path(path: str) -> bool:
+    return any(p.search(path) for p in _DUNNING_DATA_ACCESS_PATTERNS)
+
+
 async def require_active_subscription(
+    request: Request,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ) -> User:
@@ -254,10 +279,22 @@ async def require_active_subscription(
 
     Pass-through statuses: ``active``, ``trialing`` (and households
     still inside their trial window even if the recorded status hasn't
-    been refreshed yet). Every other status — ``canceled``, ``past_due``,
+    been refreshed yet). Every other status (``canceled``, ``past_due``,
     ``paused``, ``incomplete``, ``incomplete_expired``, ``unpaid``, or
-    anything unrecognised — is rejected with a structured 402 the
+    anything unrecognised) is rejected with a structured 402 the
     frontend can branch on to render the upgrade banner.
+
+    Dunning (failed-payment recovery, services/billing.py):
+
+    - ``grace`` passes like an active subscription: the first seven
+      days after a payment failure change nothing for the family.
+    - ``restricted`` and ``canceled`` are inactive, except for the
+      data-stewardship carve-outs in _DUNNING_DATA_ACCESS_PATTERNS
+      (family record read, sealed export, prior exports), which stay
+      open so a payment problem can never wall a family off from
+      their own records.
+
+    Non-dunning states keep the exact pre-dunning semantics.
 
     Local-dev escape hatch: when ``settings.DEV_BYPASS_SUBSCRIPTION`` is
     true (set in docker-compose.override.yml, never in prod/staging),
@@ -284,11 +321,16 @@ async def require_active_subscription(
     result = await db.execute(select(Household).where(Household.id == user.household_id))
     hh = result.scalar_one_or_none()
     current_status = hh.subscription_status if hh else "unknown"
+    dunning_state = getattr(hh, "dunning_state", "none") if hh else "none"
 
     if hh is not None:
         if hh.subscription_status in ("active", "trialing"):
             return user
         if hh.trial_ends_at and hh.trial_ends_at > datetime.now(UTC):
+            return user
+        if dunning_state == "grace":
+            return user
+        if dunning_state in ("restricted", "canceled") and _is_dunning_data_access_path(request.url.path):
             return user
 
     raise HTTPException(
@@ -296,6 +338,7 @@ async def require_active_subscription(
         detail={
             "error": "subscription_required",
             "status": current_status,
+            "dunning_state": dunning_state,
             "checkout_url": "/billing/checkout",
         },
     )
