@@ -287,3 +287,94 @@ def deletion_canceled_email(parent_name: str) -> str:
         If you didn't cancel this deletion, change your password immediately.
     </p>"""
     return _base("Your METHEAN deletion was canceled", body)
+
+
+def payment_failed_email(parent_name: str, update_url: str, grace_until: str) -> str:
+    """First dunning email, sent the moment a payment fails. Calm and
+    practical: cards expire, banks decline, life happens. Nothing is
+    paused yet and the email says so plainly."""
+    body = f"""
+    <h2 style="font-size:20px;color:#0F1B2D;margin:0 0 8px;">A payment didn't go through</h2>
+    <p style="font-size:14px;color:#6B6B6B;line-height:1.6;margin:0 0 16px;">
+        {parent_name}, we tried to process your METHEAN subscription payment and it
+        didn't succeed. This is usually something small: an expired card, a new
+        card number, or a bank being cautious.
+    </p>
+    <p style="font-size:14px;color:#6B6B6B;line-height:1.6;margin:0 0 16px;">
+        Nothing has changed for your family. Lessons, records, and everything else
+        keep working exactly as before through <strong>{grace_until}</strong>.
+        Updating your payment method takes about a minute:
+    </p>
+    <div style="text-align:center;margin:0 0 20px;">
+        <a href="{update_url}" style="display:inline-block;background:#4A6FA5;color:white;padding:14px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">Update Payment Method</a>
+    </div>
+    <p style="font-size:12px;color:#9A9A9A;margin:0;">
+        Already fixed it? Then you're all set and can ignore this email.
+        We'll retry automatically.
+    </p>"""
+    return _base("A payment didn't go through", body)
+
+
+def restriction_warning_email(parent_name: str, update_url: str, restrict_date: str) -> str:
+    """Second dunning email, sent when the grace window ends and paid
+    features pause. States exactly what is paused, what is not, and the
+    cancellation date if nothing changes. Helpful, never threatening."""
+    body = f"""
+    <h2 style="font-size:20px;color:#0F1B2D;margin:0 0 8px;">Your subscription is paused</h2>
+    <p style="font-size:14px;color:#6B6B6B;line-height:1.6;margin:0 0 16px;">
+        {parent_name}, we still haven't been able to process your subscription
+        payment, so paid features are paused for now: new lessons, AI planning,
+        and document generation are on hold.
+    </p>
+    <div style="background:rgba(184,134,11,0.08);border-left:3px solid #B8860B;border-radius:0 8px 8px 0;padding:12px 16px;margin:0 0 16px;">
+        <strong style="color:#B8860B;font-size:13px;">Your family's records are safe.</strong>
+        <p style="font-size:12px;color:#6B6B6B;margin:4px 0 0;line-height:1.5;">
+            Everything your children have done is intact. You can still view the
+            Family Record and export a complete copy at any time, paused or not.
+        </p>
+    </div>
+    <p style="font-size:14px;color:#6B6B6B;line-height:1.6;margin:0 0 16px;">
+        If we can't process a payment by <strong>{restrict_date}</strong>, the
+        subscription will be canceled. Updating your payment method brings
+        everything back immediately:
+    </p>
+    <div style="text-align:center;margin:0 0 20px;">
+        <a href="{update_url}" style="display:inline-block;background:#4A6FA5;color:white;padding:14px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">Update Payment Method</a>
+    </div>
+    <p style="font-size:12px;color:#9A9A9A;margin:0;">
+        Questions, or going through a hard stretch? Reply to this email and a
+        person will read it.
+    </p>"""
+    return _base("Your METHEAN subscription is paused", body)
+
+
+def final_notice_email(parent_name: str, reactivate_url: str) -> str:
+    """Third dunning email, sent when the subscription is canceled after
+    the dunning window. Leads with what the family keeps (their data),
+    then offers the way back."""
+    body = f"""
+    <h2 style="font-size:20px;color:#0F1B2D;margin:0 0 8px;">Your subscription was canceled</h2>
+    <p style="font-size:14px;color:#6B6B6B;line-height:1.6;margin:0 0 16px;">
+        {parent_name}, we weren't able to process a payment, so your METHEAN
+        subscription has been canceled. No hard feelings, and nothing to do
+        unless you want to come back.
+    </p>
+    <div style="background:rgba(45,106,79,0.08);border-left:3px solid #2D6A4F;border-radius:0 8px 8px 0;padding:12px 16px;margin:0 0 16px;">
+        <strong style="color:#2D6A4F;font-size:13px;">Your family's data remains intact.</strong>
+        <p style="font-size:12px;color:#6B6B6B;margin:4px 0 0;line-height:1.5;">
+            Every learning record, transcript, and document is preserved and
+            exportable. Your children's work belongs to your family, not to a
+            payment status.
+        </p>
+    </div>
+    <p style="font-size:14px;color:#6B6B6B;line-height:1.6;margin:0 0 16px;">
+        If you'd like to pick up where you left off, reactivating restores
+        everything exactly as it was:
+    </p>
+    <div style="text-align:center;margin:0 0 20px;">
+        <a href="{reactivate_url}" style="display:inline-block;background:#C6A24E;color:white;padding:14px 32px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;">Reactivate Subscription</a>
+    </div>
+    <p style="font-size:12px;color:#9A9A9A;margin:0;">
+        Thank you for letting METHEAN be part of your family's learning.
+    </p>"""
+    return _base("Your METHEAN subscription was canceled", body)

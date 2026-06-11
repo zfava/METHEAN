@@ -78,6 +78,10 @@ celery_app.conf.beat_schedule = {
         "task": "app.tasks.worker.purge_deleted_households",
         "schedule": crontab(hour=1, minute=30),
     },
+    "daily-dunning-advance": {
+        "task": "app.tasks.worker.advance_dunning_task",
+        "schedule": crontab(hour=6, minute=0),
+    },
 }
 
 
@@ -231,6 +235,17 @@ def purge_deleted_households(self) -> dict:
         from app.tasks.purge import run_purge_sync
 
         return run_purge_sync()
+    except Exception as exc:
+        self.retry(exc=exc, countdown=30 * (2**self.request.retries))
+
+
+@celery_app.task(name="app.tasks.worker.advance_dunning_task", bind=True, max_retries=3)
+def advance_dunning_task(self) -> dict:
+    """Daily: advance failed-payment dunning for in-dunning households."""
+    try:
+        from app.tasks.dunning import run_dunning_sync
+
+        return run_dunning_sync()
     except Exception as exc:
         self.retry(exc=exc, countdown=30 * (2**self.request.retries))
 
