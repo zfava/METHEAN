@@ -381,6 +381,38 @@ export const aiGovernance = {
   status: () => request<AIStatusData>("/governance/ai-status"),
 };
 
+// Tutor continuity: parent-governed tutor memory per child.
+export interface TutorProfileEntryData {
+  id: string;
+  category: string;
+  content: string;
+  status: "proposed" | "active" | "rejected" | "revoked";
+  grant_event_hash: string | null;
+  proposed_at: string | null;
+  decided_at: string | null;
+  decided_by: string | null;
+}
+
+export interface TutorProfileData {
+  proposed: TutorProfileEntryData[];
+  active: TutorProfileEntryData[];
+  rejected: TutorProfileEntryData[];
+  revoked: TutorProfileEntryData[];
+}
+
+export const tutorProfile = {
+  get: (childId: string) => request<TutorProfileData>(`/children/${childId}/tutor-profile`),
+  decide: (childId: string, entryId: string, action: "approve" | "reject") =>
+    request<TutorProfileEntryData>(`/children/${childId}/tutor-profile/${entryId}/decide`, {
+      method: "POST",
+      body: JSON.stringify({ action }),
+    }),
+  revoke: (childId: string, entryId: string) =>
+    request<TutorProfileEntryData>(`/children/${childId}/tutor-profile/${entryId}/revoke`, {
+      method: "POST",
+    }),
+};
+
 // Family Record: the cumulative, evidence-backed educational record
 // (2.1 backend). Read-only over learner state; export seals a bundle.
 export interface RecordEvidenceAttempt {

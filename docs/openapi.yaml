@@ -3852,6 +3852,151 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/tutor-profile:
+    get:
+      tags:
+      - governance
+      summary: Get Tutor Profile
+      description: 'The child''s tutor memory, grouped by status. Parent surface:
+
+        every entry shows exactly how it came to apply (parent approval or
+
+        standing grant, with the grant hash).'
+      operationId: get_tutor_profile_api_v1_children__child_id__tutor_profile_get
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Get Tutor Profile Api V1 Children  Child Id  Tutor
+                  Profile Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/tutor-profile/{entry_id}/decide:
+    post:
+      tags:
+      - governance
+      summary: Decide Tutor Profile Entry
+      description: 'Approve or reject a proposed entry. Repeat decisions are 409:
+
+        decided entries are immutable to further decisions.'
+      operationId: decide_tutor_profile_entry_api_v1_children__child_id__tutor_profile__entry_id__decide_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: entry_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Entry Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TutorProfileDecision'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Decide Tutor Profile Entry Api V1 Children  Child
+                  Id  Tutor Profile  Entry Id  Decide Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/tutor-profile/{entry_id}/revoke:
+    post:
+      tags:
+      - governance
+      summary: Revoke Tutor Profile Entry
+      description: 'Revoke an active entry, one tap. Revoked entries are never
+
+        injected and never deleted: the record is the record.'
+      operationId: revoke_tutor_profile_entry_api_v1_children__child_id__tutor_profile__entry_id__revoke_post
+      parameters:
+      - name: child_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Child Id
+      - name: entry_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Entry Id
+      - name: access_token
+        in: cookie
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Revoke Tutor Profile Entry Api V1 Children  Child
+                  Id  Tutor Profile  Entry Id  Revoke Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/governance/queue:
     get:
       tags:
@@ -15247,6 +15392,15 @@ components:
       - encouragement
       - ai_run_id
       title: TutorMessageResponse
+    TutorProfileDecision:
+      properties:
+        action:
+          type: string
+          title: Action
+      type: object
+      required:
+      - action
+      title: TutorProfileDecision
     UpdatePlanRequest:
       properties:
         name:

@@ -22,6 +22,7 @@ Last verified: 2026-04-17
 | review_logs | yes | yes | review_logs_household_isolation | 027 |
 | governance_rules | yes | yes | governance_rules_household_isolation | 027 |
 | household_ai_role_settings | yes | yes | household_ai_role_settings_household_isolation | 056 |
+| tutor_profile_entries | yes | yes | tutor_profile_entries_household_isolation | 057 |
 | governance_events | yes | yes | governance_events_household_isolation | 027 |
 | plans | yes | yes | plans_household_isolation | 027 |
 | plan_weeks | yes | yes | plan_weeks_household_isolation | 027 |
