@@ -22,7 +22,17 @@ import { useMobile } from "@/lib/useMobile";
 import PullToRefresh from "@/components/PullToRefresh";
 import SwipeAction from "@/components/SwipeAction";
 
-interface TodayActivity { id: string; title: string; activity_type: string; status: string; estimated_minutes: number | null; }
+interface TodayActivity {
+  id: string;
+  title: string;
+  activity_type: string;
+  status: string;
+  estimated_minutes: number | null;
+  node_id: string | null;
+  requires_supervision?: boolean;
+  supervision_attested?: boolean;
+  required_role?: string | null;
+}
 interface AlertItem { title: string; message: string; severity: string; }
 interface ChildSummary { id: string; mastered: number; total: number; todayCount: number; }
 
@@ -295,6 +305,23 @@ export default function DashboardPage() {
     } catch {}
   }
 
+  async function handleAttestSupervision(a: TodayActivity) {
+    if (!selectedChild || !a.node_id) return;
+    const role = a.required_role || "qualified adult";
+    // Optimistic: mark attested immediately, revert if the call fails.
+    setTodayActivities((prev) =>
+      prev.map((x) => (x.id === a.id ? { ...x, supervision_attested: true } : x))
+    );
+    try {
+      await childrenApi.attestSupervision(selectedChild.id, a.node_id, role);
+    } catch (err: any) {
+      setTodayActivities((prev) =>
+        prev.map((x) => (x.id === a.id ? { ...x, supervision_attested: false } : x))
+      );
+      setError(err?.detail || err?.message || "Couldn't record the supervision attestation.");
+    }
+  }
+
   async function handleQueueReject(item: any) {
     if (!item.plan_id) return;
     try {
@@ -530,6 +557,20 @@ export default function DashboardPage() {
                         <div className="flex-1 min-w-0">
                           <div className="font-semibold text-[15px] text-(--color-text) truncate">{a.title}</div>
                           <div className="text-[13px] text-(--color-text-secondary)">{a.activity_type}{a.estimated_minutes ? ` · ${a.estimated_minutes} min` : ""}</div>
+                          {a.requires_supervision && (
+                            a.supervision_attested ? (
+                              <div className="text-[12px] font-medium text-(--color-success) mt-1">
+                                &#10003; {a.required_role || "qualified adult"} present
+                              </div>
+                            ) : (
+                              <button
+                                onClick={() => handleAttestSupervision(a)}
+                                className="text-[12px] font-semibold mt-1 px-2.5 py-1 rounded-lg press-scale bg-(--color-warning)/15 text-(--color-warning) border border-(--color-warning)/40"
+                              >
+                                Confirm {a.required_role || "qualified adult"} present
+                              </button>
+                            )
+                          )}
                         </div>
                         <div className="w-3 h-3 rounded-full shrink-0" style={{ background: statusColor }} />
                       </div>
@@ -625,9 +666,26 @@ export default function DashboardPage() {
                             <span className="text-[11px] text-(--color-text-tertiary) shrink-0">{selectedChild.first_name}</span>
                           )}
                         </div>
-                        {a.estimated_minutes && (
-                          <span className="text-xs text-(--color-text-tertiary) shrink-0">{a.estimated_minutes}m</span>
-                        )}
+                        <div className="flex items-center gap-2 shrink-0">
+                          {a.requires_supervision && (
+                            a.supervision_attested ? (
+                              <span className="text-[11px] font-medium text-(--color-success)">
+                                &#10003; {a.required_role || "qualified adult"} present
+                              </span>
+                            ) : (
+                              <button
+                                onClick={() => handleAttestSupervision(a)}
+                                className="text-[11px] font-semibold px-2.5 py-1 rounded-lg press-scale bg-(--color-warning)/15 text-(--color-warning) border border-(--color-warning)/40"
+                                title={`This activity needs a ${a.required_role || "qualified adult"} physically present. Confirm for today.`}
+                              >
+                                Confirm {a.required_role || "qualified adult"} present
+                              </button>
+                            )
+                          )}
+                          {a.estimated_minutes && (
+                            <span className="text-xs text-(--color-text-tertiary)">{a.estimated_minutes}m</span>
+                          )}
+                        </div>
                       </div>
                     );
                   })}

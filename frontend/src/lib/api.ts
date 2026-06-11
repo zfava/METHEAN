@@ -272,6 +272,20 @@ export const children = {
       body: JSON.stringify(body),
     }),
   today: (childId: string) => request<any[]>(`/children/${childId}/today`),
+  attestSupervision: (childId: string, nodeId: string, roleClaimed: string, note?: string) =>
+    request<{
+      id: string;
+      governance_event_id: string;
+      child_id: string;
+      node_id: string;
+      role_claimed: string;
+      attested_at: string;
+      expires_at: string;
+      message: string;
+    }>(`/children/${childId}/supervision-attestation`, {
+      method: "POST",
+      body: JSON.stringify({ node_id: nodeId, role_claimed: roleClaimed, note: note ?? null }),
+    }),
   dashboard: (childId: string) => request<ChildDashboardResponse>(`/children/${childId}/dashboard`),
   alerts: (childId: string, limit = 5) => request<any>(`/children/${childId}/alerts?limit=${limit}`),
   preferences: (childId: string) =>
@@ -723,6 +737,10 @@ export interface LearningContext {
   };
   assessment: { prompts: string[]; mastery_criteria: string; methods: string[] };
   reading?: { passages: PassageData[] };
+  // Safety gates: when either flag is true the content fields above are
+  // emptied by the backend and the activity must not be presented.
+  awaiting_human_safety_review?: boolean;
+  awaiting_qualified_human?: boolean;
   tutor_available: boolean;
   previous_attempts: Array<{ date: string; status: string; duration_minutes: number; score: number | null }>;
   grade_level: string | null;
