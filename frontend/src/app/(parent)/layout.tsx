@@ -12,6 +12,7 @@ import BottomTabBar from "@/components/BottomTabBar";
 import MobileNavSheet from "@/components/MobileNavSheet";
 import BetaFeedbackButton from "@/components/BetaFeedbackButton";
 import SubscriptionGate from "@/components/billing/SubscriptionGate";
+import DunningBanner from "@/components/billing/DunningBanner";
 import { account, householdDeletion, EMAIL_NOT_VERIFIED_EVENT } from "@/lib/api";
 
 /**
@@ -188,6 +189,7 @@ function ParentLayoutInner({ children }: { children: React.ReactNode }) {
       >
         <DeletionPendingBanner />
         <VerifyEmailBanner />
+        <DunningBanner />
         <PageTransition>
           <SubscriptionGate>{children}</SubscriptionGate>
         </PageTransition>

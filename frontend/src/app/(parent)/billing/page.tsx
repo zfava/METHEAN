@@ -76,9 +76,59 @@ export default function BillingPage() {
   const subEnd = status?.subscription_ends_at ? new Date(status.subscription_ends_at) : null;
   const daysLeft = trialEnd ? Math.max(0, Math.ceil((trialEnd.getTime() - Date.now()) / 86400000)) : null;
 
+  const dunning = status?.dunning_state || "none";
+  const fmtDate = (iso: string | null | undefined) =>
+    iso ? new Date(iso).toLocaleDateString(undefined, { month: "long", day: "numeric", year: "numeric" }) : null;
+  const graceEnds = fmtDate(status?.dunning_grace_ends_at);
+  const cancelsAt = fmtDate(status?.dunning_cancels_at);
+
   return (
     <div className="max-w-2xl">
       <PageHeader title="Billing" subtitle="Manage your METHEAN subscription." />
+
+      {/* Failed-payment recovery (dunning) state */}
+      {dunning === "grace" && (
+        <Card className="mb-5" borderLeft="border-l-(--color-warning)">
+          <h3 className="text-sm font-semibold text-(--color-text) mb-1">A payment didn&apos;t go through</h3>
+          <p className="text-xs text-(--color-text-secondary) mb-3">
+            Usually an expired or replaced card. Nothing has changed for your family
+            {graceEnds ? <>; everything keeps working through <strong>{graceEnds}</strong></> : null}.
+            Updating your payment method takes about a minute.
+          </p>
+          <Button variant="gold" size="md" className={isMobile ? "w-full" : ""} onClick={handlePortal}>
+            Update Payment Method
+          </Button>
+        </Card>
+      )}
+      {dunning === "restricted" && (
+        <Card className="mb-5" borderLeft="border-l-(--color-warning)">
+          <h3 className="text-sm font-semibold text-(--color-text) mb-1">Subscription paused</h3>
+          <p className="text-xs text-(--color-text-secondary) mb-2">
+            We still couldn&apos;t process a payment, so paid features are paused: new lessons,
+            AI planning, and document generation are on hold.
+          </p>
+          <p className="text-xs text-(--color-text-secondary) mb-3">
+            Your family&apos;s records are untouched: the Family Record and full data export stay
+            available the whole time.
+            {cancelsAt ? <> If payment isn&apos;t updated by <strong>{cancelsAt}</strong>, the subscription will be canceled.</> : null}
+          </p>
+          <Button variant="gold" size="md" className={isMobile ? "w-full" : ""} onClick={handlePortal}>
+            Update Payment Method
+          </Button>
+        </Card>
+      )}
+      {dunning === "canceled" && (
+        <Card className="mb-5" borderLeft="border-l-(--color-danger)">
+          <h3 className="text-sm font-semibold text-(--color-text) mb-1">Subscription canceled after a payment problem</h3>
+          <p className="text-xs text-(--color-text-secondary) mb-3">
+            Every learning record, transcript, and document is preserved and exportable.
+            Reactivating restores everything exactly as it was.
+          </p>
+          <Button variant="gold" size="md" className={isMobile ? "w-full" : ""} onClick={handleSubscribe} disabled={!status?.stripe_configured}>
+            Reactivate for $99/month
+          </Button>
+        </Card>
+      )}
 
       {/* Current plan status */}
       <Card className="mb-5" borderLeft={isActive ? "border-l-(--color-success)" : isTrial ? "border-l-(--gold)" : "border-l-(--color-danger)"}>
