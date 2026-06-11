@@ -25,16 +25,16 @@ import "./landing.css";
 // element is already in its final visible position. CTAs point at the
 // real Next routes, not the reference's hash routes.
 //
-// TODO(zack): verify the engineering stats numbers against the real build
-// before public launch:
-//   - 51/51 jurisdictions
-//   - 220+ governed endpoints
-//   - 49/51 tables isolated by tenant
-//   - 8 AI roles
-// The reference also said "4 Philosophies honored natively"; the real
-// product carries five (Classical, Charlotte Mason, Montessori,
-// Traditional, Unschooling/Trade-bound), so the curriculum-stats card
-// and the philosophies grid both read FIVE here.
+// Every stat on this page is derived from the repository, not estimated:
+//   - 51 jurisdictions: len(STATE_REQUIREMENTS) in services/compliance_engine.py
+//   - 260 endpoints: route decorators across backend/app
+//   - 57/62 tenant-isolated tables: RLS_COVERED_TABLES over models' __tablename__ count
+//   - 8 AI roles: the AIRole enum in app/ai/gateway.py
+//   - 155,476 content lines: wc -l backend/app/content/*.py
+//   - 36 weeks: the annual curriculum generator's school-year default
+//   - 5 native philosophies: the six selectable philosophies minus
+//     eclectic, which is a per-subject mix of the other five
+// Re-derive when these change; do not round up.
 
 const AUTH_HREF = "/auth?mode=register";
 const SIGNIN_HREF = "/auth";
@@ -786,11 +786,9 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* TODO(zack): verify the curriculum-stat numbers against the real build
-              before public launch. Philosophies count corrected to 5. */}
           <div className="curriculum-stats reveal">
             <div className="cstat">
-              <div className="cstat-n">29,956</div>
+              <div className="cstat-n">155,476</div>
               <div className="cstat-l">
                 Lines of pre-built
                 <br />
@@ -834,20 +832,17 @@ export default function LandingPage() {
               Built like <span className="em dark">infrastructure</span>. Because it is.
             </h2>
           </div>
-          {/* TODO(zack): verify these four engineering stats against the real
-              build (jurisdictions, governed endpoints, isolated tables, AI
-              roles) before public launch. */}
           <div className="stats-grid reveal-stagger">
             <div className="stat">
               <Counter target={51} unit="/51" />
               <div className="stat-l">States &amp; DC supported</div>
             </div>
             <div className="stat">
-              <Counter target={220} unit="+" />
+              <Counter target={260} />
               <div className="stat-l">Governed endpoints</div>
             </div>
             <div className="stat">
-              <Counter target={49} unit="/51" />
+              <Counter target={57} unit="/62" />
               <div className="stat-l">Tables isolated by tenant</div>
             </div>
             <div className="stat">
