@@ -130,6 +130,24 @@ class AIProviderUnavailableError(Exception):
         self.retry_after_seconds = retry_after_seconds
 
 
+class AIRoleDisabledError(AIProviderUnavailableError):
+    """The household's parent policy has this AI role set to off.
+
+    Subclasses AIProviderUnavailableError so every existing caller
+    degrades exactly the way it already does for provider outages and
+    exhausted budgets (the app.main 503 handler catches the parent
+    class). Surfaces that want a kinder, policy-specific message (the
+    child tutor) catch this subclass explicitly.
+    """
+
+    def __init__(self, role: str):
+        super().__init__(
+            message=f"The {role} AI role is turned off by parent policy",
+            retry_after_seconds=0,
+        )
+        self.role = role
+
+
 class CircuitBreaker:
     """Per-provider circuit breaker. States: closed (normal), open (skip), half_open (testing)."""
 
@@ -283,6 +301,26 @@ async def call_ai(
     except Exception:
         pass  # Budget check failure should not block AI calls
 
+    # Parent autonomy policy: a role set to off makes no AI calls at
+    # all. Checked after role resolution and before any provider work.
+    from app.services.governance import AI_AUTONOMY_OFF, get_ai_role_policy
+
+    role_policy = await get_ai_role_policy(db, household_id, role.value)
+    role_disabled = role_policy == AI_AUTONOMY_OFF
+    if role_disabled and role != AIRole.education_architect:
+        ai_run_stub = AIRun(
+            household_id=household_id,
+            triggered_by=triggered_by,
+            run_type=role.value,
+            status=AIRunStatus.failed,
+            error_message="AI role disabled by parent policy",
+            started_at=datetime.now(UTC),
+            completed_at=datetime.now(UTC),
+        )
+        db.add(ai_run_stub)
+        await db.flush()
+        raise AIRoleDisabledError(role.value)
+
     # Inject philosophical constraints into the system prompt, substituting
     # authority-referring language for the household's governance mode.
     from app.ai.prompts import build_philosophical_constraints
@@ -324,8 +362,16 @@ async def call_ai(
     input_tokens = 0
     output_tokens = 0
 
-    # Try providers in order: Claude -> OpenAI -> Mock
-    providers = _get_provider_chain()
+    # Try providers in order: Claude -> OpenAI -> Native -> Mock.
+    # CARVE-OUT: when the education_architect role is off, the chain is
+    # restricted to the native provider instead of raising. Native is
+    # curriculum, not AI advice: turning the AI off must never disable
+    # a family's annual curriculum generation, so the deterministic
+    # native path proceeds and only the LLM providers are withheld.
+    if role_disabled and role == AIRole.education_architect:
+        providers = [AIProvider.native]
+    else:
+        providers = _get_provider_chain()
 
     for provider in providers:
         try:

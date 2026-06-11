@@ -12,6 +12,7 @@ from sqlalchemy import (
     Integer,
     String,
     Text,
+    UniqueConstraint,
 )
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -53,6 +54,39 @@ class GovernanceRule(Base):
     effective_until: Mapped[date | None] = mapped_column(Date)
     trigger_conditions: Mapped[dict | None] = mapped_column(JSONB, default=dict)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+
+
+class HouseholdAIRoleSetting(Base):
+    """Per-household autonomy policy for one AI role (migration 056).
+
+    Lives beside GovernanceRule because this IS parent governance
+    configuration: it is read by the AI gateway and written only
+    through the governance API, with every change hash-chained as a
+    governance event.
+
+    An absent row means "standard". Default-advisory is acceptable
+    because the parent approval gate on learner-state writes is the
+    actual safety boundary; this policy controls how much the AI may
+    advise (or, for explicitly widened roles, act), not whether it can
+    bypass approval. Nothing in this system may ever default to
+    autonomous.
+    """
+
+    __tablename__ = "household_ai_role_settings"
+    __table_args__ = (UniqueConstraint("household_id", "role", name="uq_household_ai_role"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    household_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("households.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    role: Mapped[str] = mapped_column(String(50), nullable=False)
+    autonomy: Mapped[str] = mapped_column(String(20), nullable=False, server_default="standard")
+    updated_by: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL")
+    )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )

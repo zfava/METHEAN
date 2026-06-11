@@ -67,9 +67,14 @@ from app.schemas.governance import (
     TutorMessageResponse,
 )
 from app.services.governance import (
+    AI_AUTONOMY_DESCRIPTIONS,
+    AI_AUTONOMY_OFF,
     build_governance_hash_payload,
     create_default_rules,
+    get_ai_role_policy,
+    get_all_ai_role_settings,
     log_governance_event,
+    set_ai_role_policy,
     verify_chain,
 )
 from app.services.planner import generate_plan
@@ -1081,6 +1086,26 @@ async def tutor_stream(
     from app.ai.gateway import stream_claude
     from app.ai.prompts import build_philosophical_constraints
 
+    # Parent autonomy policy: the streaming path bypasses call_ai, so
+    # the role check happens here too. Off renders the same kind
+    # in-chat message the tutor uses for every other unavailability.
+    tutor_policy = await get_ai_role_policy(db, user.household_id, "tutor")
+    if tutor_policy == AI_AUTONOMY_OFF:
+
+        async def disabled_stream():
+            message = "The AI tutor is taking a break right now. Ask your parent about it, and keep going with your great work!"
+            yield f"data: {json.dumps({'type': 'error', 'message': message})}\n\n"
+
+        return StreamingResponse(
+            disabled_stream(),
+            media_type="text/event-stream",
+            headers={
+                "Cache-Control": "no-cache",
+                "Connection": "keep-alive",
+                "X-Accel-Buffering": "no",
+            },
+        )
+
     # Verify activity
     act_result = await db.execute(
         select(Activity).where(Activity.id == activity_id, Activity.household_id == user.household_id)
@@ -1750,6 +1775,123 @@ async def verify_governance_chain(
         "checked": report["checked"],
         "head_hash": head_hash,
         "first_break_index": report["first_break_index"],
+    }
+
+
+# ══════════════════════════════════════════════════
+# AI Governance Panel (autonomy policy, status, spend)
+# ══════════════════════════════════════════════════
+
+
+class AIRolePolicyUpdate(BaseModel):
+    role: str
+    autonomy: str
+
+
+@router.get("/governance/ai-settings")
+async def get_ai_settings(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "co_parent")),
+) -> dict:
+    """All eight AI roles with their autonomy policy and parent-readable
+    descriptions. Absent rows mean standard: today's METHEAN, where the
+    AI advises and every persistent change routes through approval."""
+    return {
+        "roles": await get_all_ai_role_settings(db, user.household_id),
+        "autonomy_levels": AI_AUTONOMY_DESCRIPTIONS,
+    }
+
+
+@router.put("/governance/ai-settings")
+async def update_ai_setting(
+    body: AIRolePolicyUpdate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "co_parent")),
+) -> dict:
+    """Change one role's autonomy policy.
+
+    Every change is a hash-chained governance event; transitions into
+    and out of autonomous carry dedicated grant and revoke events
+    because a standing grant has legal and parental weight.
+    """
+    try:
+        result = await set_ai_role_policy(db, user.household_id, user.id, body.role, body.autonomy)
+    except ValueError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    return result
+
+
+@router.get("/governance/ai-status")
+async def get_ai_status(
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "co_parent")),
+) -> dict:
+    """Provider chain status, today's spend against budget, and 30-day
+    usage by role. Configuration booleans only: key material (and even
+    key prefixes) never leave the server."""
+    from app.ai.cost_controls import check_budget, estimate_cost_cents, get_daily_usage
+    from app.ai.gateway import _get_provider_chain
+
+    chain = [p.value for p in _get_provider_chain()]
+    providers = {
+        "anthropic": {"configured": bool(settings.AI_API_KEY)},
+        "openai": {"configured": bool(settings.AI_FALLBACK_API_KEY)},
+        "native": {"configured": True, "always_available": True},
+        "mock": {"configured": bool(settings.AI_MOCK_ENABLED)},
+    }
+
+    # Mirror call_ai's tier-derived daily token ceiling so the budget
+    # numbers here match what the gateway actually enforces.
+    from app.models.identity import Household
+
+    household_result = await db.execute(select(Household).where(Household.id == user.household_id))
+    household = household_result.scalar_one_or_none()
+    ai_tier = (household.settings or {}).get("ai_tier", "opus") if household else "opus"
+    tier_daily_limits = {"opus": 50_000, "sonnet": 100_000, "haiku": 200_000}
+    daily_limit = tier_daily_limits.get(ai_tier, 50_000)
+
+    budget = await check_budget(db, user.household_id, daily_token_limit=daily_limit)
+    usage_today = await get_daily_usage(db, user.household_id)
+
+    thirty_days_ago = datetime.now(UTC) - timedelta(days=30)
+    by_role_result = await db.execute(
+        select(
+            AIRun.run_type,
+            func.count().label("calls"),
+            func.coalesce(func.sum(AIRun.input_tokens), 0).label("input_tokens"),
+            func.coalesce(func.sum(AIRun.output_tokens), 0).label("output_tokens"),
+        )
+        .where(AIRun.household_id == user.household_id, AIRun.started_at >= thirty_days_ago)
+        .group_by(AIRun.run_type)
+    )
+    by_role = []
+    for row in by_role_result.all():
+        by_role.append(
+            {
+                "role": row.run_type,
+                "calls": row.calls,
+                "input_tokens": row.input_tokens,
+                "output_tokens": row.output_tokens,
+                # Same default-rate estimation get_daily_usage documents.
+                "estimated_cost_cents": estimate_cost_cents(
+                    "claude-sonnet-4-20250514", row.input_tokens, row.output_tokens
+                ),
+            }
+        )
+    by_role.sort(key=lambda r: r["calls"], reverse=True)
+
+    return {
+        "chain_order": chain,
+        "providers": providers,
+        "today": {
+            "spend_cents": usage_today["total_cost_cents"],
+            "tokens": usage_today["total_tokens"],
+            "calls": usage_today["call_count"],
+            "daily_token_limit": daily_limit,
+            "pct_tokens": budget["pct_tokens"],
+            "pct_cost": budget["pct_cost"],
+        },
+        "last_30_days": by_role,
     }
 
 

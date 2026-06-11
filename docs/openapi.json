@@ -5885,6 +5885,170 @@
         }
       }
     },
+    "/api/v1/governance/ai-settings": {
+      "get": {
+        "tags": [
+          "governance"
+        ],
+        "summary": "Get Ai Settings",
+        "description": "All eight AI roles with their autonomy policy and parent-readable\ndescriptions. Absent rows mean standard: today's METHEAN, where the\nAI advises and every persistent change routes through approval.",
+        "operationId": "get_ai_settings_api_v1_governance_ai_settings_get",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Ai Settings Api V1 Governance Ai Settings Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "governance"
+        ],
+        "summary": "Update Ai Setting",
+        "description": "Change one role's autonomy policy.\n\nEvery change is a hash-chained governance event; transitions into\nand out of autonomous carry dedicated grant and revoke events\nbecause a standing grant has legal and parental weight.",
+        "operationId": "update_ai_setting_api_v1_governance_ai_settings_put",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AIRolePolicyUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Update Ai Setting Api V1 Governance Ai Settings Put"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/governance/ai-status": {
+      "get": {
+        "tags": [
+          "governance"
+        ],
+        "summary": "Get Ai Status",
+        "description": "Provider chain status, today's spend against budget, and 30-day\nusage by role. Configuration booleans only: key material (and even\nkey prefixes) never leave the server.",
+        "operationId": "get_ai_status_api_v1_governance_ai_status_get",
+        "parameters": [
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Ai Status Api V1 Governance Ai Status Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/governance/queue": {
       "get": {
         "tags": [
@@ -16966,6 +17130,24 @@
   },
   "components": {
     "schemas": {
+      "AIRolePolicyUpdate": {
+        "properties": {
+          "role": {
+            "type": "string",
+            "title": "Role"
+          },
+          "autonomy": {
+            "type": "string",
+            "title": "Autonomy"
+          }
+        },
+        "type": "object",
+        "required": [
+          "role",
+          "autonomy"
+        ],
+        "title": "AIRolePolicyUpdate"
+      },
       "AIRunResponse": {
         "properties": {
           "id": {

@@ -21,6 +21,7 @@ Last verified: 2026-04-17
 | fsrs_cards | yes | yes | fsrs_cards_household_isolation | 027 |
 | review_logs | yes | yes | review_logs_household_isolation | 027 |
 | governance_rules | yes | yes | governance_rules_household_isolation | 027 |
+| household_ai_role_settings | yes | yes | household_ai_role_settings_household_isolation | 056 |
 | governance_events | yes | yes | governance_events_household_isolation | 027 |
 | plans | yes | yes | plans_household_isolation | 027 |
 | plan_weeks | yes | yes | plan_weeks_household_isolation | 027 |
