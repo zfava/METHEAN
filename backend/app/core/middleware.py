@@ -287,8 +287,11 @@ class ChildScopeMiddleware(BaseHTTPMiddleware):
 
         try:
             payload = decode_token(token)
-        except Exception:
+        except Exception as exc:
             # Invalid or expired token: let normal auth produce its 401.
+            # Debug level (routine churn); class name only, never token
+            # material.
+            logger.debug("scope_token_decode_failed", error_type=type(exc).__name__)
             return await call_next(request)
 
         if payload.get("scope", "parent") != "child":

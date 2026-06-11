@@ -17,11 +17,14 @@ from dataclasses import dataclass
 from datetime import UTC, date, datetime
 from zoneinfo import ZoneInfo
 
+import structlog
 from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.identity import PersonalizationPolicy, VoiceUsageDaily
+
+logger = structlog.get_logger()
 
 
 @dataclass(frozen=True)
@@ -43,8 +46,10 @@ def _today_in_tz(tz_name: str | None) -> date:
     if tz_name:
         try:
             return datetime.now(ZoneInfo(tz_name)).date()
-        except Exception:
-            pass
+        except (KeyError, ValueError, TypeError, OSError) as exc:
+            # Same ZoneInfo failure surface as services/supervision.py;
+            # UTC fallback preserves the daily-cap behavior.
+            logger.warning("household_timezone_invalid", timezone_name=tz_name, error=str(exc))
     return datetime.now(UTC).date()
 
 

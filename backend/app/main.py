@@ -242,6 +242,7 @@ async def health_ready() -> dict:
             await conn.execute(text("SELECT 1"))
         checks["database"] = "ok"
     except Exception as e:
+        logger.warning("readiness_database_check_failed", error=str(e))
         checks["database"] = f"error: {e!s}"
 
     # Check Redis
@@ -250,6 +251,7 @@ async def health_ready() -> dict:
         await redis.ping()
         checks["redis"] = "ok"
     except Exception as e:
+        logger.warning("readiness_redis_check_failed", error=str(e))
         checks["redis"] = f"error: {e!s}"
 
     # Check Celery (non-blocking — Celery down = degraded, not unready)
@@ -260,7 +262,8 @@ async def health_ready() -> dict:
             checks["celery"] = "ok"
         else:
             checks["celery"] = "error: no workers"
-    except Exception:
+    except Exception as e:
+        logger.warning("readiness_celery_check_failed", error=str(e))
         checks["celery"] = "error: no workers"
 
     # Sentry

@@ -12,6 +12,7 @@ import asyncio
 import time
 from datetime import UTC, datetime
 
+import structlog
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import NullPool
@@ -21,6 +22,8 @@ from app.core.database import set_tenant
 from app.models.enums import MasteryLevel, StateEventType
 from app.models.state import ChildNodeState, FSRSCard, StateEvent
 from app.services.state_engine import build_demotion_explanation, compute_retrievability, emit_state_event
+
+logger = structlog.get_logger()
 
 
 async def run_decay_batch(
@@ -140,8 +143,8 @@ async def run_decay_batch(
                         from app.core.metrics import fsrs_decays
 
                         fsrs_decays.inc()
-                    except Exception:
-                        pass
+                    except Exception as exc:
+                        logger.debug("metrics_record_failed", metric="fsrs_decays", error=str(exc))
 
             offset += batch_size
             await db.flush()

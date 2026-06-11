@@ -10,6 +10,7 @@ import logging
 import uuid
 from datetime import UTC, date, datetime, timedelta
 
+import structlog
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -27,6 +28,7 @@ from app.models.governance import Activity, Attempt, Plan, PlanWeek
 from app.models.identity import Child, ChildPreferences, Household
 
 logger = logging.getLogger("methean.annual_curriculum")
+slog = structlog.get_logger()
 
 
 class MaterializationError(Exception):
@@ -51,7 +53,11 @@ def _subject_is_authored(subject_name: str) -> bool:
     try:
         from app.content.scope_sequences import SCOPE_SEQUENCES
         from app.core.learning_levels import SUBJECT_CATALOG
-    except Exception:
+    except ImportError as exc:
+        # The authored content modules failing to import is a build
+        # defect, not an empty subject: shout, then keep the
+        # conservative answer.
+        slog.error("scope_sequence_import_failed", error=str(exc))
         return False
 
     subj_id = subject_name.lower().replace(" ", "_").replace("&", "and")
@@ -226,8 +232,13 @@ SCOPE AND SEQUENCE ({len(topics)} topics in pedagogical order for {level} level)
 Follow this topic order. Respect prerequisites. Do NOT skip or reorder topics.
 {chr(10).join(topic_lines)}
 """
-    except Exception:
-        pass
+    except Exception as exc:
+        slog.warning(
+            "scope_sequence_context_failed",
+            subject=subject_name,
+            level=level,
+            error=str(exc),
+        )
 
     # Detect vocational subject and use appropriate prompt
     from app.core.learning_levels import SUBJECT_CATALOG
@@ -362,8 +373,13 @@ async def approve_annual_curriculum(
             from app.tasks.worker import enrich_map_task
 
             enrich_map_task.delay(str(curriculum.learning_map_id), str(household_id))
-    except Exception:
-        pass
+    except Exception as exc:
+        slog.warning(
+            "enrichment_queue_failed",
+            learning_map_id=str(curriculum.learning_map_id),
+            household_id=str(household_id),
+            error=str(exc),
+        )
 
     return curriculum
 

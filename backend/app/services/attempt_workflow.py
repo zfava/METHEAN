@@ -7,6 +7,7 @@ update state -> emit events -> cascade unblock.
 import uuid
 from datetime import UTC, datetime
 
+import structlog
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -17,6 +18,8 @@ from app.services import achievements as achievements_svc
 from app.services import intelligence
 from app.services.evaluator import mock_evaluator
 from app.services.state_engine import process_review
+
+logger = structlog.get_logger()
 
 
 async def start_attempt(
@@ -157,8 +160,14 @@ async def submit_attempt(
         adjusted = await apply_calibration_offset(db, confidence, attempt.child_id)
         calibration_offset_applied = adjusted - confidence
         confidence = adjusted
-    except Exception:
-        pass  # Calibration is advisory
+    except Exception as exc:
+        # Calibration is advisory.
+        logger.warning(
+            "calibration_offset_failed",
+            child_id=str(attempt.child_id),
+            attempt_id=str(attempt.id),
+            error=str(exc),
+        )
 
     # Reconcile calibration on subsequent attempts (same child + node)
     try:
@@ -185,8 +194,14 @@ async def submit_attempt(
                 activity.node_id,
                 new_fsrs_rating=new_rating.value,
             )
-    except Exception:
-        pass  # Calibration reconciliation is advisory
+    except Exception as exc:
+        # Calibration reconciliation is advisory.
+        logger.warning(
+            "calibration_reconcile_failed",
+            child_id=str(attempt.child_id),
+            attempt_id=str(attempt.id),
+            error=str(exc),
+        )
 
     # Process through state engine (FSRS + state transition + cascade)
     review_result = await process_review(
@@ -214,8 +229,14 @@ async def submit_attempt(
             predicted_retention_at=review_result.get("fsrs_due"),
             calibration_offset_applied=calibration_offset_applied,
         )
-    except Exception:
-        pass  # Calibration recording is advisory
+    except Exception as exc:
+        # Calibration recording is advisory.
+        logger.warning(
+            "calibration_prediction_record_failed",
+            child_id=str(attempt.child_id),
+            attempt_id=str(attempt.id),
+            error=str(exc),
+        )
 
     # Record intelligence observations (non-blocking)
     try:
@@ -260,8 +281,14 @@ async def submit_attempt(
                 to_level=curr,
                 node_title=activity.title or "",
             )
-    except Exception:
-        pass  # Intelligence recording is non-blocking
+    except Exception as exc:
+        # Intelligence recording is non-blocking.
+        logger.warning(
+            "intelligence_record_failed",
+            child_id=str(attempt.child_id),
+            attempt_id=str(attempt.id),
+            error=str(exc),
+        )
 
     # Check achievements and update streak
     new_achievements = []
@@ -280,16 +307,22 @@ async def submit_attempt(
             trigger_event="mastery_change" if ctx["new_level"] != ctx["old_level"] else "activity_complete",
             context=ctx,
         )
-    except Exception:
-        pass  # Achievement checking is non-blocking
+    except Exception as exc:
+        # Achievement checking is non-blocking.
+        logger.warning(
+            "achievement_check_failed",
+            child_id=str(attempt.child_id),
+            attempt_id=str(attempt.id),
+            error=str(exc),
+        )
 
     # Record metrics
     try:
         from app.core.metrics import attempts_completed
 
         attempts_completed.inc()
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.debug("metrics_record_failed", metric="attempts_completed", error=str(exc))
 
     # Invalidate cached child state
     await cache_delete(f"child_state:{household_id}:{attempt.child_id}")

@@ -8,8 +8,10 @@ import logging
 from typing import Any
 
 import redis.asyncio as aioredis
+import structlog
 
 logger = logging.getLogger(__name__)
+slog = structlog.get_logger()
 
 _redis: aioredis.Redis | None = None
 
@@ -47,8 +49,10 @@ async def cache_delete(key: str) -> None:
         return
     try:
         await _redis.delete(key)
-    except Exception:
-        pass
+    except Exception as exc:
+        # Fail open by design, but a failed invalidation can serve
+        # stale policy reads (cache_delete guards writes): be loud.
+        slog.warning("cache_delete_failed", key=key, error=str(exc))
 
 
 async def cache_delete_pattern(pattern: str) -> None:
@@ -58,5 +62,5 @@ async def cache_delete_pattern(pattern: str) -> None:
     try:
         async for key in _redis.scan_iter(match=pattern):
             await _redis.delete(key)
-    except Exception:
-        pass
+    except Exception as exc:
+        slog.warning("cache_delete_pattern_failed", pattern=pattern, error=str(exc))

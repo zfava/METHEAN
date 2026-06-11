@@ -416,8 +416,8 @@ async def evaluate_activity(
             from app.core.metrics import governance_decisions
 
             governance_decisions.labels(action="require_review").inc()
-        except Exception:
-            pass
+        except Exception as exc:
+            logger.debug("metrics_record_failed", metric="governance_decisions", error=str(exc))
         return GovernanceDecision(
             action="require_review",
             reason=reviews[0].reason,
@@ -444,8 +444,8 @@ async def evaluate_activity(
         from app.core.metrics import governance_decisions
 
         governance_decisions.labels(action="auto_approve").inc()
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.debug("metrics_record_failed", metric="governance_decisions", error=str(exc))
     return GovernanceDecision(
         action="auto_approve",
         reason=("Self-governed, trust within rules" if self_governed_trust else "All rules passed"),
@@ -683,8 +683,13 @@ async def log_governance_event(
             activity_type=meta.get("activity_type"),
             difficulty=meta.get("difficulty"),
         )
-    except Exception:
-        pass  # Intelligence recording is non-blocking
+    except Exception as exc:
+        # Intelligence recording is non-blocking.
+        logger.warning(
+            "governance_pattern_record_failed",
+            household_id=str(household_id),
+            error=str(exc),
+        )
 
     return event
 

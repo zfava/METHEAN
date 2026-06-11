@@ -190,8 +190,14 @@ async def register(
             "Verify your METHEAN email",
             email_verification_email(verify_url),
         )
-    except Exception:
-        pass
+    except Exception as exc:
+        # Class name only: the failure path holds a live verification
+        # URL and exception text could echo it.
+        logger.warning(
+            "verification_email_send_failed",
+            user_id=str(user.id),
+            error_type=type(exc).__name__,
+        )
 
     return RegisterResponse(
         user=UserResponse.model_validate(user),
@@ -589,8 +595,14 @@ async def logout(
                 # together with the decode/lookup errors — logout must
                 # never fail from the user's perspective.
                 await db.commit()
-        except Exception:
-            pass  # Best-effort revocation
+        except Exception as exc:
+            # Best-effort revocation: logout must never fail from the
+            # user's perspective. Class name only: decode errors can
+            # echo token material.
+            logger.debug(
+                "logout_refresh_revocation_failed",
+                error_type=type(exc).__name__,
+            )
 
     response.delete_cookie("access_token", path="/")
     response.delete_cookie("refresh_token", path="/")

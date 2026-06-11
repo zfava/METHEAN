@@ -1011,8 +1011,14 @@ Continue the Socratic dialogue. Reference what was discussed earlier if relevant
             assembled_ctx = assembled["context_text"]
             if assembled_ctx:
                 user_prompt += f"\n\n{assembled_ctx}"
-    except Exception:
-        pass
+    except Exception as exc:
+        # Context assembly is advisory; the tutor answers without it.
+        logger.warning(
+            "context_assembly_failed",
+            role="tutor",
+            child_id=str(body.child_id) if body.child_id else None,
+            error=str(exc),
+        )
 
     phil = await _get_philosophical_profile(db, user.household_id)
     # Load personalization once per request so prompt assembly stays
@@ -1049,8 +1055,13 @@ Continue the Socratic dialogue. Reference what was discussed earlier if relevant
                 hints_used=hints_in_response,
                 self_corrections=0,  # tracked client-side if available
             )
-    except Exception:
-        pass  # Intelligence recording is advisory, never blocking
+    except Exception as exc:
+        # Intelligence recording is advisory, never blocking.
+        logger.warning(
+            "tutor_interaction_record_failed",
+            child_id=str(body.child_id) if body.child_id else None,
+            error=str(exc),
+        )
 
     # Tutor continuity: distill the exchange into proposed memory
     # entries, routed by the parent's autonomy policy (no-op at off).
@@ -1180,8 +1191,13 @@ Respond in plain text as the Socratic tutor. Do NOT use JSON. Just speak natural
             )
             if assembled.get("context_text"):
                 user_prompt += f"\n\n{assembled['context_text']}"
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning(
+            "context_assembly_failed",
+            role="tutor_stream",
+            child_id=str(body.child_id) if body.child_id else None,
+            error=str(exc),
+        )
 
     phil = await _get_philosophical_profile(db, user.household_id)
     pctx = await load_personalization_context(db, body.child_id) if body.child_id else None
@@ -1259,8 +1275,12 @@ Respond in plain text as the Socratic tutor. Do NOT use JSON. Just speak natural
                     ai_run.input_tokens = data.get("input_tokens", 0)
                     ai_run.output_tokens = data.get("output_tokens", 0)
                     await db.commit()
-                except Exception:
-                    pass
+                except Exception as exc:
+                    logger.warning(
+                        "tutor_stream_run_finalize_failed",
+                        ai_run_id=str(run_id),
+                        error=str(exc),
+                    )
                 try:
                     from app.services.intelligence import record_tutor_interaction
 
@@ -1274,8 +1294,12 @@ Respond in plain text as the Socratic tutor. Do NOT use JSON. Just speak natural
                             hints_used=len(hints),
                             self_corrections=0,
                         )
-                except Exception:
-                    pass
+                except Exception as exc:
+                    logger.warning(
+                        "tutor_interaction_record_failed",
+                        child_id=str(body.child_id) if body.child_id else None,
+                        error=str(exc),
+                    )
                 try:
                     if body.child_id:
                         from app.services.tutor_profile import extract_and_route_proposals
@@ -1366,8 +1390,13 @@ Provide calibration recommendations."""
         assembled_ctx = assembled["context_text"]
         if assembled_ctx:
             user_prompt += f"\n\n{assembled_ctx}"
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning(
+            "context_assembly_failed",
+            role="cartographer",
+            child_id=str(child_id) if child_id else None,
+            error=str(exc),
+        )
 
     phil = await _get_philosophical_profile(db, user.household_id)
     result = await call_ai(
@@ -1454,8 +1483,13 @@ Provide an encouraging, honest assessment."""
         assembled_ctx = assembled["context_text"]
         if assembled_ctx:
             user_prompt += f"\n\n{assembled_ctx}"
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning(
+            "context_assembly_failed",
+            role="advisor",
+            child_id=str(child_id) if child_id else None,
+            error=str(exc),
+        )
 
     phil = await _get_philosophical_profile(db, user.household_id)
     result = await call_ai(

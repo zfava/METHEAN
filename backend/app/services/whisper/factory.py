@@ -9,6 +9,7 @@ import logging
 import uuid
 
 import httpx
+import structlog
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -19,6 +20,7 @@ from app.services.whisper.local_provider import LocalWhisperProvider
 from app.services.whisper.openai_provider import OpenAIWhisperProvider
 
 logger = logging.getLogger("methean.voice.factory")
+slog = structlog.get_logger()
 
 
 async def _local_alive(timeout_seconds: float = 1.0) -> bool:
@@ -31,7 +33,10 @@ async def _local_alive(timeout_seconds: float = 1.0) -> bool:
         async with httpx.AsyncClient(timeout=timeout_seconds) as client:
             resp = await client.get(url)
         return resp.status_code < 500
-    except Exception:
+    except httpx.HTTPError as exc:
+        # The whole transport failure surface of httpx; an unreachable
+        # STT sidecar downgrades to the fallback provider, visibly.
+        slog.warning("whisper_health_probe_failed", url=url, error=str(exc))
         return False
 
 

@@ -7,6 +7,7 @@ import json
 import uuid
 from datetime import date, timedelta
 
+import structlog
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -23,6 +24,8 @@ from app.models.governance import Activity, Plan, PlanWeek
 from app.models.identity import Child
 from app.models.state import ChildNodeState, FSRSCard
 from app.services.governance import evaluate_activity, log_governance_event
+
+logger = structlog.get_logger()
 
 
 async def generate_plan(
@@ -79,8 +82,12 @@ async def generate_plan(
         gov_adjustments = await get_planning_adjustments(db, household_id)
         if gov_adjustments:
             context["governance_intelligence"] = gov_adjustments
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning(
+            "governance_intelligence_failed",
+            household_id=str(household_id),
+            error=str(exc),
+        )
 
     day_labels = ", ".join([d.capitalize() for d in instruction_days])
 
@@ -110,8 +117,14 @@ Prioritize nodes that are due for review, then available nodes."""
         assembled_ctx = assembled["context_text"]
         if assembled_ctx:
             user_prompt += f"\n\n{assembled_ctx}"
-    except Exception:
-        pass
+    except Exception as exc:
+        # Context assembly is advisory, never blocking.
+        logger.warning(
+            "context_assembly_failed",
+            role="planner",
+            child_id=str(child_id) if child_id else None,
+            error=str(exc),
+        )
 
     # Fetch household philosophical profile for AI constraints
     from app.models.identity import Household
@@ -373,7 +386,12 @@ async def _build_planner_context(
 
     try:
         intel = await get_intelligence_context(db, child_id, household_id)
-    except Exception:
+    except Exception as exc:
+        logger.warning(
+            "intelligence_context_failed",
+            child_id=str(child_id),
+            error=str(exc),
+        )
         intel = {}
 
     # Inject scope sequence context for AI planning
@@ -421,7 +439,12 @@ async def _build_planner_context(
                     scope_context[subj_name] = [
                         {"title": t["title"], "key_concepts": t["key_concepts"]} for t in next_topics
                     ]
-    except Exception:
+    except Exception as exc:
+        logger.warning(
+            "scope_sequence_context_failed",
+            child_id=str(child_id),
+            error=str(exc),
+        )
         scope_context = {}
 
     result = {

@@ -7,10 +7,13 @@ where confidence is provided explicitly.
 
 import uuid
 
+import structlog
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.ai.gateway import AIRole, call_ai
 from app.ai.prompts import EVALUATOR_SYSTEM
+
+logger = structlog.get_logger()
 
 
 class MockEvaluator:
@@ -88,8 +91,14 @@ Provide your assessment."""
         assembled_ctx = assembled["context_text"]
         if assembled_ctx:
             user_prompt += f"\n\n{assembled_ctx}"
-    except Exception:
-        pass
+    except Exception as exc:
+        # Context assembly is advisory, never blocking.
+        logger.warning(
+            "context_assembly_failed",
+            role="evaluator",
+            household_id=str(household_id),
+            error=str(exc),
+        )
 
     # Fetch philosophical profile for AI constraints
     from sqlalchemy import select as sa_select

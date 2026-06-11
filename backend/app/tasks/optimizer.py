@@ -158,7 +158,9 @@ async def optimize_fsrs_weights(
                         import fsrs as _fsrs_mod
 
                         ver = getattr(_fsrs_mod, "__version__", "unknown")
-                    except Exception:
+                    except ImportError:
+                        # Version introspection for the error log below;
+                        # only the import itself can fail here.
                         ver = "unknown"
                     logger.error(
                         "fsrs_optimizer_api_unavailable",

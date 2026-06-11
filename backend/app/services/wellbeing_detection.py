@@ -12,6 +12,7 @@ import uuid
 from collections import defaultdict
 from datetime import UTC, date, datetime, timedelta
 
+import structlog
 from sqlalchemy import and_, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -24,6 +25,7 @@ from app.models.intelligence import LearnerIntelligence
 from app.models.wellbeing import WellbeingAnomaly, WellbeingConfig
 
 logger = logging.getLogger(__name__)
+slog = structlog.get_logger()
 
 # Active statuses for deduplication
 ACTIVE_STATUSES = {AnomalyStatus.detected, AnomalyStatus.notified, AnomalyStatus.acknowledged}
@@ -625,8 +627,13 @@ async def run_wellbeing_detection(
                         },
                     )
                 )
-            except Exception:
-                pass
+            except Exception as exc:
+                slog.warning(
+                    "wellbeing_audit_log_failed",
+                    anomaly_id=str(result.id),
+                    household_id=str(household_id),
+                    error=str(exc),
+                )
 
         except Exception:
             logger.exception("Wellbeing detector '%s' failed for child %s", name, child_id)
@@ -716,8 +723,13 @@ async def record_dismissal(
                 "total_false_positives": config.total_false_positives,
             },
         )
-    except Exception:
-        pass
+    except Exception as exc:
+        slog.warning(
+            "wellbeing_governance_event_failed",
+            anomaly_id=str(anomaly.id),
+            household_id=str(household_id),
+            error=str(exc),
+        )
 
     # Audit log
     try:
@@ -733,8 +745,13 @@ async def record_dismissal(
                 details={"action": "dismissal_recorded", "anomaly_type": atype},
             )
         )
-    except Exception:
-        pass
+    except Exception as exc:
+        slog.warning(
+            "wellbeing_audit_log_failed",
+            anomaly_id=str(anomaly.id),
+            household_id=str(household_id),
+            error=str(exc),
+        )
 
     await db.flush()
     return anomaly
@@ -828,8 +845,13 @@ async def check_for_resolution(
                         details={"action": "anomaly_resolved", "anomaly_type": atype},
                     )
                 )
-            except Exception:
-                pass
+            except Exception as exc:
+                slog.warning(
+                    "wellbeing_audit_log_failed",
+                    anomaly_id=str(anomaly.id),
+                    household_id=str(household_id),
+                    error=str(exc),
+                )
 
     if resolved:
         await db.flush()

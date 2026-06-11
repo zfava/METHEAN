@@ -11,6 +11,7 @@ from datetime import UTC, datetime, timedelta
 from itertools import pairwise
 from typing import Any
 
+import structlog
 from fsrs import Rating
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -28,6 +29,8 @@ from app.services.state_engine import (
     get_or_create_fsrs_card,
     get_or_create_node_state,
 )
+
+logger = structlog.get_logger()
 
 # Units where a smaller number means a better performance.
 _LOWER_IS_BETTER_UNITS = {"seconds", "minutes"}
@@ -294,8 +297,8 @@ async def log_fitness_activity(
         from app.services.alert_engine import detect_fitness_overtraining
 
         await detect_fitness_overtraining(db, child_id, household_id)
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning("fitness_overtraining_check_failed", child_id=str(child_id), error=str(exc))
 
     # Achievement checks are non-blocking.
     new_achievements: list = []
@@ -315,16 +318,16 @@ async def log_fitness_activity(
                 else str(state.mastery_level),
             },
         )
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning("achievement_check_failed", child_id=str(child_id), error=str(exc))
 
     # Fitness logs count toward the general learning streak.
     try:
         from app.services.achievements import update_streak
 
         await update_streak(db, child_id, household_id)
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning("streak_update_failed", child_id=str(child_id), error=str(exc))
 
     return {
         "id": log.id,
@@ -410,8 +413,13 @@ async def record_benchmark(
         from app.services.alert_engine import detect_fitness_regression
 
         await detect_fitness_regression(db, child_id, household_id, benchmark_name)
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning(
+            "fitness_regression_check_failed",
+            child_id=str(child_id),
+            benchmark=benchmark_name,
+            error=str(exc),
+        )
 
     # Achievement checks are non-blocking.
     new_achievements: list = []
@@ -432,8 +440,8 @@ async def record_benchmark(
                 "improvement_pct": improvement_pct,
             },
         )
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning("achievement_check_failed", child_id=str(child_id), error=str(exc))
 
     return {
         "id": benchmark.id,

@@ -11,10 +11,13 @@ import logging
 import uuid
 from typing import TYPE_CHECKING
 
+import structlog
+
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import async_sessionmaker
 
 logger = logging.getLogger(__name__)
+slog = structlog.get_logger()
 
 
 def enrich_learning_map_sync(learning_map_id: str, household_id: str) -> dict:
@@ -164,5 +167,13 @@ def _get_scope_metadata(node_title: str, subject_name: str | None = None) -> dic
                             "estimated_weeks": topic.get("estimated_weeks", 1),
                         }
         return None
-    except Exception:
+    except Exception as exc:
+        # Malformed authored content must not break enrichment, but a
+        # node silently losing its scope alignment is exactly the
+        # degradation the loud-failure policy exists to surface.
+        slog.warning(
+            "scope_alignment_lookup_failed",
+            node_title=node_title,
+            error=str(exc),
+        )
         return None

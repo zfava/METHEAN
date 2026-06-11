@@ -11,6 +11,7 @@ import uuid
 from collections import defaultdict
 from datetime import UTC, date, datetime, timedelta
 
+import structlog
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -28,6 +29,8 @@ from app.models.identity import Child, Household, User
 from app.models.state import ChildNodeState, StateEvent
 
 router = APIRouter(tags=["child-dashboard"])
+
+logger = structlog.get_logger()
 
 DEFAULT_COLORS = {
     "Mathematics": "#3b82f6",
@@ -205,7 +208,12 @@ async def _build_child_dashboard(db: AsyncSession, child_id: uuid.UUID, househol
 
         streak_data = await get_streak(db, child_id, household_id)
         achievements = await get_achievements(db, child_id)
-    except Exception:
+    except Exception as exc:
+        logger.warning(
+            "dashboard_streak_block_failed",
+            child_id=str(child_id),
+            error=str(exc),
+        )
         streak_data = {"current_streak": 0, "longest_streak": 0, "last_activity_date": None}
         achievements = []
 
@@ -502,8 +510,12 @@ async def _build_child_dashboard(db: AsyncSession, child_id: uuid.UUID, househol
         intel = intel_r.scalar_one_or_none()
         if intel and intel.engagement_patterns:
             avg_session = intel.engagement_patterns.get("avg_focus_minutes")
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning(
+            "dashboard_intelligence_block_failed",
+            child_id=str(child_id),
+            error=str(exc),
+        )
 
     encouragement = generate_encouragement(
         activities_completed_this_week=week_completed,
@@ -534,14 +546,23 @@ async def _build_child_dashboard(db: AsyncSession, child_id: uuid.UUID, househol
                 else None,
                 "attention_pattern": sv.attention_pattern,
             }
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning(
+            "dashboard_style_block_failed",
+            child_id=str(child_id),
+            error=str(exc),
+        )
 
     # ── Fitness block (only if the child has a PE enrollment) ──
     fitness_block = None
     try:
         fitness_block = await _build_fitness_block(db, child_id, household_id, today, week_start)
-    except Exception:
+    except Exception as exc:
+        logger.warning(
+            "dashboard_fitness_block_failed",
+            child_id=str(child_id),
+            error=str(exc),
+        )
         fitness_block = None
 
     response: dict = {
