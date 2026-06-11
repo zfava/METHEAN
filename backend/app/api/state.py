@@ -12,7 +12,13 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.api.deps import PaginationParams, get_current_user, get_db, require_child_access
+from app.api.deps import (
+    PaginationParams,
+    get_current_user,
+    get_db,
+    require_child_access,
+    require_role,
+)
 from app.core.cache import cache_get, cache_set
 from app.models.curriculum import (
     ChildMapEnrollment,
@@ -24,8 +30,8 @@ from app.models.enums import (
     GovernanceAction,
     MasteryLevel,
 )
-from app.models.governance import Attempt
-from app.models.identity import Child, User
+from app.models.governance import Attempt, SupervisionAttestation
+from app.models.identity import Child, Household, User
 from app.models.state import ChildNodeState, FSRSCard, StateEvent
 from app.schemas.state import (
     AttemptProgressRequest,
@@ -40,10 +46,14 @@ from app.schemas.state import (
     NodeStateResponse,
     RetentionSummaryResponse,
     StateEventResponse,
+    SupervisionAttestationRequest,
+    SupervisionAttestationResponse,
 )
 from app.services.attempt_workflow import save_attempt_progress, start_attempt, submit_attempt
 from app.services.learning_context import get_activity_learning_context
+from app.services.node_content import requires_qualified_human_present_at_runtime
 from app.services.state_engine import apply_mastery_override, compute_retrievability
+from app.services.supervision import local_end_of_day
 
 router = APIRouter(tags=["state"])
 
@@ -353,6 +363,102 @@ async def override_mastery_demotion(
         node_id=node_id,
         new_mastery_level=override["new_level"],
         message=f"Node '{node.title}' mastery set to {override['new_level'].value} via parent override",
+    )
+
+
+@router.post(
+    "/children/{child_id}/supervision-attestation",
+    response_model=SupervisionAttestationResponse,
+    status_code=201,
+)
+async def attest_supervision(
+    child_id: uuid.UUID,
+    body: SupervisionAttestationRequest,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "co_parent")),
+    _child: Child = Depends(require_child_access("write")),
+) -> SupervisionAttestationResponse:
+    """Parent attestation that the qualified human a hazardous node names
+    is physically present at the work, today, for this child.
+
+    The runtime presence gate in services/learning_context.py refuses
+    to surface a node flagged by
+    requires_qualified_human_present_at_runtime until an unexpired
+    attestation exists. Attestations are per child, per node, per day:
+    expires_at is the household-local end of day, never longer, so
+    there are no standing waivers. Only parent-scoped parent roles can
+    attest (require_role rejects child-scoped tokens outright), and the
+    attestation is hash-chained as a governance event.
+    """
+    await _get_child_or_404(db, child_id, user.household_id)
+
+    node_result = await db.execute(
+        select(LearningNode).where(
+            LearningNode.id == body.node_id,
+            LearningNode.household_id == user.household_id,
+            LearningNode.is_active == True,  # noqa: E712
+        )
+    )
+    node = node_result.scalar_one_or_none()
+    if not node:
+        raise HTTPException(status_code=404, detail="Node not found")
+
+    # An attestation only means something on a node that requires the
+    # runtime presence check; attesting anything else is a client error.
+    if not requires_qualified_human_present_at_runtime(node.content):
+        raise HTTPException(
+            status_code=400,
+            detail="Node does not require a qualified human present at runtime",
+        )
+
+    household_result = await db.execute(select(Household).where(Household.id == user.household_id))
+    household = household_result.scalar_one()
+    now = datetime.now(UTC)
+    expires_at = local_end_of_day(household.timezone, now)
+
+    attestation = SupervisionAttestation(
+        household_id=user.household_id,
+        child_id=child_id,
+        node_id=node.id,
+        attested_by=user.id,
+        role_claimed=body.role_claimed,
+        attested_at=now,
+        expires_at=expires_at,
+        note=body.note,
+    )
+    db.add(attestation)
+    await db.flush()
+
+    from app.services.governance import log_governance_event
+
+    gov_event = await log_governance_event(
+        db,
+        user.household_id,
+        user.id,
+        GovernanceAction.approve,
+        "supervision_attested",
+        node.id,
+        reason=body.note or f"Qualified human attested present: {body.role_claimed}",
+        metadata={
+            "child_id": str(child_id),
+            "node_id": str(node.id),
+            "attestation_id": str(attestation.id),
+            "role_claimed": body.role_claimed,
+            "expires_at": expires_at.isoformat(),
+        },
+    )
+
+    await db.commit()
+
+    return SupervisionAttestationResponse(
+        id=attestation.id,
+        governance_event_id=gov_event.id,
+        child_id=child_id,
+        node_id=node.id,
+        role_claimed=attestation.role_claimed,
+        attested_at=now,
+        expires_at=expires_at,
+        message=f"Qualified human presence attested for '{node.title}' until end of day",
     )
 
 

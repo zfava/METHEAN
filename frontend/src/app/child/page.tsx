@@ -25,6 +25,7 @@ import AssessmentView from "@/components/child/AssessmentView";
 import ProjectView from "@/components/child/ProjectView";
 import FieldTripView from "@/components/child/FieldTripView";
 import CompletionState from "@/components/child/CompletionState";
+import { BlockedActivityCard } from "@/components/child/BlockedActivityCard";
 import { AmbientField, PageTransition } from "@/components/child/motion";
 import {
   Fade,
@@ -490,6 +491,13 @@ export default function ChildPage() {
   // ═══ PHASE 2: ACTIVITY MODE ═══
   if (activeActivity && learningContext) {
     const t = activeActivity.type;
+    // Safety gates: the backend empties the content and sets one of the
+    // awaiting flags when an activity is blocked (content review pending,
+    // or a qualified human must be present and is not attested today).
+    // One shared card handles both; no activity view ever renders.
+    const blocked =
+      learningContext.awaiting_human_safety_review === true ||
+      learningContext.awaiting_qualified_human === true;
     return (
       <SharedLayout id="child-activity-morph">
       {/* The tapped card morphs into this full-screen container via the
@@ -514,11 +522,12 @@ export default function ChildPage() {
         <div className="flex-1 overflow-y-auto">
           <PageTransition viewKey={`activity-${activeActivity.id}-${t}`} mode="page">
           <div className="max-w-2xl mx-auto px-4 md:px-8 py-6">
-            {t === "lesson" && <LessonView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
-            {t === "practice" && <PracticeView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
-            {t === "review" && <ReviewView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
-            {t === "assessment" && <AssessmentView context={learningContext} onComplete={handleComplete} />}
-            {t === "project" && (
+            {blocked && <BlockedActivityCard context={learningContext} onBack={goNext} />}
+            {!blocked && t === "lesson" && <LessonView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
+            {!blocked && t === "practice" && <PracticeView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
+            {!blocked && t === "review" && <ReviewView context={learningContext} childId={selectedId} onComplete={handleComplete} />}
+            {!blocked && t === "assessment" && <AssessmentView context={learningContext} onComplete={handleComplete} />}
+            {!blocked && t === "project" && (
               <ProjectView
                 context={learningContext}
                 childId={selectedId}
@@ -531,7 +540,7 @@ export default function ChildPage() {
                 }
               />
             )}
-            {t === "field_trip" && <FieldTripView context={learningContext} onComplete={handleComplete} />}
+            {!blocked && t === "field_trip" && <FieldTripView context={learningContext} onComplete={handleComplete} />}
           </div>
           </PageTransition>
         </div>

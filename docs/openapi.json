@@ -3429,6 +3429,76 @@
         }
       }
     },
+    "/api/v1/children/{child_id}/supervision-attestation": {
+      "post": {
+        "tags": [
+          "state"
+        ],
+        "summary": "Attest Supervision",
+        "description": "Parent attestation that the qualified human a hazardous node names\nis physically present at the work, today, for this child.\n\nThe runtime presence gate in services/learning_context.py refuses\nto surface a node flagged by\nrequires_qualified_human_present_at_runtime until an unexpired\nattestation exists. Attestations are per child, per node, per day:\nexpires_at is the household-local end of day, never longer, so\nthere are no standing waivers. Only parent-scoped parent roles can\nattest (require_role rejects child-scoped tokens outright), and the\nattestation is hash-chained as a governance event.",
+        "operationId": "attest_supervision_api_v1_children__child_id__supervision_attestation_post",
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SupervisionAttestationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SupervisionAttestationResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/children/{child_id}/retention-summary": {
       "get": {
         "tags": [
@@ -24017,6 +24087,94 @@
           "created_at"
         ],
         "title": "SubjectResponse"
+      },
+      "SupervisionAttestationRequest": {
+        "properties": {
+          "node_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Node Id"
+          },
+          "role_claimed": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "title": "Role Claimed"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          }
+        },
+        "type": "object",
+        "required": [
+          "node_id",
+          "role_claimed"
+        ],
+        "title": "SupervisionAttestationRequest",
+        "description": "Parent attestation that a qualified human is physically present.\n\n``role_claimed`` is the qualified role being attested (pre-filled\nby the client from the node's supervision_basis). ``note`` is an\noptional free-text remark recorded on the attestation row."
+      },
+      "SupervisionAttestationResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "governance_event_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Governance Event Id"
+          },
+          "child_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Child Id"
+          },
+          "node_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Node Id"
+          },
+          "role_claimed": {
+            "type": "string",
+            "title": "Role Claimed"
+          },
+          "attested_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Attested At"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Expires At"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "governance_event_id",
+          "child_id",
+          "node_id",
+          "role_claimed",
+          "attested_at",
+          "expires_at",
+          "message"
+        ],
+        "title": "SupervisionAttestationResponse"
       },
       "SyncEvent": {
         "properties": {

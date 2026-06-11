@@ -40,6 +40,8 @@ from app.models.identity import (
 )
 from app.models.operational import DeviceToken, NotificationLog
 from app.models.state import ChildNodeState
+from app.services.node_content import requires_qualified_human_present_at_runtime
+from app.services.supervision import get_attested_node_ids, required_role_from_content
 
 router = APIRouter(tags=["spec-coverage"])
 
@@ -798,6 +800,24 @@ async def get_today(
     )
     activities = result.scalars().all()
 
+    # Runtime presence gate surfacing (migration 058): flag activities
+    # whose node names a qualified human who must be physically present,
+    # and whether today's attestation already exists, so the parent day
+    # view can offer the one-tap attestation with the role pre-filled.
+    node_ids = [a.node_id for a in activities if a.node_id]
+    supervision_by_node: dict[uuid.UUID, str] = {}
+    if node_ids:
+        nodes_result = await db.execute(
+            select(LearningNode).where(
+                LearningNode.id.in_(node_ids),
+                LearningNode.household_id == user.household_id,
+            )
+        )
+        for n in nodes_result.scalars().all():
+            if requires_qualified_human_present_at_runtime(n.content):
+                supervision_by_node[n.id] = required_role_from_content(n.content) or "qualified adult"
+    attested_ids = await get_attested_node_ids(db, user.household_id, child_id, list(supervision_by_node.keys()))
+
     return [
         {
             "id": str(a.id),
@@ -806,6 +826,9 @@ async def get_today(
             "status": a.status.value if hasattr(a.status, "value") else str(a.status),
             "estimated_minutes": a.estimated_minutes,
             "node_id": str(a.node_id) if a.node_id else None,
+            "requires_supervision": a.node_id in supervision_by_node,
+            "supervision_attested": a.node_id in attested_ids,
+            "required_role": supervision_by_node.get(a.node_id) if a.node_id else None,
         }
         for a in activities
     ]

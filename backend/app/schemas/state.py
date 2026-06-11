@@ -92,6 +92,30 @@ class MasteryOverrideResponse(BaseModel):
     message: str
 
 
+class SupervisionAttestationRequest(BaseModel):
+    """Parent attestation that a qualified human is physically present.
+
+    ``role_claimed`` is the qualified role being attested (pre-filled
+    by the client from the node's supervision_basis). ``note`` is an
+    optional free-text remark recorded on the attestation row.
+    """
+
+    node_id: uuid.UUID
+    role_claimed: str = Field(min_length=1, max_length=100)
+    note: str | None = Field(default=None, max_length=500)
+
+
+class SupervisionAttestationResponse(BaseModel):
+    id: uuid.UUID
+    governance_event_id: uuid.UUID
+    child_id: uuid.UUID
+    node_id: uuid.UUID
+    role_claimed: str
+    attested_at: datetime
+    expires_at: datetime
+    message: str
+
+
 class RetentionSummaryResponse(BaseModel):
     child_id: uuid.UUID
     total_nodes: int

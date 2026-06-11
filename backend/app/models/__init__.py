@@ -32,6 +32,7 @@ from app.models.governance import (
     GovernanceRule,
     Plan,
     PlanWeek,
+    SupervisionAttestation,
 )
 from app.models.identity import Child, ChildPreferences, FamilyInvite, Household, User
 from app.models.intelligence import LearnerIntelligence
@@ -97,6 +98,7 @@ __all__ = [
     "StateEvent",
     "Streak",
     "Subject",
+    "SupervisionAttestation",
     "TTSCache",
     "UsageEvent",
     "UsageLedger",
