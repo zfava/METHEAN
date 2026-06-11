@@ -59,6 +59,11 @@ curl http://localhost:8000/metrics
 #   methean_ai_calls_total, methean_attempts_completed_total
 ```
 
+Grafana dashboard for these metrics: import
+`docs/ops/grafana/methean-overview.json` (instructions in
+`docs/ops/grafana/README.md`). Load-test baseline against this
+surface: `docs/load-test-results.md`.
+
 ## Accessing Logs
 
 ### Docker
