@@ -410,6 +410,12 @@ class TestSafetyGateDoesNotBlockSafeNodes:
         as if a qualified human had reviewed it. In production this would
         only be set after a licensed electrician has worked through the
         safety review checklist.
+
+        els-001 also names a licensed electrician physically present, so
+        since migration 058 the runtime presence gate stands behind the
+        content-review gate. A same-day attestation is created here so
+        this test isolates the content-review gate; the presence gate's
+        own contract is pinned in test_runtime_presence_gate.py.
         """
         content = dict(ELECTRICAL_CONTENT["els-001"])
         content["safety_review"] = {
@@ -421,6 +427,24 @@ class TestSafetyGateDoesNotBlockSafeNodes:
         activity = await _make_activity_with_content(
             db_session, household, child, user, learning_map, content
         )
+
+        from datetime import UTC, datetime, timedelta
+
+        from app.models.governance import SupervisionAttestation
+
+        db_session.add(
+            SupervisionAttestation(
+                household_id=household.id,
+                child_id=child.id,
+                node_id=activity.node_id,
+                attested_by=user.id,
+                role_claimed="licensed electrician",
+                attested_at=datetime.now(UTC),
+                expires_at=datetime.now(UTC) + timedelta(hours=4),
+            )
+        )
+        await db_session.flush()
+
         ctx = await get_activity_learning_context(
             db_session, activity.id, household.id, child.id
         )

@@ -19,6 +19,7 @@ from app.services.node_content import (
     is_enriched,
     requires_qualified_human_present_at_runtime,
 )
+from app.services.supervision import get_valid_attestation
 
 
 async def get_activity_learning_context(
@@ -127,25 +128,33 @@ async def get_activity_learning_context(
                 }
                 return context
 
-            # TODO (governance integration): for nodes where
-            # requires_qualified_human_present_at_runtime returns True, the
-            # content-review gate above is necessary but NOT sufficient. The
-            # higher governance layer must additionally confirm a qualified
-            # human (named per subsystem in the node's supervision_basis) is
-            # physically present at the work before the activity is
-            # surfaced. The seam below is the single function boundary where
-            # that runtime presence check is wired; this module does NOT
-            # perform the check (it is governance's responsibility) but
-            # it documents which nodes require it and where the check is
-            # invoked.
-            _runtime_presence_required = requires_qualified_human_present_at_runtime(node.content)
-            # When the runtime check is implemented, replace the assignment
-            # above with a callable that consults the session-time
-            # qualified-human-present record and returns / raises
-            # accordingly. Until then, the content-review gate above is the
-            # active enforcement and the governance layer is documented as
-            # the owner of the runtime presence check.
-            _ = _runtime_presence_required  # acknowledge the seam; not used here
+            # SAFETY GATE (runtime presence): for nodes where the
+            # supervision_basis names a qualified human who must be
+            # physically present at the work, the content-review gate
+            # above is necessary but NOT sufficient. A parent must have
+            # attested, today, that the qualified human is present for
+            # this child and this node (services/supervision.py).
+            # Fail-closed: no attestation, an expired attestation, or a
+            # missing child_id all block surfacing. The check runs
+            # BEFORE enrichment so the AI never generates content for a
+            # blocked hazardous node.
+            if requires_qualified_human_present_at_runtime(node.content):
+                attestation = None
+                if child_id:
+                    attestation = await get_valid_attestation(db, household_id, child_id, node.id)
+                if attestation is None:
+                    context["awaiting_qualified_human"] = True
+                    context["lesson"] = {"widgets": []}
+                    context["assessment"] = {}
+                    context["practice"] = {"items": []}
+                    context["reading"] = {"passages": []}
+                    context["tutor_available"] = False
+                    context["philosophy"] = {
+                        "approach": context["philosophy"]["approach"],
+                        "content": None,
+                        "is_native": False,
+                    }
+                    return context
 
             # Ensure content exists
             if not is_enriched(node.content):

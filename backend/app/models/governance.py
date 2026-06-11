@@ -9,6 +9,7 @@ from sqlalchemy import (
     DateTime,
     Float,
     ForeignKey,
+    Index,
     Integer,
     String,
     Text,
@@ -114,6 +115,44 @@ class GovernanceEvent(Base):
     # non-Postgres environments degrade to unhashed (verify fails closed).
     event_hash: Mapped[str | None] = mapped_column(String(64))
     prev_event_hash: Mapped[str | None] = mapped_column(String(64))
+
+
+class SupervisionAttestation(Base):
+    """One parent attestation that a qualified human is physically
+    present for a hazardous node, today (migration 058).
+
+    Lives beside GovernanceEvent because this IS a runtime governance
+    record: it is what the qualified-human presence gate in
+    services/learning_context.py consults before surfacing a node
+    flagged by requires_qualified_human_present_at_runtime, and every
+    row is paired with a hash-chained governance event.
+
+    Scope is deliberately narrow: per child, per node, per day.
+    expires_at is the household-local end of day at creation time, so
+    an attestation can never become a standing waiver. Absence of an
+    unexpired row means the activity is NOT surfaced (fail closed).
+    """
+
+    __tablename__ = "supervision_attestations"
+    __table_args__ = (Index("ix_supervision_attestation_lookup", "child_id", "node_id", "expires_at"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    household_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("households.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    child_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("children.id", ondelete="CASCADE"), nullable=False
+    )
+    node_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("learning_nodes.id", ondelete="CASCADE"), nullable=False
+    )
+    attested_by: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL")
+    )
+    role_claimed: Mapped[str] = mapped_column(String(100), nullable=False)
+    attested_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    note: Mapped[str | None] = mapped_column(String(500))
 
 
 class Plan(Base):
