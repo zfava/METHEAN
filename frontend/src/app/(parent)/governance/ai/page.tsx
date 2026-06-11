@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { aiGovernance, type AIRoleSetting, type AIStatusData } from "@/lib/api";
+import { aiGovernance, tutorProfile, type AIRoleSetting, type AIStatusData, type TutorProfileData, type TutorProfileEntryData } from "@/lib/api";
+import { useChild } from "@/lib/ChildContext";
 import { useToast } from "@/components/Toast";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import PageHeader from "@/components/ui/PageHeader";
@@ -37,6 +38,179 @@ const PROVIDER_LABELS: Record<string, string> = {
 
 function centsToDollars(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`;
+}
+
+const CATEGORY_LABELS: Record<string, string> = {
+  explanation_style: "How to explain",
+  motivation: "What motivates",
+  pacing: "Pacing",
+  interest: "Interests",
+  other: "Other",
+};
+
+function entryAppliedLine(entry: TutorProfileEntryData): string {
+  const date = entry.decided_at
+    ? new Date(entry.decided_at).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })
+    : "";
+  if (entry.grant_event_hash) {
+    return `applied under your standing grant (${entry.grant_event_hash.slice(0, 12)}) ${date}`;
+  }
+  return `you approved on ${date}`;
+}
+
+/**
+ * "How your tutor is learning": the per-child tutor memory, with the
+ * parent in full control. Active entries with how they came to apply,
+ * pending proposals with inline approve and reject, history collapsed.
+ */
+function TutorMemorySection({ tutorPolicy }: { tutorPolicy: string }) {
+  const { toast } = useToast();
+  const { selectedChild } = useChild();
+  const [profile, setProfile] = useState<TutorProfileData | null>(null);
+  const [showHistory, setShowHistory] = useState(false);
+  const [busy, setBusy] = useState<string | null>(null);
+
+  const load = () => {
+    if (!selectedChild) return;
+    tutorProfile.get(selectedChild.id).then(setProfile).catch(() => setProfile(null));
+  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(load, [selectedChild?.id]);
+
+  async function act(entryId: string, action: "approve" | "reject" | "revoke") {
+    if (!selectedChild) return;
+    setBusy(entryId);
+    try {
+      if (action === "revoke") await tutorProfile.revoke(selectedChild.id, entryId);
+      else await tutorProfile.decide(selectedChild.id, entryId, action);
+      load();
+      if (action === "approve") toast("Approved. The tutor will use this from the next session.", "success");
+      if (action === "reject") toast("Rejected. The tutor will not remember this.", "info");
+      if (action === "revoke") toast("Removed. The tutor stops using this immediately.", "success");
+    } catch (err: unknown) {
+      const detail = (err as { detail?: string })?.detail;
+      toast(detail || "That didn't go through. Nothing was changed.", "error");
+    } finally {
+      setBusy(null);
+    }
+  }
+
+  if (!selectedChild) return null;
+  const history = profile ? [...profile.rejected, ...profile.revoked] : [];
+
+  return (
+    <Card className="mb-6">
+      <SectionHeader title="How your tutor is learning" />
+      <p className="text-xs text-(--color-text-secondary) mt-1 mb-4">
+        Over time the tutor notices what works for {selectedChild.first_name}: how to explain things, what
+        keeps them motivated, what pace fits. It remembers strategies, never what your child said. You decide
+        every entry below.
+      </p>
+
+      {tutorPolicy === "off" && (
+        <p className="text-sm text-(--color-text-secondary)" data-testid="tutor-memory-off">
+          Tutor memory is off. Your tutor starts fresh every session.
+        </p>
+      )}
+
+      {tutorPolicy !== "off" && profile && (
+        <div className="space-y-4">
+          {profile.proposed.length > 0 ? (
+            <div>
+              <div className="type-eyebrow-md text-(--color-text-tertiary) mb-2">Waiting for your review</div>
+              <div className="space-y-2">
+                {profile.proposed.map((entry) => (
+                  <div key={entry.id} className="px-3 py-2.5 rounded-[10px] border border-(--color-warning)/40 bg-(--color-warning-light)/40">
+                    <div className="flex items-start justify-between gap-3 flex-wrap">
+                      <div className="min-w-0">
+                        <span className="text-[10px] uppercase tracking-wide text-(--color-text-tertiary)">
+                          {CATEGORY_LABELS[entry.category] || entry.category}
+                        </span>
+                        <p className="text-sm text-(--color-text)">{entry.content}</p>
+                      </div>
+                      <div className="flex gap-2 shrink-0">
+                        <Button variant="primary" size="sm" disabled={busy === entry.id} onClick={() => act(entry.id, "approve")}>
+                          Approve
+                        </Button>
+                        <Button variant="ghost" size="sm" disabled={busy === entry.id} onClick={() => act(entry.id, "reject")}>
+                          Reject
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            tutorPolicy === "standard" && (
+              <p className="text-xs text-(--color-text-tertiary)">Nothing waiting for review.</p>
+            )
+          )}
+
+          {tutorPolicy === "autonomous" && (
+            <p className="text-xs text-(--color-text-secondary)">
+              Your standing grant is active: new entries apply immediately and are recorded in your family
+              record. Switch the tutor back to Approve each change above to review entries before they apply.
+            </p>
+          )}
+
+          <div>
+            <div className="type-eyebrow-md text-(--color-text-tertiary) mb-2">What the tutor remembers</div>
+            {profile.active.length === 0 ? (
+              <p className="text-xs text-(--color-text-tertiary)">
+                Nothing yet. As {selectedChild.first_name} works with the tutor, what works will land here for
+                you to see.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {profile.active.map((entry) => (
+                  <div key={entry.id} className="px-3 py-2.5 rounded-[10px] bg-(--color-page) border border-(--color-border)">
+                    <div className="flex items-start justify-between gap-3 flex-wrap">
+                      <div className="min-w-0">
+                        <span className="text-[10px] uppercase tracking-wide text-(--color-text-tertiary)">
+                          {CATEGORY_LABELS[entry.category] || entry.category}
+                        </span>
+                        <p className="text-sm text-(--color-text)">{entry.content}</p>
+                        <p className="text-[10px] text-(--color-text-tertiary) mt-0.5 font-mono">
+                          {entryAppliedLine(entry)}
+                        </p>
+                      </div>
+                      <Button variant="ghost" size="sm" disabled={busy === entry.id} onClick={() => act(entry.id, "revoke")}>
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {history.length > 0 && (
+            <div>
+              <button
+                onClick={() => setShowHistory(!showHistory)}
+                className="text-xs text-(--color-text-tertiary) hover:text-(--color-text) underline"
+              >
+                {showHistory ? "Hide" : "Show"} declined and removed entries ({history.length})
+              </button>
+              {showHistory && (
+                <div className="space-y-1.5 mt-2">
+                  {history.map((entry) => (
+                    <div key={entry.id} className="px-3 py-2 rounded-[10px] bg-(--color-page) opacity-70">
+                      <span className="text-[10px] uppercase tracking-wide text-(--color-text-tertiary) mr-2">
+                        {entry.status === "rejected" ? "Declined" : "Removed"}
+                      </span>
+                      <span className="text-xs text-(--color-text-secondary)">{entry.content}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </Card>
+  );
 }
 
 /**
@@ -216,6 +390,8 @@ export default function AIGovernancePage() {
           ))}
         </div>
       </Card>
+
+      <TutorMemorySection tutorPolicy={roles.find((r) => r.role === "tutor")?.autonomy || "standard"} />
 
       {/* Spend */}
       {status && (
