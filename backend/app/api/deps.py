@@ -271,9 +271,12 @@ def _is_dunning_data_access_path(path: str) -> bool:
 
 
 async def require_active_subscription(
-    request: Request,
     user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
+    # Annotated as plain Request so FastAPI injects it; the None default
+    # keeps the long-standing direct-call signature (unit tests and any
+    # non-HTTP caller) intact, failing closed on the carve-outs.
+    request: Request = None,  # type: ignore[assignment]
 ) -> User:
     """Gate: require active or trialing subscription.
 
@@ -330,7 +333,13 @@ async def require_active_subscription(
             return user
         if dunning_state == "grace":
             return user
-        if dunning_state in ("restricted", "canceled") and _is_dunning_data_access_path(request.url.path):
+        # Fail closed when called outside a request context (request is
+        # None): no path to match means no carve-out.
+        if (
+            dunning_state in ("restricted", "canceled")
+            and request is not None
+            and _is_dunning_data_access_path(request.url.path)
+        ):
             return user
 
     raise HTTPException(
