@@ -12,7 +12,10 @@ import uuid
 from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 
+import structlog
+
 logger = logging.getLogger(__name__)
+slog = structlog.get_logger()
 
 
 # ── Data Structures ──
@@ -1044,7 +1047,12 @@ async def fetch_fitness_context(db, child_id, household_id, **kw) -> dict:
         from app.services.fitness_service import get_progress_summary
 
         progress = await get_progress_summary(db, household_id, child_id)
-    except Exception:
+    except Exception as exc:
+        slog.warning(
+            "context_fitness_progress_failed",
+            child_id=str(child_id),
+            error=str(exc),
+        )
         progress = {"benchmarks": []}
 
     lines: list[str] = []

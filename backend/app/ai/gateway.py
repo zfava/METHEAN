@@ -19,6 +19,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from enum import Enum
 
+import structlog
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -34,6 +35,10 @@ from app.models.identity import Child, ChildPreferences
 from app.models.operational import AIRun
 
 logger = logging.getLogger("methean.ai.gateway")
+
+# Structured logger for failure-path visibility (loud-failure policy,
+# docs/architecture-decisions.md). The stdlib logger above predates it.
+slog = structlog.get_logger()
 
 
 @dataclass
@@ -298,8 +303,15 @@ async def call_ai(
             )
     except UsageLimitExceededError:
         raise
-    except Exception:
-        pass  # Budget check failure should not block AI calls
+    except Exception as exc:
+        # Budget check failure must not block AI calls, but a broken
+        # budget pipeline means cost controls are dark: say so loudly.
+        slog.warning(
+            "ai_budget_check_failed",
+            household_id=str(household_id),
+            role=role.value,
+            error=str(exc),
+        )
 
     # Parent autonomy policy: a role set to off makes no AI calls at
     # all. Checked after role resolution and before any provider work.
@@ -471,8 +483,8 @@ async def call_ai(
             from app.core.metrics import ai_calls_total
 
             ai_calls_total.labels(role=role.value, provider="none", status="error").inc()
-        except Exception:
-            pass
+        except Exception as exc:
+            slog.debug("ai_metrics_record_failed", role=role.value, error=str(exc))
         raise AIProviderUnavailableError(
             f"AI call failed for role={role.value}: {error_msg or 'all providers unavailable'}"
         )
@@ -508,8 +520,13 @@ async def call_ai(
 
         cost_cents = estimate_cost_cents(model_used or "mock", input_tokens, output_tokens)
         ai_run.cost_usd = cost_cents / 100.0
-    except Exception:
-        pass
+    except Exception as exc:
+        slog.warning(
+            "ai_cost_estimate_failed",
+            ai_run_id=str(ai_run.id),
+            model=model_used or "unknown",
+            error=str(exc),
+        )
 
     await db.flush()
 
@@ -527,8 +544,15 @@ async def call_ai(
                 model_used or "unknown",
                 role.value,
             )
-    except Exception:
-        pass  # Usage recording should not break AI response
+    except Exception as exc:
+        # Usage recording must not break the AI response, but a silent
+        # gap here is silent revenue/limits drift: log at error level.
+        slog.error(
+            "ai_usage_record_failed",
+            household_id=str(household_id),
+            ai_run_id=str(ai_run.id),
+            error=str(exc),
+        )
 
     # Record metrics
     try:
@@ -537,8 +561,8 @@ async def call_ai(
         provider_label = provider_used.value if provider_used else "none"
         ai_calls_total.labels(role=role.value, provider=provider_label, status="ok").inc()
         ai_latency.labels(role=role.value).observe(elapsed_ms / 1000)
-    except Exception:
-        pass
+    except Exception as exc:
+        slog.debug("ai_metrics_record_failed", role=role.value, error=str(exc))
 
     return {
         "ai_run_id": ai_run.id,
@@ -587,6 +611,10 @@ async def stream_claude(
                 },
             )
     except Exception as e:
+        # The SSE consumer is told, and now so is the operator. Class
+        # name only: provider error strings can echo request content
+        # and the tutor stream carries child speech.
+        slog.warning("ai_stream_failed", error_type=type(e).__name__)
         yield ("error", str(e))
 
 

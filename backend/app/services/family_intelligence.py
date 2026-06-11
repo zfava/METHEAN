@@ -11,6 +11,7 @@ import uuid
 from collections import defaultdict
 from datetime import UTC, datetime, timedelta
 
+import structlog
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -22,6 +23,7 @@ from app.models.identity import Child
 from app.models.state import ChildNodeState
 
 logger = logging.getLogger(__name__)
+slog = structlog.get_logger()
 
 # Statuses that indicate a non-duplicate existing insight
 ACTIVE_STATUSES = {InsightStatus.detected, InsightStatus.notified, InsightStatus.acknowledged}
@@ -592,8 +594,12 @@ async def run_family_intelligence(
                             },
                         )
                     )
-                except Exception:
-                    pass
+                except Exception as exc:
+                    slog.warning(
+                        "family_insight_audit_log_failed",
+                        household_id=str(household_id),
+                        error=str(exc),
+                    )
         except Exception:
             logger.exception("Family intelligence detector '%s' failed for household %s", name, household_id)
             counts[name] = 0
@@ -826,7 +832,12 @@ async def build_planner_scaffolding_context(
             if not node_title:
                 try:
                     node_title = await _get_node_title(db, uuid.UUID(insight.affected_nodes[0]))
-                except Exception:
+                except Exception as exc:
+                    slog.debug(
+                        "family_insight_node_title_failed",
+                        insight_id=str(insight.id),
+                        error=str(exc),
+                    )
                     node_title = "unknown"
         lines.append(
             f'- WARNING: "{node_title}" was challenging for siblings. '

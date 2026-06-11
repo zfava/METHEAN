@@ -18,10 +18,13 @@ import uuid
 from datetime import UTC, datetime, time
 from zoneinfo import ZoneInfo
 
+import structlog
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.governance import SupervisionAttestation
+
+logger = structlog.get_logger()
 
 # Maps the lowercase qualified-human phrases recognised by
 # requires_qualified_human_present_at_runtime to the display role an
@@ -73,7 +76,16 @@ def local_end_of_day(timezone_name: str | None, now: datetime | None = None) -> 
     current = now or datetime.now(UTC)
     try:
         tz = ZoneInfo(timezone_name or "UTC")
-    except Exception:
+    except (KeyError, ValueError, TypeError, OSError) as exc:
+        # ZoneInfo raises ZoneInfoNotFoundError (a KeyError) for unknown
+        # keys, ValueError/TypeError for malformed ones, OSError when no
+        # tz database is reachable. UTC fallback only ever shortens the
+        # attestation window, never extends it.
+        logger.warning(
+            "household_timezone_invalid",
+            timezone_name=timezone_name,
+            error=str(exc),
+        )
         tz = ZoneInfo("UTC")
     local_now = current.astimezone(tz)
     local_end = datetime.combine(local_now.date(), time.max, tzinfo=tz)

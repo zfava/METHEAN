@@ -7,6 +7,7 @@ Generates content on the fly if the linked node is unenriched.
 
 import uuid
 
+import structlog
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -20,6 +21,8 @@ from app.services.node_content import (
     requires_qualified_human_present_at_runtime,
 )
 from app.services.supervision import get_valid_attestation
+
+logger = structlog.get_logger()
 
 
 async def get_activity_learning_context(
@@ -161,8 +164,16 @@ async def get_activity_learning_context(
                 try:
                     await enrich_single_node(db, node.id, household_id)
                     await db.refresh(node)
-                except Exception:
-                    pass  # Use whatever content exists
+                except Exception as exc:
+                    # Serve whatever content exists; the learner is not
+                    # blocked by an enrichment outage, but the operator
+                    # must see it.
+                    logger.warning(
+                        "enrichment_failed",
+                        node_id=str(node.id),
+                        household_id=str(household_id),
+                        error=str(exc),
+                    )
 
             content = node.content or {}
             tg = content.get("teaching_guidance", {})

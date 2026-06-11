@@ -8,6 +8,7 @@ import uuid
 from datetime import UTC, datetime, timedelta
 from zoneinfo import ZoneInfo
 
+import structlog
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -15,6 +16,8 @@ from app.models.enums import ActivityStatus
 from app.models.governance import Activity
 from app.models.identity import User
 from app.models.operational import NotificationLog
+
+logger = structlog.get_logger()
 
 # Dedup windows per event type (in seconds)
 DEDUP_WINDOWS = {
@@ -144,8 +147,15 @@ async def send_notification(
                     from app.services.email import send_email
 
                     await send_email(user_obj.email, title, body)
-        except Exception:
-            pass  # Email delivery is non-blocking
+        except Exception as exc:
+            # Email delivery is non-blocking. Class name only: the
+            # failure path holds notification body text.
+            logger.warning(
+                "notification_email_failed",
+                user_id=str(user_id),
+                event_type=event_type,
+                error_type=type(exc).__name__,
+            )
 
     # Send push notification for high-priority events (non-blocking)
     PUSH_EVENTS = {
@@ -171,8 +181,14 @@ async def send_notification(
             }
             data = {"url": deep_links.get(event_type, "/dashboard")}
             await send_push_to_user(db, user_id, household_id, title, body, data)
-        except Exception:
-            pass  # Push delivery is non-blocking
+        except Exception as exc:
+            # Push delivery is non-blocking.
+            logger.warning(
+                "notification_push_failed",
+                user_id=str(user_id),
+                event_type=event_type,
+                error_type=type(exc).__name__,
+            )
 
     return log
 

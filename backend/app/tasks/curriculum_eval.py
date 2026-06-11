@@ -7,11 +7,14 @@ completed weeks that haven't been recorded yet.
 import asyncio
 from datetime import date
 
+import structlog
 from sqlalchemy import select
 
 from app.core.database import async_session_factory
 from app.models.annual_curriculum import AnnualCurriculum
 from app.services.annual_curriculum import evaluate_approaching_weeks, record_week_completion
+
+logger = structlog.get_logger()
 
 
 async def _run_curriculum_eval() -> dict:
@@ -42,8 +45,15 @@ async def _run_curriculum_eval() -> dict:
                     try:
                         await record_week_completion(db, curriculum.id, wn)
                         total_completed += 1
-                    except (ValueError, Exception):
-                        pass
+                    except Exception as exc:
+                        # One bad week must not stop the sweep; the
+                        # remaining weeks still record.
+                        logger.warning(
+                            "week_completion_record_failed",
+                            curriculum_id=str(curriculum.id),
+                            week=wn,
+                            error=str(exc),
+                        )
 
         await db.commit()
         return {

@@ -8,6 +8,7 @@ replacing what the family already uses.
 import uuid
 from datetime import UTC, datetime
 
+import structlog
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -23,6 +24,8 @@ from app.models.curriculum import (
 from app.models.enums import EdgeRelation, GovernanceAction, MasteryLevel
 from app.models.identity import Child, Household
 from app.models.state import ChildNodeState, FSRSCard
+
+logger = structlog.get_logger()
 
 
 async def map_existing_curriculum(
@@ -224,8 +227,13 @@ async def apply_curriculum_mapping(
         from app.tasks.worker import enrich_map_task
 
         enrich_map_task.delay(str(lmap.id), str(household_id))
-    except Exception:
-        pass
+    except Exception as exc:
+        logger.warning(
+            "enrichment_queue_failed",
+            learning_map_id=str(lmap.id),
+            household_id=str(household_id),
+            error=str(exc),
+        )
 
     return {
         "learning_map_id": str(lmap.id),

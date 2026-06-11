@@ -22,10 +22,13 @@ import time
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Literal
 
+import structlog
 from fastapi import Depends, HTTPException, Request
 
 from app.api.deps import get_current_user
 from app.core.config import settings
+
+logger = structlog.get_logger()
 
 if TYPE_CHECKING:
     from app.models.identity import User
@@ -86,10 +89,16 @@ async def check_and_consume(
         if count > policy.requests:
             return False, policy.window_seconds
         return True, 0
-    except Exception:
+    except Exception as exc:
         # Auth + AI policies declare fail_open=False so the gate stays
         # closed when Redis is unreachable; a Redis outage must not
         # disable brute-force protection.
+        logger.warning(
+            "rate_limit_backend_failed",
+            policy=policy.name,
+            fail_open=policy.fail_open,
+            error=str(exc),
+        )
         return policy.fail_open, 60
 
 

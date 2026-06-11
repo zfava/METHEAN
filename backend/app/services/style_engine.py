@@ -12,6 +12,7 @@ import math
 import uuid
 from datetime import UTC, datetime
 
+import structlog
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -19,6 +20,7 @@ from app.models.intelligence import LearnerIntelligence
 from app.models.style_vector import LearnerStyleVector
 
 logger = logging.getLogger(__name__)
+slog = structlog.get_logger()
 
 # ── Thresholds ──
 
@@ -460,8 +462,13 @@ async def compute_style_vector(
                 },
             )
         )
-    except Exception:
-        pass  # Audit logging is advisory
+    except Exception as exc:
+        # Audit logging is advisory.
+        slog.warning(
+            "style_vector_audit_log_failed",
+            child_id=str(child_id),
+            error=str(exc),
+        )
 
     await db.flush()
     return vector
@@ -600,8 +607,12 @@ async def build_style_context(
                 lines.append("PARENT OBSERVATIONS:")
                 for obs in obs_texts[-5:]:
                     lines.append(f"- {obs}")
-    except Exception:
-        pass
+    except Exception as exc:
+        slog.warning(
+            "style_parent_observations_failed",
+            child_id=str(child_id),
+            error=str(exc),
+        )
 
     return "\n".join(lines)
 

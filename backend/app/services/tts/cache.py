@@ -8,12 +8,14 @@ configured cap.
 
 import logging
 
+import structlog
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.tts_cache import TTSCache
 
 logger = logging.getLogger("methean.voice.tts.cache")
+slog = structlog.get_logger()
 
 
 async def lookup(db: AsyncSession, *, cache_key_value: str) -> tuple[bytes, float] | None:
@@ -55,7 +57,10 @@ async def insert(
     db.add(entry)
     try:
         await db.flush()
-    except Exception:
+    except Exception as exc:
         # Race: another request inserted first. Treat as success;
-        # the row exists, our copy is redundant.
+        # the row exists, our copy is redundant. Anything that is NOT
+        # the designed unique-key race still rolls back (behavior
+        # preserved) but is now visible.
+        slog.warning("tts_cache_store_failed", error_type=type(exc).__name__)
         await db.rollback()

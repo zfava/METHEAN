@@ -6,6 +6,7 @@ child map state, enrollment, parent overrides, and template copying.
 
 import uuid
 
+import structlog
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel, Field
 from sqlalchemy import func, select
@@ -62,6 +63,8 @@ from app.services.template_persistence import apply_template
 from app.services.templates import TEMPLATES
 
 router = APIRouter(tags=["curriculum"], dependencies=[Depends(require_active_subscription)])
+
+logger = structlog.get_logger()
 
 
 # ── Helpers ──
@@ -205,8 +208,15 @@ async def copy_template(
         from app.tasks.worker import enrich_map_task
 
         enrich_map_task.delay(str(application.learning_map_id), str(user.household_id))
-    except Exception:
-        pass  # Enrichment failure should not block template application
+    except Exception as exc:
+        # Enrichment queueing failure must not block template
+        # application, but a dead broker should be visible.
+        logger.warning(
+            "enrichment_queue_failed",
+            learning_map_id=str(application.learning_map_id),
+            household_id=str(user.household_id),
+            error=str(exc),
+        )
 
     return TemplateCopyResponse(
         learning_map_id=application.learning_map_id,
@@ -824,6 +834,7 @@ async def batch_update(
             if edge:
                 await db.delete(edge)
         except Exception as e:
+            logger.warning("map_batch_edge_delete_failed", map_id=str(map_id), error=str(e))
             errors.append(f"edge_delete {edge_id_str}: {e}")
 
     # 2. Delete nodes
@@ -846,6 +857,7 @@ async def batch_update(
                 )
             )
         except Exception as e:
+            logger.warning("map_batch_node_delete_failed", map_id=str(map_id), error=str(e))
             errors.append(f"node_delete {node_id_str}: {e}")
 
     await db.flush()
@@ -888,6 +900,7 @@ async def batch_update(
                 if nu.sort_order is not None:
                     node.sort_order = nu.sort_order
         except Exception as e:
+            logger.warning("map_batch_node_update_failed", map_id=str(map_id), error=str(e))
             errors.append(f"node_update {nu.id}: {e}")
 
     await db.flush()
@@ -913,6 +926,7 @@ async def batch_update(
             await add_closure_entries(db, map_id, from_id, to_id)
             edges_created += 1
         except Exception as e:
+            logger.warning("map_batch_edge_create_failed", map_id=str(map_id), error=str(e))
             errors.append(f"edge_create: {e}")
 
     # 6. Rebuild closure if edges were deleted

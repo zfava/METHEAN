@@ -7,6 +7,7 @@ and functions to check compliance, generate documents, and track hours.
 import uuid
 from datetime import date
 
+import structlog
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -14,6 +15,8 @@ from app.models.curriculum import LearningMap, LearningNode, Subject
 from app.models.governance import Activity
 from app.models.identity import Child
 from app.models.state import ChildNodeState
+
+logger = structlog.get_logger()
 
 # ══════════════════════════════════════════════════
 # State Requirements Database
@@ -1461,8 +1464,14 @@ async def get_hours_breakdown(
                 for tag in cross_tags:
                     tag_subject = tag.replace("_", " ").title()
                     by_subject[tag_subject] = by_subject.get(tag_subject, 0) + (act.estimated_minutes * 0.25) / 60
-    except Exception:
-        pass  # Cross-subject tags are additive; failure is non-fatal
+    except Exception as exc:
+        # Cross-subject tags are additive; failure is non-fatal.
+        logger.warning(
+            "compliance_cross_subject_tags_failed",
+            household_id=str(household_id),
+            child_id=str(child_id),
+            error=str(exc),
+        )
 
     # Also include reading log time
     try:
@@ -1481,8 +1490,16 @@ async def get_hours_breakdown(
         total_minutes += reading_minutes
         if reading_minutes > 0:
             by_subject["Reading (books)"] = round(reading_minutes / 60, 1)
-    except Exception:
-        pass  # ReadingLogEntry table may not exist yet
+    except Exception as exc:
+        # Reading-log hours are additive; a missing table on an old
+        # database shape degrades the total, which the parent should
+        # know about.
+        logger.warning(
+            "compliance_reading_log_failed",
+            household_id=str(household_id),
+            child_id=str(child_id),
+            error=str(exc),
+        )
 
     return {
         "total_hours": round(total_minutes / 60, 2),

@@ -1,9 +1,12 @@
 """Celery worker configuration with all scheduled tasks."""
 
+import structlog
 from celery import Celery
 from celery.schedules import crontab
 
 from app.core.config import settings
+
+logger = structlog.get_logger()
 
 celery_app = Celery(
     "methean",
@@ -93,6 +96,12 @@ def nightly_decay_task(self) -> dict:
 
         return run_decay_sync()
     except Exception as exc:
+        logger.warning(
+            "celery_task_retry",
+            task=self.name,
+            retries=self.request.retries,
+            error=str(exc),
+        )
         self.retry(exc=exc, countdown=30 * (2**self.request.retries))
 
 
@@ -104,6 +113,12 @@ def weekly_snapshot_task(self) -> dict:
 
         return run_snapshots_sync()
     except Exception as exc:
+        logger.warning(
+            "celery_task_retry",
+            task=self.name,
+            retries=self.request.retries,
+            error=str(exc),
+        )
         self.retry(exc=exc, countdown=30 * (2**self.request.retries))
 
 
@@ -115,6 +130,12 @@ def fsrs_optimize_task(self) -> dict:
 
         return run_optimizer_sync()
     except Exception as exc:
+        logger.warning(
+            "celery_task_retry",
+            task=self.name,
+            retries=self.request.retries,
+            error=str(exc),
+        )
         self.retry(exc=exc, countdown=30 * (2**self.request.retries))
 
 
@@ -126,6 +147,12 @@ def temporal_triggers_task(self) -> dict:
 
         return run_temporal_sync()
     except Exception as exc:
+        logger.warning(
+            "celery_task_retry",
+            task=self.name,
+            retries=self.request.retries,
+            error=str(exc),
+        )
         self.retry(exc=exc, countdown=30 * (2**self.request.retries))
 
 
@@ -137,6 +164,12 @@ def check_alerts_task(self) -> dict:
 
         return run_check_alerts_sync()
     except Exception as exc:
+        logger.warning(
+            "celery_task_retry",
+            task=self.name,
+            retries=self.request.retries,
+            error=str(exc),
+        )
         self.retry(exc=exc, countdown=30 * (2**self.request.retries))
 
 
@@ -148,6 +181,12 @@ def curriculum_eval_task(self) -> dict:
 
         return run_curriculum_eval_sync()
     except Exception as exc:
+        logger.warning(
+            "celery_task_retry",
+            task=self.name,
+            retries=self.request.retries,
+            error=str(exc),
+        )
         self.retry(exc=exc, countdown=30 * (2**self.request.retries))
 
 
@@ -159,6 +198,12 @@ def daily_summary_task(self) -> dict:
 
         return run_daily_summary_sync()
     except Exception as exc:
+        logger.warning(
+            "celery_task_retry",
+            task=self.name,
+            retries=self.request.retries,
+            error=str(exc),
+        )
         self.retry(exc=exc, countdown=120)
 
 
@@ -170,6 +215,12 @@ def weekly_digest_task(self) -> dict:
 
         return run_weekly_digest_sync()
     except Exception as exc:
+        logger.warning(
+            "celery_task_retry",
+            task=self.name,
+            retries=self.request.retries,
+            error=str(exc),
+        )
         self.retry(exc=exc, countdown=30 * (2**self.request.retries))
 
 
@@ -181,6 +232,12 @@ def enrich_map_task(self, learning_map_id: str, household_id: str) -> dict:
 
         return enrich_learning_map_sync(learning_map_id, household_id)
     except Exception as exc:
+        logger.warning(
+            "celery_task_retry",
+            task=self.name,
+            retries=self.request.retries,
+            error=str(exc),
+        )
         self.retry(exc=exc, countdown=60)
 
 
@@ -192,6 +249,12 @@ def calibration_nightly_task(self) -> dict:
 
         return run_calibration_sync()
     except Exception as exc:
+        logger.warning(
+            "celery_task_retry",
+            task=self.name,
+            retries=self.request.retries,
+            error=str(exc),
+        )
         self.retry(exc=exc, countdown=30 * (2**self.request.retries))
 
 
@@ -203,6 +266,12 @@ def style_vector_nightly_task(self) -> dict:
 
         return run_style_vector_sync()
     except Exception as exc:
+        logger.warning(
+            "celery_task_retry",
+            task=self.name,
+            retries=self.request.retries,
+            error=str(exc),
+        )
         self.retry(exc=exc, countdown=30 * (2**self.request.retries))
 
 
@@ -214,6 +283,12 @@ def family_intelligence_nightly_task(self) -> dict:
 
         return run_family_intelligence_sync()
     except Exception as exc:
+        logger.warning(
+            "celery_task_retry",
+            task=self.name,
+            retries=self.request.retries,
+            error=str(exc),
+        )
         self.retry(exc=exc, countdown=30 * (2**self.request.retries))
 
 
@@ -225,6 +300,12 @@ def wellbeing_detection_task(self) -> dict:
 
         return run_wellbeing_sync()
     except Exception as exc:
+        logger.warning(
+            "celery_task_retry",
+            task=self.name,
+            retries=self.request.retries,
+            error=str(exc),
+        )
         self.retry(exc=exc, countdown=30 * (2**self.request.retries))
 
 
@@ -236,6 +317,12 @@ def purge_deleted_households(self) -> dict:
 
         return run_purge_sync()
     except Exception as exc:
+        logger.warning(
+            "celery_task_retry",
+            task=self.name,
+            retries=self.request.retries,
+            error=str(exc),
+        )
         self.retry(exc=exc, countdown=30 * (2**self.request.retries))
 
 
@@ -247,6 +334,12 @@ def advance_dunning_task(self) -> dict:
 
         return run_dunning_sync()
     except Exception as exc:
+        logger.warning(
+            "celery_task_retry",
+            task=self.name,
+            retries=self.request.retries,
+            error=str(exc),
+        )
         self.retry(exc=exc, countdown=30 * (2**self.request.retries))
 
 
