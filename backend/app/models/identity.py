@@ -34,6 +34,15 @@ class Household(Base):
     trial_ends_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     subscription_ends_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
+    # Failed-payment recovery (migration 059). Stripe is authoritative
+    # for payment facts; dunning_state is METHEAN's derived policy walk
+    # (none -> grace -> restricted -> canceled, reset to none by any
+    # successful payment). Written ONLY by services/billing.py.
+    dunning_state: Mapped[str] = mapped_column(String(20), nullable=False, server_default="none", default="none")
+    dunning_started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    last_dunning_email_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    dunning_emails_sent: Mapped[int] = mapped_column(Integer, nullable=False, server_default="0", default=0)
+
     # Governance mode (additive, defaults preserve existing behavior)
     governance_mode: Mapped[str] = mapped_column(String(30), nullable=False, server_default="parent_governed")
     organization_type: Mapped[str] = mapped_column(String(50), nullable=False, server_default="homeschool")
