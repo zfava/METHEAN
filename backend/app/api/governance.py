@@ -1052,6 +1052,19 @@ Continue the Socratic dialogue. Reference what was discussed earlier if relevant
     except Exception:
         pass  # Intelligence recording is advisory, never blocking
 
+    # Tutor continuity: distill the exchange into proposed memory
+    # entries, routed by the parent's autonomy policy (no-op at off).
+    # Advisory like intelligence recording: failure never blocks the
+    # child's tutoring response.
+    try:
+        if body.child_id:
+            from app.services.tutor_profile import extract_and_route_proposals
+
+            exchange = f"Child asked: {body.message}\nTutor replied: {output.get('message', '')}"
+            await extract_and_route_proposals(db, user.household_id, body.child_id, exchange, triggered_by=user.id)
+    except Exception:
+        logger.warning("tutor_profile_extraction_failed", household_id=str(user.household_id))
+
     response_message = output.get("message", "Could you tell me more about your thinking?")
     if body.voice_mode:
         from app.services.sentence_truncate import truncate_to_sentences
@@ -1263,6 +1276,17 @@ Respond in plain text as the Socratic tutor. Do NOT use JSON. Just speak natural
                         )
                 except Exception:
                     pass
+                try:
+                    if body.child_id:
+                        from app.services.tutor_profile import extract_and_route_proposals
+
+                        exchange = f"Child asked: {body.message}\nTutor replied: {accumulated[:1500]}"
+                        await extract_and_route_proposals(
+                            db, user.household_id, body.child_id, exchange, triggered_by=user.id
+                        )
+                        await db.commit()
+                except Exception:
+                    logger.warning("tutor_profile_extraction_failed", household_id=str(user.household_id))
             elif event_type == "error":
                 yield f"data: {json.dumps({'type': 'error', 'message': 'I had trouble thinking. Try again in a moment.'})}\n\n"
 
@@ -1893,6 +1917,96 @@ async def get_ai_status(
         },
         "last_30_days": by_role,
     }
+
+
+# ══════════════════════════════════════════════════
+# Tutor Profile (parent-governed tutor memory)
+# ══════════════════════════════════════════════════
+
+
+class TutorProfileDecision(BaseModel):
+    action: str  # approve | reject
+
+
+def _entry_to_dict(entry) -> dict:
+    return {
+        "id": str(entry.id),
+        "category": entry.category,
+        "content": entry.content,
+        "status": entry.status,
+        "grant_event_hash": entry.grant_event_hash,
+        "proposed_at": entry.proposed_at.isoformat() if entry.proposed_at else None,
+        "decided_at": entry.decided_at.isoformat() if entry.decided_at else None,
+        "decided_by": str(entry.decided_by) if entry.decided_by else None,
+    }
+
+
+@router.get("/children/{child_id}/tutor-profile")
+async def get_tutor_profile(
+    child_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "co_parent")),
+) -> dict:
+    """The child's tutor memory, grouped by status. Parent surface:
+    every entry shows exactly how it came to apply (parent approval or
+    standing grant, with the grant hash)."""
+    from app.services.tutor_profile import list_entries
+
+    await _get_child_or_404(db, child_id, user.household_id)
+    entries = await list_entries(db, user.household_id, child_id)
+    grouped: dict[str, list[dict]] = {"proposed": [], "active": [], "rejected": [], "revoked": []}
+    for entry in entries:
+        grouped.setdefault(entry.status, []).append(_entry_to_dict(entry))
+    return grouped
+
+
+@router.post("/children/{child_id}/tutor-profile/{entry_id}/decide")
+async def decide_tutor_profile_entry(
+    child_id: uuid.UUID,
+    entry_id: uuid.UUID,
+    body: TutorProfileDecision,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "co_parent")),
+) -> dict:
+    """Approve or reject a proposed entry. Repeat decisions are 409:
+    decided entries are immutable to further decisions."""
+    from app.services.tutor_profile import (
+        TutorProfileStateError,
+        TutorProfileValidationError,
+        decide_entry,
+    )
+
+    await _get_child_or_404(db, child_id, user.household_id)
+    try:
+        entry = await decide_entry(db, user.household_id, child_id, entry_id, body.action, user.id)
+    except LookupError:
+        raise HTTPException(status_code=404, detail="Entry not found")
+    except TutorProfileValidationError as e:
+        raise HTTPException(status_code=422, detail=str(e))
+    except TutorProfileStateError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    return _entry_to_dict(entry)
+
+
+@router.post("/children/{child_id}/tutor-profile/{entry_id}/revoke")
+async def revoke_tutor_profile_entry(
+    child_id: uuid.UUID,
+    entry_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "co_parent")),
+) -> dict:
+    """Revoke an active entry, one tap. Revoked entries are never
+    injected and never deleted: the record is the record."""
+    from app.services.tutor_profile import TutorProfileStateError, revoke_entry
+
+    await _get_child_or_404(db, child_id, user.household_id)
+    try:
+        entry = await revoke_entry(db, user.household_id, child_id, entry_id, user.id)
+    except LookupError:
+        raise HTTPException(status_code=404, detail="Entry not found")
+    except TutorProfileStateError as e:
+        raise HTTPException(status_code=409, detail=str(e))
+    return _entry_to_dict(entry)
 
 
 # ══════════════════════════════════════════════════

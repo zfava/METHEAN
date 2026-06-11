@@ -64,6 +64,9 @@ TUTOR_PROFILE = RoleContextProfile(
         ContextSource("active_frustration_signals", "fetch_frustration_signals", 200, 0.85, 7),
         ContextSource("governance_constraints", "fetch_governance_constraints", 200, 0.8, 90, required=True),
         ContextSource("parent_observations", "fetch_parent_observations", 200, 0.6, 90),
+        # Parent-governed tutor memory (tutor_profile_entries): active,
+        # approved-or-granted strategies only. Empty at policy off.
+        ContextSource("tutor_profile", "fetch_tutor_profile", 250, 0.85, 365),
     ],
 )
 
@@ -269,6 +272,21 @@ async def fetch_style_context(db, child_id, household_id, **kw) -> dict:
     from app.services.style_engine import build_style_context
 
     text = await build_style_context(db, child_id, household_id)
+    return {"text": text, "metadata": {"timestamp": _now()}}
+
+
+async def fetch_tutor_profile(db, child_id, household_id, **kw) -> dict:
+    """Active tutor memory entries as the what-works guidance block.
+
+    Reads through services/tutor_profile.py so the autonomy policy is
+    honored: off injects nothing, and only status=active entries (the
+    parent approved them, or they were applied under a standing grant)
+    ever reach the model. Tone and approach guidance only, never facts
+    about mastery.
+    """
+    from app.services.tutor_profile import get_active_entries_block
+
+    text = await get_active_entries_block(db, household_id, child_id)
     return {"text": text, "metadata": {"timestamp": _now()}}
 
 
@@ -1067,6 +1085,7 @@ async def fetch_fitness_context(db, child_id, household_id, **kw) -> dict:
 FETCHER_MAP: dict[str, callable] = {
     "fetch_current_activity": fetch_current_activity,
     "fetch_style_context": fetch_style_context,
+    "fetch_tutor_profile": fetch_tutor_profile,
     "fetch_recent_attempts_node": fetch_recent_attempts_node,
     "fetch_recent_attempts_related": fetch_recent_attempts_related,
     "fetch_frustration_signals": fetch_frustration_signals,
