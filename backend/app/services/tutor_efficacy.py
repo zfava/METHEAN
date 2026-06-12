@@ -38,6 +38,7 @@ import structlog
 from sqlalchemy import case, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.learning_levels import LEARNING_LEVELS, VALID_LEVELS
 from app.models.curriculum import LearningMap, LearningNode, Subject
 from app.models.enums import AttemptStatus, GovernanceAction
 from app.models.governance import Activity, Attempt, GovernanceEvent
@@ -97,6 +98,10 @@ SUCCESS_MIN_SCORE = 0.3
 # life: one, and one more only if the parent rejected the first and the
 # signal later recurs.
 MAX_RETIREMENT_PROPOSALS = 2
+
+# A strategy stamped this many content tiers (or more) below the child's
+# current tier is treated as tied to an outgrown developmental stage.
+TIER_LAG_THRESHOLD = 2
 
 # Governance event types for the retirement lifecycle. target_id is the
 # entry id on all three, so the lifecycle is queryable per entry.
@@ -438,6 +443,48 @@ async def maybe_propose_retirement(
     return await route_proposal(db, entry.household_id, entry.child_id, proposal)
 
 
+async def maybe_propose_tier_lag_retirement(
+    db: AsyncSession,
+    entry: TutorProfileEntry,
+    now: datetime | None = None,
+) -> TutorProfileEntry | None:
+    """Propose retiring an active entry whose stamped tier_band sits
+    TIER_LAG_THRESHOLD or more tiers below the child's current content
+    tier: a strategy tied to a developmental stage the child has left.
+
+    Routes through the same retire_entry path and honors the same lifetime
+    rules (one pending at a time, at most two ever, second only after a
+    rejection). The reason names both stages. Independent of efficacy
+    readings: a strategy can still be working and yet belong to an outgrown
+    stage. Fail closed: an unresolvable current tier proposes nothing.
+    """
+    from app.services.tutor_register import current_tier_for_child, tier_lag
+
+    stamped = entry.tier_band
+    if entry.status != "active" or stamped is None or stamped not in VALID_LEVELS:
+        return None
+    if not await _can_propose_retirement(db, entry):
+        return None
+    current = await current_tier_for_child(db, entry.child_id)
+    if current is None or current not in VALID_LEVELS:
+        return None
+    lag = tier_lag(current, stamped)
+    if lag is None or lag < TIER_LAG_THRESHOLD:
+        return None
+    reason = (
+        f"Outgrown stage: this strategy was learned at the {LEARNING_LEVELS[stamped]['label']} "
+        f"stage and the learner is now at the {LEARNING_LEVELS[current]['label']} stage."
+    )
+    proposal = {
+        "action": "retire_entry",
+        "entry_id": str(entry.id),
+        "reason": reason,
+        "deltas": None,
+        "sample_sizes": None,
+    }
+    return await route_proposal(db, entry.household_id, entry.child_id, proposal)
+
+
 async def decide_retirement(
     db: AsyncSession,
     household_id: uuid.UUID,
@@ -577,6 +624,13 @@ async def evaluate_tutor_entries(db: AsyncSession, now: datetime | None = None) 
                 routed = await maybe_propose_retirement(db, entry)
                 if routed is not None:
                     proposals += 1
+            # Tier-lag retirement (independent of efficacy): a strategy two
+            # or more tiers below the child's current stage. Honors the same
+            # lifetime cap, so it will not double-propose alongside the
+            # efficacy retirement above (that one leaves a pending proposal).
+            tier_routed = await maybe_propose_tier_lag_retirement(db, entry, now=now)
+            if tier_routed is not None:
+                proposals += 1
 
         await db.commit()
         totals["households"] += 1

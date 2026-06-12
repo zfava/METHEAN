@@ -60,6 +60,11 @@ TUTOR_PROFILE = RoleContextProfile(
     role="tutor",
     total_token_budget=2000,
     sources=[
+        # Developmental voice register: how to speak with this learner now,
+        # derived from their curriculum stage. Required and placed first so
+        # the voice frames the strategy guidance that follows. Empty only
+        # when the tutor role is off.
+        ContextSource("developmental_register", "fetch_register", 220, 0.99, 1, required=True),
         ContextSource("current_activity", "fetch_current_activity", 400, 1.0, 1, required=True),
         ContextSource("style_vector", "fetch_style_context", 300, 0.9, 90, required=True),
         ContextSource("recent_attempts_same_node", "fetch_recent_attempts_node", 400, 0.95, 14),
@@ -294,6 +299,19 @@ async def fetch_tutor_profile(db, child_id, household_id, **kw) -> dict:
     from app.services.tutor_profile import get_active_entries_block
 
     text = await get_active_entries_block(db, household_id, child_id)
+    return {"text": text, "metadata": {"timestamp": _now()}}
+
+
+async def fetch_register(db, child_id, household_id, **kw) -> dict:
+    """Developmental voice register block for the tutor.
+
+    Reads through services/learning_context.py so the role gate and the
+    fail-closed tier resolution live in one place. Only registered on the
+    tutor profile, so it never fires for another role.
+    """
+    from app.services.learning_context import build_register_block
+
+    text = await build_register_block(db, household_id, child_id, role="tutor", node_id=kw.get("node_id"))
     return {"text": text, "metadata": {"timestamp": _now()}}
 
 
@@ -1111,6 +1129,7 @@ FETCHER_MAP: dict[str, callable] = {
     "fetch_current_activity": fetch_current_activity,
     "fetch_style_context": fetch_style_context,
     "fetch_tutor_profile": fetch_tutor_profile,
+    "fetch_register": fetch_register,
     "fetch_session_signal": fetch_session_signal,
     "fetch_recent_attempts_node": fetch_recent_attempts_node,
     "fetch_recent_attempts_related": fetch_recent_attempts_related,

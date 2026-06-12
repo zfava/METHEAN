@@ -75,6 +75,71 @@ async def build_session_signal_block(
     )
 
 
+async def build_register_block(
+    db: AsyncSession,
+    household_id: uuid.UUID,
+    child_id: uuid.UUID,
+    role: str,
+    node_id: uuid.UUID | None = None,
+) -> str:
+    """The developmental voice register block injected for the tutor.
+
+    The register tells the tutor how to speak with this learner right now,
+    derived from the child's content tier in the subject being tutored
+    (resolved from node_id) with an absolute per-child parent override.
+    Unlike tutor memory, the register is presentation, not memory, so it
+    applies regardless of profile policy: the only gate is that the tutor
+    role is not off. Returns an empty string for a non-tutor role or when
+    the role is off. Fail closed: an unreadable policy injects nothing, and
+    an unresolvable tier resolves to the most protective (youngest)
+    register inside resolve_register, never a silent richer one.
+    """
+    if role != "tutor":
+        return ""
+
+    from app.services.governance import AI_AUTONOMY_OFF, get_ai_role_policy
+
+    try:
+        policy = await get_ai_role_policy(db, household_id, "tutor")
+    except Exception as exc:
+        logger.warning(
+            "register_policy_unreadable",
+            household_id=str(household_id),
+            child_id=str(child_id),
+            error=str(exc),
+        )
+        return ""
+    if policy == AI_AUTONOMY_OFF:
+        return ""
+
+    subject_name = None
+    if node_id is not None:
+        try:
+            subject_name = (
+                await db.execute(
+                    select(Subject.name)
+                    .join(LearningMap, LearningMap.subject_id == Subject.id)
+                    .join(LearningNode, LearningNode.learning_map_id == LearningMap.id)
+                    .where(LearningNode.id == node_id)
+                )
+            ).scalar_one_or_none()
+        except Exception as exc:
+            logger.warning("register_subject_unresolved", node_id=str(node_id), error=str(exc))
+            subject_name = None
+
+    from app.core.learning_levels import LEARNING_LEVELS
+    from app.services.tutor_register import resolve_register
+
+    tier, guidance, source = await resolve_register(db, child_id, subject_name)
+    label = LEARNING_LEVELS[tier]["label"]
+    provenance = "you set this voice" if source == "override" else "from this learner's curriculum stage"
+    return (
+        "TUTOR VOICE REGISTER (developmental, " + provenance + "; how to speak with this learner "
+        "right now, never a label shown to the child):\n"
+        f"Stage: {label}\n" + guidance
+    )
+
+
 async def get_activity_learning_context(
     db: AsyncSession,
     activity_id: uuid.UUID,
