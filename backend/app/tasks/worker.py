@@ -85,6 +85,10 @@ celery_app.conf.beat_schedule = {
         "task": "app.tasks.worker.advance_dunning_task",
         "schedule": crontab(hour=6, minute=0),
     },
+    "weekly-tutor-efficacy": {
+        "task": "app.tasks.worker.tutor_efficacy_task",
+        "schedule": crontab(day_of_week="sunday", hour=3, minute=0),
+    },
 }
 
 
@@ -333,6 +337,24 @@ def advance_dunning_task(self) -> dict:
         from app.tasks.dunning import run_dunning_sync
 
         return run_dunning_sync()
+    except Exception as exc:
+        logger.warning(
+            "celery_task_retry",
+            task=self.name,
+            retries=self.request.retries,
+            error=str(exc),
+        )
+        self.retry(exc=exc, countdown=30 * (2**self.request.retries))
+
+
+@celery_app.task(name="app.tasks.worker.tutor_efficacy_task", bind=True, max_retries=3)
+def tutor_efficacy_task(self) -> dict:
+    """Weekly: measure every active tutor profile entry against the
+    child's real attempt outcomes and propose retiring outgrown ones."""
+    try:
+        from app.services.tutor_efficacy import run_tutor_efficacy_sync
+
+        return run_tutor_efficacy_sync()
     except Exception as exc:
         logger.warning(
             "celery_task_retry",
