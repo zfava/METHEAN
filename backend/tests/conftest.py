@@ -117,6 +117,7 @@ RLS_TABLES = [
     "child_map_enrollments",
     "child_node_states",
     "child_preferences",
+    "child_tutor_preferences",
     "children",
     "device_tokens",
     "education_plans",

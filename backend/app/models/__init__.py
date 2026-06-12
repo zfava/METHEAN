@@ -35,7 +35,7 @@ from app.models.governance import (
     SupervisionAttestation,
 )
 from app.models.identity import Child, ChildPreferences, FamilyInvite, Household, User
-from app.models.intelligence import LearnerIntelligence
+from app.models.intelligence import ChildTutorPreferences, LearnerIntelligence
 from app.models.operational import (
     AIRun,
     AuditLog,
@@ -69,6 +69,7 @@ __all__ = [
     "ChildMapEnrollment",
     "ChildNodeState",
     "ChildPreferences",
+    "ChildTutorPreferences",
     "DeviceToken",
     "EducationPlan",
     "EvaluatorPrediction",

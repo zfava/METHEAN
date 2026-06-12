@@ -79,6 +79,11 @@ class TutorProfileEntry(Base):
     category: Mapped[str] = mapped_column(String(30), nullable=False)
     content: Mapped[str] = mapped_column(String(300), nullable=False)
     status: Mapped[str] = mapped_column(String(20), nullable=False, default="proposed")
+    # The content tier (LEARNING_LEVELS key) the child was at, in the
+    # relevant subject, when this entry was proposed (migration 062). Lets
+    # the efficacy engine retire a strategy tied to an outgrown stage.
+    # Distinct from MasteryLevel: this is the curriculum tier axis.
+    tier_band: Mapped[str | None] = mapped_column(String(20), nullable=True)
     # Set only when an entry was applied autonomously: the hash of the
     # standing ai_autonomy_granted event in force at application time.
     grant_event_hash: Mapped[str | None] = mapped_column(String(64), nullable=True)
@@ -160,3 +165,43 @@ class TutorEntryObservation(Base):
     # "all": the sample was every attempt because the scope was ambiguous.
     subject_scope: Mapped[str] = mapped_column(String(30), nullable=False, server_default="all", default="all")
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
+
+
+class ChildTutorPreferences(Base):
+    """One row per child: the parent's control surface over the tutor's
+    developmental voice register (migration 062).
+
+    register_override is absolute when set: it overrides the tier derived
+    from the child's curriculum stage entirely, per child, until cleared.
+    Null means automatic (derive from content tier). relationship_memory
+    ships 'off' and is consumed by a later prompt; the column lives here
+    now so register and that feature share one table and one migration.
+    Writes go through the preferences API, which logs a governance event
+    on every override change.
+    """
+
+    __tablename__ = "child_tutor_preferences"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    household_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("households.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    child_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("children.id", ondelete="CASCADE"),
+        nullable=False,
+        unique=True,
+    )
+    # One of the five LEARNING_LEVELS keys, or null for automatic.
+    register_override: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    # off|on. Ships off; activated by the relationship memory prompt.
+    relationship_memory: Mapped[str] = mapped_column(String(8), nullable=False, server_default="off", default="off")
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
+    )
+    updated_by: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True
+    )
