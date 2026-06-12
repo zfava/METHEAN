@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { auth, children as childrenApi, governance, household, snapshots, usage, familyInsights, wellbeing, type User, type ChildState, type GovernanceEvent, type SnapshotItem, type FamilyInsightSummary, type FamilyInsightItem, type WellbeingSummary } from "@/lib/api";
+import { auth, children as childrenApi, governance, household, snapshots, usage, familyInsights, wellbeing, type User, type ChildState, type GovernanceEvent, type SnapshotItem, type FamilyInsightSummary, type FamilyInsightItem, type WellbeingSummary, type SessionSignal } from "@/lib/api";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
 import StatusBadge from "@/components/StatusBadge";
 import PageHeader from "@/components/ui/PageHeader";
@@ -113,6 +113,67 @@ function WellbeingIndicator({ childId }: { childId: string | undefined }) {
       <span className="w-2 h-2 rounded-full bg-(--color-warning) animate-pulse-soft" />
       {count} wellbeing observation{count > 1 ? "s" : ""} to review
     </Link>
+  );
+}
+
+// Parent-facing copy for the live signal. Deliberately non-pathologizing
+// and framed as right-now, never as a label on the child.
+const SESSION_SIGNAL_COPY: Record<NonNullable<SessionSignal["signal"]>, { text: string; tone: "good" | "soft" }> = {
+  cruising: { text: "Cruising right now", tone: "good" },
+  stretching: { text: "Stretching nicely right now", tone: "good" },
+  struggling: { text: "Finding this tricky right now", tone: "soft" },
+  frustrated: { text: "Hitting a hard patch right now", tone: "soft" },
+};
+
+/**
+ * Live within-session signal chip. Right-now information that disappears:
+ * it polls, and clears itself the moment the signal lapses (empty payload
+ * or a passed expiry). Shows nothing when no signal is live or the tutor
+ * policy is off (the endpoint returns {}).
+ */
+function LiveSessionSignalChip({ childId }: { childId: string | undefined }) {
+  const [signal, setSignal] = useState<SessionSignal | null>(null);
+
+  useEffect(() => {
+    if (!childId) {
+      setSignal(null);
+      return;
+    }
+    let active = true;
+    const poll = () => {
+      childrenApi
+        .sessionSignal(childId)
+        .then((s) => {
+          if (active) setSignal(s && s.signal ? s : null);
+        })
+        .catch(() => {
+          if (active) setSignal(null);
+        });
+    };
+    poll();
+    const id = setInterval(poll, 30000);
+    return () => {
+      active = false;
+      clearInterval(id);
+    };
+  }, [childId]);
+
+  if (!signal || !signal.signal) return null;
+  // Auto-clear once the TTL has lapsed, without waiting for the next poll.
+  if (signal.expires_at && new Date(signal.expires_at).getTime() <= Date.now()) return null;
+
+  const copy = SESSION_SIGNAL_COPY[signal.signal];
+  const tone =
+    copy.tone === "good"
+      ? "bg-(--color-success-light) border-(--color-success)/10 text-(--color-success)"
+      : "bg-(--color-warning-light) border-(--color-warning)/10 text-(--color-warning)";
+  const dot = copy.tone === "good" ? "bg-(--color-success)" : "bg-(--color-warning)";
+
+  return (
+    <div className={cn("flex items-center gap-2 px-3 py-2 border rounded-[10px] text-xs", tone)}>
+      <span className={cn("w-2 h-2 rounded-full animate-pulse-soft", dot)} />
+      Right now: {copy.text}
+    </div>
   );
 }
 
@@ -782,7 +843,8 @@ export default function DashboardPage() {
           <div className="animate-fade-up stagger-7 mb-3">
             <FamilyInsightsWidget childCount={children.length} />
           </div>
-          <div className="animate-fade-up stagger-8 mb-3">
+          <div className="animate-fade-up stagger-8 mb-3 flex flex-wrap gap-2">
+            <LiveSessionSignalChip childId={selectedChild?.id} />
             <WellbeingIndicator childId={selectedChild?.id} />
           </div>
 

@@ -272,6 +272,8 @@ export const children = {
       body: JSON.stringify(body),
     }),
   today: (childId: string) => request<any[]>(`/children/${childId}/today`),
+  sessionSignal: (childId: string) =>
+    request<SessionSignal>(`/children/${childId}/session-signal`),
   attestSupervision: (childId: string, nodeId: string, roleClaimed: string, note?: string) =>
     request<{
       id: string;
@@ -1395,6 +1397,14 @@ export interface ChildState {
   mastered_count: number;
   in_progress_count: number;
   not_started_count: number;
+}
+
+// Ephemeral within-session signal. The endpoint returns {} when nothing
+// is live, so every field is optional.
+export interface SessionSignal {
+  signal?: "cruising" | "stretching" | "struggling" | "frustrated";
+  as_of?: string;
+  expires_at?: string;
 }
 
 export interface NodeState {
