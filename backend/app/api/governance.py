@@ -2093,6 +2093,132 @@ async def revoke_tutor_profile_entry(
     return _entry_to_dict(entry)
 
 
+class TutorRegisterUpdate(BaseModel):
+    # Null clears the override (back to automatic). relationship_memory is
+    # declared so a stray write can be detected and rejected; it is not
+    # configurable until the relationship memory feature ships.
+    register_override: str | None = None
+    relationship_memory: str | None = None
+
+
+async def _tutor_register_payload(db: AsyncSession, child_id: uuid.UUID) -> dict:
+    """The register view for one child: per-subject derived tiers, the
+    parent override, the effective stage, and the relationship_memory
+    flag. Effective is the override when set, else the child's furthest
+    reach across subjects, else foundational (most protective)."""
+    from app.core.learning_levels import LEARNING_LEVELS, VALID_LEVELS
+    from app.models.identity import ChildPreferences
+    from app.models.intelligence import ChildTutorPreferences
+    from app.services.tutor_register import tier_rank
+
+    ctp = (
+        await db.execute(select(ChildTutorPreferences).where(ChildTutorPreferences.child_id == child_id))
+    ).scalar_one_or_none()
+    prefs = (
+        await db.execute(select(ChildPreferences).where(ChildPreferences.child_id == child_id))
+    ).scalar_one_or_none()
+
+    levels = prefs.subject_levels if (prefs and isinstance(prefs.subject_levels, dict)) else {}
+    derived = {subj: tier for subj, tier in levels.items() if tier in VALID_LEVELS}
+    override = ctp.register_override if (ctp and ctp.register_override in VALID_LEVELS) else None
+    relationship_memory = ctp.relationship_memory if ctp else "off"
+
+    if override is not None:
+        effective_tier, source = override, "override"
+    else:
+        reached = list(derived.values())
+        effective_tier = max(reached, key=tier_rank) if reached else "foundational"
+        source = "derived"
+
+    return {
+        "child_id": str(child_id),
+        "register_override": override,
+        "relationship_memory": relationship_memory,
+        "derived_by_subject": derived,
+        "effective_tier": effective_tier,
+        "effective_label": LEARNING_LEVELS[effective_tier]["label"],
+        "source": source,
+    }
+
+
+@router.get("/children/{child_id}/tutor-register")
+async def get_tutor_register(
+    child_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "co_parent")),
+) -> dict:
+    """The child's developmental voice register: derived tier per subject,
+    the effective stage, the parent override, and relationship_memory.
+    Parent scope, verified email (router level)."""
+    await _get_child_or_404(db, child_id, user.household_id)
+    return await _tutor_register_payload(db, child_id)
+
+
+@router.put("/children/{child_id}/tutor-register")
+async def set_tutor_register(
+    child_id: uuid.UUID,
+    body: TutorRegisterUpdate,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "co_parent")),
+) -> dict:
+    """Set or clear the per-child register override. The override is
+    absolute when set: it replaces the derived tier entirely. Every change
+    logs a governance event. relationship_memory is not writable yet."""
+    from app.core.learning_levels import VALID_LEVELS
+    from app.models.intelligence import ChildTutorPreferences
+    from app.services.governance import log_governance_event
+
+    if "relationship_memory" in body.model_fields_set:
+        raise HTTPException(
+            status_code=422,
+            detail="relationship_memory is not configurable yet; it arrives with relationship memory.",
+        )
+
+    override = body.register_override
+    if override is not None and override not in VALID_LEVELS:
+        raise HTTPException(
+            status_code=422,
+            detail=f"register_override must be null or one of {sorted(VALID_LEVELS)}.",
+        )
+
+    await _get_child_or_404(db, child_id, user.household_id)
+
+    ctp = (
+        await db.execute(select(ChildTutorPreferences).where(ChildTutorPreferences.child_id == child_id))
+    ).scalar_one_or_none()
+    if ctp is None:
+        ctp = ChildTutorPreferences(household_id=user.household_id, child_id=child_id)
+        db.add(ctp)
+    ctp.register_override = override
+    ctp.updated_by = user.id
+    await db.flush()
+
+    if override is not None:
+        await log_governance_event(
+            db,
+            user.household_id,
+            user.id,
+            GovernanceAction.modify,
+            "tutor_register_override_set",
+            child_id,
+            reason=f"Parent set the tutor voice register to {override}",
+            metadata={"register_override": override},
+        )
+    else:
+        await log_governance_event(
+            db,
+            user.household_id,
+            user.id,
+            GovernanceAction.modify,
+            "tutor_register_override_cleared",
+            child_id,
+            reason="Parent returned the tutor voice register to automatic",
+            metadata={},
+        )
+
+    return await _tutor_register_payload(db, child_id)
+
+
 # ══════════════════════════════════════════════════
 # Approval Queue
 # ══════════════════════════════════════════════════
