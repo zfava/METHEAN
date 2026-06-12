@@ -2040,8 +2040,12 @@ async def decide_tutor_profile_entry(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_role("owner", "co_parent")),
 ) -> dict:
-    """Approve or reject a proposed entry. Repeat decisions are 409:
-    decided entries are immutable to further decisions."""
+    """Approve or reject a queued tutor memory decision. Two disjoint
+    states route through this one handler: a proposed new entry is decided
+    by decide_entry; an active entry the efficacy engine has proposed
+    retiring (retirement_pending) is decided by decide_retirement. Repeat
+    decisions are 409: decided entries are immutable to further decisions."""
+    from app.services.tutor_efficacy import decide_retirement, retirement_pending
     from app.services.tutor_profile import (
         TutorProfileStateError,
         TutorProfileValidationError,
@@ -2050,7 +2054,15 @@ async def decide_tutor_profile_entry(
 
     await _get_child_or_404(db, child_id, user.household_id)
     try:
-        entry = await decide_entry(db, user.household_id, child_id, entry_id, body.action, user.id)
+        # A pending retirement (active entry the child outgrew) and a
+        # proposed new entry are mutually exclusive states, so the dispatch
+        # is unambiguous and needs no new endpoint. decide_retirement lives
+        # in the efficacy subsystem that proposed the retirement, keeping
+        # tutor_profile.py the sole entry creation writer.
+        if await retirement_pending(db, entry_id):
+            entry = await decide_retirement(db, user.household_id, child_id, entry_id, body.action, user.id)
+        else:
+            entry = await decide_entry(db, user.household_id, child_id, entry_id, body.action, user.id)
     except LookupError:
         raise HTTPException(status_code=404, detail="Entry not found")
     except TutorProfileValidationError as e:
