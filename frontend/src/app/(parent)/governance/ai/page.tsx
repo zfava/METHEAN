@@ -48,6 +48,69 @@ const CATEGORY_LABELS: Record<string, string> = {
   other: "Other",
 };
 
+// Conservative words, never scores. These read for a parent with no
+// statistics background: an honest signal, not a verdict.
+const EFFICACY_LABELS: Record<string, string> = {
+  working_well: "Seems to be working",
+  no_clear_effect: "No clear effect yet",
+  may_have_outgrown: "May have outgrown this",
+  insufficient_data: "Still learning whether this helps",
+};
+
+const EFFICACY_BADGE_CLASS: Record<string, string> = {
+  working_well: "bg-(--color-success-light) text-(--color-mastered) border-(--color-success)/25",
+  no_clear_effect: "bg-(--color-page) text-(--color-text-secondary) border-(--color-border)",
+  may_have_outgrown: "bg-(--color-warning-light)/60 text-(--color-warning) border-(--color-warning)/40",
+  insufficient_data: "bg-(--color-page) text-(--color-text-tertiary) border-(--color-border)",
+};
+
+/**
+ * A quiet efficacy badge on an active entry card. Tap to open the one
+ * detail line, which never shows a number without the sample size it
+ * came from, and always says "signal, not proof" in plain language.
+ */
+function EfficacyBadge({ entry }: { entry: TutorProfileEntryData }) {
+  const [open, setOpen] = useState(false);
+  const label = entry.efficacy_label;
+  if (!label) return null;
+
+  const word = EFFICACY_LABELS[label] || label;
+  const cls = EFFICACY_BADGE_CLASS[label] || EFFICACY_BADGE_CLASS.no_clear_effect;
+  const pendingRetirement = label === "may_have_outgrown" && entry.retirement_pending;
+
+  return (
+    <div className="mt-1.5">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className={cn(
+          "px-2 py-0.5 rounded-full text-[10px] font-medium border transition-colors",
+          cls,
+        )}
+        data-testid={`efficacy-badge-${entry.id}`}
+        aria-expanded={open}
+      >
+        {word}
+      </button>
+      {pendingRetirement && (
+        <span
+          className="ml-2 px-2 py-0.5 rounded-full text-[10px] font-medium border border-(--color-warning)/40 bg-(--color-warning-light)/40 text-(--color-warning)"
+          data-testid={`retirement-pending-${entry.id}`}
+        >
+          Retirement suggested, waiting for you
+        </span>
+      )}
+      {open && (
+        <p className="text-[10px] text-(--color-text-tertiary) mt-1" data-testid={`efficacy-detail-${entry.id}`}>
+          {label === "insufficient_data" || entry.active_attempts === null || entry.baseline_attempts === null
+            ? "Still learning whether this helps."
+            : `Based on ${entry.active_attempts} attempts with this strategy vs ${entry.baseline_attempts} before it. This is a signal, not proof.`}
+        </p>
+      )}
+    </div>
+  );
+}
+
 function entryAppliedLine(entry: TutorProfileEntryData): string {
   const date = entry.decided_at
     ? new Date(entry.decided_at).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })
@@ -174,6 +237,7 @@ function TutorMemorySection({ tutorPolicy }: { tutorPolicy: string }) {
                         <p className="text-[10px] text-(--color-text-tertiary) mt-0.5 font-mono">
                           {entryAppliedLine(entry)}
                         </p>
+                        <EfficacyBadge entry={entry} />
                       </div>
                       <Button variant="ghost" size="sm" disabled={busy === entry.id} onClick={() => act(entry.id, "revoke")}>
                         Remove

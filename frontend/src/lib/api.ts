@@ -396,15 +396,27 @@ export const aiGovernance = {
 };
 
 // Tutor continuity: parent-governed tutor memory per child.
+export type TutorEfficacyLabel =
+  | "working_well"
+  | "no_clear_effect"
+  | "may_have_outgrown"
+  | "insufficient_data";
+
 export interface TutorProfileEntryData {
   id: string;
   category: string;
   content: string;
-  status: "proposed" | "active" | "rejected" | "revoked";
+  status: "proposed" | "active" | "rejected" | "revoked" | "retired";
   grant_event_hash: string | null;
   proposed_at: string | null;
   decided_at: string | null;
   decided_by: string | null;
+  efficacy_label: TutorEfficacyLabel | null;
+  observations_count: number;
+  last_evaluated_at: string | null;
+  active_attempts: number | null;
+  baseline_attempts: number | null;
+  retirement_pending: boolean;
 }
 
 export interface TutorProfileData {
@@ -412,6 +424,7 @@ export interface TutorProfileData {
   active: TutorProfileEntryData[];
   rejected: TutorProfileEntryData[];
   revoked: TutorProfileEntryData[];
+  retired: TutorProfileEntryData[];
 }
 
 export const tutorProfile = {
