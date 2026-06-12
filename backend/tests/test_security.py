@@ -217,6 +217,7 @@ RLS_COVERED_TABLES = [
     "tutor_profile_entries",
     "supervision_attestations",
     "tutor_entry_observations",
+    "child_tutor_preferences",
 ]
 
 
@@ -403,4 +404,5 @@ class TestRLSCoverageMatrix:
         # tutor_profile_entries added in migration 057
         # supervision_attestations added in migration 058
         # tutor_entry_observations added in migration 061
-        assert len(RLS_COVERED_TABLES) == 58
+        # child_tutor_preferences added in migration 062
+        assert len(RLS_COVERED_TABLES) == 59
