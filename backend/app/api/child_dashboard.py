@@ -24,7 +24,7 @@ from app.models.curriculum import (
     Subject,
 )
 from app.models.enums import ActivityStatus, PlanStatus
-from app.models.governance import Activity, Attempt, GovernanceEvent, GovernanceRule, Plan
+from app.models.governance import Activity, Attempt, GovernanceEvent, GovernanceRule, Plan, PlanWeek
 from app.models.identity import Child, Household, User
 from app.models.state import ChildNodeState, StateEvent
 
@@ -221,10 +221,19 @@ async def _build_child_dashboard(db: AsyncSession, child_id: uuid.UUID, househol
     is_today_complete = streak_data.get("last_activity_date") == today.isoformat()
 
     # ── Today's activities (1 query) ──
+    # Activity has no child_id column; the child link lives on Plan, so
+    # the query joins Activity -> PlanWeek -> Plan and filters on
+    # Plan.child_id, the same scoping as /children/{id}/today in
+    # spec_coverage.py. The previous household-only filter leaked every
+    # sibling's same-day activities onto this child's kid surface.
+    # plan_week_id is non-nullable, so the inner join drops nothing.
     act_result = await db.execute(
         select(Activity)
+        .join(PlanWeek, Activity.plan_week_id == PlanWeek.id)
+        .join(Plan, PlanWeek.plan_id == Plan.id)
         .where(
             Activity.household_id == household_id,
+            Plan.child_id == child_id,
             Activity.scheduled_date == today,
             Activity.status.in_([ActivityStatus.scheduled, ActivityStatus.in_progress, ActivityStatus.completed]),
         )
