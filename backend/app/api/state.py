@@ -81,6 +81,38 @@ async def _get_child_or_404(
 # ── State Query Endpoints ──
 
 
+@router.get("/children/{child_id}/session-signal")
+async def get_session_signal(
+    child_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+    _child: Child = Depends(require_child_access("read")),
+) -> dict:
+    """Parent live view of the child's ephemeral within-session signal.
+
+    Read only, parent scope, verified email (router level). Returns
+    {signal, as_of, expires_at} when a signal is live, or {} otherwise.
+    The signal is ephemeral and clears itself when its TTL lapses. The
+    child never reaches this view: a classification of a child is never
+    shown to that child.
+    """
+    # Parent surface only. A child-scoped session is denied outright so a
+    # child can never see its own classification.
+    if getattr(user, "token_scope", "parent") == "child":
+        raise HTTPException(status_code=403, detail="parent_scope_required")
+
+    # Policy off for the tutor role disables the whole layer, this view
+    # included.
+    from app.services.governance import AI_AUTONOMY_OFF, get_ai_role_policy
+
+    if await get_ai_role_policy(db, user.household_id, "tutor") == AI_AUTONOMY_OFF:
+        return {}
+
+    from app.services.tutor_session_signals import get_live_signal
+
+    return await get_live_signal(child_id) or {}
+
+
 @router.get(
     "/children/{child_id}/state",
     response_model=ChildStateResponse,

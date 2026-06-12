@@ -3101,6 +3101,68 @@
         }
       }
     },
+    "/api/v1/children/{child_id}/session-signal": {
+      "get": {
+        "tags": [
+          "state"
+        ],
+        "summary": "Get Session Signal",
+        "description": "Parent live view of the child's ephemeral within-session signal.\n\nRead only, parent scope, verified email (router level). Returns\n{signal, as_of, expires_at} when a signal is live, or {} otherwise.\nThe signal is ephemeral and clears itself when its TTL lapses. The\nchild never reaches this view: a classification of a child is never\nshown to that child.",
+        "operationId": "get_session_signal_api_v1_children__child_id__session_signal_get",
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get Session Signal Api V1 Children  Child Id  Session Signal Get",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/children/{child_id}/state": {
       "get": {
         "tags": [

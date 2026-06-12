@@ -70,6 +70,10 @@ TUTOR_PROFILE = RoleContextProfile(
         # Parent-governed tutor memory (tutor_profile_entries): active,
         # approved-or-granted strategies only. Empty at policy off.
         ContextSource("tutor_profile", "fetch_tutor_profile", 250, 0.85, 365),
+        # Ephemeral within-session signal (Redis, never persisted): the
+        # learner's right-now state plus directives. Empty at policy off
+        # and when no signal is live. recency_half_life 1 keeps it hot.
+        ContextSource("session_signal", "fetch_session_signal", 200, 0.97, 1, required=True),
     ],
 )
 
@@ -290,6 +294,19 @@ async def fetch_tutor_profile(db, child_id, household_id, **kw) -> dict:
     from app.services.tutor_profile import get_active_entries_block
 
     text = await get_active_entries_block(db, household_id, child_id)
+    return {"text": text, "metadata": {"timestamp": _now()}}
+
+
+async def fetch_session_signal(db, child_id, household_id, **kw) -> dict:
+    """Ephemeral within-session signal block for the tutor.
+
+    Reads through services/learning_context.py so the tutor policy and
+    the fail-closed rules live in one place. Only registered on the tutor
+    profile, so it never fires for another role.
+    """
+    from app.services.learning_context import build_session_signal_block
+
+    text = await build_session_signal_block(db, household_id, child_id, role="tutor")
     return {"text": text, "metadata": {"timestamp": _now()}}
 
 
@@ -1094,6 +1111,7 @@ FETCHER_MAP: dict[str, callable] = {
     "fetch_current_activity": fetch_current_activity,
     "fetch_style_context": fetch_style_context,
     "fetch_tutor_profile": fetch_tutor_profile,
+    "fetch_session_signal": fetch_session_signal,
     "fetch_recent_attempts_node": fetch_recent_attempts_node,
     "fetch_recent_attempts_related": fetch_recent_attempts_related,
     "fetch_frustration_signals": fetch_frustration_signals,

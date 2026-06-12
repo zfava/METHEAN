@@ -1976,6 +1976,56 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/children/{child_id}/session-signal:
+    get:
+      description: 'Parent live view of the child''s ephemeral within-session signal.
+
+
+        Read only, parent scope, verified email (router level). Returns
+
+        {signal, as_of, expires_at} when a signal is live, or {} otherwise.
+
+        The signal is ephemeral and clears itself when its TTL lapses. The
+
+        child never reaches this view: a classification of a child is never
+
+        shown to that child.'
+      operationId: get_session_signal_api_v1_children__child_id__session_signal_get
+      parameters:
+      - in: path
+        name: child_id
+        required: true
+        schema:
+          format: uuid
+          title: Child Id
+          type: string
+      - in: cookie
+        name: access_token
+        required: false
+        schema:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Access Token
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                title: Response Get Session Signal Api V1 Children  Child Id  Session
+                  Signal Get
+                type: object
+          description: Successful Response
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Get Session Signal
+      tags:
+      - state
   /api/v1/children/{child_id}/state:
     get:
       tags:
