@@ -140,15 +140,28 @@ function TutorMemorySection({ tutorPolicy }: { tutorPolicy: string }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(load, [selectedChild?.id]);
 
-  async function act(entryId: string, action: "approve" | "reject" | "revoke") {
+  async function act(entryId: string, action: "approve" | "reject" | "revoke", retirement = false) {
     if (!selectedChild) return;
     setBusy(entryId);
     try {
       if (action === "revoke") await tutorProfile.revoke(selectedChild.id, entryId);
       else await tutorProfile.decide(selectedChild.id, entryId, action);
       load();
-      if (action === "approve") toast("Approved. The tutor will use this from the next session.", "success");
-      if (action === "reject") toast("Rejected. The tutor will not remember this.", "info");
+      // approve/reject mean the opposite things for a retirement decision
+      // (stop using vs keep using) than for a new-entry proposal (start
+      // using vs never remember), so the confirmation copy branches on it.
+      if (action === "approve")
+        toast(
+          retirement
+            ? "Retired. The tutor will stop using this."
+            : "Approved. The tutor will use this from the next session.",
+          "success",
+        );
+      if (action === "reject")
+        toast(
+          retirement ? "Kept. The tutor will keep using this." : "Rejected. The tutor will not remember this.",
+          "info",
+        );
       if (action === "revoke") toast("Removed. The tutor stops using this immediately.", "success");
     } catch (err: unknown) {
       const detail = (err as { detail?: string })?.detail;
@@ -239,9 +252,32 @@ function TutorMemorySection({ tutorPolicy }: { tutorPolicy: string }) {
                         </p>
                         <EfficacyBadge entry={entry} />
                       </div>
-                      <Button variant="ghost" size="sm" disabled={busy === entry.id} onClick={() => act(entry.id, "revoke")}>
-                        Remove
-                      </Button>
+                      {entry.retirement_pending ? (
+                        <div className="flex gap-2 shrink-0">
+                          <Button
+                            variant="primary"
+                            size="sm"
+                            disabled={busy === entry.id}
+                            onClick={() => act(entry.id, "approve", true)}
+                            data-testid={`retire-approve-${entry.id}`}
+                          >
+                            Approve
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            disabled={busy === entry.id}
+                            onClick={() => act(entry.id, "reject", true)}
+                            data-testid={`retire-reject-${entry.id}`}
+                          >
+                            Reject
+                          </Button>
+                        </div>
+                      ) : (
+                        <Button variant="ghost" size="sm" disabled={busy === entry.id} onClick={() => act(entry.id, "revoke")}>
+                          Remove
+                        </Button>
+                      )}
                     </div>
                   </div>
                 ))}
