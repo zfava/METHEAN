@@ -3,7 +3,7 @@
 import uuid
 from datetime import datetime
 
-from sqlalchemy import DateTime, ForeignKey, Index, Integer, String
+from sqlalchemy import DateTime, Float, ForeignKey, Index, Integer, String
 from sqlalchemy.dialects.postgresql import JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.sql import func
@@ -89,4 +89,74 @@ class TutorProfileEntry(Base):
         UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True
     )
 
+    # Efficacy signals (migration 061). The tutor's memory becomes
+    # evidence-bearing: each active entry is measured against the child's
+    # real attempt outcomes by services/tutor_efficacy.py, the SINGLE
+    # writer of these fields and of TutorEntryObservation. The label is a
+    # conservative word (working_well, no_clear_effect, may_have_outgrown,
+    # insufficient_data), never a score: these are observational
+    # correlations on small samples, a signal and not proof. 'retired' is
+    # a valid status value: an entry the child has outgrown, retired
+    # through the same autonomy policy as everything else; retired entries
+    # are never injected and never deleted.
+    efficacy_label: Mapped[str | None] = mapped_column(String(30), nullable=True)
+    observations_count: Mapped[int] = mapped_column(Integer, server_default="0", default=0, nullable=False)
+    last_evaluated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+
     __table_args__ = (Index("ix_tutor_profile_child_status", "child_id", "status"),)
+
+
+class TutorEntryObservation(Base):
+    """One efficacy evaluation of a tutor profile entry (migration 061).
+
+    Each row is a single observational reading: the child's success rate
+    on attempts inside the entry's active window versus a baseline window
+    before the entry was activated, and the delta between them. The rate
+    uses the SAME definition of success the mastery system uses (an
+    attempt's FSRS rating is not Again); it is never a new metric.
+
+    These are correlations on small samples, not causal proof, so every
+    row records its own sample sizes: a delta is meaningless without the N
+    it came from. subject_scope records whether the sample was narrowed to
+    one subject family (derived conservatively from the entry's content)
+    or left as all attempts.
+
+    Written ONLY through services/tutor_efficacy.py, the single choke
+    point (guard-tested), mirroring the TutorProfileEntry writer guard.
+    The efficacy engine reads attempts and mastery outcomes and writes
+    nothing else: observation rows here, and proposals through
+    tutor_profile.route_proposal.
+    """
+
+    __tablename__ = "tutor_entry_observations"
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    household_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("households.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    child_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("children.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    entry_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        ForeignKey("tutor_profile_entries.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    window_start: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    window_end: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    active_attempts: Mapped[int] = mapped_column(Integer, nullable=False, server_default="0", default=0)
+    active_success_rate: Mapped[float | None] = mapped_column(Float, nullable=True)
+    baseline_attempts: Mapped[int] = mapped_column(Integer, nullable=False, server_default="0", default=0)
+    baseline_success_rate: Mapped[float | None] = mapped_column(Float, nullable=True)
+    delta: Mapped[float | None] = mapped_column(Float, nullable=True)
+    # "math", "reading", etc. when the entry content named a subject, else
+    # "all": the sample was every attempt because the scope was ambiguous.
+    subject_scope: Mapped[str] = mapped_column(String(30), nullable=False, server_default="all", default="all")
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())

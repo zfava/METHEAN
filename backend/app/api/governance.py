@@ -1962,8 +1962,8 @@ class TutorProfileDecision(BaseModel):
     action: str  # approve | reject
 
 
-def _entry_to_dict(entry) -> dict:
-    return {
+def _entry_to_dict(entry, efficacy: dict | None = None) -> dict:
+    data = {
         "id": str(entry.id),
         "category": entry.category,
         "content": entry.content,
@@ -1972,7 +1972,18 @@ def _entry_to_dict(entry) -> dict:
         "proposed_at": entry.proposed_at.isoformat() if entry.proposed_at else None,
         "decided_at": entry.decided_at.isoformat() if entry.decided_at else None,
         "decided_by": str(entry.decided_by) if entry.decided_by else None,
+        # Efficacy signals (migration 061). A conservative word and the
+        # sample sizes behind it, never a bare score.
+        "efficacy_label": entry.efficacy_label,
+        "observations_count": entry.observations_count,
+        "last_evaluated_at": entry.last_evaluated_at.isoformat() if entry.last_evaluated_at else None,
+        "active_attempts": None,
+        "baseline_attempts": None,
+        "retirement_pending": False,
     }
+    if efficacy:
+        data.update(efficacy)
+    return data
 
 
 @router.get("/children/{child_id}/tutor-profile")
@@ -1983,14 +1994,41 @@ async def get_tutor_profile(
 ) -> dict:
     """The child's tutor memory, grouped by status. Parent surface:
     every entry shows exactly how it came to apply (parent approval or
-    standing grant, with the grant hash)."""
+    standing grant, with the grant hash), and how it is holding up
+    against the child's real attempt outcomes (efficacy label plus the
+    latest observation's sample sizes, never a number without its N)."""
+    from app.models.intelligence import TutorEntryObservation
+    from app.services.tutor_efficacy import retirement_pending
     from app.services.tutor_profile import list_entries
 
     await _get_child_or_404(db, child_id, user.household_id)
     entries = await list_entries(db, user.household_id, child_id)
-    grouped: dict[str, list[dict]] = {"proposed": [], "active": [], "rejected": [], "revoked": []}
+    grouped: dict[str, list[dict]] = {
+        "proposed": [],
+        "active": [],
+        "rejected": [],
+        "revoked": [],
+        "retired": [],
+    }
     for entry in entries:
-        grouped.setdefault(entry.status, []).append(_entry_to_dict(entry))
+        efficacy: dict = {}
+        if entry.status == "active" and entry.observations_count:
+            latest = (
+                await db.execute(
+                    select(TutorEntryObservation)
+                    .where(TutorEntryObservation.entry_id == entry.id)
+                    .order_by(
+                        TutorEntryObservation.created_at.desc(),
+                        TutorEntryObservation.id.desc(),
+                    )
+                    .limit(1)
+                )
+            ).scalar_one_or_none()
+            if latest is not None:
+                efficacy["active_attempts"] = latest.active_attempts
+                efficacy["baseline_attempts"] = latest.baseline_attempts
+            efficacy["retirement_pending"] = await retirement_pending(db, entry.id)
+        grouped.setdefault(entry.status, []).append(_entry_to_dict(entry, efficacy))
     return grouped
 
 

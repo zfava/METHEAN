@@ -139,6 +139,157 @@ def validate_entry(category: str, content: str) -> None:
         )
 
 
+# Retirement lifecycle governance event types. Kept as literals here
+# (mirrored by services/tutor_efficacy.py) to avoid a circular import:
+# tutor_efficacy imports route_proposal from this module.
+_EVT_RETIREMENT_PROPOSED = "tutor_profile_retirement_proposed"
+_EVT_ENTRY_RETIRED = "tutor_profile_entry_retired"
+
+
+async def _route_retirement(
+    db: AsyncSession,
+    household_id: uuid.UUID,
+    child_id: uuid.UUID,
+    proposal: dict,
+) -> TutorProfileEntry | None:
+    """Route a retire_entry proposal through the autonomy policy.
+
+    standard queues it: a readable governance event the parent can act
+    on, while the entry stays active until they do. autonomous applies it
+    immediately, setting the entry to retired and citing the standing
+    grant's hash. off proposes nothing. Fail-closed throughout: an
+    unreadable policy or an unresolvable grant drops the proposal.
+
+    Retired entries are never injected (get_active_entries_block filters
+    to status active) and never deleted: the record is the record.
+    """
+    try:
+        entry_id = uuid.UUID(str(proposal.get("entry_id")))
+    except (ValueError, TypeError):
+        logger.info("tutor_retirement_dropped", reason="bad_entry_id", household_id=str(household_id))
+        return None
+
+    entry = (
+        await db.execute(
+            select(TutorProfileEntry).where(
+                TutorProfileEntry.id == entry_id,
+                TutorProfileEntry.household_id == household_id,
+                TutorProfileEntry.child_id == child_id,
+            )
+        )
+    ).scalar_one_or_none()
+    if entry is None or entry.status != "active":
+        logger.info(
+            "tutor_retirement_dropped",
+            reason="entry_not_active",
+            entry_id=str(entry_id),
+            household_id=str(household_id),
+        )
+        return None
+
+    try:
+        policy = await get_ai_role_policy(db, household_id, "tutor")
+    except Exception as exc:
+        logger.warning(
+            "tutor_retirement_dropped",
+            reason="policy_unreadable",
+            household_id=str(household_id),
+            error=str(exc),
+        )
+        return None
+
+    if policy == AI_AUTONOMY_OFF:
+        # The engine still observes at off; it just proposes nothing.
+        return None
+
+    reason = str(proposal.get("reason", "")) or f"The tutor thinks this strategy may no longer help: {entry.content}"
+    deltas = proposal.get("deltas")
+    sample_sizes = proposal.get("sample_sizes")
+
+    if policy == AI_AUTONOMY_AUTONOMOUS:
+        try:
+            grant_hash = await get_active_autonomy_grant(db, household_id, "tutor")
+        except Exception as exc:
+            logger.warning(
+                "tutor_retirement_dropped",
+                reason="grant_unresolvable",
+                entry_id=str(entry_id),
+                household_id=str(household_id),
+                error=str(exc),
+            )
+            return None
+        if grant_hash is None:
+            # Race with a revoke: policy says autonomous, no grant in
+            # force. Fail closed: do not retire.
+            logger.warning(
+                "tutor_retirement_dropped",
+                reason="no_active_grant",
+                entry_id=str(entry_id),
+                household_id=str(household_id),
+            )
+            return None
+
+        entry.status = "retired"
+        entry.decided_at = datetime.now(UTC)
+        entry.decided_by = None
+        # Preserve the original application provenance if present; record
+        # the retirement grant on the row only when there was none.
+        if entry.grant_event_hash is None:
+            entry.grant_event_hash = grant_hash
+        await db.flush()
+        await log_governance_event(
+            db,
+            household_id,
+            None,
+            GovernanceAction.modify,
+            _EVT_ENTRY_RETIRED,
+            entry.id,
+            reason=reason,
+            metadata={
+                "child_id": str(child_id),
+                "category": entry.category,
+                "grant_event_hash": grant_hash,
+                "deltas": deltas,
+                "sample_sizes": sample_sizes,
+                "via": "autonomous_grant",
+            },
+        )
+        logger.info(
+            "tutor_profile_entry_retired",
+            entry_id=str(entry.id),
+            household_id=str(household_id),
+            child_id=str(child_id),
+            grant_event_hash=grant_hash,
+            via="autonomous_grant",
+        )
+        return entry
+
+    # standard: queue a readable proposal; the entry stays active until
+    # the parent decides (services/tutor_efficacy.decide_retirement).
+    await log_governance_event(
+        db,
+        household_id,
+        None,
+        GovernanceAction.modify,
+        _EVT_RETIREMENT_PROPOSED,
+        entry.id,
+        reason=reason,
+        metadata={
+            "child_id": str(child_id),
+            "category": entry.category,
+            "deltas": deltas,
+            "sample_sizes": sample_sizes,
+        },
+    )
+    logger.info(
+        "tutor_profile_retirement_proposed",
+        entry_id=str(entry.id),
+        household_id=str(household_id),
+        child_id=str(child_id),
+    )
+    return entry
+
+
 async def route_proposal(
     db: AsyncSession,
     household_id: uuid.UUID,
@@ -151,7 +302,16 @@ async def route_proposal(
     cannot be resolved while autonomous, the proposal is DROPPED and
     logged, never auto-applied. Returns the created entry or None when
     dropped.
+
+    Two proposal shapes route through here, so the autonomy policy is the
+    single gate for both: a new memory entry (category + content), and a
+    retire_entry action that proposes retiring an entry the child has
+    outgrown. The efficacy engine builds retire proposals; this routes
+    them exactly like everything else.
     """
+    if proposal.get("action") == "retire_entry":
+        return await _route_retirement(db, household_id, child_id, proposal)
+
     category = str(proposal.get("category", ""))
     content = str(proposal.get("content", ""))
 

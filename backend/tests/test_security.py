@@ -216,6 +216,7 @@ RLS_COVERED_TABLES = [
     "voice_usage_daily",
     "tutor_profile_entries",
     "supervision_attestations",
+    "tutor_entry_observations",
 ]
 
 
@@ -401,4 +402,5 @@ class TestRLSCoverageMatrix:
         # household_ai_role_settings added in migration 056
         # tutor_profile_entries added in migration 057
         # supervision_attestations added in migration 058
-        assert len(RLS_COVERED_TABLES) == 57
+        # tutor_entry_observations added in migration 061
+        assert len(RLS_COVERED_TABLES) == 58
