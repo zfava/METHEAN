@@ -436,6 +436,64 @@ async def test_decide_and_revoke_endpoints(auth_client: AsyncClient, db_session,
     assert twice.status_code == 409
 
 
+async def _queue_pending_retirement(db_session, household, child, content: str) -> TutorProfileEntry:
+    """An active entry with a standard-policy retirement proposal queued
+    (the efficacy engine's retire_entry routed through route_proposal),
+    so retirement_pending is True and the decide endpoint must dispatch to
+    decide_retirement."""
+    entry = TutorProfileEntry(
+        household_id=household.id,
+        child_id=child.id,
+        category="pacing",
+        content=content,
+        status="active",
+    )
+    db_session.add(entry)
+    await db_session.flush()
+    await route_proposal(
+        db_session,
+        household.id,
+        child.id,
+        {
+            "action": "retire_entry",
+            "entry_id": str(entry.id),
+            "reason": "The tutor thinks this strategy may no longer help",
+            "deltas": [0.12, 0.10],
+            "sample_sizes": [[8, 8], [9, 9]],
+        },
+    )
+    return entry
+
+
+@pytest.mark.asyncio
+async def test_decide_endpoint_routes_queued_retirement(auth_client: AsyncClient, db_session, household, user, child):
+    """The queue decision handler (POST .../decide) reaches decide_retirement
+    for a pending retirement: approve retires the entry, reject leaves it
+    active."""
+    e_approve = await _queue_pending_retirement(
+        db_session, household, child, "Short sessions with frequent breaks help"
+    )
+    e_reject = await _queue_pending_retirement(
+        db_session, household, child, "Concrete examples before abstract rules help"
+    )
+
+    approved = await auth_client.post(
+        f"/api/v1/children/{child.id}/tutor-profile/{e_approve.id}/decide", json={"action": "approve"}
+    )
+    assert approved.status_code == 200, approved.text
+    assert approved.json()["status"] == "retired"
+    await db_session.refresh(e_approve)
+    assert e_approve.status == "retired"
+
+    rejected = await auth_client.post(
+        f"/api/v1/children/{child.id}/tutor-profile/{e_reject.id}/decide", json={"action": "reject"}
+    )
+    assert rejected.status_code == 200, rejected.text
+    assert rejected.json()["status"] == "active"
+    await db_session.refresh(e_reject)
+    assert e_reject.status == "active"
+
+
 @pytest.mark.asyncio
 async def test_household_isolation(client: AsyncClient, db_session, household, user, child):
     entry = await route_proposal(db_session, household.id, child.id, dict(GOOD_PROPOSAL))
