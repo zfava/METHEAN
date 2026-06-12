@@ -13,7 +13,8 @@ import MobileNavSheet from "@/components/MobileNavSheet";
 import BetaFeedbackButton from "@/components/BetaFeedbackButton";
 import SubscriptionGate from "@/components/billing/SubscriptionGate";
 import DunningBanner from "@/components/billing/DunningBanner";
-import { account, householdDeletion, EMAIL_NOT_VERIFIED_EVENT } from "@/lib/api";
+import VerifyEmailGate from "@/components/VerifyEmailGate";
+import { householdDeletion } from "@/lib/api";
 
 /**
  * Banner shown while a household deletion is pending: states the purge
@@ -71,45 +72,6 @@ function DeletionPendingBanner() {
         </button>
       </div>
       {error && <p className="text-xs text-white/90">{error}</p>}
-    </div>
-  );
-}
-
-/**
- * Banner shown after any API call is rejected with email_not_verified.
- * Points at the existing verification flow (resend + emailed link).
- */
-function VerifyEmailBanner() {
-  const [visible, setVisible] = useState(false);
-  const [sent, setSent] = useState(false);
-
-  useEffect(() => {
-    const show = () => setVisible(true);
-    window.addEventListener(EMAIL_NOT_VERIFIED_EVENT, show);
-    return () => window.removeEventListener(EMAIL_NOT_VERIFIED_EVENT, show);
-  }, []);
-
-  if (!visible) return null;
-  return (
-    <div className="bg-(--color-warning) text-(--color-text) px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
-      <p className="text-sm flex-1">
-        Verify your email to unlock your family's learning records. Check your inbox for the
-        verification link.
-      </p>
-      <button
-        disabled={sent}
-        onClick={async () => {
-          try {
-            await account.resendVerification();
-            setSent(true);
-          } catch {
-            setSent(true);
-          }
-        }}
-        className="px-3 py-1.5 text-sm font-semibold rounded-[8px] bg-white text-(--color-text) disabled:opacity-60"
-      >
-        {sent ? "Sent. Check your inbox." : "Resend verification email"}
-      </button>
     </div>
   );
 }
@@ -188,10 +150,11 @@ function ParentLayoutInner({ children }: { children: React.ReactNode }) {
         }}
       >
         <DeletionPendingBanner />
-        <VerifyEmailBanner />
         <DunningBanner />
         <PageTransition>
-          <SubscriptionGate>{children}</SubscriptionGate>
+          <VerifyEmailGate>
+            <SubscriptionGate>{children}</SubscriptionGate>
+          </VerifyEmailGate>
         </PageTransition>
       </main>
 
