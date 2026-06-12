@@ -149,6 +149,7 @@ RLS_TABLES = [
     "subjects",
     "supervision_attestations",
     "tutor_profile_entries",
+    "tutor_entry_observations",
     "usage_events",
     "usage_ledger",
     "user_permissions",
