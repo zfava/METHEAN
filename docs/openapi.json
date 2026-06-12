@@ -6397,6 +6397,138 @@
         }
       }
     },
+    "/api/v1/children/{child_id}/tutor-register": {
+      "get": {
+        "tags": [
+          "governance"
+        ],
+        "summary": "Get Tutor Register",
+        "description": "The child's developmental voice register: derived tier per subject,\nthe effective stage, the parent override, and relationship_memory.\nParent scope, verified email (router level).",
+        "operationId": "get_tutor_register_api_v1_children__child_id__tutor_register_get",
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Get Tutor Register Api V1 Children  Child Id  Tutor Register Get",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "governance"
+        ],
+        "summary": "Set Tutor Register",
+        "description": "Set or clear the per-child register override. The override is\nabsolute when set: it replaces the derived tier entirely. Every change\nlogs a governance event. relationship_memory is not writable yet.",
+        "operationId": "set_tutor_register_api_v1_children__child_id__tutor_register_put",
+        "parameters": [
+          {
+            "name": "child_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Child Id"
+            }
+          },
+          {
+            "name": "access_token",
+            "in": "cookie",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Access Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TutorRegisterUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Response Set Tutor Register Api V1 Children  Child Id  Tutor Register Put",
+                  "additionalProperties": true
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/governance/queue": {
       "get": {
         "tags": [
@@ -25162,6 +25294,34 @@
           "reason"
         ],
         "title": "OverrideRequest"
+      },
+      "TutorRegisterUpdate": {
+        "properties": {
+          "register_override": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Register Override"
+          },
+          "relationship_memory": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Relationship Memory"
+          }
+        },
+        "type": "object",
+        "title": "TutorRegisterUpdate"
       }
     }
   }
