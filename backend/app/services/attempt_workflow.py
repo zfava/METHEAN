@@ -316,6 +316,40 @@ async def submit_attempt(
             error=str(exc),
         )
 
+    # Update the ephemeral within-session signal (Redis, never persisted).
+    # SANCTIONED LOG-AND-CONTINUE SITE: the signal layer is advisory and
+    # ephemeral, so a Redis hiccup or a policy read here must never fail an
+    # attempt submission. The whole block is wrapped and only warns. Policy
+    # off for the tutor role disables the entire layer (no hooks fire).
+    try:
+        from app.services.governance import AI_AUTONOMY_OFF, get_ai_role_policy
+
+        if await get_ai_role_policy(db, household_id, "tutor") != AI_AUTONOMY_OFF:
+            from app.services import tutor_session_signals as session_signals
+
+            correct = (review_result.get("fsrs_rating") or 0) >= 3
+            signal_result = await session_signals.update_on_attempt(
+                attempt.child_id,
+                {
+                    "correct": correct,
+                    "hints_used": int((feedback or {}).get("hints_used") or 0),
+                    "duration_minutes": duration_minutes,
+                    "node_id": str(activity.node_id) if activity.node_id else None,
+                },
+            )
+            # No clean session-end seam exists in the schema, so the post
+            # session pattern check runs lazily when a 30-minute idle gap
+            # marks the prior session as ended.
+            if signal_result.get("session_ended"):
+                await session_signals.maybe_propose_session_pattern(db, household_id, attempt.child_id)
+    except Exception as exc:
+        logger.warning(
+            "session_signal_update_failed",
+            child_id=str(attempt.child_id),
+            attempt_id=str(attempt.id),
+            error=str(exc),
+        )
+
     # Record metrics
     try:
         from app.core.metrics import attempts_completed

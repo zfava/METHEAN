@@ -45,7 +45,7 @@ from app.services.governance import (
 
 logger = structlog.get_logger()
 
-CATEGORIES = ("explanation_style", "motivation", "pacing", "interest", "other")
+CATEGORIES = ("explanation_style", "motivation", "pacing", "interest", "session_pattern", "other")
 
 ENTRY_MAX_CHARS = 300
 

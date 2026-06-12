@@ -25,6 +25,56 @@ from app.services.supervision import get_valid_attestation
 logger = structlog.get_logger()
 
 
+async def build_session_signal_block(
+    db: AsyncSession,
+    household_id: uuid.UUID,
+    child_id: uuid.UUID,
+    role: str,
+) -> str:
+    """The ephemeral within-session signal block injected for the tutor.
+
+    Returns a delimited block naming the current signal plus its concrete
+    directives, or an empty string. Fail closed to the tutor's default
+    behavior: nothing for a non-tutor role, nothing when the tutor policy
+    is off, and nothing when no live signal exists in Redis. The signal
+    is read only here; it is never persisted and never shown to the child.
+    """
+    if role != "tutor":
+        return ""
+
+    from app.services.governance import AI_AUTONOMY_OFF, get_ai_role_policy
+
+    try:
+        policy = await get_ai_role_policy(db, household_id, "tutor")
+    except Exception as exc:
+        # Fail closed to the tutor's default behavior, but never silently:
+        # an unreadable policy must not leak a signal block.
+        logger.warning(
+            "session_signal_policy_unreadable",
+            household_id=str(household_id),
+            child_id=str(child_id),
+            error=str(exc),
+        )
+        return ""
+    if policy == AI_AUTONOMY_OFF:
+        return ""
+
+    from app.services.tutor_session_signals import directives, read_signal
+
+    signal = await read_signal(child_id)
+    if signal is None:
+        return ""
+
+    lines = directives(signal)
+    body = "\n".join(f"- {d}" for d in lines)
+    return (
+        "LIVE SESSION SIGNAL (ephemeral right-now read of this sitting; guidance for your "
+        "next move only, never shown to the child and never a fact about mastery):\n"
+        f"State: {signal}\n"
+        "Do now:\n" + body
+    )
+
+
 async def get_activity_learning_context(
     db: AsyncSession,
     activity_id: uuid.UUID,

@@ -21,6 +21,16 @@ def init_cache(redis_client: aioredis.Redis) -> None:
     _redis = redis_client
 
 
+def get_redis() -> aioredis.Redis | None:
+    """The shared async Redis client, or None when uninitialized.
+
+    Callers that need richer operations than cache_get/cache_set (lists,
+    counters, TTL inspection) use this and MUST fail open: a None client
+    or any raised error means degrade silently, never block the caller.
+    """
+    return _redis
+
+
 async def cache_get(key: str) -> Any | None:
     """Get cached value. Returns None on miss or error."""
     if not _redis:
