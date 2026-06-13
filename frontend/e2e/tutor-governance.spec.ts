@@ -166,16 +166,24 @@ test("a parent governs the tutor end to end: policy, memory, grant, voice, relat
   // 6. Enable relationship memory and watch the preview populate. A seeded
   //    streak gives the child a derivable milestone, so the preview shows a
   //    real line (exactly what the tutor would see), not just the empty copy.
+  //    The control renders nothing until its relationship-memory GET resolves,
+  //    so wait for the control itself before touching the toggle inside it.
   backend(SEED_STREAK, child.id);
-  const memoryToggle = page.getByTestId("relationship-memory-toggle");
-  await expect(memoryToggle).toHaveText(/Turn on/);
+  const memoryControl = page.getByTestId("relationship-memory-control");
+  await expect(memoryControl).toBeVisible();
+  const memoryToggle = memoryControl.getByTestId("relationship-memory-toggle");
+  // Off is the default: no preview yet, and the toggle invites turning it on.
+  await expect(page.getByTestId("relationship-memory-preview")).toHaveCount(0);
+  await expect(memoryToggle).toHaveText("Turn on");
+
+  // The off to on transition: the preview appears and populates with the
+  // seeded milestone, which is exactly what the tutor would see.
   await memoryToggle.click();
-  const preview = page.getByTestId("relationship-memory-preview");
-  await expect(preview).toBeVisible();
+  await expect(page.getByTestId("relationship-memory-preview")).toBeVisible();
   await expect(page.getByTestId("relationship-memory-milestone").first()).toBeVisible();
+  await expect(memoryToggle).toHaveText("Turn off");
 
   // 7. Disable it and the preview is gone.
-  await expect(memoryToggle).toHaveText(/Turn off/);
   await memoryToggle.click();
   await expect(page.getByTestId("relationship-memory-preview")).toHaveCount(0);
 
