@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { aiGovernance, tutorProfile, tutorRegister, type AIRoleSetting, type AIStatusData, type TutorProfileData, type TutorProfileEntryData, type TutorRegisterData, type RegisterTier } from "@/lib/api";
+import { aiGovernance, tutorProfile, tutorRegister, type AIRoleSetting, type AIStatusData, type TutorProfileData, type TutorProfileEntryData, type TutorRegisterData, type RegisterTier, type RelationshipMilestone } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
 import { useToast } from "@/components/Toast";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
@@ -203,6 +203,125 @@ function TutorRegisterRow({ childId }: { childId: string }) {
   );
 }
 
+const MILESTONE_KIND_LABELS: Record<string, string> = {
+  breakthrough: "Breakthrough",
+  completion: "Finished",
+  streak: "Showing up",
+  first: "A first",
+};
+
+/**
+ * Relationship memory: strictly opt in, off by default. When on, the
+ * tutor remembers the journey, drawn only from the learning record the
+ * family already governs. The preview shows the parent exactly what the
+ * child's tutor sees, nothing hidden: the same derived milestones, from
+ * the same service.
+ */
+function RelationshipMemoryControl({ childId, childName }: { childId: string; childName: string }) {
+  const { toast } = useToast();
+  const [memory, setMemory] = useState<string | null>(null);
+  const [milestones, setMilestones] = useState<RelationshipMilestone[] | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    tutorRegister
+      .get(childId)
+      .then((d) => active && setMemory(d.relationship_memory))
+      .catch(() => active && setMemory(null));
+    return () => {
+      active = false;
+    };
+  }, [childId]);
+
+  // Load the preview whenever it is on, so the parent sees what the tutor sees.
+  useEffect(() => {
+    if (memory !== "on") {
+      setMilestones(null);
+      return;
+    }
+    let active = true;
+    tutorRegister
+      .milestones(childId)
+      .then((d) => active && setMilestones(d.milestones))
+      .catch(() => active && setMilestones([]));
+    return () => {
+      active = false;
+    };
+  }, [memory, childId]);
+
+  if (memory === null) return null;
+  const on = memory === "on";
+
+  async function onToggle() {
+    const next = on ? "off" : "on";
+    setBusy(true);
+    try {
+      const data = await tutorRegister.setRelationshipMemory(childId, next);
+      setMemory(data.relationship_memory);
+      toast(
+        next === "on"
+          ? "On. Your tutor will remember the journey from the next session."
+          : "Off. The tutor forgets the journey immediately.",
+        "success",
+      );
+    } catch {
+      toast("That didn't go through. Nothing was changed.", "error");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="px-3 py-2.5 rounded-[10px] bg-(--color-page) border border-(--color-border)" data-testid="relationship-memory-control">
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div className="min-w-0">
+          <span className="text-[10px] uppercase tracking-wide text-(--color-text-tertiary)">Relationship memory</span>
+          <p className="text-xs text-(--color-text-secondary) mt-0.5 max-w-md">
+            When this is on, your tutor remembers the journey: breakthroughs, milestones, how far {childName} has
+            come. It draws only from the learning record you already govern. Turn it off any time and the tutor
+            forgets immediately.
+          </p>
+        </div>
+        <Button
+          variant={on ? "ghost" : "primary"}
+          size="sm"
+          disabled={busy}
+          onClick={onToggle}
+          data-testid="relationship-memory-toggle"
+        >
+          {on ? "Turn off" : "Turn on"}
+        </Button>
+      </div>
+
+      {on && (
+        <div className="mt-3 border-t border-(--color-border) pt-3" data-testid="relationship-memory-preview">
+          <div className="type-eyebrow-md text-(--color-text-tertiary) mb-2">What the tutor remembers right now</div>
+          {milestones === null ? (
+            <p className="text-xs text-(--color-text-tertiary)">Loading the journey so far...</p>
+          ) : milestones.length === 0 ? (
+            <p className="text-xs text-(--color-text-tertiary)">
+              Nothing yet. As {childName} keeps learning, the breakthroughs and milestones will gather here, and
+              this is exactly what the tutor will see.
+            </p>
+          ) : (
+            <ul className="space-y-2">
+              {milestones.map((m, i) => (
+                <li key={i} className="text-sm text-(--color-text)" data-testid="relationship-memory-milestone">
+                  <span className="text-[10px] uppercase tracking-wide text-(--color-text-tertiary) mr-2">
+                    {MILESTONE_KIND_LABELS[m.kind] || m.kind}
+                  </span>
+                  {m.line}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /**
  * "How your tutor is learning": the per-child tutor memory, with the
  * parent in full control. Active entries with how they came to apply,
@@ -272,8 +391,9 @@ function TutorMemorySection({ tutorPolicy }: { tutorPolicy: string }) {
       )}
 
       {tutorPolicy !== "off" && (
-        <div className="mb-4">
+        <div className="mb-4 space-y-3">
           <TutorRegisterRow childId={selectedChild.id} />
+          <RelationshipMemoryControl childId={selectedChild.id} childName={selectedChild.first_name} />
         </div>
       )}
 
