@@ -164,6 +164,50 @@ Out of scope here (separate task): wiring templates for non-foundational tiers
 and for science / history / writing so those subjects/tiers resolve to real
 node UUIDs. Already flagged in the Phase 0 audit.
 
+## Resolution of the tier-default trap (section 4 follow-up)
+
+Date: 2026-06-13
+
+The latent tier gap described in section 4 (an untouched tier picker resolving
+to `developing`, which has no wired template and therefore produces genuinely
+empty `focus_nodes`) is now closed. This is distinct from the line-441 display
+fix landed in fb80f93; it is the real empty-plan path.
+
+What changed:
+
+- `backend/app/core/learning_levels.py`: `get_level_for_subject` now defaults
+  to a new `DEFAULT_LEVEL = "foundational"` (the populated, generatable tier)
+  instead of `developing`. A child with no saved per-subject level lands on a
+  tier that has wired content rather than on an empty shell. An explicit saved
+  level is still honored unchanged.
+- `backend/app/services/annual_curriculum.py`: a fallback-safety guard in
+  `generate_annual_curriculum`. If the resolved level (from an explicit
+  `content_tier` request OR the child's saved/defaulted level) has no wired
+  content for the subject, it falls back to the populated foundational tier and
+  emits a structured `annual_curriculum.tier_fallback` event
+  (`subject`, `subject_id`, `requested_level`, `fallback_level`). When neither
+  the requested level nor foundational is generatable (a genuinely unauthored
+  subject such as science today), the level is left untouched so the
+  `materialize_full_year` loud-failure guard keeps its warn-vs-raise
+  distinction. No content is fabricated and no templates are wired here.
+
+Generatable tiers at the time of this fix (scope + wired templates): only
+`mathematics/foundational` (157 nodes) and `phonics_reading/foundational`
+(155 nodes). Every other subject/tier resolves empty and is covered by the
+fallback (when foundational is populated) or by the existing materialize guard
+(when the subject is wholly unauthored).
+
+Before/after for the untouched-picker default:
+
+- Mathematics: BEFORE `developing` -> 0 wired focus-node sources (empty);
+  AFTER `foundational` -> 157 (populated).
+- Phonics & Reading: BEFORE `developing` -> 0 (empty); AFTER `foundational`
+  -> 155 (populated).
+
+Still out of scope (separate task): wiring templates for the non-foundational
+tiers and for science / history / writing / literature so those resolve to real
+node UUIDs.
+
 ## Conclusion
 
 The exact file:line where the displayed node count becomes 0 on the real UI
