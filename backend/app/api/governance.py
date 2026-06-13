@@ -2095,8 +2095,9 @@ async def revoke_tutor_profile_entry(
 
 class TutorRegisterUpdate(BaseModel):
     # Null clears the override (back to automatic). relationship_memory is
-    # declared so a stray write can be detected and rejected; it is not
-    # configurable until the relationship memory feature ships.
+    # the opt in continuity layer: "on" or "off", default off. Each field
+    # is applied only when present in the request, so a write to one never
+    # disturbs the other.
     register_override: str | None = None
     relationship_memory: str | None = None
 
@@ -2161,24 +2162,31 @@ async def set_tutor_register(
     db: AsyncSession = Depends(get_db),
     user: User = Depends(require_role("owner", "co_parent")),
 ) -> dict:
-    """Set or clear the per-child register override. The override is
-    absolute when set: it replaces the derived tier entirely. Every change
-    logs a governance event. relationship_memory is not writable yet."""
+    """Set the per-child register override and/or the relationship memory
+    flag. The override is absolute when set: it replaces the derived tier
+    entirely. relationship_memory is the opt in continuity layer, "on" or
+    "off". Each field is applied only when present in the request. Every
+    change logs a governance event; toggling relationship memory also
+    invalidates the derived milestone cache so the choice is immediate."""
     from app.core.learning_levels import VALID_LEVELS
     from app.models.intelligence import ChildTutorPreferences
     from app.services.governance import log_governance_event
+    from app.services.tutor_milestones import invalidate_milestones
 
-    if "relationship_memory" in body.model_fields_set:
-        raise HTTPException(
-            status_code=422,
-            detail="relationship_memory is not configurable yet; it arrives with relationship memory.",
-        )
+    set_override = "register_override" in body.model_fields_set
+    set_memory = "relationship_memory" in body.model_fields_set
 
     override = body.register_override
-    if override is not None and override not in VALID_LEVELS:
+    if set_override and override is not None and override not in VALID_LEVELS:
         raise HTTPException(
             status_code=422,
             detail=f"register_override must be null or one of {sorted(VALID_LEVELS)}.",
+        )
+    memory = body.relationship_memory
+    if set_memory and memory not in ("on", "off"):
+        raise HTTPException(
+            status_code=422,
+            detail='relationship_memory must be "on" or "off".',
         )
 
     await _get_child_or_404(db, child_id, user.household_id)
@@ -2189,34 +2197,103 @@ async def set_tutor_register(
     if ctp is None:
         ctp = ChildTutorPreferences(household_id=user.household_id, child_id=child_id)
         db.add(ctp)
-    ctp.register_override = override
+    if set_override:
+        ctp.register_override = override
+    if set_memory:
+        # Validated above to be "on" or "off"; narrow for the non-null column.
+        ctp.relationship_memory = "on" if memory == "on" else "off"
     ctp.updated_by = user.id
     await db.flush()
 
-    if override is not None:
-        await log_governance_event(
-            db,
-            user.household_id,
-            user.id,
-            GovernanceAction.modify,
-            "tutor_register_override_set",
-            child_id,
-            reason=f"Parent set the tutor voice register to {override}",
-            metadata={"register_override": override},
-        )
-    else:
-        await log_governance_event(
-            db,
-            user.household_id,
-            user.id,
-            GovernanceAction.modify,
-            "tutor_register_override_cleared",
-            child_id,
-            reason="Parent returned the tutor voice register to automatic",
-            metadata={},
-        )
+    if set_override:
+        if override is not None:
+            await log_governance_event(
+                db,
+                user.household_id,
+                user.id,
+                GovernanceAction.modify,
+                "tutor_register_override_set",
+                child_id,
+                reason=f"Parent set the tutor voice register to {override}",
+                metadata={"register_override": override},
+            )
+        else:
+            await log_governance_event(
+                db,
+                user.household_id,
+                user.id,
+                GovernanceAction.modify,
+                "tutor_register_override_cleared",
+                child_id,
+                reason="Parent returned the tutor voice register to automatic",
+                metadata={},
+            )
+
+    if set_memory:
+        # Toggling takes effect on the next context assembly; invalidating
+        # the derived milestone cache makes it immediate in practice.
+        await invalidate_milestones(child_id)
+        if memory == "on":
+            await log_governance_event(
+                db,
+                user.household_id,
+                user.id,
+                GovernanceAction.modify,
+                "tutor_relationship_memory_enabled",
+                child_id,
+                reason="Parent turned on tutor relationship memory",
+                metadata={},
+            )
+        else:
+            await log_governance_event(
+                db,
+                user.household_id,
+                user.id,
+                GovernanceAction.modify,
+                "tutor_relationship_memory_disabled",
+                child_id,
+                reason="Parent turned off tutor relationship memory",
+                metadata={},
+            )
 
     return await _tutor_register_payload(db, child_id)
+
+
+@router.get("/children/{child_id}/tutor-register/milestones")
+async def get_tutor_milestones_preview(
+    child_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(require_role("owner", "co_parent")),
+) -> dict:
+    """What the tutor would remember right now: the same derived
+    milestones, from the same service and cache, that the tutor context
+    injects. The parent preview and the tutor injection are provably the
+    same data. Parent scope, verified email (router level)."""
+    from app.models.intelligence import ChildTutorPreferences
+    from app.services.tutor_milestones import get_milestones
+
+    await _get_child_or_404(db, child_id, user.household_id)
+
+    ctp = (
+        await db.execute(select(ChildTutorPreferences).where(ChildTutorPreferences.child_id == child_id))
+    ).scalar_one_or_none()
+    relationship_memory = ctp.relationship_memory if ctp else "off"
+
+    milestones = await get_milestones(db, child_id)
+    return {
+        "child_id": str(child_id),
+        "relationship_memory": relationship_memory,
+        "milestones": [
+            {
+                "kind": m.kind,
+                "subject": m.subject,
+                "title": m.title,
+                "when": m.when.isoformat() if m.when is not None else None,
+                "line": m.line,
+            }
+            for m in milestones
+        ],
+    }
 
 
 # ══════════════════════════════════════════════════

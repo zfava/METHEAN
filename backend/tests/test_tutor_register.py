@@ -6,7 +6,7 @@ fail-closed fallback to the youngest register, injection into the tutor
 context (present with the right guidance, gated only by the role being
 off, present even with zero memory entries), tier_band stamping on new
 entries, tier-lag retirement through the existing retire_entry pipeline,
-the relationship_memory write rejection, and access control.
+the relationship_memory write (now accepted), and access control.
 """
 
 import pytest
@@ -321,9 +321,12 @@ async def test_invalid_override_rejected(auth_client: AsyncClient, child):
 
 
 @pytest.mark.asyncio
-async def test_relationship_memory_write_rejected(auth_client: AsyncClient, child):
+async def test_relationship_memory_write_accepted(auth_client: AsyncClient, child):
+    # The relationship memory layer has shipped: the PUT now accepts the
+    # opt in flag (see test_tutor_milestones for the full behavior).
     resp = await auth_client.put(f"/api/v1/children/{child.id}/tutor-register", json={"relationship_memory": "on"})
-    assert resp.status_code == 422
+    assert resp.status_code == 200
+    assert resp.json()["relationship_memory"] == "on"
 
 
 @pytest.mark.asyncio
