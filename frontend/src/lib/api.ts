@@ -455,6 +455,22 @@ export interface TutorRegisterData {
   source: "override" | "derived";
 }
 
+// One derived continuity memory, the same data the tutor sees. line is
+// the tutor facing sentence; the rest are the facts it was drawn from.
+export interface RelationshipMilestone {
+  kind: "breakthrough" | "completion" | "streak" | "first";
+  subject: string | null;
+  title: string | null;
+  when: string | null;
+  line: string;
+}
+
+export interface TutorMilestonesData {
+  child_id: string;
+  relationship_memory: string;
+  milestones: RelationshipMilestone[];
+}
+
 export const tutorRegister = {
   get: (childId: string) => request<TutorRegisterData>(`/children/${childId}/tutor-register`),
   set: (childId: string, registerOverride: RegisterTier | null) =>
@@ -462,6 +478,13 @@ export const tutorRegister = {
       method: "PUT",
       body: JSON.stringify({ register_override: registerOverride }),
     }),
+  setRelationshipMemory: (childId: string, value: "on" | "off") =>
+    request<TutorRegisterData>(`/children/${childId}/tutor-register`, {
+      method: "PUT",
+      body: JSON.stringify({ relationship_memory: value }),
+    }),
+  milestones: (childId: string) =>
+    request<TutorMilestonesData>(`/children/${childId}/tutor-register/milestones`),
 };
 
 // Family Record: the cumulative, evidence-backed educational record
