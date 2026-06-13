@@ -24,6 +24,11 @@ class AIRun(Base):
     )
     run_type: Mapped[str] = mapped_column(String(100), nullable=False)
     status: Mapped[AIRunStatus] = mapped_column(nullable=False, default=AIRunStatus.pending)
+    # Which provider answered this run (anthropic, openai, local, native,
+    # mock). Provenance the family can audit: proof that a tutor turn ran
+    # locally. Nullable so historical rows predating the column stay
+    # readable; model_used remains the model identifier.
+    provider: Mapped[str | None] = mapped_column(String(50))
     model_used: Mapped[str | None] = mapped_column(String(100))
     input_tokens: Mapped[int | None] = mapped_column(Integer)
     output_tokens: Mapped[int | None] = mapped_column(Integer)
