@@ -472,18 +472,30 @@ class TestContentTierOverride:
         )
         assert "Foundational" in captured["user_prompt"]
 
-        # With override: should use "advanced" instead of the saved value.
-        await svc.generate_annual_curriculum(
-            db_session,
-            household.id,
-            child.id,
-            user.id,
-            subject_name="Mathematics",
-            academic_year="2026-2027",
-            total_weeks=2,
-            content_tier="advanced",
-        )
-        assert "Advanced" in captured["user_prompt"]
+        # With override: the explicit "advanced" tier is taken as the requested
+        # level (overriding the saved "foundational"). "advanced" math has no
+        # wired content today, so the fallback-safety guard resolves it to the
+        # populated foundational tier and logs the substitution. The logged
+        # requested_level proves the explicit tier overrode the saved value.
+        import structlog
+
+        with structlog.testing.capture_logs() as logs:
+            await svc.generate_annual_curriculum(
+                db_session,
+                household.id,
+                child.id,
+                user.id,
+                subject_name="Mathematics",
+                academic_year="2026-2027",
+                total_weeks=2,
+                content_tier="advanced",
+            )
+        fallback = [e for e in logs if e.get("event") == "annual_curriculum.tier_fallback"]
+        assert len(fallback) == 1
+        assert fallback[0]["requested_level"] == "advanced"
+        assert fallback[0]["fallback_level"] == "foundational"
+        # The plan never silently lands on the empty "advanced" tier.
+        assert "Foundational" in captured["user_prompt"]
 
     @pytest.mark.asyncio
     async def test_unknown_content_tier_falls_back_to_saved_level(

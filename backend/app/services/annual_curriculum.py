@@ -69,6 +69,67 @@ def _subject_is_authored(subject_name: str) -> bool:
     return bool(SCOPE_SEQUENCES.get(subj_id))
 
 
+def _resolve_subject_id(subject_name: str) -> str:
+    """Map a subject display name to its scope_sequences subject_id."""
+    from app.core.learning_levels import SUBJECT_CATALOG
+
+    subj_id = subject_name.lower().replace(" ", "_").replace("&", "and")
+    for cat in SUBJECT_CATALOG.values():
+        for s in cat:
+            if s["name"].lower() == subject_name.lower() or s["id"] == subj_id:
+                return s["id"]
+    return subj_id
+
+
+def _level_is_generatable(subject_id: str, level: str) -> bool:
+    """True when subject_id+level has at least one scope topic backed by a wired
+    content template, so it resolves to real focus_nodes rather than an empty
+    needs_content shell.
+
+    Pure and synchronous: reads only scope_sequences and the TEMPLATES registry
+    (through the node_resolver's pure helpers). It authors no content and
+    touches no DB.
+    """
+    from app.content.scope_sequences import get_scope_sequence
+    from app.services.node_resolver import resolve_ref_to_content_id, template_for_content_id
+
+    for topic in get_scope_sequence(subject_id, level):
+        ref = topic.get("ref")
+        if not ref:
+            continue
+        content_id = resolve_ref_to_content_id(ref)
+        if content_id is not None and template_for_content_id(content_id) is not None:
+            return True
+    return False
+
+
+def _resolve_generatable_level(subject_name: str, subject_id: str, level: str) -> str:
+    """Return a tier with generatable content for this subject.
+
+    If ``level`` already resolves to wired content, it is returned unchanged. If
+    not, fall back to the populated default tier (foundational) when that tier
+    is itself generatable for the subject, emitting a structured fallback event
+    so the substitution is transparent. If neither the requested level nor the
+    default is generatable (a genuinely unauthored subject, e.g. science today),
+    the requested level is returned untouched so the materialize loud-failure
+    guard keeps its warn-vs-raise distinction. No content is fabricated here.
+    """
+    from app.core.learning_levels import DEFAULT_LEVEL
+
+    if _level_is_generatable(subject_id, level):
+        return level
+    if level != DEFAULT_LEVEL and _level_is_generatable(subject_id, DEFAULT_LEVEL):
+        slog.info(
+            "annual_curriculum.tier_fallback",
+            subject=subject_name,
+            subject_id=subject_id,
+            requested_level=level,
+            fallback_level=DEFAULT_LEVEL,
+        )
+        return DEFAULT_LEVEL
+    return level
+
+
 ANNUAL_CURRICULUM_SYSTEM = """You are METHEAN's Annual Curriculum Architect.
 
 You design COMPLETE year-long scope-and-sequence plans for individual subjects.
@@ -163,16 +224,24 @@ async def generate_annual_curriculum(
 
     # Learning level for AI prompt. If the caller explicitly chose a
     # content tier in the picker, honor it; otherwise fall back to the
-    # child's saved per-subject level. Unknown values are coerced to the
-    # safe "developing" default rather than raising, so a stale client
-    # sending a value we no longer recognize still generates something.
-    from app.core.learning_levels import LEARNING_LEVELS, VALID_LEVELS, get_level_for_subject
+    # child's saved per-subject level (which itself defaults to the
+    # populated foundational tier). Unknown values are coerced to the safe
+    # DEFAULT_LEVEL rather than raising, so a stale client sending a value we
+    # no longer recognize still generates something.
+    from app.core.learning_levels import DEFAULT_LEVEL, LEARNING_LEVELS, VALID_LEVELS, get_level_for_subject
 
     if content_tier and content_tier in VALID_LEVELS:
-        level = content_tier
+        requested_level = content_tier
     else:
-        level = get_level_for_subject(prefs, subject_name)
-    level_info = LEARNING_LEVELS.get(level, LEARNING_LEVELS["developing"])
+        requested_level = get_level_for_subject(prefs, subject_name)
+
+    # Resolve the scope_sequences subject_id once (reused below) and apply the
+    # fallback-safety guard: a requested tier with no wired content for this
+    # subject falls back to the populated foundational tier so the parent never
+    # silently lands on an empty plan. The fallback is logged transparently.
+    subj_id = _resolve_subject_id(subject_name)
+    level = _resolve_generatable_level(subject_name=subject_name, subject_id=subj_id, level=requested_level)
+    level_info = LEARNING_LEVELS.get(level, LEARNING_LEVELS[DEFAULT_LEVEL])
 
     # Fetch learning map nodes in topological order if provided
     nodes_description = ""
@@ -205,19 +274,12 @@ Use these node IDs in the focus_nodes field for each week."""
     # Build philosophical constraints
     phil_constraints = build_philosophical_constraints(phil)
 
-    # Inject scope sequence context for pedagogically grounded curriculum
+    # Inject scope sequence context for pedagogically grounded curriculum.
+    # subj_id and level were resolved (with fallback) above.
     scope_sequence_context = ""
     try:
         from app.content.scope_sequences import get_scope_sequence
-        from app.core.learning_levels import SUBJECT_CATALOG
 
-        # Resolve subject_name to subject_id
-        subj_id = subject_name.lower().replace(" ", "_").replace("&", "and")
-        for cat in SUBJECT_CATALOG.values():
-            for s in cat:
-                if s["name"].lower() == subject_name.lower() or s["id"] == subj_id:
-                    subj_id = s["id"]
-                    break
         topics = get_scope_sequence(subj_id, level)
         if topics:
             topic_lines = []

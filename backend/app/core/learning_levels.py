@@ -39,6 +39,14 @@ LEARNING_LEVELS = {
 
 VALID_LEVELS = set(LEARNING_LEVELS.keys())
 
+# The tier a subject defaults to when neither an explicit content_tier nor a
+# saved per-subject level is available. Foundational is the populated,
+# generatable tier (it has wired content templates for math and reading), so a
+# parent who never touches the tier picker still generates a real plan instead
+# of the empty "developing" shell. See docs/philosophy_empty_plan_investigation.md
+# (the developing-tier default trap) for the trace.
+DEFAULT_LEVEL = "foundational"
+
 SUBJECT_CATALOG = {
     "academic": [
         {
@@ -228,9 +236,15 @@ def get_all_subjects(household_settings=None):
 
 
 def get_level_for_subject(preferences, subject_name):
-    """Get a child's learning level for a subject. Default: developing."""
+    """Get a child's learning level for a subject. Default: foundational.
+
+    Defaults to the populated, generatable tier (``DEFAULT_LEVEL`` =
+    foundational) rather than ``developing``: a child with no saved level for
+    the subject should land on a tier that has wired content, not on an empty
+    plan. An explicit saved level is always honored.
+    """
     if not preferences or not getattr(preferences, "subject_levels", None):
-        return "developing"
+        return DEFAULT_LEVEL
     levels = preferences.subject_levels or {}
     key = subject_name.lower().replace(" ", "_").replace("&", "and")
     if key in levels:
@@ -238,7 +252,7 @@ def get_level_for_subject(preferences, subject_name):
     for k, v in levels.items():
         if k.lower() in subject_name.lower() or subject_name.lower() in k.lower():
             return v
-    return "developing"
+    return DEFAULT_LEVEL
 
 
 def get_daily_minutes_for_child(child, calendar=None):
@@ -256,6 +270,6 @@ def build_level_context(preferences, subjects):
     for subj in subjects:
         name = subj if isinstance(subj, str) else subj.get("name", "")
         level = get_level_for_subject(preferences, name)
-        level_info = LEARNING_LEVELS.get(level, LEARNING_LEVELS["developing"])
+        level_info = LEARNING_LEVELS.get(level, LEARNING_LEVELS[DEFAULT_LEVEL])
         lines.append(f"- {name}: {level_info['label']} — {level_info['ai_instruction']}")
     return "\n".join(lines)

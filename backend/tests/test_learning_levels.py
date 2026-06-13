@@ -25,7 +25,9 @@ class TestLearningLevelsModule:
         assert len(SUBJECT_CATALOG["vocational"]) >= 10
 
     def test_get_level_default(self):
-        assert get_level_for_subject(None, "Mathematics") == "developing"
+        # Defaults to the populated, generatable tier (foundational) so a child
+        # with no saved level never lands on the empty "developing" shell.
+        assert get_level_for_subject(None, "Mathematics") == "foundational"
 
     def test_get_level_from_prefs(self):
         class FakePrefs:
@@ -33,7 +35,8 @@ class TestLearningLevelsModule:
 
         assert get_level_for_subject(FakePrefs(), "Mathematics") == "advanced"
         assert get_level_for_subject(FakePrefs(), "Latin") == "foundational"
-        assert get_level_for_subject(FakePrefs(), "Science") == "developing"
+        # A subject with no saved level still defaults to foundational.
+        assert get_level_for_subject(FakePrefs(), "Science") == "foundational"
 
     def test_daily_minutes_fallback(self):
         class FakeChild:
@@ -56,7 +59,7 @@ class TestLearningLevelsModule:
 
         ctx = build_level_context(FakePrefs(), ["Mathematics", "Latin"])
         assert "Advanced" in ctx
-        assert "Developing" in ctx  # Latin defaults to developing
+        assert "Foundational" in ctx  # Latin defaults to foundational
 
 
 class TestSubjectCatalogAPI:
