@@ -140,29 +140,28 @@ async def build_register_block(
     )
 
 
-async def build_milestone_block(
+async def gated_milestones(
     db: AsyncSession,
     household_id: uuid.UUID,
     child_id: uuid.UUID,
     role: str,
-) -> str:
-    """The relationship memory block injected for the tutor.
+) -> list:
+    """The milestones the tutor would actually see, after the opt in gate.
 
-    Strictly opt in. It is empty unless the tutor role is not off AND the
-    parent has turned relationship memory on for this child
+    The SINGLE gate used by both the tutor context injection and the
+    parent preview, so the preview can never show derived memories the
+    tutor would not, and never exposes anything before opt in. Returns an
+    empty list unless the tutor role is not off AND the parent has turned
+    relationship memory on for this child
     (child_tutor_preferences.relationship_memory == "on", default off).
-    When on, it injects up to three derived milestones, most meaningful
-    first, with a one line preface telling the tutor to use them naturally
-    and sparingly. The milestones are DERIVED from the existing record and
-    never stored; this is a read.
 
     Fail closed: a non tutor role, an off policy, a missing or unset
-    preference, or an unreadable preference all inject nothing. The gate
-    is checked BEFORE any derivation runs, so when the layer is off no
+    preference, or an unreadable preference all return []. The gate is
+    checked BEFORE any derivation runs, so when the layer is off no
     milestone query and no AI call ever happens.
     """
     if role != "tutor":
-        return ""
+        return []
 
     from app.services.governance import AI_AUTONOMY_OFF, get_ai_role_policy
 
@@ -175,9 +174,9 @@ async def build_milestone_block(
             child_id=str(child_id),
             error=str(exc),
         )
-        return ""
+        return []
     if policy == AI_AUTONOMY_OFF:
-        return ""
+        return []
 
     from app.models.intelligence import ChildTutorPreferences
 
@@ -187,13 +186,32 @@ async def build_milestone_block(
         ).scalar_one_or_none()
     except Exception as exc:
         logger.warning("milestone_preference_unreadable", child_id=str(child_id), error=str(exc))
-        return ""
+        return []
     if ctp is None or ctp.relationship_memory != "on":
-        return ""
+        return []
 
-    from app.services.tutor_milestones import get_milestones, render_milestone_block
+    from app.services.tutor_milestones import get_milestones
 
-    milestones = await get_milestones(db, child_id)
+    return await get_milestones(db, child_id)
+
+
+async def build_milestone_block(
+    db: AsyncSession,
+    household_id: uuid.UUID,
+    child_id: uuid.UUID,
+    role: str,
+) -> str:
+    """The relationship memory block injected for the tutor.
+
+    Strictly opt in: empty unless gated_milestones returns something. When
+    on, it injects up to three derived milestones, most meaningful first,
+    with a one line preface telling the tutor to use them naturally and
+    sparingly. The milestones are DERIVED from the existing record and
+    never stored; this is a read.
+    """
+    from app.services.tutor_milestones import render_milestone_block
+
+    milestones = await gated_milestones(db, household_id, child_id, role)
     return render_milestone_block(milestones)
 
 

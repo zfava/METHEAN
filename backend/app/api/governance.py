@@ -2266,11 +2266,13 @@ async def get_tutor_milestones_preview(
     user: User = Depends(require_role("owner", "co_parent")),
 ) -> dict:
     """What the tutor would remember right now: the same derived
-    milestones, from the same service and cache, that the tutor context
-    injects. The parent preview and the tutor injection are provably the
-    same data. Parent scope, verified email (router level)."""
+    milestones, from the same gate, service, and cache, that the tutor
+    context injects. The preview passes through the EXACT opt in gate
+    build_milestone_block uses, so it returns nothing in any off state and
+    never exposes derived memories before opt in. Parent scope, verified
+    email (router level)."""
     from app.models.intelligence import ChildTutorPreferences
-    from app.services.tutor_milestones import get_milestones
+    from app.services.learning_context import gated_milestones
 
     await _get_child_or_404(db, child_id, user.household_id)
 
@@ -2279,7 +2281,7 @@ async def get_tutor_milestones_preview(
     ).scalar_one_or_none()
     relationship_memory = ctp.relationship_memory if ctp else "off"
 
-    milestones = await get_milestones(db, child_id)
+    milestones = await gated_milestones(db, user.household_id, child_id, "tutor")
     return {
         "child_id": str(child_id),
         "relationship_memory": relationship_memory,

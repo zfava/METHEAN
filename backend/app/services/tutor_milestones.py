@@ -173,10 +173,10 @@ async def derive_milestones(db: AsyncSession, child_id: uuid.UUID) -> list[Miles
         node_meta[state.node_id] = (title, subject_name, state)
     node_ids = list(node_meta.keys())
 
-    # 2. Attempt history per reached node: count and the span of dates.
-    #    Joined through Activity, since Attempt has no node_id of its own.
-    attempt_count: dict[uuid.UUID, int] = {}
-    attempt_first: dict[uuid.UUID, datetime] = {}
+    # 2. Attempt history per reached node, kept as raw (start, end) pairs so
+    #    breakthrough evidence can be bounded to the attempts that preceded
+    #    mastery. Joined through Activity, since Attempt has no node_id.
+    attempt_times: dict[uuid.UUID, list[tuple[datetime, datetime]]] = {}
     attempt_last: dict[uuid.UUID, datetime] = {}
     if node_ids:
         attempts_result = await db.execute(
@@ -185,17 +185,13 @@ async def derive_milestones(db: AsyncSession, child_id: uuid.UUID) -> list[Miles
             .where(Attempt.child_id == child_id, Activity.node_id.in_(node_ids))
         )
         for node_id, started_at, completed_at in attempts_result.all():
-            attempt_count[node_id] = attempt_count.get(node_id, 0) + 1
-            start = started_at
+            if started_at is None:
+                continue
             end = completed_at or started_at
-            if start is not None:
-                cur = attempt_first.get(node_id)
-                if cur is None or start < cur:
-                    attempt_first[node_id] = start
-            if end is not None:
-                cur = attempt_last.get(node_id)
-                if cur is None or end > cur:
-                    attempt_last[node_id] = end
+            attempt_times.setdefault(node_id, []).append((started_at, end))
+            cur = attempt_last.get(node_id)
+            if cur is None or end > cur:
+                attempt_last[node_id] = end
 
     # 3. achieved_at: the latest mastery_change whose to_state matches the
     #    node's current level (the Family Record's achieved_at rule).
@@ -223,10 +219,18 @@ async def derive_milestones(db: AsyncSession, child_id: uuid.UUID) -> list[Miles
 
     # ── Breakthrough arcs ────────────────────────────────────────────────
     for node_id, (title, subject_name, _state) in node_meta.items():
-        n_attempts = attempt_count.get(node_id, 0)
+        achieved = achieved_at.get(node_id)
+        # Only attempts at or before the mastery moment count as the
+        # struggle that preceded it: practice logged AFTER a node was
+        # mastered must never make an easy node read as hard (dignity rule).
+        # When the mastery moment is unknown, fall back to all attempts.
+        times = attempt_times.get(node_id, [])
+        relevant = [(s, e) for (s, e) in times if achieved is None or s <= achieved]
+        n_attempts = len(relevant)
         span_days = 0
-        first, last = attempt_first.get(node_id), attempt_last.get(node_id)
-        if first is not None and last is not None:
+        if relevant:
+            first = min(s for s, _ in relevant)
+            last = achieved if achieved is not None else max(e for _, e in relevant)
             span_days = (last - first).days
         long_struggle = span_days >= BREAKTHROUGH_MIN_DAYS
         many_attempts = n_attempts >= BREAKTHROUGH_MIN_ATTEMPTS

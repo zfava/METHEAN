@@ -184,6 +184,79 @@ async def test_quick_mastery_excluded_from_breakthroughs(db_session, household, 
     assert [m for m in milestones if m.kind == "breakthrough"] == []
 
 
+@pytest.mark.asyncio
+async def test_quick_mastery_then_practiced_not_breakthrough(db_session, household, child, plan_week):
+    # Mastered quickly (two attempts in a day), then practiced for weeks
+    # afterward. Only the attempts BEFORE mastery decide the struggle, so
+    # the later practice must not turn an easy node into a "did not come
+    # easy" breakthrough (dignity rule).
+    lmap = await _subject_map(db_session, household, "Mathematics", "Math Unit")
+    node = LearningNode(
+        learning_map_id=lmap.id, household_id=household.id, node_type=NodeType.concept, title="Counting"
+    )
+    db_session.add(node)
+    await db_session.flush()
+    activity = Activity(
+        plan_week_id=plan_week.id,
+        household_id=household.id,
+        title="Practice Counting",
+        activity_type=ActivityType.practice,
+        node_id=node.id,
+    )
+    db_session.add(activity)
+    await db_session.flush()
+
+    now = datetime.now(UTC)
+    achieved = now - timedelta(days=40)
+    # Two quick attempts before mastery.
+    for ts in (achieved - timedelta(days=1), achieved):
+        db_session.add(
+            Attempt(
+                activity_id=activity.id,
+                household_id=household.id,
+                child_id=child.id,
+                status=AttemptStatus.completed,
+                score=0.9,
+                started_at=ts,
+                completed_at=ts,
+            )
+        )
+    # Six practice attempts spread across the weeks AFTER mastery.
+    for i in range(6):
+        ts = now - timedelta(days=i * 6)
+        db_session.add(
+            Attempt(
+                activity_id=activity.id,
+                household_id=household.id,
+                child_id=child.id,
+                status=AttemptStatus.completed,
+                score=0.95,
+                started_at=ts,
+                completed_at=ts,
+            )
+        )
+    db_session.add(
+        ChildNodeState(
+            child_id=child.id, household_id=household.id, node_id=node.id, mastery_level=MasteryLevel.mastered
+        )
+    )
+    db_session.add(
+        StateEvent(
+            child_id=child.id,
+            household_id=household.id,
+            node_id=node.id,
+            event_type=StateEventType.mastery_change,
+            from_state="developing",
+            to_state="mastered",
+            created_at=achieved,
+        )
+    )
+    await db_session.flush()
+
+    milestones = await derive_milestones(db_session, child.id)
+    assert [m for m in milestones if m.kind == "breakthrough"] == []
+
+
 # ── 2. Completion, first, streak detection ──────────────────────────────
 
 
@@ -441,6 +514,25 @@ async def test_preview_equals_injected_milestones(auth_client: AsyncClient, db_s
     injected_lines = [ln[len("- ") :] for ln in block.splitlines() if ln.startswith("- ")]
 
     assert preview_lines == injected_lines
+
+
+@pytest.mark.asyncio
+async def test_preview_empty_when_memory_off(auth_client: AsyncClient, db_session, household, child, plan_week):
+    # Milestones exist in the record, but relationship memory is off
+    # (default). The preview must pass through the same opt in gate the
+    # tutor injection uses and expose nothing before opt in.
+    math = await _subject_map(db_session, household, "Mathematics", "Math Unit")
+    await _seed_node(
+        db_session, household, child, math, plan_week, "Long Division", MasteryLevel.mastered, attempts=4, span_days=42
+    )
+
+    preview = await auth_client.get(f"/api/v1/children/{child.id}/tutor-register/milestones")
+    assert preview.status_code == 200, preview.text
+    body = preview.json()
+    assert body["relationship_memory"] == "off"
+    assert body["milestones"] == []
+    # And it matches what the tutor sees: nothing.
+    assert await build_milestone_block(db_session, household.id, child.id, "tutor") == ""
 
 
 # ── 8. Zero database writes and no migration guards ─────────────────────

@@ -6472,7 +6472,7 @@
           "governance"
         ],
         "summary": "Get Tutor Milestones Preview",
-        "description": "What the tutor would remember right now: the same derived\nmilestones, from the same service and cache, that the tutor context\ninjects. The parent preview and the tutor injection are provably the\nsame data. Parent scope, verified email (router level).",
+        "description": "What the tutor would remember right now: the same derived\nmilestones, from the same gate, service, and cache, that the tutor\ncontext injects. The preview passes through the EXACT opt in gate\nbuild_milestone_block uses, so it returns nothing in any off state and\nnever exposes derived memories before opt in. Parent scope, verified\nemail (router level).",
         "operationId": "get_tutor_milestones_preview_api_v1_children__child_id__tutor_register_milestones_get",
         "parameters": [
           {
