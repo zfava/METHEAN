@@ -25,6 +25,7 @@ Last verified: 2026-04-17
 | tutor_profile_entries | yes | yes | tutor_profile_entries_household_isolation | 057 |
 | supervision_attestations | yes | yes | supervision_attestations_household_isolation | 058 |
 | tutor_entry_observations | yes | yes | tutor_entry_observations_household_isolation | 061 |
+| child_tutor_preferences | yes | yes | child_tutor_preferences_household_isolation | 062 |
 | governance_events | yes | yes | governance_events_household_isolation | 027 |
 | plans | yes | yes | plans_household_isolation | 027 |
 | plan_weeks | yes | yes | plan_weeks_household_isolation | 027 |

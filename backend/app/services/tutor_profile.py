@@ -384,6 +384,13 @@ async def route_proposal(
         )
         return None
 
+    # Stamp the child's current content tier so the efficacy engine can
+    # later notice a strategy tied to an outgrown developmental stage
+    # (migration 062). None when the child has no tier data yet.
+    from app.services.tutor_register import current_tier_for_child
+
+    tier_band = await current_tier_for_child(db, child_id)
+
     if policy == AI_AUTONOMY_AUTONOMOUS:
         try:
             grant_hash = await get_active_autonomy_grant(db, household_id, "tutor")
@@ -413,6 +420,7 @@ async def route_proposal(
             category=category,
             content=content,
             status="active",
+            tier_band=tier_band,
             grant_event_hash=grant_hash,
             decided_at=datetime.now(UTC),
             decided_by=None,
@@ -449,6 +457,7 @@ async def route_proposal(
         category=category,
         content=content,
         status="proposed",
+        tier_band=tier_band,
     )
     db.add(entry)
     await db.flush()

@@ -442,6 +442,28 @@ export const tutorProfile = {
     }),
 };
 
+// One of the five LEARNING_LEVELS keys, or null for automatic.
+export type RegisterTier = "foundational" | "developing" | "intermediate" | "advanced" | "mastery";
+
+export interface TutorRegisterData {
+  child_id: string;
+  register_override: RegisterTier | null;
+  relationship_memory: string;
+  derived_by_subject: Record<string, string>;
+  effective_tier: RegisterTier;
+  effective_label: string;
+  source: "override" | "derived";
+}
+
+export const tutorRegister = {
+  get: (childId: string) => request<TutorRegisterData>(`/children/${childId}/tutor-register`),
+  set: (childId: string, registerOverride: RegisterTier | null) =>
+    request<TutorRegisterData>(`/children/${childId}/tutor-register`, {
+      method: "PUT",
+      body: JSON.stringify({ register_override: registerOverride }),
+    }),
+};
+
 // Family Record: the cumulative, evidence-backed educational record
 // (2.1 backend). Read-only over learner state; export seals a bundle.
 export interface RecordEvidenceAttempt {

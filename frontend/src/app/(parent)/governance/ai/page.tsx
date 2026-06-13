@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { aiGovernance, tutorProfile, type AIRoleSetting, type AIStatusData, type TutorProfileData, type TutorProfileEntryData } from "@/lib/api";
+import { aiGovernance, tutorProfile, tutorRegister, type AIRoleSetting, type AIStatusData, type TutorProfileData, type TutorProfileEntryData, type TutorRegisterData, type RegisterTier } from "@/lib/api";
 import { useChild } from "@/lib/ChildContext";
 import { useToast } from "@/components/Toast";
 import LoadingSkeleton from "@/components/LoadingSkeleton";
@@ -121,6 +121,88 @@ function entryAppliedLine(entry: TutorProfileEntryData): string {
   return `you approved on ${date}`;
 }
 
+// The five tiers in plain parent words. Empty value means automatic.
+const REGISTER_OPTIONS: { value: "" | RegisterTier; label: string }[] = [
+  { value: "", label: "Automatic" },
+  { value: "foundational", label: "Early learner" },
+  { value: "developing", label: "Building" },
+  { value: "intermediate", label: "Growing" },
+  { value: "advanced", label: "Advanced" },
+  { value: "mastery", label: "Near-peer" },
+];
+
+/**
+ * The developmental voice register row: how the tutor talks to this child,
+ * derived from their curriculum stage, with an absolute parent override.
+ */
+function TutorRegisterRow({ childId }: { childId: string }) {
+  const { toast } = useToast();
+  const [data, setData] = useState<TutorRegisterData | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    tutorRegister
+      .get(childId)
+      .then((d) => active && setData(d))
+      .catch(() => active && setData(null));
+    return () => {
+      active = false;
+    };
+  }, [childId]);
+
+  if (!data) return null;
+
+  async function onChange(value: string) {
+    setBusy(true);
+    try {
+      const next = await tutorRegister.set(childId, value === "" ? null : (value as RegisterTier));
+      setData(next);
+      toast(
+        next.register_override
+          ? "You chose the voice. Automatic follows their curriculum level."
+          : "Back to automatic. The voice follows their curriculum level.",
+        "success",
+      );
+    } catch {
+      toast("That didn't go through. Nothing was changed.", "error");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const current = data.register_override ?? "";
+  return (
+    <div className="px-3 py-2.5 rounded-[10px] bg-(--color-page) border border-(--color-border) flex items-center justify-between gap-3 flex-wrap">
+      <div className="min-w-0">
+        <span className="text-[10px] uppercase tracking-wide text-(--color-text-tertiary)">Tutor voice</span>
+        <p className="text-sm text-(--color-text)">
+          {data.effective_label}{" "}
+          <span className="text-(--color-text-tertiary)">
+            ({data.source === "override" ? "you chose this" : "automatic"})
+          </span>
+        </p>
+      </div>
+      <label className="flex items-center gap-2 shrink-0">
+        <span className="sr-only">Tutor voice register</span>
+        <select
+          value={current}
+          disabled={busy}
+          onChange={(e) => onChange(e.target.value)}
+          data-testid="register-override-select"
+          className="text-xs rounded-[10px] border border-(--color-border) bg-(--color-surface) px-2 py-1 text-(--color-text)"
+        >
+          {REGISTER_OPTIONS.map((o) => (
+            <option key={o.value || "auto"} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+        </select>
+      </label>
+    </div>
+  );
+}
+
 /**
  * "How your tutor is learning": the per-child tutor memory, with the
  * parent in full control. Active entries with how they came to apply,
@@ -187,6 +269,12 @@ function TutorMemorySection({ tutorPolicy }: { tutorPolicy: string }) {
         <p className="text-sm text-(--color-text-secondary)" data-testid="tutor-memory-off">
           Tutor memory is off. Your tutor starts fresh every session.
         </p>
+      )}
+
+      {tutorPolicy !== "off" && (
+        <div className="mb-4">
+          <TutorRegisterRow childId={selectedChild.id} />
+        </div>
       )}
 
       {tutorPolicy !== "off" && profile && (
