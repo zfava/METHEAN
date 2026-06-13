@@ -438,7 +438,9 @@ export default function CurriculumPage() {
           </div>
           <h2 className="text-sm font-semibold text-(--color-text) mb-1">Curriculum Created!</h2>
           <p className="text-xs text-(--color-text-secondary) mb-4">
-            {proposal?.material_name || selectedSubject?.s || "Your curriculum"} with {proposal?.nodes?.length || 0} nodes is now active for {selectedChild.first_name}.
+            {proposal?.id
+              ? `${proposal?.subject || selectedSubject?.s || "Your curriculum"} is now active for ${selectedChild.first_name}${proposal?.total_weeks ? ` — ${proposal.total_weeks} weeks planned` : ""}.`
+              : `${proposal?.material_name || selectedSubject?.s || "Your curriculum"} with ${proposal?.nodes?.length || 0} nodes is now active for ${selectedChild.first_name}.`}
           </p>
           <div className="flex gap-2 justify-center">
             {proposal?.id ? (

@@ -149,7 +149,12 @@ async def generate_curriculum(
         content_tier=body.content_tier,
     )
     await db.commit()
-    return {"id": str(curriculum.id), "status": curriculum.status, "subject": curriculum.subject_name}
+    return {
+        "id": str(curriculum.id),
+        "status": curriculum.status,
+        "subject": curriculum.subject_name,
+        "total_weeks": curriculum.total_weeks,
+    }
 
 
 @router.get("/children/{child_id}/curricula")
