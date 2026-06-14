@@ -59,6 +59,9 @@ async def get_daily_usage(
     now = reference_time or datetime.now(UTC)
     today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
 
+    # Local inference has zero marginal cost, so its runs never count
+    # toward the daily spend cap. ``IS DISTINCT FROM`` keeps historical
+    # rows with a NULL provider (predating the column) in the total.
     result = await db.execute(
         select(
             func.coalesce(func.sum(AIRun.input_tokens + AIRun.output_tokens), 0).label("tokens"),
@@ -68,6 +71,7 @@ async def get_daily_usage(
         ).where(
             AIRun.household_id == household_id,
             AIRun.started_at >= today_start,
+            AIRun.provider.is_distinct_from("local"),
         )
     )
     row = result.one()

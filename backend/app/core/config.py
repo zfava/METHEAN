@@ -50,6 +50,27 @@ class Settings(BaseSettings):
     AI_MAX_TOKENS: int = 4096
     AI_TEMPERATURE: float = 0.7
 
+    # Local inference (independence from external AI vendors). When
+    # LOCAL_AI_ENABLED is true the gateway adds a LOCAL provider that
+    # talks to an OpenAI-compatible local endpoint (Ollama by default,
+    # but any OpenAI-compatible server works). Local inference has zero
+    # marginal API cost, so cost controls record its usage at cost 0
+    # and never block a household running on local. LOCAL stays out of
+    # the chain entirely while this flag is false, so existing
+    # deployments see no behavior change.
+    LOCAL_AI_ENABLED: bool = False
+    LOCAL_AI_BASE_URL: str = "http://localhost:11434/v1"
+    LOCAL_AI_MODEL: str = "llama3.1:8b"
+    LOCAL_AI_TIMEOUT_SECONDS: float = 30.0
+
+    # Optional explicit provider ordering, comma separated, e.g.
+    # "local,claude,openai,native,mock". Empty means the default
+    # ordering (LOCAL first when enabled, then Claude, OpenAI, the
+    # native deterministic floor, and mock). Names that are not
+    # configured or enabled are skipped; the native floor is always
+    # guaranteed present so a request can never fall off the end.
+    PROVIDER_CHAIN: str = ""
+
     # S3
     S3_ENDPOINT_URL: str = "http://minio:9000"
     S3_ACCESS_KEY: str = "minioadmin"

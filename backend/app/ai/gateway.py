@@ -229,6 +229,7 @@ class AIProvider(str, Enum):
     # member name so callers don't churn.
     claude = "anthropic"
     openai = "openai"
+    local = "local"
     native = "native"
     mock = "mock"
 
@@ -280,13 +281,30 @@ async def call_ai(
     }
     daily_limit = tier_daily_limits.get(ai_tier, 50_000)
 
-    # Budget check before calling any provider
+    # Resolve the provider chain up front so the budget gate can tell
+    # whether this call will be served for free. Local inference has zero
+    # marginal cost, so when LOCAL leads the chain the daily spend cap
+    # does not apply: a household on local keeps working even at its
+    # limit. The same resolved chain feeds the provider loop below.
+    provider_chain = _get_provider_chain()
+    free_primary = bool(provider_chain) and provider_chain[0] == AIProvider.local
+
+    # Budget check before calling any provider. ``budget_blocked`` is True
+    # only in hard-block mode over the cap; it is enforced in two places:
+    # here (raise immediately unless a free primary leads the chain) and,
+    # for the free-primary path, at the paid provider call sites in the
+    # loop below. That second guard is essential: if LOCAL leads but is
+    # down, the chain must not fall through to a paid provider and quietly
+    # bill an over-cap household. Free providers (local, native, mock) may
+    # still serve at the cap.
+    budget_blocked = False
     try:
         from app.ai.cost_controls import check_budget
         from app.services.usage import UsageLimitExceededError
 
         budget = await check_budget(db, household_id, daily_token_limit=daily_limit)
-        if not budget["allowed"]:
+        budget_blocked = not budget["allowed"]
+        if budget_blocked and not free_primary:
             ai_run_stub = AIRun(
                 household_id=household_id,
                 triggered_by=triggered_by,
@@ -383,11 +401,17 @@ async def call_ai(
     if role_disabled and role == AIRole.education_architect:
         providers = [AIProvider.native]
     else:
-        providers = _get_provider_chain()
+        providers = provider_chain
 
     for provider in providers:
         try:
             if provider == AIProvider.claude and settings.AI_API_KEY:
+                # Paid provider: never call it for a household over its hard
+                # cap, even when a free primary let the request past the
+                # up-front gate. The cap holds; free providers serve instead.
+                if budget_blocked:
+                    logger.debug("Budget blocked, skipping paid provider Claude")
+                    continue
                 if not _claude_circuit.should_allow():
                     logger.debug("Circuit open for Claude, skipping")
                     continue
@@ -401,6 +425,10 @@ async def call_ai(
                 break
 
             elif provider == AIProvider.openai and settings.AI_FALLBACK_API_KEY:
+                # Paid provider: same cap enforcement as Claude above.
+                if budget_blocked:
+                    logger.debug("Budget blocked, skipping paid provider OpenAI")
+                    continue
                 if not _openai_circuit.should_allow():
                     logger.debug("Circuit open for OpenAI, skipping")
                     continue
@@ -411,6 +439,19 @@ async def call_ai(
                 input_tokens = result.get("input_tokens", 0)
                 output_tokens = result.get("output_tokens", 0)
                 provider_used = AIProvider.openai
+                break
+
+            elif provider == AIProvider.local and settings.LOCAL_AI_ENABLED:
+                # Local open-weight model via an OpenAI-compatible endpoint.
+                # No external API cost, so no circuit breaker and no spend
+                # accounting; on any failure _call_local raises and the loop
+                # falls through exactly like Claude or OpenAI would.
+                result = await _call_local(system_prompt, user_prompt, max_tokens)
+                output = result["content"]
+                model_used = result["model"]
+                input_tokens = result.get("input_tokens", 0)
+                output_tokens = result.get("output_tokens", 0)
+                provider_used = AIProvider.local
                 break
 
             elif provider == AIProvider.native:
@@ -471,20 +512,31 @@ async def call_ai(
             continue
 
     if output is None:
-        # All providers failed AND mock fallback is disabled (or
-        # unavailable). Surface this loudly with a typed exception so
-        # the FastAPI handler in app.main can return a structured 503
-        # instead of a generic 500.
+        # No provider produced output. Two distinct reasons:
+        # 1. The household is over its hard cap and the only providers that
+        #    could have answered were paid (which we refused to call) plus
+        #    a free floor that did not produce content for this role. The
+        #    honest signal is the usage-limit error, not a generic outage.
+        # 2. Otherwise: real providers failed AND mock is disabled or
+        #    unavailable. Surface that loudly so app.main returns a 503.
         ai_run.status = AIRunStatus.failed
-        ai_run.error_message = error_msg or "All AI providers unavailable"
         ai_run.completed_at = datetime.now(UTC)
-        await db.flush()
         try:
             from app.core.metrics import ai_calls_total
 
             ai_calls_total.labels(role=role.value, provider="none", status="error").inc()
         except Exception as exc:
             slog.debug("ai_metrics_record_failed", role=role.value, error=str(exc))
+        if budget_blocked:
+            from app.services.usage import UsageLimitExceededError
+
+            ai_run.error_message = "Daily AI usage limit reached"
+            await db.flush()
+            raise UsageLimitExceededError(
+                f"Daily AI token limit ({daily_limit}) reached for tier '{ai_tier}'. Resets at midnight UTC."
+            )
+        ai_run.error_message = error_msg or "All AI providers unavailable"
+        await db.flush()
         raise AIProviderUnavailableError(
             f"AI call failed for role={role.value}: {error_msg or 'all providers unavailable'}"
         )
@@ -508,25 +560,31 @@ async def call_ai(
 
     # Update AIRun
     ai_run.status = AIRunStatus.completed
+    ai_run.provider = provider_used.value if provider_used else None
     ai_run.model_used = model_used
     ai_run.input_tokens = input_tokens
     ai_run.output_tokens = output_tokens
     ai_run.output_data = parsed_output if isinstance(parsed_output, dict) else {"result": parsed_output}
     ai_run.completed_at = datetime.now(UTC)
 
-    # Compute and store cost estimate
-    try:
-        from app.ai.cost_controls import estimate_cost_cents
+    # Compute and store cost estimate. Local inference runs on the
+    # family's own hardware: zero marginal API cost, recorded as $0
+    # regardless of token volume.
+    if provider_used == AIProvider.local:
+        ai_run.cost_usd = 0.0
+    else:
+        try:
+            from app.ai.cost_controls import estimate_cost_cents
 
-        cost_cents = estimate_cost_cents(model_used or "mock", input_tokens, output_tokens)
-        ai_run.cost_usd = cost_cents / 100.0
-    except Exception as exc:
-        slog.warning(
-            "ai_cost_estimate_failed",
-            ai_run_id=str(ai_run.id),
-            model=model_used or "unknown",
-            error=str(exc),
-        )
+            cost_cents = estimate_cost_cents(model_used or "mock", input_tokens, output_tokens)
+            ai_run.cost_usd = cost_cents / 100.0
+        except Exception as exc:
+            slog.warning(
+                "ai_cost_estimate_failed",
+                ai_run_id=str(ai_run.id),
+                model=model_used or "unknown",
+                error=str(exc),
+            )
 
     await db.flush()
 
@@ -543,6 +601,7 @@ async def call_ai(
                 output_tokens,
                 model_used or "unknown",
                 role.value,
+                provider=provider_used.value if provider_used else None,
             )
     except Exception as exc:
         # Usage recording must not break the AI response, but a silent
@@ -637,19 +696,68 @@ def _classify_error(e: Exception) -> str:
 
 
 def _get_provider_chain() -> list[AIProvider]:
-    """Get ordered list of providers to try."""
-    chain = []
-    if settings.AI_API_KEY:
-        chain.append(AIProvider.claude)
-    if settings.AI_FALLBACK_API_KEY:
-        chain.append(AIProvider.openai)
-    # Deterministic native generator: always available, sits ahead of mock so
-    # that when the real providers are absent or fail it produces real content
-    # (currently the annual curriculum) rather than falling through to mock.
-    chain.append(AIProvider.native)
-    if settings.AI_MOCK_ENABLED:
-        chain.append(AIProvider.mock)
+    """Get ordered list of providers to try.
+
+    Ordering is driven by ``settings.PROVIDER_CHAIN`` when set (a comma
+    separated list of provider names). When it is empty the default
+    ordering applies: LOCAL first (only when ``LOCAL_AI_ENABLED``),
+    then Claude, OpenAI, the native deterministic floor, and mock. This
+    keeps existing deployments unchanged: with LOCAL disabled and no
+    explicit chain the result is exactly the historical Claude -> OpenAI
+    -> native -> mock order.
+
+    A provider name only contributes an entry when that provider is
+    actually configured or enabled (Claude needs ``AI_API_KEY``, OpenAI
+    needs ``AI_FALLBACK_API_KEY``, LOCAL needs ``LOCAL_AI_ENABLED``,
+    mock needs ``AI_MOCK_ENABLED``). The native floor is always
+    guaranteed present so a request can never fall off the end of the
+    chain, even if an operator omits it from PROVIDER_CHAIN.
+    """
+    raw = (settings.PROVIDER_CHAIN or "").strip()
+    if raw:
+        order = [name.strip().lower() for name in raw.split(",") if name.strip()]
+    else:
+        order = []
+        if settings.LOCAL_AI_ENABLED:
+            order.append("local")
+        order += ["claude", "openai", "native", "mock"]
+
+    chain: list[AIProvider] = []
+    for name in order:
+        if name == "claude" and settings.AI_API_KEY and AIProvider.claude not in chain:
+            chain.append(AIProvider.claude)
+        elif name == "openai" and settings.AI_FALLBACK_API_KEY and AIProvider.openai not in chain:
+            chain.append(AIProvider.openai)
+        elif name == "local" and settings.LOCAL_AI_ENABLED and AIProvider.local not in chain:
+            chain.append(AIProvider.local)
+        elif name == "native" and AIProvider.native not in chain:
+            chain.append(AIProvider.native)
+        elif name == "mock" and settings.AI_MOCK_ENABLED and AIProvider.mock not in chain:
+            chain.append(AIProvider.mock)
+
+    # The native deterministic floor is always available and must always
+    # be reachable, so guarantee it even when an explicit PROVIDER_CHAIN
+    # leaves it out. It sits ahead of mock when both are appended here.
+    if AIProvider.native not in chain:
+        chain.append(AIProvider.native)
     return chain
+
+
+async def _call_local(
+    system_prompt: str,
+    user_prompt: str,
+    max_tokens: int,
+) -> dict:
+    """Call the local OpenAI-compatible endpoint.
+
+    Thin wrapper over ``app.ai.providers.call_local`` so the gateway
+    loop dispatches local exactly like Claude and OpenAI. Returns the
+    same ``content``/``model``/token dict; raises ``LocalProviderError``
+    on failure, which the loop catches and falls through.
+    """
+    from app.ai.providers import call_local
+
+    return await call_local(system_prompt, user_prompt, max_tokens)
 
 
 async def _call_claude(

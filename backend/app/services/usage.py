@@ -77,16 +77,27 @@ async def record_usage(
     output_tokens: int,
     model: str,
     role: str,
+    provider: str | None = None,
 ) -> None:
-    """Record token consumption after every AI call."""
+    """Record token consumption after every AI call.
+
+    Local inference runs on the family's own hardware: zero marginal
+    cost. We still record the usage event for transparency (the tokens
+    are visible in the breakdown) but at $0 and without consuming the
+    monthly token budget, so a household on local never burns its paid
+    allowance.
+    """
+    is_free_local = provider == "local"
+
     ledger = await get_or_create_current_period(db, household_id)
     total = input_tokens + output_tokens
 
-    ledger.tokens_consumed = (ledger.tokens_consumed or 0) + total
+    if not is_free_local:
+        ledger.tokens_consumed = (ledger.tokens_consumed or 0) + total
     ledger.ai_calls_count = (ledger.ai_calls_count or 0) + 1
     ledger.last_call_at = datetime.now(UTC)
 
-    cost = _estimate_cost(model, input_tokens, output_tokens)
+    cost = 0.0 if is_free_local else _estimate_cost(model, input_tokens, output_tokens)
 
     event = UsageEvent(
         household_id=household_id,
