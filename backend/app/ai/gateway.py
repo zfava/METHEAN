@@ -289,13 +289,22 @@ async def call_ai(
     provider_chain = _get_provider_chain()
     free_primary = bool(provider_chain) and provider_chain[0] == AIProvider.local
 
-    # Budget check before calling any provider
+    # Budget check before calling any provider. ``budget_blocked`` is True
+    # only in hard-block mode over the cap; it is enforced in two places:
+    # here (raise immediately unless a free primary leads the chain) and,
+    # for the free-primary path, at the paid provider call sites in the
+    # loop below. That second guard is essential: if LOCAL leads but is
+    # down, the chain must not fall through to a paid provider and quietly
+    # bill an over-cap household. Free providers (local, native, mock) may
+    # still serve at the cap.
+    budget_blocked = False
     try:
         from app.ai.cost_controls import check_budget
         from app.services.usage import UsageLimitExceededError
 
         budget = await check_budget(db, household_id, daily_token_limit=daily_limit)
-        if not budget["allowed"] and not free_primary:
+        budget_blocked = not budget["allowed"]
+        if budget_blocked and not free_primary:
             ai_run_stub = AIRun(
                 household_id=household_id,
                 triggered_by=triggered_by,
@@ -397,6 +406,12 @@ async def call_ai(
     for provider in providers:
         try:
             if provider == AIProvider.claude and settings.AI_API_KEY:
+                # Paid provider: never call it for a household over its hard
+                # cap, even when a free primary let the request past the
+                # up-front gate. The cap holds; free providers serve instead.
+                if budget_blocked:
+                    logger.debug("Budget blocked, skipping paid provider Claude")
+                    continue
                 if not _claude_circuit.should_allow():
                     logger.debug("Circuit open for Claude, skipping")
                     continue
@@ -410,6 +425,10 @@ async def call_ai(
                 break
 
             elif provider == AIProvider.openai and settings.AI_FALLBACK_API_KEY:
+                # Paid provider: same cap enforcement as Claude above.
+                if budget_blocked:
+                    logger.debug("Budget blocked, skipping paid provider OpenAI")
+                    continue
                 if not _openai_circuit.should_allow():
                     logger.debug("Circuit open for OpenAI, skipping")
                     continue
@@ -493,20 +512,31 @@ async def call_ai(
             continue
 
     if output is None:
-        # All providers failed AND mock fallback is disabled (or
-        # unavailable). Surface this loudly with a typed exception so
-        # the FastAPI handler in app.main can return a structured 503
-        # instead of a generic 500.
+        # No provider produced output. Two distinct reasons:
+        # 1. The household is over its hard cap and the only providers that
+        #    could have answered were paid (which we refused to call) plus
+        #    a free floor that did not produce content for this role. The
+        #    honest signal is the usage-limit error, not a generic outage.
+        # 2. Otherwise: real providers failed AND mock is disabled or
+        #    unavailable. Surface that loudly so app.main returns a 503.
         ai_run.status = AIRunStatus.failed
-        ai_run.error_message = error_msg or "All AI providers unavailable"
         ai_run.completed_at = datetime.now(UTC)
-        await db.flush()
         try:
             from app.core.metrics import ai_calls_total
 
             ai_calls_total.labels(role=role.value, provider="none", status="error").inc()
         except Exception as exc:
             slog.debug("ai_metrics_record_failed", role=role.value, error=str(exc))
+        if budget_blocked:
+            from app.services.usage import UsageLimitExceededError
+
+            ai_run.error_message = "Daily AI usage limit reached"
+            await db.flush()
+            raise UsageLimitExceededError(
+                f"Daily AI token limit ({daily_limit}) reached for tier '{ai_tier}'. Resets at midnight UTC."
+            )
+        ai_run.error_message = error_msg or "All AI providers unavailable"
+        await db.flush()
         raise AIProviderUnavailableError(
             f"AI call failed for role={role.value}: {error_msg or 'all providers unavailable'}"
         )

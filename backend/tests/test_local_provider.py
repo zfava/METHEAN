@@ -403,6 +403,71 @@ class TestGatewayLocalIntegration:
         )
         assert result["provider"] == "local"
 
+    async def test_over_cap_local_down_never_falls_through_to_paid(self, db_session, household, user, monkeypatch):
+        """Over-cap household, LOCAL first but down, paid keys configured:
+        the chain must not call a paid provider; the free floor serves."""
+        monkeypatch.setattr(settings, "LOCAL_AI_ENABLED", True)
+        monkeypatch.setattr(settings, "PROVIDER_CHAIN", "")
+        monkeypatch.setattr(settings, "AI_API_KEY", "sk-test")  # paid configured
+        monkeypatch.setattr(settings, "AI_FALLBACK_API_KEY", "")
+        monkeypatch.setattr(settings, "AI_MOCK_ENABLED", True)  # mock is the free floor
+
+        async def local_down(system_prompt, user_prompt, max_tokens):
+            raise LocalProviderError("local down")
+
+        claude_calls = {"n": 0}
+
+        async def spy_claude(system_prompt, user_prompt, max_tokens, model=None):
+            claude_calls["n"] += 1
+            return {"content": '{"m": "x"}', "model": "claude-x", "input_tokens": 1, "output_tokens": 1}
+
+        async def blocked_budget(*args, **kwargs):
+            return {"allowed": False, "should_degrade": False, "should_alert": True, "usage": {}, "budget": {}}
+
+        monkeypatch.setattr("app.ai.gateway._call_local", local_down)
+        monkeypatch.setattr("app.ai.gateway._call_claude", spy_claude)
+        monkeypatch.setattr("app.ai.cost_controls.check_budget", blocked_budget)
+
+        result = await call_ai(db_session, AIRole.tutor, "system", "user", household_id=household.id)
+        # The paid provider was never called while over the cap.
+        assert claude_calls["n"] == 0
+        assert result["provider"] not in {"anthropic", "openai"}
+        # The free floor (mock here) served instead.
+        assert result["provider"] == "mock"
+
+    async def test_over_cap_local_down_no_free_answer_raises_limit(self, db_session, household, user, monkeypatch):
+        """Over-cap, LOCAL down, paid configured, no free floor for the role:
+        raise the usage-limit error rather than billing a paid run."""
+        monkeypatch.setattr(settings, "LOCAL_AI_ENABLED", True)
+        monkeypatch.setattr(settings, "PROVIDER_CHAIN", "")
+        monkeypatch.setattr(settings, "AI_API_KEY", "sk-test")  # paid configured
+        monkeypatch.setattr(settings, "AI_FALLBACK_API_KEY", "")
+        monkeypatch.setattr(settings, "AI_MOCK_ENABLED", False)  # no mock floor
+
+        from app.services.usage import UsageLimitExceededError
+
+        async def local_down(system_prompt, user_prompt, max_tokens):
+            raise LocalProviderError("local down")
+
+        claude_calls = {"n": 0}
+
+        async def spy_claude(system_prompt, user_prompt, max_tokens, model=None):
+            claude_calls["n"] += 1
+            return {"content": '{"m": "x"}', "model": "claude-x", "input_tokens": 1, "output_tokens": 1}
+
+        async def blocked_budget(*args, **kwargs):
+            return {"allowed": False, "should_degrade": False, "should_alert": True, "usage": {}, "budget": {}}
+
+        monkeypatch.setattr("app.ai.gateway._call_local", local_down)
+        monkeypatch.setattr("app.ai.gateway._call_claude", spy_claude)
+        monkeypatch.setattr("app.ai.cost_controls.check_budget", blocked_budget)
+
+        # Native returns None for the tutor role and mock is off, so no free
+        # provider can answer; the cap must surface, paid must not be called.
+        with pytest.raises(UsageLimitExceededError):
+            await call_ai(db_session, AIRole.tutor, "system", "user", household_id=household.id)
+        assert claude_calls["n"] == 0
+
     async def test_budget_gate_still_blocks_when_paid_provider_leads(self, db_session, household, user, monkeypatch):
         """Control: with a paid provider leading, the cap is still enforced."""
         from app.services.usage import UsageLimitExceededError

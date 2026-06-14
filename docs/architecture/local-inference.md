@@ -139,9 +139,14 @@ that honestly:
   toward the daily cap.
 - Local usage is recorded for transparency in the monthly usage ledger
   but does not consume the paid token budget.
-- When LOCAL leads the chain (the free primary), the budget gate is
-  skipped entirely, so a household at its spend cap can keep using its
-  tutor on local hardware.
+- When LOCAL leads the chain (the free primary), the up-front budget gate
+  is not raised, so a household at its spend cap can keep using its tutor
+  on local hardware.
+- The cap still holds for paid providers. If LOCAL leads but is down and
+  the household is over a hard cap, the loop refuses to fall through to a
+  paid provider (Claude or OpenAI): it skips them and lets the free floor
+  serve, or raises the usage-limit error if no free provider can answer
+  the role. An over-cap household is never quietly billed for a paid run.
 
 ## Configuration
 
