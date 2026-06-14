@@ -88,4 +88,11 @@ async def update_calendar(
     household.settings = settings
     await db.flush()
 
-    return current
+    # Live re-flow: apply the edited calendar to every active curriculum's
+    # plan, re-dating only the future/uncompleted portion. Completed,
+    # in-progress, and past/same-day activities are preserved byte-for-byte.
+    from app.services.annual_curriculum import reflow_household_active_curricula
+
+    reflow = await reflow_household_active_curricula(db, user.household_id, user.id, current)
+
+    return {**current, "reflow": reflow}

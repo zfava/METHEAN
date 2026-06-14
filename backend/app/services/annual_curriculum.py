@@ -5,6 +5,8 @@ Plan/PlanWeek/Activity records, tracks week completion, and
 maintains the historical record of planned vs actual.
 """
 
+import bisect
+import hashlib
 import json
 import logging
 import uuid
@@ -446,6 +448,307 @@ async def approve_annual_curriculum(
     return curriculum
 
 
+# ── Calendar-aware date layout ────────────────────────────────────
+
+# Canonical weekday offsets from the start of an instructional week. The
+# materializer treats a curriculum's ``start_date`` (and each week's anchor)
+# as offset 0, so a default Monday-Friday calendar reproduces the prior
+# ``start_date + day_offset`` placement exactly, while a custom
+# ``instruction_days`` cadence shifts placement onto the configured days.
+_DAY_TO_OFFSET: dict[str, int] = {
+    "monday": 0,
+    "tuesday": 1,
+    "wednesday": 2,
+    "thursday": 3,
+    "friday": 4,
+    "saturday": 5,
+    "sunday": 6,
+}
+
+
+def _calendar_version(calendar: dict) -> str:
+    """Stable SHA-256 hash of a resolved calendar, for drift detection and
+    governance-event traceability. Independent of key order."""
+    canonical = json.dumps(calendar, sort_keys=True, default=str)
+    return hashlib.sha256(canonical.encode()).hexdigest()
+
+
+def _instruction_offsets(calendar: dict) -> list[int]:
+    """Sorted weekday offsets (Mon=0..Sun=6) for the configured instruction
+    days. Falls back to Monday-Friday when nothing usable is configured so a
+    week never has zero teaching days."""
+    from app.services.academic_calendar import get_instruction_days
+
+    offsets = sorted({_DAY_TO_OFFSET[d.lower()] for d in get_instruction_days(calendar) if d.lower() in _DAY_TO_OFFSET})
+    return offsets or [0, 1, 2, 3, 4]
+
+
+def _place_offset(live_offsets: dict[int, date], canonical_offset: int) -> date:
+    """Map a canonical weekday offset (the activity's authored day) onto a real
+    instruction date for the week.
+
+    If the offset is itself an available instruction day, the activity lands on
+    that exact day. Otherwise it is clamped to the nearest available instruction
+    day by position, so a Friday activity on a Mon-Thu cadence lands on
+    Thursday and a Monday activity on a Tue-Sat cadence lands on Tuesday.
+    Activities therefore never land on a non-instruction or break day.
+    """
+    if canonical_offset in live_offsets:
+        return live_offsets[canonical_offset]
+    avail = sorted(live_offsets)
+    pos = bisect.bisect_right(avail, canonical_offset)
+    idx = min(pos, len(avail) - 1)
+    return live_offsets[avail[idx]]
+
+
+def _lay_weeks(
+    first_week_start: date,
+    calendar: dict,
+    week_numbers: list[int],
+) -> dict[int, tuple[date, date, dict[int, date]]]:
+    """Lay instructional weeks forward onto real dates, mirroring the weekly
+    planner's calendar handling (is_break_date + instruction_days).
+
+    Walks consecutive 7-day windows from ``first_week_start`` (treated as offset
+    0). For each curriculum week it materializes the configured instruction
+    days, dropping any that fall inside a break. A calendar week whose every
+    instruction day is a break is skipped entirely (it does not consume a
+    curriculum week), so a break shifts dates and extends the calendar end
+    without ever deleting a curriculum week.
+
+    Returns ``{week_number: (week_start, week_end, {offset: date})}`` where the
+    offset map holds the live (non-break) instruction dates for that week.
+    """
+    from app.services.academic_calendar import is_break_date
+
+    offsets = _instruction_offsets(calendar)
+    schedule: dict[int, tuple[date, date, dict[int, date]]] = {}
+    week_start = first_week_start
+
+    for wn in week_numbers:
+        candidate: dict[int, date] = {}
+        live: dict[int, date] = {}
+        # Skip fully-break calendar weeks (guard bounds the walk).
+        for _ in range(200):
+            candidate = {o: week_start + timedelta(days=o) for o in offsets}
+            live = {o: d for o, d in candidate.items() if not is_break_date(calendar, d)}
+            if live:
+                break
+            week_start += timedelta(days=7)
+        else:
+            # Pathological all-break stretch: keep the curriculum week rather
+            # than dropping it, so the instructional week count is preserved.
+            live = candidate
+        dates = list(live.values())
+        schedule[wn] = (min(dates), max(dates), live)
+        week_start += timedelta(days=7)
+
+    return schedule
+
+
+def _activity_reflowable(activity: Activity, today: date) -> bool:
+    """True only for strictly-future, untouched scheduled activities.
+
+    Locked (returns False) when work has begun or finished
+    (in_progress/completed), the activity is a terminal parent decision
+    (skipped/cancelled), or it is scheduled for today or earlier. Governance
+    approval is deliberately NOT a lock signal: it is set automatically by the
+    near-window auto-approval at materialization and does not represent a
+    deliberate parent lock, so using it would pin the parent's own calendar
+    edits in the common editing case.
+    """
+    if activity.status != ActivityStatus.scheduled:
+        return False
+    return activity.scheduled_date is not None and activity.scheduled_date > today
+
+
+def _canonical_offset_for_activity(activity: Activity, week: PlanWeek, week_data: dict | None) -> int:
+    """Recover the canonical weekday offset (Mon=0) an activity was authored
+    for, so a re-flow places it on the same logical day under the new calendar.
+
+    Primary source is the immutable scope_sequence (the authored ``day`` matched
+    by sort_order), which is stable across re-flows. Parent-added activities are
+    not in the scope_sequence, so fall back to the activity's current offset
+    within its (pre-re-flow) week.
+    """
+    suggested = week_data.get("suggested_activities", []) if week_data else []
+    if 0 <= activity.sort_order < len(suggested):
+        name = str(suggested[activity.sort_order].get("day", "Monday")).lower()
+        if name in _DAY_TO_OFFSET:
+            return _DAY_TO_OFFSET[name]
+    if activity.scheduled_date is not None:
+        delta = (activity.scheduled_date - week.start_date).days
+        if 0 <= delta <= 6:
+            return delta
+    return 0
+
+
+async def reflow_curriculum_plan(
+    db: AsyncSession,
+    curriculum: AnnualCurriculum,
+    calendar: dict,
+    user_id: uuid.UUID | None,
+    today: date | None = None,
+) -> dict | None:
+    """Re-flow the future, uncompleted portion of a materialized plan onto a
+    (possibly edited) household academic calendar.
+
+    Completed/in-progress/terminal and past/same-day activities are immutable
+    and preserved byte-for-byte. Only weeks whose every non-cancelled activity
+    is strictly-future-and-scheduled are re-dated, walking the calendar forward
+    from the end of the last preserved week so a locked week never collides with
+    a re-dated one and dates stay monotonic. The resolved calendar snapshot and
+    version are refreshed when (and only when) a re-flow actually happens.
+
+    Returns a summary dict, or None when the curriculum has no materialized plan.
+    """
+    from sqlalchemy.orm import selectinload
+
+    today = today or date.today()
+
+    plan_result = await db.execute(
+        select(Plan)
+        .where(Plan.annual_curriculum_id == curriculum.id)
+        .options(selectinload(Plan.weeks).selectinload(PlanWeek.activities))
+    )
+    plan = plan_result.scalars().first()
+    if plan is None:
+        return None
+
+    weeks = sorted(plan.weeks, key=lambda w: w.week_number)
+
+    # Classify each week and find the frontier of the immutable (preserved)
+    # past. A week is re-flowable only if it has activities and every
+    # non-cancelled one is strictly-future-and-scheduled.
+    reflowable_wn: dict[int, bool] = {}
+    last_preserved_wn = 0
+    for w in weeks:
+        non_cancelled = [a for a in w.activities if a.status != ActivityStatus.cancelled]
+        is_reflowable = bool(non_cancelled) and all(_activity_reflowable(a, today) for a in non_cancelled)
+        reflowable_wn[w.week_number] = is_reflowable
+        if not is_reflowable:
+            last_preserved_wn = max(last_preserved_wn, w.week_number)
+
+    # Only weeks strictly after the last preserved week are re-flowed.
+    target_weeks = [w for w in weeks if w.week_number > last_preserved_wn and reflowable_wn[w.week_number]]
+    preserved_count = len(weeks) - len(target_weeks)
+
+    if not target_weeks:
+        return {
+            "plan_id": str(plan.id),
+            "weeks_reflowed": 0,
+            "weeks_preserved_locked": preserved_count,
+            "calendar_version": _calendar_version(calendar),
+        }
+
+    # Anchor: the calendar week after the last preserved week, else the
+    # calendar's start (a new start_date wins for a fully-future plan).
+    if last_preserved_wn:
+        anchor_week = next(w for w in weeks if w.week_number == last_preserved_wn)
+        first_week_start = anchor_week.start_date + timedelta(days=7)
+    else:
+        cal_start = calendar.get("start_date")
+        if cal_start:
+            first_week_start = date.fromisoformat(cal_start) if isinstance(cal_start, str) else cal_start
+        else:
+            first_week_start = curriculum.start_date
+
+    scope_by_wn = {w.get("week_number"): w for w in (curriculum.scope_sequence or {}).get("weeks", [])}
+    schedule = _lay_weeks(first_week_start, calendar, [w.week_number for w in target_weeks])
+
+    for w in target_weeks:
+        ws, we, live = schedule[w.week_number]
+        week_data = scope_by_wn.get(w.week_number)
+        # Resolve canonical offsets BEFORE overwriting the week's old dates,
+        # since the parent-added fallback measures against the old week start.
+        placements = [
+            (a, _canonical_offset_for_activity(a, w, week_data)) for a in w.activities if _activity_reflowable(a, today)
+        ]
+        w.start_date = ws
+        w.end_date = we
+        for a, canonical in placements:
+            a.scheduled_date = _place_offset(live, canonical)
+
+    await db.flush()
+
+    return {
+        "plan_id": str(plan.id),
+        "weeks_reflowed": len(target_weeks),
+        "weeks_preserved_locked": preserved_count,
+        "calendar_version": _calendar_version(calendar),
+        "new_end_date": max(w.end_date for w in target_weeks).isoformat(),
+    }
+
+
+async def reflow_household_active_curricula(
+    db: AsyncSession,
+    household_id: uuid.UUID,
+    user_id: uuid.UUID | None,
+    calendar: dict,
+    today: date | None = None,
+) -> list[dict]:
+    """Apply a household calendar edit to every active curriculum's plan.
+
+    Re-flows only the future/uncompleted portion of each plan (see
+    reflow_curriculum_plan), refreshes the curriculum's calendar snapshot, and
+    emits one ``modify`` governance event per plan that actually moved, carrying
+    the calendar version and the re-flowed/preserved counts.
+    """
+    from app.services.governance import log_governance_event
+
+    version = _calendar_version(calendar)
+    result = await db.execute(
+        select(AnnualCurriculum).where(
+            AnnualCurriculum.household_id == household_id,
+            AnnualCurriculum.status == "active",
+        )
+    )
+    curricula = result.scalars().all()
+
+    summaries: list[dict] = []
+    for curriculum in curricula:
+        summary = await reflow_curriculum_plan(db, curriculum, calendar, user_id, today=today)
+        if summary is None:
+            continue
+        summaries.append({"curriculum_id": str(curriculum.id), **summary})
+        if summary["weeks_reflowed"] == 0:
+            continue
+
+        # The snapshot now matches the dates on the plan's future portion.
+        curriculum.calendar_snapshot = calendar
+        curriculum.calendar_version = version
+
+        slog.info(
+            "annual_curriculum.calendar_reflow",
+            household_id=str(household_id),
+            curriculum_id=str(curriculum.id),
+            plan_id=summary["plan_id"],
+            calendar_version=version,
+            weeks_reflowed=summary["weeks_reflowed"],
+            weeks_preserved_locked=summary["weeks_preserved_locked"],
+        )
+        await log_governance_event(
+            db,
+            household_id,
+            user_id,
+            GovernanceAction.modify,
+            "annual_curriculum",
+            curriculum.id,
+            reason=(
+                f"Calendar edit re-flowed {summary['weeks_reflowed']} future week(s) of "
+                f"'{curriculum.subject_name}' ({summary['weeks_preserved_locked']} preserved as locked)"
+            ),
+            metadata={
+                "event_type": "calendar_reflow",
+                "calendar_version": version,
+                "weeks_reflowed": summary["weeks_reflowed"],
+                "weeks_preserved_locked": summary["weeks_preserved_locked"],
+            },
+        )
+
+    return summaries
+
+
 async def materialize_full_year(
     db: AsyncSession,
     curriculum: AnnualCurriculum,
@@ -515,6 +818,18 @@ async def materialize_full_year(
             f"(ai_run_id={curriculum.ai_run_id})."
         )
 
+    # Load the household academic calendar and snapshot it onto the curriculum
+    # so a later calendar edit can detect drift and re-flow deterministically.
+    # Weeks/days are laid onto real instruction dates, skipping breaks and
+    # honoring the configured cadence, mirroring the weekly planner.
+    from app.services.academic_calendar import get_academic_calendar
+
+    calendar = await get_academic_calendar(db, curriculum.household_id)
+    curriculum.calendar_snapshot = calendar
+    curriculum.calendar_version = _calendar_version(calendar)
+    week_numbers = sorted({w.get("week_number", i + 1) for i, w in enumerate(weeks_data)})
+    schedule = _lay_weeks(curriculum.start_date, calendar, list(week_numbers))
+
     # Determine which weeks are "near" (auto-approve governance)
     today = date.today()
     near_threshold = today + timedelta(weeks=4)
@@ -545,14 +860,11 @@ async def materialize_full_year(
         "field_trip": ActivityType.field_trip,
     }
 
-    day_offsets = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3, "Friday": 4}
-
     total_activities = 0
 
-    for week_data in weeks_data:
-        week_num = week_data.get("week_number", 1)
-        week_start = curriculum.start_date + timedelta(weeks=week_num - 1)
-        week_end = week_start + timedelta(days=4)
+    for i, week_data in enumerate(weeks_data):
+        week_num = week_data.get("week_number", i + 1)
+        week_start, week_end, live_offsets = schedule[week_num]
 
         pw = PlanWeek(
             plan_id=plan.id,
@@ -569,9 +881,9 @@ async def materialize_full_year(
         activities = week_data.get("suggested_activities", [])
 
         for idx, act_data in enumerate(activities):
-            day_name = act_data.get("day", "Monday")
-            day_offset = day_offsets.get(day_name, 0)
-            scheduled = week_start + timedelta(days=day_offset)
+            day_name = str(act_data.get("day", "Monday")).lower()
+            canonical_offset = _DAY_TO_OFFSET.get(day_name, 0)
+            scheduled = _place_offset(live_offsets, canonical_offset)
 
             act_type_str = act_data.get("type", "lesson")
             act_type = activity_type_map.get(act_type_str, ActivityType.lesson)

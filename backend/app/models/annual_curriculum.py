@@ -53,6 +53,14 @@ class AnnualCurriculum(Base):
     # The full scope and sequence as generated/approved — IMMUTABLE after approval
     scope_sequence: Mapped[dict] = mapped_column(JSONB, nullable=False, default=dict)
 
+    # Resolved household academic calendar this plan was materialized against,
+    # snapshotted at approval time. Lets a later calendar edit detect drift and
+    # re-flow the future, uncompleted portion deterministically. calendar_version
+    # is a stable hash of calendar_snapshot, recorded on governance events so a
+    # re-flow is traceable to the exact calendar that produced it.
+    calendar_snapshot: Mapped[dict | None] = mapped_column(JSONB, nullable=True)
+    calendar_version: Mapped[str | None] = mapped_column(String(64), nullable=True)
+
     # Status
     status: Mapped[str] = mapped_column(String(50), default="draft")  # draft, active, completed, archived
     ai_run_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True))
