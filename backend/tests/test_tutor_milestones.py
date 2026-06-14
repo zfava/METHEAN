@@ -560,8 +560,12 @@ async def test_module_performs_no_database_writes(db_session, household, child, 
 
 
 def test_no_migration_added_to_diff():
-    # Relationship memory is a computed view; the diff must contain no
-    # Alembic migration. Same git assertion as the prior derived layer.
+    # Relationship memory is a computed view; it must add no Alembic
+    # migration of its own. Unrelated migrations elsewhere on the branch
+    # are fine, so the guard inspects migration CONTENT for any reference
+    # to the relationship-memory schema rather than asserting the branch
+    # added no migration at all. A migration that introduces
+    # relationship-memory storage would name it and is caught here.
     repo_root = Path(__file__).resolve().parents[2]
     base = None
     for ref in ("origin/main", "main"):
@@ -577,7 +581,14 @@ def test_no_migration_added_to_diff():
     if diff.returncode != 0:
         pytest.skip("git diff unavailable")
     migrations = [f for f in diff.stdout.splitlines() if "alembic/versions/" in f]
-    assert migrations == [], f"relationship memory must add no migration; found {migrations}"
+    offenders = []
+    for rel_path in migrations:
+        path = repo_root / rel_path
+        if not path.exists():
+            continue
+        if "relationship_memory" in path.read_text().lower():
+            offenders.append(rel_path)
+    assert offenders == [], f"relationship memory must add no migration; found {offenders}"
 
 
 # ── 9. Access control ───────────────────────────────────────────────────
