@@ -93,6 +93,11 @@ asyncio.run(main(sys.argv[1]))
 test("a parent governs the tutor end to end: policy, memory, grant, voice, relationship, off", async ({ page }) => {
   test.setTimeout(240000);
 
+  // Honor reduced motion so the kid surface renders its plain, immediately
+  // interactive controls (the motion primitives settle to their final state),
+  // which keeps the journey deterministic.
+  await page.emulateMedia({ reducedMotion: "reduce" });
+
   const { email } = await registerAndLogin(page);
   const child = await api(page, "post", "/children", { first_name: "Devon", grade_level: "5th" });
   await api(page, "post", "/auth/pin", { current_password: "TestPass123!", new_pin: PIN });
@@ -168,23 +173,27 @@ test("a parent governs the tutor end to end: policy, memory, grant, voice, relat
   //    real line (exactly what the tutor would see), not just the empty copy.
   //    The control renders nothing until its relationship-memory GET resolves,
   //    so wait for the control itself before touching the toggle inside it.
+  //    The toggle is a Button (which does not forward data-testid), so it is
+  //    located by its role and visible label, which the component renders as
+  //    "Turn on" while off and "Turn off" while on.
   backend(SEED_STREAK, child.id);
   const memoryControl = page.getByTestId("relationship-memory-control");
   await expect(memoryControl).toBeVisible();
-  const memoryToggle = memoryControl.getByTestId("relationship-memory-toggle");
   // Off is the default: no preview yet, and the toggle invites turning it on.
   await expect(page.getByTestId("relationship-memory-preview")).toHaveCount(0);
-  await expect(memoryToggle).toHaveText("Turn on");
+  const turnOnButton = memoryControl.getByRole("button", { name: "Turn on" });
+  await expect(turnOnButton).toBeVisible();
 
   // The off to on transition: the preview appears and populates with the
   // seeded milestone, which is exactly what the tutor would see.
-  await memoryToggle.click();
+  await turnOnButton.click();
   await expect(page.getByTestId("relationship-memory-preview")).toBeVisible();
   await expect(page.getByTestId("relationship-memory-milestone").first()).toBeVisible();
-  await expect(memoryToggle).toHaveText("Turn off");
+  const turnOffButton = memoryControl.getByRole("button", { name: "Turn off" });
+  await expect(turnOffButton).toBeVisible();
 
   // 7. Disable it and the preview is gone.
-  await memoryToggle.click();
+  await turnOffButton.click();
   await expect(page.getByTestId("relationship-memory-preview")).toHaveCount(0);
 
   // 8. Turn the tutor off entirely; the memory surface confirms the role is off.
@@ -192,24 +201,54 @@ test("a parent governs the tutor end to end: policy, memory, grant, voice, relat
   await expect(page.getByTestId("tutor-memory-off")).toBeVisible();
 
   // 9. The child tutor surface shows a kind unavailable state, not an error.
-  //    Enter kid mode, open the first activity, ask the tutor, and the reply
-  //    is the gentle fallback rather than a broken screen.
-  await page.goto("/child");
-  await page.waitForLoadState("networkidle");
-  const enter = await page.request.post(`${API_BASE}/auth/child-session/enter`, {
-    headers: { "Content-Type": "application/json", ...(await csrfHeader(page)) },
-    data: { child_id: child.id },
-  });
-  expect(enter.ok(), `enter kid mode -> ${enter.status()}`).toBeTruthy();
-  await page.reload();
-  await page.waitForLoadState("networkidle");
+  //    Open today's activity in kid mode, ask the tutor, and the reply is the
+  //    gentle fallback rather than a broken screen. Pick the target while
+  //    still in the parent session, before the token swaps to child scope.
+  const todayList: { activity_type: string; title: string }[] = await api(page, "get", `/children/${child.id}/today`);
+  const target = todayList.find((a) => a.activity_type === "lesson") || todayList[0];
+  expect(target, "the child has an activity to open").toBeTruthy();
+  const activityTitle = (target as { title: string }).title;
 
-  const skip = page.getByRole("button", { name: /skip the whole thing/i });
-  if (await skip.isVisible().catch(() => false)) {
-    await skip.click();
+  // Navigating to the child home auto-enters kid mode (the app posts the
+  // child session). A second manual enter would be forbidden once the
+  // session is child scoped, so rely on the navigation alone.
+  const [enterResponse] = await Promise.all([
+    page.waitForResponse(
+      (resp) => resp.url().includes("/auth/child-session/enter") && resp.request().method() === "POST",
+      { timeout: 30000 },
+    ),
+    page.goto("/child"),
+  ]);
+  expect(enterResponse.status()).toBe(200);
+
+  // First visit shows the kid onboarding wizard; skip it if present.
+  const skipWizard = page.getByRole("button", { name: /skip the whole thing/i });
+  try {
+    await skipWizard.waitFor({ state: "visible", timeout: 10000 });
+    await skipWizard.click();
+    await skipWizard.waitFor({ state: "hidden", timeout: 10000 });
+  } catch {
+    // No wizard this run; the today list is already interactive.
   }
 
-  const stuck = page.getByRole("button", { name: /i'?m stuck|talk to your tutor/i }).first();
+  // The child opens the activity from the kid surface (its Start card), then
+  // walks forward through any overview and intro screens to the guided steps,
+  // where the tutor control appears. A practice activity surfaces it at once.
+  await page.getByRole("button", { name: `Start ${activityTitle}`, exact: true }).first().click({ timeout: 20000 });
+  const stuck = page.getByRole("button", { name: /talk to your tutor|i'?m stuck|ask the tutor/i }).first();
+  const advance = page.getByRole("button", { name: /^(Begin|Continue)$/ }).first();
+  for (let i = 0; i < 6; i++) {
+    if (await stuck.isVisible().catch(() => false)) break;
+    // Wait for the next forward control to render (the view may still be
+    // loading), then advance one screen toward the guided steps.
+    try {
+      await advance.waitFor({ state: "visible", timeout: 10000 });
+    } catch {
+      break;
+    }
+    await advance.click();
+    await page.waitForTimeout(600);
+  }
   await expect(stuck).toBeVisible({ timeout: 20000 });
   await stuck.click();
 
@@ -218,6 +257,7 @@ test("a parent governs the tutor end to end: policy, memory, grant, voice, relat
   await tutorInput.fill("Can you help me with this problem?");
   await tutorInput.press("Enter");
 
-  // The tutor is off: the child gets a calm, kind message, never a crash.
-  await expect(page.getByText(/having trouble thinking right now/i)).toBeVisible({ timeout: 20000 });
+  // The tutor is off: the child gets a calm, kind unavailable message, never a
+  // crash. This is the dedicated role-off copy, not a generic error.
+  await expect(page.getByText(/taking a break right now/i)).toBeVisible({ timeout: 20000 });
 });
